@@ -1,0 +1,434 @@
+/* LLossless, the console theme (redesign option A).
+ *
+ * A layer over `app.css`, loaded after it, and the only file the look lives
+ * in. `app.css` is untouched: it still carries the report's palette value for
+ * value (`test_the_app_and_the_report_share_one_palette`), and deleting the
+ * `<link>` to this file, the `<script src="theme.js">` and the three small
+ * header/result hooks in `index.html` puts the page back to the pre-redesign
+ * look. The branch point is tagged `pre-redesign-a`.
+ *
+ * Three modes. No `data-theme` on `<html>` is "System" and follows
+ * `prefers-color-scheme` live; `data-theme="light"` and `data-theme="dark"`
+ * pin one. `theme.js` sets the attribute before first paint.
+ *
+ * Every text and background pair below was computed against WCAG AA (4.5:1
+ * text, 3:1 large text and UI components) in both themes;
+ * `tests/test_web_theme.py` recomputes them from this file.
+ *
+ * No @import, no @font-face, no remote URL. The type is the system stack.
+ */
+
+/* == tokens: light (the default, and data-theme="light") =============== */
+
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --sans: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto,
+          Ubuntu, Cantarell, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo,
+          Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+
+  --bg: #eeeeeb;
+  --surface: #ffffff;
+  --panel: #f5f5f3;
+  --field: #ffffff;
+  --ink: #16181b;
+  --ink-soft: #52575e;
+  --line: #d9d9d4;
+  --line-strong: #7a8088;
+
+  --accent: #8f5200;
+  --accent-bg: #fcefd6;
+  --accent-fill: #f2a516;
+  --accent-ink: #1b1204;
+  --focus: #8f5200;
+  /* A subscription route's badge (685): a plan, friendly blue, set apart
+     from the amber of a metered route that costs money per call. */
+  --plan: #1d5fa8;
+  --plan-bg: #e6f0fb;
+
+  --ok: #1b7439;
+  --ok-bg: #e4f2e8;
+  --warn: #a2410a;
+  --warn-bg: #fcebdc;
+  --bad: #b0241c;
+  --bad-bg: #fbe7e5;
+  --bad-fill: #b0241c;
+  --bad-fill-ink: #ffffff;
+  --none: #555a60;
+  --none-bg: #ebebe8;
+
+  --console-bg: #15171a;
+  --console-raise: #1d2024;
+  --console-line: #2c3036;
+  --console-ink: #dcd9d3;
+  --console-soft: #9ba1a8;
+  --console-info: #8fb8f0;
+  --console-ok: #74d69a;
+  --console-warn: #ffb35c;
+  --console-bad: #ff8e85;
+
+  --shadow: 0 1px 2px rgba(20, 20, 20, .06), 0 6px 18px rgba(20, 20, 20, .05);
+  --radius: .8rem;
+  --radius-sm: .45rem;
+}
+
+/* == tokens: dark ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f1113;
+    --surface: #171a1d;
+    --panel: #1f2327;
+    --field: #121417;
+    --ink: #e9e7e3;
+    --ink-soft: #a6abb1;
+    --line: #2d3237;
+    --line-strong: #6b727a;
+
+    --accent: #f5a524;
+    --accent-bg: #2f2411;
+    --accent-fill: #f5a524;
+    --accent-ink: #1b1204;
+    --focus: #f5a524;
+    --plan: #8cc8ff;
+    --plan-bg: #132a40;
+
+    --ok: #62d08a;
+    --ok-bg: #13291b;
+    --warn: #ff9d5c;
+    --warn-bg: #33200f;
+    --bad: #ff8a80;
+    --bad-bg: #3a1917;
+    --bad-fill: #c8302a;
+    --bad-fill-ink: #ffffff;
+    --none: #a6abb1;
+    --none-bg: #252a2f;
+
+    --console-bg: #0a0b0d;
+    --console-raise: #15181b;
+    --console-line: #24282d;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 8px 24px rgba(0, 0, 0, .35);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1113;
+  --surface: #171a1d;
+  --panel: #1f2327;
+  --field: #121417;
+  --ink: #e9e7e3;
+  --ink-soft: #a6abb1;
+  --line: #2d3237;
+  --line-strong: #6b727a;
+
+  --accent: #f5a524;
+  --accent-bg: #2f2411;
+  --accent-fill: #f5a524;
+  --accent-ink: #1b1204;
+  --focus: #f5a524;
+  --plan: #8cc8ff;
+  --plan-bg: #132a40;
+
+  --ok: #62d08a;
+  --ok-bg: #13291b;
+  --warn: #ff9d5c;
+  --warn-bg: #33200f;
+  --bad: #ff8a80;
+  --bad-bg: #3a1917;
+  --bad-fill: #c8302a;
+  --bad-fill-ink: #ffffff;
+  --none: #a6abb1;
+  --none-bg: #252a2f;
+
+  --console-bg: #0a0b0d;
+  --console-raise: #15181b;
+  --console-line: #24282d;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 8px 24px rgba(0, 0, 0, .35);
+}
+
+/* == type and hierarchy =================================================== */
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+h2 { font-size: 1.3rem; font-weight: 700; letter-spacing: -.012em; }
+h3 { font-size: 1.05rem; font-weight: 650; letter-spacing: -.005em; }
+
+/* The step panels' headings carry their step's number; that badge, and the
+   step tabs it matches, are in `layout.css` (673). */
+
+/* Meta and ids: small, monospace, set in capitals where they label. */
+.version, .doc-tab-size, .history .id, .history .when, .provenance dt,
+.status-word, .suffix {
+  font-family: var(--mono);
+}
+.progress-head > .label-like,
+thead th,
+.finding-detail dt,
+.stack-panel > summary,
+.banner-label,
+.run-header-label,
+.run-field-name,
+.checks .check-name {
+  font-family: var(--mono);
+}
+thead th { font-size: .72rem; letter-spacing: .06em; }
+.progress-head > .label-like {
+  font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+pre.document:focus-visible,
+.claims th button.sort:focus-visible,
+table.models th button.sort:focus-visible,
+.file-button:focus-within { outline-color: var(--focus); }
+
+/* == the top bar ========================================================= */
+
+.topbar {
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+.wordmark { font-size: 1.2rem; font-weight: 800; letter-spacing: -.02em; }
+.wordmark::after {
+  content: ""; display: inline-block; width: .42rem; height: .42rem;
+  margin-left: .2rem; border-radius: 1px; background: var(--accent-fill);
+  vertical-align: baseline;
+}
+
+/* The tagline's row carries the theme control and the readiness pill at its
+   right-hand end. The row above, the one 626 and 649 pin equal across
+   languages, is left with exactly the controls it had. The tagline takes what
+   is left and wraps as it always did; on a phone the two controls drop under
+   it, right-aligned. */
+.topbar-tagline {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .45rem 1rem;
+}
+.topbar-tagline > .tagline { flex: 1 1 16rem; min-width: 0; }
+.topbar-status {
+  display: flex; align-items: center; gap: .6rem; flex: none; margin-left: auto;
+}
+
+/* The theme control: three icon buttons in one segmented group, each named by
+   a visually hidden label from the catalogue and marked with aria-pressed.
+   A fixed width, like the language picker, so the bar's height cannot differ
+   by language (626, 649). */
+.theme-field {
+  display: inline-flex; flex: none; width: 6.3rem;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  padding: 2px; gap: 1px; background: var(--field);
+}
+.theme-field .theme-choice {
+  flex: 1 1 0; display: inline-flex; align-items: center; justify-content: center;
+  height: 1.7rem; padding: 0; border: 0; border-radius: 999px;
+  background: transparent; color: var(--ink-soft);
+}
+.theme-field .theme-choice:hover:not(:disabled) { color: var(--ink); border-color: transparent; }
+/* The pressed state is the fill and a ring in --accent: the light theme's
+   amber fill alone is under 3:1 against the white track, the ring is not. */
+.theme-field .theme-choice[aria-pressed="true"] {
+  background: var(--accent-fill); color: var(--accent-ink);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+.theme-field svg { width: 1rem; height: 1rem; display: block; }
+
+/* Endpoint readiness. A dot and a word, and the word is the information: the
+   dot only repeats it. Fixed width for the header invariant. */
+.status-pill {
+  display: inline-flex; align-items: center; gap: .45rem; flex: none;
+  width: 8.75rem; min-width: 0;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  padding: .24rem .7rem; background: var(--field);
+  font-size: .78rem; font-weight: 600; letter-spacing: .01em;
+  color: var(--ink); white-space: nowrap;
+}
+.status-pill-text { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.status-pill .pill-dot {
+  width: .55rem; height: .55rem; border-radius: 50%; flex: none;
+  background: var(--none);
+}
+.status-pill.ok .pill-dot { background: var(--ok); }
+.status-pill.warn .pill-dot { background: var(--warn); }
+.status-pill.bad .pill-dot { background: var(--bad); }
+.status-pill.ok { border-color: var(--ok); }
+.status-pill.warn { border-color: var(--warn); }
+.status-pill.bad { border-color: var(--bad); }
+
+/* == raised panels ======================================================== */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.2rem 1.3rem;
+}
+.sheet, .sheet-foot { background: var(--surface); }
+.sheet { border-radius: var(--radius); }
+.sheet::backdrop { background: rgba(8, 9, 11, .6); backdrop-filter: blur(3px); }
+.effort-card, .provider, .finding, .banner, pre.document { border-radius: var(--radius-sm); }
+
+input[type="text"], input[type="number"], input[type="search"],
+input[type="password"], input[type="url"], textarea, select {
+  background: var(--field); border-color: var(--line-strong);
+}
+/* `app.css` never styled the endpoint field, so it rendered as the browser's
+   own box beside styled neighbours. Given the same shape as the others. */
+input[type="url"] {
+  font: inherit; color: var(--ink); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm); padding: .45rem .6rem; width: 100%;
+}
+input[type="range"], .radio-set input, .radio-stack input,
+.inline-check input, table.models input[type="radio"] { accent-color: var(--accent-fill); }
+
+/* == buttons ============================================================== */
+
+button, .ghost, .primary, a.ghost {
+  border-radius: var(--radius-sm);
+  transition: border-color .12s ease, background-color .12s ease, color .12s ease;
+}
+.ghost, a.ghost {
+  background: transparent; border-color: var(--line-strong); color: var(--ink);
+}
+button:hover:not(:disabled), a.ghost:hover { border-color: var(--accent); }
+.ghost:hover:not(:disabled), a.ghost:hover { background: var(--panel); }
+.primary {
+  background: var(--accent-fill); color: var(--accent-ink);
+  border: 1px solid var(--accent-fill); font-weight: 650;
+}
+.primary:hover:not(:disabled) { filter: none; background: color-mix(in srgb, var(--accent-fill) 88%, #ffffff); }
+
+/* Destructive: red outline, red words, a tint on hover. Cancel run and Start
+   over, and the remove/clear controls that already carried `.danger`. */
+.danger, .ghost.danger, [data-cc="start-over"] {
+  color: var(--bad); border-color: var(--bad); background: transparent;
+}
+.danger:hover:not(:disabled), [data-cc="start-over"]:hover:not(:disabled) {
+  background: var(--bad-bg); border-color: var(--bad);
+}
+.confirm-actions .primary {
+  background: var(--bad-fill); color: var(--bad-fill-ink); border-color: var(--bad-fill);
+}
+.confirm-actions .primary:hover:not(:disabled) { background: var(--bad-fill); filter: brightness(1.08); }
+
+/* The run bar's actions as a grid: equal cells, two across on a phone, the
+   main action two cells wide, and the status line under them. */
+.runbar .runbar-inner {
+  display: grid; gap: .55rem;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  align-items: stretch;
+}
+@media (max-width: 36rem) {
+  .runbar .runbar-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.runbar .runbar-inner > button { justify-content: center; text-align: center; }
+.runbar .runbar-inner > [data-cc="submit"] { grid-column: span 2; }
+.runbar .runbar-inner > .status { grid-column: 1 / -1; }
+
+/* == selection states ===================================================== */
+
+.doc-tab[aria-selected="true"],
+.radio-set label:has(input:checked),
+.radio-stack label:has(input:checked) {
+  background: var(--accent-bg); border-color: var(--accent);
+}
+.status.busy .status-word { color: var(--accent); }
+.dot.busy { background: var(--accent-fill); border-color: var(--accent); }
+/* A plan is light blue and filled (685): the operator found the amber of the
+   accent unfriendly here, and amber stays the metered badge's alone (637).
+   The word says which kind; the colour only speeds the read. */
+table.models .route-badge.subscription,
+table.models .route-badge.command {
+  border-color: var(--plan); color: var(--plan); background: var(--plan-bg);
+}
+
+/* == the model picker's figures, as small tiles =========================== */
+
+table.models td.num {
+  font-size: .98rem; font-weight: 650; font-variant-numeric: tabular-nums;
+}
+table.models .rank-word {
+  display: block; width: max-content; margin: .3rem 0 0 auto; padding: .05rem .4rem;
+  border: 1px solid currentColor; border-radius: .3rem;
+  font-family: var(--mono); font-size: .66rem; letter-spacing: .06em;
+}
+table.models td.rank-excellent,
+table.models td.rank-good,
+table.models td.rank-fair,
+table.models td.rank-poor { border-radius: 0; }
+
+/* == the report's headline figures, as stat tiles ========================= */
+
+.stat-tiles {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+}
+.stat-tile {
+  display: flex; flex-direction: column; gap: .15rem; min-width: 0;
+  background: var(--surface); border: 1px solid var(--line);
+  border-top: 3px solid var(--none);
+  border-radius: var(--radius-sm); padding: .75rem .9rem .8rem;
+  box-shadow: var(--shadow);
+}
+.stat-tile.ok { border-top-color: var(--ok); }
+.stat-tile.warn { border-top-color: var(--warn); }
+.stat-tile.bad { border-top-color: var(--bad); }
+.tile-label {
+  order: -1; font-family: var(--mono); font-size: .7rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+.tile-figure {
+  font-family: var(--mono); font-size: 2.1rem; font-weight: 700;
+  line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.tile-note { font-size: .84rem; color: var(--ink-soft); overflow-wrap: anywhere; }
+.tile-note.ok { color: var(--ok); }
+.tile-note.warn { color: var(--warn); }
+.tile-note.bad { color: var(--bad); }
+
+/* == the progress log, as a console ======================================= */
+
+.progress { border-top-color: var(--line); }
+.events {
+  background: var(--console-bg); color: var(--console-ink);
+  border: 1px solid var(--console-line); border-radius: var(--radius-sm);
+  padding: .5rem .7rem; max-height: 18rem; font-size: .82rem;
+  color-scheme: dark;
+}
+.events li { border-bottom-color: var(--console-line); align-items: baseline; padding: .28rem 0; }
+.events .message { color: var(--console-ink); }
+.events .secs { color: var(--console-soft); }
+/* Each line's kind as a level chip. The word stays the kind the server sent;
+   the colour groups it: information, done, a warning, an error. */
+.events .kind {
+  width: auto; min-width: 4.6rem; flex: none; text-align: center;
+  padding: .05rem .4rem; border: 1px solid currentColor; border-radius: .3rem;
+  font-size: .66rem; font-weight: 700; letter-spacing: .07em;
+  color: var(--console-info);
+}
+.events .kind.done { color: var(--console-ok); }
+.events .kind.warn, .events .kind.notice { color: var(--console-warn); }
+.events .kind.failed { color: var(--console-bad); }
+.events .kind.skipped, .events .kind.detail { color: var(--console-soft); }
+.events li.run-header {
+  background: var(--console-raise); border-color: var(--console-line);
+}
+.events .run-header-label, .events .run-field-name { color: var(--console-soft); }
+.events .run-field-value { color: var(--console-ink); }
+
+/* == print ================================================================ */
+
+@media print {
+  .status-pill, .theme-field { display: none; }
+  .events { background: #fff; color: #000; }
+}

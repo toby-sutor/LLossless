@@ -1,0 +1,496 @@
+/* LLossless, the workbench layout (673).
+ *
+ * Loaded after `theme.css`. `app.css` keeps the components and `theme.css`
+ * the look; this file only places things: an input pane (four step tabs, the
+ * step's panel, the run bar pinned under it) and an output pane (empty state,
+ * the log, the result with its finding tabs, or the earlier runs).
+ *
+ * From 1024px the two panes sit side by side, the page itself never scrolls
+ * and each pane scrolls on its own. Under 1024px they stack, the step tabs
+ * become a strip that scrolls sideways and the run bar is fixed to the foot
+ * of the viewport; `app.js` measures it into `--runbar-h` so nothing ends up
+ * under it.
+ *
+ * Colours are theme tokens only, so `tests/test_web_theme.py`'s contrast table
+ * covers every pair painted here.
+ */
+
+/* == header: the language picker's globe (673) ========================== */
+
+.locale-icon { width: 1.05rem; height: 1.05rem; flex: none; color: var(--ink-soft); }
+
+/* == shared: tab strips =================================================== */
+
+[role="tab"] { cursor: pointer; }
+
+.steps, .output-tabs, .finding-tabs { display: flex; gap: .4rem; }
+
+/* A panel the operator has not selected. `hidden` stays with the renderers,
+   which use it for "this section does not apply to this run". */
+.tab-off { display: none !important; }
+
+/* -- the steps ------------------------------------------------------------ */
+
+.steps { flex: none; margin-bottom: .75rem; }
+.step-tab {
+  /* `0%` and not `auto`: an `auto` basis sizes each tab off its own content
+     first and only tops up the remainder, so the Tuning tab's width tracked
+     the title policy's word length and the row visibly resettled on every
+     change (712). A `0%` basis ignores content for sizing and divides the
+     row by the grow factor alone, so all four tabs stay an equal quarter of
+     the row width no matter what any of them says; `tests/test_web_layout.py`
+     pins this rule. */
+  flex: 1 1 0%; min-width: 0;
+  display: flex; align-items: center; gap: .6rem;
+  padding: .5rem .7rem; text-align: left;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  font: inherit;
+}
+.step-tab:hover:not([aria-selected="true"]) { border-color: var(--line-strong); background: var(--panel); }
+.step-n {
+  flex: none; display: inline-grid; place-items: center;
+  width: 1.7rem; height: 1.7rem; border-radius: 50%;
+  border: 1.5px solid var(--line-strong); color: var(--ink-soft);
+  font-family: var(--mono); font-size: .8rem; font-weight: 700;
+  background: var(--field);
+}
+.step-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.step-name {
+  font-size: .92rem; font-weight: 650;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.step-state {
+  font-size: .76rem; color: var(--ink-soft); min-height: 1.2em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Done (`ok` on the state line): the number takes the ok colour. Needs
+   attention (`warn`): the number and the line take the warning colour, and
+   the line says what. Colour never carries it alone: the words do. */
+.step-tab:not([aria-selected="true"]):has(.step-state.ok) .step-n { border-color: var(--ok); color: var(--ok); }
+.step-tab:not([aria-selected="true"]):has(.step-state.warn) .step-n { border-color: var(--warn); color: var(--warn); }
+.step-state.warn { color: var(--warn); font-weight: 600; }
+.step-tab[aria-selected="true"] {
+  border-color: var(--accent); background: var(--accent-bg);
+  box-shadow: inset 0 -3px 0 var(--accent-fill), var(--shadow);
+}
+.step-tab[aria-selected="true"] .step-n {
+  background: var(--accent-fill); border-color: var(--accent); color: var(--accent-ink);
+}
+
+/* Each step panel's heading carries its step's number, from `data-n`, in the
+   badge the tabs use. Generated, with an empty alternative: the tab already
+   says the number to a screen reader. */
+.step-panel > .card-head > h2 { display: inline-flex; align-items: center; gap: .6rem; }
+.step-panel > .card-head > h2[data-n]::before {
+  content: attr(data-n);
+  content: attr(data-n) / "";
+  display: inline-grid; place-items: center; flex: none;
+  width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  background: var(--accent-fill); color: var(--accent-ink);
+  border: 1.5px solid var(--accent);
+  font-family: var(--mono); font-size: .78rem; font-weight: 700;
+}
+.step-panel:focus { outline: none; }
+.step-panel:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Back and Next sit on the heading's line, at its right end, so they cost no
+   height; the hint lines under the heading take a row each. */
+.step-panel > .card-head { align-items: center; gap: .3rem .75rem; margin-bottom: .75rem; }
+.step-panel > .card-head > p { flex: 1 0 100%; margin: 0; }
+.step-panel > .card-head > .refusal:empty { display: none; }
+.step-nav {
+  display: flex; flex-wrap: wrap; justify-content: flex-end;
+  gap: .45rem; align-items: center; margin-left: auto;
+}
+.step-nav button { min-width: 5.5rem; justify-content: center; padding-top: .3rem; padding-bottom: .3rem; }
+/* The scorecard/examples button shares the step-nav row with Back/Next
+   (723); its own `margin-left: auto` (used when it stood alone on its own
+   row) would do nothing useful here, so it is turned off rather than left to
+   depend on that being true by accident. */
+.step-nav .open-detail-btn { margin-left: 0; }
+.step-new {
+  display: inline-block; margin-left: .3rem; padding: 0 .35rem; border-radius: .3rem;
+  background: var(--accent-fill); color: var(--accent-ink);
+  font-size: .68rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  vertical-align: .1em;
+}
+
+/* == help: a "?" that opens its text on hover and on focus (673) ========= */
+
+.label-row, .check-row { position: relative; display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; }
+.label-row > label, .label-row > .label-like { margin-bottom: 0; }
+.field > .label-row { margin-bottom: .35rem; }
+.check-row > .inline-check { margin: 0; }
+.help { display: inline-flex; }
+.help-icon {
+  display: inline-grid; place-items: center; flex: none;
+  width: 1.2rem; height: 1.2rem; padding: 0; border-radius: 50%;
+  border: 1px solid var(--line-strong); background: var(--field); color: var(--ink-soft);
+  font-size: .72rem; font-weight: 700; line-height: 1; cursor: help;
+}
+.help-icon:hover, .help-icon:focus-visible { color: var(--ink); border-color: var(--accent); }
+.help-pop {
+  display: none; position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + .3rem);
+  max-width: 34rem; padding: .7rem .85rem;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow);
+  font-size: .85rem; font-weight: 400; line-height: 1.5; text-transform: none; letter-spacing: normal;
+  white-space: normal; text-align: left; cursor: auto;
+}
+.help-pop > * + * { margin-top: .45rem; }
+.help-pop p { margin: 0; color: var(--ink); }
+.help:hover > .help-pop, .help:focus-within > .help-pop { display: block; }
+.help-pop .stacked-explains { display: block; margin: 0; color: var(--ink); font-size: inherit; }
+
+/* The depth options: a short line each, the full sentence behind "?". */
+.radio-stack label { position: relative; }
+.stacked-title { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.stacked-brief { display: block; color: var(--ink-soft); font-size: .84rem; margin-top: .1rem; }
+.radio-stack .help { margin-left: .35rem; vertical-align: middle; }
+
+/* The level's line under the slider: one line high at every level, so the
+   page does not move when the slider does. */
+.level-brief {
+  min-height: 0; height: 1.5em; margin-top: .3rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* A control's "open more" secondary button, beside the control's own label
+   or heading rather than in a footer (711): "See examples" and "Model
+   scorecard" used to be sized by hand in two separate rules and drifted
+   apart (one padded and set smaller, the other left at the plain `.ghost`
+   size). One rule, shared by both, so there is nothing left to drift; the
+   size itself is the base `.ghost` button's, unchanged. */
+.open-detail-btn { margin-left: auto; }
+
+/* The effort slider on the Settings step, first; its measured card opens
+   from the "?" beside the label. */
+.step-panel .effort-block { display: block; }
+.step-panel .effort-control { width: 100%; }
+.help-pop .effort-card { background: transparent; border: 0; padding: 0; }
+.effort-control > .hint.warn { margin-top: .35rem; }
+
+/* The settings and tuning grids live in a pane about half the page wide, so
+   one field per row reads better than two cramped ones. */
+.step-panel .controls-grid { grid-template-columns: minmax(0, 1fr); gap: .9rem; }
+.step-panel.card { padding: 1rem 1.2rem; }
+.step-panel .range-legend { margin-top: .1rem; }
+
+/* Each stop's word centred under its thumb (686). The thumb's centre travels
+   from half a thumb in from each end, not across the whole track, so words
+   spread over the full width sat up to 60px off it. Each word is placed on
+   the thumb's own line, `--at` being its stop as a fraction (set by the
+   script); the slider and its words are inset together so the end words fit
+   whole. `--range-thumb` is Chromium's thumb, measured. */
+:root { --range-thumb: 16px; --range-inset: 1.25rem; }
+input[type="range"][data-cc="effort-slider"],
+input[type="range"][data-cc="fidelity-range"] {
+  width: calc(100% - 2 * var(--range-inset));
+  margin-left: var(--range-inset); margin-right: var(--range-inset);
+}
+.range-legend {
+  position: relative; display: block; height: 1.35em; line-height: 1.35;
+  margin-left: var(--range-inset); margin-right: var(--range-inset);
+}
+.range-legend span {
+  position: absolute; top: 0; white-space: nowrap;
+  left: calc(var(--range-thumb) / 2 + (100% - var(--range-thumb)) * var(--at, 0));
+  transform: translateX(-50%);
+}
+
+/* -- the run bar --------------------------------------------------------- */
+
+.runbar, .runbar.settled { position: static; }
+.runbar { flex: none; margin-top: .75rem; padding: .85rem 1rem; }
+.status-goto {
+  justify-self: stretch; text-align: center; font-weight: 600;
+  padding-top: .3rem; padding-bottom: .3rem;
+  color: var(--warn); border-color: var(--warn); background: var(--warn-bg);
+}
+/* The way to a blocking step joins the buttons' row, after Start over, and
+   the status line keeps a row of its own under them. */
+.runbar .runbar-inner > .status-goto { order: 1; font-size: .86rem; line-height: 1.25; }
+.runbar .runbar-inner > .status { order: 2; }
+.status-goto:hover:not(:disabled) { border-color: var(--warn); filter: brightness(1.04); }
+
+/* Save these settings as my defaults (674): the cell after Start over, the
+   one the way to a blocking step takes while the run cannot start. The
+   words wrap inside the cell rather than widening the row. */
+.save-defaults {
+  display: flex; align-items: center; gap: .45rem; margin: 0;
+  font-size: .86rem; font-weight: 600; line-height: 1.25; cursor: pointer;
+}
+.save-defaults input { flex: none; margin: 0; width: 1.05rem; height: 1.05rem; accent-color: var(--accent-fill); }
+.save-defaults-note {
+  grid-column: span 2; align-self: center; margin: 0;
+  font-size: .86rem; line-height: 1.25; color: var(--ink-soft);
+}
+.save-defaults-note.ok { color: var(--ok); }
+.save-defaults-note.ok::before { content: "\2713\00a0"; }
+.save-defaults-note.warn { color: var(--warn); }
+.runbar .runbar-inner > .save-defaults-note { order: 1; }
+/* The notice for saved values no longer offered: one line and its buttons. */
+.runbar > .defaults-dropped {
+  display: flex; align-items: center; gap: .5rem .75rem; flex-wrap: wrap; margin: 0 0 .7rem;
+}
+.defaults-dropped > span { flex: 1 1 16rem; }
+.defaults-dropped > button { padding: .2rem .7rem; font-size: .82rem; }
+.defaults-field .explains { margin-top: 0; }
+.defaults-actions { margin-top: .45rem; }
+
+/* -- the divider between the panes (673) ------------------------------------ */
+
+.pane-divider { display: none; }
+
+/* -- the compare-levels dialog -------------------------------------------- */
+
+.sheet.compare { max-width: 44rem; }
+.compare-note {
+  display: inline-block; margin: 0 0 .75rem; padding: .15rem .55rem;
+  border: 1px dashed var(--warn); border-radius: .3rem;
+  color: var(--warn); font-size: .82rem; font-weight: 600;
+}
+.compare-sources { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin-bottom: .9rem; }
+.compare-source { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .55rem .7rem; }
+.compare-source p, .compare-merge { margin: .25rem 0 0; font-size: .86rem; }
+.compare-tabs { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .6rem; }
+.compare-tab {
+  padding: .3rem .75rem; font: inherit; font-size: .88rem; font-weight: 600;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+}
+.compare-tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent-bg); box-shadow: inset 0 -3px 0 var(--accent-fill); }
+/* A minimum, not a fixed height, for every level's panel: the shortest
+   content still lines the tabs up with the sources above, and a level
+   whose disclosure (711) is open is simply taller. */
+.compare-panel { min-height: 10.5rem; }
+.compare-panel > * + * { margin-top: .45rem; }
+.compare-merge { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .55rem .7rem; }
+.compare-merge mark {
+  background: var(--accent-bg); color: var(--ink);
+  box-shadow: inset 0 -2px 0 var(--accent-fill); border-radius: .15rem; padding: 0 .1em;
+}
+.compare-change { font-size: .86rem; color: var(--ink-soft); }
+.compare-brief { font-weight: 600; }
+/* The level's summary/buys/costs (711): an inline disclosure now, not the
+   hover popup, reusing `.about-list`'s own look and spacing. It is still
+   exactly "a line of detail nobody has to read to use the control". */
+.help-line { display: block; }
+.help-line + .help-line { margin-top: .45rem; }
+
+/* The measured baseline under the effort slider, with its "?". */
+.effort-baseline { position: relative; display: flex; align-items: center; gap: .45rem; margin-top: .3rem; font-size: .88rem; color: var(--ink); }
+
+/* -- the output pane ------------------------------------------------------ */
+
+.output-tabs { flex: none; margin-bottom: .75rem; align-items: stretch; }
+/* Each tab's own hover/focus tooltip (717), the same mechanics as `.help`
+   (`.help-icon`/`.help-pop`) but anchored on the tab itself rather than on a
+   separate "?": `position: relative` so `.help-pop` opens under this tab and
+   not some taller ancestor (711 is the failure this avoids), `inline-flex`
+   with `.output-tabs`' own `align-items: stretch` so the wrapper still
+   stretches to the row's height and the button inside fills it. */
+.tab-help { position: relative; display: inline-flex; }
+.tab-help:hover > .help-pop, .tab-help:focus-within > .help-pop { display: block; }
+.output-tab {
+  display: inline-flex; align-items: center;
+  padding: .45rem .95rem; font: inherit; font-weight: 600; font-size: .92rem;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+.output-tab:hover:not([aria-selected="true"]):not([aria-disabled="true"]) {
+  border-color: var(--line-strong); background: var(--panel);
+}
+/* Clearly disabled in both themes (717): the shared `[aria-disabled="true"]`
+   rule already dims it, this adds the pointer that says so. */
+.output-tab[aria-disabled="true"] { cursor: not-allowed; }
+.output-tab[aria-selected="true"] {
+  border-color: var(--accent); background: var(--accent-bg);
+  box-shadow: inset 0 -3px 0 var(--accent-fill), var(--shadow);
+}
+
+.output-run { display: flex; flex-direction: column; gap: 1rem; }
+/* The result above the log once there is one: the log stays, under it. */
+.output-run > .results { order: -1; }
+
+.output-empty {
+  display: grid; place-items: center; text-align: center;
+  min-height: 12rem; padding: 2rem 1.5rem;
+  border: 1.5px dashed var(--line-strong); border-radius: var(--radius);
+  color: var(--ink-soft);
+}
+.output-empty p { max-width: 30rem; }
+.output-run:has(> [data-cc="progress-wrap"]:not([hidden])) > .output-empty,
+.output-run:has(> [data-cc="results"]:not([hidden])) > .output-empty { display: none; }
+
+/* The log, out of the run bar and into a panel of its own. */
+.output-run > .progress {
+  margin: 0; padding: 1rem 1.1rem;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.output-run > .progress .events { max-height: min(60vh, 34rem); }
+
+/* -- the finding tabs ----------------------------------------------------- */
+
+.findings-head { position: relative; display: flex; align-items: center; gap: .45rem; margin-bottom: -.4rem; }
+.findings-head h3 { font-size: .95rem; }
+/* The "?" goes with the sentence it opens: a run that graded nothing has none. */
+.findings-head .help:has([data-cc="judged-note"][hidden]) { display: none; }
+.sheet.compare { padding-bottom: 0; }
+
+.finding-tabs { flex-wrap: wrap; margin-bottom: -.5rem; }
+.finding-tab {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .35rem .6rem; font: inherit; font-size: .88rem; font-weight: 600;
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+}
+.finding-tab:hover:not([aria-selected="true"]) { border-color: var(--line-strong); background: var(--panel); }
+.finding-tab[aria-selected="true"] {
+  border-color: var(--accent); background: var(--accent-bg);
+  box-shadow: inset 0 -3px 0 var(--accent-fill);
+}
+.finding-tab .section-title { font-size: inherit; }
+.finding-tab .chip { font-size: .72rem; padding: .05rem .45rem; }
+.results > .section > .section-body { margin-top: 0; }
+.results > .section:focus { outline: none; }
+.results > .section:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* == wide: two panes, the page does not scroll ============================ */
+
+@media (min-width: 64rem) {
+  html, body { height: 100%; }
+  html { scroll-behavior: auto; }
+  body { display: flex; flex-direction: column; }
+  .topbar { flex: none; }
+  .topbar-inner, .topbar-tagline { max-width: 120rem; }
+
+  main.workbench {
+    flex: 1 1 auto; min-height: 0; width: 100%; max-width: 120rem;
+    margin: 0 auto; padding: 1rem 1.25rem;
+    display: grid; gap: 0;
+    grid-template-columns: minmax(0, var(--pane-input, 60fr)) .9rem minmax(0, var(--pane-output, 40fr));
+    grid-template-rows: minmax(0, 1fr);
+  }
+  /* The divider: a strip between the panes with a grip, a resize cursor, and
+     the focus ring when the keyboard is on it. */
+  .pane-divider {
+    display: block; position: relative; cursor: col-resize; touch-action: none;
+    border-radius: .4rem; margin: 0 .15rem;
+  }
+  .pane-divider::before {
+    content: ""; position: absolute; top: 50%; left: 50%; width: .3rem; height: 3rem;
+    transform: translate(-50%, -50%); border-radius: .2rem;
+    background: var(--line-strong); opacity: .6;
+  }
+  .pane-divider:hover::before, .pane-divider.dragging::before, .pane-divider:focus-visible::before {
+    background: var(--accent); opacity: 1;
+  }
+  .pane-divider:focus { outline: none; }
+  .pane-divider:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+
+  /* The selected step fills the pane, and the one thing in it that can give
+     up height does: the document's text box, and the model table (which then
+     scrolls inside itself). Everything else keeps its own height, so the pane
+     does not scroll at 1280x800 when there is room (673).
+
+     `.doc-panes`, `.doc-pane` and the field wrapping the text box carry no
+     `min-height: 0` of their own (716). They used to, matching the
+     flex-shrink pattern every ancestor here follows, but the text box a
+     level down is the one element in this chain with its own floor, set by
+     `min-height: 5.5rem` below, and a `min-height: 0` in between let the
+     flex algorithm size these containers smaller than that floor without the
+     textarea agreeing to shrink with them: the box stayed at 5.5rem and
+     painted past its own container's bottom edge, over the Base document row
+     that follows it in the flow. At German widths tight enough for this
+     (1366x768 was measured; 1280x800 inside a real browser's chrome is
+     tighter still), the row read as overlapping the text box above it rather
+     than being pushed down. Left off, these containers cannot be sized under
+     their own content's real minimum, so a window too short for everything
+     to fit now grows `.pane-body`'s own scrollbar (it already carries
+     `overflow-y: auto`) instead of letting a child paint outside its box. */
+  .pane-input .pane-body { display: flex; flex-direction: column; }
+  .step-panel { flex: 1 0 auto; }
+  #step-documents:not(.tab-off), #step-model:not(.tab-off) {
+    flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+  }
+  #step-documents .doc-panes { flex: 1 1 auto; display: flex; flex-direction: column; }
+  #step-documents .doc-pane:not([hidden]) { flex: 1 1 auto; display: flex; flex-direction: column; }
+  #step-documents .doc-pane > .field:has(> .doc-text) { flex: 1 1 auto; display: flex; flex-direction: column; }
+  #step-documents .doc-text { flex: 1 1 0; min-height: 5.5rem; height: auto; resize: none; }
+  #step-model > .field { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; margin-top: 0; }
+  #step-model [data-cc="picker-box"] { flex: 0 1 auto; min-height: 7rem; overflow: auto; }
+  /* The two depths side by side: each is one short line now. */
+  .step-panel .radio-stack { flex-direction: row; }
+  .step-panel .radio-stack > label { flex: 1 1 0; min-width: 0; }
+  /* The base document on one row with its label. */
+  #step-documents .base-field { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; max-width: none; margin-top: .7rem; }
+  #step-documents .base-field > .label-row { margin: 0; position: static; }
+  #step-documents .base-field > .label-row .help-pop { left: 0; right: 0; }
+  #step-documents .base-field { position: relative; }
+  #step-documents .base-field > select { flex: 0 1 20rem; width: auto; min-width: 10rem; }
+  #step-documents .doc-pane { padding-top: .6rem; }
+  .pane { min-height: 0; display: flex; flex-direction: column; }
+  /* The pane's own scroll. A few pixels of padding so focus rings and card
+     shadows are not clipped by the overflow edge. */
+  .pane-body {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+    margin: -.35rem; padding: .35rem;
+  }
+  .pane-output .pane-body { display: flex; flex-direction: column; }
+  .output-run { flex: 1 0 auto; }
+  .output-empty { flex: 1 0 auto; }
+  .history-panel { flex: none; }
+}
+
+/* == narrow: one column, the run bar at the foot of the viewport ========== */
+
+@media (max-width: 63.99rem) {
+  /* The top bar scrolls away here: pinned, with the run bar fixed under the
+     content, the two took half of a phone's screen. */
+  .topbar { position: static; }
+  html { scroll-padding-bottom: calc(var(--runbar-h, 11rem) + .5rem); }
+  main.workbench {
+    gap: 1.25rem;
+    padding-bottom: calc(var(--runbar-h, 11rem) + 1.25rem);
+  }
+  .pane { display: flex; flex-direction: column; min-width: 0; }
+  /* The strip scrolls sideways inside itself; the page never does. */
+  .steps {
+    overflow-x: auto; scroll-snap-type: x proximity;
+    padding: .2rem .15rem .45rem; margin: -.2rem -.15rem .3rem;
+    scrollbar-width: thin;
+  }
+  .step-tab { flex: 0 0 auto; width: 10.5rem; scroll-snap-align: start; }
+  .runbar .runbar-inner > .status-goto { grid-column: 1 / -1; }
+  .runbar .runbar-inner > .save-defaults,
+  .runbar .runbar-inner > .save-defaults-note { grid-column: 1 / -1; }
+  #step-documents .doc-text { height: 12rem; }
+  .runbar, .runbar.settled {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
+    margin: 0; border-radius: 0; border-width: 1px 0 0;
+    max-height: 55vh; overflow-y: auto;
+    padding: .7rem max(1rem, env(safe-area-inset-right)) calc(.7rem + env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  }
+  .output-run > .progress .events { max-height: 22rem; }
+  /* A shorter bar: Run and Start over share a row, the status line wraps
+     under its word, and the way to the blocking step is a slim button. */
+  .runbar .runbar-inner { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; }
+  .runbar .runbar-inner > button { padding-left: .5rem; padding-right: .5rem; }
+  .runbar .status { flex-wrap: wrap; gap: .1rem .5rem; }
+  .runbar .status-word { white-space: nowrap; }
+  .status-goto { margin-top: .4rem; padding-top: .35rem; padding-bottom: .35rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .steps { scroll-behavior: auto; }
+}
+
+@media print {
+  .steps, .output-tabs, .finding-tabs, .step-nav, .status-goto, .output-empty { display: none !important; }
+  .tab-off:not([hidden]) { display: block !important; }
+  main.workbench { display: block; }
+}

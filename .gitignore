@@ -1,0 +1,49 @@
+.llossless-cache/
+__pycache__/
+.venv/
+*.pyc
+.env
+/internal/assets/
+
+# Run output written into the repo root: -o merges and piped reports. These
+# carry the source documents' content, which is the same content /internal/assets/ is
+# ignored for, and they are named by whoever ran the command -- so they are
+# matched by position rather than by name. Ignoring a path does nothing to a
+# tracked one, so README.md, STATE.md, CHANGELOG.md, MEMORY.md, HISTORY.md and
+# publication-manifest.txt keep showing their edits; only new root files are
+# swallowed. A root file that genuinely belongs in the repo goes in with
+# `git add -f`, or lives in docs/ like every other document here.
+/*.md
+/*.txt
+
+# internal/TODO.md is TRACKED. It was ignored here once, on the reasoning
+# that it is a working note rather than a result (332) -- which was true and
+# was also an argument for HISTORY.md and MEMORY.md, both tracked below.
+# 332 is superseded (344): DA's freeze parks findings in this file, and an
+# untracked file is absent from the object store, from the CO item 0b mirror,
+# and from any clone. It is withheld from publication by living in internal/,
+# which is the whole mechanism -- not by being hidden from Git.
+
+# HISTORY.md and MEMORY.md are TRACKED. They were ignored here once, and the
+# patterns came out when the decision changed; this comment survived them and
+# said the opposite of the truth until 2026-08-23. They are working records, so
+# they are withheld from publication instead, by name, in
+# publication-manifest.txt. Git tracking and publication are separate decisions
+# and this file only makes the first one.
+
+
+# The role -> model id map. Untracked because it is one machine's configuration,
+# not because a model id is secret; models.local.example.json shows the shape.
+models.local.json
+
+# Exploratory cross-model cassettes. Recorded from a dirty tree and against
+# prompts that no longer exist, so no commit reproduces them and no current run
+# can hit their keys. tests/eval/README.md is tracked and explains them; the
+# cassettes are not.
+tests/eval/*/
+
+# What the last finished run of `tests/run_all.py` proved, and about which
+# tree. Read by `scripts/hooks/pre-commit`. Untracked because it is a fact
+# about one working copy at one moment: committing it would publish a claim
+# that the next person to clone has no way to have earned (299).
+/.suite-stamp.json

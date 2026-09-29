@@ -1,0 +1,1539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LLossless</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<!-- The favicon: "LL" on the header's amber, as SVG for every browser that
+     takes one and a 32 px PNG for the rest. Named here, so no browser asks
+     for /favicon.ico. -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<!-- Redesign option A. theme.js first and blocking, so the stored theme is
+     on <html> before first paint; theme.css after app.css, and the whole
+     look is in it (tag pre-redesign-a is the page before). -->
+<script src="theme.js"></script>
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="theme.css">
+<!-- The two-pane workbench (673): placement only, after the look. -->
+<link rel="stylesheet" href="layout.css">
+<script src="app.js" type="module" defer></script>
+</head>
+<body>
+<a class="skip" href="#work">Skip to the documents</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <!-- The version belongs to the product, so it sits with the wordmark. It
+         used to lead the right-hand cluster, where it read as the first of
+         four unrelated things on one line: a build number, a form field, an
+         identity and a button, none of them grouped and none of them aligned
+         with each other. -->
+    <div class="brand">
+      <span class="wordmark">LLossless</span>
+      <span class="version mono" data-cc="version"></span>
+    </div>
+    <!-- Two groups, separated by a rule rather than by whitespace: what this
+         page is in, and who is in it. Everything inside a group shares a
+         baseline and a type size; the rule is what says the two are not one
+         list of four controls. -->
+    <div class="topbar-right">
+      <!-- Hidden until the script has been told this server holds more than
+           one catalogue. A picker with one option is a control that cannot be
+           operated and would claim a choice the server does not offer. -->
+      <div class="locale-field" data-cc="locale-field" hidden>
+        <!-- A globe, not a word (673): "Sprache" on a German page is the word
+             an English reader cannot read. The name is in both languages so
+             it holds whichever one is on screen; each option is its
+             language's own name. -->
+        <svg class="locale-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.3"/><ellipse cx="8" cy="8" rx="2.7" ry="6.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.8 8h12.4M2.9 4.9h10.2M2.9 11.1h10.2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+        <select id="locale-select" data-cc="locale-select" aria-label="Language / Sprache" title="Language / Sprache"></select>
+      </div>
+      <span class="topbar-rule" aria-hidden="true"></span>
+      <div class="topbar-account">
+        <!-- Who is signed in, and the way out. Hidden on a server with no
+             account store, which is the single-tenant arrangement: there is
+             nobody to be signed in as and a sign-out button would be a control
+             that does nothing. The Credentials button stays either way, so it
+             is outside this element and inside the group. -->
+        <!-- The name in full, and only the name (673): "Signed in as" is
+             the one part that changes with the language, so it is said to a
+             screen reader and in `title`, and the visible width is the same
+             in every language without cutting the name off (649). -->
+        <span class="session-field" data-cc="session-field" hidden>
+          <svg class="session-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="5.2" r="2.7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.8 14c.6-2.7 2.7-4.2 5.2-4.2s4.6 1.5 5.2 4.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="visually-hidden" data-cc="session-said"></span>
+          <span class="mono session-user" data-cc="session-user" aria-hidden="true"></span>
+        </span>
+        <button type="button" class="ghost" data-cc="open-settings" data-t="settings.open">Credentials</button>
+        <button type="button" class="ghost" data-cc="sign-out" hidden data-t="auth.signout">Sign out</button>
+      </div>
+    </div>
+  </div>
+  <!-- A row of its own, below the wordmark/version/controls row rather than
+       inside it (653): that row's height is pinned equal in English and
+       German at every width (626, 649), and a sentence a third longer in one
+       language cannot share it without risking the same breakpoint bug 626
+       fixed. Here it may wrap to as many lines as the language needs; nothing
+       else in the header moves when it does. -->
+  <div class="topbar-tagline">
+    <span class="tagline" data-t="app.tagline">Combine your documents into one, then check that nothing was lost, changed or made up</span>
+    <!-- Redesign A: the theme control and the readiness pill share the
+         tagline's row, at its right-hand end, and never the pinned row above:
+         that row keeps exactly the controls 626/649 measured. -->
+    <div class="topbar-status">
+      <!-- Colour theme (redesign A): System, Light, Dark. Wired by theme.js,
+           named by the hidden labels, which app.js translates. -->
+      <div class="theme-field" role="group" aria-labelledby="theme-label">
+        <span class="visually-hidden" id="theme-label" data-t="theme.label">Colour theme</span>
+        <button type="button" class="theme-choice" data-theme-choice="system" aria-pressed="true">
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2a6 6 0 0 1 0 12z" fill="currentColor"/></svg>
+          <span class="visually-hidden" data-t="theme.system">System</span>
+        </button>
+        <button type="button" class="theme-choice" data-theme-choice="light" aria-pressed="false">
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="visually-hidden" data-t="theme.light">Light</span>
+        </button>
+        <button type="button" class="theme-choice" data-theme-choice="dark" aria-pressed="false">
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M13.5 10.2A5.8 5.8 0 0 1 5.8 2.5a5.8 5.8 0 1 0 7.7 7.7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span class="visually-hidden" data-t="theme.dark">Dark</span>
+        </button>
+      </div>
+      <!-- Endpoint readiness (redesign A), from what renderModels already
+           knows: a runnable row in the picker, or none. Hidden until the
+           script has said something, so a blocked script shows no claim. -->
+      <span class="status-pill" data-cc="status-pill" role="status" hidden>
+        <span class="pill-dot" aria-hidden="true"></span>
+        <span class="status-pill-text" data-cc="status-pill-text"></span>
+      </span>
+    </div>
+  </div>
+</header>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- the gate: sign in, or make the first account                        -->
+<!-- ------------------------------------------------------------------ -->
+<!-- One form for both, because they are the same three fields with one
+     extra: a login is a username and a password, and setup is those plus
+     the one-time token the server printed. Two forms would be two places
+     the field names, the autocomplete hints and the error line are
+     written. -->
+<section class="card gate" data-cc="gate" hidden aria-labelledby="gate-heading">
+  <div class="card-head">
+    <h2 id="gate-heading" data-cc="gate-heading"></h2>
+    <p class="hint" data-cc="gate-hint"></p>
+  </div>
+  <div class="field" data-cc="gate-token-field" hidden>
+    <label for="gate-token" data-t="auth.token">Setup address</label>
+    <input type="text" id="gate-token" data-cc="gate-token" autocomplete="off" spellcheck="false">
+    <p class="hint" data-t="auth.token.hint">This server printed a one-time address when it started. Opening that address fills this in; it works once, and only while there is no account.</p>
+  </div>
+  <div class="field">
+    <label for="gate-username" data-t="auth.username">Username</label>
+    <input type="text" id="gate-username" data-cc="gate-username" autocomplete="username" spellcheck="false">
+  </div>
+  <div class="field">
+    <label for="gate-password" data-t="auth.password">Password</label>
+    <input type="password" id="gate-password" data-cc="gate-password" autocomplete="current-password">
+  </div>
+  <div class="runbar-inner">
+    <button type="button" class="primary" data-cc="gate-submit"></button>
+    <p class="status" data-cc="gate-status" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- The workbench (673): input on the left, output on the right, each pane
+     scrolling on its own so the page itself does not. Under 1024px the two
+     stack, the step tabs become a strip that scrolls sideways, and the run
+     bar is fixed to the bottom of the viewport. The layout is `layout.css`;
+     the step, output and finding tabs are wired by `wireTabs` in app.js. -->
+<main id="work" data-cc="workspace" class="workbench">
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- input: four steps, then the run bar                                 -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="pane pane-input" id="pane-input" aria-labelledby="input-heading">
+    <h2 id="input-heading" class="visually-hidden" data-t="layout.input">Input</h2>
+    <!-- The steps, as a WAI-ARIA tablist: arrow keys, Home and End move
+         between them, and only the selected one is in the tab order. Each
+         tab carries its state under its name, written by `renderStepStates`
+         from what `readiness` reads: done, or what needs attention. -->
+    <div class="steps" role="tablist" aria-labelledby="input-heading" data-cc="step-tabs">
+      <button type="button" class="step-tab" role="tab" id="step-tab-documents" aria-controls="step-documents"
+              aria-selected="true" tabindex="0" data-step="documents">
+        <span class="step-n">1</span>
+        <span class="step-text">
+          <span class="step-name" data-t="documents.heading">Documents</span>
+          <span class="step-state" data-cc="step-state-documents"></span>
+        </span>
+      </button>
+      <button type="button" class="step-tab" role="tab" id="step-tab-model" aria-controls="step-model"
+              aria-selected="false" tabindex="-1" data-step="model">
+        <span class="step-n">2</span>
+        <span class="step-text">
+          <span class="step-name" data-t="step.model">Model</span>
+          <span class="step-state" data-cc="step-state-model"></span>
+        </span>
+      </button>
+      <button type="button" class="step-tab" role="tab" id="step-tab-settings" aria-controls="step-settings"
+              aria-selected="false" tabindex="-1" data-step="settings">
+        <span class="step-n">3</span>
+        <span class="step-text">
+          <span class="step-name"><span data-t="controls.heading">Settings</span> <span class="step-new" data-cc="step-new-settings" data-t="step.new" hidden>new</span></span>
+          <span class="step-state" data-cc="step-state-settings"></span>
+        </span>
+      </button>
+      <button type="button" class="step-tab" role="tab" id="step-tab-tuning" aria-controls="step-tuning"
+              aria-selected="false" tabindex="-1" data-step="tuning">
+        <span class="step-n">4</span>
+        <span class="step-text">
+          <span class="step-name" data-t="step.tuning">Tuning</span>
+          <span class="step-state" data-cc="step-state-tuning"></span>
+        </span>
+      </button>
+    </div>
+
+    <div class="pane-body" data-cc="input-body">
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- 1. the documents                                                    -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="card step-panel" role="tabpanel" id="step-documents" aria-labelledby="step-tab-documents" tabindex="-1">
+    <div class="card-head">
+      <h2 id="documents-heading" data-n="1" data-t="documents.heading">Documents</h2>
+      <div class="step-nav">
+        <button type="button" class="ghost step-next" data-step-go="model" data-t="step.next">Next</button>
+      </div>
+      <p class="hint" data-t="documents.hint">Paste or upload the documents you want to combine into one, one per tab.</p>
+      <p class="hint" data-cc="doc-total"></p>
+      <!-- Where a refused add or remove says why. Empty otherwise, and
+           cleared by the next render, so it never reads as a standing
+           complaint about a bound the operator is not at. -->
+      <p class="hint refusal" data-cc="doc-refusal" role="status" aria-live="polite"></p>
+    </div>
+
+    <!-- The add control lives in the tab bar, beside the tabs it makes, and
+         each tab carries its own remove. It is deliberately *outside* the
+         `role="tablist"` element: a tablist owns tabs, and a button that is
+         not one confuses the roving-tabindex model a screen reader uses to
+         walk the set. -->
+    <div class="doc-tabbar">
+      <div class="doc-tabs" role="tablist" aria-label="Documents" data-cc="doc-tabs"></div>
+      <button type="button" class="ghost tab-add" data-cc="add-document">
+        <span class="tab-add-glyph" aria-hidden="true">+</span>
+        <span class="visually-hidden" data-t="documents.add">Add a document</span>
+      </button>
+    </div>
+
+    <div class="doc-panes" data-cc="doc-panes"></div>
+
+    <div class="field base-field">
+      <div class="label-row">
+        <label for="base-select" data-t="documents.base">Base document</label>
+        <div class="help">
+          <button type="button" class="help-icon" aria-describedby="help-base"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+          <div class="help-pop" role="tooltip" id="help-base">
+            <p data-t="documents.base.hint">The merged document follows this document's structure. Its title is chosen in step 4, Tuning.</p>
+          </div>
+        </div>
+      </div>
+      <select id="base-select" data-cc="base-select"></select>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- 2. the model                                                        -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="card step-panel tab-off" role="tabpanel" id="step-model" aria-labelledby="step-tab-model" tabindex="-1">
+    <div class="card-head">
+      <!-- Names the picker table as well (`aria-labelledby`). -->
+      <h2 id="models-label" data-n="2" data-t="step.model">Model</h2>
+      <div class="step-nav">
+        <!-- The scorecard button sits beside Back/Next (723): it used to sit
+             on a row of its own above the picker table, which the operator
+             asked back for the table's own height ("this will give us some
+             space back for the model grid that is otherwise pretty
+             compressed"). Same class and the same position relative to
+             Back/Next as the Settings step's "See examples" button. -->
+        <button type="button" class="ghost open-detail-btn" data-cc="open-scorecard" aria-haspopup="dialog" data-t="scorecard.open">Model scorecard</button>
+        <button type="button" class="ghost step-back" data-step-go="documents" data-t="step.back">Back</button>
+        <button type="button" class="ghost step-next" data-step-go="settings" data-t="step.next">Next</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <!-- The picker (631): only the rows this reader can run -- a model whose
+           provider has an endpoint configured, a model an endpoint listed, and
+           the command routes this server offers. Every catalogue row, with
+           its figures, bands, dates and notes, is in the scorecard the button
+           beside Back/Next opens (723); the picker keeps two short figures a
+           row. -->
+      <!-- The order is the operator's (634), the scorecard button moved to
+           the step-nav since (723): the sentence saying what is listed, the
+           table, then the two checkboxes that change what the table picks,
+           side by side since 723, and the effort slider last. -->
+      <p class="hint" data-t="controls.models.hint">The AI model that writes and checks the merge. Only models you can use here are listed; the scorecard has every model this tool has measured.</p>
+      <!-- No configured endpoint and no command route, so no row. Said in
+           words, with the way to fix it one click away, rather than as an
+           empty table. -->
+      <div class="picker-empty" data-cc="picker-empty" hidden>
+        <p class="hint" data-t="models.picker.empty">No AI model is set up yet. Add an API key or an address under Credentials, or type a model id below.</p>
+        <button type="button" class="ghost" data-cc="picker-credentials" data-t="settings.open">Credentials</button>
+      </div>
+      <div class="scroll" data-cc="picker-box">
+        <table class="models picker" aria-labelledby="models-label">
+          <thead>
+            <tr>
+              <th scope="col" data-t="models.col.use">Use</th>
+              <th scope="col" data-cc="models-check-head" data-t="models.col.check" hidden>Check</th>
+              <th scope="col" aria-sort="none" data-cc="picker-sort-head-name">
+                <button type="button" class="sort" data-cc="picker-sort-name" data-sort="name" data-t="models.col.model">Model</button>
+              </th>
+              <th scope="col" class="num" aria-sort="none" data-cc="picker-sort-head-cost">
+                <span class="col-label"><button type="button" class="sort" data-cc="picker-sort-cost" data-sort="cost" data-t="models.picker.col.cost">Cost</button><span class="col-help" tabindex="0" data-cc="help-picker-cost" aria-label="What this figure means" aria-describedby="help-picker-cost-why">?</span></span>
+              </th>
+              <th scope="col" class="num" aria-sort="none" data-cc="picker-sort-head-speed">
+                <span class="col-label"><button type="button" class="sort" data-cc="picker-sort-speed" data-sort="speed" data-t="models.picker.col.speed">Speed</button><span class="col-help" tabindex="0" data-cc="help-picker-speed" aria-label="What this figure means" aria-describedby="help-picker-speed-why">?</span></span>
+              </th>
+              <th scope="col" class="num" aria-sort="none" data-cc="picker-sort-head-loss">
+                <span class="col-label"><button type="button" class="sort" data-cc="picker-sort-loss" data-sort="loss" data-t="models.picker.col.loss">Loss</button><span class="col-help" tabindex="0" data-cc="help-picker-loss" aria-label="What this figure means" aria-describedby="help-picker-loss-why">?</span></span>
+              </th>
+              <th scope="col" class="num" aria-sort="none" data-cc="picker-sort-head-deviations">
+                <span class="col-label"><button type="button" class="sort" data-cc="picker-sort-deviations" data-sort="deviations" data-t="models.picker.col.deviations">Deviations</button><span class="col-help" tabindex="0" data-cc="help-picker-deviations" aria-label="What this figure means" aria-describedby="help-picker-deviations-why">?</span></span>
+              </th>
+            </tr>
+          </thead>
+          <tbody data-cc="picker-rows"></tbody>
+        </table>
+        <!-- What "not directly comparable" means (638), for the marker's
+             `aria-describedby`; the marker's `title` says it to a pointer. -->
+        <p class="hint" id="incomparable-why-picker" data-t="models.route.mark.incomparable.why" hidden>This route runs a program on this server. The program is told the answer format in the prompt rather than having it enforced, and its randomness cannot be fixed, so two runs can give different results. Its figures were measured through this same route: compare them with other routes like it, not with rows that use an API.</p>
+        <!-- What "measured on <model>" means (675), for that marker's `aria-describedby`. -->
+        <p class="hint" id="history-why-picker" data-t="models.route.mark.history.why" hidden>This route's model alias now runs a newer model than the one these figures were measured on. They are the older model's figures, kept until the route is measured again, and they sort after every figure measured on the model a route runs today.</p>
+        <!-- What each figure column means (655), for its header's help icon:
+             `aria-describedby` for a screen reader, `title` (set by
+             `paintColumnHelp`) for a pointer. Same sentence, same keys, as
+             the scorecard's copies below -- one meaning, said twice because
+             the two tables are two subtrees. -->
+        <p class="hint" id="help-picker-cost-why" data-t="models.help.cost" hidden>What one merge cost at list prices in this tool's tests. Lower is better. &quot;on plan&quot;: it ran on a subscription, which has no price per merge. &quot;free tier&quot;: measured on a vendor's free quota. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+        <p class="hint" id="help-picker-speed-why" data-t="models.help.speed" hidden>How long one merge took in this tool's tests, in seconds. Lower is better. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+        <p class="hint" id="help-picker-loss-why" data-t="models.help.loss" hidden>How many facts from the source documents went missing without the merge saying so, per test (one test is two documents merged). Lower is better; 0 is excellent. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+        <p class="hint" id="help-picker-deviations-why" data-t="models.help.deviations_per_pair" hidden>How many changes the merge made without flagging them, per test (one test is two documents merged). Lower is better; 0 is excellent. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+      </div>
+
+      <!-- One radio per row picks the model for both roles. Splitting them is
+           a real capability -- a frontier merge beside a cheap local check is
+           what "best model for the best price" means -- but it is two
+           decisions and most runs are one, so it is asked for rather than
+           presented. -->
+      <!-- The two toggles in one row (723): "Use a different model for the
+           checks" and "Use a model id not in the table" used to stack, one
+           full-width row each. `flex-wrap` on the pair, and a flexible basis
+           on each `.check-row`, lets them sit side by side when there is
+           room and fall back to stacked -- gracefully, not overflowing -- at
+           a phone width or under the longer German labels. -->
+      <div class="toggle-pair">
+      <div class="check-row">
+      <label class="inline-check">
+        <input type="checkbox" data-cc="split-models">
+        <span data-t="models.split">Use a different model for the checks</span>
+      </label>
+      <div class="help">
+        <button type="button" class="help-icon" aria-describedby="help-split"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+        <div class="help-pop" role="tooltip" id="help-split">
+          <p data-t="models.split.hint">Off, one model does the merge and the checks. On, a second column appears and the two are chosen separately; the report names both.</p>
+        </div>
+      </div>
+      </div>
+
+      <!-- A model id the table does not offer, asked for with a checkbox
+           (591). Ticking it shows the id and where it goes together, because
+           the second is the question the first raises: the tool never works
+           the provider out from the name, so the destination is always stated
+           beside the field. Unticking hides both and clears the id, and the
+           table is in charge again. -->
+      <div class="check-row">
+        <label class="inline-check">
+          <input type="checkbox" data-cc="custom-toggle">
+          <span data-t="models.custom.toggle">Use a model id not in the table</span>
+        </label>
+        <div class="help">
+          <button type="button" class="help-icon" aria-describedby="help-custom"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+          <div class="help-pop" role="tooltip" id="help-custom">
+            <p data-t="models.custom.hint">The id is sent exactly as written to the endpoint chosen in "Send it to"; LLossless does not guess the provider from the name. Only endpoints you have configured are listed. Add one under Credentials.</p>
+          </div>
+        </div>
+      </div>
+      </div>
+      <!-- Why the box above is disabled and what enables it, written by
+           `renderModels` from `splitBlocked`, the one condition the box is
+           disabled under (596). Visible, and the box points at it with
+           `aria-describedby`; the same sentence is its `title` for a pointer.
+           Hidden, and unlinked, while the box is enabled. -->
+      <p class="hint warn" id="split-blocked" data-cc="split-blocked" hidden></p>
+      <!-- Why a command row's Check radio is greyed, written by `renderModels`
+           only while the split is on under an HTTP merge and a command row is
+           in the table (570). An id as well as a hook, because the disabled
+           radios point at it with `aria-describedby`. -->
+      <p class="hint" id="split-routes" data-cc="split-routes" hidden></p>
+
+      <div class="custom-block" data-cc="custom-block" hidden>
+          <div class="custom-row">
+            <div class="field">
+              <label data-cc="custom-model-label" data-t="models.custom">Model id</label>
+              <input type="text" data-cc="custom-model" autocomplete="off" spellcheck="false" placeholder="qwen3:8b">
+            </div>
+            <div class="field">
+              <label data-cc="custom-endpoint-label" data-t="models.custom.endpoint">Send it to</label>
+              <select data-cc="custom-endpoint"></select>
+            </div>
+          </div>
+          <p class="hint" data-cc="custom-model-note"></p>
+          <!-- A typed id that names a retired row (621): warned, not blocked.
+               The server routes it by that row and the vendor refuses it, so
+               the reader is told before the run rather than after it. Written
+               by `renderCustomModel`, like its twin by the submit button. -->
+          <p class="hint warn" data-cc="custom-model-retired" hidden></p>
+      </div>
+      <!-- The window a model is served with, stated because a vendor cannot
+           report one and LLossless never guesses it (604). Not nested in
+           `.custom-block`: it is shown the same way for a typed id, behind the
+           checkbox above, and for a row picked straight from the table above
+           that the catalogue states no window for (605) -- an id an endpoint
+           listed that no catalogue entry names, which had nowhere to state
+           one before. `renderCustomWindow` is the one renderer for both;
+           required where the destination cannot report it, optional where it
+           may (an ollama), the note says which. -->
+      <div class="field" data-cc="window-block" hidden>
+        <label data-cc="custom-window-label" data-t="models.custom.window">Context window (tokens)</label>
+        <input type="number" data-cc="custom-window" inputmode="numeric" step="1" autocomplete="off" aria-describedby="custom-window-note">
+        <p class="hint" id="custom-window-note" data-cc="custom-window-note"></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- 3. the settings: how freely the merge is written, how deeply checked -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="card step-panel tab-off" role="tabpanel" id="step-settings" aria-labelledby="step-tab-settings" tabindex="-1">
+    <div class="card-head">
+      <h2 id="controls-heading" data-n="3" data-t="controls.heading">Settings</h2>
+      <div class="step-nav">
+        <!-- Consistent with the Model step's scorecard button (723): the
+             same class, the same position, before Back. -->
+        <button type="button" class="ghost open-detail-btn" data-cc="open-compare" aria-haspopup="dialog" data-t="compare.open">See examples</button>
+        <button type="button" class="ghost step-back" data-step-go="model" data-t="step.back">Back</button>
+        <button type="button" class="ghost step-next" data-step-go="tuning" data-t="step.next">Next</button>
+      </div>
+    </div>
+
+    <div class="controls-grid">
+
+      <!-- The merge's effort, first when the chosen route takes one (673):
+           it is a choice about this run, like the two below. The Settings tab
+           carries a "new" marker when it appears, until the step is opened. -->
+      <!-- The merge's effort level, on a subscription route only (613). The
+           slider is a native range input, so it is keyboard-operable as it
+           stands, and its label names it; `aria-valuetext` carries the level's
+           name rather than its position. The card beside it shows what the
+           registered grid measured at that level, and changes as the slider
+           moves; a level with no figures says so in words rather than as a
+           blank or a zero. `max` is a fifth stop the grid never ran (615): the
+           card adds a cost warning under the unmeasured sentence, and the same
+           warning is repeated by the submit button below so picking it and
+           never reading the card still shows it. A route can also carry
+           figures for a model its program was pinned to by full id (661):
+           each is its own section under `effort-pinned`, headed by the model
+           id, and the route's own figures are then headed by theirs. The
+           section for the model the route's alias answers as now goes in
+           `effort-current`, above the route's own figures, which are then
+           headed as history. Written
+           by `renderEffort` and `renderEffortCard`. -->
+      <div class="field effort-block" data-cc="effort-block" hidden>
+        <div class="effort-control">
+          <div class="label-row">
+            <label for="effort-slider" data-t="effort.label">Merge effort</label>
+            <!-- What the test grid measured at the chosen level, behind "?"
+                 (673): benchmark figures are for a reader who asks for them.
+                 The two warnings stay in view under the slider. -->
+            <div class="help">
+              <button type="button" class="help-icon" aria-describedby="effort-card-title"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+              <div class="help-pop" role="tooltip">
+        <div class="effort-card" role="group" aria-labelledby="effort-card-title" aria-live="polite">
+          <p class="effort-card-title" id="effort-card-title" data-cc="effort-card-title"></p>
+          <div class="effort-pinned" data-cc="effort-current" hidden></div>
+          <p class="effort-model" data-cc="effort-model" hidden></p>
+          <dl class="effort-figures" data-cc="effort-figures"></dl>
+          <p class="hint" data-cc="effort-unmeasured" hidden></p>
+          <p class="hint effort-caveat" data-cc="effort-caveat" hidden></p>
+          <div class="effort-pinned" data-cc="effort-pinned" hidden></div>
+        </div>
+              </div>
+            </div>
+          </div>
+          <input type="range" id="effort-slider" data-cc="effort-slider" min="0" max="4" step="1" aria-describedby="effort-hint">
+          <div class="range-legend" data-cc="effort-ticks" aria-hidden="true"></div>
+          <p class="hint" id="effort-hint" data-t="effort.hint">How hard the model thinks while it writes the merge. Higher is slower and usually costs more.</p>
+          <!-- The lowest level measurably as good as the best, computed from
+               the catalogue by `effortBaseline` (673), and shown only where
+               the measurement is of what this route runs now. Otherwise
+               nothing: no "unmeasured" line. -->
+          <div class="effort-baseline" data-cc="effort-baseline" hidden>
+            <span data-cc="effort-baseline-text"></span>
+            <div class="help">
+              <button type="button" class="help-icon" aria-describedby="help-baseline"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+              <div class="help-pop" role="tooltip" id="help-baseline"><p data-cc="effort-baseline-detail"></p></div>
+            </div>
+          </div>
+          <p class="hint warn" data-cc="effort-max-warning" hidden></p>
+          <p class="hint warn" data-cc="effort-warning" hidden></p>
+        </div>
+      </div>
+
+      <!-- Shown in the effort control's place for a single-level model
+           (688, ruling 11: Haiku has extended thinking on or off, and no
+           graded scale). `renderEffort` toggles it opposite `effort-block`. -->
+      <div class="field">
+        <p class="hint" data-cc="effort-single-level" hidden></p>
+      </div>
+
+      <div class="field">
+        <div class="label-row">
+          <label for="fidelity-range" data-t="controls.fidelity">How much the wording may change</label>
+        </div>
+        <input type="range" id="fidelity-range" data-cc="fidelity-range"
+               min="0" max="0" step="1" value="0" list="fidelity-stops">
+        <datalist id="fidelity-stops" data-cc="fidelity-stops"></datalist>
+        <div class="range-legend" data-cc="fidelity-legend" aria-hidden="true"></div>
+        <!-- One short line per level, one line high whatever the level, so
+             the page does not move under the slider (673). What each level
+             buys and costs, with a sample, is in the Compare levels dialog;
+             the slider's `aria-valuetext` still carries all of it (550). -->
+        <p class="explains level-brief" data-cc="fidelity-brief"></p>
+      </div>
+
+      <!-- Beside the fidelity slider because the two are the run's two axes:
+           how freely the merge may be written, and how thoroughly what came
+           back is checked. The options are stacked rather than pilled like
+           the title policy below, because the limitation belongs to the
+           option rather than to a footnote under the group -- a reader who
+           picks the cheap depth must not be able to miss that it stops
+           checking for invention. -->
+      <div class="field">
+        <div class="label-row">
+          <span class="label-like" id="verify-depth-label" data-t="controls.depth">How thoroughly to check</span>
+          <div class="help">
+            <button type="button" class="help-icon" aria-describedby="help-depth"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+            <div class="help-pop" role="tooltip" id="help-depth">
+              <!-- What the cheaper depth costs in detection, said behind the picker's help icon (673)
+                   rather than left for a reader to assume. The figures are the
+                   catalogue's `verify_depth` block (585), rendered by
+                   `renderDepthDelta` from `/config`; with no block, or with the
+                   script blocked, the sentence here says they are not loaded, and a
+                   blank or a zero in their place would be an answer nobody measured.
+              
+                   Two hooks on one paragraph, on purpose. `data-t` is the sentence a
+                   reader gets with the script blocked, which is the state this page
+                   is built to stay readable in; `data-cc` is how `renderVerifyDepth`
+                   replaces it with the measured figures `/config` serves. Without the
+                   second, the field and the sentence could disagree in silence. -->
+              <p class="hint policy-note" data-cc="depth-delta" data-t="controls.depth.unmeasured">A benchmark was run, but its figures are not loaded on this server, so how much the cheaper check misses is unmeasured here, which is not the same as nothing. Shown instead: the calls it saves, and what it does not check.</p>
+            </div>
+          </div>
+        </div>
+        <div class="radio-stack" role="radiogroup" aria-labelledby="verify-depth-label"
+             data-cc="verify-depth"></div>
+        <p class="explains" data-cc="depth-estimate"></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- 4. tuning: what the merge may leave out, and the title              -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="card step-panel tab-off" role="tabpanel" id="step-tuning" aria-labelledby="step-tab-tuning" tabindex="-1">
+    <div class="card-head">
+      <h2 id="tuning-heading" data-n="4" data-t="step.tuning">Tuning</h2>
+      <div class="step-nav">
+        <button type="button" class="ghost step-back" data-step-go="settings" data-t="step.back">Back</button>
+      </div>
+    </div>
+
+    <div class="controls-grid">
+
+      <!-- The declared-loss ceiling directly above the title policy, the two
+           stacked in one column (593). Alone at the end of the grid it wrapped
+           to a row of its own under the fidelity slider, a screen below the
+           control it sits beside in meaning: both decide what the merge may
+           leave out of, or change about, the sources. One cell keeps them
+           together at every width, and the source order is the tab order. -->
+      <div class="field-stack">
+        <div class="field">
+          <label for="loss-budget" data-t="controls.loss">How much may be left out</label>
+          <div class="with-suffix">
+            <input type="number" id="loss-budget" data-cc="loss-budget"
+                   min="0" max="1" step="0.01" inputmode="decimal">
+            <span class="suffix mono" data-cc="loss-budget-pct"></span>
+          </div>
+          <p class="explains" data-t="controls.loss.hint">The merge may openly leave out up to this share of your documents, and lists every omission. Over it, you still get the merged document, marked for review. The report calls this the declared-loss ceiling.</p>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <span class="label-like" id="title-policy-label" data-t="controls.title">Title</span>
+            <div class="help">
+              <button type="button" class="help-icon" aria-describedby="help-title"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+              <div class="help-pop" role="tooltip" id="help-title">
+                <!-- The chosen policy's sentence is the merge prompt's own,
+                     served per policy. The two after it are what the prompts
+                     do not say: which policy may write a title at all, and
+                     what happens when no source has one. -->
+                <p data-cc="title-explains"></p>
+                <p data-t="controls.title.policies">&quot;keep-base&quot; keeps the base document's title, or the first title in document order if the base has none. &quot;choose-best&quot; takes the clearest existing title and never writes one. Only &quot;synthesise&quot; may write a new title, and that title is checked against your documents like any other fact.</p>
+                <p data-t="controls.title.notitle">Nothing is reported when no document has a title and the merge writes none, or when the merged title's words already appear in a document's text. A first line that runs straight into the text is not counted as a title.</p>
+              </div>
+            </div>
+          </div>
+          <div class="radio-set" role="radiogroup" aria-labelledby="title-policy-label"
+               data-cc="title-policy"></div>
+          <p class="explains" data-cc="title-brief"></p>
+        </div>
+      </div>
+
+      <!-- Your saved defaults (674): shown only while you have some, with
+           the way back to the server's. Written by `renderDefaultsField`. -->
+      <div class="field defaults-field" data-cc="defaults-field" hidden>
+        <span class="label-like" data-t="defaults.heading">Your defaults</span>
+        <p class="explains" data-cc="defaults-line" tabindex="-1"></p>
+        <div class="defaults-actions">
+          <button type="button" class="ghost" data-cc="defaults-reset" data-t="defaults.reset">Reset to server defaults</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+    </div>
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- 3. run                                                              -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="card runbar" data-cc="run-card" aria-labelledby="run-heading">
+    <h2 id="run-heading" class="visually-hidden" data-t="run.heading">Run</h2>
+    <!-- The same cost warning the effort card shows at `max` (615), repeated
+         here so a submitter who picked the slider's last stop and never read
+         the card upstream still meets it right before the button. Written by
+         `renderEffortCard`, which hides it the moment `max` is not the
+         selected level or the route takes no effort level at all. -->
+    <p class="hint warn" data-cc="effort-submit-max-warning" hidden></p>
+    <!-- The typed-id retired warning (621), repeated here for the reason the
+         `max` warning is: it applies to the button below it. -->
+    <p class="hint warn" data-cc="submit-retired-warning" hidden></p>
+    <!-- Saved defaults this server no longer offers (674), named once, in
+         one line, above the button they would have changed. Never replaced
+         in silence; "Update my defaults" re-saves the stored set with the
+         dropped fields removed (686), or Dismiss hides the notice in this
+         browser until the dropped set changes. -->
+    <div class="hint warn defaults-dropped" data-cc="defaults-dropped" role="status" hidden>
+      <span data-cc="defaults-dropped-text"></span>
+      <button type="button" class="ghost" data-cc="defaults-update" data-t="defaults.update">Update my defaults</button>
+      <button type="button" class="ghost" data-cc="defaults-dropped-close" data-t="defaults.dismiss">Dismiss</button>
+    </div>
+    <div class="runbar-inner">
+      <!-- The spinner is inside the button and the label changes with it. A
+           run takes between 23 and 4,559 seconds, and the only thing that
+           said one was in flight was the word RUNNING in the status line at
+           7.8px -- "easy to miss", which is how somebody presses a disabled
+           button twice and concludes the page is broken. Colour and motion
+           never carry it alone: the word on the button changes too. -->
+      <button type="button" class="primary" data-cc="submit">
+        <span class="spinner" data-cc="submit-spinner" aria-hidden="true" hidden></span>
+        <span data-cc="submit-label" data-t="run.submit">Merge and check</span>
+      </button>
+      <button type="button" class="ghost" data-cc="cancel" hidden data-t="run.stopwatching">Stop watching</button>
+      <!-- A real cancel (639), beside the button that only stops this page
+           following the run. Shown while a run is queued or running; the
+           dialog below says what is billed before anything is sent. -->
+      <button type="button" class="ghost danger" data-cc="cancel-run" hidden data-t="run.cancel">Cancel run</button>
+      <!-- Retry (660), on a followed run that failed or was interrupted by a
+           server stop, while its documents are still held. The dialog below
+           says the new run may be billed again before anything is sent. -->
+      <button type="button" class="ghost" data-cc="retry-run" hidden data-t="run.retry">Retry</button>
+      <!-- Opt-in, and the only thing that asks the browser for permission
+           (660): nothing is requested on page load. Hidden where the browser
+           has no notifications or they were refused. -->
+      <button type="button" class="ghost" data-cc="notify" hidden data-t="run.notify">Notify me</button>
+      <!-- Always there, because the alternative was reloading the page. It
+           never clears anything on its own: the dialog below is the whole of
+           the control. -->
+      <button type="button" class="ghost" data-cc="start-over" data-t="run.startover">Start over</button>
+      <!-- Save these settings as my defaults (674). Offered while the run can
+           start; unticked by default, and a plain manual checkbox until a
+           first save exists. From then on it tracks whether the page's
+           current settings still equal what is saved (717,
+           `syncSaveDefaultsChecked`): ticked whenever they agree, whether
+           that is because a run was just started with it ticked or because
+           nothing has changed since a load that found them already equal,
+           and unticked the moment a setting is changed away from the saved
+           set. The note beside it says what the last save did while the run
+           goes. -->
+      <label class="save-defaults" data-cc="save-defaults-field" hidden>
+        <input type="checkbox" data-cc="save-defaults">
+        <span data-t="defaults.save">Save these settings as my defaults</span>
+      </label>
+      <p class="save-defaults-note" data-cc="save-defaults-note" role="status" hidden></p>
+      <p class="status" data-cc="status" role="status" aria-live="polite">
+        <!-- The dot and the word share their own line box (717): `.status`
+             aligns its children on their text baseline, which put the dot
+             where the *pair's* shared baseline fell rather than centred on
+             the word beside it. `.status-lead` isolates the two so the dot
+             centres on `.status-word`'s own line, not on a box widened by
+             `.status-text`'s taller font sharing the same baseline. -->
+        <span class="status-lead">
+          <span class="dot" data-cc="status-dot" aria-hidden="true"></span>
+          <span class="status-word mono" data-cc="status-word"></span>
+        </span>
+        <span class="status-text" data-cc="status-text"></span>
+      </p>
+      <!-- When the line beside it says the run is not ready, the way to the
+           step that holds the reason (673): a blocked run never fails silently
+           behind a tab. Written by `refreshIdleStatus`, hidden while ready. -->
+      <button type="button" class="ghost status-goto" data-cc="status-goto" hidden></button>
+    </div>
+  </section>
+  </section>
+
+  <!-- The divider between the panes (673): drag it, or focus it and use the
+       arrow keys; a double-click puts it back. Hidden under 1024px, where the
+       panes stack. The width is kept per browser. -->
+  <div class="pane-divider" role="separator" aria-orientation="vertical" tabindex="0"
+       aria-labelledby="divider-label" aria-controls="pane-input" aria-valuemin="30" aria-valuemax="75" aria-valuenow="60"
+       data-cc="pane-divider"><span class="visually-hidden" id="divider-label" data-t="layout.divider">Width of the input pane</span></div>
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- output: an empty state, the log while a run goes, then the result   -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="pane pane-output" aria-labelledby="output-heading" data-cc="output-pane">
+    <h2 id="output-heading" class="visually-hidden" data-t="layout.output">Output</h2>
+    <!-- The current run, or the list of previous ones (717): both tabs are
+         always shown now, each `aria-disabled` until there is something
+         behind it (a run started this page, or a first entry in the list),
+         so neither ever looks live and does nothing. Each carries its own
+         "?"-less tooltip, shown on hover and on keyboard focus the same way
+         `helpBox` already works elsewhere, kept in step by `enableRunTab`,
+         `syncHistoryTab` and `refreshHistory`. -->
+    <div class="output-tabs" role="tablist" aria-labelledby="output-heading" data-cc="output-tabs">
+      <span class="tab-help">
+        <button type="button" class="output-tab" role="tab" id="output-tab-run" aria-controls="output-run"
+                aria-selected="true" tabindex="0" aria-disabled="true" aria-describedby="output-tab-run-hint"
+                data-t="layout.output.run">Current run</button>
+        <span class="help-pop" role="tooltip" id="output-tab-run-hint" data-t="layout.output.run.hint">Shows the run's progress and result once you start a merge.</span>
+      </span>
+      <span class="tab-help">
+        <button type="button" class="output-tab" role="tab" id="output-tab-history" aria-controls="history-panel"
+                aria-selected="false" tabindex="-1" aria-disabled="true" aria-describedby="output-tab-history-hint"
+                data-t="layout.output.history">Previous runs</button>
+        <span class="help-pop" role="tooltip" id="output-tab-history-hint" data-t="layout.output.history.hint">Your finished runs will be listed here.</span>
+      </span>
+    </div>
+
+    <div class="pane-body" data-cc="output-body">
+    <div class="output-run" role="tabpanel" id="output-run" aria-labelledby="output-tab-run">
+
+    <!-- Shown by `layout.css` while there is neither a log nor a result. -->
+    <div class="output-empty">
+      <p data-t="layout.output.empty">Your merged document appears here, checked fact by fact against your originals, so you can see what was kept, lost, changed or made up. Add your documents and press Merge and check.</p>
+    </div>
+
+    <div class="progress" data-cc="progress-wrap" hidden>
+      <div class="progress-head">
+        <span class="label-like" data-t="run.progress">Progress</span>
+        <span class="mono hint" data-cc="elapsed"></span>
+      </div>
+      <ol class="events" data-cc="events"></ol>
+    </div>
+
+    <!-- The CLI-equivalent block: how this run reads as an `llossless merge`
+         command, rendered by the server off the settings the job actually
+         ran with (never off these controls) and shown from the moment the
+         run starts to the finished result (`web/cli_render.py`). Collapsed
+         and closed by default -- a label and one short line for the reader
+         who only wants to know the run is reproducible, the command itself
+         behind the disclosure triangle for the reader who wants it. -->
+    <details class="card cli-equivalent" data-cc="cli-equivalent" hidden>
+      <summary data-t="cli.summary">Run this from the command line</summary>
+      <div class="cli-body">
+        <p class="hint" data-t="cli.intro">The exact command this run used - copy it to repeat the run, or to automate it.</p>
+        <p class="hint" data-cc="cli-documents-hint" data-t="cli.documents.hint" hidden>Save each document under the name shown, in this order:</p>
+        <ol class="cli-docs" data-cc="cli-docs"></ol>
+        <div class="card-head-actions">
+          <span class="hint mono" data-cc="cli-shell"></span>
+          <button type="button" class="ghost" data-cc="cli-copy" data-t="cli.copy">Copy command</button>
+        </div>
+        <pre class="document mono" data-cc="cli-command" tabindex="0" role="region" aria-label="Command"></pre>
+        <p class="hint" data-cc="cli-copy-note" role="status" aria-live="polite" hidden></p>
+        <div data-cc="cli-notes-wrap" hidden>
+          <p class="label-like" data-t="cli.notes.heading">Notes</p>
+          <ul class="cli-notes" data-cc="cli-notes"></ul>
+        </div>
+      </div>
+    </details>
+
+  <!-- ------------------------------------------------------------------ -->
+  <!-- 4. results                                                          -->
+  <!-- ------------------------------------------------------------------ -->
+  <section class="results" data-cc="results" hidden aria-labelledby="results-heading">
+    <h2 id="results-heading" class="visually-hidden" data-t="results.heading">Result</h2>
+
+    <div class="banner" data-cc="verdict">
+      <span class="banner-label" data-cc="verdict-label"></span>
+      <p class="banner-text" data-cc="verdict-text"></p>
+    </div>
+
+    <!-- The section chips' figures as tiles (redesign A): one per section,
+         the count large and the chip's own words under it. -->
+    <ul class="stat-tiles" data-cc="stat-tiles" aria-labelledby="results-heading"></ul>
+
+    <div class="card">
+      <div class="card-head">
+        <h3 id="results-merged-heading" data-t="results.merged">Merged document</h3>
+        <div class="card-head-actions" data-cc="result-actions">
+          <!-- **First, because it is the cheapest thing in the group** (553,
+               561). 553 settled that a free action goes before the ones that
+               put a file on a disk, and this one does not even open a window.
+               It names the artefact the way its neighbours do, because a
+               control called "Copy" in a row of four would be the only one
+               that did not say what it acts on.
+
+               A real `<button>`, not a styled span: Enter and Space have to
+               work on it, and a copy control only a mouse can hit is half a
+               feature. No `<label for=...>` -- a button is named by the text
+               inside it, and a second name beside it would be two names for
+               one control. -->
+          <button type="button" class="ghost" data-cc="copy-merged" data-t="results.copy">Copy merged document</button>
+          <a class="ghost" data-cc="download-merged" download="merged.md" data-t="results.download">Download markdown</a>
+          <!-- **Viewing first, then the two saves, narrow to wide** (553). The
+               operator's report: *"the rows 'Download report / Download
+               everything / Full report' have the wrong order. It should be
+               'View report', 'Download report' and 'Download everything'."*
+               They are right twice over -- the free action goes before the two
+               that put a file on a disk, and the group then reads as one
+               escalating list instead of two saves with a view stranded after
+               them. `Full report` is also renamed: it named a size where its
+               neighbours name an action, which is what made it read as a
+               fourth kind of download. -->
+          <a class="ghost" data-cc="open-report" target="_blank" rel="noopener" data-t="results.report">View report</a>
+          <!-- The same bytes the "View report" link opens, saved rather than
+               shown. `html_report.render` is one self-contained document with
+               its stylesheet inline and nothing fetched, so the file works
+               from a disk with no network -- which is what made Save Page As
+               the wrong answer: it is browser-dependent, several clicks, and
+               some browsers do not offer it at all. -->
+          <a class="ghost" data-cc="download-report" download="report.html" data-t="results.download.report">Download report</a>
+          <!-- Sources, merged document, `report.json` and `report.html` in one
+               archive. The operator asked for it for auditing, and that is what
+               decides the contents: enough to check this merge against the
+               documents it was made from, months later, on a machine that
+               cannot reach this server. -->
+          <a class="ghost" data-cc="download-bundle" download="bundle.zip" data-t="results.download.bundle">Download everything</a>
+        </div>
+      </div>
+      <!-- How long this run is kept, said before it matters rather than after.
+           Filled by the script from `/config` and from the run's own remaining
+           seconds: the window is this server's setting, not this tool's, and a
+           sentence written here would be wrong on every deployment that passed
+           `--retention`. -->
+      <p class="hint" data-cc="retention-note" hidden></p>
+      <!-- Which of the three copy paths ran, in words (561). The API is absent
+           over plain http to a LAN address, which is a deployment this project
+           supports, so "nothing happened" is a state a reader will meet and a
+           control that goes quiet there is a control they will press twice. -->
+      <p class="hint" data-cc="copy-note" role="status" aria-live="polite" hidden></p>
+      <!-- `tabindex="0"` and a named region, for the operator's second
+           request: *"if we select the text box and press ctrl+a it would
+           select the text in the box and not the entire website"*. It is a
+           `<pre>`, not a `<textarea>` -- a textarea would scope Ctrl+A for
+           free and would also make a read-only artefact editable, which is
+           not a trade this tool makes -- so the shortcut is a `keydown` on
+           this element, and an element that can hold a keydown is an element
+           that can hold focus. It is also the right answer without the
+           shortcut: this box scrolls, and a scrollable region a keyboard
+           cannot reach is one a keyboard cannot read. -->
+      <pre class="document" data-cc="merged" tabindex="0" role="region" aria-labelledby="results-merged-heading"></pre>
+    </div>
+
+    <div class="banner" data-cc="mismatch" hidden>
+      <span class="banner-label" data-t="mismatch.label">Possibly not one document</span>
+      <p class="banner-text" data-cc="mismatch-text"></p>
+    </div>
+
+    <!-- The finding sections as tabs (673), each tab carrying the chip its
+         section had. A section the renderers hide takes its tab with it
+         (`syncFindingTabs`), so there is never an empty tab. -->
+    <div class="findings-head">
+      <h3 id="findings-heading" data-t="layout.findings">Findings</h3>
+      <!-- What "the reference" means, said once, where a reader meets the word.
+           The rationale under every finding is the model's own prose and it
+           says "the reference text" because that is what the prompt calls it --
+           in the forward direction the merged document, in the reverse the
+           sources. Hidden on a run where nothing was graded: a sentence about
+           how verdicts were reached, over no verdicts, is furniture. -->
+      <div class="help">
+        <button type="button" class="help-icon" aria-describedby="help-judged"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
+        <div class="help-pop" role="tooltip" id="help-judged">
+          <p class="judged-note" data-cc="judged-note" data-t="results.judged" hidden>Each finding names the document it was judged against. The model is told to use that document alone and to ignore anything it knows from elsewhere, and nothing here can prove it did - so a rationale that reads like general knowledge is one to check against the span it quoted.</p>
+        </div>
+      </div>
+    </div>
+    <div class="finding-tabs" role="tablist" aria-labelledby="findings-heading" data-cc="finding-tabs">
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-review" aria-controls="finding-review"
+              aria-selected="false" tabindex="-1" hidden>
+        <span class="section-title" data-t="results.review">What needs your attention</span>
+        <span class="chip" data-cc="review-chip"></span>
+      </button>
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-conflicts" aria-controls="finding-conflicts"
+              aria-selected="true" tabindex="0">
+        <span class="section-title" data-t="results.conflicts">Conflicts</span>
+        <span class="chip" data-cc="conflicts-chip"></span>
+      </button>
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-omitted" aria-controls="finding-omitted"
+              aria-selected="false" tabindex="-1">
+        <span class="section-title" data-t="results.omitted">Omitted content</span>
+        <span class="chip" data-cc="omitted-chip"></span>
+      </button>
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-attributions" aria-controls="finding-attributions"
+              aria-selected="false" tabindex="-1" hidden>
+        <span class="section-title" data-t="results.attributions">Attributions</span>
+        <span class="chip" data-cc="attributions-chip"></span>
+      </button>
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-numbers" aria-controls="finding-numbers"
+              aria-selected="false" tabindex="-1" hidden>
+        <span class="section-title" data-t="results.numbers">Number format</span>
+        <span class="chip" data-cc="numbers-chip"></span>
+      </button>
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-additions" aria-controls="finding-additions"
+              aria-selected="false" tabindex="-1" hidden>
+        <span class="section-title" data-t="results.additions">Added from outside your documents</span>
+        <span class="chip" data-cc="additions-chip"></span>
+      </button>
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-claims" aria-controls="finding-claims"
+              aria-selected="false" tabindex="-1">
+        <span class="section-title" data-t="results.claims">Claims</span>
+        <span class="chip" data-cc="claims-chip"></span>
+      </button>
+      <button type="button" class="finding-tab" role="tab" id="finding-tab-checks" aria-controls="finding-checks"
+              aria-selected="false" tabindex="-1">
+        <span class="section-title" data-t="results.checks">What was checked</span>
+        <span class="chip" data-cc="checks-chip"></span>
+      </button>
+    </div>
+
+    <section class="card section tab-off" role="tabpanel" id="finding-review" aria-labelledby="finding-tab-review" data-cc="review-section" hidden tabindex="0">
+      <div class="section-body" data-cc="review"></div>
+    </section>
+
+    <section class="card section" role="tabpanel" id="finding-conflicts" aria-labelledby="finding-tab-conflicts" data-cc="conflicts-section" tabindex="0">
+      <div class="section-body" data-cc="conflicts"></div>
+    </section>
+
+    <section class="card section tab-off" role="tabpanel" id="finding-omitted" aria-labelledby="finding-tab-omitted" data-cc="omitted-section" tabindex="0">
+      <div class="section-body" data-cc="omitted"></div>
+    </section>
+
+    <!-- A merged sentence credited to a source that does not state it (572).
+         Hidden until something fired, the report's rule for its own section;
+         whether the check ran is a row in "What was checked". -->
+    <section class="card section tab-off" role="tabpanel" id="finding-attributions" aria-labelledby="finding-tab-attributions" data-cc="attributions-section" hidden tabindex="0">
+      <div class="section-body" data-cc="attributions"></div>
+    </section>
+
+    <!-- How each document writes its decimals, and the numerals that break
+         it (601). Hidden until something was flagged; whether the check ran
+         is a row in "What was checked". -->
+    <section class="card section tab-off" role="tabpanel" id="finding-numbers" aria-labelledby="finding-tab-numbers" data-cc="numbers-section" hidden tabindex="0">
+      <div class="section-body" data-cc="numbers"></div>
+    </section>
+
+    <section class="card section tab-off" role="tabpanel" id="finding-additions" aria-labelledby="finding-tab-additions" data-cc="additions-section" hidden tabindex="0">
+      <div class="section-body" data-cc="additions"></div>
+    </section>
+
+    <section class="card section tab-off" role="tabpanel" id="finding-claims" aria-labelledby="finding-tab-claims" data-cc="claims-section" tabindex="0">
+      <div class="section-body">
+        <div class="field filter">
+          <label for="claim-filter" data-t="results.filter">Filter claims</label>
+          <input type="search" id="claim-filter" data-cc="claim-filter" autocomplete="off">
+        </div>
+        <div class="scroll">
+          <table class="claims">
+            <thead>
+              <tr>
+                <th scope="col" class="num" data-t="claims.col.n">#</th>
+                <th scope="col" data-t="claims.col.claim">Claim</th>
+                <th scope="col" aria-sort="none" data-cc="claims-sort-head">
+                  <button type="button" class="sort" data-cc="claims-sort"
+                          data-t="claims.col.status">Status</button>
+                </th>
+                <th scope="col" data-t="claims.col.note">Note</th>
+              </tr>
+            </thead>
+            <tbody data-cc="claim-rows"></tbody>
+          </table>
+        </div>
+        <p class="hint" data-cc="claims-empty"></p>
+      </div>
+    </section>
+
+    <section class="card section tab-off" role="tabpanel" id="finding-checks" aria-labelledby="finding-tab-checks" data-cc="checks-section" tabindex="0">
+      <div class="section-body">
+        <ul class="checks" data-cc="checks"></ul>
+        <dl class="provenance" data-cc="provenance"></dl>
+      </div>
+    </section>
+
+  </section>
+
+    </div>
+
+  <section class="card history-panel tab-off" role="tabpanel" id="history-panel" aria-labelledby="output-tab-history" data-cc="history-section" hidden>
+    <div class="card-head">
+      <h2 id="history-heading" data-t="history.heading">Earlier runs on this server</h2>
+      <p class="hint" data-t="history.hint">Uploads and everything derived from them are deleted when the retention window passes.</p>
+    </div>
+    <ul class="history" data-cc="history"></ul>
+  </section>
+    </div>
+  </section>
+
+</main>
+
+<!-- -------------------------------------------------------------------- -->
+<!-- credentials                                                           -->
+<!-- -------------------------------------------------------------------- -->
+<dialog class="sheet settings" data-cc="settings-dialog" aria-labelledby="settings-heading">
+  <div class="sheet-head">
+    <h2 id="settings-heading" data-t="settings.heading">Credentials</h2>
+  </div>
+  <p class="hint" data-t="settings.hint">A key is written to this server and never read back. This page only ever learns whether one is set, and its last four characters.</p>
+  <ul class="providers" data-cc="providers"></ul>
+  <p class="hint" data-cc="settings-note"></p>
+
+  <!-- Beside the endpoints, because it is the same question one mechanism
+       over: how does this server reach a model. An endpoint is an address and
+       a key; this is a program already installed on the machine, and the
+       operator could not find it at all when the only way to configure it was
+       a file. What the browser sends is the id of something this server found
+       on its own PATH -- never a command, never a path, and there is no field
+       here that could carry one. -->
+  <div class="accounts" data-cc="commands-section">
+    <h3 data-t="commands.heading">Subscription tools on this server</h3>
+    <p class="hint" data-t="commands.hint">This server looked in its usual install places for the subscription tools it knows by name. Switching one on offers it in the model picker. The browser only ever sees a tool's name, never the command it runs.</p>
+    <!-- The three sentences every command route owes its reader, said once
+         rather than on each of four rows. They are properties of the
+         mechanism and not of the row, which is why `per_user` is served once
+         too; four copies of them would be four places one could go stale. -->
+    <p class="hint" data-cc="commands-shared"></p>
+    <p class="hint" data-cc="commands-tier"></p>
+    <p class="hint" data-cc="commands-cost"></p>
+    <!-- Above the list, not at the foot with the rest of the notes. It says
+         where a route that was in the picker yesterday went, and it tells the
+         reader to switch one on *below* -- so a copy of it under four rows is
+         a sentence pointing backwards at what the reader has already scrolled
+         past. It is also not a note about a toggle they just used, which is
+         what `commands-note` is for. -->
+    <p class="hint" data-cc="commands-retired" hidden></p>
+    <!-- The commands file in use is the one from before the rename (647). -->
+    <ul class="providers" data-cc="commands-list"></ul>
+    <!-- The rows of the commands file this build cannot use and which match
+         none of the four above -- a hand-written route with a field missing,
+         almost always. They are rows rather than a paragraph for the reason
+         the four are: the message names one route, so it belongs beside that
+         route and not across the panel. Empty and hidden on the ordinary
+         deployment, which is every deployment whose file is fine. -->
+    <ul class="providers" data-cc="commands-problems" hidden></ul>
+    <p class="hint" data-cc="commands-note"></p>
+  </div>
+
+  <!-- Your own password. Shown to anybody signed in, including the operator,
+       because "the operator can reset anybody's" is not a substitute for
+       being able to change your own without asking them. -->
+  <div class="accounts" data-cc="password-section" hidden>
+    <h3 data-t="password.heading">Your password</h3>
+    <p class="hint" data-t="password.hint">Changing it signs this browser out, and every other browser and script signed in as you.</p>
+    <div class="provider-actions">
+      <div class="field grow">
+        <label data-cc="current-password-label" data-t="password.current">Current password</label>
+        <input type="password" class="provider-key" data-cc="current-password" autocomplete="current-password">
+      </div>
+      <div class="field grow">
+        <label data-cc="new-password-label" data-t="password.new">New password</label>
+        <input type="password" class="provider-key" data-cc="new-password" autocomplete="new-password">
+      </div>
+      <button type="button" class="ghost" data-cc="change-password" data-t="password.save">Change</button>
+    </div>
+    <p class="hint" data-cc="password-note"></p>
+  </div>
+
+  <!-- The operator's, and hidden from everybody else: the route behind it
+       answers 403 to anyone who is not, and a page that offered the control
+       anyway would be a page that explains a refusal after the fact. -->
+  <div class="accounts" data-cc="accounts-section" hidden>
+    <h3 data-t="accounts.heading">Accounts</h3>
+    <p class="hint" data-t="accounts.hint">Everyone signed in here can use the endpoints you set up, and can add their own. Their keys are their own; this page never sees them.</p>
+    <ul class="providers" data-cc="accounts-list"></ul>
+    <!-- The row the operator hit: *"there are two unlabeled fields. I suppose
+         that is username and password or similar."* They were labelled, and
+         the label was `visually-hidden` -- audible to a screen reader,
+         invisible to the person typing. Worse, `associate` put the `for` on a
+         `<span>`, where it is inert; what was tying label to control was the
+         wrapping `<label>`, and the generated attribute did nothing. Both are
+         fixed together, here and on the five sibling rows in this sheet. -->
+    <div class="provider-actions">
+      <div class="field grow">
+        <label data-cc="new-account-name-label" data-t="accounts.username">Username</label>
+        <input type="text" class="provider-url" data-cc="new-account-name" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field grow">
+        <label data-cc="new-account-password-label" data-t="accounts.password">Password</label>
+        <input type="password" class="provider-key" data-cc="new-account-password" autocomplete="new-password">
+      </div>
+      <button type="button" class="ghost" data-cc="add-account" data-t="accounts.add">Add</button>
+    </div>
+    <p class="hint" data-cc="accounts-note"></p>
+  </div>
+
+  <!-- The way out, at the foot and stuck there. Two faults in one control,
+       both the operator's: *"it is confusing that the button is on top. I
+       would probably expect it at the bottom"* -- and at the bottom of this
+       sheet it was 1,753px above the viewport, because the sheet scrolls
+       2,653px inside an 860px box and the only control sat in the part that
+       scrolls away first.
+
+       **One control, not two, and not the pair that was asked for.** The
+       request was `Close & Discard` beside `Close & Save`. Nothing in this
+       sheet buffers: every row commits itself the moment its own button or
+       checkbox is used, and closing sends no request at all. A `Discard`
+       here would offer to undo what is already written to disk on the
+       server, which is the most confusing thing the sheet could say. So the
+       honest shape is the one dismissal this sheet has always had, moved to
+       where the eye ends up and held there, with the sentence that says why
+       there is no second button beside it.
+
+       A copy at the top as well was the other option and is not taken: two
+       controls doing one thing is two tab stops and two announcements for a
+       screen reader, and the sticky copy is visible from the first pixel of
+       scroll anyway. `autofocus` keeps the opening focus on the way out,
+       which is where `showModal` put it when this button was the first
+       element in the sheet. -->
+  <!-- `aria-describedby`, because `autofocus` lands here and a screen reader
+       would otherwise announce "Done, button" and nothing else. The sentence
+       beside it is the answer to the question the operator arrived with --
+       what happens to my changes when I close this -- and reading order alone
+       puts it *before* the element focus starts on. One sentence, announced
+       where it is needed and shown where it is read. -->
+  <div class="sheet-foot">
+    <p class="hint" id="settings-autosave" data-t="settings.autosave">Changes save as you make them, row by row. Text you typed but did not save is dropped.</p>
+    <button type="button" class="primary" data-cc="close-settings" data-t="settings.done"
+            aria-describedby="settings-autosave" autofocus>Done</button>
+  </div>
+</dialog>
+
+<!-- -------------------------------------------------------------------- -->
+<!-- the model scorecard                                                   -->
+<!-- -------------------------------------------------------------------- -->
+<!-- Every catalogue row, configured here or not, with its measured figures
+     (631). The page's picker lists only what this reader can run; this is
+     the table the picker used to be, with no radios: picking happens on the
+     page. The credentials sheet's pattern throughout -- `showModal`, Escape by
+     the dialog itself, the same backdrop, the one way out in a sticky footer
+     and focused on open.
+
+     Each sortable header is a real `<button>` in its `<th>`, and the `<th>`
+     carries `aria-sort`, written by `paintScorecardHeads`. The table may
+     scroll sideways inside `.scroll`; the page never does. -->
+<dialog class="sheet scorecard" data-cc="scorecard-dialog" aria-labelledby="scorecard-heading">
+  <div class="sheet-head">
+    <h2 id="scorecard-heading" data-t="scorecard.heading">Model scorecard</h2>
+  </div>
+  <p class="hint" data-t="scorecard.hint">Cost, speed and reliability here are measured figures from this tool's own runs, not vendor claims. A figure nobody has measured says so, and sorts last whichever way a column is sorted.</p>
+  <div class="scroll">
+    <table class="models" aria-labelledby="scorecard-heading">
+      <thead>
+        <tr>
+          <th scope="col" aria-sort="none" data-cc="sort-head-name">
+            <button type="button" class="sort" data-cc="sort-name" data-sort="name" data-t="models.col.model">Model</button>
+          </th>
+          <th scope="col" class="num" aria-sort="none" data-cc="sort-head-cost">
+            <span class="col-label"><button type="button" class="sort" data-cc="sort-cost" data-sort="cost" data-t="models.col.cost">Cost / merge</button><span class="col-help" tabindex="0" data-cc="help-scorecard-cost" aria-label="What this figure means" aria-describedby="help-scorecard-cost-why">?</span></span>
+          </th>
+          <th scope="col" class="num" aria-sort="none" data-cc="sort-head-speed">
+            <span class="col-label"><button type="button" class="sort" data-cc="sort-speed" data-sort="speed" data-t="models.col.speed">Seconds / merge</button><span class="col-help" tabindex="0" data-cc="help-scorecard-speed" aria-label="What this figure means" aria-describedby="help-scorecard-speed-why">?</span></span>
+          </th>
+          <th scope="col" class="num" aria-sort="none" data-cc="sort-head-loss">
+            <span class="col-label"><button type="button" class="sort" data-cc="sort-loss" data-sort="loss" data-t="models.col.loss">Silent loss</button><span class="col-help" tabindex="0" data-cc="help-scorecard-loss" aria-label="What this figure means" aria-describedby="help-scorecard-loss-why">?</span></span>
+          </th>
+          <th scope="col" class="num" aria-sort="none" data-cc="sort-head-deviations">
+            <span class="col-label"><button type="button" class="sort" data-cc="sort-deviations" data-sort="deviations" data-t="models.col.deviations">Deviations / test</button><span class="col-help" tabindex="0" data-cc="help-scorecard-deviations" aria-label="What this figure means" aria-describedby="help-scorecard-deviations-why">?</span></span>
+          </th>
+        </tr>
+      </thead>
+      <tbody data-cc="model-rows"></tbody>
+    </table>
+    <p class="hint" id="incomparable-why-scorecard" data-t="models.route.mark.incomparable.why" hidden>This route runs a program on this server. The program is told the answer format in the prompt rather than having it enforced, and its randomness cannot be fixed, so two runs can give different results. Its figures were measured through this same route: compare them with other routes like it, not with rows that use an API.</p>
+    <p class="hint" id="history-why-scorecard" data-t="models.route.mark.history.why" hidden>This route's model alias now runs a newer model than the one these figures were measured on. They are the older model's figures, kept until the route is measured again, and they sort after every figure measured on the model a route runs today.</p>
+    <!-- What each figure column means (655): same keys as the picker's
+         copies, said again because the dialog is a separate subtree. -->
+    <p class="hint" id="help-scorecard-cost-why" data-t="models.help.cost" hidden>What one merge cost at list prices in this tool's tests. Lower is better. &quot;on plan&quot;: it ran on a subscription, which has no price per merge. &quot;free tier&quot;: measured on a vendor's free quota. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+    <p class="hint" id="help-scorecard-speed-why" data-t="models.help.speed" hidden>How long one merge took in this tool's tests, in seconds. Lower is better. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+    <p class="hint" id="help-scorecard-loss-why" data-t="models.help.loss" hidden>How many facts from the source documents went missing without the merge saying so, per test (one test is two documents merged). Lower is better; 0 is excellent. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+    <p class="hint" id="help-scorecard-deviations-why" data-t="models.help.deviations_per_pair" hidden>How many changes the merge made without flagging them, per test (one test is two documents merged). Lower is better; 0 is excellent. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
+  </div>
+  <!-- "About this list": every paragraph that explains the table, folded
+       and closed on every load (592, 595), and in the scorecard with the
+       table it explains (631).
+
+       The legend is written out from the same constants that apply the
+       bands, so it cannot drift from the colouring it explains. The
+       caveats are said once, in words, never behind a `title`, and each
+       is hidden where no row carries the marker it explains. The commands
+       sentence appears only where a command route is configured. -->
+  <details class="about-list" id="about-list">
+    <summary data-t="models.about">About this list</summary>
+    <p class="hint" data-cc="catalogue-note"></p>
+    <p class="hint" data-cc="model-bands"></p>
+    <p class="hint" data-cc="route-caveats" hidden></p>
+    <p class="hint" data-cc="commands-hint" data-t="models.commands.hint" hidden>A tool that runs as a program on this server is set up by whoever runs the server. From a browser you can only switch on the tools the server found on its own machine, under Credentials. The command itself is never sent to a browser.</p>
+    <p class="hint" data-t="models.notpriced.note">A self-hosted row has no cost per merge, because its GPU is billed by the minute, not by the token. The cell says "per GPU-minute" instead of showing a zero: it is not free, and it cannot be compared with the per-token prices of hosted rows.</p>
+  </details>
+  <div class="sheet-foot">
+    <p class="hint" id="scorecard-sort-note" data-t="scorecard.sort.hint">Click a column heading to sort by it, and again to reverse. Figures measured on a model the route no longer runs sort after current ones; retired rows and figures nobody measured always sort last.</p>
+    <button type="button" class="primary" data-cc="close-scorecard" data-t="scorecard.close"
+            aria-describedby="scorecard-sort-note" autofocus>Close</button>
+  </div>
+</dialog>
+
+<!-- -------------------------------------------------------------------- -->
+<!-- comparing the rewording levels (673)                                  -->
+<!-- -------------------------------------------------------------------- -->
+<!-- One tiny pair and what the merge makes of it at each level, one tab a
+     level, built by `renderCompare` from the levels `/config` serves. The
+     sample is an illustration written for this dialog and says so: no
+     recorded run in this repository merges one small pair at more than two
+     levels. The pair has no conflicting facts, because conflicts are not
+     what this dialog teaches; source A carries a typo and a wrong year so
+     the higher levels have something to correct. The words that changed
+     from the level before are marked in the catalogue by hand. The
+     level's own summary, what it buys and what it costs (the sentences
+     `--fidelity --help` prints) sit behind a "More about this" disclosure
+     (711: a hover popup here used to open far below the "?" that opened
+     it and get clipped by the dialog's edge, because its containing block
+     was the whole tall panel rather than the button). -->
+<dialog class="sheet compare" data-cc="compare-dialog" aria-labelledby="compare-heading">
+  <div class="sheet-head">
+    <h2 id="compare-heading" data-t="compare.heading">What each level does to a text</h2>
+  </div>
+  <p class="compare-note" data-t="compare.illustration">Illustration, not a real run.</p>
+  <div class="compare-sources">
+    <div class="compare-source">
+      <span class="label-like" data-t="compare.source.a.label">Document A</span>
+      <p class="mono" data-t="compare.source.a">The Eiffel Tower stands in Paris. It opend in 1899. It is 330 metres tall.</p>
+    </div>
+    <div class="compare-source">
+      <span class="label-like" data-t="compare.source.b.label">Document B</span>
+      <p class="mono" data-t="compare.source.b">The Eiffel Tower is 330 metres tall. Visitors can climb 674 steps to the second floor.</p>
+    </div>
+  </div>
+  <div class="compare-tabs" role="tablist" aria-labelledby="compare-heading" data-cc="compare-tabs"></div>
+  <div class="compare-panels" data-cc="compare-panels"></div>
+  <div class="sheet-foot">
+    <button type="button" class="ghost" data-cc="compare-use" data-t="compare.use">Use this level</button>
+    <button type="button" class="primary" data-cc="close-compare" data-t="compare.close" autofocus>Close</button>
+  </div>
+</dialog>
+
+<!-- -------------------------------------------------------------------- -->
+<!-- cancelling a run (639)                                                -->
+<!-- -------------------------------------------------------------------- -->
+<!-- The confirm step before a cancel. "Keep it running" is first and takes
+     the focus, because Escape and the backdrop also keep it running: a
+     dialog that cancelled on a stray key would be the accident it guards. -->
+<dialog class="sheet confirm" data-cc="cancel-dialog" aria-labelledby="cancel-heading" aria-describedby="cancel-text">
+  <div class="sheet-head">
+    <h2 id="cancel-heading" data-t="confirm.cancel.heading">Cancel this run?</h2>
+  </div>
+  <p id="cancel-text" data-t="confirm.cancel.text">Calls already made are billed and cannot be undone. Cancelling stops any further calls: the run stops before its next model call, and a call still in progress is abandoned, which the provider may still bill. What ran so far is kept in the report.</p>
+  <div class="confirm-actions">
+    <button type="button" class="ghost" data-cc="cancel-keep" data-t="confirm.cancel.keep" autofocus>Keep it running</button>
+    <button type="button" class="primary" data-cc="cancel-ok" data-t="confirm.cancel.ok">Cancel the run</button>
+  </div>
+</dialog>
+
+<!-- The confirm step before a Retry (660). A retry is a new run, from the
+     start, and it is billed again: said before anything is sent, with
+     "Keep" first and focused for the reason the cancel dialog's is. -->
+<dialog class="sheet confirm" data-cc="retry-dialog" aria-labelledby="retry-heading" aria-describedby="retry-text">
+  <div class="sheet-head">
+    <h2 id="retry-heading" data-t="confirm.retry.heading">Retry this run?</h2>
+  </div>
+  <p id="retry-text" data-t="confirm.retry.text">This starts a new run from the same documents and settings. It runs from the beginning: every model call is made again, and calls may be billed again, including any the stopped run already made. The earlier run stays in the list, and the new one links to it.</p>
+  <div class="confirm-actions">
+    <button type="button" class="ghost" data-cc="retry-keep" data-t="confirm.retry.keep" autofocus>Do not retry</button>
+    <button type="button" class="primary" data-cc="retry-ok" data-t="confirm.retry.ok">Start a new run</button>
+  </div>
+</dialog>
+
+<!-- -------------------------------------------------------------------- -->
+<!-- starting over                                                         -->
+<!-- -------------------------------------------------------------------- -->
+<!-- A `<dialog>` and not `window.confirm`. Two reasons, and the second is a
+     rule this page already follows everywhere else: a native confirm paints
+     its own buttons in the *browser's* language, so "OK" and "Cancel" would
+     be the two strings on this page that no catalogue can reach, and the
+     German reader would get a German page with English buttons. The first is
+     that the text in a native confirm is one unstyled run of prose with no
+     room to say what survives and what does not. -->
+<dialog class="sheet confirm" data-cc="confirm-dialog" aria-labelledby="confirm-heading">
+  <div class="sheet-head">
+    <h2 id="confirm-heading" data-t="confirm.startover.heading">Clear this and start again?</h2>
+  </div>
+  <p data-t="confirm.startover.text">The documents you pasted, the settings you changed and the result on screen are all cleared. There is no undo. The run itself stays on this server until its retention window passes, and it is still in the list of earlier runs.</p>
+  <div class="confirm-actions">
+    <button type="button" class="ghost" data-cc="confirm-cancel" data-t="confirm.keep">Keep everything</button>
+    <button type="button" class="primary" data-cc="confirm-ok" data-t="confirm.startover.ok">Clear and start again</button>
+  </div>
+</dialog>
+
+<!-- -------------------------------------------------------------------- -->
+<!-- resetting saved settings (723)                                        -->
+<!-- -------------------------------------------------------------------- -->
+<!-- "Reset to server defaults" (`resetDefaults`) both forgets the saved set
+     on the server and puts every live control on the page back to the
+     server's own defaults at once, so it is asked for the same way
+     `confirmStartOver` is above: a `<dialog>`, not `window.confirm`, for the
+     same two reasons. "Keep my settings" is first and focused, matching
+     Escape and the backdrop, which both also keep everything as it was. -->
+<dialog class="sheet confirm" data-cc="reset-defaults-dialog" aria-labelledby="reset-defaults-heading">
+  <div class="sheet-head">
+    <h2 id="reset-defaults-heading" data-t="confirm.resetdefaults.heading">Reset your settings?</h2>
+  </div>
+  <p data-t="confirm.resetdefaults.text">Your model, checking depth, wording level and tuning choices on this page go back to their defaults. Your saved defaults (&quot;Save these settings as my defaults&quot;) are removed too, so this page starts from the server's own defaults next time. There is no undo.</p>
+  <div class="confirm-actions">
+    <button type="button" class="ghost" data-cc="reset-defaults-keep" data-t="confirm.resetdefaults.keep" autofocus>Keep my settings</button>
+    <button type="button" class="primary" data-cc="reset-defaults-ok" data-t="confirm.resetdefaults.ok">Reset to defaults</button>
+  </div>
+</dialog>
+
+<!-- -------------------------------------------------------------------- -->
+<!-- templates                                                             -->
+<!-- -------------------------------------------------------------------- -->
+<!-- A div rather than a button, because the tab now contains one: a button
+     inside a button is not parseable markup and the inner one is dropped.
+     `role="tab"` and the roving tabindex `documentTab` writes are what make it
+     a tab; the remove control is a real button so that Enter and Space
+     activate it the way a keyboard user expects. -->
+<template data-cc="tpl-doc-tab">
+  <div class="doc-tab" role="tab">
+    <span class="doc-tab-name" data-cc="tab-name"></span>
+    <span class="doc-tab-size mono" data-cc="tab-size"></span>
+    <button type="button" class="tab-close" data-cc="tab-remove">
+      <span aria-hidden="true">&#215;</span>
+      <span class="visually-hidden" data-cc="tab-remove-label"></span>
+    </button>
+  </div>
+</template>
+
+<template data-cc="tpl-doc-pane">
+  <div class="doc-pane" role="tabpanel">
+    <div class="doc-pane-head">
+      <div class="field grow">
+        <label data-cc="name-label" data-t="documents.name">Name</label>
+        <input type="text" class="doc-name" data-cc="doc-name" autocomplete="off">
+      </div>
+      <div class="doc-pane-actions">
+        <!-- `multiple`, because the drop handler behind this pane takes a
+             whole `DataTransfer` and makes one document per file, and a
+             picker that took one file would be the same control answering
+             the same question two different ways. `for` is set at render
+             time by `associate`: the wrapping label would tie the two on its
+             own, and the attribute is set as well for the same reason every
+             other field in this file has one. -->
+        <label class="ghost file-button" data-cc="file-label">
+          <span data-t="documents.upload">Upload files</span>
+          <input type="file" multiple data-cc="doc-file" accept=".md,.markdown,.txt,.text,text/plain,text/markdown">
+        </label>
+        <button type="button" class="ghost danger" data-cc="doc-remove" data-t="documents.remove">Remove</button>
+      </div>
+    </div>
+    <div class="field">
+      <label data-cc="text-label" data-t="documents.text">Text</label>
+      <textarea class="doc-text" data-cc="doc-text" spellcheck="false" rows="16"></textarea>
+    </div>
+  </div>
+</template>
+
+<template data-cc="tpl-finding">
+  <!-- `tabindex="-1"` (717): not in the page's own Tab order, but a target
+       the review list can move focus to once it has jumped here, the same
+       way `panel.querySelector('[data-cc="stack-summary"]')` is focused
+       after Escape closes a disclosure elsewhere on this page. -->
+  <li class="finding" tabindex="-1">
+    <p class="finding-line">
+      <strong class="finding-label" data-cc="finding-label"></strong>
+      <span class="finding-text" data-cc="finding-text"></span>
+    </p>
+    <dl class="finding-detail" data-cc="finding-detail"></dl>
+    <div data-cc="finding-extra"></div>
+  </li>
+</template>
+
+<!-- One row of "What needs your attention" (488, 717): a `<button>` so the
+     whole row is one clickable, keyboard-reachable control that jumps to the
+     matching card in its own section (`reviewItem`, `jumpToFinding`), with
+     the one-line decision beside its label and text, and the "In section"
+     row outside the button as ordinary detail, exactly as `tpl-finding`'s
+     own `<dl>` is. -->
+<template data-cc="tpl-review-item">
+  <li class="finding review-item">
+    <button type="button" class="review-jump" data-cc="review-jump">
+      <span class="finding-line">
+        <strong class="finding-label" data-cc="finding-label"></strong>
+        <span class="finding-text" data-cc="finding-text"></span>
+      </span>
+      <span class="review-decide" data-cc="review-decide"></span>
+    </button>
+    <dl class="finding-detail" data-cc="finding-detail"></dl>
+  </li>
+</template>
+
+<!-- The two sides, one directly above the other (561). The operator asked to
+     read the difference by scanning down a column rather than along a
+     sentence, and the shape that does that is a stack, not a lightbox: the
+     Markdown report and the terminal have no lightbox, and a finding legible
+     only in a browser is useless in a downloaded audit. So it is the same
+     three lines `report.stacked_lines` writes, in a `<pre>` so the padded
+     labels actually line up.
+
+     A `<details>` because it is an expanded row, not a dialog: `<summary>` is
+     focusable and toggles on Enter and Space with no script, it degrades to
+     an open block where script is off, and it takes nothing over. Escape
+     closes it all the same -- 557's rule is that everything dismissible on
+     this page agrees with Escape, and a disclosure that ignored it would be
+     the one exception a reader has to learn. -->
+<template data-cc="tpl-stack">
+  <details class="stack-panel" data-cc="stack-panel">
+    <summary data-cc="stack-summary"></summary>
+    <pre class="stack" data-cc="finding-stack"></pre>
+  </details>
+</template>
+
+<template data-cc="tpl-account">
+  <li class="provider">
+    <div class="provider-head">
+      <span class="provider-name mono" data-cc="account-name"></span>
+      <span class="chip" data-cc="account-chip"></span>
+    </div>
+    <div class="provider-actions">
+      <button type="button" class="ghost danger" data-cc="account-remove"></button>
+    </div>
+  </li>
+</template>
+
+<!-- One discovered route: one tool, one model. Four of these for one `claude`,
+     because 518's rule is that every row a reader chooses between is a route
+     to a model -- a tool with a model dropdown beside it would be a second
+     piece of state to misread.
+
+     The row carries what differs: the model's label, whether the tool behind
+     it was found, and the toggle. What every command route shares is said
+     once above the list.
+
+     The control is a checkbox with a real `<label for=...>` on it. The
+     wrapping label would tie the two on its own; the attribute is set as well
+     because the sibling rows in this sheet were just fixed the same way, after
+     the operator met two fields whose labels were audible to a screen reader
+     and invisible to the person typing. -->
+<template data-cc="tpl-command">
+  <li class="provider">
+    <div class="provider-head">
+      <span class="provider-name" data-cc="command-name"></span>
+      <span class="chip" data-cc="command-chip"></span>
+    </div>
+    <p class="hint" data-cc="command-note"></p>
+    <!-- Not inside `.provider-actions`. That row is built for text fields
+         beside buttons and carries `input { width: 100% }`, which stretches a
+         checkbox across its own label and squeezes the words into a column
+         three wide. Found by looking at the rendered page, which is the only
+         place it is visible at all. -->
+    <label class="inline-check" data-cc="command-toggle-label">
+      <input type="checkbox" data-cc="command-toggle">
+      <span data-cc="command-toggle-text"></span>
+    </label>
+  </li>
+</template>
+
+<!-- One row of the commands file this build could not use. No control on it:
+     the remedy is an editor, because the row is the operator's own -- a row
+     this page wrote is retired at startup instead (`Commands.migrate`), so a
+     row that reaches this template is one this page must not touch. -->
+<template data-cc="tpl-command-problem">
+  <li class="provider">
+    <div class="provider-head">
+      <span class="provider-name" data-cc="command-problem-name"></span>
+      <span class="chip" data-cc="command-problem-chip"></span>
+    </div>
+    <p class="hint" data-cc="command-problem-note"></p>
+  </li>
+</template>
+
+<template data-cc="tpl-claim-row">
+  <tr>
+    <td class="num mono" data-cc="claim-n"></td>
+    <td class="claim" data-cc="claim-text"></td>
+    <td><span class="chip" data-cc="claim-status"></span></td>
+    <td class="note" data-cc="claim-note"></td>
+  </tr>
+</template>
+
+<template data-cc="tpl-provider">
+  <li class="provider">
+    <div class="provider-head">
+      <span class="provider-name mono" data-cc="provider-name"></span>
+      <span class="chip" data-cc="provider-chip"></span>
+      <!-- Whose endpoint this is. Empty when nobody has configured one, so
+           an unset row does not claim an owner it does not have. -->
+      <span class="chip" data-cc="provider-owner"></span>
+    </div>
+    <p class="hint mono" data-cc="provider-variable"></p>
+    <!-- The provider's well-known address (676), shown instead of the field
+         when none is stored or the stored one is it: saving a key saves this
+         address with it. "Change address" opens the field. -->
+    <p class="provider-address" data-cc="provider-address" hidden>
+      <span class="provider-address-label" data-t="settings.endpoint">Endpoint</span>
+      <span class="mono provider-address-text" data-cc="provider-address-text"></span>
+      <button type="button" class="ghost provider-address-change" data-cc="provider-address-change" data-t="settings.address.change">Change address</button>
+    </p>
+    <div class="provider-actions" data-cc="provider-url-row">
+      <div class="field grow">
+        <label data-cc="provider-url-label" data-t="settings.endpoint">Endpoint</label>
+        <input type="url" class="provider-url" data-cc="provider-url" autocomplete="off" spellcheck="false">
+      </div>
+      <button type="button" class="ghost" data-cc="provider-url-save" data-t="settings.endpoint.save">Save endpoint</button>
+      <button type="button" class="ghost danger" data-cc="provider-url-clear" data-t="settings.endpoint.clear">Clear endpoint</button>
+    </div>
+    <p class="hint" data-cc="provider-note"></p>
+    <div class="provider-actions">
+      <div class="field grow">
+        <label data-cc="provider-input-label" data-t="settings.key">API key</label>
+        <input type="password" class="provider-key" data-cc="provider-key" autocomplete="off">
+      </div>
+      <button type="button" class="ghost" data-cc="provider-save" data-t="settings.save">Save</button>
+      <button type="button" class="ghost danger" data-cc="provider-clear" data-t="settings.clear">Clear</button>
+    </div>
+  </li>
+</template>
+
+</body>
+</html>

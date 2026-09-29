@@ -1,0 +1,1111 @@
+/* LLossless, the self-hosted interface.
+ *
+ * The custom properties below are lifted from `html_report.py`'s STYLE, value
+ * for value, so that the page an operator works in and the report they
+ * download look like one product rather than two tools that happened to ship
+ * together. `tests/test_web_static.py` asserts they still agree: a palette
+ * copied once is a palette that drifts on the next edit to either file.
+ *
+ * Colour never carries meaning on its own. Every state that has a colour also
+ * has a word -- the status line says "running", the chips say "not checked" --
+ * because the report has held that rule since it was written and an interface
+ * that dropped it would be unreadable to the readers it was written for.
+ *
+ * No @import, no font host, no CDN. This file is served by the same loopback
+ * process as everything else on the page and reaches nothing off the machine.
+ */
+
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --panel: #f7f7f5;
+  --ink: #1a1a1a;
+  --ink-soft: #56534d;
+  --line: #d8d5cf;
+  --ok: #1f7a3d;
+  --ok-bg: #e6f4ea;
+  --warn: #8a5a00;
+  --warn-bg: #fdf1dc;
+  --bad: #a3272c;
+  --bad-bg: #fbe9e9;
+  --none: #55534f;
+  --none-bg: #eeece8;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* The app's own, and only these. The report has no interactive surface, so
+   * it has no accent and no elevation; both are needed here and neither may
+   * contradict the eight above. */
+  --accent: #2f5fa8;
+  --accent-bg: #e8effa;
+  --accent-ink: #ffffff;
+  --shadow: 0 1px 2px rgba(20, 20, 20, .06), 0 8px 24px rgba(20, 20, 20, .05);
+  --radius: .6rem;
+  --radius-sm: .35rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #16181c;
+    --panel: #1f2228;
+    --ink: #e9e7e3;
+    --ink-soft: #a8a49c;
+    --line: #343841;
+    --ok: #6ed08c;
+    --ok-bg: #17301f;
+    --warn: #e0b25e;
+    --warn-bg: #33280f;
+    --bad: #f28b8b;
+    --bad-bg: #3a1c1e;
+    --none: #a8a49c;
+    --none-bg: #262a31;
+
+    --accent: #7aa7e8;
+    --accent-bg: #1b2534;
+    --accent-ink: #10131a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+  }
+}
+
+* { box-sizing: border-box; }
+
+/* `hidden` is how this page shows and withholds whole sections, and every
+ * container below that is a flex or grid box would otherwise out-specify it.
+ * The results panel shipped visible-and-empty for exactly that reason. */
+[hidden] { display: none !important; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+h1, h2, h3 { line-height: 1.25; }
+h2 { font-size: 1.15rem; margin: 0; }
+h3 { font-size: 1rem; margin: 0; }
+p { margin: 0; }
+code, .mono { font-family: var(--mono); font-size: .92em; }
+
+/* -- shared furniture --------------------------------------------------- */
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip {
+  position: absolute; left: .75rem; top: -3rem; z-index: 10;
+  background: var(--accent); color: var(--accent-ink);
+  padding: .5rem .8rem; border-radius: var(--radius-sm); text-decoration: none;
+  transition: top .15s ease;
+}
+.skip:focus { top: .75rem; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.hint { color: var(--ink-soft); font-size: .88rem; }
+/* A hint that has become a warning. The retention note is the only one:
+   it is furniture for most of a run's life and the one sentence that
+   matters in the last stretch of it, and a colour change is how it stops
+   reading as furniture without moving anything on the page. */
+.hint.warn { color: var(--warn); }
+.hint.bad { color: var(--bad); }
+.explains { color: var(--ink-soft); font-size: .9rem; margin-top: .45rem; min-height: 1.4em; }
+.label-like, label { font-size: .88rem; font-weight: 600; color: var(--ink); display: block; }
+.scroll { overflow-x: auto; }
+.grow { flex: 1 1 auto; min-width: 0; }
+
+/* -- the bar across the top --------------------------------------------- */
+
+.topbar {
+  position: sticky; top: 0; z-index: 5;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+  max-width: 68rem; margin: 0 auto; padding: .7rem 1.25rem;
+  display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; min-width: 0; }
+.wordmark { font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; flex: none; }
+/* 626 bounded this in place, next to the wordmark, with an ellipsis and a
+   `title` mirror: the German sentence is about a third longer than the
+   English one, and sharing a row with the wordmark, version and account
+   controls meant its length alone could push that row onto a second line at
+   a width English never reached. The operator disliked the clipped line,
+   so 653 moves the sentence to its own row (`.topbar-tagline`, below) instead
+   of shortening it: the row this rule lives in is no longer the one whose
+   height is pinned equal across languages, so it is free to wrap to however
+   many lines German needs. No `max-width`, no `overflow`, no `title` --
+   the full sentence is on the page. */
+.tagline { display: block; color: var(--ink-soft); font-size: .8rem; }
+/* Its own strip, full width, under the pinned row. Same horizontal rhythm as
+   `.topbar-inner` (max-width, side padding) so the sentence lines up under
+   the wordmark rather than under the page's own left edge. */
+.topbar-tagline { max-width: 68rem; margin: 0 auto; padding: 0 1.25rem .6rem; }
+/* Wraps, because it does not fit. At 320px the version line, the language
+   picker and the credentials button come to 340px on one row and the whole
+   document gained a horizontal scrollbar -- found in a browser at that width,
+   not by any rule over these files.
+   `align-items: center` and not `baseline`: the two groups contain controls of
+   different heights, and a baseline shared by a select, a button and a bare
+   span is what made this row read as four things that had been dropped on the
+   page rather than as two groups. */
+.topbar-right {
+  margin-left: auto; display: flex; align-items: center; gap: .75rem;
+  flex-wrap: wrap; justify-content: flex-end; min-width: 0;
+}
+.version { color: var(--ink-soft); font-size: .8rem; }
+
+/* The separator between the two groups. `aria-hidden`, and it disappears when
+   the bar wraps: a vertical rule at the start of a new line separates nothing
+   and reads as a rendering fault. */
+.topbar-rule {
+  width: 1px; align-self: stretch; min-height: 1.4rem;
+  background: var(--line); flex: none;
+}
+@media (max-width: 40rem) { .topbar-rule { display: none; } }
+
+/* Who is signed in, the way to their credentials, and the way out -- one
+   group, one type size, one gap.
+   Every piece of it has a width that does not depend on the language, for the
+   tagline's reason (626): signed in, "Zugangsdaten", "Abmelden" and "Angemeldet
+   als" are longer than their English, and the bar kept one row at 1024px in
+   English and took two in German; at 380px "Sign out" and the session line
+   wrapped inside themselves in one language and not the other (649). So
+   nothing here wraps: the buttons are at least as wide as the longer language
+   needs, and the session line takes a fixed share, ends in an ellipsis when
+   the name is long, and carries the whole sentence in its `title`. */
+.topbar-account { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.topbar-account .ghost { padding: .3rem .7rem; font-size: .85rem; white-space: nowrap; flex: none; }
+.topbar-account [data-cc="open-settings"] { min-width: 7rem; }
+.topbar-account [data-cc="sign-out"] { min-width: 5.5rem; }
+.session-field {
+  display: inline-flex; align-items: center; gap: .35rem;
+  flex: 0 1 auto; min-width: 0; color: var(--ink-soft);
+}
+.session-icon { width: .95rem; height: .95rem; flex: none; }
+/* The name in full (673): no ellipsis. It is the same in every language, so
+   the row's height cannot differ by language; a very long name wraps. */
+.session-user {
+  display: block; color: var(--ink-soft); font-size: .85rem;
+  overflow-wrap: anywhere; min-width: 0;
+}
+
+/* The language picker. Its label sits beside the select rather than above it,
+   which is what `.field` would do: in the top bar the extra line would push
+   the whole bar out of alignment with the wordmark. A fixed width, right
+   aligned, so "Language" and "Sprache" take the same room (649). */
+.locale-field { display: flex; align-items: center; justify-content: flex-end; gap: .4rem; width: 9.5rem; flex: none; }
+.locale-field > label { margin-bottom: 0; color: var(--ink-soft); font-size: .8rem; white-space: nowrap; }
+.locale-field select { width: auto; padding: .25rem .4rem; font-size: .85rem; }
+
+/* -- cards --------------------------------------------------------------- */
+
+main {
+  max-width: 68rem; margin: 0 auto;
+  padding: 1.5rem 1.25rem 6rem;
+  display: flex; flex-direction: column; gap: 1.25rem;
+}
+
+.card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.15rem;
+  box-shadow: var(--shadow);
+}
+.card-head {
+  display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap;
+  margin-bottom: .9rem;
+}
+.card-head-actions { margin-left: auto; display: flex; gap: .5rem; flex-wrap: wrap; }
+
+/* The sign-in card. Narrow and centred, because it is the whole page while it
+   is showing and a full-width form of three fields reads as an empty page with
+   something in the corner. `main` is hidden behind it, so the margins here are
+   this card's own rather than inherited from the layout it replaces. */
+.gate {
+  max-width: 34rem;
+  margin: 3rem auto 0;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.gate .runbar-inner { margin-top: .25rem; }
+.accounts {
+  border-top: 1px solid var(--line);
+  margin-top: 1.25rem; padding-top: 1rem;
+  display: flex; flex-direction: column; gap: .6rem;
+}
+
+/* -- controls ------------------------------------------------------------ */
+
+button, .ghost, .primary {
+  font: inherit; cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: .42rem .85rem;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+}
+button:hover:not(:disabled), a.ghost:hover { border-color: var(--ink-soft); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+a.ghost {
+  display: inline-block; text-decoration: none;
+  border-radius: var(--radius-sm); padding: .42rem .85rem;
+  border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  font-size: .95rem;
+}
+
+.primary {
+  background: var(--accent); color: var(--accent-ink);
+  border-color: transparent; font-weight: 600; padding: .55rem 1.2rem;
+  display: inline-flex; align-items: center; gap: .5rem;
+}
+.primary:hover:not(:disabled) { filter: brightness(1.08); }
+
+/* The run indicator, inside the button that started it. A disabled button and
+   the word RUNNING at .78rem two controls away was the whole of the previous
+   signal, and it is the one an operator is looking for during a wait that runs
+   to 4,559 seconds.
+   `currentColor` at two opacities rather than a second palette entry: the ring
+   is the button's own ink, so it is legible on the accent in both schemes and
+   cannot drift from it. Motion is never the only signal -- the button's label
+   changes to "Running" with it, which is also what a reader gets under
+   `prefers-reduced-motion`, where the global rule stops the spin. */
+.spinner {
+  width: .85rem; height: .85rem; flex: none; border-radius: 50%;
+  border: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-top-color: currentColor;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.danger { color: var(--bad); }
+
+input[type="text"], input[type="number"], input[type="search"],
+input[type="password"], textarea, select {
+  font: inherit; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: .45rem .6rem; width: 100%;
+}
+textarea { font-family: var(--mono); font-size: .88rem; resize: vertical; }
+select { background: var(--panel); }
+
+.field { margin-top: .9rem; }
+.field > label, .field > .label-like { margin-bottom: .35rem; }
+
+.with-suffix { display: flex; align-items: center; gap: .5rem; }
+.with-suffix input { max-width: 8rem; }
+.suffix { color: var(--ink-soft); }
+
+.controls-grid {
+  display: grid; gap: 1.25rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+.controls-grid .field { margin-top: 0; }
+/* Two fields in one grid cell, the second under the first (593). */
+.controls-grid .field-stack > .field + .field { margin-top: 1.25rem; }
+
+input[type="range"] { width: 100%; accent-color: var(--accent); padding: 0; }
+.range-legend {
+  display: flex; justify-content: space-between; gap: .5rem;
+  font-size: .78rem; color: var(--ink-soft); margin-top: .3rem;
+}
+.range-legend span { flex: 1 1 0; text-align: center; }
+.range-legend span:first-child { text-align: left; }
+.range-legend span:last-child { text-align: right; }
+.range-legend span.on { color: var(--ink); font-weight: 600; }
+
+.radio-set { display: flex; flex-wrap: wrap; gap: .4rem; }
+.radio-set label {
+  display: inline-flex; align-items: center; gap: .4rem;
+  border: 1px solid var(--line); border-radius: 2rem;
+  padding: .3rem .75rem .3rem .6rem; font-weight: 500; cursor: pointer;
+}
+.radio-set label:has(input:checked) {
+  border-color: var(--accent); background: var(--accent-bg);
+}
+.radio-set input { accent-color: var(--accent); margin: 0; }
+
+/* The verification depth, which is a radio set whose options carry their own
+   description. `.radio-set` above puts the options in a row of pills and hangs
+   one shared sentence underneath; that shape is right where the options differ
+   in degree, and wrong here, where one of them stops asking a question the
+   other asks. A pill reading "Coverage" beside a sentence that changes when
+   you select it is a sentence a reader can choose without having read. So the
+   limitation is inside the option, and the option is as tall as it needs to
+   be. */
+.radio-stack { display: flex; flex-direction: column; gap: .4rem; }
+.radio-stack label {
+  display: flex; align-items: flex-start; gap: .55rem;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: .55rem .7rem; cursor: pointer; font-weight: 400;
+}
+.radio-stack label:hover { border-color: var(--ink-soft); }
+.radio-stack label:has(input:checked) {
+  border-color: var(--accent); background: var(--accent-bg);
+}
+/* `margin-top` rather than `align-items: center`: the control lines up with
+   the first line of the title, which is where a reader's eye starts, not with
+   the middle of a two-line block. */
+.radio-stack input { accent-color: var(--accent); margin: .2rem 0 0; flex: none; }
+.stacked-body { display: block; min-width: 0; }
+.stacked-title {
+  display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap;
+  font-weight: 600; color: var(--ink);
+}
+/* The cost of the option, in the option. It is a count of model calls and not
+   a price: the calls are not the same size, so a dollar figure derived from
+   halving this one would be invented (`config.merge_model_calls`). */
+.stacked-cost { font-size: .78rem; font-weight: 500; color: var(--ink-soft); }
+.stacked-explains {
+  display: block; margin-top: .2rem;
+  font-size: .85rem; font-weight: 400; color: var(--ink-soft);
+}
+
+/* What the merge prompts do not say: which policy may write a title, and what
+   happens when no source has one. Sits under the served per-policy sentence,
+   quieter than it, because it does not change with the radio. */
+.policy-note { margin-top: .5rem; }
+
+/* -- documents ----------------------------------------------------------- */
+
+/* The bar holds the tablist and the add control side by side; the rule that
+   separates it from the panes is on the bar rather than on the tablist, so
+   the `+` sits inside the same underline as the tabs it makes. */
+.doc-tabbar {
+  display: flex; align-items: flex-start; gap: .5rem; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line); padding-bottom: .55rem;
+}
+.doc-tabs { display: flex; gap: .35rem; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; }
+
+/* A div, not a button, because it contains one. Everything a button would
+   have brought with it is restated here. */
+.doc-tab {
+  display: inline-flex; align-items: baseline; gap: .45rem;
+  font: inherit; cursor: pointer; color: var(--ink);
+  background: transparent;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  padding: .35rem .5rem .35rem .7rem; max-width: 18rem;
+}
+.doc-tab:hover { border-color: var(--ink-soft); }
+.doc-tab-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.doc-tab-size { color: var(--ink-soft); font-size: .78rem; }
+.doc-tab[aria-selected="true"] {
+  background: var(--accent-bg); border-color: var(--accent); font-weight: 600;
+}
+
+.tab-close {
+  border: 0; background: transparent; color: var(--ink-soft);
+  padding: 0 .2rem; line-height: 1; font-size: 1.05rem;
+  align-self: center; flex: none;
+}
+.tab-close:hover { color: var(--bad); }
+.tab-add { padding: .3rem .7rem; line-height: 1.2; font-weight: 600; }
+.tab-add-glyph { font-size: 1.15rem; }
+
+/* Refused, not unavailable. A `disabled` button never reaches a handler, so
+   the press that would have asked "why not?" is swallowed and the operator is
+   left with a greyed control and no sentence; these look the same and answer.
+   `:not(button)` is not needed -- the opacity is all a disabled button got. */
+[aria-disabled="true"] { opacity: .55; }
+.refusal { color: var(--bad); }
+.refusal:empty { display: none; }
+
+.doc-pane { padding-top: .9rem; }
+.doc-pane[hidden] { display: none; }
+.doc-pane-head { display: flex; gap: .75rem; align-items: flex-end; flex-wrap: wrap; }
+.doc-pane-head .field { margin-top: 0; }
+.doc-pane-actions { display: flex; gap: .5rem; align-items: center; }
+
+.file-button { position: relative; overflow: hidden; display: inline-block;
+               font-weight: 500; font-size: .95rem; }
+.file-button input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; width: 100%; cursor: pointer;
+}
+.file-button:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.doc-pane.dropping { outline: 2px dashed var(--accent); outline-offset: .4rem; }
+.drop-hint { margin-top: .4rem; }
+
+.doc-actions {
+  display: flex; align-items: center; gap: .75rem; margin-top: .9rem;
+  flex-wrap: wrap;
+}
+.base-field { max-width: 26rem; }
+
+/* -- the run bar --------------------------------------------------------- */
+
+.runbar { position: sticky; bottom: 1rem; z-index: 4; }
+.runbar.settled { position: static; }
+.runbar-inner { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+/* The `max` cost warning (615), repeated from the effort card so it sits
+ * right above the button it applies to. A block-level sibling of
+ * `.runbar-inner` rather than a flex item inside it, so it always spans the
+ * full width instead of being squeezed beside the buttons at 380px. */
+.runbar > .hint.warn { margin: 0 0 .7rem; }
+
+.status { display: flex; align-items: baseline; gap: .5rem; flex: 1 1 18rem; }
+/* The dot and the word, isolated in their own line box (717): centring the
+   dot on `.status`'s full flex line put it against the pair's shared
+   baseline with `.status-text`, whose larger font makes that line taller
+   than `.status-word`'s own, so the dot sat off the word it sits beside.
+   `align-items: center` here is scoped to just the two, so the dot centres
+   on `.status-word`'s own line box regardless of what stands beside it. */
+.status-lead { display: inline-flex; align-items: center; gap: .5rem; }
+.status-word {
+  font-size: .78rem; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--none);
+}
+.status-text { color: var(--ink-soft); font-size: .92rem; }
+
+.dot {
+  width: .6rem; height: .6rem; border-radius: 50%; flex: none;
+  background: var(--none); border: 1px solid var(--none);
+}
+.dot.ok   { background: var(--ok);   border-color: var(--ok); }
+.dot.warn { background: var(--warn); border-color: var(--warn); }
+.dot.bad  { background: var(--bad);  border-color: var(--bad); }
+.dot.busy { background: var(--accent); border-color: var(--accent);
+            animation: pulse 1.6s ease-in-out infinite; }
+.status.ok   .status-word { color: var(--ok); }
+.status.warn .status-word { color: var(--warn); }
+.status.bad  .status-word { color: var(--bad); }
+.status.busy .status-word { color: var(--accent); }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+.progress { margin-top: 1rem; border-top: 1px solid var(--line); padding-top: .8rem; }
+.progress-head { display: flex; justify-content: space-between; align-items: baseline; }
+.events {
+  list-style: none; margin: .5rem 0 0; padding: 0;
+  max-height: 16rem; overflow-y: auto;
+  font-size: .88rem; font-family: var(--mono);
+}
+.events li {
+  display: flex; gap: .6rem; padding: .18rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.events li:last-child { border-bottom: 0; }
+.events .kind {
+  flex: none; width: 4.5rem; color: var(--ink-soft); font-size: .78rem;
+  text-transform: uppercase; letter-spacing: .04em; padding-top: .12rem;
+}
+.events .kind.failed { color: var(--bad); }
+.events .kind.warn { color: var(--warn); }
+.events .kind.done { color: var(--ok); }
+.events .message { flex: 1 1 auto; word-break: break-word; }
+.events .secs { flex: none; color: var(--ink-soft); }
+
+/* The banner is not a step and had been dressed as one: the word BANNER in
+   the kind column, then five dot-separated values in the message column where
+   every other row holds one short sentence. The operator's words were that it
+   "looks odd, and it is not clear to the user why that is", and the in-between
+   state was the whole of the problem -- it was neither the same as its
+   neighbours nor visibly different on purpose.
+   It is now a header for the run rather than an entry in it: full width, no
+   kind column, a label, and each of the six fields under its own name. The
+   rule underneath is what says the steps below it belong to this. */
+.events li.run-header {
+  display: block; padding: .5rem .6rem .55rem;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); margin-bottom: .45rem;
+}
+.run-header-label {
+  display: block; font-size: .7rem; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-soft); margin-bottom: .3rem;
+}
+.run-header-fields { display: flex; flex-wrap: wrap; gap: .3rem .9rem; }
+.run-field { display: flex; align-items: baseline; gap: .3rem; min-width: 0; }
+.run-field-name {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: .7rem; font-weight: 600; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+.run-field-value { color: var(--ink); word-break: break-word; }
+
+/* -- results ------------------------------------------------------------- */
+
+.results { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.banner {
+  border: 1px solid var(--line);
+  border-left: .5rem solid var(--none);
+  background: var(--panel);
+  border-radius: var(--radius-sm);
+  padding: .9rem 1rem;
+}
+.banner-label {
+  display: inline-block; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; font-size: .78rem; margin-bottom: .3rem;
+  color: var(--none);
+}
+.banner.ok   { border-left-color: var(--ok);   background: var(--ok-bg); }
+.banner.ok .banner-label { color: var(--ok); }
+.banner.warn { border-left-color: var(--warn); background: var(--warn-bg); }
+.banner.warn .banner-label { color: var(--warn); }
+.banner.bad  { border-left-color: var(--bad);  background: var(--bad-bg); }
+.banner.bad .banner-label { color: var(--bad); }
+.banner.none { border-left-color: var(--none); background: var(--none-bg); }
+
+.chip {
+  display: inline-block; white-space: nowrap; font-size: .8rem; font-weight: 600;
+  padding: .1rem .5rem; border-radius: .8rem;
+  border: 1px solid var(--none); color: var(--none); background: var(--none-bg);
+}
+.chip.ok   { color: var(--ok);   background: var(--ok-bg);   border-color: var(--ok); }
+.chip.warn { color: var(--warn); background: var(--warn-bg); border-color: var(--warn); }
+.chip.bad  { color: var(--bad);  background: var(--bad-bg);  border-color: var(--bad); }
+
+details.section > summary {
+  display: flex; align-items: center; gap: .6rem;
+  cursor: pointer; list-style: none; font-weight: 600;
+}
+details.section > summary::-webkit-details-marker { display: none; }
+details.section > summary::before {
+  content: "\25B8"; color: var(--ink-soft); font-size: .8rem;
+  transition: transform .12s ease;
+}
+details.section[open] > summary::before { transform: rotate(90deg); }
+.section-title { font-size: 1rem; }
+.section-body { margin-top: .9rem; }
+
+.findings { list-style: none; margin: 0; padding: 0;
+            display: flex; flex-direction: column; gap: .75rem; }
+.finding {
+  border: 1px solid var(--line); border-left: .35rem solid var(--none);
+  background: var(--panel); border-radius: var(--radius-sm);
+  padding: .65rem .85rem;
+}
+.finding.bad  { border-left-color: var(--bad); }
+.finding.warn { border-left-color: var(--warn); }
+.finding.ok   { border-left-color: var(--ok); }
+.finding-line { line-height: 1.55; }
+.finding-label { margin-right: .4rem; }
+.finding-text { color: var(--ink); }
+.finding-detail { margin: .45rem 0 0; }
+.finding-detail dt {
+  font-size: .78rem; color: var(--ink-soft); text-transform: uppercase;
+  letter-spacing: .03em; margin-top: .4rem;
+}
+.finding-detail dd { margin: 0; }
+.finding-detail dd.quote {
+  font-family: var(--mono); font-size: .86rem;
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: .3rem .5rem; margin-top: .15rem;
+  white-space: pre-wrap; word-break: break-word;
+}
+
+/* "What needs your attention" (488, 717): the whole row is a button, so it
+   is one control rather than a card with a link buried in it, and its
+   content is the same two spans `.finding-line` already styles plus the
+   one-line decision under them. Reset to plain text on a transparent
+   background -- `.finding`'s own border and padding already look like a
+   button is not needed to say "this is clickable"; the pointer and the
+   underline on hover do that instead. */
+.review-jump {
+  display: block; width: 100%; text-align: left;
+  background: none; border: 0; padding: 0; margin: 0; font: inherit; color: inherit;
+  cursor: pointer;
+}
+.review-jump:hover .finding-text { text-decoration: underline; }
+.review-decide { display: block; margin-top: .3rem; color: var(--ink-soft); font-size: .88rem; }
+.review-item .finding-detail { margin-top: .5rem; }
+
+/* The card a review row jumped to (717): a brief flash so the eye finds what
+   the keyboard focus and the scroll already found, timed to match the 2s
+   `window.setTimeout` in `jumpToFinding` that removes the class again. */
+.finding.just-found { animation: finding-just-found 2s ease-out; }
+@keyframes finding-just-found {
+  0% { background: var(--accent-bg); }
+  100% { background: var(--panel); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .finding.just-found { animation: none; background: var(--accent-bg); }
+}
+
+/* The two sides stacked (561). Monospaced, because the labels are padded to
+   one width so the texts start in the same column and a proportional font
+   makes that padding a lie. `overflow-wrap: anywhere` rather than
+   `word-break: break-word`: a long segment has to wrap inside the box rather
+   than push it sideways -- 531's rule, and the page asserts `scrollWidth`
+   against `clientWidth` on this element rather than reading it off a
+   screenshot. */
+.stack-panel { margin: .5rem 0 0; }
+.stack-panel > summary {
+  cursor: pointer; font-size: .82rem; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: .03em;
+}
+.stack-panel > pre.stack {
+  font-family: var(--mono); font-size: .86rem;
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: .45rem .6rem; margin: .35rem 0 0;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td {
+  text-align: left; vertical-align: top;
+  padding: .55rem .6rem; border-bottom: 1px solid var(--line);
+}
+thead th {
+  background: var(--panel); border-bottom: 2px solid var(--line);
+  font-size: .82rem; text-transform: uppercase; letter-spacing: .03em;
+  color: var(--ink-soft); font-weight: 600;
+}
+th.num, td.num { text-align: right; white-space: nowrap; }
+td.num, td.mono { font-family: var(--mono); }
+td.claim { min-width: 20rem; }
+td.note { color: var(--ink-soft); font-size: .88rem; }
+tbody tr:hover { background: var(--panel); }
+tr.hidden { display: none; }
+
+/* Wider than a phone, on purpose. `width: 100%` inside a scrolling box
+ * fits the table to the box and nothing ever scrolls; the seven columns
+ * then wrap one word per line and the figures stop being comparable,
+ * which is the only reason the table exists. */
+table.models { min-width: 46rem; }
+table.claims { min-width: 34rem; }
+
+/* The picker (631, 655): only the rows this reader can run, but back to four
+ * figures a row (655) -- 631 dropping two of them was never the operator's
+ * ask, only the row filter was. Narrower than the scorecard's 46rem: no
+ * notes, no date line, no raw number under a band, so four narrower columns
+ * still fit less width. Scrolls sideways inside `.scroll` below 40rem or so,
+ * same as the scorecard, rather than wrapping a band word across two lines. */
+table.models.picker { min-width: 40rem; }
+/* The scorecard button moved beside Back/Next (723), so the picker table
+   gets its row back; `.models-head` is gone with it. */
+.picker-empty { display: flex; align-items: center; gap: .5rem 1rem; flex-wrap: wrap;
+                margin-top: .4rem; }
+.picker-empty .hint { flex: 1 1 16rem; margin: 0; }
+
+/* The scorecard (631) is the widest sheet: the whole table, which scrolls
+ * sideways inside its own box and never takes the page with it. Its footer
+ * is the credentials sheet's, so its bottom padding is the footer's too. */
+.sheet.scorecard { max-width: 72rem; padding-bottom: 0; }
+.sheet.scorecard > .scroll { margin-top: .6rem; }
+/* A retired row (618) is shown, dimmed, and says why in words. */
+table.models tr.retired > td { opacity: .62; }
+table.models .row-notes { margin-top: .3rem; font-size: .8rem; font-weight: 400; }
+table.models .row-notes > summary { cursor: pointer; color: var(--ink-soft); width: max-content; }
+table.models .row-notes > p { margin: .3rem 0 0; max-width: 44rem; white-space: normal;
+                              color: var(--ink-soft); }
+
+/* "About this list": the catalogue's note, closed by default (592). A
+ * small disclosure line under the table, not a section heading. */
+details.about-list { margin-top: .5rem; }
+details.about-list > summary {
+  cursor: pointer; color: var(--ink-soft); font-size: .88rem; width: max-content;
+  max-width: 100%;
+}
+details.about-list > .hint { margin-top: .35rem; }
+
+/* The CLI-equivalent block ("Web UI: show the equivalent CLI command for a
+ * run"): a card whose whole body is the disclosure, so a reader who never
+ * opens it sees one line and a reader who does gets the command in the same
+ * boxed style as the merged document below it. The chevron is
+ * `details.section`'s, reused rather than redrawn, so one arrow means one
+ * thing everywhere on the page. */
+details.cli-equivalent { padding: .75rem 1.1rem; }
+details.cli-equivalent > summary {
+  display: flex; align-items: center; gap: .6rem;
+  cursor: pointer; list-style: none; font-weight: 600;
+}
+details.cli-equivalent > summary::-webkit-details-marker { display: none; }
+details.cli-equivalent > summary::before {
+  content: "\25B8"; color: var(--ink-soft); font-size: .8rem;
+  transition: transform .12s ease;
+}
+details.cli-equivalent[open] > summary::before { transform: rotate(90deg); }
+.cli-body { margin-top: .8rem; display: flex; flex-direction: column; gap: .6rem; }
+.cli-docs { margin: 0; padding-left: 1.3rem; }
+.cli-docs li { font-size: .9rem; }
+.cli-docs .cli-filename { font-family: var(--mono); }
+.cli-notes { list-style: none; margin: 0; padding: 0;
+             display: flex; flex-direction: column; gap: .35rem; }
+.cli-notes li { font-size: .85rem; color: var(--ink-soft); }
+
+/* The typed id and where it goes, side by side while there is room and one
+ * under the other on a phone: the destination is the question the id raises,
+ * so the two are never apart (591). */
+/* The merge effort slider and its card (613). Side by side where there is
+ * room, stacked below it; nothing here has a fixed width, so at 380px the two
+ * wrap rather than push the page sideways. */
+.effort-block { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; align-items: flex-start; }
+.effort-control { flex: 1 1 14rem; min-width: 0; }
+.effort-control > label { display: block; margin-bottom: .35rem; font-weight: 600; }
+/* The browser's own 2px side margin on a range input, beside `width: 100%`,
+ * held the block 4px past its box at 380px. */
+.effort-control input[type="range"] { margin-left: 0; margin-right: 0; }
+.effort-card { flex: 1 1 18rem; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .6rem .8rem; }
+.effort-card-title { margin: 0 0 .35rem; font-weight: 600; }
+.effort-figures { margin: 0; display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: .2rem .75rem; font-size: .9rem; }
+.effort-figures dt { color: var(--ink-soft); }
+.effort-figures dd { margin: 0; overflow-wrap: anywhere; }
+@media (max-width: 30rem) {
+  .effort-figures { grid-template-columns: minmax(0, 1fr); }
+  .effort-figures dd { margin-bottom: .3rem; }
+}
+.effort-card > .hint { margin: .45rem 0 0; }
+.effort-model { margin: .1rem 0 .3rem; font-size: .9rem; font-weight: 600; overflow-wrap: anywhere; }
+.effort-pinned-block { margin-top: .6rem; padding-top: .5rem; border-top: 1px solid var(--line); }
+.effort-pinned-block > .hint { margin: .45rem 0 0; }
+[data-cc="effort-current"] > .effort-pinned-block { margin: 0 0 .6rem; padding: 0 0 .5rem; border-top: 0; border-bottom: 1px solid var(--line); }
+
+/* The two model toggles side by side (723), one row back from the operator's
+   ask; each `.check-row` keeps its own `position: relative` for its help
+   popup, unaffected by the wrapper. `flex-wrap` falls back to stacked at a
+   phone width or under the longer German labels, rather than overflowing. */
+.toggle-pair { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+.toggle-pair > .check-row { flex: 1 1 16rem; min-width: 0; }
+.custom-block { margin-top: .4rem; }
+.custom-row { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+.custom-row > .field { flex: 1 1 14rem; min-width: 0; margin: 0; }
+.custom-row select { max-width: 100%; }
+table.models td.pick { text-align: center; width: 3.5rem; }
+table.models input[type="radio"] { accent-color: var(--accent); }
+/* The name is whole; the route badge after it may take the next line (565).
+   The whole span used to be `nowrap`, so name and badge were one run. */
+table.models .model-name { font-weight: 600; }
+table.models .model-name > span:first-child { white-space: nowrap; }
+table.models .model-meta { color: var(--ink-soft); font-size: .8rem;
+                           display: block; white-space: nowrap; }
+/* The wire name and the window may go onto two lines, and nothing else may
+   break (565). With the Check column on, this line held the Model column at
+   its full 376px and the table 18px past its box at 1280px. Each half stays
+   `nowrap` so a model id is never split at its hyphens; the one space between
+   them is the only break. One class heavier than `.model-meta` on purpose, so
+   it wins wherever the two rules sit in this file -- the order trap
+   `.route-note` has to be guarded against does not exist here. */
+table.models .model-meta.model-wire { white-space: normal; }
+table.models .model-meta.model-wire > span { white-space: nowrap; }
+/* The four figure headers wrap at their spaces (565). `th.num` is `nowrap`
+   for every table on the page, and in this one the headers are phrases:
+   `Seconds / merge` and `Deviations / pair` held two columns open in English,
+   and the German `Sekunden / Zusammenführung` alone is 222px, which put the
+   table 258px past its box at 1280px with the Check column off. The figures
+   under them keep `td.num`'s `nowrap`; only the label wraps. */
+table.models th.num { white-space: normal; }
+
+/* A model whose provider has no endpoint configured. Dimmed *and* labelled:
+   the row carries its reason in words beside the name, because a state this
+   page signals with contrast alone is a state a reader who cannot see the
+   contrast is never told about. */
+table.models tr.unreachable .model-name { color: var(--ink-soft); }
+table.models .unreachable-why { color: var(--ink-soft); font-style: italic;
+                                white-space: normal; }
+
+/* A checkbox and its label on one line, for a setting that is a single
+   yes-or-no rather than a field with a value. */
+.inline-check { display: flex; align-items: center; gap: .45rem;
+                margin-top: .6rem; }
+.inline-check input { accent-color: var(--accent); }
+
+/* Two neutral states, and neither is ever given a band colour. `unmeasured`
+   is nobody looked; `notpriced` is a row whose GPU time is billed by the
+   minute, so there is no per-merge price to look at. Shading either one would
+   invent a judgement out of an absence -- the same rule the `notchecked` chip
+   follows, for the same reason. */
+.unmeasured, .notpriced {
+  color: var(--ink-soft); font-style: italic; font-size: .85rem;
+}
+
+/* A third neutral state, and it is neutral for the same reason: a
+   subscription reports no token counts, so there is no figure, and what the
+   operator pays is a plan this tool cannot divide by a merge. It is set apart
+   from the two above rather than folded into them because it is the one an
+   operator is choosing *for* -- so it reads as an answer rather than as an
+   absence -- and it is never a zero, which would read as "measured, and
+   free". */
+.onplan {
+  color: var(--ink-soft); font-size: .85rem; font-weight: 600;
+}
+
+/* The two markers a command row owes its reader: that its figures do not
+   compare with the measured ones beside it, and that it is shared by everyone
+   on this server. Said in words under the label, never by the row merely
+   looking different; what each one means is written out once under the table.
+
+   `white-space: normal` overrides `model-meta`'s `nowrap`, and it is the
+   structural half of the fix rather than a tidy-up. Two full sentences under
+   that rule were two unwrapped lines, which took the Model column from 410px
+   to 670px and the table 311px past its scroll box. The markers are short
+   enough now that it does not bite -- and a longer translation of one is
+   exactly how this would come back, so the column wraps instead. */
+table.models .route-note { color: var(--ink-soft); white-space: normal; }
+/* A marker that explains itself on hover and on focus (638). */
+table.models .route-mark.explained { text-decoration: underline dotted; text-underline-offset: 2px;
+                                     cursor: help; }
+/* The measured date and commit (618) wrap at their space like the route note. */
+table.models .measured-when { white-space: normal; }
+/* A retired row's sentence (618) wraps, and never widens the column. */
+table.models .retired-why { color: var(--ink-soft); font-style: italic;
+                            white-space: normal; }
+
+/* The route, on every row rather than on the new kind only. A list where one
+   kind of row is annotated and the rest are bare names asks the reader to
+   infer the difference, and the inference is the failure this is for. The
+   subscription badge is the one that is filled rather than outlined, because
+   it is the row whose cost column carries no figure and therefore has the
+   least else to distinguish it. */
+table.models .route-badge {
+  display: inline-block; margin-left: .45rem; padding: .05rem .35rem;
+  border: 1px solid var(--line); border-radius: .35rem;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: .68rem; font-weight: 700; letter-spacing: .03em;
+  text-transform: uppercase; white-space: nowrap; vertical-align: middle;
+  color: var(--ink-soft);
+}
+table.models .route-badge.subscription,
+table.models .route-badge.command {
+  border-color: var(--accent); color: var(--accent);
+}
+/* Metered is amber, filled (637): the one kind billed per call, set against
+   the blue of a plan. The warn tokens hold 4.5:1 and more for the text in
+   both themes, on the fill and on the page. */
+table.models .route-badge.metered {
+  border-color: var(--warn); color: var(--warn); background: var(--warn-bg);
+}
+/* Local keeps the grey outline; a route nobody could identify is the same
+   grey, dashed, so the two never read as one kind. */
+table.models .route-badge.unknown { border-style: dashed; }
+
+/* The three bands. The colour is the fast read and the word underneath is the
+   answer: a cell that loses its colour to a monochrome print or to a reader
+   who cannot separate red from green still says which band it is in. */
+table.models td.rank-excellent { background: var(--ok-bg);
+                                 box-shadow: inset 0 0 0 2px var(--ok); }
+table.models td.rank-good { background: var(--ok-bg); }
+table.models td.rank-fair { background: var(--warn-bg); }
+table.models td.rank-poor { background: var(--bad-bg); }
+table.models .rank-word {
+  display: block; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: .72rem; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; white-space: nowrap;
+}
+table.models td.rank-excellent .rank-word { color: var(--ok); font-weight: 800; }
+table.models td.rank-good .rank-word { color: var(--ok); }
+table.models td.rank-fair .rank-word { color: var(--warn); }
+table.models td.rank-poor .rank-word { color: var(--bad); }
+
+pre.document {
+  white-space: pre-wrap; word-break: break-word;
+  font-family: var(--mono); font-size: .88rem;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: .9rem;
+  max-height: 34rem; overflow-y: auto; margin: 0;
+}
+/* It holds focus now, so it has to show that it does (561). A scrollable box
+   a keyboard can reach and cannot see it has reached is worse than one it
+   cannot reach: the arrow keys start scrolling something the reader cannot
+   point at. `:focus-visible` rather than `:focus`, so clicking into it to
+   read does not draw a ring nobody asked for. */
+pre.document:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+.checks { list-style: none; margin: 0; padding: 0;
+          display: flex; flex-direction: column; gap: .5rem; }
+.checks li { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.checks .check-name { font-weight: 600; min-width: 12rem; }
+.checks .check-note { color: var(--ink-soft); font-size: .88rem; }
+
+.provenance {
+  margin: 1.2rem 0 0; display: grid; gap: .2rem .9rem;
+  grid-template-columns: max-content 1fr; font-size: .88rem;
+}
+.provenance dt { color: var(--ink-soft); }
+.provenance dd { margin: 0; font-family: var(--mono); word-break: break-word; }
+
+.history { list-style: none; margin: 0; padding: 0; }
+.history li {
+  display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap;
+  padding: .45rem 0; border-bottom: 1px solid var(--line);
+}
+.history li:last-child { border-bottom: 0; }
+.history .when { color: var(--ink-soft); font-size: .85rem; }
+.history .id { font-family: var(--mono); font-size: .8rem; color: var(--ink-soft); }
+/* What an interrupted or failed run did, on its own line under the entry (660). */
+.history .note { flex-basis: 100%; color: var(--ink-soft); font-size: .85rem; }
+
+/* -- the credentials sheet ----------------------------------------------- */
+
+.sheet {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--bg); color: var(--ink);
+  padding: 1.2rem; max-width: 34rem; width: calc(100% - 2rem);
+  box-shadow: var(--shadow);
+}
+.sheet::backdrop { background: rgba(0, 0, 0, .45); }
+.sheet-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: .5rem; }
+.sheet-head h2 { margin-right: auto; }
+
+/* The credentials sheet is the one that scrolls -- 2,653px of content in an
+   860px box on a 900px screen -- and its bottom padding is the footer's
+   rather than the box's. A `sticky` child is clamped to its parent's
+   *content* box, so a sheet that kept its own `padding-bottom` would hold the
+   footer 1.2rem clear of the bottom edge and let the rows scroll through the
+   strip underneath. Only this sheet: `.sheet.confirm` is two buttons under
+   one sentence and never scrolls.
+
+   `--bg`, not `--panel`: the footer sits over the rows, so it has to be
+   opaque in both schemes, and the rows behind it are `--panel`. */
+.sheet.settings { padding-bottom: 0; }
+.sheet-foot {
+  position: sticky; bottom: 0; z-index: 1;
+  /* Full bleed sideways, flush with the bottom: the negative margins cancel
+     the sheet's side padding so the rule reads edge to edge. */
+  margin: 1.1rem -1.2rem 0; padding: .7rem 1.2rem .9rem;
+  background: var(--bg); border-top: 1px solid var(--line);
+  border-radius: 0 0 var(--radius) var(--radius);
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+/* The sentence gives way and the button does not. At 380px they stack, and
+   `margin-left: auto` keeps the control on the right of its own line rather
+   than under the first word of the sentence above it. */
+.sheet-foot .hint { flex: 1 1 14rem; margin: 0; font-size: .82rem; }
+.sheet-foot button { margin-left: auto; flex: none; }
+
+.providers { list-style: none; margin: 1rem 0 0; padding: 0;
+             display: flex; flex-direction: column; gap: .9rem; }
+.provider { border: 1px solid var(--line); border-radius: var(--radius-sm);
+            padding: .7rem .8rem; background: var(--panel); }
+.provider-head { display: flex; align-items: center; gap: .6rem; }
+.provider-name { font-weight: 600; margin-right: auto; }
+/* `flex-end`, because each field is now a label stacked over its input and the
+   buttons belong on the input's line rather than halfway up the label. */
+.provider-actions { display: flex; gap: .5rem; align-items: flex-end;
+                    margin-top: .55rem; flex-wrap: wrap; }
+.provider-actions .grow { flex: 1 1 12rem; }
+.provider-actions .field { margin-top: 0; }
+.provider-actions label { font-size: .8rem; font-weight: 600; color: var(--ink-soft); }
+.provider-actions input { width: 100%; }
+.provider-note { margin-top: .4rem; }
+/* The offered well-known address (676): the label, the address, and the way
+   to change it, on one line that wraps under a narrow sheet. */
+.provider-address { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .6rem;
+                    margin: .6rem 0 0; }
+.provider-address-label { font-size: .8rem; font-weight: 600; color: var(--ink-soft); }
+.provider-address-text { overflow-wrap: anywhere; }
+.provider-address-change { padding: .15rem .6rem; font-size: .82rem; }
+
+/* The one confirmation on this page. Narrower than the credentials sheet
+   because it is one question, and the two buttons sit at the end of the row
+   in the order a reader expects: the way out first, the destructive answer
+   last and named, never "OK". */
+.sheet.confirm { max-width: 26rem; }
+.confirm p { color: var(--ink-soft); font-size: .92rem; margin-top: .4rem; }
+.confirm-actions {
+  display: flex; gap: .5rem; justify-content: flex-end;
+  margin-top: 1.1rem; flex-wrap: wrap;
+}
+.confirm-actions .primary { background: var(--bad); border-color: transparent; }
+
+/* The sentence that says which document a rationale was written about. Sits
+   under the verdict and above everything that quotes a model, which is where
+   a reader meets the word "reference" for the first time. */
+.judged-note { margin-top: -.4rem; }
+
+/* -- print ---------------------------------------------------------------- */
+
+@media print {
+  .topbar, .runbar, .doc-tabs, .doc-panes, .skip, .sheet { display: none; }
+  body { background: #fff; color: #000; }
+  .card { box-shadow: none; break-inside: avoid; }
+  details.section { display: block; }
+  tr.hidden { display: revert; }
+}
+
+/* The one sortable column (495). A button rather than a click handler on the
+   `th`, because a sort control has to be reachable from the keyboard and
+   announce itself; `aria-sort` on the header is what a screen reader reads.
+   Styled to sit in the header rather than to look like a button, since it is
+   a column label that happens to be operable. */
+.claims th button.sort {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: baseline;
+  font: inherit;
+  color: inherit;
+}
+
+/* `all: unset` drops the focus ring the global rule provides, so it is put
+   back rather than left to a keyboard user to do without. */
+.claims th button.sort:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.claims th button.sort::after { content: "\2195"; opacity: 0.45; font-size: 0.85em; }
+.claims th[aria-sort="descending"] button.sort::after { content: "\2193"; opacity: 1; }
+.claims th[aria-sort="none"] button.sort:hover::after { opacity: 0.8; }
+
+/* The scorecard's five sort controls (631), the claims header's pattern: a
+   real button inside the `th`, `aria-sort` on the `th`, the focus ring put
+   back after `all: unset`, and the arrow saying which way. */
+table.models th button.sort {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: baseline;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+}
+table.models th button.sort:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+table.models th button.sort::after { content: "\2195"; opacity: 0.45; font-size: 0.85em; }
+table.models th[aria-sort="ascending"] button.sort::after { content: "\2191"; opacity: 1; }
+table.models th[aria-sort="descending"] button.sort::after { content: "\2193"; opacity: 1; }
+table.models th[aria-sort="none"] button.sort:hover::after { opacity: 0.8; }
+
+/* The label and its help icon, one non-breaking unit (657). `th.num` below
+   is `white-space: normal` so a long scorecard phrase ("Seconds / merge")
+   can wrap at its own space (565) -- and the space `index.html`'s
+   indentation leaves between `</button>` and `<span class="col-help">` is
+   exactly such a break point, so at some width the icon wrapped onto a line
+   of its own, seen on "Cost" and "Deviations" in a browser, not by any rule
+   over these files. `.col-label` wraps both in one `inline-flex`, `nowrap`:
+   an atomic box the line can break before or after but never inside, so the
+   label and its "?" are always on one line, whatever the column does at
+   that width -- overflow into the table's own horizontal scroll (631)
+   rather than a split icon. */
+table.models th .col-label {
+  display: inline-flex; align-items: baseline; white-space: nowrap;
+}
+/* The help icon beside a figure header's label (655): a sibling of the sort
+   button, never inside it, so a click on the icon cannot reach the button's
+   own click handler and sort the column it explains. `title` for a pointer
+   (`paintColumnHelp`), `aria-describedby` for the same sentence read out on
+   keyboard focus -- 638's pattern for a row marker, on a header instead. */
+table.models th .col-help {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.1rem; height: 1.1rem; margin-left: .3rem; flex: none;
+  border: 1px solid var(--ink-soft); border-radius: 50%;
+  font-size: .68rem; font-weight: 700; line-height: 1;
+  text-transform: none; letter-spacing: normal;
+  color: var(--ink-soft); cursor: help; vertical-align: middle;
+}
+table.models th .col-help:hover,
+table.models th .col-help:focus-visible {
+  color: var(--ink); border-color: var(--ink);
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}

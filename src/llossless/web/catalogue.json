@@ -1,0 +1,742 @@
+{
+  "schema_version": 1,
+  "notes": "Not an exhaustive list: the measured rows are every model or subscription route someone actually ran through this tool and recorded, not a curated top-N or a vendor's full lineup. A model missing from this list has not been measured, not been ruled out.",
+  "models": [
+    {
+      "id": "claude-opus-5-5",
+      "api_model": "claude-opus-5-5",
+      "display_name": "Claude Opus 5.5",
+      "provider": "anthropic",
+      "profile": "anthropic",
+      "context_window": 200000,
+      "notes": "Superseded 2026-09-28 by the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704), replacing the 2026-09-25 vendor-run figures (arms/2026-09-25/vendor/, ff8ff77), kept in this project's git history. Measured 2026-09-27 at claimcheck 73b61563c13c: the nine pairs in tests/pairs at high, --verify-depth full, structured-output tier pinned to 'prompt' for the whole run, thinking on for every role, vendor default effort (medium), safe mode on every claude call, one draw a cell with three draws on badge_access, trace_names and rate_limits (spread_draws). 2 silent losses disqualify this row from the lineup's headline rank; both are within the rate_limits spread (0-2 over 3 draws). Below the mechanical-union floor on its own pairs (61 deviations against a union of 70). Replaces Claude Opus 5, retired 2026-09-25 (entry 618). deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead.",
+      "measured": {
+        "usd_per_merge": 0.485,
+        "seconds_per_merge": 142.7,
+        "silent_loss": 2,
+        "silent_loss_per_pair": 0.22,
+        "deviations": 61,
+        "deviations_per_pair": 6.78,
+        "pairs": 9,
+        "fidelity": "high",
+        "billed_upper_bound_usd_per_merge": 0.485,
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 2,
+        "deviations_all_completed": 61,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 35,
+        "absent_behind_rejected_declarations": 4,
+        "spread_draws": {
+          "badge_access": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 0, "median": 0, "max": 0}},
+          "trace_names": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 7, "median": 7, "max": 9}},
+          "rate_limits": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 2}, "deviations": {"min": 24, "median": 24, "max": 27}}
+        },
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c"
+      }
+    },
+    {
+      "id": "claude-sonnet-5",
+      "api_model": "claude-sonnet-5",
+      "display_name": "Claude Sonnet 5",
+      "provider": "anthropic",
+      "profile": "anthropic",
+      "context_window": 200000,
+      "notes": "Superseded 2026-09-28 by the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704), replacing the 2026-09-18 matrix-run figures (arms/2026-09-18/matrix/, cf30209), kept in this project's git history. Measured 2026-09-27 at claimcheck 73b61563c13c: the nine pairs in tests/pairs at high, --verify-depth full, structured-output tier pinned to 'prompt' for the whole run, thinking on for every role, vendor default effort. No silent loss, and no better than the mechanical-union floor on its own pairs (73 deviations against a union of 70) -- the lineup's one row disqualified this way (688, ruling 16's floor). deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead.",
+      "measured": {
+        "usd_per_merge": 0.462,
+        "seconds_per_merge": 332.4,
+        "silent_loss": 0,
+        "silent_loss_per_pair": 0.0,
+        "deviations": 73,
+        "deviations_per_pair": 8.11,
+        "pairs": 9,
+        "fidelity": "high",
+        "billed_upper_bound_usd_per_merge": 0.462,
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 0,
+        "deviations_all_completed": 73,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 42,
+        "absent_behind_rejected_declarations": 2,
+        "spread_draws": {},
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c"
+      }
+    },
+    {
+      "id": "claude-haiku-4-5",
+      "api_model": "claude-haiku-4-5-20251001",
+      "display_name": "Claude Haiku 4.5",
+      "provider": "anthropic",
+      "profile": "anthropic",
+      "context_window": 200000,
+      "notes": "Superseded 2026-09-28 by the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704), replacing the 2026-09-18 matrix-run figures (arms/2026-09-18/matrix/, cf30209), kept in this project's git history. API model id claude-haiku-4-5-20251001. Measured 2026-09-27 at claimcheck 73b61563c13c: extended thinking on/off at its own default (one level, not a sweep), structured-output tier pinned to 'prompt' for the whole run. Incomplete: bike_docks failed with no verdict for the title claim on every retry (a model failure, DECISIONS 700), so this row's figures are over the 8 of 9 pairs it completed, listed after the complete rows rather than shrinking anyone else's set. 13 silent losses over those 8 pairs disqualify it from the lineup's headline rank regardless. deviations is a raw count over this row's own pairs (8, not 9 this run); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead.",
+      "measured": {
+        "usd_per_merge": 0.069,
+        "seconds_per_merge": 69.1,
+        "silent_loss": 13,
+        "silent_loss_per_pair": 1.62,
+        "deviations": 50,
+        "deviations_per_pair": 6.25,
+        "pairs": 8,
+        "fidelity": "high",
+        "billed_upper_bound_usd_per_merge": 0.069,
+        "pairs_completed": 8,
+        "silent_loss_all_completed": 13,
+        "deviations_all_completed": 50,
+        "pairs_not_completed": ["bike_docks (model_failure)"],
+        "model_confirmed_declarations": 6,
+        "absent_behind_rejected_declarations": 11,
+        "spread_draws": {},
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c"
+      }
+    },
+    {
+      "id": "gpt-5.6-terra",
+      "api_model": "gpt-5.6-terra",
+      "display_name": "GPT-5.6 Terra",
+      "provider": "openai",
+      "profile": "openai-reasoning",
+      "context_window": 200000,
+      "notes": "Structured-output tier pinned to 'prompt' for this run rather than probed, per this project's rule that a recorded sweep pins the tier once so a later flake cannot rewrite earlier requests. deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead.",
+      "measured": {
+        "usd_per_merge": 0.206,
+        "seconds_per_merge": 180.0,
+        "silent_loss": 1,
+        "silent_loss_per_pair": 0.11,
+        "deviations": 46,
+        "deviations_per_pair": 5.11,
+        "pairs": 9,
+        "fidelity": "high",
+        "billed_upper_bound_usd_per_merge": 0.206,
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 1,
+        "deviations_all_completed": 46,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 24,
+        "absent_behind_rejected_declarations": 18,
+        "spread_draws": {},
+        "run": "2026-09-18-matrix",
+        "artefacts": ["arms/2026-09-18/matrix/results_openai.json", "arms/2026-09-18/matrix/scored.json", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/matrix_figures.py --check -- re-scores the published cells of arms/2026-09-18/matrix/ with tests/rank_matrix.py's cell_figures and requires scored.json back, then forms every figure in this row from scored.json, by rank_matrix.py's selection (the last runner row per cell) and tests/figure_rules.py's arithmetic (the pairs every counted model completed; dollars and seconds as exact means from each report, rounded once), and requires this row, and the figures its notes state, to equal it. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-18",
+        "claimcheck_commit": "cf3020941b41"
+      }
+    },
+    {
+      "id": "gpt-6-sol",
+      "api_model": "gpt-6-sol",
+      "display_name": "GPT-6 Sol",
+      "provider": "openai",
+      "profile": "openai-reasoning",
+      "context_window": 200000,
+      "notes": "Superseded 2026-09-28 by the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704), replacing the 2026-09-25 vendor-run figures (arms/2026-09-25/vendor/, ff8ff77), kept in this project's git history -- the badge_access timeout and trace_names crash entry 619 describes were specific to that earlier run and do not apply here. Measured 2026-09-27 at claimcheck 73b61563c13c: the nine pairs in tests/pairs at high, --verify-depth full, structured-output tier pinned to 'prompt' for the whole run, thinking on for every role, vendor default effort. No silent loss, and the fewest deviations per pair of any row in the lineup: first in the registered order among the rows that survive disqualification. deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead.",
+      "measured": {
+        "usd_per_merge": 0.189,
+        "seconds_per_merge": 158.4,
+        "silent_loss": 0,
+        "silent_loss_per_pair": 0.0,
+        "deviations": 37,
+        "deviations_per_pair": 4.11,
+        "pairs": 9,
+        "fidelity": "high",
+        "billed_upper_bound_usd_per_merge": 0.189,
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 0,
+        "deviations_all_completed": 37,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 19,
+        "absent_behind_rejected_declarations": 9,
+        "spread_draws": {
+          "badge_access": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 0, "median": 0, "max": 1}},
+          "trace_names": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 8, "median": 9, "max": 10}},
+          "rate_limits": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 1}, "deviations": {"min": 9, "median": 9, "max": 9}}
+        },
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c"
+      }
+    },
+    {
+      "id": "gpt-6-luna",
+      "api_model": "gpt-6-luna",
+      "display_name": "GPT-6 Luna",
+      "provider": "openai",
+      "profile": "openai-reasoning",
+      "context_window": 200000,
+      "notes": "Superseded 2026-09-28 by the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704), replacing the 2026-09-25 vendor-run figures (arms/2026-09-25/vendor/, ff8ff77), kept in this project's git history. Measured 2026-09-27 at claimcheck 73b61563c13c: the nine pairs in tests/pairs at high, --verify-depth full, structured-output tier pinned to 'prompt' for the whole run, thinking on for every role, vendor default effort. 2 silent losses disqualify this row from the lineup's headline rank; both are within the rate_limits spread (1-2 over 3 draws), where its rate_limits deviations also range 16-22 over the three draws. Cheapest row in the lineup by a wide margin. deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead.",
+      "measured": {
+        "usd_per_merge": 0.012,
+        "seconds_per_merge": 141.3,
+        "silent_loss": 2,
+        "silent_loss_per_pair": 0.22,
+        "deviations": 51,
+        "deviations_per_pair": 5.67,
+        "pairs": 9,
+        "fidelity": "high",
+        "billed_upper_bound_usd_per_merge": 0.012,
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 2,
+        "deviations_all_completed": 51,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 22,
+        "absent_behind_rejected_declarations": 11,
+        "spread_draws": {
+          "badge_access": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 0, "median": 1, "max": 1}},
+          "trace_names": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 8, "median": 8, "max": 9}},
+          "rate_limits": {"draws": 3, "silent_loss": {"min": 1, "median": 2, "max": 2}, "deviations": {"min": 16, "median": 19, "max": 22}}
+        },
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c"
+      }
+    },
+    {
+      "id": "gemini-3.8-flash",
+      "api_model": "gemini-3.8-flash",
+      "display_name": "Gemini 3.8 Flash",
+      "provider": "google",
+      "profile": "google",
+      "context_window": 200000,
+      "notes": "Not yet measured. Registered with Gemini 3.5 Flash-Lite for the 2026-09-25 free-tier run (arms/2026-09-25/google/REGISTRATION.md; internal/docs/DECISIONS.md entry 625), but the free tier allows this model 20 requests a day, 503 answers included, and the pilot that found the google profile used the first day's. The profile and endpoint were confirmed on it (entry 624). Its nine pairs need about five days of free-tier quota; the run resumes at the same tool commit. Best effort, in progress: Google models are measured on the free tier as a reference only, with no commitment to keep this row current or complete (internal/docs/DECISIONS.md entry 658). The daily free-tier job that completes this row keeps running; paid Gemini measurement is added only on demand.",
+      "measured": null
+    },
+    {
+      "id": "gemini-3.5-flash-lite",
+      "api_model": "gemini-3.5-flash-lite",
+      "display_name": "Gemini 3.5 Flash-Lite",
+      "provider": "google",
+      "profile": "google",
+      "context_window": 200000,
+      "notes": "Measured 2026-09-25 at claimcheck 0771aa6 on Google's free tier, rate-limited (arms/2026-09-25/google/REGISTRATION.md and its dated amendments; internal/docs/DECISIONS.md entries 624 and 625): the nine pairs in tests/pairs at high, --verify-depth full, one draw each, through Google's OpenAI-compatible endpoint, profile google, thinking on for every role and no reasoning_effort sent, so the model's default applied; structured-output tier pinned to 'prompt', as the other 2026-09-25 vendor rows were. The same corpus and scoring as those rows. 8 of the 9 pairs completed: freezer_alarm exited 2 after five merge answers that broke the schema, and is excluded. Free tier: $0.00 billed, and usd_per_merge is null because nothing was billed. At the paid tier's rates in pricing.py (read 2026-09-25), the same calls would have cost $0.0254 per merge; that figure is computed, not billed. seconds_per_merge excludes the 15 s the harness waited between calls to stay under the free tier's limits; the raw wall is 219.2 s per merge. Free-tier inputs may be used by Google; every document sent was a public CC BY 4.0 test pair. context_window is the --window the run stated, not the model's own (1,048,576). deviations is a raw count over this row's own pairs (8); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead. Best effort: this row is a free-tier reference, not a maintained measurement, with no commitment to re-run it as the tool changes (internal/docs/DECISIONS.md entry 658). Paid Gemini measurement is added only on demand.",
+      "measured": {
+        "usd_per_merge": null,
+        "seconds_per_merge": 135.4,
+        "silent_loss": 8,
+        "silent_loss_per_pair": 1.0,
+        "deviations": 40,
+        "deviations_per_pair": 5.0,
+        "pairs": 8,
+        "fidelity": "high",
+        "billed": "free-tier",
+        "pairs_completed": 8,
+        "silent_loss_all_completed": 8,
+        "deviations_all_completed": 40,
+        "pairs_not_completed": ["freezer_alarm (exit_2)"],
+        "model_confirmed_declarations": 15,
+        "absent_behind_rejected_declarations": 7,
+        "spread_draws": {},
+        "run": "2026-09-25-google",
+        "artefacts": ["arms/2026-09-25/google/results_gemini-3.5-flash-lite.json", "arms/2026-09-25/google/scored.json", "arms/2026-09-25/google/ledger_google.json", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/google_figures.py --check -- re-scores the published cells of arms/2026-09-25/google/ with tests/rank_matrix.py's cell_figures and requires scored.json back, then forms every figure in this row from scored.json (each report's own duration_seconds less the harness's pacing and backoff waits, the mean rounded once, by tests/figure_rules.py), computes the paid-tier figure from the ledger's tokens at pricing.py's rates, and requires this row and the figures its notes state to equal them. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-25",
+        "claimcheck_commit": "0771aa6f830d"
+      }
+    },
+    {
+      "id": "qwen3-8b",
+      "api_model": "qwen/qwen3-8b",
+      "display_name": "Qwen3 8B",
+      "provider": "self-hosted",
+      "profile": "openai-compatible",
+      "context_window": 32768,
+      "notes": "Self-hosted on a metered serverless GPU endpoint billed per minute of GPU time, not per token; usd_per_merge is left null rather than estimated -- reporting a self-hosted model as free would invert a cost comparison against the hosted vendors above. context_window is the --window ceiling the harness stated for this run, not a probed native maximum. Measured against the operator's own toby-test corpus (a different corpus, and a different reference document, than the hosted four above), and one of the three pairs attempted (toby-test-5) failed with exit_code 2 and is excluded, leaving pairs=2. deviations is a raw count over this row's own pairs (2); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead, and note pairs=2 is a small sample.",
+      "measured": {
+        "usd_per_merge": null,
+        "seconds_per_merge": 139.9,
+        "silent_loss": 4,
+        "silent_loss_per_pair": 2.0,
+        "deviations": 15,
+        "deviations_per_pair": 7.5,
+        "pairs": 2,
+        "fidelity": "high",
+        "run": "2026-09-16-phase4",
+        "artefacts": ["arms/2026-09-16/phase4/results.json", "arms/2026-09-16/phase4/scored.json", "tests/handwritten/*/reference.md"],
+        "derived_by": "python3 tests/phase4_figures.py --check -- re-scores the published cells of arms/2026-09-16/phase4/ against each pair's tests/handwritten/<pair>/reference.md with tests/rank_arms.py's cell_figures (the scoring DECISIONS 444 used; it does not forgive confirmed declarations or the title as rank_matrix.py does) and requires scored.json back, then forms every figure in this row from the high cells and requires this row to equal it. tests/test_catalogue.py runs the check. A reference.md is a reference and not an oracle -- see tests/handwritten/README.md.",
+        "measured_on": "2026-09-16",
+        "claimcheck_commit": "605b53189df8"
+      }
+    },
+    {
+      "id": "qwen3.8-27b-fp8",
+      "api_model": "Qwen/Qwen3.8-27B-FP8",
+      "display_name": "Qwen3.8 27B (FP8)",
+      "provider": "self-hosted",
+      "profile": "openai-compatible",
+      "context_window": 32768,
+      "notes": "Self-hosted on the same metered serverless GPU endpoint as qwen3-8b; usd_per_merge is null for the same reason (billed per GPU-minute, not per token). context_window is the --window ceiling the harness stated for this run, not a probed native maximum. Measured against the operator's own toby-test corpus, a different corpus than the hosted four above -- do not average the two groups together. All 3 attempted pairs completed. deviations is a raw count over this row's own pairs (3); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead.",
+      "measured": {
+        "usd_per_merge": null,
+        "seconds_per_merge": 675.7,
+        "silent_loss": 10,
+        "silent_loss_per_pair": 3.33,
+        "deviations": 35,
+        "deviations_per_pair": 11.67,
+        "pairs": 3,
+        "fidelity": "high",
+        "run": "2026-09-16-phase4",
+        "artefacts": ["arms/2026-09-16/phase4/results.json", "arms/2026-09-16/phase4/scored.json", "tests/handwritten/*/reference.md"],
+        "derived_by": "python3 tests/phase4_figures.py --check -- re-scores the published cells of arms/2026-09-16/phase4/ against each pair's tests/handwritten/<pair>/reference.md with tests/rank_arms.py's cell_figures (the scoring DECISIONS 444 used; it does not forgive confirmed declarations or the title as rank_matrix.py does) and requires scored.json back, then forms every figure in this row from the high cells and requires this row to equal it. tests/test_catalogue.py runs the check. A reference.md is a reference and not an oracle -- see tests/handwritten/README.md.",
+        "measured_on": "2026-09-16",
+        "claimcheck_commit": "605b53189df8"
+      }
+    }
+  ],
+  "command_routes": [
+    {
+      "route": "claude-haiku",
+      "model": "haiku",
+      "profile": "subscription",
+      "display_name": "Claude Haiku 4.5 (subscription)",
+      "resolved_model": "claude-haiku-4-5-20251001",
+      "notes": "Measured through a subscription: the claude-haiku command route, alias haiku, which answered as claude-haiku-4-5-20251001 in the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704). Superseded 2026-09-28: replaces the 2026-09-24 measured block (arms/2026-09-24/subscription/) and its safe-mode spot-check caveat (entry 666), which no longer applies -- this run ran in safe mode throughout. Kept in this project's git history. Measured 2026-09-27 at claimcheck 73b61563c13c: the nine pairs in tests/pairs at high, --verify-depth full, structured-output tier pinned to 'prompt', extended thinking on/off at its own default (one level, not a sweep), effort medium on every role (CLI), safe mode on every call. All 9 pairs completed. 3 silent losses disqualify this row from the lineup's headline rank, ranging 2-26 over the three rate_limits draws (median 10). deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead. This run's own dollars-per-merge figure (API-equivalent, $0.483) is not carried in usd_per_merge, for the reason the claude-opus route's notes state; see arms/2026-09-27/lineup/figures.json (row haiku-4.5-sub).",
+      "measured": {
+        "usd_per_merge": null,
+        "seconds_per_merge": 676.5,
+        "silent_loss": 3,
+        "silent_loss_per_pair": 0.33,
+        "deviations": 68,
+        "deviations_per_pair": 7.56,
+        "pairs": 9,
+        "fidelity": "high",
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 3,
+        "deviations_all_completed": 68,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 26,
+        "absent_behind_rejected_declarations": 22,
+        "spread_draws": {
+          "badge_access": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 0, "median": 0, "max": 0}},
+          "trace_names": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 9, "median": 10, "max": 10}},
+          "rate_limits": {"draws": 3, "silent_loss": {"min": 2, "median": 10, "max": 26}, "deviations": {"min": 9, "median": 10, "max": 14}}
+        },
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c",
+        "merge_effort": "medium"
+      },
+      "measured_by_effort": {
+        "run": "2026-09-25-subscription-comparison",
+        "artefacts": ["arms/2026-09-25/subscription-comparison/scored.json", "arms/2026-09-25/subscription-comparison/results.json", "arms/2026-09-25/subscription-comparison/tables.md", "arms/2026-09-25/subscription-comparison/REGISTRATION.md"],
+        "derived_by": "python3 tests/effort_figures.py --check -- checks every scored record in arms/2026-09-25/subscription-comparison/scored.json against its own per-error outcomes, forms every level here from those records and requires the cells score_grid.py rendered into tables.md back, then requires this block to equal them. The raw runs are published at arms/2026-09-25/subscription-comparison/runs/, at the operator's ruling of 2026-09-25 (DECISIONS 616); the per-error scorer is now published (tests/score_planted.py), but re-scoring the raw runs still needs internal/arms/2026-09-25/subscription-comparison/score_grid.py, whose own per-error outcome text stays withheld, so this check takes scored.json as given and says so. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-25",
+        "claimcheck_commit": "0418d4886ac7",
+        "fidelity": "sourced",
+        "verify_depth": "full",
+        "draws": 3,
+        "resolved_model": "claude-haiku-4-5-20251001",
+        "safe_mode": false,
+        "notes": "The registered grid of 2026-09-25 (arms/2026-09-25/subscription-comparison/REGISTRATION.md; internal/docs/DECISIONS.md entry 609): claimcheck merge at --fidelity sourced --verify-depth full through the claude CLI on a subscription, alias haiku, which answered as claude-haiku-4-5-20251001 in every call. Only the merge role's effort was varied; decompose and verify stayed at low. K = 3 draws per level on two small pairs with planted errors: voyager (44) and bip39 (14; its error 4 is the licence, GPL planted where the source says MIT). fixed is the median, min and max over the three draws. seconds are the whole claimcheck merge run, decompose and verify included. searched counts the runs that retrieved (more turns than the floor, or a webSearchRequests count above zero), over both pairs. Haiku ran at medium only, as the registered lower anchor; every other level is not measured, not ruled out. A level missing from levels was not run. The mahjongg false-correction control ran at medium for opus and sonnet only and is not in this block; its figures are in internal/docs/subscription-comparison.md. Measured before the CLI was isolated (internal/docs/DECISIONS.md entry 610): every call ran without --safe-mode or --tools, so the CLI loaded the operator's own CLAUDE.md and auto-memory and offered the model its whole built-in tool set, subagents included. The figures are kept as measured; a re-measurement under safe mode has not been run. Not comparable with the measured block above, which is another pair set at another fidelity, one draw, from another tool commit.",
+        "levels": {
+          "medium": {
+            "pairs": {
+              "voyager": {
+                "planted": 44,
+                "draws": 3,
+                "fixed": {"median": 6, "min": 2, "max": 16},
+                "seconds": {"median": 663, "min": 532, "max": 877}
+              },
+              "bip39": {
+                "planted": 14,
+                "draws": 3,
+                "fixed": {"median": 9, "min": 6, "max": 10},
+                "seconds": {"median": 578, "min": 538, "max": 588},
+                "licence_fixed": 0,
+                "licence_fixed_rate": 0.0
+              }
+            },
+            "runs": 6,
+            "searched": 0,
+            "searched_rate": 0.0
+          }
+        }
+      }
+    },
+    {
+      "route": "claude-sonnet",
+      "model": "sonnet",
+      "profile": "subscription",
+      "display_name": "Claude Sonnet 5 (subscription)",
+      "resolved_model": "claude-sonnet-5",
+      "notes": "Measured through a subscription: the claude-sonnet command route, alias sonnet, which answered as claude-sonnet-5 in the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704). Superseded 2026-09-28: replaces the 2026-09-24 measured block (arms/2026-09-24/subscription/), kept in this project's git history -- the system-prompt caveat entry 665 describes is about the measured_by_effort grid below, not this block. Measured 2026-09-27 at claimcheck 73b61563c13c: the nine pairs in tests/pairs at high, --verify-depth full, structured-output tier pinned to 'prompt', thinking on for every role, effort medium on every role (CLI), safe mode on every call. Serially from a clone pinned at that commit; seconds include the CLI's own start-up on every call. All 9 pairs completed. 5 silent losses disqualify this row from the lineup's headline rank; up to 4 of them are within the rate_limits spread (0-4 over 3 draws). deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own -- use deviations_per_pair for that comparison instead. This run's own dollars-per-merge figure (API-equivalent, $0.309) is not carried in usd_per_merge, for the reason the claude-opus route's notes state; see arms/2026-09-27/lineup/figures.json (row sonnet-5-sub).",
+      "measured": {
+        "usd_per_merge": null,
+        "seconds_per_merge": 186.5,
+        "silent_loss": 5,
+        "silent_loss_per_pair": 0.56,
+        "deviations": 66,
+        "deviations_per_pair": 7.33,
+        "pairs": 9,
+        "fidelity": "high",
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 5,
+        "deviations_all_completed": 66,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 36,
+        "absent_behind_rejected_declarations": 19,
+        "spread_draws": {
+          "badge_access": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 0, "median": 0, "max": 0}},
+          "trace_names": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 4, "median": 5, "max": 7}},
+          "rate_limits": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 4}, "deviations": {"min": 21, "median": 21, "max": 26}}
+        },
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c",
+        "merge_effort": "medium"
+      },
+      "measured_by_effort": {
+        "run": "2026-09-25-subscription-comparison",
+        "artefacts": ["arms/2026-09-25/subscription-comparison/scored.json", "arms/2026-09-25/subscription-comparison/results.json", "arms/2026-09-25/subscription-comparison/tables.md", "arms/2026-09-25/subscription-comparison/REGISTRATION.md"],
+        "derived_by": "python3 tests/effort_figures.py --check -- checks every scored record in arms/2026-09-25/subscription-comparison/scored.json against its own per-error outcomes, forms every level here from those records and requires the cells score_grid.py rendered into tables.md back, then requires this block to equal them. The raw runs are published at arms/2026-09-25/subscription-comparison/runs/, at the operator's ruling of 2026-09-25 (DECISIONS 616); the per-error scorer is now published (tests/score_planted.py), but re-scoring the raw runs still needs internal/arms/2026-09-25/subscription-comparison/score_grid.py, whose own per-error outcome text stays withheld, so this check takes scored.json as given and says so. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-25",
+        "claimcheck_commit": "0418d4886ac7",
+        "fidelity": "sourced",
+        "verify_depth": "full",
+        "draws": 3,
+        "resolved_model": "claude-sonnet-5",
+        "safe_mode": false,
+        "notes": "The registered grid of 2026-09-25 (arms/2026-09-25/subscription-comparison/REGISTRATION.md; internal/docs/DECISIONS.md entry 609): claimcheck merge at --fidelity sourced --verify-depth full through the claude CLI on a subscription, alias sonnet, which answered as claude-sonnet-5 in every call. Not reproducible on CLI 2.1.281 or newer (system prompt change): from 2.1.281 the CLI sends Sonnet 5 a much shorter system prompt, and at sourced it then answers the merge without looking anything up (arms/2026-09-26/sourced-2183/; DECISIONS entries 665 and 666). These figures were taken on 2.1.274 and need re-measuring on the current CLI. Only the merge role's effort was varied; decompose and verify stayed at low. K = 3 draws per level on two small pairs with planted errors: voyager (44) and bip39 (14; its error 4 is the licence, GPL planted where the source says MIT). fixed is the median, min and max over the three draws. seconds are the whole claimcheck merge run, decompose and verify included. searched counts the runs that retrieved (more turns than the floor, or a webSearchRequests count above zero), over both pairs. A level missing from levels was not run. The mahjongg false-correction control ran at medium for opus and sonnet only and is not in this block; its figures are in internal/docs/subscription-comparison.md. Measured before the CLI was isolated (internal/docs/DECISIONS.md entry 610): every call ran without --safe-mode or --tools, so the CLI loaded the operator's own CLAUDE.md and auto-memory and offered the model its whole built-in tool set, subagents included. The figures are kept as measured; a re-measurement under safe mode has not been run. Not comparable with the measured block above, which is another pair set at another fidelity, one draw, from another tool commit.",
+        "levels": {
+          "low": {
+            "pairs": {
+              "voyager": {
+                "planted": 44,
+                "draws": 3,
+                "fixed": {"median": 18, "min": 8, "max": 19},
+                "seconds": {"median": 261, "min": 179, "max": 278}
+              },
+              "bip39": {
+                "planted": 14,
+                "draws": 3,
+                "fixed": {"median": 11, "min": 11, "max": 13},
+                "seconds": {"median": 142, "min": 131, "max": 183},
+                "licence_fixed": 3,
+                "licence_fixed_rate": 1.0
+              }
+            },
+            "runs": 6,
+            "searched": 5,
+            "searched_rate": 0.83
+          },
+          "medium": {
+            "pairs": {
+              "voyager": {
+                "planted": 44,
+                "draws": 3,
+                "fixed": {"median": 30, "min": 26, "max": 31},
+                "seconds": {"median": 407, "min": 332, "max": 416}
+              },
+              "bip39": {
+                "planted": 14,
+                "draws": 3,
+                "fixed": {"median": 13, "min": 11, "max": 14},
+                "seconds": {"median": 197, "min": 191, "max": 206},
+                "licence_fixed": 3,
+                "licence_fixed_rate": 1.0
+              }
+            },
+            "runs": 6,
+            "searched": 6,
+            "searched_rate": 1.0
+          },
+          "high": {
+            "pairs": {
+              "voyager": {
+                "planted": 44,
+                "draws": 3,
+                "fixed": {"median": 28, "min": 24, "max": 35},
+                "seconds": {"median": 667, "min": 512, "max": 1172}
+              },
+              "bip39": {
+                "planted": 14,
+                "draws": 3,
+                "fixed": {"median": 13, "min": 12, "max": 14},
+                "seconds": {"median": 309, "min": 288, "max": 333},
+                "licence_fixed": 3,
+                "licence_fixed_rate": 1.0
+              }
+            },
+            "runs": 6,
+            "searched": 6,
+            "searched_rate": 1.0
+          },
+          "xhigh": {
+            "pairs": {
+              "voyager": {
+                "planted": 44,
+                "draws": 3,
+                "fixed": {"median": 31, "min": 24, "max": 35},
+                "seconds": {"median": 664, "min": 639, "max": 748}
+              },
+              "bip39": {
+                "planted": 14,
+                "draws": 3,
+                "fixed": {"median": 14, "min": 14, "max": 14},
+                "seconds": {"median": 359, "min": 324, "max": 367},
+                "licence_fixed": 3,
+                "licence_fixed_rate": 1.0
+              }
+            },
+            "runs": 6,
+            "searched": 6,
+            "searched_rate": 1.0
+          }
+        }
+      }
+    },
+    {
+      "route": "claude-opus",
+      "model": "opus",
+      "profile": "subscription",
+      "display_name": "Claude Opus 5.5 (subscription)",
+      "resolved_model": "claude-opus-5-5",
+      "notes": "Measured through a subscription: the claude-opus command route, alias opus, which answered as claude-opus-5-5 in the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704, 708). Superseded 2026-09-28 (DECISIONS 708, the operator's ruling that Opus 5 is not Opus 5.5 and no longer credible on this card): replaces the 2026-09-24 measured block (arms/2026-09-24/subscription/), kept in this project's git history. The alias_now block (661) is gone: the schema forbids alias_now.model equalling resolved_model, and the alias and this row's resolved_model now agree. measured_by_effort is gone too: it was Claude Opus 5's own K=3 grid (arms/2026-09-25/subscription-comparison/), a model this route no longer answers as, so it is removed rather than kept mislabelled as current; the raw grid is still in this project's git history. Measured 2026-09-27 at claimcheck 73b61563c13c: the nine pairs in tests/pairs at high, --verify-depth full, structured-output tier pinned to 'prompt', effort medium on every role (CLI), safe mode on every call. All 9 pairs completed and none is excluded. No silent loss. deviations is a raw count over this row's own pairs (9); it is not comparable across rows with different pairs counts on its own, use deviations_per_pair for that comparison instead. usd_per_merge is null: the calls are included in the subscription and not priced per call, and the only field this schema has for a route's dollars, api_equivalent_usd, lives inside measured_by_effort/pinned_by_effort's multi-level grid shape, which this single-effort run does not have; this run's own dollars-per-merge figure (API-equivalent, $0.614) is named here instead, citing arms/2026-09-27/lineup/figures.json (row opus-5.5-sub). The pinned_by_effort grid below already measured claude-opus-5-5 directly (DECISIONS 661) and confirmed the alias ahead of this run.",
+      "measured": {
+        "usd_per_merge": null,
+        "seconds_per_merge": 164.1,
+        "silent_loss": 0,
+        "silent_loss_per_pair": 0.0,
+        "deviations": 63,
+        "deviations_per_pair": 7.0,
+        "pairs": 9,
+        "fidelity": "high",
+        "pairs_completed": 9,
+        "silent_loss_all_completed": 0,
+        "deviations_all_completed": 63,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 37,
+        "absent_behind_rejected_declarations": 2,
+        "spread_draws": {
+          "badge_access": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 0, "median": 0, "max": 0}},
+          "trace_names": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 7, "median": 7, "max": 8}},
+          "rate_limits": {"draws": 3, "silent_loss": {"min": 0, "median": 0, "max": 0}, "deviations": {"min": 25, "median": 26, "max": 28}}
+        },
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/pairs/*/ideal.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check: re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-27",
+        "claimcheck_commit": "73b61563c13c",
+        "merge_effort": "medium"
+      },
+      "measured_by_effort": null,
+      "pinned_by_effort": [
+        {
+          "run": "2026-09-26-opus-max",
+          "artefacts": [
+            "arms/2026-09-26/opus-max/scored.json",
+            "arms/2026-09-26/opus-max/results.json",
+            "arms/2026-09-26/opus-max/tables.md",
+            "arms/2026-09-26/opus-max/REGISTRATION.md"
+          ],
+          "derived_by": "python3 tests/opus55_effort_figures.py --check -- checks every call of every run in arms/2026-09-26/opus-max/results.json asked for claude-opus-5-5 in safe mode at the level its record names, checks every scored record against its own per-error outcomes, forms both levels from the records and requires the cells in tables.md back, then requires this block to equal them. The raw runs are published at arms/2026-09-26/opus-max/runs/; the per-error scorer is now published (tests/score_planted.py), but re-scoring the raw runs still needs internal/arms/2026-09-26/opus-max/score_max.py, whose own per-error outcome text stays withheld, so this check takes scored.json's voyager outcomes as given and says so. The mahjongg control's record and the count these notes state are rescored from its run by tests/mahjongg_figures.py with the corrected scorer (DECISIONS 682 B10), and this check runs that one. tests/test_catalogue.py runs the check.",
+          "measured_on": "2026-09-26",
+          "claimcheck_commit": "a13818a072bf",
+          "fidelity": "sourced",
+          "verify_depth": "full",
+          "draws": 3,
+          "requested_model": "claude-opus-5-5",
+          "resolved_model": "claude-opus-5-5",
+          "safe_mode": true,
+          "levels": {
+            "xhigh": {
+              "pairs": {
+                "voyager": {
+                  "planted": 44,
+                  "draws": 2,
+                  "fixed": {
+                    "median": 38,
+                    "min": 38,
+                    "max": 38
+                  },
+                  "seconds": {
+                    "median": 278.5,
+                    "min": 256,
+                    "max": 301
+                  }
+                }
+              },
+              "runs": 2,
+              "searched": 2,
+              "searched_rate": 1.0,
+              "api_equivalent_usd": {
+                "median": 1.0,
+                "min": 0.99,
+                "max": 1.01
+              },
+              "uncached_list_usd": {
+                "median": 1.05,
+                "min": 1.05,
+                "max": 1.05
+              }
+            },
+            "max": {
+              "pairs": {
+                "voyager": {
+                  "planted": 44,
+                  "draws": 3,
+                  "fixed": {
+                    "median": 38,
+                    "min": 37,
+                    "max": 38
+                  },
+                  "seconds": {
+                    "median": 606,
+                    "min": 574,
+                    "max": 866
+                  }
+                }
+              },
+              "runs": 3,
+              "searched": 3,
+              "searched_rate": 1.0,
+              "api_equivalent_usd": {
+                "median": 2.04,
+                "min": 1.87,
+                "max": 3.0
+              },
+              "uncached_list_usd": {
+                "median": 2.45,
+                "min": 2.1,
+                "max": 4.61
+              }
+            }
+          },
+          "notes": "The registered run of 2026-09-26 (arms/2026-09-26/opus-max/REGISTRATION.md; internal/docs/DECISIONS.md entry 661): llossless merge at --fidelity sourced --verify-depth full through the claude CLI on a subscription, in safe mode with --tools WebSearch,WebFetch, asked for claude-opus-5-5 by its full id rather than through the opus alias, which still answered as claude-opus-5 on the installed CLI (2.1.274) when the run was registered. On 2026-09-26, after the CLI was updated to 2.1.283, one call showed the opus alias answering as claude-opus-5-5, so these are the figures for the model this route now runs (the route's own alias_now field at the time; folded into resolved_model directly once the route's own measurement caught up, DECISIONS 708). claude-opus-5-5 answered every role of every run. Only the merge role's effort varied; decompose and verify stayed at low. Voyager only (44 planted errors): xhigh K = 2 as the same-session comparator, max K = 3. bip39 was not run. fixed is the median, min and max over the draws. seconds are the whole merge run, decompose and verify included. api_equivalent_usd is each run's summed CLI envelope total_cost_usd, what the same tokens would have cost through the API; the subscription billed nothing per call, and the page shows it only as a ratio between levels. uncached_list_usd is the same tokens with every input token at the model's uncached input rate in pricing.py (internal/docs/DECISIONS.md entry 682): the envelope prices the CLI's own prompt cache, reads below the input rate and writes at 1.25x or 2x it, so the two differ by the cache alone; neither is a price, and web-search fees are in neither. max fixed 37-38 against xhigh's 38-38, within the draw spread; it took about 2.2x the wall time and about 2x the usage. The mahjongg false-correction control ran once at max: 4 mechanical false corrections, not all of them necessarily wrong, unreviewed (rescored from the published run with the corrected tests/score_planted.py, DECISIONS 682 B10; 7 as first published, which counted a declared correction of a changed sentence twice); it is not in this block. Run with Claude Code 2.1.281: the installed 2.1.274 refuses this model (version 2.1.280 or newer is required). Not the same run as the route's own measured block (2026-09-27, medium effort only): this one is the registered xhigh/max effort grid."
+        }
+      ]
+    },
+    {
+      "route": "claude-fable",
+      "model": "fable",
+      "profile": "subscription",
+      "display_name": "Claude Fable (subscription)",
+      "resolved_model": "claude-fable-5-1",
+      "notes": "Measured through a subscription: the claude-fable command route, alias fable, which answered as claude-fable-5-1 in the release benchmark (arms/2026-09-27/lineup/; DECISIONS 700-702, 704) -- the operator's earlier decision not to run it is superseded. Not a headline row (678, 688): registered on the hardest documents only -- S1's rate_limits and index_429, S3's voyager, bip39 and mahjongg -- 3 items, one draw each, so pairs here is 2, not the 9 every headline row completed, and this row's figures are not comparable to any other row's per-pair rate. It is a side comparison against opus-5.5-sub over the same 2 pairs; that route's own figures above are over its full 9 pairs and differ from what the same 2-pair scope gives it. Measured 2026-09-28 at claimcheck 73b61563c13c: --verify-depth full, structured-output tier pinned to 'prompt', effort medium on every role (CLI), safe mode on every call. No silent loss on the 2 pairs it ran. This run's own dollars-per-merge figure (API-equivalent, $2.721) is not carried in usd_per_merge, for the reason the claude-opus route's notes state; see arms/2026-09-27/lineup/figures.json (S1.side.fable-sub) for that figure and the opus-5.5-sub comparator over the same 2 pairs.",
+      "measured": {
+        "usd_per_merge": null,
+        "seconds_per_merge": 359.9,
+        "silent_loss": 0,
+        "silent_loss_per_pair": 0.0,
+        "deviations": 21,
+        "deviations_per_pair": 10.5,
+        "pairs": 2,
+        "fidelity": "high",
+        "pairs_completed": 2,
+        "silent_loss_all_completed": 0,
+        "deviations_all_completed": 21,
+        "pairs_not_completed": [],
+        "model_confirmed_declarations": 3,
+        "absent_behind_rejected_declarations": 0,
+        "spread_draws": {},
+        "run": "2026-09-27-lineup",
+        "artefacts": ["arms/2026-09-27/lineup/figures.json", "arms/2026-09-27/lineup/scored.json", "arms/2026-09-27/lineup/cells.jsonl", "tests/handwritten/*/reference.md"],
+        "derived_by": "python3 tests/lineup_figures.py --check -- re-derives scored.json from the run's cells (rank_matrix.cell_figures for the pairs) and requires it back, then forms every row from scored.json by figure_rules.lineup_groups (headline draw per pair, disqualify-then-rank, 688; a row's own missing or excluded pair never shrinks another row's pairs) and requires figures.json back; tests/lineup_figures.py's own catalogue_problems() then requires this row to equal the published figures.json. tests/test_catalogue.py runs the check.",
+        "measured_on": "2026-09-28",
+        "claimcheck_commit": "73b61563c13c",
+        "merge_effort": "medium"
+      },
+      "measured_by_effort": null
+    }
+  ],
+  "verify_depth": {
+    "notes": "What the cheaper verification depth costs in detection, measured. One model, one small test set, one draw: the 13 fixtures of the pre-registered detection block in tests/fixtures/, 7 planted defects among them, each fixture's hand-written merged.md verified at both depths, K=1 (every figure was identical across K=3 on 2026-09-22, which is the registration's reason for one draw). Figures are per probe direction and never blended: source_to_merged asks whether a source's content survived into the merge, merged_to_sources whether the merge says something its sources do not. cannot_detect names a defect class a depth has no step to reach: coverage has no reverse pass, so a merge that invents a statement (the hallucination fixture) is outside it by construction, and that plant is left out of its rate rather than lowering it. For the same reason coverage grades none of the 28 merged_to_sources guard probes, so its guards_wrong_rate there is null, not zero. plants_detected_mechanically counts plants found by the attributions check (DECISIONS 569), which asks no model and runs at both depths; at coverage it is the only thing that reads the merged document. Scored under DECISIONS 582; the as-run scoring, which counted full's two second reports on attribution_swapped as invented findings, is kept beside it in the evidence. model_calls and seconds are sums over the 13 fixtures, and speedup is the comparator's seconds over this depth's. Nothing here measures either depth on real documents.",
+    "comparator": "full",
+    "model": "Qwen/Qwen3.8-27B-FP8",
+    "draws": 1,
+    "fixtures": 13,
+    "plants": 7,
+    "depths": [
+      {
+        "value": "full",
+        "source_to_merged": {
+          "plants": 3,
+          "plants_detected": 3,
+          "plants_detected_rate": 1.0,
+          "plants_detected_mechanically": 0,
+          "guards": 90,
+          "guards_graded": 88,
+          "guards_wrong": 0,
+          "guards_wrong_rate": 0.0
+        },
+        "merged_to_sources": {
+          "plants": 4,
+          "plants_detected": 4,
+          "plants_detected_rate": 1.0,
+          "plants_detected_mechanically": 1,
+          "guards": 28,
+          "guards_graded": 28,
+          "guards_wrong": 0,
+          "guards_wrong_rate": 0.0
+        },
+        "cannot_detect": [],
+        "model_calls": 71,
+        "seconds": 2924.2
+      },
+      {
+        "value": "coverage",
+        "source_to_merged": {
+          "plants": 3,
+          "plants_detected": 3,
+          "plants_detected_rate": 1.0,
+          "plants_detected_mechanically": 0,
+          "guards": 90,
+          "guards_graded": 90,
+          "guards_wrong": 0,
+          "guards_wrong_rate": 0.0
+        },
+        "merged_to_sources": {
+          "plants": 3,
+          "plants_detected": 3,
+          "plants_detected_rate": 1.0,
+          "plants_detected_mechanically": 3,
+          "guards": 28,
+          "guards_graded": 0,
+          "guards_wrong": 0,
+          "guards_wrong_rate": null
+        },
+        "cannot_detect": [
+          {
+            "class": "hallucination",
+            "direction": "merged_to_sources",
+            "plants": 1,
+            "detected": 0
+          }
+        ],
+        "model_calls": 26,
+        "seconds": 1432.8,
+        "speedup": 2.04
+      }
+    ],
+    "registration": "arms/2026-09-24/depth/REGISTRATION.md",
+    "run": "2026-09-24-depth-rerun",
+    "artefacts": [
+      "arms/2026-09-24/depth/regraded/full.json",
+      "arms/2026-09-24/depth/regraded/coverage.json",
+      "arms/2026-09-24/depth/r1/full-reports/*.json",
+      "arms/2026-09-24/depth/r1/coverage-reports/*.json",
+      "tests/fixtures/*/expected.json"
+    ],
+    "derived_by": "python3 tests/depth_figures.py --check -- re-grades the committed reports under arms/2026-09-24/depth/r1 with tests/run_detect.py's grade() and requires the committed regraded records back, then forms every figure in this block from those records and each fixture's expected.json and requires this block to equal it. python3 tests/depth_figures.py prints the figures it forms. tests/test_catalogue.py runs the check.",
+    "measured_on": "2026-09-24",
+    "claimcheck_commit": "2a01e9b2f242"
+  }
+}
