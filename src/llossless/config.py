@@ -51,18 +51,18 @@ ROOT = Path(__file__).resolve().parents[2]
 # is imported by everything, so a constant it reads out of `backend` would
 # pull the socket module into every offline run and break the containment
 # `acceptance_replay_never_loads_the_transport_module` exists to hold. This
-# module already owns the other command-backend setting (`COMMAND_TIMEOUT`,
-# 533), so it owns this one.
+# module already owns the other command-backend setting (`COMMAND_TIMEOUT`),
+# so it owns this one.
 #
 # `raw`    stdout is the answer, byte for byte. What this backend has always
 #          done, what an arbitrary wrapper script produces, and the default.
 # `result` stdout is a single JSON result envelope whose `result` holds the
 #          text and whose `usage` holds the token block and `server_tool_use`.
-#          Two of the three things 483 lists as unknowable on this path.
+#          Two of the three things otherwise unknowable on this path.
 #
 # Declared per route, never detected: the answer under `raw` is itself JSON,
 # so a sniffer would be choosing between two JSON objects on the presence of
-# a key (537).
+# a key.
 ENVELOPE_RAW = "raw"
 ENVELOPE_RESULT = "result"
 COMMAND_ENVELOPES = (ENVELOPE_RAW, ENVELOPE_RESULT)
@@ -74,7 +74,7 @@ COMMAND_ENVELOPES = (ENVELOPE_RAW, ENVELOPE_RESULT)
 # command line -- and `web/commands.py` imports this module while nothing in
 # this module may import that one. A second spelling of the rule would be a
 # second answer to one question, which is the confusion the pair exists to
-# stop (555).
+# stop.
 #
 # Long form, like `ALLOW_TOOLS_FLAG`: the argv is read back by a check, and a
 # reader comparing the two should not have to know a short form is one flag.
@@ -100,18 +100,18 @@ WEB_TOOLS = (WEB_SEARCH, WEB_FETCH)
 ALLOW_TOOLS_FLAG = "--allowed-tools"
 
 # Which program this build knows how to grant retrieval to, and what it grants
-# it (548, 578). Keyed by the program's **basename**, because a route's command
+# it. Keyed by the program's **basename**, because a route's command
 # is an absolute path as often as not and where a binary lives is a fact about
 # the machine rather than about the tool.
 #
-# **Both tools, each observed to fire.** 548 granted `WebFetch` alone, calling
-# `--allowed-tools WebSearch` a no-op because the CLI listed no such tool. That
-# list was read through a local proxy which stripped the tool, and every probe
-# ran through it. Without the proxy the tool is there. This grant's own argv,
-# `--allowed-tools WebSearch,WebFetch` at 2.1.274, answered a question that
-# needs a search with sources, two searches in `modelUsage`, and `num_turns`
-# 4, above the no-retrieval floor of 2 (578). 548 saw `WebFetch` fire on a URL
-# that could not resolve: the CLI's own `getaddrinfo ENOTFOUND` came back.
+# **Both tools, each observed to fire.** Testing granted `WebFetch` alone at
+# first, calling `--allowed-tools WebSearch` a no-op because the CLI listed no
+# such tool. That list was read through a local proxy which stripped the tool,
+# and every probe ran through it. Without the proxy the tool is there. This
+# grant's own argv, `--allowed-tools WebSearch,WebFetch` at 2.1.274, answered a
+# question that needs a search with sources, two searches in `modelUsage`, and
+# `num_turns` 4, above the no-retrieval floor of 2. `WebFetch` also fired on a
+# URL that could not resolve: the CLI's own `getaddrinfo ENOTFOUND` came back.
 #
 # **The operator decided this, and their reasoning is recorded rather than
 # assumed.** *"I think WebSearch should be on"*, and on the grant: *"make it
@@ -120,7 +120,7 @@ ALLOW_TOOLS_FLAG = "--allowed-tools"
 # out of the machine anyway, so a search is likely no bigger harm. We just need
 # to be transparent."* `WebFetch` is the riskier tool: a URL inside a hostile
 # document is a way to aim a fetch. So the grant is automatic and every surface
-# says it is in force; what it is not is silent. See DECISIONS 548 and 578.
+# says it is in force; what it is not is silent.
 AUTO_GRANT: dict[str, tuple[str, ...]] = {"claude": (WEB_SEARCH, WEB_FETCH)}
 assert all(set(tools) <= set(WEB_TOOLS) for tools in AUTO_GRANT.values())
 
@@ -130,7 +130,7 @@ assert all(set(tools) <= set(WEB_TOOLS) for tools in AUTO_GRANT.values())
 # one is this repository's test corpus -- so none of them may be baked into the
 # wheel, and all three answer differently depending on which of the two it is.
 # `parents[2]` is right in a checkout and meaningless in a wheel, where it names
-# the directory above site-packages (pre-release review B1, second half).
+# the directory above site-packages.
 #
 # Asked by looking for the two things a checkout has and an install does not.
 IN_CHECKOUT = (ROOT / "pyproject.toml").is_file() and (ROOT / "src" / "llossless").is_dir()
@@ -139,7 +139,7 @@ DEFAULT_BASE_URL = "http://localhost:11434/v1"
 DEFAULT_TIMEOUT = 120.0
 
 # The same bound for a command backend, and it is a different quantity rather
-# than a larger version of the one above (533).
+# than a larger version of the one above.
 #
 # Over HTTP the run streams, so every chunk renews the clock and 120 s means
 # "this endpoint has gone silent for two minutes", which is a wedged endpoint
@@ -161,7 +161,7 @@ DEFAULT_TIMEOUT = 120.0
 # is `--timeout`, `LLOSSLESS_TIMEOUT`, or the route's own `timeout`.
 COMMAND_TIMEOUT = 890.0
 
-# How many claims go in one verify call, over HTTP and through a command (551).
+# How many claims go in one verify call, over HTTP and through a command.
 #
 # Named here rather than in `verify.py` for `COMMAND_TIMEOUT`'s reason one line
 # up: this module owns the settings a backend resolves differently, and
@@ -172,8 +172,8 @@ COMMAND_TIMEOUT = 890.0
 # `messages` is a cassette-key component -- so raising it globally would orphan
 # the corpus every published figure in this project comes from.
 #
-# **100 through a command, and this is now a measurement** (558). 551 set the
-# figure from an argument -- a six-word prompt reported 16,586 cache-creation
+# **100 through a command, and this is now a measurement.** It was set from
+# an argument: a six-word prompt reported 16,586 cache-creation
 # tokens, therefore the per-call cost is nearly fixed at ~120 s, therefore
 # fewer calls must win. The first two steps were wrong. One verify call was
 # timed at four batch sizes against test-12's own claims and prompts, through
@@ -188,7 +188,7 @@ COMMAND_TIMEOUT = 890.0
 # Least squares: forward 25.7 s fixed + 1.289 s a claim, reverse 29.9 s +
 # 1.502 s. So the fixed cost is ~26-30 s and not ~120 s, and the per-claim
 # term is real rather than negligible -- but the curve is **sub-linear per
-# claim**, so the conclusion 551 reached from the wrong premise holds: over 90
+# claim**, so the conclusion reached from the wrong premise still holds: over 90
 # claims each way, batch 25 is eight calls and ~474 s and batch 100 is two
 # calls and ~307 s. All eight timed answers graded every claim they were
 # given, in order, at every size up to 90.
@@ -197,7 +197,7 @@ COMMAND_TIMEOUT = 890.0
 # as unmeasured: more claims in one answer is more for a model to keep
 # straight. What bounds the risk is that Pass C salvage is on in
 # `cli.pipeline` -- an unusable record is dropped by name and the rest of the
-# batch is still graded (194) -- so a larger batch no longer means a larger
+# batch is still graded -- so a larger batch no longer means a larger
 # blast radius for one bad record.
 #
 # **And batch size is not the lever that matters here.** On the same pair one
@@ -209,7 +209,7 @@ DEFAULT_VERIFY_BATCH = 25
 COMMAND_VERIFY_BATCH = 100
 
 # How hard a subscription CLI is asked to think, for programs whose flags this
-# build has read (558). A sibling of `AUTO_GRANT` above, with the same rule and
+# build has read. A sibling of `AUTO_GRANT` above, with the same rule and
 # the same reason: a flag is appended only to a named program, never to a
 # wrapper script whose arguments nobody here has seen, and never over a choice
 # the operator made themselves.
@@ -230,8 +230,8 @@ COMMAND_VERIFY_BATCH = 100
 # cap. Both beat the baseline; neither repeats the other, because nothing on
 # this path does.
 #
-# **This is a speed setting and it is not free** -- and 562 measured the bill
-# 558 could not. `low` against `high` through the pipeline, one variable,
+# **This is a speed setting and it is not free** -- and a later pass measured
+# the bill an earlier one could not. `low` against `high` through the pipeline, one variable,
 # unproxied: voyager at `sourced`/`full` 245.4 s and 817.4 s, bip39 at
 # `sourced`/`coverage` 132.2 s and 408.8 s, for 10 and 17 correction records
 # on the first pair and 7 and 11 on the second.
@@ -239,9 +239,9 @@ COMMAND_VERIFY_BATCH = 100
 # **Those record counts are not a quality measure, and reading them as one is
 # the trap this comment exists to mark.** The record count *falls* from 27 to
 # 14 as the level rises on the single calls below, because a higher level
-# consolidates several corrections into one broader record. 562 then scored
-# the calls against 22 seeded errors typed from reading the voyager pair; a
-# diff of the pair finds 47 (594). Re-scored on the merged text:
+# consolidates several corrections into one broader record. The calls were
+# then scored against 22 seeded errors typed from reading the voyager pair; a
+# diff of the pair finds 47. Re-scored on the merged text:
 #
 #     setting                wall     records   fixed of 47   kept
 #     medium, thinking off   125 s      13          42           5
@@ -265,14 +265,14 @@ COMMAND_VERIFY_BATCH = 100
 # to improve the one that declares anything. Judging a claim against a
 # document is not a reasoning-heavy task and the verify answers held up at
 # `low` -- every timed call graded every claim it was given, in order -- so
-# `decompose` and `verify` keep 558's `low` and the speed work stands.
+# `decompose` and `verify` keep the `low` setting and the speed work stands.
 #
 # An operator who wants something else says so and is obeyed: `--effort`,
 # `LLOSSLESS_EFFORT`, `LLOSSLESS_EFFORT_<ROLE>`, or a level written into
 # their own command, which this build has never overwritten and still does not.
 EFFORT_FLAG = "--effort"
 # `claude --help` at 2.1.274: *"--model <model>  Model for the current session.
-# Provide an alias for the latest model"*. Read by `stated_model` (612).
+# Provide an alias for the latest model"*. Read by `stated_model`.
 MODEL_FLAG = "--model"
 # `claude --help` at 2.1.274: *"--effort <level>  Effort level for the current
 # session (low, medium, high, xhigh, max)"*. Named here so the table below is
@@ -287,15 +287,15 @@ AUTO_EFFORT: dict[str, dict[str, str]] = {
 }
 assert all(level in EFFORT_LEVELS
            for table in AUTO_EFFORT.values() for level in table.values())
-# The merge's level per model alias, laid over the program's row above (612).
-# The operator's ruling on 609's grid: a subscription route runs Opus with the
+# The merge's level per model alias, laid over the program's row above.
+# The operator's ruling: a subscription route runs Opus with the
 # merge at `high`, Sonnet at `medium`. Read off the argv's own `--model`
 # (`stated_model`), so an argv naming no model, or an alias this table does not
 # name -- `fable`, never measured, or a dated id -- keeps the program's row and
 # no level is claimed for a model nobody ran. Merge only: decompose and verify
-# stay at 558's `low` for every model, because they read the merge's work back.
+# stay at the `low` setting for every model, because they read the merge's work back.
 #
-# No `haiku` row (688, ruling 11): see `SINGLE_LEVEL_MODELS` below, which
+# No `haiku` row: see `SINGLE_LEVEL_MODELS` below, which
 # refuses this table -- and the program's own row above it -- before either is
 # consulted, so a model named here can only ever be one this build measured a
 # graded scale on.
@@ -307,8 +307,8 @@ assert all(set(row) == {"merge"} and row["merge"] in EFFORT_LEVELS
            for models in AUTO_EFFORT_BY_MODEL.values() for row in models.values())
 
 # Which models take one level of effort -- extended thinking on or off -- and
-# never the graded scale `--effort` moves (688, ruling 11, the operator's own
-# words): *"Haiku does not provide effort levels like sonnet or opus do. It
+# never the graded scale `--effort` moves, in the operator's own
+# words: *"Haiku does not provide effort levels like sonnet or opus do. It
 # only allows 'extended' reasoning on/off. We should keep the default and flag
 # it accordingly that it only has one level."*
 #
@@ -321,7 +321,7 @@ assert all(set(row) == {"merge"} and row["merge"] in EFFORT_LEVELS
 # measured keeps its silence rather than being guessed into either bucket,
 # the refusal `auto_effort` already makes for a program it does not recognise.
 SINGLE_LEVEL_MODELS = re.compile(r"^(haiku|claude-haiku-.*)$")
-# The label a report gives such a route in place of a claimed level (688).
+# The label a report gives such a route in place of a claimed level.
 SINGLE_LEVEL_LABEL = "one level (extended thinking on/off; default kept)"
 
 
@@ -334,10 +334,10 @@ def is_single_level_model(model: str) -> bool:
     here rather than each holding its own copy of `SINGLE_LEVEL_MODELS`.
     """
     return bool(model) and SINGLE_LEVEL_MODELS.match(model) is not None
-# Never `low` for the merge in a row this build picks (612): 609 found it the
+# Never `low` for the merge in a row this build picks: testing found it the
 # one level that separates, downwards, and at `sourced` it retrieved in 2 of 6
 # voyager draws. A person may still ask for it; the table never does, and the
-# page's effort card says it is not recommended for looking facts up (613).
+# page's effort card says it is not recommended for looking facts up.
 MERGE_EFFORT_NOT_AT_SOURCED = ("low",)
 assert all(table["merge"] not in MERGE_EFFORT_NOT_AT_SOURCED
            for table in AUTO_EFFORT.values())
@@ -347,10 +347,10 @@ assert all(row["merge"] not in MERGE_EFFORT_NOT_AT_SOURCED
 DEFAULT_MAX_CALLS = 200
 DEFAULT_KEY_ENV = "LLOSSLESS_API_KEY"
 
-# The tool was called claimcheck until 645. Every variable it reads is
+# The tool had a different name earlier. Every variable it reads is
 # `LLOSSLESS_*`, and its config and cache directories are `llossless`. The old
-# `CLAIMCHECK_*` names and `claimcheck` directories were read as fallbacks for
-# one phase (647) and are no longer read at all (651): an old variable, file
+# prefix and directories under that former name were read as fallbacks for
+# one phase and are no longer read at all: an old variable, file
 # or directory is ignored, silently, as any unrelated name would be.
 DIR_NAME = "llossless"
 
@@ -419,7 +419,7 @@ ROLES = ("merge", "verify", "decompose")
 # Here rather than beside `AUTO_EFFORT`, which is defined above this line: a
 # table that names two of three roles would leave the third on the program's
 # own default without saying so, and "nothing was chosen for verify" is the
-# one state this table must not be able to express by accident (562).
+# one state this table must not be able to express by accident.
 assert all(set(table) == set(ROLES) for table in AUTO_EFFORT.values())
 
 # Which roles emit a reasoning block when nothing says otherwise. None, by
@@ -428,7 +428,7 @@ assert all(set(table) == set(ROLES) for table in AUTO_EFFORT.values())
 # twelve fixtures common to every recording, every merge cell measured is at
 # or above 97.5% forward coverage except `thinking off` on today's prompt,
 # which recorded 225/243 and then returned 212/243 on a live re-run of the
-# identical configuration a day later (M9 A.28). Decompose and verify stay off
+# identical configuration a day later. Decompose and verify stay off
 # regardless of that argument. Their corpora were recorded off, their
 # published figures are off, and neither is in question -- flipping them
 # would re-key every cassette and buy nothing.
@@ -436,16 +436,16 @@ assert all(set(table) == set(ROLES) for table in AUTO_EFFORT.values())
 # Off is still reachable and still cheap to ask for: `LLOSSLESS_THINKING` is
 # authoritative whenever it is set at all, so set-but-empty means no role
 # thinks. Unset is the only case that falls back to this.
-# Emptied by 385. `qwen3.8:27b` spent all 12,800 completion tokens in the
-# reasoning channel on a 4,344-token prompt and returned no content, three
-# times, deterministically -- the same mechanism as `gpt-oss:120b`'s empty
-# body, on an unrelated family. Entry 52 had also measured thinking on this
-# role *worse* (P1 1/12 to 4/12, s = 0.0) and required a re-measurement before
-# it was ever enabled, which 88 did not do and which is still parked. 385's
-# third reason, that every recorded cassette carries `thinking=False`, was
-# false for merge: 76 of the 151 merge cassettes were recorded with thinking
-# on (m4 33, m7 39, pairs 4); every decompose and verify cassette is off
-# (579). The default rests on the first two.
+# The default is empty for two reasons that still hold and a third that turned out
+# false. `qwen3.8:27b` spent all 12,800 completion tokens in the reasoning channel
+# on a 4,344-token prompt and returned no content, three times,
+# deterministically -- the same mechanism as `gpt-oss:120b`'s empty body, on an
+# unrelated family. An earlier measurement also found thinking on this role *worse*
+# (P1 1/12 to 4/12, s = 0.0) and called for a re-measurement before it was enabled,
+# which never happened and is still parked. The claimed third reason, that every
+# recorded cassette carries `thinking=False`, was false for merge: 76 of the 151
+# merge cassettes were recorded with thinking on (m4 33, m7 39, pairs 4); every
+# decompose and verify cassette is off. The default rests on the first two.
 DEFAULT_THINKING: frozenset[str] = frozenset()
 STRUCTURED_MODES = ("auto", "json_schema", "tool_call", "prompt")
 LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1", "[::1]", ""})
@@ -454,14 +454,14 @@ LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1", "[::1]", ""})
 # hash is the whole reason this is a function and not an inline digest: a
 # corpus half-recorded as `127.0.0.1` and half as `localhost` would produce two
 # ids for one box, and the endpoint guard would then fire on history instead of
-# on a mistake. That is the failure M7 task 2 already fixed once in the corpus,
+# on a mistake. That is the failure an earlier version already fixed once in the corpus,
 # and doing it in the hash means it cannot come back.
 ENDPOINT_ALIASES = frozenset({"127.0.0.1", "::1", "[::1]"})
 ENDPOINT_ID_CHARS = 12
 
 # Which rule produced the ids this build writes. Stamped into every cassette's
 # `meta` so that a reader can tell which rule an id on disk was made under, and
-# an absent marker means scheme 1 — see DECISIONS 438.
+# an absent marker means scheme 1.
 #
 #   1  sha256(canonical_host(hostname))[:12], or the label. Everything recorded
 #      before 2026-09-17. It cannot be migrated to 2: a cassette records the id
@@ -482,7 +482,7 @@ ENDPOINT_ID_SCHEME_HOSTNAME = 1
 # should be able to rely on that — everything permitted at one level is
 # permitted at every level above it. `high` is the default; see below.
 #
-# `open` is the fifth and is a different kind of step (DECISIONS 481). The four
+# `open` is the fifth and is a different kind of step. The four
 # below it differ in how freely the merge may *reword* its sources, and all four
 # share one outer bound: the sources are the only thing the merged document may
 # state. `open` moves that bound. It keeps the ladder's promise -- everything
@@ -492,7 +492,7 @@ ENDPOINT_ID_SCHEME_HOSTNAME = 1
 #
 # `sourced` is the sixth and moves the same bound one step further: at `open`
 # the model may assert what it knows, and at `sourced` it is expected to go and
-# *retrieve* rather than recall (548). The schema does not move with it -- an
+# *retrieve* rather than recall. The schema does not move with it -- an
 # undeclared factual change is `hallucinated` here exactly as at `open` -- and
 # neither does anything else in the record contract. What changes is what the
 # model is asked to do before it declares, and whether the run can say it did.
@@ -510,7 +510,7 @@ FIDELITY_LEVELS = ("off", "low", "mid", "high", "open", "sourced")
 # already refuse for the tables beside them.
 SOURCED = "sourced"
 assert SOURCED in FIDELITY_LEVELS
-# `high` since EQ, on four operator pairs. `off` is the benchmark's strict mode
+# `high`, based on four operator pairs. `off` is the benchmark's strict mode
 # and five registrations hold it constant, so it is not going anywhere -- but a
 # flagless run is a person merging two documents, and at `off` the tool is a
 # diff with a verifier attached rather than a merge tool: it may not choose
@@ -548,7 +548,7 @@ class VerifyDepthShape:
     `--verify-depth` help below, `/api/v1/config`, and the picker the web page
     renders from it -- and a fourth copy of the sentence is how a page ends up
     explaining a depth that has since changed. It is the arrangement the
-    fidelity ladder has had since 550: `FIDELITY_SHAPES`, one copy that the
+    fidelity ladder has kept: `FIDELITY_SHAPES`, one copy that the
     `--fidelity` help renders and the page's locale strings are held to. A
     depth is a shape of the pipeline rather than an instruction to a model,
     so it never had a prompt fragment to confuse with, and this is its copy.
@@ -568,7 +568,7 @@ class VerifyDepthShape:
     so a change to the pipeline that does not reach here fails rather than
     publishing a stale price.
 
-    **`exact_calls` is the correction 505 makes to 504.** That entry called
+    **`exact_calls` corrects an earlier claim.** That claim called
     the figure exact at both depths and it is exact at only one.
     `verify.verify_claims` batches at `Settings.verify_batch`, so each of
     `full`'s two verify steps is one call *per batch*: at the HTTP figure of
@@ -586,9 +586,9 @@ class VerifyDepthShape:
     minimum for a quote.
 
     **The call count is most of what a long run costs, and not the whole of
-    it** (551, corrected by 558). An operator's three-source merge of 6 KB of
+    it.** An operator's three-source merge of 6 KB of
     document took 1,585 s over 13 calls -- one merge, four decompose and eight
-    verify -- and 551 read that as a nearly fixed cost per call. Measured, the
+    verify -- and that was first read as a nearly fixed cost per call. Measured, the
     fixed part is ~26-30 s and a verify call also pays ~1.3-1.5 s a claim, so
     a call's size matters as well as the count. `coverage` is still the larger
     of the two levers here and still the one a reader chooses: it would have
@@ -620,7 +620,7 @@ VERIFY_DEPTH_SHAPES = {
         fixed_calls=4,
         calls_per_source=1,
         # A floor. Both verify steps batch at `Settings.verify_batch`,
-        # which is 25 over HTTP and 100 through a command (551).
+        # which is 25 over HTTP and 100 through a command.
         exact_calls=False,
     ),
     COVERAGE_DEPTH: VerifyDepthShape(
@@ -651,7 +651,7 @@ def merge_model_calls(depth: str, sources: int) -> int:
     The one figure about this choice that can be stated without measuring
     anything, which is why it is the one the page shows. What the cheaper depth
     costs in *detection* is unmeasured (a benchmark ran, its comparator was
-    disqualified, 516), and what it saves in *dollars* is not derivable from
+    disqualified), and what it saves in *dollars* is not derivable from
     this either: the calls are not the same size, so halving the count does not
     halve the spend and a figure that implied it would be invented. Naming what
     is exact and declining the rest is `pricing.py`'s own rule for costs.
@@ -660,21 +660,21 @@ def merge_model_calls(depth: str, sources: int) -> int:
     which, and `VERIFY_DEPTH_SHAPES[depth].exact_calls` is how it finds out.
     `verify_claims` batches claims, 25 a call over HTTP and 100 through a
     command, so `full` spends a call per batch each way and this counts one. Returning a bare integer
-    that means different things at the two depths would be the defect 505
-    found in 504's own prose; the flag beside it is what stops the difference
+    that means different things at the two depths would be a mistake this
+    file's prose once made; the flag beside it is what stops the difference
     living in a docstring only.
     """
     shape = VERIFY_DEPTH_SHAPES[depth]
     return shape.fixed_calls + shape.calls_per_source * max(0, int(sources))
 
 # The strictest level is *called* `verbatim` and *spelled* `off` on the wire.
-# Entry 437, on the operator's ruling: `--fidelity off` reads as "turn fidelity
+# The operator's ruling: `--fidelity off` reads as "turn fidelity
 # checking off" when it means "rewriting off", and it is the setting that
 # permits the least. In a tool being published, a flag whose name suggests the
 # opposite of what it does is a defect in its own right.
 #
 # Why the wire name did not move with it. `off` is in 151 recorded merge
-# cassettes, in every `paper/records/*.json`, in the fidelity prompt fragments
+# cassettes, in every graded run record (withheld with the paper), in the fidelity prompt fragments
 # whose text is hashed into the cassette key, in five benchmark registrations
 # and in the operator's own scripts. Renaming the value would orphan all of it
 # for a cosmetic gain. So `FIDELITY_LEVELS` is untouched and the rename lives
@@ -709,7 +709,7 @@ assert FIDELITY_PUBLISHED[0] == "verbatim" and DEFAULT_FIDELITY == "high"
 
 @dataclass(frozen=True)
 class FidelityShape:
-    """What one level does for a reader, in a reader's words. A row (550).
+    """What one level does for a reader, in a reader's words. A row per level.
 
     **Held apart from the prompt fragment, and that is the whole point.** The
     page used to render `prompts/fidelity/<level>.merge.md`'s opening paragraph
@@ -902,7 +902,7 @@ def granted_web_tools(command: str, *, raw: bool = False) -> tuple[str, ...]:
 
     Both spellings, `=` or a space, and both separators the CLI documents, comma
     or space; order is the table's and duplicates collapse. A tool the argv's
-    own `--tools` leaves out is not granted, whatever the allowlist says (610);
+    own `--tools` leaves out is not granted, whatever the allowlist says;
     `raw` reads the allowlist alone, which is what "already granted" asks.
     """
     argv = _argv(command)
@@ -952,7 +952,7 @@ def carries_result_args(argv: list[str]) -> bool:
 
 
 def auto_granted_tools(command: str) -> tuple[str, ...]:
-    """What this build would add to this command line for a `sourced` run (548).
+    """What this build would add to this command line for a `sourced` run.
 
     Empty for an HTTP endpoint -- there is no command to add a flag to -- and
     empty for a program `AUTO_GRANT` does not name, which is the honest answer
@@ -961,7 +961,7 @@ def auto_granted_tools(command: str) -> tuple[str, ...]:
     route rather than widen it.
 
     Empty, too, where the operator already granted something, and narrowed to
-    what their own `--tools` makes available (610): their argv is theirs.
+    what their own `--tools` makes available: their argv is theirs.
     """
     argv = _argv(command)
     if not argv or granted_web_tools(command, raw=True):
@@ -1029,7 +1029,7 @@ def stated_model(command: str) -> str:
 
     `stated_effort`'s reader for the flag beside it: both spellings, and the
     last one wins, as the program does with a repeated flag. `AUTO_EFFORT_BY_MODEL`
-    is keyed by what this returns (612), so a route that names no model gets the
+    is keyed by what this returns, so a route that names no model gets the
     program's row rather than a level measured on some other model.
     """
     argv = _argv(command)
@@ -1056,18 +1056,18 @@ def auto_effort(command: str, role: str) -> str:
     working route rather than speeding it up; and empty where the operator
     already stated a level, because their argv is theirs.
 
-    A fourth, since 688 (ruling 11): empty for a model `is_single_level_model`
+    A fourth, added later: empty for a model `is_single_level_model`
     names, on every role -- not only the merge `AUTO_EFFORT_BY_MODEL` used to
     override. Haiku's decompose and verify calls read the program's own row
     exactly as every other model's do, and that row is a level this model
     cannot carry either; the table never measured a per-model exception for
     those two roles because there was never meant to be one to reach.
 
-    Per role since 562. The table's own comment holds the measurement; what
+    Set per role. The table's own comment holds the measurement; what
     this function adds is that the role is asked for rather than assumed, so a
     caller cannot get an answer about "the run" that is true of one call of six.
 
-    Per model since 612: the program's row, with `AUTO_EFFORT_BY_MODEL`'s row
+    Set per model too: the program's row, with `AUTO_EFFORT_BY_MODEL`'s row
     for the argv's own `--model` alias over it.
     """
     if role not in ROLES:
@@ -1088,10 +1088,10 @@ def effort_of(command: str, role: str,
     """The level this role's calls will really be asked for, or "".
 
     **The whole precedence, in one function**, so that no caller can assemble a
-    different one (562). Highest first:
+    different one. Highest first:
 
     1. a level in the operator's own argv, which wins for every role and is
-       never written over -- 548's rule for `AUTO_GRANT`, unchanged;
+       never written over -- the same rule as `AUTO_GRANT`'s, unchanged;
     2. `chosen`, what they said on `--effort` or in `LLOSSLESS_EFFORT*`;
     3. `AUTO_EFFORT`, what this build would pick for them.
 
@@ -1104,7 +1104,7 @@ def effort_of(command: str, role: str,
     provenance block publishes them, in the JSON and in the rendered
     `Decoding` row. The banner does not carry it.
 
-    `chosen` is gated the same way on a single-level model (688, ruling 11): a
+    `chosen` is gated the same way on a single-level model: a
     stray `LLOSSLESS_EFFORT*` or a web request naming one for a Haiku route is
     not honoured either, and is reported through the same `effort_ignored`
     mechanism rather than reaching the argv. Rule 1 above still stands --
@@ -1158,7 +1158,7 @@ def retrieval_refusal(fidelity: str, command: str) -> str | None:
     """Why this backend may not answer at `sourced`, or None. The safety property.
 
     **Selecting `sourced` on a backend that cannot retrieve refuses rather than
-    behaving like `open`** (548). A user who picks the level that says "go and
+    behaving like `open`.** A user who picks the level that says "go and
     check" and receives recalled assertions wearing citations is worse off than
     one who picked `open`, because they believe the claims were verified -- and
     the two runs are not distinguishable from the report. The measurement is
@@ -1174,7 +1174,7 @@ def retrieval_refusal(fidelity: str, command: str) -> str | None:
     if canonical_fidelity(fidelity) != SOURCED:
         return None
     if retrieval_tools(command) or tools_withhold_the_grant(command):
-        return _grant_refusal(command)  # withheld? can it tell? (568)
+        return _grant_refusal(command)  # withheld? can it tell?
     if not (command or "").strip():
         return (
             f"--fidelity {SOURCED} asks the model to look things up before it "
@@ -1196,9 +1196,9 @@ def retrieval_refusal(fidelity: str, command: str) -> str | None:
         f"command yourself if {program!r} takes it, or use --fidelity open.")
 
 def envelope_refusal(envelope: str, command: str) -> str | None:
-    """Why this command and this envelope cannot both be right, or None (555).
+    """Why this command and this envelope cannot both be right, or None.
 
-    The rule `web/commands._row` has held on a route since 541, applied to the
+    The rule `web/commands._row` has held on a route, applied to the
     other way in. A command line reaches a command backend through
     `--answer-with` or `LLOSSLESS_COMMAND` and neither was checked against
     `LLOSSLESS_COMMAND_ENVELOPE`, so a command carrying
@@ -1249,7 +1249,7 @@ def envelope_refusal(envelope: str, command: str) -> str | None:
 # sources already carry. Neither ever licenses writing a new one — that rule is
 # in `merge.md` itself and holds at every level under both policies.
 # `synthesise` permits a written title and is the only policy that does.
-# DECISIONS 450: a title is a claim, and a claim cannot be graded by the
+# A title is a claim, and a claim cannot be graded by the
 # words it is made of -- "A motorbike is more stable than a quad" is built
 # entirely from source vocabulary and inverts what the sources say. So a
 # written title is verified semantically, against the sources, by the same
@@ -1259,7 +1259,7 @@ TITLE_POLICIES = ("keep-base", "choose-best", "synthesise")
 DEFAULT_TITLE_POLICY = "synthesise"
 
 # One clause per policy, and `--title-policy`'s help is built from this rather
-# than written beside it (542). It read "default synthesise: the base
+# than written beside it. It read "default synthesise: the base
 # document's" -- the default's name interpolated from the constant, the
 # description left behind from when `keep-base` was the default, and the one
 # policy that may *write* a title not described at all. The flag's own help is
@@ -1288,7 +1288,7 @@ assert set(TITLE_POLICY_EXPLAINS) == set(TITLE_POLICIES)
 # The rule this feeds is written once, in `reconcile.over_budget`, and the
 # value travels to it as an argument -- a second copy of the arithmetic, or a
 # default baked into that signature, is the same hidden global one layer down.
-# Lowered from 0.05 on 2026-09-18 (DECISIONS 446). Measured over the
+# Lowered from 0.05 on 2026-09-18. Measured over the
 # 36-cell matrix: at 5% only `claude-haiku-4-5` ever fired, and
 # `claude-sonnet-5` dropping both `{internal-notes}` markers on
 # `index_429` -- 2 of 63 segments, 3.17% -- passed under it. 3% catches
@@ -1341,7 +1341,7 @@ def replay_field_order(recorded: str, requested: str) -> str:
     recording always won would read those as `schema` and break them.
 
     A live call and a cache hit never come through here: they are read under
-    `requested`, so a live run's behaviour does not move (DECISIONS 583).
+    `requested`, so a live run's behaviour does not move.
     """
     return max(recorded, requested, key=FIELD_ORDERS.index)
 
@@ -1352,7 +1352,7 @@ def replay_field_order(recorded: str, requested: str) -> str:
 #
 # **This is not a default window and must never become one.** `served_window`
 # refuses to invent a figure because the invented figure is the hard-coded
-# number task 41 exists to remove, and that refusal is unchanged. What this
+# number an earlier version removed, and that refusal is unchanged. What this
 # adds is the one other thing that can be true about an endpoint the tool
 # cannot interrogate: a person who knows what it serves, saying so. A stated
 # window therefore travels as its own `Window.source` and its own
@@ -1373,9 +1373,9 @@ def endpoint_address(base_url: str) -> str:
     This is the string `endpoint_id` hashes, and it is never written down. It
     exists as its own function because *what* identifies a deployment is a
     judgement, not a formatting detail, and it was wrong: it was the hostname
-    alone until DECISIONS 438, and a provider that routes deployments by **path**
+    alone until this was fixed, and a provider that routes deployments by **path**
     — which is what serverless endpoints do — collapsed every one of them onto
-    one id. The eleven Phase 4 runs that wrote a report carry one id between
+    one id. Eleven runs that wrote a report carry one id between
     them, across two different boxes.
 
     Four components, and each is here because two endpoints can differ by it
@@ -1385,7 +1385,7 @@ def endpoint_address(base_url: str) -> str:
     * **port**, defaulted from the scheme rather than left absent, because two
       ollamas on one box are two deployments and `:11434` against nothing is a
       difference in spelling rather than in address.
-    * **path**, which is the whole of entry 428: the deployment id lives here on
+    * **path**, which is why the deployment id lives here on
       the topology this project actually runs against.
     * **scheme**, because it decides the default port and because plain and TLS
       on one host:port are two ways in, not one.
@@ -1416,12 +1416,12 @@ def endpoint_id(base_url: str, label: str = "") -> str:
 
     A cassette is committed test data in a public repository, and the operator's
     endpoint is not the repository's to publish. What the corpus needs of the
-    endpoint, since DECISIONS 405, is a census — `Store.endpoints()` tallies
+    endpoint is a census — `Store.endpoints()` tallies
     which boxes answered a directory, and a hash carries that without carrying
     an address.
 
-    **The address is `endpoint_address(base_url)`, not the hostname** (438,
-    scheme 2). The argument is a base URL and this hashes what it resolves to;
+    **The address is `endpoint_address(base_url)`, not the hostname** (scheme 2).
+    The argument is a base URL and this hashes what it resolves to;
     handing this a bare hostname gets an empty id, because a bare hostname is
     not an endpoint. Ids recorded under scheme 1 stay as they are and cannot be
     recomputed — see `ENDPOINT_ID_SCHEME` and `legacy_endpoint_id`.
@@ -1458,7 +1458,7 @@ def legacy_endpoint_id(host: str) -> str:
 
     Every id in the committed corpus is one of these, and none of them can be
     turned into a scheme 2 id: a cassette records the id and never the URL, so
-    there is nothing left to re-hash (DECISIONS 432, 438). This is kept for the
+    there is nothing left to re-hash. This is kept for the
     two callers that legitimately still speak scheme 1 — `Cassette.from_file`,
     resolving the `endpoint_host` field that older local caches still carry, and
     `tests/migrate_endpoint_id.py`, a one-pass migration already applied, whose
@@ -1505,7 +1505,7 @@ def with_api_path(base_url: str) -> str:
 #
 # **A `ContextVar` rather than a field, an argument or a global.** The rule this
 # preserves is `Settings.api_key`'s own: no key value on anything `repr` or
-# `asdict` reaches (421, 467). A field would put credentials on a frozen
+# `asdict` reaches. A field would put credentials on a frozen
 # dataclass that the provenance block serialises. A plain module global would
 # leak one job's key into the job running beside it, because `JobStore` runs
 # work on threads. A `ContextVar` is read by the thread that set it and by no
@@ -1561,9 +1561,9 @@ class Settings:
     # Empty is the normal case and means "every role goes to `base_url`".
     #
     # This is what "the best model for the best price" needs that `models`
-    # alone could not give: `model_for` has resolved a model per role since the
-    # brief, but every role shared one host, so a frontier merge beside a local
-    # decompose was unreachable however the models were set. Entry 421.
+    # alone could not give: `model_for` has resolved a model per role from the
+    # start, but every role shared one host, so a frontier merge beside a local
+    # decompose was unreachable however the models were set.
     #
     # Endpoints hold URLs; keys hold *environment variable names*, never keys,
     # for the reason the class docstring gives about `api_key()`.
@@ -1582,16 +1582,16 @@ class Settings:
     declared_loss_budget: float = DEFAULT_DECLARED_LOSS_BUDGET
     field_order: str = DEFAULT_FIELD_ORDER
     thinking: frozenset[str] = DEFAULT_THINKING
-    # How hard the operator asked each role to think, role -> level (562).
+    # How hard the operator asked each role to think, role -> level.
     # `thinking` one line up is the same axis at one bit of resolution, and
-    # this is the shape 421 settled on for every other per-role setting: a map
+    # this is the shape settled on for every other per-role setting: a map
     # the environment and the flag both write into, never a parsed string.
     #
     # Empty is "no opinion", and `AUTO_EFFORT` answers. A level in here is the
     # operator's and beats the table; a level in their own command beats both,
     # which is `effort_of`'s rule and not this field's.
     effort: dict[str, str] = field(default_factory=dict)
-    # The part of `effort` a web request chose, role -> level (613). Set by
+    # The part of `effort` a web request chose, role -> level. Set by
     # `web.jobs.web_settings` alone, as `window_declared_by` is, and read by
     # the provenance block so a report says whose choice the level was.
     effort_requested: dict[str, str] = field(default_factory=dict)
@@ -1631,7 +1631,7 @@ class Settings:
     stream: bool = True
     # What the operator asked for, and `None` for "nothing asked". The number
     # a call is actually made with is `call_timeout`, which is where the two
-    # backends' different defaults live (533): a bound stated by an operator
+    # backends' different defaults live: a bound stated by an operator
     # applies as stated, and only an unstated one is resolved per backend.
     # Carried as the unstated value rather than resolved here so that
     # `replace(settings, command=...)` -- which is what `--answer-with` does --
@@ -1659,7 +1659,7 @@ class Settings:
     # the request body -- it is in the cassette key so that a runner
     # measuring resample spread does not collide with its own first draw.
     sample: int = 0
-    # A subprocess to answer with, instead of an HTTP endpoint (483). Empty is
+    # A subprocess to answer with, instead of an HTTP endpoint. Empty is
     # the ordinary case and means the transport. Non-empty is the whole switch:
     # there is no `backend` field beside it, because a backend named `command`
     # with no command and a command with the backend left at `http` are two
@@ -1679,13 +1679,13 @@ class Settings:
     # this, a command run's banner and the web page's endpoint row both printed
     # `banner_endpoint`, which is derived from `base_url` -- so a run that
     # contacted no endpoint at all announced the local ollama it never touched.
-    # That is 477's fault on the one line an operator reads *while the run is
+    # That was a defect on the one line an operator reads *while the run is
     # going*, and it is the line the money is committed on.
     #
     # **Display only.** It is not a cassette key component, for the reason
     # `endpoint_label` is not: naming a deployment is a thing the operator does
     # to their own records, and nothing about the bytes sent changes with it.
-    # `command` is already in the key (483) and is what separates one program's
+    # `command` is already in the key and is what separates one program's
     # recordings from another's.
     command_label: str = ""
     # How this command's stdout is read: `backend.RAW` (the answer is the
@@ -1693,7 +1693,7 @@ class Settings:
     # that also carries the usage block). Declared by whoever configured the
     # command, never detected from what comes back -- the answer under `raw`
     # is itself JSON, so a sniffer would be choosing between two JSON objects
-    # on the presence of a key (537).
+    # on the presence of a key.
     #
     # Default `raw`, which is what this backend did before the option existed,
     # so no configured command changes behaviour by being upgraded past it.
@@ -1720,7 +1720,7 @@ class Settings:
         # reason: `with_api_path` is what lets an operator paste the URL the
         # vendor's console shows them. A map entry that skipped it would work
         # for one vendor and 404 for the next, and the difference would look
-        # like the role rather than like the URL. Entry 421.
+        # like the role rather than like the URL.
         if self.endpoints:
             object.__setattr__(self, "endpoints", {
                 role: with_api_path(url) for role, url in self.endpoints.items()})
@@ -1754,14 +1754,14 @@ class Settings:
         # Refused here rather than at the first call, for the reason every
         # other setting in this block is: a typo in a route's envelope is a
         # sentence before anything is spent, not a `CommandError` after a
-        # model has answered (537).
+        # model has answered.
         if self.command_envelope not in COMMAND_ENVELOPES:
             raise ConfigError(
                 f"unknown command envelope {self.command_envelope!r}; the "
                 f"envelopes are {', '.join(COMMAND_ENVELOPES)}"
             )
         # A command backend has to be told its window, because it cannot be
-        # asked for one (483). `DEFAULT_WINDOW is None` means "probe the
+        # asked for one. `DEFAULT_WINDOW is None` means "probe the
         # endpoint", and the probe is `/api/ps` over HTTP: there is no endpoint
         # here to probe. Token counts are equally unavailable, so the post-hoc
         # overrun check is blind too, and *both* ends of the window guard are
@@ -1801,7 +1801,7 @@ class Settings:
     def endpoint_id(self) -> str:
         """This deployment, de-identified — or the one the operator named instead.
 
-        Scheme, host, port and path, hashed (438). Not `host`: the deployment
+        Scheme, host, port and path, hashed. Not `host`: the deployment
         this project's own runs are recorded against is one path on a shared
         provider hostname, and hashing the hostname gave every deployment there
         the same id.
@@ -1813,7 +1813,7 @@ class Settings:
         """
         # A command backend has no address to hash. Falling through would
         # stamp every such run with the id of the default localhost endpoint it
-        # never contacted, which is the second half of the fault 477 describes
+        # never contacted, which is the second half of the same fault
         # -- the first half being the `content_left_this_machine: false` beside
         # it. The command is what distinguishes one of these deployments from
         # another, so the command is what gets hashed. Only the digest is ever
@@ -1832,7 +1832,7 @@ class Settings:
         `cli.py` documents the label as recorded *in place of* the host, and an
         error message is a record: it reaches stderr, a captured log, and from
         there a decision entry or a paper. A rented pod's hostname carries the
-        pod id and the provider, and entry 91 already had one reach a transcript
+        pod id and the provider, and one already reached a transcript
         through a 404 body. So every message that names the endpoint names this
         instead of `host`.
 
@@ -1845,7 +1845,7 @@ class Settings:
         no host: `base_url` still holds whatever the environment configured and
         the run contacted none of it, so returning it here would put an address
         this run never used into every message about a program that failed.
-        The id is the hashed command (483), which is the one identifier this
+        The id is the hashed command, which is the one identifier this
         backend actually has.
         """
         if self.command:
@@ -1880,7 +1880,7 @@ class Settings:
         return self.banner_endpoint_for(None)
 
     def banner_endpoint_for(self, role: str | None) -> str:
-        """`banner_endpoint`, read off one role's own endpoint (576).
+        """`banner_endpoint`, read off one role's own endpoint.
 
         The same three answers in the same order, so a run header that names
         each role cannot word an address differently from the one that names
@@ -1931,11 +1931,11 @@ class Settings:
         Read fresh every call rather than captured at construction, and that is
         load-bearing now there can be several: a run holding three keys in
         fields would put three credentials in one object that `repr` and
-        `asdict` reach. Entry 421 kept the existing rule rather than making an
+        `asdict` reach. This kept the existing rule rather than making an
         exception for the map.
 
         **The rule is "no key value on anything serialisation reaches", not
-        "keys come from `os.environ`"** (467). The environment was the first
+        "keys come from `os.environ`"**. The environment was the first
         implementation of that rule and it is the reason this is single-tenant:
         a process has exactly one environment, so two jobs cannot hold two
         users' keys at once. `keys_for_this_run` swaps the *source* for the
@@ -1977,7 +1977,7 @@ class Settings:
         """`endpoint_id`, per role, and identical to it unless a role is split.
 
         A label names a *deployment* so that a pod restart does not split one
-        census entry in two (405). Entry 421 broke that in the other
+        census entry in two. That guarantee broke in the other
         direction: with two endpoints under one label, two deployments shared
         one id and the census merged them. So a role with an endpoint of its
         own is hashed with its role name appended to the label -- still no
@@ -1986,8 +1986,8 @@ class Settings:
         A role with no override returns `endpoint_id`, so a single-endpoint run
         still stamps one id across all three roles.
 
-        **Unlabelled, this hashes the role's whole address** (438). It hashed the
-        role's hostname, which made 421's split a no-op on the one topology it
+        **Unlabelled, this hashes the role's whole address.** It hashed the
+        role's hostname, which made that split a no-op on the one topology it
         was written for: two serverless deployments of one provider differ only
         in their path, so both roles got one id and the census merged the two
         boxes it exists to tell apart.
@@ -1996,10 +1996,10 @@ class Settings:
             raise ConfigError(
                 f"unknown role {role!r}; expected one of {', '.join(ROLES)}")
         # A command backend answers every role through the one program, so
-        # per-role endpoints are dead configuration rather than routing (483).
+        # per-role endpoints are dead configuration rather than routing.
         # Falling through would stamp this role's cassettes and its provenance
         # with the id of an HTTP endpoint the run never addressed, which is
-        # 477's fault at cassette scale -- and the combination is ordinary, not
+        # the same fault at cassette scale -- and the combination is ordinary, not
         # exotic: an operator with vendor endpoints already in their
         # environment who tries a command run has it. Refusing that would make
         # the backend unusable without first clearing the environment, so it
@@ -2027,7 +2027,7 @@ class Settings:
         return urlsplit(self.base_url_for(role)).hostname or self.base_url_for(role)
 
     def effort_for(self, role: str) -> str:
-        """The level this role's calls will really be asked for, or "" (562).
+        """The level this role's calls will really be asked for, or "".
 
         One line, because the precedence is `effort_of`'s and lives there. What
         this adds is the operator's own map, which only a `Settings` holds.
@@ -2041,9 +2041,9 @@ class Settings:
         `command` is the route -- the operator's program, plus the retrieval
         grant, which is a property of the run and not of the role. The effort
         level is not: the merge is asked for more than the two roles that read
-        its work back, so the flag goes on here, where the role is known (562).
+        its work back, so the flag goes on here, where the role is known.
 
-        So is the isolation, `--safe-mode` and `--tools` (610): here, per call,
+        So is the isolation, `--safe-mode` and `--tools`: here, per call,
         so `command` stays what a sweep re-levels. Both are read back off this,
         so a provenance block cannot describe a level the run was not asked for.
         """
@@ -2072,7 +2072,7 @@ class Settings:
 
         None still means "ask the endpoint", which only Ollama answers. A role
         whose endpoint cannot be asked and has no stated figure is refused by
-        `window.preflight`, unchanged by entry 421 -- the point of the map is
+        `window.preflight`, unchanged since the per-role map was added -- the point of the map is
         that the figure can now differ per role, not that it can be skipped.
         """
         if role is not None and role not in ROLES:
@@ -2082,7 +2082,7 @@ class Settings:
 
     @property
     def call_timeout(self) -> float:
-        """The seconds one call gets. **Read this, never `timeout`** (533).
+        """The seconds one call gets. **Read this, never `timeout`**.
 
         `timeout` is what the operator stated and is `None` when they stated
         nothing; this is the number a request is made with, and it is the one
@@ -2103,7 +2103,7 @@ class Settings:
 
     @property
     def verify_batch(self) -> int:
-        """How many claims one verify call carries on this backend (551).
+        """How many claims one verify call carries on this backend.
 
         `call_timeout`'s sibling, and the same shape for the same reason: it is
         one setting whose right answer depends on which backend answers, and
@@ -2111,7 +2111,7 @@ class Settings:
         `COMMAND_VERIFY_BATCH` for the measurement the command figure comes
         from -- a command backend's cost is ~26-30 s a call plus ~1.3-1.5 s a
         claim, so time per claim falls as the batch grows and 25 there pays
-        the fixed part four times where 100 pays it once (558).
+        the fixed part four times where 100 pays it once.
 
         The HTTP figure is untouched and must stay untouched: batch size
         reaches `messages`, `messages` is a cassette-key component, and every
@@ -2131,7 +2131,7 @@ class Settings:
         """The vendor model id for a logical role.
 
         decompose falls back to verify: they are both the small structured-output
-        model and the brief never gives them separate budgets. If that stops
+        model and the original design never gives them separate budgets. If that stops
         being true, add a decompose entry to models.local.json — no code change.
         """
         if role not in ROLES:
@@ -2160,7 +2160,7 @@ class Settings:
         Merge is the interesting case. See DEFAULT_THINKING for the evidence
         that argues for turning it on there and for what it does not claim --
         the A/B that would have attributed the difference to the prompt
-        returned outcome U -- and for why it ships off anyway.
+        returned no clear signal -- and for why it ships off anyway.
         """
         return role in self.thinking
 
@@ -2216,7 +2216,7 @@ def from_env(
     not only in `apply_arguments` because `Settings.__post_init__` refuses a
     command with no window, and this function builds a `Settings`: with
     `LLOSSLESS_COMMAND` set and the window given as a flag, the object built
-    from the environment alone was refused before the flag was read (574).
+    from the environment alone was refused before the flag was read.
 
     `model_map_path` is a parameter so the test suite can point it somewhere
     empty. Reading the developer's own models.local.json would make the suite
@@ -2232,7 +2232,7 @@ def from_env(
     models.setdefault("merge", models.get("verify", ""))
     models = {role: model for role, model in models.items() if model}
 
-    # Per-role endpoint, key and window, entry 421. One variable per role per
+    # Per-role endpoint, key and window. One variable per role per
     # axis rather than one parsed string, because the parsed form would need a
     # separator that cannot appear in a URL, an env var name or an integer, and
     # every candidate appears in at least one of them.
@@ -2240,11 +2240,11 @@ def from_env(
     # `LLOSSLESS_API_KEY_ENV_<ROLE>` names a *variable*, matching
     # `LLOSSLESS_API_KEY_ENV`. A run with a frontier merge and a local
     # decompose then holds two variable names and no keys, which is the same
-    # property entry 91 asked of the single-endpoint case.
+    # property already true of the single-endpoint case.
     endpoints, api_key_envs, windows = {}, {}, {}
     # The run-wide effort level, laid down first so that a per-role variable
-    # below overwrites it (562). `LLOSSLESS_WINDOW`'s relationship to
-    # `LLOSSLESS_WINDOW_<ROLE>`, on the axis 558 measured: the general
+    # below overwrites it. `LLOSSLESS_WINDOW`'s relationship to
+    # `LLOSSLESS_WINDOW_<ROLE>`, on the same axis: the general
     # statement is the floor and the specific one is the exception to it.
     effort = effort_from_env(env)
     for role in ROLES:
@@ -2413,7 +2413,7 @@ def from_env(
     # Unset is `None` -- "nothing was stated" -- and not a number, because the
     # number depends on which backend answers and that is not settled here:
     # `--answer-with` can turn a command backend on after this function has
-    # run. `Settings.call_timeout` resolves it (533).
+    # run. `Settings.call_timeout` resolves it.
     raw_timeout = env.get("LLOSSLESS_TIMEOUT", "").strip()
     try:
         timeout = float(raw_timeout) if raw_timeout else None
@@ -2426,7 +2426,7 @@ def from_env(
     if ca_bundle and not Path(ca_bundle).exists():
         raise ConfigError(f"LLOSSLESS_CA_BUNDLE points at a file that does not exist: {ca_bundle}")
 
-    # Not in the brief's variable list, but the container in M6 runs on a
+    # Not in the original variable list, but an earlier deployment's container ran on a
     # read-only filesystem and the cache has to go somewhere writable.
     cache_dir = Path(env.get("LLOSSLESS_CACHE_DIR", "").strip() or CACHE_DIR)
 
@@ -2483,7 +2483,7 @@ def add_arguments(
     """The flags every entry point shares. Kept here so they cannot drift apart.
 
     `offline_dir` is what `--offline` resolves to. It is a parameter because a
-    milestone's corpus is its own directory — M4 records into
+    milestone's corpus is its own directory: for example, the `m4/` corpus records into
     `tests/responses/m4/`, one revision per directory — and `--offline` has to
     mean "this runner's recordings" rather than "the recordings of whichever
     runner was written first". Pass the same value to `apply_arguments`.
@@ -2596,7 +2596,7 @@ def add_arguments(
         # rendered from `VERIFY_DEPTH_SHAPES` and for the same reason: the
         # help text and the sentence the web picker shows were two copies of
         # one description, and the copy nobody edits goes on describing the
-        # old behaviour while reading exactly like the new one (550).
+        # old behaviour while reading exactly like the new one.
         help="how freely the merge may reword and combine the sources (default "
              + DEFAULT_FIDELITY + ". "
              + " ".join(f"{fidelity_name(level)}: {shape.summary} {shape.costs}"
@@ -2626,7 +2626,7 @@ def add_arguments(
         default=None,
         # Built from the table, never retyped: the default's clause first and
         # the others after it, so naming a policy and describing another is not
-        # a thing this string can do (542).
+        # a thing this string can do.
         help="which title the merged document takes (default "
              + DEFAULT_TITLE_POLICY + ": "
              + TITLE_POLICY_EXPLAINS[DEFAULT_TITLE_POLICY] + "; "
@@ -2670,7 +2670,7 @@ def add_arguments(
     # places it runs. In a checkout the cache is on: the people it helps are
     # working on this repository, replaying the same corpus all day. Installed
     # it is off, because an installed user pointing this at a confidential
-    # document should opt into keeping a copy of it, not opt out (311).
+    # document should opt into keeping a copy of it, not opt out.
     group.add_argument("--no-cache", action="store_true",
                        help="ignore cached responses and persist nothing")
     group.add_argument("--cache", action="store_true",
@@ -2724,7 +2724,7 @@ def parse_effort(stated: list[str] | None) -> dict[str, str]:
     Validated here rather than by argparse's `choices`, because `choices` on a
     flag with two spellings would have to hold every role crossed with every
     level, and what it prints on a typo would be that product instead of a
-    sentence naming which half was wrong (562).
+    sentence naming which half was wrong.
     """
     chosen: dict[str, str] = {}
     for item in stated or ():
@@ -2765,7 +2765,7 @@ def apply_arguments(settings: Settings, args, offline_dir: Path = OFFLINE_CASSET
         #
         # `decompose` too, for the same reason: `model_for` reads a file's
         # `decompose` entry before falling back to `verify`, so a flag that set
-        # only `verify` left decompose on the file's model (DECISIONS 584).
+        # only `verify` left decompose on the file's model.
         models["verify"] = models["decompose"] = args.model
         models["merge"] = args.model
     if getattr(args, "merge_model", None):
@@ -2811,7 +2811,7 @@ def apply_arguments(settings: Settings, args, offline_dir: Path = OFFLINE_CASSET
         # flag leaves whatever the environment said instead of overwriting it.
         # `canonical_fidelity` is where `--fidelity verbatim` becomes `off`:
         # one resolution, at the boundary, so no consumer below has to know
-        # the level has two names (437).
+        # the level has two names.
         fidelity=canonical_fidelity(getattr(args, "fidelity", None) or settings.fidelity),
         verify_depth=getattr(args, "verify_depth", None) or settings.verify_depth,
         title_policy=getattr(args, "title_policy", None) or settings.title_policy,
@@ -2828,7 +2828,7 @@ def apply_arguments(settings: Settings, args, offline_dir: Path = OFFLINE_CASSET
         # thinks". Here every role always has a level, so replacing the map
         # would mean `--effort merge=high` silently handing `decompose` and
         # `verify` back to the program's own default -- the 3.3x this work
-        # exists to stop paying (562).
+        # exists to stop paying.
         effort={**settings.effort, **parse_effort(getattr(args, "effort", None))},
         profile=getattr(args, "profile", None) or settings.profile,
         # `is None`, not `or`: every other numeric flag here is falsy at a
@@ -2870,7 +2870,7 @@ def check_base_url(settings: Settings) -> None:
     half. It refuses a socket to anywhere but the configured endpoint; a
     `file://` read opens no socket at all. The constraint was enforced one layer
     above the layer where the route exists, which is why a check that has been
-    green for the life of the project was green over this too (323).
+    green for the life of the project was green over this too.
 
     A hostname is required as well. `file:///etc/passwd` has none, and neither
     does anything else worth refusing here.
@@ -2959,7 +2959,7 @@ def check_cleartext_key(settings: Settings) -> None:
     was cleartext `http` on a public address and ollama takes no key, so the two
     halves have never been true at once. It goes live the first time a hosted
     endpoint wants a token, and the answer then is the provider's `https` proxy
-    URL, never a bypass (324).
+    URL, never a bypass.
 
     **Per role, over every configured endpoint**, for the reason `check_base_url`
     now does: the key a role sends is `api_key_env_for(role)` and the host it
@@ -2993,21 +2993,21 @@ def resolve(
 ) -> Settings:
     # The flag's window goes in with the environment, not after it: the pair
     # the window refusal checks can arrive split across the two, and the
-    # refusal runs on every `Settings` built, including the first (574).
+    # refusal runs on every `Settings` built, including the first.
     settings = from_env(environ, window=getattr(args, "window", None))
     if args is not None:
         settings = apply_arguments(settings, args, offline_dir)
     # After argument handling, because both halves of this decision can move
     # there: `--fidelity sourced` and `--answer-with` are flags, and a guard
     # that read the environment's answer would be guarding a run that is not
-    # the one about to happen (548).
+    # the one about to happen.
     #
     # The grant and then the refusal, in `at_fidelity`, which is also what
     # `sweep.settings_for` calls for every row of `--sweep-fidelity`: one
     # owner, so a sweep row cannot be granted or refused differently from a
-    # run at its level (577). The function is at the foot of this module.
+    # run at its level. The function is at the foot of this module.
     settings = at_fidelity(settings, settings.fidelity)
-    # **The effort level is not appended here** (562). 558 put it beside the
+    # **The effort level is not appended here.** It used to sit beside the
     # grant, which was right while one level covered the run; it is per role
     # now, and a role is not known until a call is about to be made. So
     # `Settings.command_for` appends it and `settings.command` stays the route
@@ -3018,7 +3018,7 @@ def resolve(
     # envelope only from the environment, so the pair is only whole once both
     # have been read. `web/commands._row` refuses this on a route before a job
     # is ever built; this is the same rule on the command line, which had none
-    # at all (555).
+    # at all.
     refusal = envelope_refusal(settings.command_envelope, settings.command)
     if refusal is not None:
         raise ConfigError(refusal)
@@ -3031,12 +3031,12 @@ def resolve(
     return settings
 
 
-# `sourced`'s second refusal and the two predicates it rests on (568). At the
+# `sourced`'s second refusal and the two predicates it rests on. At the
 # foot of the module rather than beside `retrieval_refusal`, which reaches
 # them by name at call time: other files cite line numbers in this one, and
 # three functions added above those lines would have moved every citation.
 def reports_retrieval(command: str) -> bool:
-    """Whether a run through this command can say afterwards if it retrieved (568).
+    """Whether a run through this command can say afterwards if it retrieved.
 
     The only answer this build has to "did the model retrieve" is `num_turns`,
     and the only envelope that carries it is `claude --print`'s result
@@ -3054,7 +3054,7 @@ def sourced_tools(command: str) -> tuple[str, ...]:
     """The web tools a `sourced` run through this command would get, or ().
 
     `retrieval_tools`, narrowed to a command that can also report whether they
-    were used (568). Empty means `sourced` refuses this command, for either
+    were used. Empty means `sourced` refuses this command, for either
     reason; what a route row serves as its retrieval marker, so the picker
     does not advertise retrieval on a route the level will refuse.
     """
@@ -3062,7 +3062,7 @@ def sourced_tools(command: str) -> tuple[str, ...]:
 
 
 def _measurement_refusal(command: str) -> str | None:
-    """Why this command could retrieve and could not say whether it did (568).
+    """Why this command could retrieve and could not say whether it did.
 
     The second half of `retrieval_refusal`, and the half an operator met
     without being told: their routes predated the result envelope, every call
@@ -3089,7 +3089,7 @@ def _measurement_refusal(command: str) -> str | None:
 def at_fidelity(settings: "Settings", level: str) -> "Settings":
     """These settings at one fidelity level, granted and refused as a run there is.
 
-    **The one owner of `sourced`'s grant-then-refuse step** (577). `resolve`
+    **The one owner of `sourced`'s grant-then-refuse step.** `resolve`
     reaches a run's level through here, and `sweep.settings_for` reaches every
     row of `--sweep-fidelity` through here. The sweep used to swap the level in
     with a plain `replace`, so its `sourced` row met neither half: over an
@@ -3114,7 +3114,7 @@ def at_fidelity(settings: "Settings", level: str) -> "Settings":
     return moved
 
 
-# The subscription CLI's isolation (610), at the foot for `reports_retrieval`'s
+# The subscription CLI's isolation, at the foot for `reports_retrieval`'s
 # reason: other files cite lines above.
 #
 # **A document-merging tool must not inherit its operator's agent setup, and
@@ -3126,7 +3126,7 @@ def at_fidelity(settings: "Settings", level: str) -> "Settings":
 # this repository's directory: asked whether it had user- or project-level
 # instructions, the model answered yes and named two files; its `system/init`
 # event listed 30 built-in tools, `Task` and `Bash` among them, and 8 MCP
-# tools. 609 had seen one Opus merge spawn two subagents through that `Task`.
+# tools. Testing had seen one Opus merge spawn two subagents through that `Task`.
 #
 # With `--safe-mode` it answered no and named nothing, and with `--tools`
 # naming the grant the tool list was exactly the grant: `WebFetch` and
@@ -3153,7 +3153,7 @@ def stated_tools(command: str) -> tuple[str, ...] | None:
     separators, up to the next flag, every occurrence. An empty tuple is a
     statement -- `--tools ""`, no tool at all -- and None is its absence, and
     the two are never folded together, because only the second leaves the
-    choice to this build (610).
+    choice to this build.
     """
     argv = _argv(command)
     named: list[str] | None = None
@@ -3173,7 +3173,7 @@ def stated_tools(command: str) -> tuple[str, ...] | None:
 
 
 def _available(command: str, tools: tuple[str, ...]) -> tuple[str, ...]:
-    """`tools`, less any the command's own `--tools` leaves out (610).
+    """`tools`, less any the command's own `--tools` leaves out.
 
     No `--tools`, or `--tools default`, restricts nothing. Otherwise a tool is
     available only when it is named there, and a permission for one that is not
@@ -3186,7 +3186,7 @@ def _available(command: str, tools: tuple[str, ...]) -> tuple[str, ...]:
 
 
 def command_with_isolation(command: str) -> str:
-    """This command line with the CLI's isolation on it. Idempotent (610).
+    """This command line with the CLI's isolation on it. Idempotent.
 
     The one writer, reached through `Settings.command_for` for every call, on
     `command_with_retrieval`'s rules: only for a program in `ISOLATED`, and
@@ -3219,7 +3219,7 @@ def command_with_isolation(command: str) -> str:
 
 
 # Environment variable names, and prefixes, `backend._child_env` drops from
-# a command backend's child process (I8, 680), and what `Provenance` reports
+# a command backend's child process, and what `Provenance` reports
 # was dropped (`isolation.<role>.env_dropped`). Defined here, not in
 # `backend.py`: this module is imported at module scope by every run
 # including a pure replay, and `backend.py` imports `transport`, which a
@@ -3235,8 +3235,8 @@ def command_with_isolation(command: str) -> str:
 # exists to reach, and it would leak that key to a program this project does
 # not control.
 #
-# `LLOSSLESS_` and `CLAIMCHECK_`: this tool's own configuration, meaningless
-# to the program being run.
+# `LLOSSLESS_` and the retired prefix it replaced: this tool's own
+# configuration, meaningless to the program being run.
 #
 # `CLAUDECODE`, `CLAUDE_CODE_` and `CLAUDE_AGENT_`: the Claude Code session
 # this process may itself be running inside of -- confirmed against this very
@@ -3250,7 +3250,7 @@ DROPPED_ENV_PREFIXES = ("ANTHROPIC", "OPENAI", "LLOSSLESS_", "CLAIMCHECK_",
                         "CLAUDE_CODE_", "CLAUDE_AGENT_", "AI_AGENT")
 DROPPED_ENV_NAMES = frozenset({"CLAUDECODE", "CLAUDE_EFFORT", "CLAUDE_PID"})
 
-# Follow-up to 680 (DECISIONS, dated after this comment was added): the
+# A later fix: the
 # `CLAUDE_CODE_` prefix above was written to catch session and effort
 # markers, but it also caught `CLAUDE_CODE_OAUTH_TOKEN` -- the credential a
 # headless user sets (`export CLAUDE_CODE_OAUTH_TOKEN=<token>`, the exact
@@ -3273,15 +3273,15 @@ DROPPED_ENV_NAMES = frozenset({"CLAUDECODE", "CLAUDE_EFFORT", "CLAUDE_PID"})
 # `env_dropped` rather than merely present with `for_report` narrowing it.
 KEPT_CREDENTIAL_NAMES = frozenset({"CLAUDE_CODE_OAUTH_TOKEN"})
 
-# `env_dropped` follow-up (680 I8, found comparing the two spellings of the
-# command setting): `LLOSSLESS_*` is dropped from the child either way, but it
+# `env_dropped` follow-up, found comparing the two spellings of the
+# command setting: `LLOSSLESS_*` is dropped from the child either way, but it
 # is this tool's own configuration, consumed on purpose, not a foreign
 # credential or session variable withheld from a program that never asked for
 # it. Reporting it made two runs that differ only in how the command was
 # spelled -- `--answer-with PROGRAM` against `LLOSSLESS_COMMAND=PROGRAM` --
 # produce two different `env_dropped` lists for what is otherwise one
 # setting, because only the env spelling puts `LLOSSLESS_COMMAND` itself into
-# `os.environ` for the filter to see. `CLAIMCHECK_` stays reported: it is the
+# `os.environ` for the filter to see. The old prefix stays reported: it is the
 # retired name for the same configuration, so a value found under it is a
 # leftover from before the rename, not this run's own configuration, and is
 # exactly the kind of thing the report exists to name.
@@ -3320,11 +3320,11 @@ def dropped_env_names(environ: dict | None = None, *, for_report: bool = False) 
 
 
 def command_safe_mode(command: str) -> bool:
-    """Whether `--safe-mode` is on this argv, read the way `stated_tools` reads `--tools` (611).
+    """Whether `--safe-mode` is on this argv, read the way `stated_tools` reads `--tools`.
 
     Off the string directly rather than off membership in `ISOLATED`: an
     argv this build isolated carries the flag because `command_with_isolation`
-    wrote it, and an operator's own wrapper can carry it too (610's "one way
+    wrote it, and an operator's own wrapper can carry it too (the "one way
     out of safe mode" is starting a differently-named program with the flag
     already on its own argv) -- both are `True` here, on the same evidence
     `Provenance` reports the rest of a run from.
@@ -3333,12 +3333,12 @@ def command_safe_mode(command: str) -> bool:
 
 
 def only_web_tools(command: str) -> bool:
-    """Whether this argv leaves the model no tool but the web tools (610).
+    """Whether this argv leaves the model no tool but the web tools.
 
     What decides how many turns a call can take without retrieving. Under the
     shipped argv `WebFetch` and `WebSearch` are deferred and loaded through
-    `ToolSearch`, so one retrieval is three turns and a plain answer may be two
-    (564). Under `--safe-mode` and a `--tools` naming web tools alone there is
+    `ToolSearch`, so one retrieval is three turns and a plain answer may be two.
+    Under `--safe-mode` and a `--tools` naming web tools alone there is
     no `ToolSearch`, no hook and no other tool, so any turn past the first is a
     web tool call: measured, one fetch and one search are two turns each.
 
@@ -3360,7 +3360,7 @@ def tools_withhold_the_grant(command: str) -> bool:
     The operator's allowlist, or failing that the automatic grant, names a web
     tool, and a `--tools` of their own leaves every one of them out. `sourced`
     refuses that command, and says why in these terms rather than in the terms
-    of a program this build does not know (610).
+    of a program this build does not know.
     """
     argv = _argv(command)
     if not argv or stated_tools(command) is None:
@@ -3371,7 +3371,7 @@ def tools_withhold_the_grant(command: str) -> bool:
 
 
 def _grant_refusal(command: str) -> str | None:
-    """`retrieval_refusal`'s answer for a program this build can grant (568, 610).
+    """`retrieval_refusal`'s answer for a program this build can grant.
 
     Two ways it still cannot answer at `sourced`: the command's own `--tools`
     makes no web tool available, or it cannot say afterwards whether it
@@ -3390,10 +3390,10 @@ def _grant_refusal(command: str) -> str | None:
 
 
 def effort_from_env(env) -> dict[str, str]:
-    """`LLOSSLESS_EFFORT` then `LLOSSLESS_EFFORT_<ROLE>`, as role -> level (562).
+    """`LLOSSLESS_EFFORT` then `LLOSSLESS_EFFORT_<ROLE>`, as role -> level.
 
     `from_env`'s reading, moved out so the web server can say what a request
-    that names no level would get (613) without resolving a whole `Settings`
+    that names no level would get without resolving a whole `Settings`
     for it. The run-wide variable is laid down first and a per-role one
     overwrites it: `LLOSSLESS_WINDOW`'s relationship to its per-role form.
     """

@@ -34,19 +34,19 @@ from .usage import NOT_RETRIEVED, UNMEASURED
 # Fields that differ between two runs of identical work. Excluded when reports
 # are compared for equality; see the replay determinism acceptance test.
 # `latency_ms` is not here: it lives on a live call's ledger row, not this
-# top-level block, and the replay test exempts it there by name (575).
+# top-level block, and the replay test exempts it there by name.
 # `window` joins these for the same reason `structured_output.how` is exempt
 # from the replay comparison: a replay sends nothing, so it preflights
 # nothing, and recording that is a true statement about the run rather than
-# drift between two runs of the same thing (Brief CL item 3).
-# `calls_by_role` joins on exactly the terms `window` did, and entry 423 adds
-# it for the same kind of reason: a replay makes no live call, so the map is
+# drift between two runs of the same thing.
+# `calls_by_role` joins on exactly the terms `window` did, for the same
+# kind of reason: a replay makes no live call, so the map is
 # empty, and that is a true statement about the run rather than drift between
 # two runs of the same work. It is the one field here that a *vendor* smoke
 # test reads, which is why it has to be recorded rather than inferred from the
 # artefacts a role leaves -- those look identical whether the endpoint answered
 # or a cassette did.
-# The four accounting blocks join them at 681 on the same terms as
+# The four accounting blocks joined the report on the same terms as
 # `duration_seconds`: each carries seconds a stopwatch measured, and a replay
 # made no call, so it has none of them to report. `answering_cost` is *not*
 # here: it is priced off the ledger's tokens and outcomes, which a replay files
@@ -55,7 +55,7 @@ VOLATILE = ("generated_at", "duration_seconds", "run_mode", "counts", "window",
             "calls_by_role", "answering_seconds", "excluded", "unruled",
             "discarded_calls")
 
-# What each route kind is called in the rendered block (570). The words the web
+# What each route kind is called in the rendered block. The words the web
 # page's submit button says before the click, said after it: `en.json`'s
 # `route.*` strings, and `tests/test_contract_parity.py` holds the two equal.
 # The kinds are the web layer's (`web/jobs.ROUTE_KINDS`); this module only
@@ -78,7 +78,7 @@ def route_said(billed: dict) -> str:
     subscription?" -- and a bare "metered API" makes the reader infer that it
     covered the role they are asking about. A kind this build has no word for
     is printed as `route not identified`, never as its raw identifier and
-    never as a guess (524).
+    never as a guess.
     """
     grouped: dict[str, list[str]] = {}
     for role, kind in billed.items():
@@ -101,12 +101,12 @@ def _cost_block(ledger: list[dict]) -> dict:
     block: dict = {
         "state": found.state,
         "usd": None if found.dollars is None else round(found.dollars, 4),
-        # The unrounded figure the arithmetic actually produced (680,
-        # report-details item -- the docstring above promised this and
-        # `_cost_block` never wrote it). `usd` is what a reader looks at;
-        # this is what a figure script sums across cells, so rounding once
-        # per cell before adding does not compound into the headline the way
-        # rounding `usd` a second time would (I9).
+        # The unrounded figure the arithmetic actually produced.
+        # `usd` is what a reader looks at; this is
+        # what a figure script sums across cells, so
+        # rounding once per cell before adding does not
+        # compound into the headline the way rounding `usd`
+        # a second time would.
         "usd_exact": found.dollars,
         "priced_calls": found.priced_calls,
         "unpriced_calls": found.unpriced_calls,
@@ -116,7 +116,7 @@ def _cost_block(ledger: list[dict]) -> dict:
         block["unpriced_models"] = list(found.unpriced_models)
     # The date the rates were read, so a stale table is visible rather than
     # implied. The rows *this run's own priced calls* actually billed against
-    # (`found.priced_skus`, 680) -- not, as before, every SKU the whole table
+    # (`found.priced_skus`), not, as before, every SKU the whole table
     # has ever priced: that read as the *oldest* date on record the moment any
     # other model's rate was read earlier, which named a rate this run never
     # touched. The oldest of the rows actually used is still the honest
@@ -146,9 +146,9 @@ def _by_role(rows: list[dict], field: str) -> dict:
 
 
 def _accounting(ledger: list[dict], discarded: list[dict]) -> dict:
-    """What a benchmark cell is charged with, and everything that is not (681).
+    """What a benchmark cell is charged with, and everything that is not.
 
-    678: a cell's cost and time are those of the attempt that produced its
+    A cell's cost and time are those of the attempt that produced its
     answer, and a blank, a timeout or a platform failure is excluded. A schema
     repair is the model failing the format it was asked for, so it is charged
     to the model and stays in both answering figures. The split is decided in
@@ -162,7 +162,7 @@ def _accounting(ledger: list[dict], discarded: list[dict]) -> dict:
       retries (`backend.cli_timing`).
     - `answering_cost`: `_cost_block` over the same rows, so the never-$0.00
       states hold for it exactly as for `cost`.
-    - `excluded`: what 678 leaves out. `calls` counts the transport's own
+    - `excluded`: what is left out. `calls` counts the transport's own
       retries (attempts beyond the first, on every live call) and the
       discarded calls by kind; `seconds` is every live call's `waited_ms`
       and `failed_ms`, plus the answering attempt of every excluded discard;
@@ -223,7 +223,7 @@ def _accounting(ledger: list[dict], discarded: list[dict]) -> dict:
 
 
 def _priced(row: dict) -> dict:
-    """A discarded call's row as the report shows it: with its own price (681).
+    """A discarded call's row as the report shows it: with its own price.
 
     `usd_exact` only where the row is both measured and priced, so a blank
     nothing reported tokens for carries no figure rather than `0.0`.
@@ -310,8 +310,8 @@ def _git_dirs(root: Path) -> tuple[Path, Path]:
     `root/.git/HEAD` as a path raises and every run made from a worktree
     recorded its provenance as `unknown` -- the commit silently missing from
     exactly the checkouts a second line of work is done in. Found by running
-    `make -C paper stamp` from one, which wrote `unknown` over a real commit
-    in `paper/generated/numbers.json`.
+    the paper's own build step from one, which wrote `unknown` over a real commit
+    in its generated output (withheld with the paper).
 
     Shelling out to `git rev-parse` would be shorter and is refused for
     `git_commit`'s own reason: git may not be installed in the container, and
@@ -360,7 +360,7 @@ def _git_dirs(root: Path) -> tuple[Path, Path]:
 RECORDED_OUTPUT = "tests/responses"
 
 # The paper's build stamp has the same shape of problem one directory over.
-# `paper/generated/numbers.tex` is tracked and carries the commit the PDF was
+# The paper's generated numbers file is tracked and carries the commit the PDF was
 # built from, so writing it is the build's own output: leave it in scope and
 # the first `make paper` after a commit stamps a clean revision, the second
 # stamps `-dirty` for nothing but the stamp the first one wrote. Passed in by
@@ -369,8 +369,8 @@ RECORDED_OUTPUT = "tests/responses"
 PAPER_OUTPUT = "paper/generated"
 
 
-# Where an untracked file counts as source (I7). `src/` and `prompts/` are
-# what a report's `claimcheck_commit` claims to describe, and an untracked
+# Where an untracked file counts as source. `src/` and `prompts/` are
+# what a report's commit-provenance field claims to describe, and an untracked
 # file shadowing a tracked one there is not a smaller kind of edit -- an
 # untracked `src/llossless/_prompts/` takes precedence over the tracked
 # `prompts/` whenever a checkout looks like an install (`prompts.py`'s
@@ -478,13 +478,13 @@ class Provenance:
     # resolved and this is where it is published; nothing recomputes it.
     base: str | None = None
     base_chosen: str | None = None
-    # How each role was paid for, in `ROUTE_WORDS`' kinds, when the caller knew
-    # (570). Only the web server does: it chose the route or the endpoint per
+    # How each role was paid for, in `ROUTE_WORDS`' kinds, when the caller knew.
+    # Only the web server does: it chose the route or the endpoint per
     # role from a row the operator picked, and the page's button named that
     # route before the click. `None` on the command line, where the operator
     # typed the endpoint and no such choice was made on their behalf.
     billed: dict | None = None
-    # Taken once, here, rather than inside `as_dict` (716). `as_dict` used to
+    # Taken once, here, rather than inside `as_dict`. `as_dict` used to
     # call `datetime.now` itself, and it is not the only reader: `rows` and
     # `notes` each call it too, `as_markdown` calls both of those, and the
     # report writer calls `as_dict` again on its own for the JSON export,
@@ -522,7 +522,7 @@ class Provenance:
         if self.settings.mode in ("replay", "dry-run"):
             return False
         # A command backend has no URL to classify, and silence here would be
-        # read as "no" (483). Everything this block relies on stops at the
+        # read as "no". Everything this block relies on stops at the
         # process boundary: `config.check_base_url` has no address to inspect,
         # and the suite's network containment is per-process, so a
         # child that opens a socket opens it unobserved. The tool therefore
@@ -530,7 +530,7 @@ class Provenance:
         # honest answer to a question it cannot answer is the one that makes a
         # reader check rather than the one that makes them stop reading.
         #
-        # This is 477 reached by a second route, and it is answered the same
+        # This is the same question reached by a second route, and it is answered the same
         # way: getting it backwards is worse than omitting it.
         if self.settings.command:
             return True
@@ -542,12 +542,12 @@ class Provenance:
         # Read off `Settings.command_for` by role, the way `retrieval.permitted`
         # is read off the argv rather than off the table that produced it: what
         # is printed is what the run was really asked for, and a table this
-        # build never reached cannot put a level in here (562).
+        # build never reached cannot put a level in here.
         effort = {role: self.settings.effort_for(role)
                   for role in sorted(config.ROLES)
                   if self.settings.effort_for(role)}
         # Which of this run's roles answered through a model that takes one
-        # level of effort rather than a scale (688, ruling 11) -- a command
+        # level of effort rather than a scale -- a command
         # route never gets `--effort` for one (`config.auto_effort`), and an
         # HTTP route never had one to send in the first place (`structured.py`'s
         # `anthropic` profile has no graded field at all). Named here rather
@@ -562,7 +562,7 @@ class Provenance:
         # still right for an HTTP role, which has no argv to read.
         single_level = sorted(role for role in self.roles
                               if config.is_single_level_model(self._effort_model(role)))
-        # The client's own stamp, taken once at `Client.__init__` (I7), not
+        # The client's own stamp, taken once at `Client.__init__`, not
         # `git_commit()` read fresh here: `git_commit()` is HEAD alone and can
         # never say `-dirty`, which is exactly the state every `--no-cache`
         # benchmark run is made in, since it never records. Falling back to
@@ -583,7 +583,7 @@ class Provenance:
         return {
             "generated_at": self.generated_at,
             "claimcheck_commit": commit_at_start,
-            # Present only when the tree moved between the two reads (I7).
+            # Present only when the tree moved between the two reads.
             # Two fields rather than one, because "it changed" and "what it
             # became" are different facts and a reader has to have both: the
             # commit a run *started* under is what every other field in this
@@ -644,7 +644,7 @@ class Provenance:
                 # used three endpoints is not a smaller truth, it is a
                 # different one.
                 # Dropped entirely for a command backend, which addresses
-                # none of them (483). Listing endpoints a run configured and
+                # none of them. Listing endpoints a run configured and
                 # never used describes a routing that did not happen, and the
                 # reader most likely to check this block is the one asking
                 # where their documents went.
@@ -653,7 +653,7 @@ class Provenance:
                    if not self.settings.command
                    and len(config.addresses(self.settings)) > 1 else {}),
                 # How each role was paid for, per role, when the caller chose
-                # the route (570). The id above says which box and `location`
+                # the route. The id above says which box and `location`
                 # says whether anything left this one; neither says whether the
                 # checks went to a subscription or to a metered API, which is
                 # the question the web page's split control made askable.
@@ -698,7 +698,7 @@ class Provenance:
             },
             "models": {role: self._model(role) for role in self.roles},
             # What a role's own calls said actually answered, distinct from
-            # the label above (B7, 680): `models` is the alias the route
+            # the label above: `models` is the alias the route
             # asked for and stays that, whatever answered. This reads the
             # same per-call facts `model_said` already renders into the
             # Markdown table -- a command backend's `answered_by`
@@ -717,7 +717,7 @@ class Provenance:
             # to be able to tell which one relaxed the contract. Resolved, not
             # the setting: a replay reads an answer no more strictly than its
             # recording did, so a replay of an `any` corpus reports `any`
-            # whatever it was passed (DECISIONS 583).
+            # whatever it was passed.
             "structured_output": {
                 "mode": self.client.resolved_tier(),
                 "how": self.client.tier_source,
@@ -725,12 +725,12 @@ class Provenance:
             },
             "prompts": dict(sorted(usage.prompts.items())),
             "decoding": {
-                # Brief AL item 3. Read from the last live call's own request
+                # Read from the last live call's own request
                 # body when there was one -- `Usage.ledger`, written from
                 # `body` at the point it was serialised, never rebuilt -- and
                 # only the module constant when nothing this run actually sent
-                # could be asked: a replay or a cache-only run. DECISIONS 178
-                # ruled out reconstructing a body to check one; this instead
+                # could be asked: a replay or a cache-only run. Reconstructing a
+                # body to check one was ruled out; this instead
                 # reports the one that was already kept.
                 "temperature": self._wire_temperature(),
                 "seed": self._wire_seed(),
@@ -761,7 +761,7 @@ class Provenance:
                 **({"reasoned_anyway": sorted(usage.thinking_ignored)}
                    if usage.thinking_ignored else {}),
                 # How hard the command backend was asked to think, read back
-                # off the argv the run will really execute (558) -- the same
+                # off the argv the run will really execute -- the same
                 # direction, and for the same reason, as `retrieval.permitted`
                 # below. It belongs with `thinking` one field up: a level that
                 # cuts reasoning tokens by an order of magnitude changes the
@@ -775,7 +775,7 @@ class Provenance:
                 # would write a claim about effort into the provenance of
                 # every HTTP run in the recorded corpus.
                 #
-                # **A map, role -> level, and never one value** (562). The
+                # **A map, role -> level, and never one value**. The
                 # merge is asked for more than the two roles that read its
                 # work back, so a single figure here would be true of one call
                 # of six and false of the rest -- and a reader comparing two
@@ -786,17 +786,17 @@ class Provenance:
                 **({"effort": effort} if effort else {}),
                 # The label, not a level: `config.SINGLE_LEVEL_LABEL`, once per
                 # role named above, never a value this model was not asked
-                # for and could not have honoured (688, ruling 11).
+                # for and could not have honoured.
                 **({"effort_single_level": {role: config.SINGLE_LEVEL_LABEL
                                             for role in single_level}}
                    if single_level else {}),
                 # What was asked for and could not be delivered, kept beside
                 # what was: an operator who names a level for an HTTP endpoint
                 # or for a program whose flags this build has not read is not
-                # refused, so the only way they learn is here (562).
+                # refused, so the only way they learn is here.
                 **({"effort_ignored": list(self.settings.effort_ignored)}
                    if self.settings.effort_ignored else {}),
-                # Whose choice a level was, when it was a web request's (613):
+                # Whose choice a level was, when it was a web request's:
                 # role -> the level the requester picked on the page's slider.
                 # `effort` above is what the argv carried, and `route_plan`
                 # refuses a level the route cannot carry, so the two agree for
@@ -860,22 +860,22 @@ class Provenance:
             # reconciling a vendor's bill against what the tool believed it
             # spent, and deciding whether two draws sent the same bytes. A row
             # with no `prompt_tokens` or `completion_tokens` key is a call the
-            # vendor reported no usage for; entry 138's rule, one level down.
+            # vendor reported no usage for; the rule for that is one level down.
             "ledger": usage.ledger,
             # What the run cost, derived from the ledger above rather than
             # from the totals: a run can put three roles on three models at
             # three rates, and one total divided by one rate is a number with
-            # no referent (488).
+            # no referent.
             #
             # **`dollars` is null for anything this table cannot price**, and a
             # reader is told which of the two reasons applied. `$0.00` is never
             # written for an unknown, because it reads as "measured, and free"
-            # -- the inversion entry 480 had to fix once already in `counts`,
+            # -- the inversion was already fixed once in `counts`,
             # and the one a cost display has exactly one way to make.
             "cost": _cost_block(usage.ledger),
-            # What a benchmark cell is charged with, and what it is not (681).
+            # What a benchmark cell is charged with, and what it is not.
             # `cost` above is unchanged -- every response body the ledger
-            # charged, a ceiling cut included. These four are 678's reading of
+            # charged, a ceiling cut included. These four are a separate reading of
             # the same run: see `_accounting`. `discarded_calls` is the live
             # calls that never reached the ledger (a blank re-asked, a call
             # the platform lost), each with the tokens its vendor reported
@@ -893,11 +893,11 @@ class Provenance:
             "window": dict(sorted(usage.window_mechanism.items())),
             # Live calls per role. `calls` above is the run's total and cannot
             # say which endpoint answered for which role, which is the question
-            # a per-role configuration (421) exists to raise. A role absent here
-            # made no live call: replay, cache hit or dry run. Entry 423.
+            # a per-role configuration exists to raise. A role absent here
+            # made no live call: replay, cache hit or dry run.
             "calls_by_role": dict(sorted(usage.calls_by_role.items())),
-            # What the model was *permitted* to reach for, and whether it did
-            # (548). Two fields, because they are two facts and a reader
+            # What the model was *permitted* to reach for, and whether it did.
+            # Two fields, because they are two facts and a reader
             # needs both: a run that retrieved nothing because it was granted
             # nothing and a run that was granted a tool and did not use it are
             # the same empty result and opposite conclusions about the
@@ -922,12 +922,12 @@ class Provenance:
             # isolated: safe mode, and the exact `--tools` grant, off
             # `Settings.command_for(role)` -- the argv the call really
             # executed, never reconstructed from `command` or from `ISOLATED`
-            # membership (611). `retrieval.permitted` above is empty at every
+            # membership. `retrieval.permitted` above is empty at every
             # level but `sourced`, so a `high` report through the isolated
             # `claude` command said nothing about the isolation at all: an
             # operator reading it could not tell their own CLAUDE.md, skills,
             # plugins and MCP servers had been kept out of that run. This
-            # block says so at every level, because 610 turned safe mode on
+            # block says so at every level, because safe mode is on
             # at every level and a reader deserves the same disclosure
             # regardless of which one produced the number in front of them.
             #
@@ -956,7 +956,7 @@ class Provenance:
                         "tools": (list(tools) if (tools := config.stated_tools(
                             self.settings.command_for(role))) is not None
                             else None),
-                        # Names only, never values (I8): what the child's
+                        # Names only, never values: what the child's
                         # environment left out. `config.dropped_env_names`
                         # rather than `backend`'s copy of the same call, so
                         # this module never has a reason to import `backend`
@@ -970,7 +970,7 @@ class Provenance:
                         # setting's two spellings (`--answer-with` against
                         # `LLOSSLESS_COMMAND=`) print two different lists.
                         "env_dropped": config.dropped_env_names(for_report=True),
-                        # The seconds one call on this route got (680): read
+                        # The seconds one call on this route got: read
                         # off `Settings.call_timeout`, never `.timeout`, for
                         # the reason that property's own docstring gives --
                         # `COMMAND_TIMEOUT` (890s) the moment the operator
@@ -995,12 +995,12 @@ class Provenance:
         actually did. They agree on every run in the recorded corpus, because
         nothing today varies `structured.build_body`'s `temperature` argument
         per call -- but a report that echoed the constant regardless would
-        have said `0.0` about Brief AK's smoke run too, which sent no
+        have said `0.0` about a smoke run too, which sent no
         `temperature` key at all. Read off `Usage.wire_temperature` rather
         than the ledger: the ledger row is shared with replay and cache, which
         send nothing, so a wire-only fact cannot live there without breaking
-        the replay determinism acceptance test (DECISIONS 178's "not the
-        rebuild" ruling extends to this: `_record_usage` reads it once, off
+        the replay determinism acceptance test (the same "not the
+        rebuild" rule applies here: `_record_usage` reads it once, off
         `body`, and keeps it off the row).
         """
         wire = self.client.usage.wire_temperature
@@ -1046,7 +1046,7 @@ class Provenance:
 
     def _effort_model(self, role: str) -> str:
         """The model name that actually governs whether this role's calls can
-        carry a graded `--effort` (688, ruling 11).
+        carry a graded `--effort`.
 
         A command backend's calls are started against whatever `--model` its
         own argv names -- `config.stated_model`, the same reader
@@ -1060,7 +1060,7 @@ class Provenance:
         return self._model(role)
 
     def _models_answered(self) -> dict:
-        """`models_answered`'s value: every role that named an answering model (B7).
+        """`models_answered`'s value: every role that named an answering model.
 
         Aggregates across every ledger row of a role, the way `model_said`
         does for the Markdown table: every distinct id any row named, and the
@@ -1112,14 +1112,14 @@ class Provenance:
                          # run went to the subscription or to the metered API.
                          + (f" -- {data['endpoint']['route']}"
                             if data["endpoint"].get("route") else "")),
-            # Per role, and only where the caller recorded it (570): the row a
+            # Per role, and only where the caller recorded it: the row a
             # reader looks for when the question is which role was billed how.
             *((("Route", route_said(data["endpoint"]["billed"])),)
               if data["endpoint"].get("billed") else ()),
             # The published name, not the recorded one. `as_dict` keeps the
             # wire spelling because a report is read by machines too and 151
-            # cassettes and every `paper/records/*.json` say `off`; this row is
-            # the half a person reads, so it says `verbatim` (437).
+            # cassettes and every graded run record (withheld with the paper) say `off`; this row is
+            # the half a person reads, so it says `verbatim`.
             ("Fidelity", fidelity_name(data["merge_policy"]["fidelity"])),
             # Unconditional, unlike `field_order` and `profile` below, which
             # are printed only when they are off their defaults. Those two say
@@ -1167,17 +1167,17 @@ class Provenance:
                    f"reasoned anyway"
                    if data["decoding"].get("reasoned_anyway") else "")
                 # The effort level, per role, and only where there is one.
-                # 558 put it in the JSON and not in the rendered block, so the
+                # An earlier change put it in the JSON and not in the rendered block, so the
                 # reader most likely to need it -- the one holding a printed
                 # report and asking why two runs disagree -- could not see it
                 # at all. Spelled out per role rather than folded into "all
                 # three at low", because the reader would then have to know
-                # which way round the shorthand went (562).
+                # which way round the shorthand went.
                 + (", effort " + ", ".join(
                     f"{role}={level}"
                     for role, level in data["decoding"]["effort"].items())
                    if data["decoding"].get("effort") else "")
-                # A model with one level rather than a scale (688, ruling 11):
+                # A model with one level rather than a scale:
                 # named beside `effort` and not folded into it, because the
                 # label is not a level and a reader scanning for "effort
                 # role=level" pairs must not mistake one for the other.
@@ -1191,7 +1191,7 @@ class Provenance:
                 + (f"; {', '.join(data['decoding']['effort_ignored'])} asked "
                    f"for a level this backend cannot carry"
                    if data["decoding"].get("effort_ignored") else "")
-                # The requester's choice, beside the level it became (613).
+                # The requester's choice, beside the level it became.
                 + ("; " + ", ".join(
                     f"{role}={level}"
                     for role, level in data["decoding"]["effort_requested"].items())
@@ -1231,7 +1231,7 @@ class Provenance:
             # provenance blocks about a mechanism that did not exist when they
             # were measured. Present, it is the disclosure the automatic grant
             # was made conditional on -- the operator's terms were that it be
-            # obvious rather than hidden (548).
+            # obvious rather than hidden.
             #
             # Two facts on one row, in this order: what was permitted, then
             # what the turn counter saw. The permission is the load-bearing
@@ -1245,8 +1245,8 @@ class Provenance:
             # above: `Retrieval` is silent below `sourced` because nothing was
             # granted there, and that silence used to be the whole story a
             # `high` report told about the isolation. `_isolation_sentence`
-            # groups roles that share one state, which is every role today
-            # (611).
+            # groups roles that share one state, which is every role
+            # today.
             *([("Isolation", _isolation_sentence(data["isolation"]))]
               if data.get("isolation") else []),
             ("Errors", str(usage["errors"])),
@@ -1274,7 +1274,7 @@ class Provenance:
             # sentence would have gone and looked at an address this run
             # ignored. `hosted` is true for a command backend not because
             # something is known to have left, but because nothing here can
-            # establish that it did not (483), and the note has to say which of
+            # establish that it did not, and the note has to say which of
             # the two it is or it is worse than no note.
             named = data["endpoint"].get("route")
             notes.append(
@@ -1293,7 +1293,7 @@ class Provenance:
                 f"which is not a local address. Run against a local endpoint if "
                 f"that is not acceptable for the documents involved."
             )
-        # The disclosure the automatic grant is conditional on (548). Same
+        # The disclosure the automatic grant is conditional on. Same
         # class as the two notes above and stated in the same place: a granted
         # web tool means the model may put text from these documents into a
         # query or a fetch, which is a second way content leaves, and the
@@ -1318,9 +1318,9 @@ class Provenance:
         # rather than only on one that declared an addition. A run at the level
         # that expects retrieval and retrieved nothing has produced citations
         # that are recollections, and it is indistinguishable from a run that
-        # retrieved unless something says so out loud (548).
+        # retrieved unless something says so out loud.
         #
-        # `retrieval` rather than `state` since 568: `state` reads the calls
+        # `retrieval` rather than `state`: `state` reads the calls
         # that reported, and a run with one silent call is not a run shown to
         # have retrieved nothing.
         sourced = config.canonical_fidelity(self.settings.fidelity) == config.SOURCED
@@ -1332,7 +1332,7 @@ class Provenance:
                 f"nothing.** Every source the merge names is therefore a "
                 f"recollection, exactly as it would be one level down."
             )
-        # The third state, which was never said at all (568). An operator ran
+        # The third state, which was never said at all. An operator ran
         # `sourced` for hours through routes that reported no turn count, and
         # this block told them what was permitted and nothing about what was
         # achieved. `config.retrieval_refusal` now refuses a command that
@@ -1351,7 +1351,7 @@ class Provenance:
         # salvaged call is the case where they do not, so it is subtracted out
         # here and said separately -- a note claiming a unit produced nothing,
         # printed above a table crediting it with verdicts, is two true
-        # sentences a reader can only read as a contradiction. Entry 194.
+        # sentences a reader can only read as a contradiction.
         lost = usage["errors"] - usage.get("salvaged", 0)
         if lost:
             notes.append(
@@ -1409,8 +1409,8 @@ class Provenance:
                 notes.append(
                     f"**{role}'s context window is unmeasurable on this endpoint.** "
                     f"{reason} No preflight guard ran; each call was instead checked "
-                    f"afterwards against its own completion-token ceiling (Brief AL "
-                    f"item 2). That is a weaker guarantee than a local endpoint gets: "
+                    f"afterwards against its own completion-token ceiling. That "
+                    f"is a weaker guarantee than a local endpoint gets: "
                     f"it catches a truncated answer, not an overrun prompt."
                 )
         return notes
@@ -1456,7 +1456,7 @@ def _stated_window(mechanisms: dict) -> str:
 
 
 def _isolation_sentence(isolation: dict) -> str:
-    """The Isolation row: safe mode and the `--tools` grant, grouped by role (611).
+    """The Isolation row: safe mode and the `--tools` grant, grouped by role.
 
     `_stated_window`'s shape: one clause per distinct state rather than one
     row per role, because the roles share one command by construction today
@@ -1497,8 +1497,8 @@ def _base(policy: dict) -> str:
     # Backticks only when the name cannot close them. This row is the caller's
     # filename inside markup this module wrote, and both renderers mark up what
     # they are given: a name carrying a backtick or a `**` pair ended up as
-    # `<code>` or `<strong>` structure in the HTML page, or closed a span early
-    # (326). Quoting is a presentation choice and the name is the fact, so the
+    # `<code>` or `<strong>` structure in the HTML page, or closed a span early.
+    # Quoting is a presentation choice and the name is the fact, so the
     # quoting is what gives way. The record itself is unaffected -- this
     # function builds a display row, and `base` is stored verbatim beside it.
     name = str(policy["base"])

@@ -98,15 +98,15 @@ assert set(STATE) == set(FORWARD_STATUS.values()) | set(REVERSE_STATUS.values())
 # The exit code, as a word and a state. The banner says both; nothing on this
 # page depends on the reader seeing the colour.
 # Every code `report.exit_code` can return, and a bare subscript below wants
-# them all: entry 420 split `3` out of `1` and this table was not told, so a
-# record-only failure crashed the HTML report with `KeyError: 3` (500). The
+# them all: `3` was split out of `1` and this table was not updated, so a
+# record-only failure crashed the HTML report with `KeyError: 3`. The
 # operator met it as an unexplained crash at the end of an otherwise finished
 # run.
 #
-# `3` is amber rather than red on purpose. The distinction 420 exists to draw
-# is that the *document* is sound as far as this tool looked and the merge's
-# account of itself is not, which is a different thing to hand a reader than
-# content that went missing.
+# `3` is amber rather than red on purpose. The distinction it draws is that
+# the *document* is sound as far as this tool looked and the merge's account
+# of itself is not, which is a different thing to hand a reader than content
+# that went missing.
 BANNER = {
     0: ("ok", "Clean"),
     1: ("bad", "Findings"),
@@ -250,7 +250,7 @@ td.claim { min-width: 18rem; }
 .card dt { font-size: .8rem; color: var(--ink-soft); text-transform: uppercase;
            letter-spacing: .03em; margin-top: .35rem; }
 .card dd { margin: 0; }
-/* A finding's two sides, under its sentence (552). The label is a word and
+/* A finding's two sides, under its sentence. The label is a word and
    the value is document text, so the two are told apart by weight and case
    rather than by colour -- this report is read on paper and in a terminal's
    browser, and a difference carried by hue is a difference somebody misses. */
@@ -264,10 +264,10 @@ td.claim { min-width: 18rem; }
    their own, which is why nothing here is coloured. */
 .card .wdiff { font-family: var(--mono); font-size: .88rem;
                white-space: pre-wrap; overflow-wrap: anywhere; }
-/* The two sides stacked (561). Monospaced and wrapping, for the same two
+/* The two sides stacked. Monospaced and wrapping, for the same two
    reasons as the diff above: the labels are padded to one width so the texts
    start in the same column, which is only true in a monospaced box, and a
-   panel that grows a horizontal scrollbar is 531's defect. `overflow-wrap`
+   panel that grows a horizontal scrollbar hides text off to the side. `overflow-wrap`
    rather than `word-break`, because a wrapped line still has to start in the
    same column for the stack to be read down. */
 .card pre.stack { font-family: var(--mono); font-size: .88rem;
@@ -378,7 +378,7 @@ def code_only(text: object) -> str:
     filename or a prompt path in backticks so both renderers show it as code.
     That mixes markup this codebase wrote with a value the caller chose, and
     `inline` cannot tell them apart -- a base document named `a**b**c.md`
-    arrived as emphasis (326).
+    arrived as emphasis.
 
     Backticks are still honoured, because the quoting is this module's and
     `provenance._base` drops it when the name could close it. `**` is not,
@@ -516,7 +516,7 @@ def coverage_block(run: Run) -> list[str]:
 
     body = _rows(pairs)
     # One naming system, not two: every row above and every finding below uses
-    # `run.display`, a short name built from the caller's own path (entry 411).
+    # `run.display`, a short name built from the caller's own path.
     # There is nothing left here to reconcile against a canonical name.
     for step in run.errored:
         body.append(
@@ -535,7 +535,7 @@ def _judged_against(run: Run, verdict) -> list[str]:
     and the answer -- `merged.md` both times -- was nowhere on the page.
     `report.judged_against` is the one implementation; this renders it.
 
-    Labelled "Checked against" (717), not "Judged against": the operator read
+    Labelled "Checked against", not "Judged against": the operator read
     it as sounding like the named document had to defend itself, which is not
     the point -- the point is which document the verdict was read against.
     """
@@ -608,7 +608,7 @@ def _finding_card(run: Run, verdict, claim, kind: str) -> list[str]:
             ]
         out += _judged_against(run, verdict)
         if verdict.rationale:
-            # Whose words these are (717): see `report.py`'s matching line.
+            # Whose words these are: see `report.py`'s matching line.
             out += ["<dt>Why it was flagged (the checker's words)</dt>",
                     f"<dd>{esc(verdict.rationale)}</dd>"]
     out += ["</dl>", "</article>"]
@@ -618,7 +618,7 @@ def _finding_card(run: Run, verdict, claim, kind: str) -> list[str]:
 def findings_block(run: Run) -> list[str]:
     if not run.findings:
         if run.structural or run.attributions or run.number_faults:
-            # The Markdown section's sentence, less its markup (569).
+            # The Markdown section's sentence, less its markup.
             return [
                 f'<p class="empty">'
                 f'{esc(elsewhere(run).replace("`## ", "").replace("`", ""))}</p>'
@@ -784,7 +784,7 @@ def structural_block(run: Run) -> list[str]:
     if not run.structural:
         out.append('<p class="empty">No structural finding.</p>')
         return out
-    # The notation, once, and only where a row below will use it (552).
+    # The notation, once, and only where a row below will use it.
     if any(finding.difference for finding in run.structural):
         out.append(f'<p class="note">{inline(DIFF_LEGEND)}</p>')
     for kind in FINDING_KINDS:
@@ -804,8 +804,8 @@ def structural_block(run: Run) -> list[str]:
                 if part
             )
             # Issue, then the two sides stacked, in the card rather than in a
-            # section a reader has to go and find (552, 561). `esc` on it: the
-            # stack is built out of document text, and a document is somebody's
+            # section a reader has to go and find. `esc` on it: the stack is
+            # built out of document text, and a document is somebody's
             # input.
             #
             # One `<pre>` holding the same three lines the Markdown report
@@ -813,8 +813,8 @@ def structural_block(run: Run) -> list[str]:
             # how a column that lines up in one file stops lining up in the
             # other -- and the padding `stacked_lines` does is only true in a
             # monospaced box, which is what `<pre>` is for. It wraps rather
-            # than scrolls; 531's rule is that a panel does not grow a
-            # horizontal scrollbar.
+            # than scrolls; a panel here should never grow a horizontal
+            # scrollbar.
             stack = stacked_lines(finding)
             evidence = (f'<pre class="stack">{esc(chr(10).join(stack))}</pre>'
                         if stack else "")
@@ -884,7 +884,7 @@ def queue_block(run: Run) -> list[str]:
             "finding above, and no declared drop accounts for one.</p>"
         )
     # Before the budget callout, because this one is about whether the run was
-    # worth making at all (497).
+    # worth making at all.
     if run.mismatch:
         out.append(
             f'<div class="callout"><strong>Possibly not one document.</strong> '
@@ -957,7 +957,7 @@ def additions_block(run: Run) -> list[str]:
     covering a dozen claims and a dozen covering one each give a reader the
     same count and are not the same thing.
 
-    **`Source` is escaped text and never an anchor** (537). A link is an
+    **`Source` is escaped text and never an anchor.** A link is an
     invitation, and an invitation rendered by the tool reads as a destination
     the tool has been to -- which is exactly the impression a fabricated
     citation needs in order to do damage. Nothing here fetched, resolved or
@@ -997,7 +997,7 @@ def additions_block(run: Run) -> list[str]:
             '<span class="note">nothing named</span>')
         # The reader's phrase and never the enum, from `report.BASIS_WORDS`:
         # this table and the page's are one column, and they printed two
-        # vocabularies until 544.
+        # vocabularies until they were unified.
         basis = esc(basis_word(str(record.get("basis", "")))) or (
             '<span class="note">none recorded</span>')
         # Plain text, deliberately. An empty cell under `own-knowledge` reads
@@ -1023,7 +1023,7 @@ def additions_block(run: Run) -> list[str]:
 def provenance_block(run: Run) -> list[str]:
     """The same rows the Markdown block prints, from `Provenance.rows`."""
     # Labels are this module's prose; values may quote a filename the caller
-    # chose, so they get code spans and no emphasis (326).
+    # chose, so they get code spans and no emphasis.
     out = _rows([(inline(label), code_only(value)) for label, value in
                  run.provenance.rows()])
     for note in run.provenance.notes():
@@ -1147,11 +1147,11 @@ def render(run: Run) -> str:
         *_section("findings", "Findings", findings_block(run)),
     ]
     # `report.render`'s order and its condition: after Findings, on either
-    # command, and only when the merge misattributed something (569).
+    # command, and only when the merge misattributed something.
     if run.attributions:
         toc.insert(3, ("attributions", "Attributions"))
         body += _section("attributions", "Attributions", attributions_block(run))
-    # The same order and condition again, for the number format (601).
+    # The same order and condition again, for the number format.
     if run.number_format:
         toc.insert(3 + bool(run.attributions), ("numbers", "Number format"))
         body += _section("numbers", "Number format", number_format_block(run))
@@ -1186,7 +1186,7 @@ def render(run: Run) -> str:
 
 
 def attributions_block(run: Run) -> list[str]:
-    """The Attributions section as HTML cards, from the Markdown rows (569).
+    """The Attributions section as HTML cards, from the Markdown rows.
 
     At the foot of the module, and importing its one constant here rather
     than at the top, so that no line another file cites in this one moves.

@@ -1,4 +1,4 @@
-/* LLossless, the workbench layout (673).
+/* LLossless, the workbench layout.
  *
  * Loaded after `theme.css`. `app.css` keeps the components and `theme.css`
  * the look; this file only places things: an input pane (four step tabs, the
@@ -15,7 +15,7 @@
  * covers every pair painted here.
  */
 
-/* == header: the language picker's globe (673) ========================== */
+/* == header: the language picker's globe ================================ */
 
 .locale-icon { width: 1.05rem; height: 1.05rem; flex: none; color: var(--ink-soft); }
 
@@ -36,7 +36,7 @@
   /* `0%` and not `auto`: an `auto` basis sizes each tab off its own content
      first and only tops up the remainder, so the Tuning tab's width tracked
      the title policy's word length and the row visibly resettled on every
-     change (712). A `0%` basis ignores content for sizing and divides the
+     change. A `0%` basis ignores content for sizing and divides the
      row by the grow factor alone, so all four tabs stay an equal quarter of
      the row width no matter what any of them says; `tests/test_web_layout.py`
      pins this rule. */
@@ -105,8 +105,8 @@
   gap: .45rem; align-items: center; margin-left: auto;
 }
 .step-nav button { min-width: 5.5rem; justify-content: center; padding-top: .3rem; padding-bottom: .3rem; }
-/* The scorecard/examples button shares the step-nav row with Back/Next
-   (723); its own `margin-left: auto` (used when it stood alone on its own
+/* The scorecard/examples button shares the step-nav row with Back/Next;
+   its own `margin-left: auto` (used when it stood alone on its own
    row) would do nothing useful here, so it is turned off rather than left to
    depend on that being true by accident. */
 .step-nav .open-detail-btn { margin-left: 0; }
@@ -117,7 +117,7 @@
   vertical-align: .1em;
 }
 
-/* == help: a "?" that opens its text on hover and on focus (673) ========= */
+/* == help: a "?" that opens its text on hover and on focus =============== */
 
 .label-row, .check-row { position: relative; display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; }
 .label-row > label, .label-row > .label-like { margin-bottom: 0; }
@@ -157,7 +157,7 @@
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 /* A control's "open more" secondary button, beside the control's own label
-   or heading rather than in a footer (711): "See examples" and "Model
+   or heading rather than in a footer: "See examples" and "Model
    scorecard" used to be sized by hand in two separate rules and drifted
    apart (one padded and set smaller, the other left at the plain `.ghost`
    size). One rule, shared by both, so there is nothing left to drift; the
@@ -177,7 +177,7 @@
 .step-panel.card { padding: 1rem 1.2rem; }
 .step-panel .range-legend { margin-top: .1rem; }
 
-/* Each stop's word centred under its thumb (686). The thumb's centre travels
+/* Each stop's word centred under its thumb. The thumb's centre travels
    from half a thumb in from each end, not across the whole track, so words
    spread over the full width sat up to 60px off it. Each word is placed on
    the thumb's own line, `--at` being its stop as a fraction (set by the
@@ -214,7 +214,7 @@ input[type="range"][data-cc="fidelity-range"] {
 .runbar .runbar-inner > .status { order: 2; }
 .status-goto:hover:not(:disabled) { border-color: var(--warn); filter: brightness(1.04); }
 
-/* Save these settings as my defaults (674): the cell after Start over, the
+/* Save these settings as my defaults: the cell after Start over, the
    one the way to a blocking step takes while the run cannot start. The
    words wrap inside the cell rather than widening the row. */
 .save-defaults {
@@ -239,7 +239,7 @@ input[type="range"][data-cc="fidelity-range"] {
 .defaults-field .explains { margin-top: 0; }
 .defaults-actions { margin-top: .45rem; }
 
-/* -- the divider between the panes (673) ------------------------------------ */
+/* -- the divider between the panes ------------------------------------------ */
 
 .pane-divider { display: none; }
 
@@ -263,7 +263,7 @@ input[type="range"][data-cc="fidelity-range"] {
 .compare-tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent-bg); box-shadow: inset 0 -3px 0 var(--accent-fill); }
 /* A minimum, not a fixed height, for every level's panel: the shortest
    content still lines the tabs up with the sources above, and a level
-   whose disclosure (711) is open is simply taller. */
+   whose disclosure is open is simply taller. */
 .compare-panel { min-height: 10.5rem; }
 .compare-panel > * + * { margin-top: .45rem; }
 .compare-merge { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .55rem .7rem; }
@@ -273,7 +273,7 @@ input[type="range"][data-cc="fidelity-range"] {
 }
 .compare-change { font-size: .86rem; color: var(--ink-soft); }
 .compare-brief { font-weight: 600; }
-/* The level's summary/buys/costs (711): an inline disclosure now, not the
+/* The level's summary/buys/costs: an inline disclosure now, not the
    hover popup, reusing `.about-list`'s own look and spacing. It is still
    exactly "a line of detail nobody has to read to use the control". */
 .help-line { display: block; }
@@ -285,10 +285,10 @@ input[type="range"][data-cc="fidelity-range"] {
 /* -- the output pane ------------------------------------------------------ */
 
 .output-tabs { flex: none; margin-bottom: .75rem; align-items: stretch; }
-/* Each tab's own hover/focus tooltip (717), the same mechanics as `.help`
+/* Each tab's own hover/focus tooltip, the same mechanics as `.help`
    (`.help-icon`/`.help-pop`) but anchored on the tab itself rather than on a
    separate "?": `position: relative` so `.help-pop` opens under this tab and
-   not some taller ancestor (711 is the failure this avoids), `inline-flex`
+   not some taller ancestor, `inline-flex`
    with `.output-tabs`' own `align-items: stretch` so the wrapper still
    stretches to the row's height and the button inside fills it. */
 .tab-help { position: relative; display: inline-flex; }
@@ -303,7 +303,7 @@ input[type="range"][data-cc="fidelity-range"] {
 .output-tab:hover:not([aria-selected="true"]):not([aria-disabled="true"]) {
   border-color: var(--line-strong); background: var(--panel);
 }
-/* Clearly disabled in both themes (717): the shared `[aria-disabled="true"]`
+/* Clearly disabled in both themes: the shared `[aria-disabled="true"]`
    rule already dims it, this adds the pointer that says so. */
 .output-tab[aria-disabled="true"] { cursor: not-allowed; }
 .output-tab[aria-selected="true"] {
@@ -395,10 +395,10 @@ input[type="range"][data-cc="fidelity-range"] {
   /* The selected step fills the pane, and the one thing in it that can give
      up height does: the document's text box, and the model table (which then
      scrolls inside itself). Everything else keeps its own height, so the pane
-     does not scroll at 1280x800 when there is room (673).
+     does not scroll at 1280x800 when there is room.
 
      `.doc-panes`, `.doc-pane` and the field wrapping the text box carry no
-     `min-height: 0` of their own (716). They used to, matching the
+     `min-height: 0` of their own. They used to, matching the
      flex-shrink pattern every ancestor here follows, but the text box a
      level down is the one element in this chain with its own floor, set by
      `min-height: 5.5rem` below, and a `min-height: 0` in between let the

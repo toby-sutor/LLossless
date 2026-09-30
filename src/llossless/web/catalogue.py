@@ -104,7 +104,7 @@ from ..config import EFFORT_LEVELS
 from .commands import ROUTE_ID
 
 # The catalogue ships beside this module as package data, not in the
-# operator's working directory and not in `internal/`: it is data about the
+# operator's working directory: it is data about the
 # tool, distributed with it, the same way `tests/pairs/*/ideal.json` travels
 # with the tests that read it. A caller that wants a different file --
 # a fork's own measurements, or a file assembled for a one-off comparison --
@@ -147,7 +147,7 @@ RATE_TOLERANCE = 0.006
 # --- the `verify_depth` block ------------------------------------------------
 #
 # What the cheaper verification depth costs in detection, measured over the
-# seeded-defect fixtures (W2). It is not a model row, so it sits beside
+# seeded-defect fixtures. It is not a model row, so it sits beside
 # `models` rather than in it, and it has rules of its own.
 #
 # **The two probe directions are never blended.** A `source_to_merged` probe
@@ -164,7 +164,7 @@ VERIFY_DEPTH_DIRECTIONS = ("source_to_merged", "merged_to_sources")
 VERIFY_DEPTH_ENTRY_FIELDS = ("value", *VERIFY_DEPTH_DIRECTIONS, "cannot_detect",
                              "model_calls", "seconds", "speedup")
 
-# Each rate with its count and its denominator, the `RATE_FIELDS` rule (466)
+# Each rate with its count and its denominator, the `RATE_FIELDS` rule
 # applied per direction. A denominator of zero is a rate over nothing, which is
 # null and never 0.0: `coverage` grades no merged-side guard probe at all, and
 # a 0.0 there would read as "never wrong" about probes it never reached.
@@ -176,8 +176,8 @@ VERIFY_DEPTH_DIRECTION_FIELDS = ("plants", "plants_detected", "plants_detected_r
 
 # --- a command route's `measured_by_effort` block ---------------------------
 #
-# What the merge did at each merge effort level, from one registered grid
-# (609): per level, per pair, the planted errors fixed as a median and range
+# What the merge did at each merge effort level, from one registered grid:
+# per level, per pair, the planted errors fixed as a median and range
 # over the draws, the whole run's seconds the same way, the licence on the pair
 # that carries one, and how many runs searched. The page's effort slider reads
 # one level at a time.
@@ -188,24 +188,24 @@ VERIFY_DEPTH_DIRECTION_FIELDS = ("plants", "plants_detected", "plants_detected_r
 # level" exists to prevent.
 EFFORT_LEVEL_FIELDS = ("pairs", "runs", "searched", "searched_rate", "api_equivalent_usd",
                        "uncached_list_usd")
-# Optional on a level (661): the CLI envelope's own `total_cost_usd` per run,
+# Optional on a level: the CLI envelope's own `total_cost_usd` per run,
 # summed over the run's calls, as a median and range. **Not a price.** A
 # subscription bills no call, which is why a command route's `usd_per_merge`
 # stays null; this is what the same tokens would have cost through the API, the
 # one usage figure the envelope reports. The page never shows it as money, only
 # as a ratio between two levels of one block ("about 2x the usage").
 EFFORT_USAGE_FIELD = "api_equivalent_usd"
-# Beside it, never alone (DECISIONS 682, B4): the same tokens at the API's
+# Beside it, never alone: the same tokens at the API's
 # uncached list price. The envelope's figure bills the CLI's own cache writes
 # at 1.25x or 2x the input rate, which an API row never pays, so it is not the
 # same unit as an API row's list price; this one is. Also not a price.
 EFFORT_UNCACHED_FIELD = "uncached_list_usd"
 # A route's figures for a model its program was pinned to by full id rather
-# than by the route's own alias (661): `pinned_by_effort`, a list of blocks
+# than by the route's own alias: `pinned_by_effort`, a list of blocks
 # held to `validate_effort_block`, each naming the id it asked for.
 PINNED_FIELDS = ("requested_model", "resolved_model")
 # What a route's alias answers as now, when that is no longer the model its
-# figures were measured on (661): `{model, checked_on, cli_version}`. The page
+# figures were measured on: `{model, checked_on, cli_version}`. The page
 # then labels the route's own figures as history and shows the pinned block
 # for that model first. A check, dated, of one call -- not a measurement.
 ALIAS_NOW_FIELDS = ("model", "checked_on", "cli_version")
@@ -395,7 +395,7 @@ def validate_measured(where: str, measured) -> None:
 
     # `billed` says how the run's calls were paid for, when that is not "at
     # the price on record". One value exists: `free-tier`, a vendor's free
-    # tier, billed $0.00 (625). Its dollar figure must be null -- a zero would
+    # tier, billed $0.00. Its dollar figure must be null -- a zero would
     # read as "measured, and free", which is the inversion `pricing.py`
     # refuses -- and the page shows a word for it instead of "unmeasured".
     billed = measured.get("billed")
@@ -436,12 +436,12 @@ _ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 def validate_retired(where: str, retired) -> None:
-    """A retired row: absent, or checked (618).
+    """A retired row: absent, or checked.
 
-    A model the operator no longer offers keeps its row, because its figures
-    were measured and history is never deleted; the page shows the row, dated,
-    and does not let it be picked. The block says when (`on`), which DECISIONS
-    entry retired it (`decision`), what to use instead (`replacement`, as the
+    A model the operator no longer offers keeps its row, because its figures were
+    measured and history is never deleted; the page shows the row, dated, and does
+    not let it be picked. The block says when (`on`), which entry in the project's
+    own record retired it (`decision`), what to use instead (`replacement`, as the
     page words it, and optionally `replaced_by`, that row's id), and, when the
     vendor refuses this build's requests, the entry recording that (`refused`).
     """
@@ -461,8 +461,8 @@ def validate_retired(where: str, retired) -> None:
             continue
         value = retired.get(field)
         if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
-            raise InvalidCatalogue(f"{where}.retired.{field} must name a DECISIONS "
-                                   f"entry, got {value!r}")
+            raise InvalidCatalogue(f"{where}.retired.{field} must be a positive whole "
+                                   f"number, an entry in the project's record, got {value!r}")
     for field in ("replacement", "replaced_by"):
         if field == "replaced_by" and field not in retired:
             continue
@@ -472,7 +472,7 @@ def validate_retired(where: str, retired) -> None:
 
 
 def validate_command_routes(block) -> None:
-    """Raise `InvalidCatalogue` if the `command_routes` block cannot be trusted (597).
+    """Raise `InvalidCatalogue` if the `command_routes` block cannot be trusted.
 
     Figures for command routes -- a subscription CLI at one model alias -- sit
     beside `models` rather than in it, because a route is not a wire name: a
@@ -511,7 +511,7 @@ def validate_command_routes(block) -> None:
                 f"{where}.usd_per_merge is {measured['usd_per_merge']!r}; a command "
                 f"route's calls are included in the subscription and not priced "
                 f"per call, so the field is null")
-        # The level the row's figures were measured at, when it says (612). The
+        # The level the row's figures were measured at, when it says. The
         # page shows it beside them, because the effort slider shows figures
         # from other levels and a row that named none would read as all of them.
         if isinstance(measured, dict) and "merge_effort" in measured \
@@ -526,7 +526,7 @@ def validate_command_routes(block) -> None:
 
 
 def validate_alias_now(where: str, entry: dict) -> None:
-    """Raise `InvalidCatalogue` if a route's `alias_now` cannot be trusted (661).
+    """Raise `InvalidCatalogue` if a route's `alias_now` cannot be trusted.
 
     Absent is the ordinary case: the alias still answers as `resolved_model`.
     Present, it is exactly `model`, `checked_on` and `cli_version`, dated and
@@ -554,7 +554,7 @@ def validate_alias_now(where: str, entry: dict) -> None:
 
 
 def validate_pinned_blocks(where: str, entry: dict) -> None:
-    """Raise `InvalidCatalogue` if a route's `pinned_by_effort` cannot be trusted (661).
+    """Raise `InvalidCatalogue` if a route's `pinned_by_effort` cannot be trusted.
 
     Absent or an empty list is a route with no such figures. Otherwise a list
     of effort blocks, each held to `validate_effort_block`, and each naming
@@ -615,7 +615,7 @@ def _rate_of(where: str, rate, count: int, over: int) -> None:
 
 
 def validate_effort_block(where: str, block) -> None:
-    """Raise `InvalidCatalogue` if a route's `measured_by_effort` cannot be trusted (613).
+    """Raise `InvalidCatalogue` if a route's `measured_by_effort` cannot be trusted.
 
     Null is the unmeasured route. Otherwise the four attribution fields, a
     positive `draws`, and a `levels` object keyed by level names this build
@@ -641,7 +641,7 @@ def validate_effort_block(where: str, block) -> None:
     draws = block.get("draws")
     if not _count(draws) or not draws:
         raise InvalidCatalogue(f"{where}.draws must be a positive count, got {draws!r}")
-    # Whether the CLI ran in safe mode (610). Required, because the page says
+    # Whether the CLI ran in safe mode. Required, because the page says
     # "before safe mode" off it, and a block that did not say would have the
     # page say one thing or the other about a run it knows nothing of.
     if not isinstance(block.get("safe_mode"), bool):
@@ -933,7 +933,7 @@ def provider_profile(provider: str, path: str | Path | None = None) -> str | Non
     """The request shape this provider's measured rows share, or None.
 
     The shape a model this catalogue does not know is sent with, once the
-    request has named its provider (DECISIONS 591). A model is sent to the
+    request has named its provider. A model is sent to the
     endpoint stored for its provider, and the body that endpoint accepts is a
     fact about the endpoint as much as about the model: `max_tokens` and
     `temperature: 0.0` are refused by OpenAI's reasoning models whatever they

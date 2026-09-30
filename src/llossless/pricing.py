@@ -1,6 +1,6 @@
 """Dollars per million tokens, and where each figure came from.
 
-Moved here from `tests/spend.py` (488), which is where it was built and the
+Moved here from `tests/spend.py`, which is where it was built and the
 wrong place for it to live: a table the *product* needs to answer "what did
 this merge cost" cannot sit in the test tree, and `src/` may not import from
 there. `spend.py` imports it back, so the vendor-arm harness, the probes and
@@ -11,8 +11,8 @@ Stdlib only, like every other module here.
 **The three-state rule this exists to keep.** A run's cost is one of: a
 figure, *unpriced* because nothing here knows the rate, or *unmeasured*
 because the calls reported no tokens. None of those is `$0.00`. A zero would
-read as "measured, and free", which is the inversion `DECISIONS.md` entry 480
-already had to fix once in `counts`.
+read as "measured, and free", which is an inversion already fixed once
+in `counts`.
 
 So `price_for` raises on an unknown SKU rather than returning a free row, and
 `estimate` reports what it could not price instead of leaving it out of the
@@ -160,7 +160,7 @@ PRICES: dict[str, Price] = {
         output=20.00,        # per MTok
         source=_ANTHROPIC, read_on="2026-09-25"),
 
-    # Google, added 2026-09-25 for the free-tier run (DECISIONS 624). These are
+    # Google, added 2026-09-25 for the free-tier run. These are
     # the PAID tier's rates, and no call of that run was billed at them: the
     # key has no credit loaded and every call went to the free tier ("Free of
     # charge" for input and output on both models). They are here so a report
@@ -195,7 +195,7 @@ def price_for(sku: str) -> Price:
     if sku not in PRICES:
         raise UnknownPrice(
             f"no price on record for {sku!r}. Add it to src/llossless/pricing.py "
-            f"(this module's own PRICES table, since 488 -- tests/spend.py only "
+            f"(this module's own PRICES table; tests/spend.py only "
             f"re-exports it) from the vendor's pricing page, with the URL and "
             f"the date you read it. An unpriced model aborts the run rather "
             f"than being charged at zero."
@@ -284,7 +284,7 @@ class Estimate:
     unmeasured_calls: int = 0
     unpriced_models: tuple[str, ...] = ()
     # Which table rows this run's own priced calls actually billed against
-    # (680, report-details item). Not every SKU the table has ever priced --
+    # for the report's own details. Not every SKU the table has ever priced:
     # `provenance._cost_block` used to read `rates_read_on` off the whole
     # table and report the *oldest* date anywhere in it, which named a rate
     # this run never touched the moment any other SKU had an older reading.
@@ -327,14 +327,14 @@ def estimate(ledger: list[dict]) -> Estimate:
     every row for exactly this kind of question.
 
     A row missing *either* `prompt_tokens` or `completion_tokens` is
-    unmeasured -- `client._record_usage` writes each token key only when the
-    vendor reported it (480), so either one's absence is the vendor's silence
-    rather than a zero. Before 680 this checked for both keys absent, so a row
+    unmeasured: `client._record_usage` writes each token key only when the
+    vendor reported it, so either one's absence is the vendor's silence
+    rather than a zero. This used to check for both keys absent, so a row
     that reported prompt tokens and nothing else was priced at
     `output_tokens=0`: a real answer costing nothing and an endpoint that
     never said what it produced are different facts, and only the table row
     that actually knows both halves may be priced from them (report-details
-    item, entry 138's rule applied here).
+    item).
 
     `UnknownPrice` from `cost` is caught and counted, not raised. It is raised
     in the harness because a run about to be billed must stop; here the caller
@@ -357,7 +357,7 @@ def estimate(ledger: list[dict]) -> Estimate:
                 models.append(model)
             continue
         # A row whose total exceeds input plus output carries output the
-        # vendor did not count as output: Google's thinking tokens (624).
+        # vendor did not count as output: Google's thinking tokens.
         # Billed as output, so costed as output; never below the count given.
         output = int(row.get("completion_tokens", 0))
         if "total_tokens" in row:

@@ -1,4 +1,4 @@
-"""A person's saved run settings: what the page starts from next time (674).
+"""A person's saved run settings: what the page starts from next time.
 
 The operator asked for it in their own words: *"we may offer them a button or
 checkbox ... asking if we should save those settings as default: model, effort,
@@ -109,7 +109,7 @@ class Offer:
     `routes` maps a command route's id to the effort levels it takes (empty
     for a route that takes none). `single_level_routes` names the routes
     among them whose empty tuple means "one level, not a scale" rather than
-    "no effort concept at all" (688, ruling 11) -- `sift`'s one way to tell a
+    "no effort concept at all" -- `sift`'s one way to tell a
     Haiku route's stored level apart from a route that never took one, so it
     can drop the first silently and the second as a named `dropped` entry.
     `catalogue` is the catalogue rows this caller can run: not retired, and on
@@ -268,7 +268,7 @@ def sift(stored: dict, offer: Offer) -> tuple[dict, list[dict]]:
     depends on a dropped model is dropped with it and named too, rather than
     left to be checked against whatever model the page falls back to.
 
-    One exception (688, ruling 11): a stored `effort` beside a route
+    One exception: a stored `effort` beside a route
     `offer.single_level_routes` names is not offered here either, and `_one`
     refuses it exactly as it would a route that never took a level -- but it
     is not *gone*, the way a retired model or a removed route is. It is a

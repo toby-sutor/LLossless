@@ -140,12 +140,12 @@ code, .mono { font-family: var(--mono); font-size: .92em; }
 }
 .brand { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; min-width: 0; }
 .wordmark { font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; flex: none; }
-/* 626 bounded this in place, next to the wordmark, with an ellipsis and a
+/* This once bounded the tagline in place, next to the wordmark, with an ellipsis and a
    `title` mirror: the German sentence is about a third longer than the
    English one, and sharing a row with the wordmark, version and account
    controls meant its length alone could push that row onto a second line at
    a width English never reached. The operator disliked the clipped line,
-   so 653 moves the sentence to its own row (`.topbar-tagline`, below) instead
+   so the sentence now moves to its own row (`.topbar-tagline`, below) instead
    of shortening it: the row this rule lives in is no longer the one whose
    height is pinned equal across languages, so it is free to wrap to however
    many lines German needs. No `max-width`, no `overflow`, no `title` --
@@ -181,10 +181,10 @@ code, .mono { font-family: var(--mono); font-size: .92em; }
 /* Who is signed in, the way to their credentials, and the way out -- one
    group, one type size, one gap.
    Every piece of it has a width that does not depend on the language, for the
-   tagline's reason (626): signed in, "Zugangsdaten", "Abmelden" and "Angemeldet
+   tagline's reason: signed in, "Zugangsdaten", "Abmelden" and "Angemeldet
    als" are longer than their English, and the bar kept one row at 1024px in
    English and took two in German; at 380px "Sign out" and the session line
-   wrapped inside themselves in one language and not the other (649). So
+   wrapped inside themselves in one language and not the other. So
    nothing here wraps: the buttons are at least as wide as the longer language
    needs, and the session line takes a fixed share, ends in an ellipsis when
    the name is long, and carries the whole sentence in its `title`. */
@@ -197,7 +197,7 @@ code, .mono { font-family: var(--mono); font-size: .92em; }
   flex: 0 1 auto; min-width: 0; color: var(--ink-soft);
 }
 .session-icon { width: .95rem; height: .95rem; flex: none; }
-/* The name in full (673): no ellipsis. It is the same in every language, so
+/* The name in full: no ellipsis. It is the same in every language, so
    the row's height cannot differ by language; a very long name wraps. */
 .session-user {
   display: block; color: var(--ink-soft); font-size: .85rem;
@@ -207,7 +207,7 @@ code, .mono { font-family: var(--mono); font-size: .92em; }
 /* The language picker. Its label sits beside the select rather than above it,
    which is what `.field` would do: in the top bar the extra line would push
    the whole bar out of alignment with the wordmark. A fixed width, right
-   aligned, so "Language" and "Sprache" take the same room (649). */
+   aligned, so "Language" and "Sprache" take the same room. */
 .locale-field { display: flex; align-items: center; justify-content: flex-end; gap: .4rem; width: 9.5rem; flex: none; }
 .locale-field > label { margin-bottom: 0; color: var(--ink-soft); font-size: .8rem; white-space: nowrap; }
 .locale-field select { width: auto; padding: .25rem .4rem; font-size: .85rem; }
@@ -316,7 +316,7 @@ select { background: var(--panel); }
   grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
 }
 .controls-grid .field { margin-top: 0; }
-/* Two fields in one grid cell, the second under the first (593). */
+/* Two fields in one grid cell, the second under the first. */
 .controls-grid .field-stack > .field + .field { margin-top: 1.25rem; }
 
 input[type="range"] { width: 100%; accent-color: var(--accent); padding: 0; }
@@ -452,14 +452,14 @@ input[type="range"] { width: 100%; accent-color: var(--accent); padding: 0; }
 .runbar { position: sticky; bottom: 1rem; z-index: 4; }
 .runbar.settled { position: static; }
 .runbar-inner { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-/* The `max` cost warning (615), repeated from the effort card so it sits
+/* The `max` cost warning, repeated from the effort card so it sits
  * right above the button it applies to. A block-level sibling of
  * `.runbar-inner` rather than a flex item inside it, so it always spans the
  * full width instead of being squeezed beside the buttons at 380px. */
 .runbar > .hint.warn { margin: 0 0 .7rem; }
 
 .status { display: flex; align-items: baseline; gap: .5rem; flex: 1 1 18rem; }
-/* The dot and the word, isolated in their own line box (717): centring the
+/* The dot and the word, isolated in their own line box: centring the
    dot on `.status`'s full flex line put it against the pair's shared
    baseline with `.status-text`, whose larger font makes that line taller
    than `.status-word`'s own, so the dot sat off the word it sits beside.
@@ -609,7 +609,7 @@ details.section[open] > summary::before { transform: rotate(90deg); }
   white-space: pre-wrap; word-break: break-word;
 }
 
-/* "What needs your attention" (488, 717): the whole row is a button, so it
+/* "What needs your attention": the whole row is a button, so it
    is one control rather than a card with a link buried in it, and its
    content is the same two spans `.finding-line` already styles plus the
    one-line decision under them. Reset to plain text on a transparent
@@ -625,7 +625,7 @@ details.section[open] > summary::before { transform: rotate(90deg); }
 .review-decide { display: block; margin-top: .3rem; color: var(--ink-soft); font-size: .88rem; }
 .review-item .finding-detail { margin-top: .5rem; }
 
-/* The card a review row jumped to (717): a brief flash so the eye finds what
+/* The card a review row jumped to: a brief flash so the eye finds what
    the keyboard focus and the scroll already found, timed to match the 2s
    `window.setTimeout` in `jumpToFinding` that removes the class again. */
 .finding.just-found { animation: finding-just-found 2s ease-out; }
@@ -637,11 +637,11 @@ details.section[open] > summary::before { transform: rotate(90deg); }
   .finding.just-found { animation: none; background: var(--accent-bg); }
 }
 
-/* The two sides stacked (561). Monospaced, because the labels are padded to
+/* The two sides stacked. Monospaced, because the labels are padded to
    one width so the texts start in the same column and a proportional font
    makes that padding a lie. `overflow-wrap: anywhere` rather than
    `word-break: break-word`: a long segment has to wrap inside the box rather
-   than push it sideways -- 531's rule, and the page asserts `scrollWidth`
+   than push it sideways, deliberately, and the page asserts `scrollWidth`
    against `clientWidth` on this element rather than reading it off a
    screenshot. */
 .stack-panel { margin: .5rem 0 0; }
@@ -680,32 +680,32 @@ tr.hidden { display: none; }
 table.models { min-width: 46rem; }
 table.claims { min-width: 34rem; }
 
-/* The picker (631, 655): only the rows this reader can run, but back to four
- * figures a row (655) -- 631 dropping two of them was never the operator's
+/* The picker: only the rows this reader can run, but back to four
+ * figures a row -- dropping two of them was never the operator's
  * ask, only the row filter was. Narrower than the scorecard's 46rem: no
  * notes, no date line, no raw number under a band, so four narrower columns
  * still fit less width. Scrolls sideways inside `.scroll` below 40rem or so,
  * same as the scorecard, rather than wrapping a band word across two lines. */
 table.models.picker { min-width: 40rem; }
-/* The scorecard button moved beside Back/Next (723), so the picker table
+/* The scorecard button moved beside Back/Next, so the picker table
    gets its row back; `.models-head` is gone with it. */
 .picker-empty { display: flex; align-items: center; gap: .5rem 1rem; flex-wrap: wrap;
                 margin-top: .4rem; }
 .picker-empty .hint { flex: 1 1 16rem; margin: 0; }
 
-/* The scorecard (631) is the widest sheet: the whole table, which scrolls
+/* The scorecard is the widest sheet: the whole table, which scrolls
  * sideways inside its own box and never takes the page with it. Its footer
  * is the credentials sheet's, so its bottom padding is the footer's too. */
 .sheet.scorecard { max-width: 72rem; padding-bottom: 0; }
 .sheet.scorecard > .scroll { margin-top: .6rem; }
-/* A retired row (618) is shown, dimmed, and says why in words. */
+/* A retired row is shown, dimmed, and says why in words. */
 table.models tr.retired > td { opacity: .62; }
 table.models .row-notes { margin-top: .3rem; font-size: .8rem; font-weight: 400; }
 table.models .row-notes > summary { cursor: pointer; color: var(--ink-soft); width: max-content; }
 table.models .row-notes > p { margin: .3rem 0 0; max-width: 44rem; white-space: normal;
                               color: var(--ink-soft); }
 
-/* "About this list": the catalogue's note, closed by default (592). A
+/* "About this list": the catalogue's note, closed by default. A
  * small disclosure line under the table, not a section heading. */
 details.about-list { margin-top: .5rem; }
 details.about-list > summary {
@@ -741,8 +741,8 @@ details.cli-equivalent[open] > summary::before { transform: rotate(90deg); }
 
 /* The typed id and where it goes, side by side while there is room and one
  * under the other on a phone: the destination is the question the id raises,
- * so the two are never apart (591). */
-/* The merge effort slider and its card (613). Side by side where there is
+ * so the two are never apart. */
+/* The merge effort slider and its card. Side by side where there is
  * room, stacked below it; nothing here has a fixed width, so at 380px the two
  * wrap rather than push the page sideways. */
 .effort-block { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; align-items: flex-start; }
@@ -766,7 +766,7 @@ details.cli-equivalent[open] > summary::before { transform: rotate(90deg); }
 .effort-pinned-block > .hint { margin: .45rem 0 0; }
 [data-cc="effort-current"] > .effort-pinned-block { margin: 0 0 .6rem; padding: 0 0 .5rem; border-top: 0; border-bottom: 1px solid var(--line); }
 
-/* The two model toggles side by side (723), one row back from the operator's
+/* The two model toggles side by side, one row back from the operator's
    ask; each `.check-row` keeps its own `position: relative` for its help
    popup, unaffected by the wrapper. `flex-wrap` falls back to stacked at a
    phone width or under the longer German labels, rather than overflowing. */
@@ -778,14 +778,14 @@ details.cli-equivalent[open] > summary::before { transform: rotate(90deg); }
 .custom-row select { max-width: 100%; }
 table.models td.pick { text-align: center; width: 3.5rem; }
 table.models input[type="radio"] { accent-color: var(--accent); }
-/* The name is whole; the route badge after it may take the next line (565).
+/* The name is whole; the route badge after it may take the next line.
    The whole span used to be `nowrap`, so name and badge were one run. */
 table.models .model-name { font-weight: 600; }
 table.models .model-name > span:first-child { white-space: nowrap; }
 table.models .model-meta { color: var(--ink-soft); font-size: .8rem;
                            display: block; white-space: nowrap; }
 /* The wire name and the window may go onto two lines, and nothing else may
-   break (565). With the Check column on, this line held the Model column at
+   break. With the Check column on, this line held the Model column at
    its full 376px and the table 18px past its box at 1280px. Each half stays
    `nowrap` so a model id is never split at its hyphens; the one space between
    them is the only break. One class heavier than `.model-meta` on purpose, so
@@ -793,7 +793,7 @@ table.models .model-meta { color: var(--ink-soft); font-size: .8rem;
    `.route-note` has to be guarded against does not exist here. */
 table.models .model-meta.model-wire { white-space: normal; }
 table.models .model-meta.model-wire > span { white-space: nowrap; }
-/* The four figure headers wrap at their spaces (565). `th.num` is `nowrap`
+/* The four figure headers wrap at their spaces. `th.num` is `nowrap`
    for every table on the page, and in this one the headers are phrases:
    `Seconds / merge` and `Deviations / pair` held two columns open in English,
    and the German `Sekunden / Zusammenführung` alone is 222px, which put the
@@ -847,12 +847,12 @@ table.models .unreachable-why { color: var(--ink-soft); font-style: italic;
    enough now that it does not bite -- and a longer translation of one is
    exactly how this would come back, so the column wraps instead. */
 table.models .route-note { color: var(--ink-soft); white-space: normal; }
-/* A marker that explains itself on hover and on focus (638). */
+/* A marker that explains itself on hover and on focus. */
 table.models .route-mark.explained { text-decoration: underline dotted; text-underline-offset: 2px;
                                      cursor: help; }
-/* The measured date and commit (618) wrap at their space like the route note. */
+/* The measured date and commit wrap at their space like the route note. */
 table.models .measured-when { white-space: normal; }
-/* A retired row's sentence (618) wraps, and never widens the column. */
+/* A retired row's sentence wraps, and never widens the column. */
 table.models .retired-why { color: var(--ink-soft); font-style: italic;
                             white-space: normal; }
 
@@ -874,7 +874,7 @@ table.models .route-badge.subscription,
 table.models .route-badge.command {
   border-color: var(--accent); color: var(--accent);
 }
-/* Metered is amber, filled (637): the one kind billed per call, set against
+/* Metered is amber, filled: the one kind billed per call, set against
    the blue of a plan. The warn tokens hold 4.5:1 and more for the text in
    both themes, on the fill and on the page. */
 table.models .route-badge.metered {
@@ -909,7 +909,7 @@ pre.document {
   border-radius: var(--radius-sm); padding: .9rem;
   max-height: 34rem; overflow-y: auto; margin: 0;
 }
-/* It holds focus now, so it has to show that it does (561). A scrollable box
+/* It holds focus now, so it has to show that it does. A scrollable box
    a keyboard can reach and cannot see it has reached is worse than one it
    cannot reach: the arrow keys start scrolling something the reader cannot
    point at. `:focus-visible` rather than `:focus`, so clicking into it to
@@ -939,7 +939,7 @@ pre.document:focus-visible {
 .history li:last-child { border-bottom: 0; }
 .history .when { color: var(--ink-soft); font-size: .85rem; }
 .history .id { font-family: var(--mono); font-size: .8rem; color: var(--ink-soft); }
-/* What an interrupted or failed run did, on its own line under the entry (660). */
+/* What an interrupted or failed run did, on its own line under the entry. */
 .history .note { flex-basis: 100%; color: var(--ink-soft); font-size: .85rem; }
 
 /* -- the credentials sheet ----------------------------------------------- */
@@ -995,7 +995,7 @@ pre.document:focus-visible {
 .provider-actions label { font-size: .8rem; font-weight: 600; color: var(--ink-soft); }
 .provider-actions input { width: 100%; }
 .provider-note { margin-top: .4rem; }
-/* The offered well-known address (676): the label, the address, and the way
+/* The offered well-known address: the label, the address, and the way
    to change it, on one line that wraps under a narrow sheet. */
 .provider-address { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .6rem;
                     margin: .6rem 0 0; }
@@ -1030,7 +1030,7 @@ pre.document:focus-visible {
   tr.hidden { display: revert; }
 }
 
-/* The one sortable column (495). A button rather than a click handler on the
+/* The one sortable column. A button rather than a click handler on the
    `th`, because a sort control has to be reachable from the keyboard and
    announce itself; `aria-sort` on the header is what a screen reader reads.
    Styled to sit in the header rather than to look like a button, since it is
@@ -1055,7 +1055,7 @@ pre.document:focus-visible {
 .claims th[aria-sort="descending"] button.sort::after { content: "\2193"; opacity: 1; }
 .claims th[aria-sort="none"] button.sort:hover::after { opacity: 0.8; }
 
-/* The scorecard's five sort controls (631), the claims header's pattern: a
+/* The scorecard's five sort controls, the claims header's pattern: a
    real button inside the `th`, `aria-sort` on the `th`, the focus ring put
    back after `all: unset`, and the arrow saying which way. */
 table.models th button.sort {
@@ -1077,25 +1077,25 @@ table.models th[aria-sort="ascending"] button.sort::after { content: "\2191"; op
 table.models th[aria-sort="descending"] button.sort::after { content: "\2193"; opacity: 1; }
 table.models th[aria-sort="none"] button.sort:hover::after { opacity: 0.8; }
 
-/* The label and its help icon, one non-breaking unit (657). `th.num` below
+/* The label and its help icon, one non-breaking unit. `th.num` below
    is `white-space: normal` so a long scorecard phrase ("Seconds / merge")
-   can wrap at its own space (565) -- and the space `index.html`'s
+   can wrap at its own space -- and the space `index.html`'s
    indentation leaves between `</button>` and `<span class="col-help">` is
    exactly such a break point, so at some width the icon wrapped onto a line
    of its own, seen on "Cost" and "Deviations" in a browser, not by any rule
    over these files. `.col-label` wraps both in one `inline-flex`, `nowrap`:
    an atomic box the line can break before or after but never inside, so the
    label and its "?" are always on one line, whatever the column does at
-   that width -- overflow into the table's own horizontal scroll (631)
+   that width -- overflow into the table's own horizontal scroll
    rather than a split icon. */
 table.models th .col-label {
   display: inline-flex; align-items: baseline; white-space: nowrap;
 }
-/* The help icon beside a figure header's label (655): a sibling of the sort
+/* The help icon beside a figure header's label: a sibling of the sort
    button, never inside it, so a click on the icon cannot reach the button's
    own click handler and sort the column it explains. `title` for a pointer
    (`paintColumnHelp`), `aria-describedby` for the same sentence read out on
-   keyboard focus -- 638's pattern for a row marker, on a header instead. */
+   keyboard focus -- the same pattern as a row marker, on a header instead. */
 table.models th .col-help {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.1rem; height: 1.1rem; margin-left: .3rem; flex: none;

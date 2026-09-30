@@ -83,7 +83,7 @@ HEADINGS = {
 assert set(HEADINGS) == set(FINDING_ORDER) == set(FINDINGS.values()) - {"none"}
 
 # The reconciler's ten kinds, reported in `reconcile.FINDING_KINDS` order, which
-# is `docs/M7-prompts/NOTES.md`'s order, so the section and the rules it enforces
+# matches the prompt's own section order, so the section and the rules it enforces
 # can be read side by side. These are failures of *structure* rather than of
 # claims: no model produced any of them and none of them came out of a verdict.
 # Twelve kinds from nine checks -- `reconcile.CHECKS` is the number the prose
@@ -94,9 +94,9 @@ STRUCTURAL_HEADINGS = {
     ),
     "undeclared_rewording": (
         "Reworded and undeclared — in the merge in altered wording, and no record explains it. "
-        "At off this also covers layout: a segment whose source line breaks the merge ran "
-        "together is altered and undeclared, and 380 reuses this kind rather than moving "
-        "FINDING_KINDS off 12"
+        "At verbatim this also covers layout: a segment whose "
+        "source line breaks the merge ran together is altered "
+        "and undeclared"
     ),
     # Reads as the opposite of the two above on purpose: those are the merge
     # saying nothing where it owed an account, this is the merge giving an
@@ -147,7 +147,7 @@ assert set(STRUCTURAL_HEADINGS) == set(FINDING_KINDS)
 # "carried only in part" and the coverage table already says "supported only in
 # part".
 #
-# `partially_dropped` reads "partly kept", the page's word too (717, 720).
+# `partially_dropped` reads "partly kept", the page's word too.
 #
 # Two tables and not one because the same finding means opposite things by
 # direction. `contradicted` is the only label that reads the same either way.
@@ -196,7 +196,7 @@ NOT_CHECKED = "not checked"
 OK, ERRORED, PLANNED, SKIPPED = "ok", "errored", "planned", "skipped"
 
 
-# How `cli.step` records a unit the web server's cancel stopped (639): the
+# How `cli.step` records a unit the web server's cancel stopped: the
 # exception's class name, then its message. `verdict_line` reads it.
 CANCELLED_PREFIX = "Cancelled:"
 
@@ -246,12 +246,12 @@ class Run:
     # decision records a choice; at `off`, `low` and `mid` the merge may not
     # choose, so a decision with no `chosen` is how a disagreement is recorded
     # at all -- the document may not carry a marker and the reconciler cannot
-    # derive one (383). Ungraded here for the same reason `Graded.reason` is:
+    # derive one. Ungraded here for the same reason `Graded.reason` is:
     # whether the conflict is real is a judgement, and nothing in this module
     # makes judgements.
     decisions: tuple[dict, ...] = ()
     # What the merge said it added from outside the documents, carried unread
-    # and gradeable by nothing here (482). Empty at every level but `open`.
+    # and gradeable by nothing here. Empty at every level but `open`.
     #
     # Ungraded is the honest state rather than a gap: the sources are the only
     # ground truth this tool has, so a statement they do not carry cannot be
@@ -260,27 +260,27 @@ class Run:
     # merge did not declare is still `hallucinated` and still exits 1.
     additions: tuple[dict, ...] = ()
     # One sentence from the merge saying these documents may not belong
-    # together (497). Reported, never graded, and it moves no exit code: the
+    # together. Reported, never graded, and it moves no exit code: the
     # operator asked for "a friendly hint", not a fourth failure class.
     mismatch: str = ""
     # The title policy in force, and how many sources gave it something to
     # name. Zero is not a defect: a plain-text document whose first line runs
     # straight into the body has no title segment, so `keep-base` has no
-    # referent and the report says so rather than the reconciler firing (386).
+    # referent and the report says so rather than the reconciler firing.
     title_policy: str = ""
     sources_with_a_title: int = 0
     # How many segments the sources were cut into, which is the denominator of
-    # the declared-loss budget (§2.6) and of nothing else. Set by the pipeline
+    # the declared-loss budget and of nothing else. Set by the pipeline
     # because it is a fact about the input documents, which this object does not
     # hold; 0 on a `verify` run, where nothing declared anything and the budget
     # has nothing to be a fraction of.
     segments: int = 0
-    # Line breaks the merge introduced that no source segment carries (391).
+    # Line breaks the merge introduced that no source segment carries.
     # A count, not a verdict: `high.merge.md` licenses restructuring and no
     # level forbids adding a break, so there is nothing here for a check to
-    # fail. It is published because 378 made an interior break recorded
-    # notation rather than a segment boundary, which is what keeps the
-    # partition fixed and is also what makes added structure invisible.
+    # fail. It is recorded because an interior break is notation rather than
+    # a segment boundary, which is what keeps the partition fixed and is
+    # also what makes added structure invisible.
     added_breaks: tuple[tuple[str, str], ...] = ()
     # (document name, line, reason) for a fence that was opened and never
     # closed. Reported, never repaired: everything after the opener is one
@@ -297,7 +297,7 @@ class Run:
     # `Reconciled` means nine checks were made and found nothing, and None
     # means nothing was checked. Collapsing the two into an empty tuple would
     # print "no structural finding" over a merge nobody examined, which is the
-    # exact failure this file's opening paragraph is about. M7 task 36.
+    # exact failure this file's opening paragraph is about.
     reconciled: Reconciled | None = None
     # `merge.md`'s worked-example words found in the merged document, one
     # `Finding` each, or empty on any run that produced no merge. Set by the
@@ -322,7 +322,7 @@ class Run:
     # `structural` below, so it moves `exit_code` and prints under the same
     # heading as the exact half it widens.
     restated: tuple[Finding, ...] = ()
-    # Sentences crediting a source with content it does not carry (569), off
+    # Sentences crediting a source with content it does not carry, off
     # `reconcile.attribution_findings`. A family of their own and not part of
     # `structural`: they run on `verify` as well as `merge`, read no
     # disposition record, and are no kind the page partitions. A document
@@ -331,7 +331,7 @@ class Run:
     attributions: tuple[Finding, ...] = ()
     attributions_checked: bool = False
     # How each document writes its decimals, and the numerals that break it
-    # (DECISIONS 601, `numerals`). Its own family for 569's reasons: it runs on
+    # (`numerals`). Its own family for the same reason `attributions` is: it runs on
     # `verify` too and reads no disposition record. Only `reading_changed` --
     # a settled source value the merge now states differently -- moves the
     # exit code; the other kinds are warnings about a text, shown and
@@ -340,13 +340,13 @@ class Run:
     number_format: tuple[Finding, ...] = ()
     number_format_checked: bool = False
     conventions: tuple[numerals.Convention, ...] = ()
-    # `reason` or `replacement` fields the merge overran its cap on, capped in
-    # place and logged rather than rejected. Empty on `verify`, where no merge
-    # ran, and on a `merge` that needed no capping. Deliberately not part of
-    # `reconciled.findings`: capping is a fact about what `parsing.parse` had
-    # to do to the response, not one of the reconciler's nine measurements
-    # against the source texts, and does not move `exit_code`. DECISIONS.md
-    # entry 190.
+    # `reason` or `replacement` fields the merge overran its cap on,
+    # capped in place and logged rather than rejected. Empty on `verify`,
+    # where no merge ran, and on a `merge` that needed no capping.
+    # Deliberately not part of `reconciled.findings`: capping is a fact
+    # about what `parsing.parse` had to do to the response, not one of
+    # the reconciler's nine measurements against the source texts, and
+    # does not move `exit_code`.
     truncations: tuple[parsing.Truncation, ...] = ()
     # What the merge did with its sources' *ordering*, or None where the
     # reconciler did not run. Reported and never judged, on the precedent
@@ -355,10 +355,10 @@ class Run:
     # merge is a byte-exact concatenation, `order.stapled` is True of it and
     # correctly so, and its `expected.json` requires exit 0 — a staple is the
     # right answer when the sources had nothing to interleave, and this
-    # measurement cannot tell that case from a weld. See DECISIONS 58.
+    # measurement cannot tell that case from a weld.
     order: Order | None = None
     # Claims submitted to a verify pass whose record came back unusable and was
-    # dropped rather than graded. Pass C, `DECISIONS.md` entry 194. Unlike
+    # dropped rather than graded, under Pass C. Unlike
     # `truncations`, this *does* move the exit code, and to 2 rather than 1:
     # the tool has no verdict for these claims, so a run carrying any of them
     # has not examined everything it was given, which is what `exit_code`
@@ -369,7 +369,7 @@ class Run:
     # `verify_claims` as its accumulator rather than collecting into a local
     # and copying it over at the end. There is then no copy step to forget on
     # a path out of the pipeline that someone adds later -- which is the exact
-    # shape of the defect entry 24 records, a mechanism that was built, tested
+    # shape of a defect once found: a mechanism that was built, tested
     # and never called.
     unusable: list[Unusable] = field(default_factory=list)
     # Which questions this run was configured to ask. `pipeline` writes it
@@ -381,7 +381,7 @@ class Run:
     # to `full` matches `pipeline`'s own default and is the direction that
     # cannot make a report claim more than the run checked: a `Run` built by
     # hand and never given a depth describes a pipeline that asked both
-    # questions, which is what every `Run` in this repository did until 503.
+    # questions, which is what every `Run` in this repository did until this field existed.
     verify_depth: str = config.DEFAULT_VERIFY_DEPTH
     provenance: Provenance | None = None
 
@@ -391,7 +391,7 @@ class Run:
 
         A capability, read out of `config.VERIFY_DEPTH_SHAPES`, and never a
         comparison against the string `coverage`. That is the rule the web
-        page already keeps (`app.js`'s `suspendedGuarantee`, W1): a surface
+        page already keeps (`app.js`'s `suspendedGuarantee`): a surface
         that decides this by name is carrying vocabulary it should be reading,
         and goes quietly wrong the day a third depth arrives -- quietly
         because the failure is a verdict that over-claims, which looks exactly
@@ -416,11 +416,11 @@ class Run:
         sources" is literally true and read by nobody as "this pass did not
         run".
 
-        The two came apart because the fix for the `coverage` verdict (505) was
-        shaped like the depth, and `app.js`'s `cleanAdvice` was not -- it keys
+        The two came apart because the fix for the `coverage` verdict was
+        shaped like the depth, and `app.js`'s `cleanAdvice` was not, it keys
         on the reverse count and its comment argues that the count is the more
-        general statement. It was, and the page was the only surface that had
-        it (528).
+        general statement. It was, and the page was the only surface that
+        had it.
 
         Submitted rather than returned. A pass that was given claims and errored
         has not cleared them either, but that run is inconclusive by then and
@@ -443,7 +443,7 @@ class Run:
 
     @property
     def accounted_for(self) -> set[str]:
-        """Claim ids whose loss a confirmed `dropped` declaration owns. M7 task 27.
+        """Claim ids whose loss a confirmed `dropped` declaration owns.
 
         Confirmed only. A rejected declaration is the merge describing itself
         wrongly, and nothing it said about that segment is worth acting on —
@@ -451,7 +451,7 @@ class Run:
         record, so the ones that did come back MISSING appear in no list here
         and stay findings, which is the conservative reading and the right one.
 
-        `dropped` only, and this is the decision task 27 exists to make. Of the
+        `dropped` only, and drawing the line there is deliberate. Of the
         five dispositions, three predict SUPPORTED and produce no finding to
         route anywhere; the two that can produce one are `dropped` (MISSING)
         and `superseded` (CONTRADICTED or PARTIAL). A declared drop is an
@@ -459,7 +459,7 @@ class Run:
         page, and a reader can put it back. A confirmed `superseded` that came
         back CONTRADICTED is not an omission — the merged document now asserts
         something a source denies, and a reader who trusts the merge is
-        misinformed however well the swap was declared. §2.1 and §2.5 both name
+        misinformed however well the swap was declared. The disposition model and the findings-versus-queue rule both name
         drops and only drops, and the principle under that wording is that the
         queue takes omissions and never assertions.
         """
@@ -474,8 +474,8 @@ class Run:
     def covering_contradictions(self) -> list[Verdict]:
         """CONTRADICTED verdicts a confirmed covering reconciliation explains.
 
-        **Reported, and still charged.** This is the one place 489's TODO
-        direction was not followed, and the reason is a principle this file
+        **Reported, and still charged.** This is the one place the obvious
+        simplification was not taken, and the reason is a principle this file
         already states one property up: `accounted_for` takes omissions and
         never assertions, because "the merged document now asserts something a
         source denies, and a reader who trusts the merge is misinformed however
@@ -491,7 +491,7 @@ class Run:
         `30-50%`. Un-charging would clear both, and the operator's own reading
         is that narrowing violates a source.
 
-        So what 489 actually fixed is the other half: the declaration is
+        So the fix that matters is the other half: the declaration is
         confirmed, because the merge's account of itself was accurate. The
         finding stays, and this list exists so the report can say *why* it is
         there rather than leaving a reader to think the merge went wrong.
@@ -557,7 +557,7 @@ class Run:
         per record: one declaration covering a dozen claims and a dozen
         declarations covering one each produce the same banner count and are
         not the same thing, and only the second is what this level was built
-        for. Neither is refused -- `open` reports rather than charges (482) --
+        for. Neither is refused -- `open` reports rather than charges --
         but a reader cannot weigh the first if the section shows one row while
         the banner counts twelve.
 
@@ -609,9 +609,9 @@ class Run:
         to ask -- a fixture, or a `Run` built by hand -- which is the same
         figure the sentence printed unconditionally before this existed.
 
-        It exists because 551 gave a command backend its own batch and left
+        It exists because a command backend was given its own batch and left
         two dry-run sentences saying 25 to an operator whose next real run
-        would send 100 (558). A plan that states the wrong unit is worse than
+        would send 100. A plan that states the wrong unit is worse than
         one that states none: it is the only number on the page.
         """
         settings = getattr(self.provenance, "settings", None)
@@ -628,14 +628,14 @@ class Run:
         the same way it treats a reported absence, which is `unmeasured`.
 
         Never a question put to the model. `server_tool_use` is a count the
-        serving side wrote down; "did you search?" is a claim (537).
+        serving side wrote down; "did you search?" is a claim.
         """
         client = getattr(self.provenance, "client", None)
         return getattr(getattr(client, "usage", None), "searches", None)
 
     @property
     def turns(self):
-        """Whether the model used a tool, or None if nothing reported (548).
+        """Whether the model used a tool, or None if nothing reported.
 
         `searches` one property up asks the same question of
         `server_tool_use`, which counts Anthropic's server-side web tools and
@@ -664,13 +664,13 @@ class Run:
 
     @property
     def number_faults(self) -> tuple[Finding, ...]:
-        """The number-format findings that move the exit code (601)."""
+        """The number-format findings that move the exit code."""
         return tuple(finding for finding in self.number_format
                      if finding.kind in numerals.FAULTS)
 
     @property
     def number_warnings(self) -> tuple[Finding, ...]:
-        """The number-format findings that are shown and never charged (601)."""
+        """The number-format findings that are shown and never charged."""
         return tuple(finding for finding in self.number_format
                      if finding.kind not in numerals.FAULTS)
 
@@ -679,14 +679,14 @@ class Run:
         """Declared additions that name something in the documents they fix.
 
         The split that decides what the exit code does, and it is not a new
-        rule (537). An addition the documents are *silent* about is excused by
+        rule. An addition the documents are *silent* about is excused by
         `added_claims`: the sources cannot deny it and the declaration is what
         makes it reviewable. A correction is the other case -- the merge now
         asserts something a source denies -- and `Run.accounted_for`'s rule
         already answers it: the queue takes omissions and never assertions,
         "because the merged document now asserts something a source denies,
         and a reader who trusts the merge is misinformed however well the swap
-        was declared" (490). Nothing in this package can tell a correction
+        was declared". Nothing in this package can tell a correction
         from a corruption, so the finding stays and this property is what lets
         the report say why it is there.
         """
@@ -717,7 +717,7 @@ class Run:
     def findings(self) -> list[Verdict]:
         """Everything that moves the exit code, and nothing that does not.
 
-        §2.5 in one property: do not let the review queue into the exit code,
+        Findings versus the review queue, in one property: do not let the review queue into the exit code,
         and do not hide findings inside it. The second half is why this
         subtracts a set of claim ids rather than filtering on a declaration —
         an undeclared drop in the same run as a declared one is still a finding,
@@ -781,9 +781,9 @@ class Run:
         """Every declared drop, including the ones no claim was drawn from.
 
         The queue counts claims; this counts records, and the difference is the
-        whole reason §2.6 exists. `decompose.md` skips headings and boilerplate,
+        whole reason the declared-loss budget exists. `decompose.md` skips headings and boilerplate,
         so a merge can declare thirty drops of segments no claim will ever come
-        out of. Task 42 fix 4 means most of those are now graded on where the
+        out of. Most of those are now graded on where the
         reconciler found their text rather than left `unchecked`, but a grade is
         still not a budget: a drop can be confirmed as a drop and still be the
         thirtieth. They appear in no queue and, under budget, in no finding, and
@@ -793,13 +793,13 @@ class Run:
 
     @property
     def over_budget(self) -> bool:
-        """§2.6, asked of `reconcile` rather than reimplemented here."""
+        """The declared-loss budget, asked of `reconcile` rather than reimplemented here."""
         return over_budget(self.declared_drops, self.segments,
                            self.declared_loss_budget)
 
     @property
     def budget_disables_check(self) -> bool:
-        """Is the ceiling set where §2.6 can no longer fire?
+        """Is the ceiling set where the declared-loss budget can no longer fire?
 
         At 1.0 a merge may declare away every segment it was given and stay
         inside the budget, because `drops / segments` cannot exceed 1. That is
@@ -843,9 +843,9 @@ class Run:
     def forward_by_source(self) -> dict[str, dict[str, int]]:
         """Per source: claims extracted, checked, accounted for, partly kept.
 
-        M7 task 26. The forward ratio above this one has a single denominator
+        The forward ratio above this one has a single denominator
         covering every source, and a pooled denominator is the defect this
-        milestone exists to refuse. Two sources of six claims each, one carried
+        property exists to refuse. Two sources of six claims each, one carried
         whole and one dropped whole, report `6/12` — the same figure a merge
         that lost one claim from each of six sources would print. The shape of
         the loss is the finding, and pooling makes it invisible: a source that
@@ -903,13 +903,13 @@ class Run:
 # The exit code for a run whose only faults are in its account of itself.
 # Deliberately 3 and not 1: `README.md` has documented 0/1/2 since the first
 # release and a caller testing `!= 0` keeps working, while a caller testing
-# `== 1` now means "the document" and gets what it asked for. Entry 420.
+# `== 1` now means "the document" and gets what it asked for.
 RECORD_ONLY = 3
 
 # Every code `exit_code` can return. One tuple so a renderer that maps codes to
-# words can assert it has them all: `html_report.BANNER` did not, and entry
-# 420's split of `3` out of `1` reached it as `KeyError: 3` at the end of a
-# finished run (500). A bare subscript is fine when something guarantees the
+# words can assert it has them all: `html_report.BANNER` did not, and the
+# split of `3` out of `1` once reached it as `KeyError: 3` at the end of a
+# finished run. A bare subscript is fine when something guarantees the
 # key exists; this is that something.
 EXIT_CODES = (0, 1, 2, RECORD_ONLY)
 
@@ -917,7 +917,7 @@ EXIT_CODES = (0, 1, 2, RECORD_ONLY)
 def exit_code(run: Run) -> int:
     """0 clean, 1 the document, 3 only the record, 2 inconclusive.
 
-    **Entry 420 split what 1 used to mean.** A finding was a finding, so a
+    **The meaning of exit code 1 was later split.** A finding was a finding, so a
     merge that mis-declared work it had done correctly ranked with a merge that
     lost content. On the operator's `universe` pair those two came apart and
     pointed opposite ways: `off` copied the sources verbatim, declared 23
@@ -936,13 +936,13 @@ def exit_code(run: Run) -> int:
     change.
 
     **It does not close B5, and an earlier version of this docstring said it
-    did.** "A merge cannot declare its way to 0" is false, and entry 426
-    reproduces the counter-example: declarations that are internally consistent
-    -- every segment `superseded`, every replacement genuinely present in the
-    merge -- pass all nine checks with 70% of the source gone, and exit 0 at
-    every level. What 3 bounds is a merge whose bookkeeping is *detectably*
-    wrong. A merge whose bookkeeping is undetectably wrong is B5's subject and
-    is still open.
+    did.** "A merge cannot declare its way to 0" is false: declarations
+    that are internally consistent, every segment `superseded`, every
+    replacement genuinely present in the merge, pass all nine checks
+    with 70% of the source gone, and exit 0 at every level. What 3
+    bounds is a merge whose bookkeeping is *detectably* wrong. A merge
+    whose bookkeeping is undetectably wrong is B5's subject and is
+    still open.
 
     Measured before landing, over the operator's 19 saved runs: **3 change**,
     and they are exactly the three that produced the inversion. The other 16
@@ -958,14 +958,14 @@ def exit_code(run: Run) -> int:
     happened to say. The ordering is here rather than in `main` so the report
     and the exit code are computed from one object by one rule.
 
-    `run.findings` already excludes the review queue (M7 task 27), so a declared
+    `run.findings` already excludes the review queue, so a declared
     and confirmed drop does not reach 1. `run.over_budget` is the ceiling that
-    keeps that from being a way of declaring your way to a clean exit: past §2.6
+    keeps that from being a way of declaring your way to a clean exit: past the declared-loss budget
     the queue stops being a queue and the run has a finding of its own, which is
     the volume of loss rather than any single claim in it.
 
     `run.unusable` reaches 2 by the same rule and for the literal case the
-    first paragraph describes. Pass C (entry 194) grades the eleven records a
+    first paragraph describes. Pass C grades the eleven records a
     batch got right instead of discarding all twelve over the one it got
     wrong, and the twelfth claim is then submitted, unanswered and named. That
     is a better report than the zero-byte one it replaces and it is not a
@@ -975,12 +975,12 @@ def exit_code(run: Run) -> int:
     one. Salvage never improves an exit code; it only ever adds detail to a
     report that had none.
 
-    `run.structural` is M7 task 36 and it makes this stricter: a merge that
+    `run.structural` was added later and makes this stricter: a merge that
     dropped a title, moved a digit or left a source segment out with no record
     explaining it now exits 1, where before it exited 0 because no *claim* was
     lost. Runs that passed before this line existed can fail now, and that is
     the point — `prompts/decompose.md` skips headings and formatting, so those
-    defects were never in a verdict to be counted. `DECISIONS.md` entry 9.
+    defects were never in a verdict to be counted.
     """
     if run.errored or run.unusable:
         return 2
@@ -995,7 +995,7 @@ def exit_code(run: Run) -> int:
     # Grounding is reported and does not move the exit code. It measures
     # whether the judge anchored its verdict in the source, not whether the
     # merge is sound, and treating a vague judge as a bad merge would put the
-    # tool's weakest measurement into its loudest output (318).
+    # tool's weakest measurement into its loudest output.
     #
     # One exception, and it is a measurement rule rather than a grading one:
     # claims were graded and *none* of them grounded. Then no verdict rests on
@@ -1006,7 +1006,7 @@ def exit_code(run: Run) -> int:
     if graded and not any(v.grounding == GROUNDED for v in graded):
         return 2
     # A `sourced` merge that retrieved nothing did not do the one thing the
-    # level exists for (665). 568 reported it on every surface and kept it off
+    # level exists for. This is reported on every surface and kept off
     # the exit code, "neither is a failure of the documents"; that left a run
     # recalled from memory exiting 1 like any sourced run, and a script or a
     # benchmark that reads the code counted it as a sourced draw. Measured
@@ -1016,22 +1016,22 @@ def exit_code(run: Run) -> int:
     # has not established what it was asked to establish, so 2, and it
     # outranks any finding, which is what makes it loud on the runs that have
     # findings -- nearly every sourced run. `not-retrieved` only: `unmeasured`
-    # is not "did not retrieve" (568), and 568 refuses in advance the command
+    # is not "did not retrieve", and this rule refuses in advance the command
     # that cannot report. A `verify` run makes no merge call and is not judged.
     if sourced_not_delivered(run):
         return 2
     # `run.findings` is claim-level -- a verdict saying the merged document
     # misstates or drops a source claim -- so it is a document fault by
-    # construction and needs no kind lookup. `run.over_budget` is the §2.6
-    # ceiling, which is content genuinely gone, and is filed the same way.
+    # construction and needs no kind lookup. `run.over_budget` is the declared-loss
+    # budget's ceiling, which is content genuinely gone, and is filed the same way.
     if run.findings or run.over_budget:
         return 1
     # An attribution the sources contradict is the merged document telling a
-    # reader something false about where a fact came from (569).
+    # reader something false about where a fact came from.
     if run.attributions:
         return 1
     # A settled source value the merge states differently: "17,560 miles"
-    # written "17.560 miles" under a decimal point (601). The warnings beside
+    # written "17.560 miles" under a decimal point. The warnings beside
     # it -- a numeral in the other convention, one readable two ways -- are
     # about a text, not a fault in the merge, and do not reach here.
     if run.number_faults:
@@ -1058,7 +1058,7 @@ def ratio(numerator: int, denominator: int, missing: str) -> str:
 
 
 def budget_sentence(run: Run) -> str:
-    """§2.6 in one sentence, or nothing. Used by the verdict and by the queue."""
+    """The declared-loss budget in one sentence, or nothing. Used by the verdict and by the queue."""
     return (
         f"The merge declared **{run.declared_drops}** drop(s) of "
         f"{run.segments} source segment(s), {loss_rate(run)}, over the "
@@ -1070,7 +1070,7 @@ def budget_sentence(run: Run) -> str:
 def loss_rate(run: Run) -> str:
     """The share of source segments the merge declared gone, as a percentage.
 
-    Both numbers were already printed and the reader had to divide (488). A
+    Both numbers were already printed and the reader had to divide. A
     run at 0.4% and a run at 2.9% read identically against a 3% ceiling, and
     they are not the same run: one is nowhere near the limit and the other is
     about to fail. Naming the achieved figure beside the configured one is
@@ -1141,7 +1141,7 @@ def covering_sentence(run: Run) -> str:
 
 
 def mismatch_sentence(run: Run) -> str:
-    """The merge's warning that these documents may not belong together (497).
+    """The merge's warning that these documents may not belong together.
 
     Deliberately not a finding. The operator's words were "we do not need to
     fail but we should provide a friendly hint that they probably end up
@@ -1192,7 +1192,7 @@ def addition_sentence(run: Run) -> str:
     )
 
 
-# What this tool did about a citation, said in one form everywhere (537).
+# What this tool did about a citation, said in one form everywhere.
 #
 # Two facts, and both belong. The first never changes: nothing in this package
 # opens a socket, so no `source` a merge wrote was fetched, resolved or
@@ -1209,14 +1209,14 @@ NOT_RESOLVED = (
     "LLossless itself opens no socket to do it."
 )
 
-# What a `basis` says in words, in the page's words (544).
+# What a `basis` says in words, in the page's words.
 #
 # The column printed the enum: `citation` and `own-knowledge`, straight off the
 # record, while the page put the same column through `t("basis." + value)` and
 # printed *cited* and *the model's own knowledge*. One column, two vocabularies,
 # and which one a reader got depended on whether they were looking at the page
-# or at the report they downloaded from it -- which is 504's defect exactly, in
-# a table rather than in a verdict.
+# or at the report they downloaded from it -- a real defect, and one that showed
+# in a table rather than in a verdict.
 #
 # The words are the catalogue's and `tests/test_contract_parity.py` pins them
 # to `basis.*` in `web/locales/en.json`, the way `advice.noinvention` is pinned.
@@ -1255,7 +1255,7 @@ _SEARCHING = {
     ),
 }
 
-# The turn counter's three states, said in turns (548). A separate table from
+# The turn counter's three states, said in turns. A separate table from
 # `_SEARCHING` because it is a separate instrument: that one counts web
 # requests off `server_tool_use` and is blind to a command backend's local
 # tool, this one counts the round trip a tool call costs and can see it. Where
@@ -1265,7 +1265,7 @@ _SEARCHING = {
 # Never the word *fetch* and never a fetch count. `num_turns` is a count of
 # turns; what a turn past `usage.MOST_TURNS_WITHOUT_RETRIEVAL` was spent on is
 # not in the number.
-# What the blind counter is allowed to say once the other one has spoken (548).
+# What the blind counter is allowed to say once the other one has spoken.
 #
 # **This is a defect the first live run printed.** `_SEARCHING["not-searched"]`
 # ends *"so every source here is recalled rather than looked up"*, and on a run
@@ -1288,7 +1288,7 @@ SEARCH_COUNTER_BLIND = (
 _TOOL_USE = {
     # No turn figure in either sentence: what a retrieval costs depends on the
     # argv the call ran under -- three turns through the shipped one, two
-    # under the isolation -- and `Turns.add` applies the right floor (610).
+    # under the isolation -- and `Turns.add` applies the right floor.
     "tool-use": (
         "The model took more turns on {n} call(s) than a call that retrieves "
         "nothing can take, so it used a tool it was granted at least that "
@@ -1307,7 +1307,7 @@ _TOOL_USE = {
 }
 
 # What a `sourced` run that retrieved nothing has to say for itself, in the
-# section that lists its citations (548). The level asked the model to go and
+# section that lists its citations. The level asked the model to go and
 # look, the run says it did not, and a report that averaged that away would
 # leave a reader believing the citations were checked. The interesting case is
 # the quiet one, so it is the one with a sentence of its own.
@@ -1319,7 +1319,7 @@ SOURCED_WITHOUT_RETRIEVAL = (
 
 
 # What a `sourced` run says about retrieval where a reader decides whether to
-# trust it: the verdict, on every exit code (568). Before this the report said
+# trust it: the verdict, on every exit code. Before this the report said
 # what was *permitted* -- "WebFetch permitted" and a turn count in the
 # provenance table -- and left the reader to work out what was *achieved*,
 # and the one state that most needed saying was the one it never said: an
@@ -1354,7 +1354,7 @@ assert set(RETRIEVAL_SAID) == set(usage.RETRIEVAL_STATES)
 
 
 def retrieval_outcome(run: Run) -> str:
-    """`retrieved`, `not-retrieved` or `unmeasured` at `sourced`; `` below it (568).
+    """`retrieved`, `not-retrieved` or `unmeasured` at `sourced`; `` below it.
 
     Empty below `sourced` rather than a fourth state: no other level promised
     retrieval, so there is nothing to have kept. A `sourced` run with no turn
@@ -1367,7 +1367,7 @@ def retrieval_outcome(run: Run) -> str:
 
 
 def retrieval_turns(run: Run):
-    """The turn tally `sourced` is judged on: the merge's calls, on a merge (665).
+    """The turn tally `sourced` is judged on: the merge's calls, on a merge.
 
     The grant is run-wide, so at `sourced` decompose and verify calls may
     retrieve as well, and a run-wide tally then reads "retrieved" over a merge
@@ -1379,9 +1379,9 @@ def retrieval_turns(run: Run):
     is judged on an empty tally, which reads `unmeasured`, never on the other
     roles'.
 
-    Pooled, as before 665, for a `verify` run, which makes no merge call, and
-    for a tally fed without roles (every recording and test written before
-    it), so those read exactly as they did. None where nothing was tallied.
+    Pooled, the way it used to be for every run, for a `verify` run, which
+    makes no merge call, and for a tally fed without roles (every recording
+    and test written before this), so those read as they did. None where nothing was tallied.
     """
     turns = run.turns
     if turns is None or run.command != "merge" or not getattr(turns, "roles", None):
@@ -1390,7 +1390,7 @@ def retrieval_turns(run: Run):
 
 
 def retrieval_calls_word(run: Run) -> str:
-    """"merge call(s)" where the tally is the merge's, "call(s)" where pooled (665).
+    """"merge call(s)" where the tally is the merge's, "call(s)" where pooled.
 
     The counts in every retrieval sentence are `retrieval_turns`' counts, and
     "none of its 1 call(s)" over a run that made six would be a false sentence
@@ -1409,7 +1409,7 @@ def _judged_tool_use(run: Run) -> dict | None:
 
 
 def sourced_not_delivered(run: Run) -> bool:
-    """A `sourced` merge whose merge calls reported and none retrieved (665).
+    """A `sourced` merge whose merge calls reported and none retrieved.
 
     What moves `exit_code` to 2. Read off `retrieval_outcome`, so it is the
     merge role's tally on a merge and `not-retrieved` alone: never over an
@@ -1420,7 +1420,7 @@ def sourced_not_delivered(run: Run) -> bool:
 
 
 def inconclusive_for_retrieval_alone(run: Run) -> bool:
-    """Whether `sourced_not_delivered` is the only reason this run exits 2 (665).
+    """Whether `sourced_not_delivered` is the only reason this run exits 2.
 
     The surfaces that explain a 2 -- the verdict line, the terminal -- were
     written for a run whose work did not finish. A run that finished and
@@ -1435,7 +1435,7 @@ def inconclusive_for_retrieval_alone(run: Run) -> bool:
     return not (graded and not any(v.grounding == GROUNDED for v in graded))
 
 
-# The verdict for a run that exits 2 on `sourced_not_delivered` alone (665).
+# The verdict for a run that exits 2 on `sourced_not_delivered` alone.
 # Its own sentence: the one for an errored unit says the model "could not be
 # made to answer usably", and this model answered; what it did not do is look.
 NOT_SOURCED = (
@@ -1448,7 +1448,7 @@ NOT_SOURCED = (
 
 
 def retrieval_lead(outcome: str) -> str:
-    """The bold opening of `RETRIEVAL_SAID[outcome]`, unmarked (568).
+    """The bold opening of `RETRIEVAL_SAID[outcome]`, unmarked.
 
     What the terminal says first, so the three surfaces a reader can move
     between open on the same words rather than on three paraphrases of them.
@@ -1472,7 +1472,7 @@ def retrieval_sentence(run: Run) -> str:
 
 
 def recall_only(run: Run) -> bool:
-    """Was this run asked to retrieve, and did it retrieve nothing? (548)
+    """Was this run asked to retrieve, and did it retrieve nothing?
 
     The question the report cannot leave a reader to work out. `sourced` is the
     level that expects retrieval; a run there whose turn counter reports no
@@ -1481,7 +1481,7 @@ def recall_only(run: Run) -> bool:
 
     False where anything went unreported, and deliberately: `unmeasured` is not
     "no tool use", and claiming recall over an absent measurement would be the
-    same inversion `usage.py` refuses everywhere else. Since 568 that includes
+    same inversion `usage.py` refuses everywhere else. That also includes
     a run where *some* calls reported and some did not -- the silent one may be
     the one that retrieved -- so this is `retrieval_outcome` and nothing else.
     """
@@ -1495,7 +1495,7 @@ def sourcing_sentence(run: Run) -> str:
     weighing a citation is doing it here, and a caveat on another page is a
     caveat they meet after they have decided.
 
-    Three facts and they are kept apart (548). What *this tool* did is first,
+    Three facts and they are kept apart. What *this tool* did is first,
     is constant, and is false to omit under any level: it opens no socket, so
     nothing here was fetched, resolved or checked. What the *model* did is two
     measurements rather than one, because the two counters answer the same
@@ -1507,7 +1507,7 @@ def sourcing_sentence(run: Run) -> str:
     state = "unmeasured" if searches is None else searches.state
     total = 0 if searches is None else (searches.total or 0)
     outcome = retrieval_outcome(run)
-    # At `sourced`, the tally the level is judged on (665): the citations
+    # At `sourced`, the tally the level is judged on: the citations
     # listed here are the merge's, and a verify call's retrieval backs none of
     # them. Below it nothing is judged and the run-wide tally reads as before.
     turns = retrieval_turns(run) if outcome else run.turns
@@ -1517,7 +1517,7 @@ def sourcing_sentence(run: Run) -> str:
         # A `sourced` run is a command run by construction -- the level refuses
         # an HTTP endpoint -- and on a command backend this counter is blind.
         # Its zero may not conclude "recalled" beside a turn count that was
-        # never reported (568).
+        # never reported.
         said.append(SEARCH_COUNTER_BLIND)
         said.append(_TOOL_USE[usage.UNMEASURED])
     elif not measured:
@@ -1535,7 +1535,7 @@ def sourcing_sentence(run: Run) -> str:
         # A run where some calls reported and some did not is `no-tool-use`
         # off the ones that did, and the sentence for that says "retrieved
         # nothing" -- over a silent call that may be the one that retrieved.
-        # So a partial absence is said as unmeasured (568).
+        # So a partial absence is said as unmeasured.
         key = (usage.UNMEASURED
                if turns.retrieval == usage.UNMEASURED else turns.state)
         said.append(_TOOL_USE[key].format(n=turns.with_tools))
@@ -1634,11 +1634,11 @@ def invention_sentence(run: Run) -> str:
     only on a clean run is missing from the report anyone reads carefully.
 
     Worded from `advice.noinvention` in `web/locales/en.json`, which the page
-    has said since W1. Two surfaces describing the same suspended guarantee in
+    has said since its first version. Two surfaces describing the same suspended guarantee in
     two sets of words is how a reader comes to believe they mean two different
     things, and this project has the worked example: at `coverage` the page
     said the run had checked "in both directions" two words before saying
-    nothing had read the merge back (504).
+    nothing had read the merge back.
 
     Keyed on `Run.detects_invention` and never on a depth's name, for the
     reason that property's own docstring gives.
@@ -1662,16 +1662,16 @@ def lost_classes(run: Run) -> str:
     rest of the list is what the forward pass answers and is true at either
     depth.
 
-    M7 task 13's rule, applied to the axis it did not have: a headline must
+    An established rule, applied to the axis it did not have: a headline must
     not be broader than the check behind it.
 
     Keyed on `checked_for_invention` rather than on `detects_invention`, which
     is the narrower of the two and was the one this read first. A depth that
     *can* read the merge back has not read it back when there was nothing to
     read: the page has keyed its version of this sentence on the reverse count
-    since W1 and argued there that the count is the more general statement, and
-    it is right -- but the fix landed on the page and this function kept the
-    depth-shaped half of it (528).
+    since its first version and argued there that the count is the more general
+    statement, and it is right, but the fix landed on the page and this
+    function kept the depth-shaped half of it.
     """
     if not run.checked_for_invention:
         return "or carried only in part"
@@ -1703,9 +1703,9 @@ def directions_checked(run: Run) -> str:
 
 
 def scope_sentence(run: Run) -> str:
-    """What a clean verdict covers. M7 task 13, and then task 36 narrowed it again.
+    """What a clean verdict covers, tightened once and then narrowed again.
 
-    Task 13 added the caveat because the headline was broader than the check
+    The caveat was added because the headline was broader than the check
     behind it: `prompts/decompose.md` skips headings and formatting, so a merge
     that dropped both titles was reported clean. Wiring the reconciler closed
     that gap for `merge` runs, and leaving the caveat in place would now
@@ -1801,7 +1801,7 @@ def verdict_line(run: Run) -> str:
     cancelled = [step for step in run.errored
                  if step.detail.startswith(CANCELLED_PREFIX)]
     if code == 2 and cancelled:
-        # Stopped on purpose (639), which is not "the model could not be made
+        # Stopped on purpose, which is not "the model could not be made
         # to answer": the sentence below would blame the model for a cancel.
         # Still a 2, and still a partial reading, said as one.
         return (
@@ -1811,7 +1811,7 @@ def verdict_line(run: Run) -> str:
             f"below, and the calls it made are counted in the provenance."
         )
     if code == 2 and inconclusive_for_retrieval_alone(run):
-        # 665. Finished and recalled; the errored-unit sentence below would
+        # Finished, but only recalled; the errored-unit sentence below would
         # blame the model for not answering, and it answered.
         line = NOT_SOURCED
         found = (len(run.findings) + len(run.structural)
@@ -1823,7 +1823,7 @@ def verdict_line(run: Run) -> str:
         # Two ways to be inconclusive and they are not the same sentence. A
         # unit of work that errored produced nothing at all; a record Pass C
         # dropped came out of a unit that did produce something, and the rest
-        # of it was graded. A run can be both. Entry 194.
+        # of it was graded. A run can be both.
         parts = []
         if run.errored:
             which = ", ".join(step.name for step in run.errored)
@@ -1892,7 +1892,7 @@ def verdict_line(run: Run) -> str:
         elif run.queued:
             line += " " + queue_sentence(run)
     elif code == RECORD_ONLY:
-        # Entry 420. Without this branch a 3 would fall through to the clean
+        # Without this branch a 3 would fall through to the clean
         # sentence below and the report would contradict the code it printed --
         # the same defect the comment fifteen lines up guards against for the
         # over-budget case.
@@ -1921,10 +1921,10 @@ def verdict_line(run: Run) -> str:
             line += " " + queue_sentence(run)
     elif run.queued:
         # The clean sentence would be false here: claims *were* dropped, and the
-        # only reason the run passes is that the merge said so first. M7 task 27.
+        # only reason the run passes is that the merge said so first.
         # Printing the usual line and letting the queue section correct it below
         # would put the strongest wording in the report next to the one figure it
-        # is wrong about, which is how §2.5's split turns into a lie by layout.
+        # is wrong about, which is how the findings-versus-queue split turns into a lie by layout.
         line = (
             f"**No undeclared claim was dropped, contradicted, "
             f"{lost_classes(run)}.** "
@@ -1934,7 +1934,7 @@ def verdict_line(run: Run) -> str:
             + scope_sentence(run)
         )
     else:
-        # M7 task 13. The sentence this replaces was "No claim was dropped,
+        # An earlier sentence here was "No claim was dropped,
         # contradicted, or invented", and on 2026-08-10 it was printed over a
         # merge that was a concatenation and had dropped both titles and both
         # summary fields. Every figure beside it was right; the sentence was
@@ -1942,11 +1942,11 @@ def verdict_line(run: Run) -> str:
         # extracted, and `prompts/decompose.md` skips headings, formatting and
         # boilerplate by design — so titles and structure are outside this
         # denominator, and the verdict now says which question it answered.
-        # "or carried only in part" is M7 task 24's addition and belongs in this
+        # "or carried only in part" was added later and belongs in this
         # sentence rather than only in the table: PARTIAL is the verdict a clean
         # run would previously have absorbed into SUPPORTED, and a headline that
         # still listed three failure classes would be narrower than the check
-        # that produced it — the same defect task 13 fixed in this very line.
+        # that produced it — the same defect fixed earlier in this very line.
         line = (
             f"**No extracted claim was dropped, contradicted, "
             f"{lost_classes(run)}.** "
@@ -1966,7 +1966,7 @@ def verdict_line(run: Run) -> str:
         line += " " + addition_sentence(run)
 
     # Whether the level that promised retrieval delivered it, beside the
-    # additions it qualifies and on every exit code (568). Empty below
+    # additions it qualifies and on every exit code. Empty below
     # `sourced`, so every other run's verdict is unchanged.
     retrieval = retrieval_sentence(run)
     if retrieval:
@@ -1985,7 +1985,7 @@ def verdict_line(run: Run) -> str:
     if run.covering_contradictions:
         line += " " + covering_sentence(run)
 
-    # The number-format warnings (601), on every exit code. They move nothing,
+    # The number-format warnings, on every exit code. They move nothing,
     # so a clean headline stays clean, but a reader told "clean" over a
     # document that writes 4,5 in English has been told less than the tool
     # knows.
@@ -2092,7 +2092,7 @@ def coverage_section(run: Run) -> str:
         # Printed at zero for the reason the errored row above it is: the
         # numerator of every ratio in this table counts claims that came back
         # with a verdict, and a reader has to be able to see that the ones
-        # that did not were looked for and counted. Entry 194.
+        # that did not were looked for and counted.
         ("Claims submitted but not graded", str(len(run.unusable))),
     ]
 
@@ -2100,7 +2100,7 @@ def coverage_section(run: Run) -> str:
     lines += [f"| {label} | {value} |" for label, value in rows]
 
     # One naming system, not two: every row above and every finding below uses
-    # `run.display`, a short name built from the caller's own path (entry 411).
+    # `run.display`, a short name built from the caller's own path.
     # There is nothing left here to reconcile against a canonical name.
 
     if run.errored:
@@ -2113,7 +2113,7 @@ def elsewhere(run: Run) -> str:
     """Where a run's findings are when none of them is in the claims.
 
     `findings_section`'s sentence, and the HTML page's with its markup taken
-    off, so the two cannot say it differently. The attributions (569) are the
+    off, so the two cannot say it differently. The attributions are the
     second place a finding can be and the first that exists on `verify` too.
     """
     structural, attributions = len(run.structural), len(run.attributions)
@@ -2209,7 +2209,7 @@ def findings_section(run: Run) -> str:
                 f"  - checked against: {judged_against(run, verdict.direction)}"
             )
             if verdict.rationale:
-                # Whose words these are, not just that they exist (717): the
+                # Whose words these are, not just that they exist: the
                 # operator read "Reason" beside a sentence like "the text
                 # attributes the collecting to Chris, not Christ" and asked
                 # which text -- the source, or the generated merge. The
@@ -2469,7 +2469,7 @@ def leak_lines(run: Run) -> list[str]:
 
 
 def structural_section(run: Run) -> str:
-    """The reconciler's nine checks, and what they found. M7 task 36.
+    """The reconciler's nine checks, and what they found.
 
     Its own section rather than rows in Findings, because the two carry
     different evidence and a reader has to be able to tell them apart. A finding
@@ -2532,7 +2532,7 @@ def structural_section(run: Run) -> str:
         # The second thing outside the denominator, and the arithmetic beside
         # it. The counts are evidence and not the test: `decompose` is not
         # reproducible at temperature 0 -- 18 claims one run and 22 the next on
-        # an identical request (entry 400) -- so a merge whose claim count
+        # an identical request -- so a merge whose claim count
         # exceeds its sources' has probably said something twice, and a check
         # that fired on that alone would fire and miss at random. The repeated
         # claims are the finding; this line is what makes one legible.
@@ -2556,7 +2556,7 @@ def structural_section(run: Run) -> str:
         return "\n".join(lines) + "\n"
     # Once, above the findings, and only where one of them will use it. A
     # legend for a notation nothing in this report uses is a line that teaches
-    # a reader to skip the hints (552).
+    # a reader to skip the hints.
     if any(finding.difference for finding in run.structural):
         lines += ["", DIFF_LEGEND]
 
@@ -2585,9 +2585,9 @@ def structural_section(run: Run) -> str:
     return "\n".join(lines) + "\n"
 
 
-# What a finding's two sides are called wherever they are shown (552). Written
+# What a finding's two sides are called wherever they are shown. Written
 # once because three surfaces print them and a fourth name for the same field
-# is how the page came to say *cited* where the report said `citation` (544).
+# is how the page came to say *cited* where the report said `citation`.
 EVIDENCE_LABELS = {
     "source": "In the source",
     "merge": "In the merge",
@@ -2606,15 +2606,15 @@ DIFF_LEGEND = (
 def stacked_lines(finding) -> list[str]:
     """One finding's two sides, one directly above the other, then the diff.
 
-    **The operator asked to read down a column rather than along a sentence**
-    (561): *"they want the source line and the merged line shown one directly
+    **The operator asked to read down a column rather than along a sentence.**
+    *"they want the source line and the merged line shown one directly
     above the other ... so the difference can be read by scanning down"*. That
     is a layout, and a layout only survives in plain text if the labels are the
     same width -- so they are padded here, once, and every surface stacks the
     same three lines.
 
-    This supersedes half of 552. That entry showed the diff **instead of** the
-    two texts wherever a diff existed, on 531's brevity grounds; the operator
+    This supersedes an earlier design that showed the diff **instead of** the
+    two texts wherever a diff existed, for brevity; the operator
     has since asked for both, and they are right that a diff alone makes the
     reader reconstruct two texts from one line. The diff stays, as the third
     line, because it is the only one of the three that says *where* to look.
@@ -2654,7 +2654,7 @@ def evidence_lines(finding) -> list[str]:
     return [FENCE + "text"] + stack + [FENCE]
 
 
-# How a misattribution is named to a reader (569). One phrase, so the verdict
+# How a misattribution is named to a reader. One phrase, so the verdict
 # line, the terminal and the section cannot call it three things.
 MISATTRIBUTED_WORDS = "credited to a source that does not state it"
 
@@ -2672,7 +2672,7 @@ ATTRIBUTIONS_NOTE = (
 
 
 def attributions_section(run: Run) -> str:
-    """The merge's misattributions, or `` where it made none (569).
+    """The merge's misattributions, or `` where it made none.
 
     Printed on either command and only when something was found, so every
     report without one reads exactly as before. Its own section and not a
@@ -2693,7 +2693,7 @@ def attributions_section(run: Run) -> str:
 
 
 
-# How a number-format fault is named to a reader (601). One phrase, for the
+# How a number-format fault is named to a reader. One phrase, for the
 # verdict line, the terminal and the section, as `MISATTRIBUTED_WORDS` is.
 NUMBER_CHANGED_WORDS = "written by the merge with a different value than its source"
 
@@ -2765,7 +2765,7 @@ def _convention_row(run: Run, convention: numerals.Convention) -> str:
 
 
 def number_format_section(run: Run) -> str:
-    """Each document's convention and every numeral flagged, or `` (601).
+    """Each document's convention and every numeral flagged, or ``.
 
     Printed on either command and only when something was flagged, so every
     report without one reads as before. The faults first, then the warnings,
@@ -2800,7 +2800,7 @@ def capping_section(run: Run) -> str:
     neither of those measurements: nothing here compares the merge against a
     source text or a verdict against a claim, it reports what `parsing.parse`
     had to shorten before either of those checks ever ran. Nothing here moves
-    `exit_code` (Pass B, `DECISIONS.md` entry 190) — nothing here is even
+    `exit_code` (Pass B) — nothing here is even
     checkable against the source texts, since the field's content past the cap
     is exactly what this section says was thrown away.
     """
@@ -2822,7 +2822,7 @@ def capping_section(run: Run) -> str:
 
 
 def unusable_section(run: Run) -> str:
-    """Claims the tool refused to grade. Pass C, `DECISIONS.md` entry 194.
+    """Claims the tool refused to grade, under Pass C.
 
     Its own section and above the inventory, because it is the one thing in
     the report a reader must not miss: every table below counts the claims
@@ -2890,14 +2890,14 @@ def order_line(run: Run) -> str:
 def review_queue_section(run: Run) -> str:
     """Losses the merge owned: everything above this line is what it did not.
 
-    §2.5's split, made visible. Findings are failures; this is work. The two are
+    The findings-versus-queue split, made visible. Findings are failures; this is work. The two are
     separate sections rather than one list with a column because a reader who
     skims the Findings heading and stops has to be reading only the things that
     went wrong, and a reader who acts on this list is doing something else with
     it — putting facts back, or agreeing they should stay out.
 
     **Not the page's "what needs your attention" list**, which shares the word
-    and is a different feature (545). That list is an index over sections the
+    and is a different feature. That list is an index over sections the
     page already renders, and it exists because a page is a set of collapsible
     panels; this is a section with a membership rule. The page's counterpart to
     this one is `Omitted content`, which is wider on purpose -- it lists every
@@ -2974,29 +2974,29 @@ def review_queue_section(run: Run) -> str:
 def declarations_section(run: Run) -> str:
     """What the merge said it did, and whether the forward pass agrees.
 
-    Separate from Findings, and below it, for the reason §2.5 gives: a rejected
+    Separate from Findings, and below it, for the reason the findings-versus-queue split gives: a rejected
     declaration is the merge describing itself wrongly, which is not the same
     thing as a dropped fact and must not be counted as one. It changes no
-    verdict above. It reaches the exit code in exactly two ways, both task 27's:
+    verdict above. It reaches the exit code in exactly two ways, both the same rule:
     a confirmed `dropped` moves a claim out of Findings and into the review
-    queue, and the count of declared drops against §2.6's budget can fail the
+    queue, and the count of declared drops against the declared-loss budget can fail the
     run on its own. Nothing else here is scored.
 
-    The empty case is printed rather than omitted, because under §2.1 silence is
+    The empty case is printed rather than omitted, because under the disposition model silence is
     itself the claim: a merge that declared nothing has said every source
     segment survives character for character, and that is a strong statement to
     leave off the page.
     """
     lines = ["## Declarations", ""]
-    # Before the counts, and on the empty path too: at a ceiling of 100% §2.6
-    # cannot fire, so `over_budget: false` further down means "not asked"
+    # Before the counts, and on the empty path too: at a ceiling of 100% the
+    # declared-loss check cannot fire, so `over_budget: false` further down means "not asked"
     # rather than "asked and passed". A disabled check that reads as a passed
     # check is this project's most-repeated failure class, so it is stated
     # rather than left to be inferred from the provenance block.
     if run.budget_disables_check:
         lines += [
             "> **Declared-loss budget disabled.** The ceiling for this run was "
-            "100% of the source segments, at which the §2.6 check cannot fire. "
+            "100% of the source segments, at which the declared-loss check cannot fire. "
             "The declared loss below was recorded, not judged.",
             "",
         ]
@@ -3022,7 +3022,7 @@ def declarations_section(run: Run) -> str:
         f"declared, and that is not agreement.",
         "",
         # Achieved beside configured, on every run and not only the failing
-        # one (488). `budget_sentence` says this when the ceiling is crossed,
+        # one. `budget_sentence` says this when the ceiling is crossed,
         # which is the case a reader least needs telling -- the run already
         # failed and named the reason. The clean run is where the report used
         # to say nothing at all about how close the merge came.
@@ -3060,7 +3060,7 @@ def additions_section(run: Run) -> str:
     and may be empty, because a merge that extends the documents corrects
     nothing and forcing it to name a victim would make it invent one.
 
-    `Basis` and `Source` are the merge's account of what it went on (537), and
+    `Basis` and `Source` are the merge's account of what it went on, and
     they are rendered flat -- `Source` is never a link. A link is an invitation
     that reads as a check somebody has already made, and nothing here has
     checked it. `sourcing_sentence` says so above the table, in the section
@@ -3155,7 +3155,7 @@ def render(run: Run) -> str:
     # out what happened to one particular fact reads on to the tables.
     parts = [verdict_section(run), coverage_section(run), findings_section(run)]
     # Beside the model's findings and above everything that is not a finding,
-    # on either command. Empty unless the merge misattributed something (569).
+    # on either command. Empty unless the merge misattributed something.
     if run.attributions:
         parts.append(attributions_section(run))
     # Beside it, for the same reasons, and only where something was flagged.
@@ -3232,7 +3232,7 @@ def as_dict(run: Run) -> dict:
             # rather than beside it because that is where the denominators
             # live: `forward_submitted` minus `forward_verdicts` is this
             # number, and a consumer that reads the two without it would see a
-            # gap with no name. Pass C, `DECISIONS.md` entry 194.
+            # gap with no name, under Pass C.
             "ungraded": len(run.unusable),
         },
         "claims": [claim.as_dict() for claims in run.claims.values() for claim in claims],
@@ -3241,14 +3241,14 @@ def as_dict(run: Run) -> dict:
         # Disjoint from `findings` by construction, and both are subsets of
         # `verdicts` — a consumer that wants every dropped claim regardless of
         # who owned it reads `verdicts`, not the sum of these two, because
-        # summing them is the arithmetic §2.5 exists to stop being implicit.
+        # summing them is the arithmetic the findings-versus-queue split exists to stop being implicit.
         "review_queue": [verdict.as_dict() for verdict in run.queued],
         "declarations": [item.as_dict() for item in run.declarations],
         # Carried whole and ungraded. A reader's tooling needs the same three
         # fields the merge wrote, and a `graded` key here would imply something
         # graded them.
         "additions": [dict(record) for record in run.additions],
-        # The merge's warning about its inputs, verbatim and ungraded (497).
+        # The merge's warning about its inputs, verbatim and ungraded.
         # Empty string rather than null for an ordinary run, so a consumer
         # tests one thing rather than two.
         "mismatch": run.mismatch,
@@ -3262,7 +3262,7 @@ def as_dict(run: Run) -> dict:
         "additions_cover": [list(run.covering(str(record.get("statement", ""))))
                             for record in run.additions],
         # What this tool did about the sources those records cite, and what
-        # the model did while producing them (537). Two facts and both
+        # the model did while producing them. Two facts and both
         # published, because either alone misleads: `resolved` is constant and
         # false, because nothing here opens a socket; `state` is a measurement
         # off `server_tool_use` and has three values, of which `unmeasured` is
@@ -3273,7 +3273,7 @@ def as_dict(run: Run) -> dict:
             **(run.searches.as_dict() if run.searches is not None
                else {"state": "unmeasured", "measured_calls": 0,
                      "unmeasured_calls": 0}),
-            # The second instrument, under a key of its own (548). Not merged
+            # The second instrument, under a key of its own. Not merged
             # into `state` above and not allowed to overwrite it: that one
             # counts web requests off `server_tool_use` and this one counts
             # turns off `num_turns`, they disagree on a command backend by
@@ -3284,7 +3284,7 @@ def as_dict(run: Run) -> dict:
             # not".
             #
             # At `sourced` this is the tally the level is judged on, the merge
-            # role's on a merge (665), so `retrieval` below and the counts a
+            # role's on a merge, so `retrieval` below and the counts a
             # page prints beside it come from one set of calls.
             # `provenance.retrieval.tool_use` keeps the run-wide account.
             "tool_use": (_judged_tool_use(run) if _judged_tool_use(run) is not None
@@ -3303,14 +3303,14 @@ def as_dict(run: Run) -> dict:
             # needs no fidelity vocabulary and a seventh level would not
             # silently stop it firing.
             "recall_only": recall_only(run),
-            # What the level that promised retrieval achieved, in three words
-            # (568): `retrieved`, `not-retrieved` or `unmeasured`, and `` below
+            # What the level that promised retrieval achieved, in three words:
+            # `retrieved`, `not-retrieved` or `unmeasured`, and `` below
             # `sourced`, where nothing was promised. Beside `recall_only`, which
             # is the second of the three as a boolean and stays for the page
             # that already reads it.
             "retrieval": retrieval_outcome(run),
             # Whether this run's exit 2 is `sourced_not_delivered` and nothing
-            # else (665): the run finished and looked nothing up. A boolean for
+            # else: the run finished and looked nothing up. A boolean for
             # the page, which picks its own inconclusive sentence by it rather
             # than the one for a run whose work did not complete.
             "inconclusive_not_sourced": inconclusive_for_retrieval_alone(run),
@@ -3344,10 +3344,10 @@ def as_dict(run: Run) -> dict:
         # via `Run.structural`.
         # `not_checked` rides beside the findings for the reason `markers`
         # does: a reader of an empty list is owed what was looked for, and
-        # after 370 they are owed what was not. Both halves are exact-string,
+        # now they are owed what was not too. Both halves are exact-string,
         # so a model that follows the example's shape in its own words is
-        # outside them, and that is the common case rather than the exotic one
-        # -- on the run that produced 370 it was seven reasons of eight.
+        # outside them, and that is the common case rather than the exotic one:
+        # on the run that motivated this it was seven reasons of eight.
         # Published rather than left in a docstring, because the person who
         # needs it is reading a green result and not the source.
         # Model-authored and ungraded, and labelled so in the block itself.
@@ -3380,7 +3380,7 @@ def as_dict(run: Run) -> dict:
         # `keep-base` names the base document's title, and a plain-text source
         # whose first line runs into the body has no title segment for it to
         # name. That is a fact about the input, not a defect in the merge, so
-        # it is reported beside the policy rather than as a finding (386).
+        # it is reported beside the policy rather than as a finding.
         "title": {
             "policy": run.title_policy,
             "sources_with_a_title": run.sources_with_a_title,
@@ -3392,7 +3392,7 @@ def as_dict(run: Run) -> dict:
                 if run.sources_with_a_title == 0 and run.merged is not None else ""
             ),
         },
-        # Reported, not judged (391). See `Run.added_breaks`.
+        # Reported, not judged. See `Run.added_breaks`.
         "structure": {
             "breaks_added_by_the_merge": len(run.added_breaks),
             "between": [list(pair) for pair in run.added_breaks],
@@ -3416,7 +3416,7 @@ def as_dict(run: Run) -> dict:
             ),
             "findings": [finding.as_dict() for finding in run.leaks],
         },
-        # A statement credited to a source that does not carry it (569). Its own
+        # A statement credited to a source that does not carry it. Its own
         # block for `restated_claims`' reason: not one of the nine `checks`,
         # and `ran` first so an empty list is "checked, clean" only where a
         # merged document existed to check. Runs on `verify` as well.
@@ -3431,7 +3431,7 @@ def as_dict(run: Run) -> dict:
             ),
             "findings": [finding.as_dict() for finding in run.attributions],
         },
-        # The number format (601). `ran` first for the reason every block here
+        # The number format. `ran` first for the reason every block here
         # has it. `faults` names the kinds that moved the exit code, so a
         # consumer does not have to know which of four kinds are warnings;
         # `documents` is each document's convention and the evidence for it.
@@ -3451,8 +3451,8 @@ def as_dict(run: Run) -> dict:
         # `claims` and `source_claims` are the arithmetic that makes a firing
         # legible -- a merge that extracts more claims than both its sources
         # together has probably stated something twice. They are published
-        # beside the findings and are not part of the predicate: entry 400
-        # measured `decompose` returning 18 claims on one run and 22 on the
+        # beside the findings and are not part of the predicate: `decompose`
+        # was measured returning 18 claims on one run and 22 on the
         # next for an identical request at temperature 0, so the comparison is
         # a sample and a check resting on it would fire and miss at random.
         "restated_claims": {
@@ -3478,7 +3478,7 @@ def as_dict(run: Run) -> dict:
             # What the merge actually did, beside what was asked of it. Both
             # numbers were already here and the reader had to divide; a
             # configured ceiling with no achieved figure next to it tells
-            # nobody whether the run was close to it or nowhere near (488).
+            # nobody whether the run was close to it or nowhere near.
             #
             # `None` when there are no segments, never 0.0. No segments is a
             # ratio that does not exist, and zero would read as a merge that

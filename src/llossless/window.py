@@ -1,4 +1,4 @@
-"""Task 41 — what context window is this endpoint actually serving?
+"""What context window is this endpoint actually serving?
 
 The question has to be asked rather than answered from a constant, because the
 answer is model-dependent from a single server setting. ollama serves
@@ -114,7 +114,7 @@ class WindowUnmeasurable(RuntimeError):
     fixes a route that does not exist, so this is never `loadable` and is never
     handed to `warm()`.
 
-    DECISIONS 179 found this on a vendor: `merge` cannot reach one at all,
+    This was found on a vendor: `merge` cannot reach one at all,
     because `served_window` asked a question only ollama answers and the
     vendor's 404 was fatal. Raising `WindowUnmeasurable` instead of a bare
     `HTTPStatusError` lets `served_window` recognise "this endpoint cannot say"
@@ -168,7 +168,7 @@ class Window:
     # "MXFP4", or "" where the endpoint did not say. Carried here because it
     # arrives in the response this module already parses: the README said
     # reading it "needs `/api/show`, and no such call has been written", and
-    # that was wrong in the direction that costs a request (DECISIONS 351).
+    # that was wrong in the direction that costs a request.
     # Empty is "not reported", never a guess from the tag -- two models on one
     # tag can be served at different levels, which is the whole reason the
     # registrations say to read it per arm rather than assume it.
@@ -233,7 +233,7 @@ def reported(settings, model: str, *, role: str | None = None) -> Window:
     # into the replay path through the side door.
     from . import transport
 
-    # `base_url_for`, not `base_url`: entry 421 lets a role be served
+    # `base_url_for`, not `base_url`: a role can be served
     # somewhere else, and probing the wrong host reports the wrong window.
     url = f"{_root(settings.base_url_for(role))}/api/ps"
     try:
@@ -270,7 +270,7 @@ def reported(settings, model: str, *, role: str | None = None) -> Window:
     # from it without comment -- so refusing the window for a spelling the
     # endpoint accepts reports "no such model" about a model that is answering
     # requests, and the guard that depends on this figure then cannot run.
-    # `DECISIONS.md` entry 24.
+    # Matching on case alone recovers that.
     #
     # Two entries differing only in case would make the case-insensitive answer
     # a guess, so that case refuses rather than picking one.
@@ -316,7 +316,7 @@ def reported(settings, model: str, *, role: str | None = None) -> Window:
 def banner_window(settings, model: str) -> str | None:
     """The served window for a startup banner, or `None` if it cannot be shown.
 
-    Brief DD item 1: an ordinary run learns about the window at per-call
+    Ordinarily a run learns about the window at per-call
     preflight, after documents are read and prompts loaded -- a correct
     refusal, but a late one. This reuses `reported()`, the one call that
     already exists for the purpose, rather than adding a second mechanism.
@@ -421,7 +421,7 @@ def stated(tokens: int, model: str, *, declared_by: str) -> Window:
     figure comes from a person who knows what their endpoint serves, for the
     case `reported()` structurally cannot reach -- a vendor with no `/api/ps`,
     where the alternatives were to refuse the run (which is what `decompose`
-    and `verify` do today, DECISIONS 294) or to proceed unguarded.
+    and `verify` do today) or to proceed unguarded.
 
     **No probe is sent.** `measured()` confirms a reported figure by spending a
     calibration generation plus a probe at 97% of it, per model per run. On a
@@ -662,7 +662,7 @@ def assert_untruncated(row: dict, *, what: str) -> None:
     """Raise `Truncated` if `row` shows a completion that hit its ceiling.
 
     `row` is one line of `Usage.ledger` -- exactly the counts the run already
-    reports, per Brief AL item 2, rather than a second measurement taken to
+    reports, rather than a second measurement taken to
     check the first. Silent when either figure is missing: a response the
     vendor reported no usage for, or a call made with no `max_tokens` ceiling,
     has nothing here to check, and manufacturing a verdict from numbers that
@@ -689,7 +689,7 @@ def assert_untruncated(row: dict, *, what: str) -> None:
 # count is read as a trim rather than as an estimate that ran long.
 #
 # Derived twice, from opposite directions, and the value sits near the middle
-# of the gap between them (DECISIONS 354, re-derived at 355):
+# of the gap between them:
 #
 #   the legitimate floor   Over 2,200 recorded calls carrying a prompt count,
 #                          `prompt_tokens` against this project's own
@@ -720,10 +720,10 @@ def assert_prompt_not_trimmed(row: dict, *, what: str) -> None:
     the runner's total and the prompt shares that total with the completion --
     so a prompt inside the reported window can still be over the budget the
     generation actually leaves for it, and ollama answers 200 with no error and
-    no `finish_reason` saying so (DECISIONS 350).
+    no `finish_reason` saying so.
 
-    **This is not a trimming signature inferred from the answer.** DECISIONS
-    305 refused that, and rightly: reading trimming out of the *shape* of the
+    **This is not a trimming signature inferred from the answer.** That was
+    rejected, and rightly: reading trimming out of the *shape* of the
     output is a guess about content. This compares two numbers the run already
     has -- a count the endpoint states about itself, in a field it already
     sends, against the estimate the preflight already computed -- and asks
@@ -771,7 +771,7 @@ def assert_prompt_not_trimmed(row: dict, *, what: str) -> None:
 def preflight(served, *, needed: int, what: str, role: str) -> None:
     """Guard a call before it is sent, and refuse when the window is unknowable.
 
-    `merge` has preflighted since task 41; `decompose` and `verify` had no guard
+    `merge` has preflighted for a while now; `decompose` and `verify` had no guard
     of any kind. That is the shape of the defect rather than an oversight in it:
     ollama does not refuse a prompt that overruns the window, it trims the front
     and answers confidently about a document whose beginning the model was never
@@ -785,7 +785,7 @@ def preflight(served, *, needed: int, what: str, role: str) -> None:
     project and this is one, so it is said and the call is not made.
 
     Note the asymmetry with `merge`, which proceeds unguarded on an endpoint
-    that cannot answer `/api/ps` and says so (DECISIONS 179). `merge` has a
+    that cannot answer `/api/ps` and says so. `merge` has a
     post-hoc check standing in its place -- `assert_untruncated` over the
     ledger row -- and these two roles have nothing. Refusing is the only
     honest option where there is no second mechanism.

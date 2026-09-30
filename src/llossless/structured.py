@@ -58,9 +58,9 @@ FALLBACK_MARKERS = (
 # "OpenAI-compatible" is a name for a wire *format*, and the four hosted SKUs
 # this project has paid to talk to all speak it. What differs between them is
 # the request envelope, and the envelope is where a run keeps its held-constant
-# conditions. Every row below is a measured 400 from a real call on
-# 2026-08-31, recorded in `internal/docs/vendor-endpoint-support.md`, not a
-# reading of anybody's documentation:
+# conditions. Every row below is a measured 400 from a real call
+# against each endpoint, made on 2026-08-31, not a reading of
+# anybody's documentation:
 #
 #   `max_tokens`              > Unsupported parameter: 'max_tokens' is not
 #                               supported with this model. Use
@@ -112,7 +112,7 @@ THINKING_OFF_RULES = (REASONING_EFFORT, THINKING_OFF_UNAVAILABLE)
 # Where the merge and decompose ceilings come from. `CEILING_DOCUMENT` is the historical
 # behaviour: `merge.budget_tokens` sizes it from the sources and adds a flat
 # `REASONING_ALLOWANCE`. `CEILING_MODEL` sends no ceiling at all and lets the
-# endpoint apply its own, which is DECISIONS 443 - a fixed allowance cannot
+# endpoint apply its own, because a fixed allowance cannot
 # hold for a model that scales reasoning with perceived difficulty, and
 # `claude-sonnet-5` proved it by spending 13,824 tokens on reasoning and being
 # truncated with `content: null` before writing a character.
@@ -160,7 +160,7 @@ class Profile:
     # A command backend is the case where it cannot be discovered -- there is
     # no `response_format` to be refused and no `tools` to be ignored, only a
     # prompt and whatever comes back -- so its profile names its one rung and
-    # `build_body` raises `TierUnsupported` for the others (483).
+    # `build_body` raises `TierUnsupported` for the others.
     tiers: tuple[str, ...] = ()
 
     def sends_temperature(self, *, thinking: bool) -> bool:
@@ -205,7 +205,7 @@ PROFILES: dict[str, Profile] = {
     #
     # No `tiers`, so the ladder probes from `json_schema`. The vendor documents
     # `response_format` as ignored on this endpoint; a must-fire schema showed
-    # it carried on four Anthropic models on 2026-09-25 (621). The ladder
+    # it carried on four Anthropic models on 2026-09-25. The ladder
     # cannot tell the two apart, so `tests/schema_carriage.py` is the check.
     "anthropic": Profile(
         budget_field="max_tokens",
@@ -216,7 +216,7 @@ PROFILES: dict[str, Profile] = {
     ),
     # Google's OpenAI-compatible endpoint
     # (`generativelanguage.googleapis.com/v1beta/openai/`), as measured on
-    # `gemini-3.8-flash` and `gemini-3.5-flash-lite` on 2026-09-25 (624):
+    # `gemini-3.8-flash` and `gemini-3.5-flash-lite` on 2026-09-25:
     #
     #   `seed`                    > Invalid JSON payload received. Unknown name
     #                               "seed": Cannot find field.
@@ -243,7 +243,7 @@ PROFILES: dict[str, Profile] = {
         thinking_off=THINKING_OFF_UNAVAILABLE,
         output_ceiling=CEILING_MODEL,
     ),
-    # A subprocess answering instead of an endpoint (483). Everything here is
+    # A subprocess answering instead of an endpoint. Everything here is
     # a consequence of there being no HTTP request to put a field in.
     #
     # `prompt` and nothing else: the other two rungs constrain a model through
@@ -494,7 +494,7 @@ def _empty_reason(response: dict, message: dict) -> str:
     reasoning channel are the same string to a reader and different problems
     to fix. The second says so in fields this function already holds:
     `finish_reason: "length"` with a reasoning block and no content means the
-    model was still thinking when it hit the cap (385). Naming the cap and the
+    model was still thinking when it hit the cap. Naming the cap and the
     size of the reasoning is what turns "the generation is blank" into an
     instruction -- the operator met the first while the response carried both.
 
@@ -529,9 +529,9 @@ def _empty_reason(response: dict, message: dict) -> str:
             f"reasoning is charged against the same budget as the answer, so the "
             f"same prompt at the same ceiling reasons into the same wall again"
         )
-    # A refusal, named rather than folded into the generic blank (680): a
+    # A refusal, named rather than folded into the generic blank: a
     # safety layer that declines is a different fault from a platform that
-    # answered nothing, and a runner classifying failures for 678 has to be
+    # answered nothing, and a runner classifying failures has to be
     # able to tell them apart. Distinct from `length` above because retrying
     # is not obviously futile here the way it is there -- a rephrased prompt
     # can clear a content filter a resend of the identical one will not.
@@ -660,7 +660,7 @@ class Capabilities:
     """A record of what each endpoint did. It decides nothing.
 
     It used to. `Client` seeded its starting rung from this file, so one
-    refusal -- or, before M5 entry 8, one blank body -- wrote a demotion that
+    refusal - or, in an earlier version, one blank body - wrote a demotion that
     every later process inherited without ever testing it again. A tier
     resolution is an observation about one request, not a fact about a server,
     and a file that turns the first into the second is a latch.
@@ -676,7 +676,7 @@ class Capabilities:
     there before, so a resolution that differs from last time gets said out
     loud at the moment it happens.
 
-    Entries written before M5 are bare strings with no timestamp and no reason.
+    Entries written before this format existed are bare strings with no timestamp and no reason.
     They are dropped on load rather than migrated -- their whole problem is
     that nothing is known about when or why they were written.
     """
@@ -730,9 +730,9 @@ class Capabilities:
             why=" ".join(why.split())[:200],
         )
         # The cache root, and the capability record in it. Not documents,
-        # but it lives in the same tree and a mode that is right for one file
-        # and wrong for its directory is not a mode anybody can reason about
-        # (325).
+        # but it lives in the same tree and a mode that is right for one
+        # file and wrong for its directory is not a mode anybody can
+        # reason about.
         # Imported here, not at module scope: `cassette` imports `config` and
         # this module is imported by `client` before either, so a top-level
         # import would be a cycle for the sake of two helpers.
@@ -760,7 +760,7 @@ def length_truncation_reason(response: dict) -> str | None:
     is not this specific, provably-futile case; either way the caller's
     existing generic message still applies.
 
-    Checked on `finish_reason` directly, and not (as before 680) by comparing
+    Checked on `finish_reason` directly, and not, as an earlier version did, by comparing
     `_empty_reason`'s text against its own generic string: that comparison
     silently started treating a `content_filter` refusal as this case too,
     the moment `_empty_reason` grew a specific sentence for one, because both

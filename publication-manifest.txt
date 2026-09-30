@@ -1,0 +1,364 @@
+# Publication manifest -- DECISIONS 34.
+#
+# Publication is by file copy into a fresh public repository, never by pushing
+# this history and never by rewriting it. This file is the list of what gets
+# copied. One path or one directory per line; a directory means every tracked
+# file under it. Blank lines and `#` comments are ignored.
+#
+# `internal/tests/test_docs.py` reads this file and refuses if:
+#   - an entry names nothing tracked,
+#   - a tracked file is neither listed here nor listed under NOT-PUBLISHED,
+#   - a listed file carries vocabulary that appears in `assets/` and nowhere
+#     else on this list.
+#
+# The third check is why the list is explicit rather than "everything except".
+# The repository itself is never published, so scanning it at large would be
+# scanning the wrong thing; what needs scanning is exactly what leaves.
+#
+# WHAT THE THIRD CHECK WILL NOT CATCH. Read this before trusting it, because
+# the limits of a scan are the part the person running it most needs.
+#
+#   - It flags a token only when that token appears in AT MOST ONE published
+#     file. Paste the same asset vocabulary into two files on this list and the
+#     scan goes quiet: two occurrences look like ordinary shared vocabulary
+#     rather than a leak. It was built for a single accidental paste, which is
+#     the failure that actually happened here, and it is not a defence against
+#     a phrase that has spread.
+#
+#   - It flags a token only when that token occurs at least 8 times across
+#     `assets/`. A name mentioned once or twice in the source documents is
+#     below the threshold and will not be seen. Eight is the lowest value that
+#     leaves this manifest clean; lowering it costs false positives on ordinary
+#     English, so the floor is a trade, not a safety margin.
+#
+#   - `tests/scan_dependencies.py` finds a read by walking literal path chains
+#     in the AST. A path routed through a constant -- `SPEC = paths.BENCH_SPEC`
+#     -- is invisible to it, because the path never appears as a literal. A
+#     refactor therefore changes what that check covers without changing the
+#     check. Only moving paths go through `repo_paths` for this reason (337).
+#
+#   - `assets/` is untracked. On a machine that does not have it the scan
+#     examines nothing at all. It says so rather than passing quietly, but a
+#     pass on such a machine is not evidence.
+#
+# The consequence for whoever assembles the upload: a green run of
+# `internal/tests/test_docs.py` means no single-file paste of high-frequency asset
+# vocabulary was found. It does not mean the copy is clean. Read the diff.
+#
+# --------------------------------------------------------------------------
+# THE ONE JOB LEFT BEFORE THE FIRST UPLOAD. Do this as a single block, and do
+# it once the corpus has stopped moving, which is the point of scheduling it
+# rather than doing it now.
+#
+# The AT MOST ONE clause above has a measured hole. A token pasted into two
+# published files is invisible to the scan, and closing the hole means raising
+# that clause until the scan flags a token that is spread across many files.
+# Raising it also flags the project's own ordinary vocabulary, and each of
+# those needs an allowlist entry with a reason. That cost was measured over
+# 53 hot tokens and 682 published files:
+#
+#     clause              allowlist entries needed
+#     spread <= 2         0        <- today's rule, restated
+#     spread <= 3         1
+#     spread <= 6         3
+#     spread <= 20        5
+#     any spread          43
+#
+# Two things follow from the shape of that table, and both are why the hole is
+# still open. The spread histogram has NOTHING in the 1-2 file band: 10 tokens
+# appear in no published file at all, none in one or two, 5 in three to twenty,
+# and the remaining 38 in twenty-one or more. So raising the clause from 2 to 3
+# or to 6 buys nothing the current rule does not already catch -- there is no
+# token sitting in the gap it would close. Only `any spread` closes the hole,
+# and that is 43 entries.
+#
+# The decision: write those 43 entries, in one scheduled block, immediately
+# before the first publication and not before. Each entry needs a reason, and a
+# reason is only writable once the token's use is settled; entries written
+# against a moving corpus rot into a stale allowlist, which is worse than no
+# allowlist because it reads like one that was checked. The check that fails
+# on an unused entry exists for exactly that decay.
+#
+# Whoever runs it: the table above is the measurement, so it does not need
+# repeating. Set the clause to `any spread`, run `internal/tests/test_docs.py`, and
+# write a reason for each of the 43 tokens it names.
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# PUBLICATION IS IN TWO PHASES.
+#
+# PHASE 1 is the application: code, prompts, tests, README, LICENSE and
+# packaging. Everything below the `NOT-PUBLISHED` line is out of it.
+#
+# PHASE 2 is documentation and lessons learned, after curation. `docs/` was a
+# phase 2 candidate; 691 published its pages one by one instead, in phase 1,
+# so it is no longer one. `internal/CHANGELOG.md` and `internal/STATE.md`
+# still are, not permanent exclusions, and that distinction is the reason they
+# are commented rather than merely listed: whoever assembles the second
+# upload needs to know the difference between a file that was held back for a
+# phase and a file that was held back for a reason. `HISTORY.md`, `MEMORY.md`
+# and `assets/` are the second kind.
+# --------------------------------------------------------------------------
+
+.gitignore
+LICENSE
+# ELv2 carries no copyright line, so the holder lives here and ships with the
+# wheel beside the licence text (453). A published tree without it would be
+# distributing the software with the licensor's notice removed.
+NOTICE
+README.md
+models.local.example.json
+publication-manifest.txt
+pyproject.toml
+uv.lock
+arms
+# Derived from `arms` and `tests/pairs`, both published, by
+# `tests/annotate_merges.py`, which the suite runs with `--check` so a
+# stale page fails the build. Published because withholding them would
+# publish the records and withhold the readable form of the same facts,
+# and because they contain nothing the two inputs do not. Entry 266.
+annotated
+prompts
+scripts
+src
+tests
+
+# `docs` was withheld wholesale, for the phase, until 691 moved the README's
+# long reference material there and published it one page at a time (see the
+# block below). This file was carved out earlier and on different grounds: it
+# is the property registry `tests/run_bench.py` reads at run time, not
+# documentation, and `95-availability.tex` names it as shipping in
+# machine-readable form alongside the harness. Brief BB item 2.
+docs/bench-spec.md
+
+# The documentation pages the README links to (DECISIONS 691). The README
+# keeps the overview; the long reference material moved into these, one file
+# per line like every other carve-out under `docs/`.
+docs/reference.md
+docs/web.md
+docs/report.md
+docs/results.md
+docs/how-it-works.md
+docs/benchmark.md
+docs/img/web-ui-light.png
+docs/img/web-ui-dark.png
+
+# The paper is not in the first release. It published here from DECISIONS 334
+# until the operator withheld it on 2026-09-30 (DECISIONS 729); its entry is
+# below the phase-2 marker, at the end of this file.
+
+
+# NOT-PUBLISHED
+#
+# Tracked deliberately, copied out never. Listing them here rather than
+# omitting them silently is the point: a tracked file that appears on neither
+# list fails the build, so a new file forces a decision instead of inheriting
+# one.
+#
+# HISTORY.md   the turn-by-turn transcript record, 58,863 lines, regenerable by
+#              internal/scripts/gen_history.py. A working record rather than a
+#              result.
+# MEMORY.md    the project's own memory: goals, architecture, constraints.
+#              Working record, same reason.
+# assets       the source documents. Untracked and gitignored today, and listed
+#              anyway: the tracked-file rule cannot withhold a path that is not
+#              tracked, so without this line the day somebody adds `assets/` to
+#              the index it inherits the published default in silence. A
+#              NOT-PUBLISHED entry is not required to name anything tracked,
+#              for exactly this case.
+
+# internal/paper/OUTLINE.md
+#              the paper's own plan. Withheld on its merits rather than for the
+#              phase, which is why it sits here and not beside `paper` below.
+#              `paper` is a phase-2 candidate and this one file is carved out of
+#              it by the same most-specific-entry rule that carves
+#              `docs/bench-spec.md` out of `NOT-PUBLISHED docs`, in the other
+#              direction.
+#
+#              It stays in check 6's corpus even so, and that is worth knowing
+#              rather than assuming either way. `scanned_files()` expands the
+#              phase-2 entries and `paper` is one of them; the most-specific
+#              rule applies to `published_files()` and not to that expansion.
+#              The docstring there says merit-withheld files are out of scope,
+#              and this is the first merit-withheld file to live inside a
+#              phase-2 directory, so it is the first case where the two
+#              disagree. Left as it is: a leak scan reading one file more than
+#              it promised is the harmless direction, and if this file ever
+#              does fire, the answer is a person deciding, which is what a
+#              firing is for. DECISIONS 303.
+
+# AUDIT.md    the received pre-release review brief. Tracked so the review is
+#              part of the record it produced, withheld on its merits like the
+#              two working records above it: it is about this repository's own
+#              development, and it is somebody else's document rather than a result of this one.
+#              Root `.md` files are gitignored by position, so it is tracked
+#              with `git add -f`, which is what that ignore rule's own comment
+#              says to do.
+
+NOT-PUBLISHED internal
+
+
+# PHASE 2 CANDIDATES. Held back from the first upload, not withheld on their
+# merits. Each is a whole-directory or single-path entry and its subtree comes
+# with it.
+#
+# Everything below this marker is still scanned. `internal/tests/test_docs.py` reads the
+# marker to build check 6's corpus, because a file held back for a *phase* is
+# still going out and a leak in it is a leak that ships late rather than one
+# that does not ship. Moving `docs` up here took 32 files out of the published
+# set and, until 2026-08-23, out of the scan with it. The entries above the
+# marker are withheld on their merits and stay out of the scan; `HISTORY.md` is
+# check 6's positive control, scanned as though it shipped and required to fire.
+#
+# The two auditors go with the documents they audit. Found by the 2026-08-27
+# publication dry run, which is the only way it could have been found: both are
+# tracked, both were published, and both crash in the copy on the first file
+# they open -- `test_docs.py` on `CHANGELOG.md`, `audit_docs.py` on `docs/`.
+# Nothing in the manifest checks that a published file can run without a
+# withheld one, so the suite was green here and broken there.
+#
+# Held back for the phase, not on their merits, and so below this marker and
+# still scanned. They are the phase-2 upload's own audit: `audit_docs.py`
+# resolves every reference the write-ups make and `test_docs.py` enforces this
+# manifest, and neither has anything to check until the write-ups ship. The
+# manifest is enforced from the source repository, before the copy, which is
+# where enforcement belongs -- a copy that validates itself is validating the
+# wrong tree.
+#
+# The two release tools, held back for the same reason and by the same test.
+# `rehearse_publication.py` performs the copy this file describes and then
+# builds, installs and runs what it copied; `scan_release.py` runs five
+# detectors over that copy, each with a seeded probe. Both import
+# `test_docs.py` for the manifest reader and the assets scan, so both would
+# crash in the copy on the first line, and neither has a job to do there: the
+# rehearsal is what the source repository does *before* an upload, and a tree
+# that rehearses its own publication is rehearsing the wrong tree.
+#
+# The dependency gate, held back for the same reason and found the same way:
+# `internal/tests/scan_dependencies.py` imports `test_docs.py` for the manifest reader
+# it audits against, and crashed in the copy on its first line the first time
+# a rehearsal actually ran it there -- the exact failure mode item 3 exists to
+# generalise, now demonstrated by the tool built to catch it. It has the same
+# job as `test_docs.py`: enforced from the source repository, before the
+# copy, or it is enforcing a tree nobody is shipping. DECISIONS 235.
+#
+# Brief BB item 4 ran that gate over the whole published set and asked, of
+# every remaining published tool that reads a withheld file, the same
+# question item 2 asked of `run_bench.py`: publish what it reads, or withhold
+# it too. Two files, and both go the second way.
+#
+# `internal/tests/known_failures.py` reads `internal/docs/M7-fidelity.md` to check that every
+# register entry's closing task is one the brief actually defines. The brief
+# is a milestone brief, held back with the rest of `docs` for the phase, and
+# it is nothing like `bench-spec.md`: not a machine-readable registry the
+# harness needs, promised to nobody, and cleared by no scan -- so publishing
+# it to satisfy one tool is not on offer. Withholding the tool costs the copy
+# nothing. Its register is empty (`ENTRIES = ()`), `run_all.py` already
+# excuses it from the suite by name, and `modules()` reaches for
+# `audit_docs.py`, which is withheld two blocks up. The read is guarded
+# (`if not BRIEF.exists()`), so a clone would not crash today -- but the
+# guard degrades to "no entry's closing task can be checked", and the first
+# non-empty register turns that into an exit 1 in the copy and nowhere else.
+# A tool that is correct only while its register is empty is not a published
+# tool. Like the two auditors, it is about this repository's own development
+# and belongs to the tree that has one.
+#
+# `internal/scripts/gen_history.py` regenerates `HISTORY.md`, which is withheld on its
+# merits and permanently, six lines above `NOT-PUBLISHED HISTORY.md`, by this
+# file, naming this script. Its redaction rules are not its own either:
+# `rules()` imports `test_docs` and `test_client` unconditionally and masks
+# against `docs.WORDS` and `docs.RUN_MAX`, so the withheld manifest auditor
+# owns the definition of what gets masked, and the only test of that masking
+# lives in `test_docs.py` too. Output withheld, rules withheld, test
+# withheld: nothing about it ships. DECISIONS 237.
+#
+# The pod session runner. Withheld because it is operational rather than part
+# of the tool: it names a mirror path under the operator's home directory, it
+# assumes this repository's own venv, and its judge-per-block and window-per-
+# block tables are the run plan in `docs/`, which is withheld wholesale. A
+# reader who wanted to reproduce a session would need the plan, not the script
+# that reads it. It carries no address: the pod URL is an environment variable
+# and refuses to start without one. DECISIONS 287.
+#
+# The commit gate. Withheld for the same reason: it is about how this
+# repository is worked on, not about what the tool does. It reads a gitignored
+# stamp that no clone would have, its escape hatch is a git flag, and no
+# published document describes it -- deliberately, because a hook that a reader
+# cannot see running is not evidence of anything and the paper does not cite
+# it. DECISIONS 299.
+#
+# The provider detector, withheld because of what it holds rather than because
+# of what it does. Every other detector in this repository matches a shape, and
+# a shape can be written down in public; this one matches the name of the
+# company renting the machine, and that name in a published file is the
+# disclosure it exists to prevent. `scan_release.py` and
+# `scripts/build_arm_bundle.py` both import it, the second of them published and
+# holding the name of the module and nothing else. DECISIONS 222.
+#
+# The gate on the public records, withheld because it imports two files that
+# are: `internal/tests/test_docs.py` for the `assets/` vocabulary scan and
+# `internal/tests/providers.py` for the provider name. It runs before those records are
+# committed, which is the only moment that matters -- git history is permanent,
+# and the release scan reads the rehearsal copy, which does not contain them
+# while `paper` is held back. DECISIONS 224.
+#
+# The gate on the inputs behind those records, withheld beside the gate on the
+# records themselves: it is about how this repository checks its own evidence
+# before a commit, and it runs from the source repository, not from a copy.
+# DECISIONS 277.
+#
+# The full audit trail and its generator. Withheld as a pair, and withheld for
+# now rather than for good: it is one page per model call -- what was sent, what
+# came back, what was made of it, which figure it feeds -- and publishing it is
+# a decision the owner has not taken. `annotated/` is the published, readable
+# subset and is unaffected. The generator goes with it because a published tool
+# that writes a withheld directory is a tool a reader cannot run to completion.
+#
+# DECISIONS 282.
+#
+# The benchmark runner was withheld here because its registration was.
+# `docs/bench-spec.md` section 8 is the property registry, `docs` was withheld
+# wholesale, and every path through `run_bench.py` reads that file first -- so
+# the copy shipped a runner that could not start. It shipped that way from the
+# day it was promoted and the suite was green over it, because the runner was
+# in no tool list and the rehearsal only runs what `run_all.py` names.
+# `--self-test` is what found it, on the commit that added it. DECISIONS 230.
+#
+# Resolved by publishing the registry rather than moving it: `docs/bench-spec.md`
+# is now carved out of `docs` above, `published_files()` gives the more specific
+# entry precedence, and `run_bench.py` starts in the rehearsed copy. Both halves
+# of `95-availability.tex`'s claim -- the harness and the machine-readable
+# registry are in the tree -- are true for a published clone now. Brief BB
+# item 2; DECISIONS 234.
+tests/run_bench.py
+#
+# The runner names all of the above. It used to be withheld because it names
+# four tools on the other side of this line and would have failed loudly in the
+# copy -- the behaviour that makes it worth having was what made it unshippable.
+# That is fixed and it now ships: `run_all.py` reads the NOT-PUBLISHED entries
+# here and treats a named tool that is absent *and* withheld as withheld, while
+# a named tool that is absent and not withheld is still the hard failure it
+# always was. Absence is judged against this file rather than against a second
+# list that could disagree with it. DECISIONS entry 166; the one-line README
+# instruction the old comment asked for names this command.
+#
+# The whitepaper, withheld from the first release (DECISIONS 729). The
+# operator, 2026-09-30: "Paper stays out." The whole directory goes: the LaTeX
+# source, the generated figures and the graded records under `paper/records/`.
+# It had published from DECISIONS 334 until then, and before that it was
+# withheld here for a different reason, while the paper was unwritten.
+#
+# Below the marker, because it is held for the phase and not on its merits:
+# it can ship with a later release. That keeps it inside check 6's
+# corpus, which matters more here than anywhere: the paper is the one document
+# whose whole job is to quote figures, so it is the most likely place for a
+# sentence to arrive with a document behind it.
+#
+# `paper/records/` is tracked by name as of DECISIONS 224: the sweep behind the
+# paper's headline number, the detection and merge arm records, the two
+# re-scores and the K=5 bench. This entry withholds them with the paper, and
+# they ship together, under CC BY 4.0, when the paper does. The published tools
+# that read them (`tests/annotate_merges.py`, `tests/benchmark_matrix.py`) say
+# UNMEASURED where they are absent rather than failing, and `tests/run_all.py`
+# excuses `paper/check_refs.py` as withheld because of this entry.
+NOT-PUBLISHED paper

@@ -1,6 +1,6 @@
 """The operator's keys and endpoints, and who is allowed to set them. One rule.
 
-`claimcheck serve` shipped able to bind loopback and nothing else, and the
+`llossless serve` shipped able to bind loopback and nothing else, and the
 reason was written into `server.py`'s docstring rather than left implied: the
 server spends the operator's API credit on every submitted document, and until
 something authenticated the submitter there must not exist a version of this
@@ -125,7 +125,7 @@ from .. import config
 # settings page and the model picker call the same vendor the same thing --
 # `tests/test_web_credentials.py` asserts that rather than leaving it to
 # whoever edits the catalogue next. `google` has had catalogue rows since
-# the free-tier run of 2026-09-25 (625); it was here before them, because a
+# the free-tier run of 2026-09-25; it was here before them, because a
 # key can be configured before a model from it has ever been measured.
 #
 # `self-hosted` maps to `config.DEFAULT_KEY_ENV`, read from `config` rather
@@ -147,7 +147,7 @@ PROVIDERS: dict[str, str] = {
 # watching a run fail on a credential they never touched.
 assert len(set(PROVIDERS.values())) == len(PROVIDERS)
 
-# The well-known OpenAI-compatible address of each vendor provider (676), so
+# The well-known OpenAI-compatible address of each vendor provider, so
 # the Credentials sheet can offer it and a person only pastes a key. The
 # operator: "We should pre set the default, well-known endpoints into the UI
 # for Anthropic, OpenAI and Google."
@@ -161,13 +161,13 @@ assert len(set(PROVIDERS.values())) == len(PROVIDERS)
 # -- so a later change to this table cannot move a stored endpoint, and so a
 # key is only ever bound to an address that was on screen when it was saved.
 #
-# Each is the address this repository's own vendor runs used, not a guess
-# (DECISIONS 676 has the lines):
+# Each is the address this repository's own vendor runs used, not
+# a guess:
 #   anthropic  `arms/2026-09-25/vendor/run_api.py` (Opus 5.5 over the
 #              OpenAI-compatible `/v1/chat/completions`)
 #   openai     the same file (GPT-6 Sol and Luna)
 #   google     `arms/2026-09-25/google/run_api.py` and its `REGISTRATION.md`
-#              (the Gemini free-tier run, 624, 625)
+#              (the Gemini free-tier run)
 # Each already carries its path, so `config.with_api_path` appends nothing.
 PRESET_URLS: dict[str, str] = {
     "anthropic": "https://api.anthropic.com/v1",
@@ -618,7 +618,7 @@ def is_loopback(host) -> bool:
 def require_token(host, token, *, accounts: int = 0) -> str:
     """The token this bind needs, or `BindRefused` saying why there is no server.
 
-    This is the check W5 was built around, so it refuses before a socket exists
+    This is the check the token requirement was built around, so it refuses before a socket exists
     rather than after: a server that binds first and discovers its
     configuration second is a server that was, for however long that took, a
     key-spending endpoint on the network with nothing in front of it.

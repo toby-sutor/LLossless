@@ -1,6 +1,6 @@
 """Nothing this host knows about its own filesystem reaches whoever submitted a job.
 
-DECISIONS 459 left one thing open for the HTTP layer. `Usage.prompts` is keyed
+One thing was left open for the HTTP layer. `Usage.prompts` is keyed
 by the full prompt path (`client.py:604`), so `report.as_dict` carries an
 absolute filesystem path for every prompt a run loaded. That is harmless in the
 artefacts this repository publishes, because `scripts/stream_redact.py` rewrites
@@ -26,10 +26,10 @@ conventional Linux home mount -- and nothing else. That covers
 the machine this project is developed on and misses every other shape a server
 actually runs under -- a systemd unit under `/srv`, a container under `/opt`, a
 `root` install, a mac. Worse, the literal cannot be written here at all:
-`internal/tests/scan_release.py` scans the published set for exactly that shape
+the release scan checks the published set for exactly that shape
 and exempts one file by name and digest, so a second copy of the pattern in
-`src/` is itself a scan failure, and DECISIONS 457 has already ruled out
-disguising a literal to get past a scanner.
+`src/` is itself a scan failure, and disguising a literal to get past a
+scanner has already been ruled out.
 
 So the rule is the *other* half of `stream_redact`, the half that generalises:
 `literal_forms()` there collects real values out of the environment and replaces

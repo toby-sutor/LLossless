@@ -28,9 +28,9 @@ contract (`api.MAX_BODY_BYTES`) rather than here, because a second
 implementation has to refuse at the same size to be the same API.
 
 **Every response says `nosniff`, `deny` and a content type.** The static
-directory is where W6's frontend will land, and a page served from the same
+directory is where the frontend will land, and a page served from the same
 origin as this API can read every one of its responses; the headers are the part
-of that arrangement that does not depend on what W6 writes. `Content-Security-
+of that arrangement that does not depend on what the frontend writes. `Content-Security-
 Policy` is set to allow only what a self-contained page needs, because the one
 artefact this server hands out that is already a whole HTML document -- the
 report -- is built from a model's output, and `html_report` escaping it
@@ -81,7 +81,7 @@ DEFAULT_PORT = 8765
 # and deletes each job's directory once the retention window passes.
 DEFAULT_WORK_DIR = config.CACHE_DIR / "web"
 
-# W6's frontend lands here. Served rather than proxied because the whole point
+# The frontend lands here. Served rather than proxied because the whole point
 # of a self-hosted UI is that it is one process with no build step in front of
 # it, and because a page served from a different origin than the API would need
 # CORS -- which is a permission this server has no reason to grant to anybody.
@@ -358,8 +358,8 @@ class Handler(BaseHTTPRequestHandler):
     def _static(self, path: str) -> None:
         """The page, behind the transport guard and nothing else. It is public.
 
-        **This is the one exemption in the package, and it is the answer to the
-        open question 461 left.** That entry demanded the token on the page
+        **This is the one exemption in the package, and it is the answer to an
+        open question an earlier decision left.** It demanded the token on the page
         itself, and said why: "every request carries the token" is a sentence
         an auditor can check and "every request except the ones that do not" is
         not. It also recorded the cost -- a browser cannot put a custom header
@@ -534,7 +534,7 @@ def build(*, host: str = HOST, port: int = DEFAULT_PORT, token: str = "",
     server, and deciding that is a decision about the command.
 
     **`accounts=None` means this server has no accounts**, which is a
-    configuration and not a missing value: it is 467's single-tenant server,
+    configuration and not a missing value: it is the single-tenant server,
     everybody who gets past the token is the same person, and every job belongs
     to everybody. It is what a library caller embedding this gets unless it
     asks for more, and it is what the suite binds a hundred of. `serve` -- the
@@ -543,7 +543,7 @@ def build(*, host: str = HOST, port: int = DEFAULT_PORT, token: str = "",
     `tests/test_web_accounts.py` asserts that rather than leaving it to
     whoever edits `serve` next.
 
-    The bind rule follows from it. With no accounts, 461 stands in full: an
+    The bind rule follows from it. With no accounts, it stands in full: an
     address that is not loopback costs a token. With at least one, logging in
     *is* that authentication and no token is wanted -- see
     `credentials.require_token`, which is where the count is read.
@@ -560,8 +560,8 @@ def build(*, host: str = HOST, port: int = DEFAULT_PORT, token: str = "",
     commands = NoCommands() if commands is None else commands
     # **Here rather than in `serve`, so the path an operator runs and the path
     # a check binds are the same path.** `Commands.migrate` retires the routes
-    # the pre-526 version of the credentials sheet wrote -- `discovered`, a
-    # tool id, no model -- which 526 turned from working rows into rows that
+    # the earlier version of the credentials sheet wrote: `discovered`, a
+    # tool id, no model. That change turned working rows into rows that
     # refuse. It touches nothing else and it is silent on a file it cannot
     # read; `serve` reads `commands.retired` afterwards and says what went.
     commands.migrate()
@@ -579,8 +579,8 @@ def build(*, host: str = HOST, port: int = DEFAULT_PORT, token: str = "",
     except BaseException:
         # A port already in use is the ordinary case here -- after a crash it
         # is in TIME_WAIT for up to a minute -- and the store is given up
-        # without its workers ever having started. Started first, as it was
-        # before 660, a restart that then failed to bind ran the queue it had
+        # without its workers ever having started. Started first, as it used to be
+        # ordered, a restart that then failed to bind ran the queue it had
         # just reloaded and died under it, which the next start reported as
         # interrupted: a run billed and lost by a bind error. Found by
         # killing a real server and restarting it on the same port.
@@ -728,7 +728,7 @@ def serve(*, host: str = HOST, port: int = DEFAULT_PORT, work_dir=None,
         print(f"llossless serve: {refusal}", file=out)
         return 2
     except (IndexUnreadable, WorkDirBusy) as refusal:
-        # Refused rather than started empty (660): see `IndexUnreadable`. The
+        # Refused rather than started empty: see `IndexUnreadable`. The
         # message says what moving the file aside would delete, because that
         # is the operator's decision to make and not this command's. A second
         # server on a work directory another one owns is refused the same way
@@ -755,7 +755,7 @@ def serve(*, host: str = HOST, port: int = DEFAULT_PORT, work_dir=None,
         reach = where
     print(f"LLossless {__version__} serving {server.url}", file=out)
     print(f"  work directory  {server.store.work_dir}", file=out)
-    # What the reload found (660), so an operator restarting after a crash is
+    # What the reload found, so an operator restarting after a crash is
     # told before anybody asks. Counts only: nothing about whose runs.
     found = server.store.restored
     print(f"  job index       {server.store.index_path} ({found['restored']} "

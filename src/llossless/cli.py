@@ -96,7 +96,7 @@ FATAL = (
     ThinkingIgnored,
     ThinkingNotHonoured,
     TransportError,
-    merge.MergeError, Cancelled,  # Cancelled: the web server's cancel (639)
+    merge.MergeError, Cancelled,  # Cancelled: the web server's cancel
 )
 
 ROLES = ("merge", "decompose", "verify")
@@ -252,9 +252,9 @@ for character. No level licenses rewriting a number, a unit, a URL, a file
 path, a version string, a command, or anything inside a fenced block.
 
 `verbatim` is the strictest level, not the absence of one: it turns rewriting
-off, not checking. It was called `off` until entry 437 and `--fidelity off`
-still names it, indefinitely -- recorded runs and older scripts are written in
-that spelling and keep working.
+off, not checking. It used to be called `off`, and `--fidelity off` still
+names it, indefinitely: recorded runs and older scripts are written in that
+spelling and keep working.
 
 The level is printed on every report, because the same coverage figure means
 different things at different levels.
@@ -390,7 +390,7 @@ def build_parser() -> argparse.ArgumentParser:
              "of under --title-policy keep-base",
     )
 
-    # M7 task 30. On `merge` alone: `verify` composes nothing, so there is no
+    # On `merge` alone: `verify` composes nothing, so there is no
     # policy for a sweep to vary. The deliverable needs live inference and
     # `sweep.refuse_before_running` says so before a call is made.
     merge_parser.add_argument(
@@ -551,7 +551,7 @@ def read_document(path: Path, what: str) -> str:
     """One document off disk, with the three ways it can be useless named."""
     try:
         # `utf-8-sig` strips a leading byte-order mark and does nothing else --
-        # it is not `errors="replace"`, which Pass 1's O1 refused because it
+        # it is not `errors="replace"`, which was refused because it
         # turns a mis-encoded document into a silently mangled one. A BOM read
         # as content left U+FEFF glued to the first heading, the ATX pattern
         # stopped matching it, and a byte-faithful merge reported four findings
@@ -669,7 +669,7 @@ def step(run: Run, name: str, call, console: Console):
         console.skipped(f"{name}: planned, not called (--dry-run)")
         return None
     except FATAL as exc:
-        # Recorded before the re-raise (411): a fault that will recur
+        # Recorded before the re-raise: a fault that will recur
         # identically on retry still aborts the run, but whatever `main` has
         # already measured -- a finished merge, prior decomposes, an earlier
         # verify pass -- is not the report's to discard. `Run.errored` is what
@@ -721,7 +721,7 @@ def pipeline(
     # Written from the argument that decides the run's shape, in the one
     # function every caller goes through, so a `Run` can never carry a depth
     # other than the one it ran at. The report reads it to decide whether a
-    # clean verdict may say "nothing was invented" (505); `Provenance` records
+    # clean verdict may say "nothing was invented"; `Provenance` records
     # it separately from `settings`, which is the same fact taken from the
     # configuration rather than from the run.
     run.verify_depth = depth
@@ -746,11 +746,11 @@ def pipeline(
     # two are the same object. `run.unusable` itself rather than a local that
     # gets copied over later: a forward-pass drop has to be reported even when
     # the reverse pass never runs, and every path out of this function then
-    # carries the record without having to remember to. `DECISIONS.md` 194.
+    # carries the record without having to remember to.
     ungraded: list[Unusable] = run.unusable
 
     if run.command == "merge":
-        # The declared-loss denominator (§2.6), computed here because it is a
+        # The declared-loss denominator, computed here because it is a
         # fact about the sources and the report holds no document to derive it
         # from. Same call the merge prompt's rendering makes and the same call
         # `reconcile` counts, so the budget the report prints and the budget the
@@ -792,7 +792,7 @@ def pipeline(
             # later needs no change here, and a payload that carries one where
             # it should not is visible in the report rather than discarded.
             run.additions = merged.additions
-            # The merge's own warning about its inputs (497). Carried at every
+            # The merge's own warning about its inputs. Carried at every
             # level: this is about the documents rather than the licence.
             run.mismatch = merged.mismatch
             run.title_policy = policy.title_policy
@@ -807,10 +807,10 @@ def pipeline(
             documents[MERGED] = merged
             run.merged = merged
             # `merge.example_content_leaks` before anything else looks at this text.
-            # M4 recorded it on 73 units and `src/` called it on none, so the
+            # An earlier run recorded it on 73 units and `src/` called it on none, so the
             # detector that caught qwen3:4b returning `merge.md`'s illustration
             # instead of the documents has never run on a document a user
-            # merged. `DECISIONS.md` entry 204 found it; this line is the fix.
+            # merged. This was found and fixed here.
             #
             # Here rather than inside `merge_documents` so that it reads the
             # text the rest of the pipeline reads, and before the reconciler so
@@ -825,7 +825,7 @@ def pipeline(
             # documents faithfully -- no marker anywhere in the text -- and
             # still write the illustration's argument into its own `reason`.
             # That happened, and the first half was green over it, which is
-            # not a failure of its claim but the edge of it (370).
+            # not a failure of its claim but the edge of it.
             run.leaks = tuple(
                 reconcile.Finding(
                     reconcile.PROMPT_EXAMPLE_LEAK,
@@ -847,7 +847,7 @@ def pipeline(
             )
 
         # The reconciler, held against the two texts and what the merge said it
-        # did. M7 task 36, `DECISIONS.md` entry 9: until this line existed
+        # did. Until this line existed,
         # `reconcile.findings` was called from no module in the shipped package,
         # so eight checks were written, tested against 72 recorded merges, and
         # reached no report and no exit code.
@@ -861,7 +861,7 @@ def pipeline(
         # behaviour this task removed — a clean report from a check that was
         # never made.
         #
-        # It runs whether or not anything was declared. Under §2.1 silence is
+        # It runs whether or not anything was declared. Under the disposition model silence is
         # the claim: an empty `dispositions` asserts that every source segment
         # survives character for character, and check 2 is the string comparison
         # that tests that assertion.
@@ -883,7 +883,7 @@ def pipeline(
                 fidelity=policy.fidelity,
                 title_policy=policy.title_policy,
                 # `run.base`, not the `base` argument: `base=None` means the
-                # merge applied the default, and §2.7's `keep-base` check has to
+                # merge applied the default, and the title policy's `keep-base` check has to
                 # be made against the document that actually governed the
                 # structure rather than against the absence of a flag.
                 base=run.base or "",
@@ -892,7 +892,7 @@ def pipeline(
 
         if merged is not None:
             run.reconciled = step(run, "reconcile", reconciled, client.console)
-            # DECISIONS 450. Only `synthesise` permits a written title, and
+            # Only `synthesise` permits a written title, and
             # `reconcile` cannot grade one: it grades no claims by design. So a
             # title this project did not copy goes to the pass that reads both
             # texts. Costs one short call, and only when the model chose to
@@ -915,7 +915,7 @@ def pipeline(
                         return run.reconciled
                     return replace(run.reconciled,
                                    findings=run.reconciled.findings + (finding,))
-                # Assigned only on success (495). `step` returns None on
+                # Assigned only on success. `step` returns None on
                 # anything else, and this field already holds the
                 # reconciliation line 825 produced -- so writing the result
                 # straight back discarded nine mechanical checks that had
@@ -932,16 +932,16 @@ def pipeline(
                 if graded is not None:
                     run.reconciled = graded
             # The other half of `measured`, and the reason this line exists at
-            # all: `Reconciliation.order` was computed on every run since M7
-            # task 11 and read by no module in `src/`. Same shape as the eight
+            # all: `Reconciliation.order` was computed on every run and never
+            # read by any module in `src/`. Same shape as the eight
             # checks the comment above describes, one tier milder -- it is not
             # a check that never ran, it is a correct measurement nobody was
-            # shown. DECISIONS 57. Assigned outside the step because a
+            # shown. Assigned outside the step because a
             # reconciler that raised leaves `measured` as None and there is
             # nothing to report.
             if measured is not None:
                 run.order = measured.order
-                # Same shape and the same reason (391): a correct measurement
+                # Same shape and the same reason: a correct measurement
                 # that nothing was showing. Taken from `measured` rather than
                 # from `run.reconciled` so it still arrives when the findings
                 # step failed, since it is a fact about the two texts and not
@@ -950,7 +950,7 @@ def pipeline(
     else:
         merged = documents.get(MERGED)
 
-    # A statement credited to a source that does not carry it (569). Here, on
+    # A statement credited to a source that does not carry it. Here, on
     # both commands and before the depth branches, because it reads the texts
     # and asks no model: `coverage` never reads the merged document back and
     # the decomposer rightly files "the guide states X" as a claim about X, so
@@ -961,8 +961,8 @@ def pipeline(
             shown={name: run.display(name) for name in sources})
         run.attributions_checked = True
 
-    # How each document writes its decimals, and the numerals that break it
-    # (601). Beside the attributions for their reasons: it reads the texts
+    # How each document writes its decimals, and the numerals that break it.
+    # Beside the attributions for their reasons: it reads the texts
     # alone, so it runs on both commands, at both depths and every level, and
     # a model reads "4,5" as the same quantity as "4.5" and would never say.
     # The sources are read even where no merge exists, since a source's own
@@ -985,8 +985,8 @@ def pipeline(
     # the merge is only *planned* under a dry run, so `merged` is None, and
     # the plan then named a `decompose source_a.md` call this depth never
     # makes and neither skip below appeared. A plan that describes a different
-    # pipeline from the one the same flags would run is worse than no plan
-    # (505). The real "there is no merged document" case is handled inside,
+    # pipeline from the one the same flags would run is worse than no plan.
+    # The real "there is no merged document" case is handled inside,
     # where it can say so.
     covering = depth == config.COVERAGE_DEPTH
     # A fused call carries the merged document, so it has nothing to ask
@@ -1067,7 +1067,7 @@ def pipeline(
             located=measured,
             findings=None if run.reconciled is None else run.reconciled.findings,
             # Threaded so a covering reconciliation predicts the CONTRADICTED
-            # its own construction guarantees (489). Every level below `open`
+            # its own construction guarantees. Every level below `open`
             # answers exactly as it did before, because `reconcile.COVERS` is
             # false for all of them.
             fidelity=policy.fidelity,
@@ -1083,7 +1083,7 @@ def pipeline(
     # depth the depth is always the reason: a coverage run skips both steps
     # whether or not a merge came back, and a `--dry-run` plan -- where
     # `merged` is None by construction -- has to name the two calls it is not
-    # going to make for the reason it is not going to make them (505).
+    # going to make for the reason it is not going to make them.
     if covering:
         skip(run, f"decompose {run.display(MERGED)}",
              "--verify-depth coverage does not read the merged document back",
@@ -1124,12 +1124,12 @@ def pipeline(
     # and its claims too, and the check would work there -- but every
     # `tests/fixtures/*/expected.json` declares an `expected_exit_code` for a
     # `verify` run derived from its probes alone, and a document-level finding
-    # is not derivable from probes (entry 402). Firing here on `verify` would
+    # is not derivable from probes. Firing here on `verify` would
     # make the new fixture's own answer key false rather than catch anything
     # the corpus contains: measured over 14 fixtures x 3 samples, no merged.md
     # in the corpus restates a claim. Widening it needs a declarable field in
     # the fixture schema, and that is a change to the answer keys, not to the
-    # tool. `internal/TODO.md` holds it.
+    # tool.
     if run.command == "merge":
         run.restated = reconcile.restated_findings(merged_claims)
 
@@ -1217,8 +1217,8 @@ def prepare_merge(
     preload is that a run dies before the merge is paid for rather than three
     calls in. `verify_coverage` was loading its own prompt inside the
     per-source loop, so at `coverage` the one prompt the depth actually needs
-    was the one prompt nothing checked until the merge had already been bought
-    (505). It joins the set; the two verify prompts a coverage run can never
+    was the one prompt nothing checked until the merge had already been bought.
+    It joins the set; the two verify prompts a coverage run can never
     reach leave it, because a preload of a file nothing will open is not an
     early failure, it is an unrelated one.
 
@@ -1277,11 +1277,11 @@ def one_merge(settings, paths: dict, documents: dict, loaded: dict,
 
 def run_sweep(args, settings, paths: dict, documents: dict, loaded: dict,
               base: str | None, console: Console) -> int:
-    """M7 task 30. Every level, one report, and nothing written unless all land.
+    """Every level, one report, and nothing written unless all land.
 
     "Every level" is every level `sweep.plan` kept for this backend, decided
     before the first call; a level it left out is said on stderr here, before
-    anything runs, and again under the table (577).
+    anything runs, and again under the table.
 
     A level that raises does not stop the sweep: the remaining levels still run,
     so the refusal at the end can name every level that failed instead of the
@@ -1295,7 +1295,7 @@ def run_sweep(args, settings, paths: dict, documents: dict, loaded: dict,
     for level, at in runs.items():
         # The banner above was printed for the resolved level, which grants
         # nothing, so a grant a row carries is said here or not at all -- and
-        # an automatic grant is never silent (548).
+        # an automatic grant is never silent.
         tools = config.granted_web_tools(at.command)
         if tools and not config.granted_web_tools(settings.command):
             console.warn(f"fidelity {config.fidelity_name(level)}: the model is "
@@ -1376,7 +1376,7 @@ CLASS_PREFIX = re.compile(r"^[A-Z][a-z0-9_]*(?:[A-Z][A-Za-z0-9_]*)+:\s*")
 # 3 is the page's `advice.record` word for word, and `test_contract_parity`
 # holds the two equal. It had no row here, and the lookup below fell back to
 # 2's, so a finished run whose merged document the tool had found sound ended
-# "Could not complete. Part of this run did not finish" (603).
+# "Could not complete. Part of this run did not finish".
 OUTCOME = {
     0: ("Done.", "Nothing was dropped, contradicted or invented."),
     1: ("Finished, with problems.", "The report lists what was found."),
@@ -1393,7 +1393,7 @@ TINT = {0: GREEN, 1: RED, 2: YELLOW, RECORD_ONLY: YELLOW}
 
 # Both tables are read with a bare subscript, so a code without a row is a
 # failure at import and never a borrowed sentence at the end of a run.
-# `html_report.BANNER` is held to the same tuple for the same reason (500).
+# `html_report.BANNER` is held to the same tuple for the same reason.
 assert set(OUTCOME) == set(TINT) == set(EXIT_CODES), (
     f"every exit code needs an outcome and a colour: OUTCOME has "
     f"{sorted(OUTCOME)}, TINT has {sorted(TINT)}, the tool returns "
@@ -1435,12 +1435,12 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
     # The failure classes this run actually looked for. A `coverage` run read
     # nothing back out of the merged document, so naming invention here would
     # be the terminal making the claim `report.lost_classes` refuses to make
-    # two lines earlier in the same output (505). The fourth surface of the
+    # two lines earlier in the same output. The fourth surface of the
     # same sentence, and the one `verdict_line` does not reach.
     #
     # `checked_for_invention`, not `detects_invention`: the question is whether
     # this run asked, and a `full` run whose merged document yielded no claims
-    # did not ask it either (528). Same predicate as `report.lost_classes`, so
+    # did not ask it either. Same predicate as `report.lost_classes`, so
     # the sentence here and the headline in the report cannot disagree about
     # which failure classes were examined.
     #
@@ -1478,7 +1478,7 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
             gloss = (f"{clean} among the claims extracted -- but {named} produced "
                      f"no claims, so coverage for it rests on the structural "
                      f"check alone.")
-        # 665. A 2 whose only reason is a `sourced` merge that retrieved nothing:
+        # A 2 whose only reason is a `sourced` merge that retrieved nothing:
         # the run finished, so "part of this run did not finish" would be false.
         if code == 2 and inconclusive_for_retrieval_alone(run):
             gloss = ("The merge was asked to look its facts up and retrieved "
@@ -1494,7 +1494,7 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
     # `suspendedGuarantee` both say so in those words and both already do it.
     # This surface said the first one on exit 0 alone and the second one never,
     # so the reader most likely to act on a report -- the one whose run just
-    # failed -- was the one not told which guarantee was suspended (528).
+    # failed -- was the one not told which guarantee was suspended.
     #
     # Indented lines rather than more of the headline: the headline is the
     # verdict and these are conditions on it, which is the shape the queued
@@ -1514,7 +1514,7 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
         line(f"  {len(run.declared_additions)} statement(s) in the merge came "
              f"from the model's own knowledge and could not be checked against "
              f"your documents; see `## Additions`")
-    # What `sourced` achieved, not only what it permitted (568). The banner
+    # What `sourced` achieved, not only what it permitted. The banner
     # at the top of the run said which tool was granted; this is the other
     # half, and the terminal is where an operator who never opens the report
     # learns it. Yellow for the two states that leave a citation unchecked,
@@ -1524,7 +1524,7 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
     # Opens on the report's own words, `retrieval_lead`, so the terminal and
     # the verdict cannot name one state two ways.
     achieved = retrieval_outcome(run)
-    # The merge's calls on a merge (665), and the words say which.
+    # The merge's calls on a merge, and the words say which.
     turns = retrieval_turns(run)
     calls = retrieval_calls_word(run)
     if achieved == usage.RETRIEVED:
@@ -1568,7 +1568,7 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
         line(f"  {len(run.queued)} claim(s) the merge declared dropped are "
              f"listed under `## Review queue`")
     if run.number_warnings:
-        # Not a finding and not coloured, for the queue's reason (601).
+        # Not a finding and not coloured, for the queue's reason.
         line(f"  {len(run.number_warnings)} number-format warning(s), on numerals "
              f"that could be misread, are listed under `## Number format`")
 
@@ -1740,7 +1740,7 @@ def main(argv: list[str] | None = None) -> int:
         # `config.DEFAULT_FIDELITY` directly, and the printed level would then
         # disagree with the level the run actually used.
         policy = merge.MergePolicy.from_settings(settings)
-        # Entry 158, second site. The sweep that found the twenty error strings
+        # The sweep that found the twenty error strings
         # searched for `settings.host` and this passes `base_url`, so it was the
         # one message left naming the pod -- and it is the first line of every
         # captured log. Unlabelled it stays the full URL: the operator typed it
@@ -1769,13 +1769,13 @@ def main(argv: list[str] | None = None) -> int:
                        depth=settings.verify_depth,
                        # What the model was granted, read off the command this
                        # run will really execute rather than off the level that
-                       # asked for it (548). `None` on every run with no grant,
+                       # asked for it. `None` on every run with no grant,
                        # which is every HTTP run and every command run below
                        # `sourced`, so this line is unchanged for all of them.
                        retrieval=", ".join(
                            config.granted_web_tools(settings.command)) or None)
         # The banner names one endpoint, because for almost every run there is
-        # one. Entry 421 made that not always true, and a banner naming the
+        # one. That is not always true, and a banner naming the
         # default host over a run whose merge goes to a vendor is a line that
         # reads as a complete account and is not one. So when the roles differ,
         # say so -- and say it at every verbosity, not only at `-vv`: which
@@ -1847,7 +1847,7 @@ def main(argv: list[str] | None = None) -> int:
                  depth=settings.verify_depth)
     except FATAL as exc:
         # `step` already recorded this as an errored unit before re-raising
-        # it (411), so `run.errored` carries it and `exit_code` below already
+        # it, so `run.errored` carries it and `exit_code` below already
         # reads 2 from that -- the same path an ordinary errored unit takes.
         # This used to `return fail(...)` unconditionally here: one red line
         # to stderr, and nothing past this point ever ran. A fault on the

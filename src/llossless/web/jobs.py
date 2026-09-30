@@ -1,6 +1,6 @@
 """Submitted work, run in the background, observed separately. The job layer.
 
-A merge takes between 23 and 4,559 seconds, measured over `paper/records/*.json`.
+A merge takes between 23 and 4,559 seconds, measured over the graded run records (withheld with the paper).
 No HTTP request holds one of those open, so the web UI cannot be a form that
 posts two documents and waits for a report. It submits, gets an id back, and
 watches the run through `events.py`. This module is what sits between those two
@@ -65,7 +65,7 @@ hand the key over.
 **A job belongs to whoever submitted it, and it runs on their credentials.**
 `Job.owner` is an account id and `Workspace.keys` is the mapping
 `config.keys_for_this_run` swaps in for the worker thread that runs it. That
-seam (468) is why this is a field and a `with` rather than a rewrite: the rule
+seam is why this is a field and a `with` rather than a rewrite: the rule
 it preserves is that no key value sits on anything `repr` or `asdict` reaches,
 so the mapping is read out of the account's own file at the moment the run
 starts, held as a local for the length of it, and never becomes a field on the
@@ -125,13 +125,13 @@ from ..report import Run, as_dict, exit_code
 from . import catalogue, cli_render, commands, credentials, diagnose, discover
 from .events import EventLog, WebConsole
 
-# The six states. `cancelled` was considered at W4 and rejected while nothing
-# could stop a running merge, and a queued job's cancel read as a failure with
-# a reason. 639 made a running merge stoppable, and a run somebody stopped on
-# purpose is not a run that failed: the page words it differently and says
-# what was billed. See `JobStore.cancel`.
+# The six states. `cancelled` was considered early and rejected while nothing
+# could stop a running merge, and a queued job's cancel read as a failure
+# with a reason. A running merge became stoppable later, and a run somebody
+# stopped on purpose is not a run that failed: the page words it differently
+# and says what was billed. See `JobStore.cancel`.
 #
-# `interrupted` (660) is a run that was `running` when the server stopped --
+# `interrupted` is a run that was `running` when the server stopped --
 # a crash, a kill, a power cut -- found so by the next start. It is neither
 # `failed` (nothing in the run went wrong) nor re-queued: re-running it
 # silently would make and bill again every call it had already made, so it
@@ -144,7 +144,7 @@ CANCELLED = "cancelled"
 INTERRUPTED = "interrupted"
 STATES = (QUEUED, RUNNING, DONE, FAILED, CANCELLED, INTERRUPTED)
 TERMINAL = frozenset({DONE, FAILED, CANCELLED, INTERRUPTED})
-# What Retry is offered on (660): a run that did not finish for a reason other
+# What Retry is offered on: a run that did not finish for a reason other
 # than its owner stopping it. A cancelled run was stopped on purpose, and a
 # done one has its answer.
 RETRYABLE = frozenset({FAILED, INTERRUPTED})
@@ -154,7 +154,7 @@ DEFAULT_WORKERS = 1
 
 # Two days from the moment a job finished. `None` means keep, and is the opt-in.
 #
-# **This was an hour until 535, and the hour was chosen for a smaller
+# **This was an hour until an earlier change, and the hour was chosen for a smaller
 # scenario.** The reasoning then: long enough that an operator who started a
 # merge and went to lunch still has their report, short enough that a forgotten
 # browser tab does not leave a confidential document on a server overnight.
@@ -287,7 +287,7 @@ def retention_warning_seconds(window: float | None) -> float | None:
 #
 # `LLOSSLESS_WINDOW` is `--window`: the context window the submitter states
 # for a model the catalogue does not know, sent to an endpoint that cannot
-# report one (604). A vendor has no `/api/ps`, so without it every check
+# report one. A vendor has no `/api/ps`, so without it every check
 # refuses after the merge has run. It is a number, bounded below by
 # `STATED_WINDOW_MIN` and above by `STATED_WINDOW_MAX`, and it names no
 # address, key or path. It is never a guess: the run records it as stated, in
@@ -319,7 +319,7 @@ REQUEST_SETTABLE = frozenset({
     "LLOSSLESS_WINDOW",
 })
 
-# The bounds on a stated window, in tokens (604). A request is checked against
+# The bounds on a stated window, in tokens. A request is checked against
 # them; `--window` and `LLOSSLESS_WINDOW` on the server are not, because the
 # operator who sets those can read the refusal in their own terminal.
 #
@@ -367,13 +367,13 @@ def stated_window_refusal(raw) -> str | None:
 assert "LLOSSLESS_COMMAND" not in REQUEST_SETTABLE
 assert "LLOSSLESS_COMMAND_LABEL" not in REQUEST_SETTABLE
 
-# The one variable a request's `effort` becomes (613), written by `route_plan`
+# The one variable a request's `effort` becomes, written by `route_plan`
 # after it has checked the route can carry a level. Not on `REQUEST_SETTABLE`:
 # an override would reach an HTTP run too, where `effort_ignored` drops it.
 EFFORT_MERGE_VARIABLE = "LLOSSLESS_EFFORT_MERGE"
 assert EFFORT_MERGE_VARIABLE not in REQUEST_SETTABLE
 
-# What a cancel says (639). The status poll's `error` for a cancelled job, and
+# What a cancel says. The status poll's `error` for a cancelled job, and
 # the event a running one gets when the cancel is asked for.
 CANCELLED_QUEUED = "cancelled before it started; no model was called"
 CANCEL_ASKED = ("cancel asked for: no further model call will be made, and a "
@@ -396,24 +396,24 @@ def cancelled_error(job: Job, exc: BaseException) -> str:
 
 
 # The three files a finished job leaves behind, named here so that retention
-# and W4's download routes agree with the writer about what exists.
+# and the download routes agree with the writer about what exists.
 REPORT_JSON = "report.json"
 MERGED_MD = "merged.md"
 REPORT_HTML = "report.html"
 
-# The two a job writes from the moment it is accepted (660), so that a restart
+# The two a job writes from the moment it is accepted, so that a restart
 # can resume it: the documents as submitted, with their labels and the base,
 # and the event log as it is emitted. Both in the job's own directory, so the
 # `rmtree` retention already does deletes them with everything else.
 SOURCES_JSON = "sources.json"
 EVENTS_JSONL = "events.jsonl"
 
-# The job index (660): one file in the work directory, naming every job this
+# The job index: one file in the work directory, naming every job this
 # server holds, its owner, state, timestamps and settings -- never a document,
-# a label or a key. See `JobStore._load` and DECISIONS 660.
+# a label or a key. See `JobStore._load`.
 INDEX_JSON = "index.json"
 INDEX_TEMP = ".index.json.tmp"
-# Held with `flock` for as long as a store owns the work directory (660). The
+# Held with `flock` for as long as a store owns the work directory. The
 # kernel drops it when the process dies, however it dies, so a crash never
 # leaves it stale.
 LOCK_FILE = ".lock"
@@ -432,9 +432,9 @@ FILE_MODE = 0o600
 
 
 class IndexUnreadable(RuntimeError):
-    """The job index exists and cannot be read. The server refuses to start (660).
+    """The job index exists and cannot be read. The server refuses to start.
 
-    Not "start with an empty list", and the choice is DECISIONS 660's. The
+    Not "start with an empty list", and the choice is deliberate. The
     index is written to a temporary file, synced and renamed over the old one,
     so a crash leaves the old file or the new one and never a torn one: an
     index that does not parse is a disk fault or a hand edit, which somebody
@@ -476,7 +476,7 @@ class WorkDirBusy(RuntimeError):
 
 
 class EffortRefused(ValueError):
-    """A request's `effort` this server cannot carry. `400 bad_effort` (613).
+    """A request's `effort` this server cannot carry. `400 bad_effort`.
 
     Its own class so the API can name the field: a level asked for with no
     command route, on a route whose program takes no `--effort`, or on a route
@@ -492,7 +492,7 @@ class JobRefused(ValueError):
 
     A `ValueError` because it is always a fact about what the caller sent --
     too few documents, a base naming a document that is not there, an
-    environment override that is not on the allowlist. W4 renders these as a
+    environment override that is not on the allowlist. The page renders these as a
     400 with the message shown to the operator, so the messages are written to
     be read by a person rather than by a log scraper.
     """
@@ -544,7 +544,7 @@ class MergeRequest:
     # names both.
     route: str | None = None
     # The merge role's effort level, chosen by the submitter on a command
-    # route (613). One of `commands.EFFORT_CHOICES`, or `None` for the route's
+    # route. One of `commands.EFFORT_CHOICES`, or `None` for the route's
     # own default. Not an override: `LLOSSLESS_EFFORT*` stays off
     # `REQUEST_SETTABLE`, and `route_plan` writes the one variable this maps to
     # only after it has checked the route can carry it.
@@ -637,7 +637,7 @@ class Workspace:
     # `None` leaves `os.environ` in place, which is every CLI run and every
     # recorded cassette, and `{}` says this account has no credentials, which
     # is what stops a user with nothing configured from spending the
-    # operator's key (468).
+    # operator's key.
     keys: object = None
 
     # The operator's command routes, or `None` for a server that has none.
@@ -684,9 +684,9 @@ class Job:
         # a visitor how many documents this server has processed and lets them
         # guess the id of somebody else's; a content hash is an oracle for
         # whether a given document was ever submitted here. `job_id` is for a
-        # job read back from the index after a restart (660), and nothing else.
+        # job read back from the index after a restart, and nothing else.
         self.id = uuid.uuid4().hex if job_id is None else job_id
-        # The run this one is a Retry of (660), by id, or None. A link, not a
+        # The run this one is a Retry of, by id, or None. A link, not a
         # dependency: the old run may be forgotten first.
         self.retry_of = retry_of
         self.request = request
@@ -716,7 +716,7 @@ class Job:
         # content; the labels are, which is why they are not kept -- a filename
         # is frequently the most sensitive line in a confidential document.
         self.document_count = len(request.documents)
-        # Set by `JobStore.cancel` (639). The run's `Client` holds it and makes
+        # Set by `JobStore.cancel`. The run's `Client` holds it and makes
         # no call once it is set; a command backend stops its program.
         self.stop = threading.Event()
         # The CLI-equivalent block (`cli_render.render`), set once `web_settings`
@@ -736,14 +736,14 @@ class Job:
 
     @property
     def retryable(self) -> bool:
-        """Can Retry start a new run from this one's documents? (660)"""
+        """Can Retry start a new run from this one's documents?"""
         return (self.state in RETRYABLE and not self.forgotten
                 and bool(self.request.documents))
 
     def status(self) -> dict:
         """The status poll's payload: state, timing, the outcome, and nothing quoted.
 
-        W4 serves this from a route anyone who has the id can reach, so what is
+        The page serves this from a route anyone who has the id can reach, so what is
         in it is a decision rather than a dump. The report and the merged
         document are their own routes, because they are the operator's text and
         a status endpoint that included them would put a document in every
@@ -770,7 +770,7 @@ class Job:
             "error": self.error,
             "documents": self.document_count,
             "events": len(self.events),
-            # A cancel was asked for (639). True on a running job between the
+            # A cancel was asked for. True on a running job between the
             # request and the stop, and on every job that was cancelled.
             "cancel_requested": self.stop.is_set(),
             # How many model calls the run made, once its report exists: the
@@ -778,8 +778,8 @@ class Job:
             # billed. None before then, and for a run cancelled while queued.
             "calls_made": (((self.report or {}).get("provenance") or {})
                            .get("counts") or {}).get("calls"),
-            # The run this one retried, and whether this one can be retried
-            # (660): its documents are still held and it did not finish.
+            # The run this one retried, and whether this one can be retried:
+            # its documents are still held and it did not finish.
             "retry_of": self.retry_of,
             "retryable": self.retryable,
         }
@@ -854,8 +854,8 @@ def resolved_environ(request: MergeRequest, base: dict[str, str],
     plans are an `if`/`else` rather than two updates that happen not to
     collide. A command backend addresses nothing, so planning an endpoint for
     it would write per-role addresses and key variables into the environment of
-    a run that contacts none of them -- 477's fault, reintroduced one layer
-    down -- and would refuse the request outright whenever the route's model
+    a run that contacts none of them: the same fault, reintroduced one layer
+    down, and would refuse the request outright whenever the route's model
     happens to share a name with a catalogue row whose provider has no endpoint
     configured. `Opus 5 - Subscription` on a server with no Anthropic key is
     exactly that case, and it is the case this milestone exists for.
@@ -874,7 +874,7 @@ def resolved_environ(request: MergeRequest, base: dict[str, str],
         environ.update(route_plan(request, routes))
     else:
         environ.update(endpoint_plan(request, environ))
-    # **`sourced` refuses here rather than at the first call** (548). The level
+    # **`sourced` refuses here rather than at the first call.** The level
     # asks the model to go and look a fact up, and a backend that cannot be
     # granted a web tool would answer it from recall and label the answer
     # retrieved -- which a reader cannot tell apart from the real thing, since
@@ -963,7 +963,7 @@ def route_plan(request: MergeRequest, routes=None) -> dict[str, str]:
     plan = route.environ()
     if request.effort is not None:
         # The requester's merge level, as the variable `--effort merge=LEVEL`
-        # reaches (613), so it goes onto the argv through `command_for` like
+        # reaches, so it goes onto the argv through `command_for` like
         # any level. Refused where the route cannot carry it rather than
         # dropped: `effort_ignored` would name it after the run, and a level
         # chosen on a slider that the run then ignored is the case to stop at
@@ -1086,8 +1086,8 @@ def endpoint_plan(request: MergeRequest, environ: dict[str, str],
         if (window and not (environ.get(f"LLOSSLESS_WINDOW_{suffix}") or "").strip()
                 and not (environ.get("LLOSSLESS_WINDOW") or "").strip()):
             plan[f"LLOSSLESS_WINDOW_{suffix}"] = str(window)
-        # **And refused, before a job exists, where nothing can supply one**
-        # (604). A model the catalogue does not know, sent to a vendor, has no
+        # **And refused, before a job exists, where nothing can supply one.**
+        # A model the catalogue does not know, sent to a vendor, has no
         # stated window and no `/api/ps` to measure one: the merge would run
         # and every check would refuse after it. The request's `window` field
         # is how the person who typed the id states it, as `--window` does on
@@ -1106,8 +1106,8 @@ def endpoint_plan(request: MergeRequest, environ: dict[str, str],
             profiles.add(entry["profile"])
         elif not entry:
             # A model the catalogue does not know -- typed, or listed by an
-            # endpoint -- gets the shape its provider's measured rows share
-            # (591). It used to get none, so the run fell to the default
+            # endpoint -- gets the shape its provider's measured rows share.
+            # It used to get none, so the run fell to the default
             # `openai-compatible` body, and an OpenAI reasoning model refuses
             # that body's `max_tokens` on the first call.
             shape = catalogue.provider_profile(provider, catalogue_path)
@@ -1116,7 +1116,7 @@ def endpoint_plan(request: MergeRequest, environ: dict[str, str],
     # **A row's stated shape outranks a provider's**, and the provider's is
     # used only when every unknown model agrees on it. The profile is one per
     # run, so a split with a catalogue merge and a listed local check keeps the
-    # row's shape exactly as it did before 591, rather than being refused as
+    # row's shape exactly as it did before, rather than being refused as
     # two shapes; the derived one fills only the case where nothing was stated.
     if not profiles and len(derived) == 1:
         profiles = derived
@@ -1136,7 +1136,7 @@ def endpoint_plan(request: MergeRequest, environ: dict[str, str],
 
 
 # How a run is paid for, per role, in the five words the page's submit button
-# uses (570). `discover` owns the three an address can be classified as; a
+# uses. `discover` owns the three an address can be classified as; a
 # command route adds the two a program can be. The page's `ROUTE_KINDS` is
 # asserted equal to this by `tests/test_web_static.py`, so the button before
 # the click and the provenance after it cannot drift into two vocabularies.
@@ -1151,7 +1151,7 @@ ROUTE_KINDS = (discover.KIND_METERED, ROUTE_SUBSCRIPTION, ROUTE_COMMAND,
 SELF_HOSTED_PROVIDER = "self-hosted"
 assert SELF_HOSTED_PROVIDER in credentials.PROVIDERS
 
-# The providers whose endpoint cannot report a context window (604). Every one
+# The providers whose endpoint cannot report a context window. Every one
 # but `self-hosted` is a vendor API, and no vendor serves ollama's `/api/ps`,
 # which is the only route `window.reported` can ask. Derived from the
 # allowlist, so a vendor added there is in here without a second edit.
@@ -1180,18 +1180,18 @@ def window_unreportable(provider, environ: dict[str, str],
 
 def billed_by_role(request: MergeRequest, settings: config.Settings,
                    environ: dict[str, str], catalogue_path=None) -> dict[str, str]:
-    """How each role of this run is paid for, as the page's button names it (570).
+    """How each role of this run is paid for, as the page's button names it.
 
     **Recorded, not inferred afterwards.** The button names the route before
     the click; this names it after, in the run's own provenance, so the answer
     to "did the checks go to the subscription or to the metered API" is in the
-    report that a week later is where the question is asked (518). It is
+    report that a week later is where the question is asked. It is
     computed from the same three sources `endpoint_plan` routes on, in the
     same order, so it describes the plan the calls were made under rather
     than a second opinion about it.
 
     A command route answers every role through one program -- `Settings.command`
-    is run-wide, and per-role endpoints are dead configuration beside it (483)
+    is run-wide, and per-role endpoints are dead configuration beside it
     -- so every role gets the route's kind. That is also why the page's Check
     column no longer offers a command row under an HTTP merge: there is no run
     this function could describe in which one role is on the subscription and
@@ -1230,7 +1230,7 @@ def billed_by_role(request: MergeRequest, settings: config.Settings,
 
 def banner_roles(settings: config.Settings,
                  billed: dict[str, str]) -> list[dict] | None:
-    """Each role's model, endpoint and route for the run header, or None (576).
+    """Each role's model, endpoint and route for the run header, or None.
 
     The header has one Model row and one Endpoint row, and they were the
     check's -- `model_for("verify")` and the run-wide address -- so on a
@@ -1306,16 +1306,16 @@ def web_settings(request: MergeRequest, workspace: Workspace) -> config.Settings
         record_dir=None,
         replay_dir=None,
         dry_run=False,
-        # The Provenance detail names whoever actually stated the figure
-        # (605). `config.resolve`'s default assumes a shell operator's
+        # The Provenance detail names whoever actually stated the figure.
+        # `config.resolve`'s default assumes a shell operator's
         # `--window` / `LLOSSLESS_WINDOW`; a request that carried its own
         # `window` stated it through the page instead -- typed beside a
-        # vendor id (604) or beside a table row the catalogue does not know
-        # (605) -- and only this call site can tell the two apart, since both
+        # vendor id or beside a table row the catalogue does not know --
+        # and only this call site can tell the two apart, since both
         # arrive here as the same `LLOSSLESS_WINDOW` override.
         **({"window_declared_by": 'the page\'s "Context window (tokens)" field'}
            if "LLOSSLESS_WINDOW" in request.overrides else {}),
-        # Whose choice the merge's level was (613). `route_plan` has already
+        # Whose choice the merge's level was. `route_plan` has already
         # refused a level the route cannot carry, so what is recorded here is
         # what `command_for` puts on the argv.
         **({"effort_requested": {"merge": request.effort}}
@@ -1411,7 +1411,7 @@ def run_merge(job: Job, workspace: Workspace) -> None:
     # `None` leaves the source unswapped, which is `os.environ` and is
     # byte-identical to every CLI run, every cassette and every recorded
     # figure. That is the property `keys_for_this_run`'s unset case exists to
-    # keep (468), and it is why this is a `nullcontext` rather than a swap to
+    # keep, and it is why this is a `nullcontext` rather than a swap to
     # `os.environ`: swapping in a copy would make the two able to disagree the
     # moment something else in the process exported a variable.
     swap = (contextlib.nullcontext() if source is None
@@ -1449,8 +1449,8 @@ def _run_merge(job: Job, workspace: Workspace, console, request) -> None:
     # that needs it (the base document); everything else is already exact here.
     job.cli_equivalent = cli_render.render(settings, request)
     # Beside the settings it describes and before any call, so a run that
-    # fails on its first request still records how it would have been billed
-    # (570). The environment is the one `web_settings` resolved from; the
+    # fails on its first request still records how it would have been billed.
+    # The environment is the one `web_settings` resolved from; the
     # listing it reads for a discovered model is in it.
     billed = billed_by_role(request, settings, request_environ(workspace, request))
     documents, loaded, unclosed_fences = cli.prepare_merge(
@@ -1469,13 +1469,13 @@ def _run_merge(job: Job, workspace: Workspace, console, request) -> None:
                    # carries more than an address -- userinfo is a credential
                    # and a query can carry a pasted token.
                    #
-                   # The verify role's own, beside the verify role's model
-                   # (576). The run-wide one is the server's default address,
+                   # The verify role's own, beside the verify role's model.
+                   # The run-wide one is the server's default address,
                    # and a catalogue model is routed per role: an all-metered
                    # run's header named the local box that answered nothing.
                    settings.banner_endpoint_for("verify"),
                    # The CLI has passed this since the banner existed and this
-                   # call site never did (500), so the page's first line named
+                   # call site never did, so the page's first line named
                    # the model and the endpoint and stopped -- while the window
                    # is one of the three things an operator reads it for. Same
                    # helper, so the two surfaces cannot word it differently.
@@ -1490,18 +1490,18 @@ def _run_merge(job: Job, workspace: Workspace, console, request) -> None:
                    # most needs to see which questions were asked.
                    depth=settings.verify_depth,
                    # The grant this run carries, on the line the submitter
-                   # watches while it runs (548). Read off `settings.command`,
+                   # watches while it runs. Read off `settings.command`,
                    # which is the argv after `config.resolve` has applied any
                    # automatic grant, so the banner says what the run really
                    # has rather than what the route was configured with.
                    retrieval=", ".join(
                        config.granted_web_tools(settings.command)) or None,
                    # Each role apart, when the model and endpoint above are one
-                   # role's and not the run's (576). From `billed`, so the
+                   # role's and not the run's. From `billed`, so the
                    # header's route words are the button's.
                    roles=banner_roles(settings, billed),
-                   # The merge's effort level, off the argv the merge will run
-                   # (613): the slider's choice, or the route's default.
+                   # The merge's effort level, off the argv the merge will run:
+                   # the slider's choice, or the route's default.
                    effort=settings.effort_for("merge") or None)
 
     run = Run(command="merge")
@@ -1512,7 +1512,7 @@ def _run_merge(job: Job, workspace: Workspace, console, request) -> None:
     run.unclosed_fences = unclosed_fences
 
     client = Client(settings, notify=console.warn, console=console)
-    # `job.stop` is the cancel (639): the client makes no call once it is set.
+    # `job.stop` is the cancel: the client makes no call once it is set.
     client.cancel = job.stop
     started = time.monotonic()
     fault: BaseException | None = None
@@ -1540,7 +1540,7 @@ def _run_merge(job: Job, workspace: Workspace, console, request) -> None:
 # --------------------------------------------------------------------------
 
 
-# Every field of an index record, and what each may hold (660). Required, all
+# Every field of an index record, and what each may hold. Required, all
 # of them, on every record: a record missing one is not a record with a
 # default, it is a file this build did not write.
 _RECORD_FIELDS = {
@@ -1626,7 +1626,7 @@ def parse_index(raw: bytes, path: Path) -> list[dict]:
 
 
 def read_sources(path: Path) -> tuple[dict[str, str], str | None]:
-    """A job's documents and base label, as `submit` wrote them (660)."""
+    """A job's documents and base label, as `submit` wrote them."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict) or set(payload) != {"documents", "base"}:
         raise ValueError("not a sources file")
@@ -1676,17 +1676,17 @@ def interrupted_error(events) -> str:
 class JobStore:
     """Submitted jobs, a worker pool that runs them, and the retention that ends them.
 
-    **The index is on disk (660).** Until then it was in memory and died with
+    **The index is on disk.** Until then it was in memory and died with
     the process, and that was argued as a decision: the alternative was "a
     database of who uploaded what and when". The operator's machine then
-    crashed twice in a week and took the queue, the running merge and the run
-    list with it, and the answer to "can I queue work and come back in a few
-    hours" became no. So the index is written down -- `index.json` in the work
-    directory, one record per job, rewritten atomically on every change of
-    state -- and the objection is answered by what it holds and how long for,
-    not by its absence: a state, timestamps, an owner id, the allowlisted
-    settings and a count; never a document, a label or a key; and it forgets
-    a job exactly when retention does. DECISIONS 660 is the security review.
+    crashed twice in a week and took the queue, the running merge and the
+    run list with it, and the answer to "can I queue work and come back in
+    a few hours" became no. So the index is written down -- `index.json`
+    in the work directory, one record per job, rewritten atomically on
+    every change of state -- and the objection is answered by what it
+    holds and how long for, not by its absence: a state, timestamps, an
+    owner id, the allowlisted settings and a count; never a document, a
+    label or a key; and it forgets a job exactly when retention does.
 
     On start (`_load`): queued jobs resume in their order; a job that was
     running becomes `interrupted` and is never re-run by itself; finished jobs
@@ -1749,7 +1749,7 @@ class JobStore:
         self._threads: list[threading.Thread] = []
         self._stopping = threading.Event()
         self._started = False
-        # What the start-up reload found, for `server.serve`'s banner (660).
+        # What the start-up reload found, for `server.serve`'s banner.
         # The lock first, so nothing is read or rewritten under a live owner.
         self._lock_handle: int | None = None
         self._claim_work_dir()
@@ -1816,7 +1816,7 @@ class JobStore:
     def __exit__(self, *exc_info) -> None:
         self.close()
 
-    # -- the index on disk (660) -------------------------------------------
+    # -- the index on disk --------------------------------------------------
 
     def _claim_work_dir(self) -> None:
         """Own the work directory, or refuse with `WorkDirBusy`.
@@ -1925,7 +1925,7 @@ class JobStore:
                   f"{self.index_path}: {exc}", file=sys.stderr, flush=True)
 
     def _load(self) -> dict:
-        """Read the index back, resume what was queued, and settle the rest (660).
+        """Read the index back, resume what was queued, and settle the rest.
 
         No index is a first start, or one after the operator moved it aside:
         an empty list. An index that cannot be read refuses; see
@@ -2045,7 +2045,7 @@ class JobStore:
         return job
 
     def queue_position(self, job: Job) -> tuple[int, int] | None:
-        """(position, length) of a queued job in the one queue, or None (660).
+        """(position, length) of a queued job in the one queue, or None.
 
         The queue is every account's, because the workers are: position 2 of 3
         means one run -- anybody's -- starts before this one. That count is all
@@ -2109,7 +2109,7 @@ class JobStore:
         resolved_environ(request, self.environ_for(owner), routes=self.routes)
 
         job = Job(request, now=self.clock(), owner=owner, retry_of=retry_of)
-        # On disk before the id is handed back (660): the documents, so a
+        # On disk before the id is handed back: the documents, so a
         # restart can run a job that was still queued, and the log, so it can
         # say what a run that was killed had done. Owner-only, in the job's own
         # directory, which retention deletes whole.
@@ -2129,7 +2129,7 @@ class JobStore:
         return job
 
     def retry(self, job_id: str) -> Job:
-        """A new job from a failed or interrupted one's documents and settings (660).
+        """A new job from a failed or interrupted one's documents and settings.
 
         **A new job, never the old one re-queued.** New id, new directory, new
         log, and every call made again from the start: the web path runs with
@@ -2173,7 +2173,7 @@ class JobStore:
         **Queued:** it never starts, lands in `cancelled`, and no model was
         called.
 
-        **Running (639):** `job.stop` is set and the job is left `running`
+        **Running:** `job.stop` is set and the job is left `running`
         until the worker comes back. The run's `Client` makes no call after
         the flag, abandons an HTTP call in flight (it cannot be taken back,
         and the provider may bill it), and a command backend's program is
@@ -2181,8 +2181,8 @@ class JobStore:
         as errored, `publish` writes the report of what ran, and `_execute`
         lands the job in `cancelled` with the calls counted in `error`. Until
         then the state stays `running`, because the merge really is: marking
-        it cancelled while a call is still being answered is the lie 472's
-        predecessor refused to tell.
+        it cancelled while a call is still being answered is the lie an
+        earlier version refused to tell.
 
         False for a job that is gone or already finished.
         """
@@ -2272,7 +2272,7 @@ class JobStore:
         for job in self.jobs():
             if job.forgotten:
                 # A tombstone is kept one more window and then dropped from
-                # the index and the list (660). On disk it is a record that a
+                # the index and the list. On disk it is a record that a
                 # run existed, and "every window retention promises" is the
                 # life such a record may have.
                 if now - job.forgotten_at >= self.retention_seconds:
@@ -2375,7 +2375,7 @@ class JobStore:
             self.runner(job, workspace)
         except BaseException as exc:  # noqa: BLE001 - see below
             if job.stop.is_set() and not isinstance(exc, (KeyboardInterrupt, SystemExit)):
-                # Cancelled (639), whatever the unit it was in raised on the
+                # Cancelled, whatever the unit it was in raised on the
                 # way out: the flag is what stopped it.
                 self._finish(job, CANCELLED, error=cancelled_error(job, exc))
                 return

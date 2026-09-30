@@ -3,8 +3,8 @@
 `credentials.py` holds *what* a run may spend; this holds *whose* it is. Until
 now the two questions had one answer: everyone who could reach the server
 shared one set of keys, because a process has one environment and a key was
-read out of it at send time (467). `config.keys_for_this_run` removed that
-constraint without touching the rule it was mistaken for (468), and this module
+read out of it at send time. `config.keys_for_this_run` removed that
+constraint without touching the rule it was mistaken for, and this module
 is what fills the seam it opened -- an identity per request, so that a job can
 be run with the submitter's credentials rather than with the machine's.
 
@@ -182,7 +182,7 @@ COOKIE_NAME = "llossless_session"
 # Where a script presents the same secret. A header rather than a cookie,
 # because a script is not a browser and has no cookie jar it did not build
 # itself -- and because this is the header a token-protected deployment has
-# always used, so a client that had one keeps its shape (461).
+# always used, so a client that had one keeps its shape.
 SESSION_HEADER = credentials.TOKEN_HEADER
 
 # Bytes behind a session id. `secrets.token_urlsafe(32)` is 256 bits of
@@ -937,7 +937,7 @@ def cookie(session_id: str, *, secure: bool, max_age: float) -> str:
 
     `HttpOnly`, so no script on this page can read it -- the page has no reason
     to, because the browser attaches it by itself. `SameSite=Strict`, which is
-    what replaces the custom header's CSRF immunity from 461: a cross-site
+    what replaces the custom header's CSRF immunity: a cross-site
     navigation or form post arrives with no cookie at all, so there is nothing
     for a hostile page to ride, and the `Origin` check on mutating requests
     stays in place as the second layer rather than the only one. `Path=/`,
@@ -985,7 +985,7 @@ def sessions_from_cookie(raw) -> tuple[str, ...]:
     """Every session id a `Cookie:` header carries under `COOKIE_NAME`.
 
     One at most: a repeated name keeps its first value. The pre-rename
-    `claimcheck_session` was read here until 651 and is ignored now.
+    cookie name was read here until the rename completed and is ignored now.
     """
     if not isinstance(raw, str) or not raw:
         return ()
@@ -1074,14 +1074,14 @@ class Directory:
     **A user with no key for a provider does not get the operator's** unless
     the operator configured that provider as a shared endpoint, which is the
     same statement as "the operator's endpoints are shared". That is the
-    behaviour the seam was built to make possible (468): an empty key source
+    behaviour the seam was built to make possible: an empty key source
     yields `None` rather than falling back to the environment, so a user with
     nothing configured gets a run that fails on a missing credential rather
     than one billed to whoever owns the process.
 
     **`keys_for` returns `None` for an empty account**, and the difference
-    matters. `None` means "do not swap the source at all", which is the
-    single-tenant server 467 describes and is byte-identical to every CLI run
+    matters. `None` means "do not swap the source at all", which is what a
+    single-tenant server already does and is byte-identical to every CLI run
     and every recorded cassette. An empty dict would mean "this user has no
     keys", which is a different and much stronger statement.
 
@@ -1108,7 +1108,7 @@ class Directory:
                 / credentials.FILE_NAME)
 
     def defaults_path(self, record: Record | None, file_name: str) -> Path:
-        """Where one person's saved run settings live (674). Checked, then joined.
+        """Where one person's saved run settings live. Checked, then joined.
 
         Beside their own credentials file, for every account including the
         operator's: settings are a person's, where the operator's credentials
@@ -1193,8 +1193,8 @@ class Directory:
         environment. `None` and `{}` are different statements, and so are
         `None` and "a faithful-looking copy".
 
-        For everybody else the mapping is built per provider, and the rule is
-        469's rather than a merge of two dictionaries:
+        For everybody else the mapping is built per provider, and the rule
+        takes each provider whole rather than a merge of two dictionaries:
 
           their own endpoint     their own key, and **never** the operator's.
                                  A shared key sent to an address a member

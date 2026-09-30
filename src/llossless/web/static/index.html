@@ -16,7 +16,7 @@
 <script src="theme.js"></script>
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="theme.css">
-<!-- The two-pane workbench (673): placement only, after the look. -->
+<!-- The two-pane workbench: placement only, after the look. -->
 <link rel="stylesheet" href="layout.css">
 <script src="app.js" type="module" defer></script>
 </head>
@@ -43,7 +43,7 @@
            one catalogue. A picker with one option is a control that cannot be
            operated and would claim a choice the server does not offer. -->
       <div class="locale-field" data-cc="locale-field" hidden>
-        <!-- A globe, not a word (673): "Sprache" on a German page is the word
+        <!-- A globe, not a word: "Sprache" on a German page is the word
              an English reader cannot read. The name is in both languages so
              it holds whichever one is on screen; each option is its
              language's own name. -->
@@ -57,10 +57,10 @@
              nobody to be signed in as and a sign-out button would be a control
              that does nothing. The Credentials button stays either way, so it
              is outside this element and inside the group. -->
-        <!-- The name in full, and only the name (673): "Signed in as" is
+        <!-- The name in full, and only the name: "Signed in as" is
              the one part that changes with the language, so it is said to a
              screen reader and in `title`, and the visible width is the same
-             in every language without cutting the name off (649). -->
+             in every language without cutting the name off. -->
         <span class="session-field" data-cc="session-field" hidden>
           <svg class="session-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="5.2" r="2.7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.8 14c.6-2.7 2.7-4.2 5.2-4.2s4.6 1.5 5.2 4.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="visually-hidden" data-cc="session-said"></span>
@@ -72,16 +72,16 @@
     </div>
   </div>
   <!-- A row of its own, below the wordmark/version/controls row rather than
-       inside it (653): that row's height is pinned equal in English and
-       German at every width (626, 649), and a sentence a third longer in one
-       language cannot share it without risking the same breakpoint bug 626
+       inside it: that row's height is pinned equal in English and
+       German at every width, and a sentence a third longer in one
+       language cannot share it without risking the same breakpoint bug
        fixed. Here it may wrap to as many lines as the language needs; nothing
        else in the header moves when it does. -->
   <div class="topbar-tagline">
     <span class="tagline" data-t="app.tagline">Combine your documents into one, then check that nothing was lost, changed or made up</span>
     <!-- Redesign A: the theme control and the readiness pill share the
          tagline's row, at its right-hand end, and never the pinned row above:
-         that row keeps exactly the controls 626/649 measured. -->
+         that row keeps exactly the controls it was already measured with. -->
     <div class="topbar-status">
       <!-- Colour theme (redesign A): System, Light, Dark. Wired by theme.js,
            named by the hidden labels, which app.js translates. -->
@@ -143,7 +143,7 @@
   </div>
 </section>
 
-<!-- The workbench (673): input on the left, output on the right, each pane
+<!-- The workbench: input on the left, output on the right, each pane
      scrolling on its own so the page itself does not. Under 1024px the two
      stack, the step tabs become a strip that scrolls sideways, and the run
      bar is fixed to the bottom of the viewport. The layout is `layout.css`;
@@ -250,7 +250,7 @@
       <!-- Names the picker table as well (`aria-labelledby`). -->
       <h2 id="models-label" data-n="2" data-t="step.model">Model</h2>
       <div class="step-nav">
-        <!-- The scorecard button sits beside Back/Next (723): it used to sit
+        <!-- The scorecard button sits beside Back/Next: it used to sit
              on a row of its own above the picker table, which the operator
              asked back for the table's own height ("this will give us some
              space back for the model grid that is otherwise pretty
@@ -263,16 +263,16 @@
     </div>
 
     <div class="field">
-      <!-- The picker (631): only the rows this reader can run -- a model whose
+      <!-- The picker: only the rows this reader can run -- a model whose
            provider has an endpoint configured, a model an endpoint listed, and
            the command routes this server offers. Every catalogue row, with
            its figures, bands, dates and notes, is in the scorecard the button
-           beside Back/Next opens (723); the picker keeps two short figures a
+           beside Back/Next opens; the picker keeps two short figures a
            row. -->
-      <!-- The order is the operator's (634), the scorecard button moved to
-           the step-nav since (723): the sentence saying what is listed, the
+      <!-- The order is the operator's, the scorecard button having moved to
+           the step-nav: the sentence saying what is listed, the
            table, then the two checkboxes that change what the table picks,
-           side by side since 723, and the effort slider last. -->
+           side by side, and the effort slider last. -->
       <p class="hint" data-t="controls.models.hint">The AI model that writes and checks the merge. Only models you can use here are listed; the scorecard has every model this tool has measured.</p>
       <!-- No configured endpoint and no command route, so no row. Said in
            words, with the way to fix it one click away, rather than as an
@@ -306,12 +306,12 @@
           </thead>
           <tbody data-cc="picker-rows"></tbody>
         </table>
-        <!-- What "not directly comparable" means (638), for the marker's
+        <!-- What "not directly comparable" means, for the marker's
              `aria-describedby`; the marker's `title` says it to a pointer. -->
         <p class="hint" id="incomparable-why-picker" data-t="models.route.mark.incomparable.why" hidden>This route runs a program on this server. The program is told the answer format in the prompt rather than having it enforced, and its randomness cannot be fixed, so two runs can give different results. Its figures were measured through this same route: compare them with other routes like it, not with rows that use an API.</p>
-        <!-- What "measured on <model>" means (675), for that marker's `aria-describedby`. -->
+        <!-- What "measured on <model>" means, for that marker's `aria-describedby`. -->
         <p class="hint" id="history-why-picker" data-t="models.route.mark.history.why" hidden>This route's model alias now runs a newer model than the one these figures were measured on. They are the older model's figures, kept until the route is measured again, and they sort after every figure measured on the model a route runs today.</p>
-        <!-- What each figure column means (655), for its header's help icon:
+        <!-- What each figure column means, for its header's help icon:
              `aria-describedby` for a screen reader, `title` (set by
              `paintColumnHelp`) for a pointer. Same sentence, same keys, as
              the scorecard's copies below -- one meaning, said twice because
@@ -327,7 +327,7 @@
            what "best model for the best price" means -- but it is two
            decisions and most runs are one, so it is asked for rather than
            presented. -->
-      <!-- The two toggles in one row (723): "Use a different model for the
+      <!-- The two toggles in one row: "Use a different model for the
            checks" and "Use a model id not in the table" used to stack, one
            full-width row each. `flex-wrap` on the pair, and a flexible basis
            on each `.check-row`, lets them sit side by side when there is
@@ -347,8 +347,8 @@
       </div>
       </div>
 
-      <!-- A model id the table does not offer, asked for with a checkbox
-           (591). Ticking it shows the id and where it goes together, because
+      <!-- A model id the table does not offer, asked for with a checkbox.
+           Ticking it shows the id and where it goes together, because
            the second is the question the first raises: the tool never works
            the provider out from the name, so the destination is always stated
            beside the field. Unticking hides both and clears the id, and the
@@ -368,13 +368,13 @@
       </div>
       <!-- Why the box above is disabled and what enables it, written by
            `renderModels` from `splitBlocked`, the one condition the box is
-           disabled under (596). Visible, and the box points at it with
+           disabled under. Visible, and the box points at it with
            `aria-describedby`; the same sentence is its `title` for a pointer.
            Hidden, and unlinked, while the box is enabled. -->
       <p class="hint warn" id="split-blocked" data-cc="split-blocked" hidden></p>
       <!-- Why a command row's Check radio is greyed, written by `renderModels`
            only while the split is on under an HTTP merge and a command row is
-           in the table (570). An id as well as a hook, because the disabled
+           in the table. An id as well as a hook, because the disabled
            radios point at it with `aria-describedby`. -->
       <p class="hint" id="split-routes" data-cc="split-routes" hidden></p>
 
@@ -390,17 +390,17 @@
             </div>
           </div>
           <p class="hint" data-cc="custom-model-note"></p>
-          <!-- A typed id that names a retired row (621): warned, not blocked.
+          <!-- A typed id that names a retired row: warned, not blocked.
                The server routes it by that row and the vendor refuses it, so
                the reader is told before the run rather than after it. Written
                by `renderCustomModel`, like its twin by the submit button. -->
           <p class="hint warn" data-cc="custom-model-retired" hidden></p>
       </div>
       <!-- The window a model is served with, stated because a vendor cannot
-           report one and LLossless never guesses it (604). Not nested in
+           report one and LLossless never guesses it. Not nested in
            `.custom-block`: it is shown the same way for a typed id, behind the
            checkbox above, and for a row picked straight from the table above
-           that the catalogue states no window for (605) -- an id an endpoint
+           that the catalogue states no window for -- an id an endpoint
            listed that no catalogue entry names, which had nowhere to state
            one before. `renderCustomWindow` is the one renderer for both;
            required where the destination cannot report it, optional where it
@@ -421,7 +421,7 @@
     <div class="card-head">
       <h2 id="controls-heading" data-n="3" data-t="controls.heading">Settings</h2>
       <div class="step-nav">
-        <!-- Consistent with the Model step's scorecard button (723): the
+        <!-- Consistent with the Model step's scorecard button: the
              same class, the same position, before Back. -->
         <button type="button" class="ghost open-detail-btn" data-cc="open-compare" aria-haspopup="dialog" data-t="compare.open">See examples</button>
         <button type="button" class="ghost step-back" data-step-go="model" data-t="step.back">Back</button>
@@ -431,20 +431,20 @@
 
     <div class="controls-grid">
 
-      <!-- The merge's effort, first when the chosen route takes one (673):
+      <!-- The merge's effort, first when the chosen route takes one:
            it is a choice about this run, like the two below. The Settings tab
            carries a "new" marker when it appears, until the step is opened. -->
-      <!-- The merge's effort level, on a subscription route only (613). The
+      <!-- The merge's effort level, on a subscription route only. The
            slider is a native range input, so it is keyboard-operable as it
            stands, and its label names it; `aria-valuetext` carries the level's
            name rather than its position. The card beside it shows what the
            registered grid measured at that level, and changes as the slider
            moves; a level with no figures says so in words rather than as a
-           blank or a zero. `max` is a fifth stop the grid never ran (615): the
+           blank or a zero. `max` is a fifth stop the grid never ran: the
            card adds a cost warning under the unmeasured sentence, and the same
            warning is repeated by the submit button below so picking it and
            never reading the card still shows it. A route can also carry
-           figures for a model its program was pinned to by full id (661):
+           figures for a model its program was pinned to by full id:
            each is its own section under `effort-pinned`, headed by the model
            id, and the route's own figures are then headed by theirs. The
            section for the model the route's alias answers as now goes in
@@ -455,8 +455,8 @@
         <div class="effort-control">
           <div class="label-row">
             <label for="effort-slider" data-t="effort.label">Merge effort</label>
-            <!-- What the test grid measured at the chosen level, behind "?"
-                 (673): benchmark figures are for a reader who asks for them.
+            <!-- What the test grid measured at the chosen level, behind "?":
+                 benchmark figures are for a reader who asks for them.
                  The two warnings stay in view under the slider. -->
             <div class="help">
               <button type="button" class="help-icon" aria-describedby="effort-card-title"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
@@ -477,7 +477,7 @@
           <div class="range-legend" data-cc="effort-ticks" aria-hidden="true"></div>
           <p class="hint" id="effort-hint" data-t="effort.hint">How hard the model thinks while it writes the merge. Higher is slower and usually costs more.</p>
           <!-- The lowest level measurably as good as the best, computed from
-               the catalogue by `effortBaseline` (673), and shown only where
+               the catalogue by `effortBaseline`, and shown only where
                the measurement is of what this route runs now. Otherwise
                nothing: no "unmeasured" line. -->
           <div class="effort-baseline" data-cc="effort-baseline" hidden>
@@ -493,7 +493,7 @@
       </div>
 
       <!-- Shown in the effort control's place for a single-level model
-           (688, ruling 11: Haiku has extended thinking on or off, and no
+           (Haiku has extended thinking on or off, and no
            graded scale). `renderEffort` toggles it opposite `effort-block`. -->
       <div class="field">
         <p class="hint" data-cc="effort-single-level" hidden></p>
@@ -508,9 +508,9 @@
         <datalist id="fidelity-stops" data-cc="fidelity-stops"></datalist>
         <div class="range-legend" data-cc="fidelity-legend" aria-hidden="true"></div>
         <!-- One short line per level, one line high whatever the level, so
-             the page does not move under the slider (673). What each level
+             the page does not move under the slider. What each level
              buys and costs, with a sample, is in the Compare levels dialog;
-             the slider's `aria-valuetext` still carries all of it (550). -->
+             the slider's `aria-valuetext` still carries all of it. -->
         <p class="explains level-brief" data-cc="fidelity-brief"></p>
       </div>
 
@@ -527,9 +527,9 @@
           <div class="help">
             <button type="button" class="help-icon" aria-describedby="help-depth"><span aria-hidden="true">?</span><span class="visually-hidden" data-t="help.more">More about this</span></button>
             <div class="help-pop" role="tooltip" id="help-depth">
-              <!-- What the cheaper depth costs in detection, said behind the picker's help icon (673)
+              <!-- What the cheaper depth costs in detection, said behind the picker's help icon
                    rather than left for a reader to assume. The figures are the
-                   catalogue's `verify_depth` block (585), rendered by
+                   catalogue's `verify_depth` block, rendered by
                    `renderDepthDelta` from `/config`; with no block, or with the
                    script blocked, the sentence here says they are not loaded, and a
                    blank or a zero in their place would be an answer nobody measured.
@@ -565,7 +565,7 @@
     <div class="controls-grid">
 
       <!-- The declared-loss ceiling directly above the title policy, the two
-           stacked in one column (593). Alone at the end of the grid it wrapped
+           stacked in one column. Alone at the end of the grid it wrapped
            to a row of its own under the fidelity slider, a screen below the
            control it sits beside in meaning: both decide what the merge may
            leave out of, or change about, the sources. One cell keeps them
@@ -603,7 +603,7 @@
         </div>
       </div>
 
-      <!-- Your saved defaults (674): shown only while you have some, with
+      <!-- Your saved defaults: shown only while you have some, with
            the way back to the server's. Written by `renderDefaultsField`. -->
       <div class="field defaults-field" data-cc="defaults-field" hidden>
         <span class="label-like" data-t="defaults.heading">Your defaults</span>
@@ -623,19 +623,19 @@
   <!-- ------------------------------------------------------------------ -->
   <section class="card runbar" data-cc="run-card" aria-labelledby="run-heading">
     <h2 id="run-heading" class="visually-hidden" data-t="run.heading">Run</h2>
-    <!-- The same cost warning the effort card shows at `max` (615), repeated
+    <!-- The same cost warning the effort card shows at `max`, repeated
          here so a submitter who picked the slider's last stop and never read
          the card upstream still meets it right before the button. Written by
          `renderEffortCard`, which hides it the moment `max` is not the
          selected level or the route takes no effort level at all. -->
     <p class="hint warn" data-cc="effort-submit-max-warning" hidden></p>
-    <!-- The typed-id retired warning (621), repeated here for the reason the
+    <!-- The typed-id retired warning, repeated here for the reason the
          `max` warning is: it applies to the button below it. -->
     <p class="hint warn" data-cc="submit-retired-warning" hidden></p>
-    <!-- Saved defaults this server no longer offers (674), named once, in
+    <!-- Saved defaults this server no longer offers, named once, in
          one line, above the button they would have changed. Never replaced
          in silence; "Update my defaults" re-saves the stored set with the
-         dropped fields removed (686), or Dismiss hides the notice in this
+         dropped fields removed, or Dismiss hides the notice in this
          browser until the dropped set changes. -->
     <div class="hint warn defaults-dropped" data-cc="defaults-dropped" role="status" hidden>
       <span data-cc="defaults-dropped-text"></span>
@@ -654,27 +654,27 @@
         <span data-cc="submit-label" data-t="run.submit">Merge and check</span>
       </button>
       <button type="button" class="ghost" data-cc="cancel" hidden data-t="run.stopwatching">Stop watching</button>
-      <!-- A real cancel (639), beside the button that only stops this page
+      <!-- A real cancel, beside the button that only stops this page
            following the run. Shown while a run is queued or running; the
            dialog below says what is billed before anything is sent. -->
       <button type="button" class="ghost danger" data-cc="cancel-run" hidden data-t="run.cancel">Cancel run</button>
-      <!-- Retry (660), on a followed run that failed or was interrupted by a
+      <!-- Retry, on a followed run that failed or was interrupted by a
            server stop, while its documents are still held. The dialog below
            says the new run may be billed again before anything is sent. -->
       <button type="button" class="ghost" data-cc="retry-run" hidden data-t="run.retry">Retry</button>
-      <!-- Opt-in, and the only thing that asks the browser for permission
-           (660): nothing is requested on page load. Hidden where the browser
+      <!-- Opt-in, and the only thing that asks the browser for permission:
+           nothing is requested on page load. Hidden where the browser
            has no notifications or they were refused. -->
       <button type="button" class="ghost" data-cc="notify" hidden data-t="run.notify">Notify me</button>
       <!-- Always there, because the alternative was reloading the page. It
            never clears anything on its own: the dialog below is the whole of
            the control. -->
       <button type="button" class="ghost" data-cc="start-over" data-t="run.startover">Start over</button>
-      <!-- Save these settings as my defaults (674). Offered while the run can
+      <!-- Save these settings as my defaults. Offered while the run can
            start; unticked by default, and a plain manual checkbox until a
            first save exists. From then on it tracks whether the page's
-           current settings still equal what is saved (717,
-           `syncSaveDefaultsChecked`): ticked whenever they agree, whether
+           current settings still equal what is saved
+           (`syncSaveDefaultsChecked`): ticked whenever they agree, whether
            that is because a run was just started with it ticked or because
            nothing has changed since a load that found them already equal,
            and unticked the moment a setting is changed away from the saved
@@ -686,7 +686,7 @@
       </label>
       <p class="save-defaults-note" data-cc="save-defaults-note" role="status" hidden></p>
       <p class="status" data-cc="status" role="status" aria-live="polite">
-        <!-- The dot and the word share their own line box (717): `.status`
+        <!-- The dot and the word share their own line box: `.status`
              aligns its children on their text baseline, which put the dot
              where the *pair's* shared baseline fell rather than centred on
              the word beside it. `.status-lead` isolates the two so the dot
@@ -699,14 +699,14 @@
         <span class="status-text" data-cc="status-text"></span>
       </p>
       <!-- When the line beside it says the run is not ready, the way to the
-           step that holds the reason (673): a blocked run never fails silently
+           step that holds the reason: a blocked run never fails silently
            behind a tab. Written by `refreshIdleStatus`, hidden while ready. -->
       <button type="button" class="ghost status-goto" data-cc="status-goto" hidden></button>
     </div>
   </section>
   </section>
 
-  <!-- The divider between the panes (673): drag it, or focus it and use the
+  <!-- The divider between the panes: drag it, or focus it and use the
        arrow keys; a double-click puts it back. Hidden under 1024px, where the
        panes stack. The width is kept per browser. -->
   <div class="pane-divider" role="separator" aria-orientation="vertical" tabindex="0"
@@ -718,7 +718,7 @@
   <!-- ------------------------------------------------------------------ -->
   <section class="pane pane-output" aria-labelledby="output-heading" data-cc="output-pane">
     <h2 id="output-heading" class="visually-hidden" data-t="layout.output">Output</h2>
-    <!-- The current run, or the list of previous ones (717): both tabs are
+    <!-- The current run, or the list of previous ones: both tabs are
          always shown now, each `aria-disabled` until there is something
          behind it (a run started this page, or a first entry in the list),
          so neither ever looks live and does nothing. Each carries its own
@@ -801,8 +801,8 @@
       <div class="card-head">
         <h3 id="results-merged-heading" data-t="results.merged">Merged document</h3>
         <div class="card-head-actions" data-cc="result-actions">
-          <!-- **First, because it is the cheapest thing in the group** (553,
-               561). 553 settled that a free action goes before the ones that
+          <!-- **First, because it is the cheapest thing in the group.**
+               An earlier ruling settled that a free action goes before the ones that
                put a file on a disk, and this one does not even open a window.
                It names the artefact the way its neighbours do, because a
                control called "Copy" in a row of four would be the only one
@@ -815,7 +815,7 @@
                one control. -->
           <button type="button" class="ghost" data-cc="copy-merged" data-t="results.copy">Copy merged document</button>
           <a class="ghost" data-cc="download-merged" download="merged.md" data-t="results.download">Download markdown</a>
-          <!-- **Viewing first, then the two saves, narrow to wide** (553). The
+          <!-- **Viewing first, then the two saves, narrow to wide**. The
                operator's report: *"the rows 'Download report / Download
                everything / Full report' have the wrong order. It should be
                'View report', 'Download report' and 'Download everything'."*
@@ -847,7 +847,7 @@
            sentence written here would be wrong on every deployment that passed
            `--retention`. -->
       <p class="hint" data-cc="retention-note" hidden></p>
-      <!-- Which of the three copy paths ran, in words (561). The API is absent
+      <!-- Which of the three copy paths ran, in words. The API is absent
            over plain http to a LAN address, which is a deployment this project
            supports, so "nothing happened" is a state a reader will meet and a
            control that goes quiet there is a control they will press twice. -->
@@ -870,7 +870,7 @@
       <p class="banner-text" data-cc="mismatch-text"></p>
     </div>
 
-    <!-- The finding sections as tabs (673), each tab carrying the chip its
+    <!-- The finding sections as tabs, each tab carrying the chip its
          section had. A section the renderers hide takes its tab with it
          (`syncFindingTabs`), so there is never an empty tab. -->
     <div class="findings-head">
@@ -943,7 +943,7 @@
       <div class="section-body" data-cc="omitted"></div>
     </section>
 
-    <!-- A merged sentence credited to a source that does not state it (572).
+    <!-- A merged sentence credited to a source that does not state it.
          Hidden until something fired, the report's rule for its own section;
          whether the check ran is a row in "What was checked". -->
     <section class="card section tab-off" role="tabpanel" id="finding-attributions" aria-labelledby="finding-tab-attributions" data-cc="attributions-section" hidden tabindex="0">
@@ -951,7 +951,7 @@
     </section>
 
     <!-- How each document writes its decimals, and the numerals that break
-         it (601). Hidden until something was flagged; whether the check ran
+         it. Hidden until something was flagged; whether the check ran
          is a row in "What was checked". -->
     <section class="card section tab-off" role="tabpanel" id="finding-numbers" aria-labelledby="finding-tab-numbers" data-cc="numbers-section" hidden tabindex="0">
       <div class="section-body" data-cc="numbers"></div>
@@ -1045,7 +1045,7 @@
          past. It is also not a note about a toggle they just used, which is
          what `commands-note` is for. -->
     <p class="hint" data-cc="commands-retired" hidden></p>
-    <!-- The commands file in use is the one from before the rename (647). -->
+    <!-- The commands file in use is the one from before the rename. -->
     <ul class="providers" data-cc="commands-list"></ul>
     <!-- The rows of the commands file this build cannot use and which match
          none of the four above -- a hand-written route with a field missing,
@@ -1144,8 +1144,8 @@
 <!-- -------------------------------------------------------------------- -->
 <!-- the model scorecard                                                   -->
 <!-- -------------------------------------------------------------------- -->
-<!-- Every catalogue row, configured here or not, with its measured figures
-     (631). The page's picker lists only what this reader can run; this is
+<!-- Every catalogue row, configured here or not, with its measured figures.
+     The page's picker lists only what this reader can run; this is
      the table the picker used to be, with no radios: picking happens on the
      page. The credentials sheet's pattern throughout -- `showModal`, Escape by
      the dialog itself, the same backdrop, the one way out in a sticky footer
@@ -1184,7 +1184,7 @@
     </table>
     <p class="hint" id="incomparable-why-scorecard" data-t="models.route.mark.incomparable.why" hidden>This route runs a program on this server. The program is told the answer format in the prompt rather than having it enforced, and its randomness cannot be fixed, so two runs can give different results. Its figures were measured through this same route: compare them with other routes like it, not with rows that use an API.</p>
     <p class="hint" id="history-why-scorecard" data-t="models.route.mark.history.why" hidden>This route's model alias now runs a newer model than the one these figures were measured on. They are the older model's figures, kept until the route is measured again, and they sort after every figure measured on the model a route runs today.</p>
-    <!-- What each figure column means (655): same keys as the picker's
+    <!-- What each figure column means: same keys as the picker's
          copies, said again because the dialog is a separate subtree. -->
     <p class="hint" id="help-scorecard-cost-why" data-t="models.help.cost" hidden>What one merge cost at list prices in this tool's tests. Lower is better. &quot;on plan&quot;: it ran on a subscription, which has no price per merge. &quot;free tier&quot;: measured on a vendor's free quota. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
     <p class="hint" id="help-scorecard-speed-why" data-t="models.help.speed" hidden>How long one merge took in this tool's tests, in seconds. Lower is better. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
@@ -1192,8 +1192,8 @@
     <p class="hint" id="help-scorecard-deviations-why" data-t="models.help.deviations_per_pair" hidden>How many changes the merge made without flagging them, per test (one test is two documents merged). Lower is better; 0 is excellent. &quot;unmeasured&quot;: nobody has run this model through LLossless yet.</p>
   </div>
   <!-- "About this list": every paragraph that explains the table, folded
-       and closed on every load (592, 595), and in the scorecard with the
-       table it explains (631).
+       and closed on every load, and in the scorecard with the
+       table it explains.
 
        The legend is written out from the same constants that apply the
        bands, so it cannot drift from the colouring it explains. The
@@ -1216,7 +1216,7 @@
 </dialog>
 
 <!-- -------------------------------------------------------------------- -->
-<!-- comparing the rewording levels (673)                                  -->
+<!-- comparing the rewording levels                                        -->
 <!-- -------------------------------------------------------------------- -->
 <!-- One tiny pair and what the merge makes of it at each level, one tab a
      level, built by `renderCompare` from the levels `/config` serves. The
@@ -1255,7 +1255,7 @@
 </dialog>
 
 <!-- -------------------------------------------------------------------- -->
-<!-- cancelling a run (639)                                                -->
+<!-- cancelling a run                                                      -->
 <!-- -------------------------------------------------------------------- -->
 <!-- The confirm step before a cancel. "Keep it running" is first and takes
      the focus, because Escape and the backdrop also keep it running: a
@@ -1271,7 +1271,7 @@
   </div>
 </dialog>
 
-<!-- The confirm step before a Retry (660). A retry is a new run, from the
+<!-- The confirm step before a Retry. A retry is a new run, from the
      start, and it is billed again: said before anything is sent, with
      "Keep" first and focused for the reason the cancel dialog's is. -->
 <dialog class="sheet confirm" data-cc="retry-dialog" aria-labelledby="retry-heading" aria-describedby="retry-text">
@@ -1307,7 +1307,7 @@
 </dialog>
 
 <!-- -------------------------------------------------------------------- -->
-<!-- resetting saved settings (723)                                        -->
+<!-- resetting saved settings                                              -->
 <!-- -------------------------------------------------------------------- -->
 <!-- "Reset to server defaults" (`resetDefaults`) both forgets the saved set
      on the server and puts every live control on the page back to the
@@ -1375,7 +1375,7 @@
 </template>
 
 <template data-cc="tpl-finding">
-  <!-- `tabindex="-1"` (717): not in the page's own Tab order, but a target
+  <!-- `tabindex="-1"`: not in the page's own Tab order, but a target
        the review list can move focus to once it has jumped here, the same
        way `panel.querySelector('[data-cc="stack-summary"]')` is focused
        after Escape closes a disclosure elsewhere on this page. -->
@@ -1389,7 +1389,7 @@
   </li>
 </template>
 
-<!-- One row of "What needs your attention" (488, 717): a `<button>` so the
+<!-- One row of "What needs your attention": a `<button>` so the
      whole row is one clickable, keyboard-reachable control that jumps to the
      matching card in its own section (`reviewItem`, `jumpToFinding`), with
      the one-line decision beside its label and text, and the "In section"
@@ -1408,7 +1408,7 @@
   </li>
 </template>
 
-<!-- The two sides, one directly above the other (561). The operator asked to
+<!-- The two sides, one directly above the other. The operator asked to
      read the difference by scanning down a column rather than along a
      sentence, and the shape that does that is a stack, not a lightbox: the
      Markdown report and the terminal have no lightbox, and a finding legible
@@ -1419,7 +1419,7 @@
      A `<details>` because it is an expanded row, not a dialog: `<summary>` is
      focusable and toggles on Enter and Space with no script, it degrades to
      an open block where script is off, and it takes nothing over. Escape
-     closes it all the same -- 557's rule is that everything dismissible on
+     closes it all the same: everything dismissible on
      this page agrees with Escape, and a disclosure that ignored it would be
      the one exception a reader has to learn. -->
 <template data-cc="tpl-stack">
@@ -1442,7 +1442,7 @@
 </template>
 
 <!-- One discovered route: one tool, one model. Four of these for one `claude`,
-     because 518's rule is that every row a reader chooses between is a route
+     because every row a reader chooses between is a route
      to a model -- a tool with a model dropdown beside it would be a second
      piece of state to misread.
 
@@ -1507,7 +1507,7 @@
       <span class="chip" data-cc="provider-owner"></span>
     </div>
     <p class="hint mono" data-cc="provider-variable"></p>
-    <!-- The provider's well-known address (676), shown instead of the field
+    <!-- The provider's well-known address, shown instead of the field
          when none is stored or the stored one is it: saving a key saves this
          address with it. "Change address" opens the field. -->
     <p class="provider-address" data-cc="provider-address" hidden>

@@ -42,9 +42,9 @@ from .config import DEFAULT_VERIFY_DEPTH, fidelity_name
 
 # The palette the three measurement harnesses already use
 # in `tests/run_verify.py`, extended by the two the report needs. Same codes
-# and the same `colour()` signature, so a reader who has seen one has seen both;
-# `internal/docs/M5-harness.md` documents the harness half and that documentation stays
-# true.
+# and the same `colour()` signature, so a reader who has seen one has seen
+# both: this module's banners and the harnesses' progress lines share one
+# vocabulary for colour.
 GREEN, RED, YELLOW, DIM, BOLD, RESET = (
     "\033[32m",
     "\033[31m",
@@ -215,7 +215,7 @@ class Console:
         been read and prompts loaded. `None` means the caller could not learn
         it -- no model loaded yet, or an endpoint with no `/api/ps` at all --
         and that is not printed as an error, because a vendor endpoint having
-        no such route is not one (Brief DD item 1).
+        no such route is not one.
 
         `fidelity` is gated on `-vv`, same as the full endpoint URL a few lines
         up in `cli.main` -- it is configuration, not progress, and belongs with
@@ -223,7 +223,7 @@ class Console:
         `policy.fidelity` off the same `MergePolicy` the merge and verify calls
         are given, not `config.DEFAULT_FIDELITY` and not the raw `--fidelity`
         string, so what this line prints cannot name a level the run did not
-        use -- `DEFAULT_FIDELITY` changed once already (390), and a banner
+        use: `DEFAULT_FIDELITY` can change, and a banner
         reading the default rather than the resolved policy would have been
         wrong about every run that overrode it.
 
@@ -243,14 +243,14 @@ class Console:
         below returned before any of that ran unless `-v` had been passed, and
         `--verbose` defaults to 0 -- so the one banner field written to be
         unmissable was missing from every run nobody asked to be verbose,
-        which is most of them (505). It was invisible because the test that
+        which is most of them. It was invisible because the test that
         covers the "ordinary verbosity" case passes `-v`: a test that sets the
         thing it is measuring cannot see the default. The floor stays for
         every other reason this line exists, so a run at the default depth
         prints nothing here without `-v`, exactly as before.
 
         `retrieval` is gated the way a non-default depth is, and for a stronger
-        version of the same reason (548). A run whose model was granted a web
+        version of the same reason. A run whose model was granted a web
         tool may put text from these documents into a query or a fetch, and at
         the level that grants it automatically the operator never typed the
         flag -- so the one thing this line must not do is stay quiet about it.
@@ -263,7 +263,7 @@ class Console:
         if window is not None:
             line += f", window {window}"
         if fidelity is not None and self.verbosity >= 2:
-            # Published name: this is a banner, not a record (437).
+            # Published name: this is a banner, not a record.
             line += f", fidelity {fidelity_name(fidelity)}"
         if depth is not None and (self.verbosity >= 2
                                   or depth != DEFAULT_VERIFY_DEPTH):

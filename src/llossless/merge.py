@@ -9,7 +9,7 @@ refusal — a merge this pass produced is evidence, not a verdict.
 Sources by name and not by accident, and now two or more of them. `merge.md` has
 always been written for N documents and takes a rendered `{sources}` list, and
 `segment.render_sources` has always emitted one `<document>` block per document,
-so the prompt was never the gate. This module was, and task 20 opened it: a
+so the prompt was never the gate. This module was, and that changed: a
 mapping is checked against canonical names derived from its own length instead
 of against a pair. The names stay this module's rather than the operator's
 filenames, because a disposition record points at a document by the name it was
@@ -83,7 +83,7 @@ class MergePolicy:
         # anything that never touched an argument parser -- and a policy
         # holding `verbatim` would reach the prompt loader as a filename that
         # does not exist. Written back onto the frozen instance so there is one
-        # spelling from here on; `config.fidelity_name` is the way back (437).
+        # spelling from here on; `config.fidelity_name` is the way back.
         object.__setattr__(self, "fidelity", config.canonical_fidelity(self.fidelity))
         if self.fidelity not in config.FIDELITY_LEVELS:
             raise config.ConfigError(
@@ -99,7 +99,7 @@ class MergePolicy:
         # built directly -- by a test, a bench runner, or a caller that never
         # touched the environment -- and an out-of-range ceiling reaching the
         # reconciler would silently decide an exit code. Not a second copy of
-        # §2.6: the rule stays in `reconcile.over_budget`, and this only
+        # the declared-loss budget: the rule stays in `reconcile.over_budget`, and this only
         # refuses a value that is not a fraction. `not (0 <= x <= 1)` is the
         # form that also rejects NaN, which fails every comparison it is asked.
         if not 0.0 <= self.declared_loss_budget <= 1.0:
@@ -156,11 +156,11 @@ class MergeResult:
     decisions: tuple[dict, ...] = ()
     dispositions: tuple[dict, ...] = ()
     # Statements the merge says it brought from outside the documents, at the
-    # one level that permits any (482). Empty at every other level, and empty
+    # one level that permits any. Empty at every other level, and empty
     # at `open` for a merge that added nothing -- which is the ordinary case
     # and the one a reader should be able to see at a glance.
     additions: tuple[dict, ...] = ()
-    # The merge's warning that the documents may not belong together (497).
+    # The merge's warning that the documents may not belong together.
     # Empty on the ordinary run, which is nearly all of them.
     mismatch: str = ""
     base: str = ""
@@ -168,7 +168,7 @@ class MergeResult:
     # A `reason` or `replacement` the model overran its cap on, capped and
     # logged rather than rejected -- `parsing.parse`'s pre-pass, threaded
     # through `client.Completion`. Empty on the ordinary case, a merge that
-    # needed no capping. `DECISIONS.md` entry 190.
+    # needed no capping.
     truncations: tuple[parsing.Truncation, ...] = ()
 
     @classmethod
@@ -287,7 +287,7 @@ _CANDIDATE_ITEM = {
 }
 
 # Which levels may choose between two values that cannot both be true. `high`
-# chooses and declares (382); the levels below it keep both statements and may
+# chooses and declares; the levels below it keep both statements and may
 # not pick a winner, so at those levels a decision record is how a conflict is
 # *recorded without being resolved*. That is the only place a disagreement is
 # written down at all: the document may not carry a marker and the reconciler
@@ -295,28 +295,28 @@ _CANDIDATE_ITEM = {
 # operation.
 #
 # `open` chooses too, and may additionally carry a value that covers both
-# candidates rather than being one of them (481). That is a wider licence for
+# candidates rather than being one of them. That is a wider licence for
 # the same record rather than a different authority, so it reads True here for
 # the same reason `high` does: the run emits a decision record either way, and
 # what changed is what `chosen` is allowed to hold.
 # `sourced` reads True for `open`'s reason and adds nothing of its own here.
 # What that level changes is where a declared statement came from, not what a
-# decision record may hold (548).
+# decision record may hold.
 MAY_CHOOSE = {"off": False, "low": False, "mid": False, "high": True,
               "open": True, "sourced": True}
 
 assert set(MAY_CHOOSE) == set(config.FIDELITY_LEVELS)
 
 
-# Which levels may state something the documents do not (482). Two levels, and
+# Which levels may state something the documents do not. Two levels, and
 # it is the whole of what separates `open` from `high` on the axis that
 # matters: every level below treats a fact the sources do not carry as an
 # invention, and `open` lets the merge own one instead.
 #
 # A table rather than `fidelity == "open"`, for `parsing.DERIVES`' reason: an
 # equality test is how a sixth level joins the ladder without anyone deciding
-# whether it may add. `sourced` is that sixth level and it adds (548) -- **and
-# the record contract it adds under is `open`'s, unchanged.** The expectation
+# whether it may add. `sourced` is that sixth level and it adds, and **the
+# record contract it adds under is `open`'s, unchanged.** The expectation
 # moves (retrieve rather than recall) and the schema does not, so an undeclared
 # factual change is `hallucinated` there exactly as it is here and still moves
 # the exit code.
@@ -343,7 +343,7 @@ def decision_item(fidelity: str | None = None) -> dict:
     """
     may_choose = None if fidelity is None else MAY_CHOOSE[fidelity]
     required = list(parsing.decision_fields(may_choose))
-    # `properties` is filtered to `required`, not carried whole (493). A
+    # `properties` is filtered to `required`, not carried whole. A
     # property that is absent from `required` is exactly what OpenAI's strict
     # `json_schema` mode refuses, and the refusal is silent: the tier ladder
     # reads it as "this endpoint cannot do json_schema", steps down to
@@ -389,7 +389,7 @@ def addition_item() -> dict:
     """One declared addition's shape. See `parsing.ADDITION_FIELDS`.
 
     `basis` is an enum rather than a free string, and that is the single most
-    load-bearing decision in this record (537). A grammar-constrained model
+    load-bearing decision in this record. A grammar-constrained model
     cannot write anything but one of the two members, so "my own knowledge, no
     source" is a token it can emit rather than a sentence it has to compose
     under a field that looks like it wants a URL. The field that makes "no
@@ -397,7 +397,7 @@ def addition_item() -> dict:
 
     `source` is required, like every other property here, because a property
     outside `required` costs the whole `json_schema` tier on a strict vendor
-    and the ladder degrades in silence (493). Required and *empty* is the
+    and the ladder degrades in silence. Required and *empty* is the
     answer under `own-knowledge`, and `parsing._check_basis` is what enforces
     the dependency the schema cannot express -- the same division of labour
     `replacement` and `dropped` already have one record type up.
@@ -444,9 +444,9 @@ _DISPOSITION_ITEM = {
         # rather than two. `parsing.check_merge` enforces which values may fill
         # it, because the schema can express neither the dependency nor the
         # emptiness. The cap it can express, and does: a grammar-constrained
-        # model is stopped at the bound rather than corrected after it
-        # (`DECISIONS.md` entry 11), and `check_merge` repeats it for the tiers
-        # that have no grammar.
+        # model is stopped at the bound rather than corrected after it, and the
+        # tiers that have no grammar are covered because `check_merge` repeats
+        # it there.
         "replacement": {"type": "string", "maxLength": parsing.REPLACEMENT_MAX},
         "reason": {"type": "string", "maxLength": parsing.REASON_MAX},
     },
@@ -471,7 +471,7 @@ MERGE_SCHEMA = {
         "decisions": {"type": "array", "items": _DECISION_ITEM},
         "dispositions": {"type": "array", "items": _DISPOSITION_ITEM},
         # The merge's own warning that these documents may not belong together
-        # (497). Empty is the ordinary answer and the one a model should give
+        # Empty is the ordinary answer and the one a model should give
         # unless it is *sure*; a sentence here is a hint to the operator, not
         # a finding, and it moves no exit code.
         #
@@ -479,7 +479,7 @@ MERGE_SCHEMA = {
         # than about what the level licenses, and two source files in
         # different programming languages are as badly matched at `off` as at
         # `open`. Required, so a strict `json_schema` endpoint accepts the
-        # schema (493) and so silence is an answer rather than an omission.
+        # schema, and so silence is an answer rather than an omission.
         "mismatch": {"type": "string", "maxLength": parsing.MISMATCH_MAX},
     },
     "required": ["merged_document", "decisions", "dispositions", "mismatch"],
@@ -501,7 +501,7 @@ assert tuple(addition_item()["properties"]) == parsing.ADDITION_FIELDS
 # Words that appear in `merge.md`'s worked example and in no fixture document.
 # A generated merge containing one of them is the model returning the prompt's
 # illustration instead of merging its inputs — the failure that took down
-# qwen3:4b under decompose (internal/docs/M3-model-comparison.md), where only span
+# qwen3:4b under decompose, where only span
 # anchoring noticed. `GLOBAL.json`'s `no-prompt-example-marlbrook` asserts the
 # same thing over extracted claims; this is the raw-text half of the pair, and
 # it runs before decompose so it cannot be defeated by how the copy was
@@ -528,9 +528,9 @@ EXAMPLE_MARKERS = ("marlbrook", "funicular")
 #
 # ## One copy per field that carries document text, and one per document
 #
-# Until M7 the budget was one document at 1.5x headroom, sized for a response
-# whose only field was the document. The v2 schema has four more places a span
-# of a source can land, and `internal/docs/M7-fidelity.md` §18 measured what that costs:
+# Until an earlier version, the budget was one document at 1.5x headroom,
+# sized for a response whose only field was the document. The v2 schema
+# has four more places a span of a source can land, and measurement showed what that costs:
 # on the largest recorded merge the old figure ran out at roughly half the
 # declared fraction, and at `high` nearly every segment is declared. Truncation
 # is self-detecting — an unterminated JSON string fails `parsing.extract_json`,
@@ -549,24 +549,24 @@ EXAMPLE_MARKERS = ("marlbrook", "funicular")
 #
 # `FIXED_COPIES + len(documents)` in all, which is four for a pair.
 #
-# `dispositions[].replacement` was a fifth until task 38 and is now charged on
-# its own line below, because it is the one field with a cap: it is the smaller
-# of the copy it used to be and `parsing.REPLACEMENT_MAX` times the record
-# count. Two bounds of different kinds, and the min is deliberate rather than
-# tidy — the cap is a proof and the copy is an argument (nothing stops two
-# records pointing at overlapping spans, so "the sum is at most the document
-# again" is a reading of what a sensible model does), and taking the smaller
-# means the argument is still load-bearing on any pair with more characters per
-# segment than the cap. `DECISIONS.md` entry 14 says what that is worth, which
-# on the pair the bound was decided for is nothing at all. Each at `HEADROOM`, which is what pays for a
-# merge restating a disputed value under two attributions. Nothing in the schema
-# bounds any of them, so no budget here is a proof; what this one is, is pessimistic in a way that is
-# stated rather than tuned, and `test_merge.py` holds it against a constructed
-# worst-case payload rather than an estimate.
+# `dispositions[].replacement` was a fifth, and is now charged on its own line
+# below, because it is the one field with a cap. Its charge is the smaller of
+# the document copy it used to be and `parsing.REPLACEMENT_MAX` times the record
+# count: the cap is a proof (nothing longer parses), the copy only an argument
+# (two records may point at overlapping spans, so "the sum is at most the
+# document again" reads what a sensible model does). The cap lowers the charge
+# only on a pair with more characters per segment than the cap; on the ~10 kB
+# pair the bound was decided for, the copy is still what is charged.
+# Every copy is charged at `HEADROOM` where the level permits composing, which
+# pays for a merge restating a disputed value under two attributions; the next
+# section says which copies keep it at a level that can only select. Nothing in
+# the schema bounds the other copies, so no budget here is a proof. This one is
+# pessimistic in a way that is stated rather than tuned, and `test_merge.py`
+# holds it against a constructed worst-case payload rather than an estimate.
 #
-# ## What the level moves, and what it does not — task 18b
+# ## What the level moves, and what it does not
 #
-# Task 18 sized all of that without asking which level was running, and at `off`
+# An earlier version sized all of that without asking which level was running, and at `off`
 # that provisions for a response `off` forbids. `reconcile.PERMITTED` is the
 # rule, and it is the same object the reconciler enforces and the four
 # `prompts/fidelity/*.merge.md` fragments state in prose, so the budget is
@@ -582,15 +582,15 @@ EXAMPLE_MARKERS = ("marlbrook", "funicular")
 # under two attributions is structural and legal at every level.
 #
 # What the level does *not* move is the record count. `dropped` is declarable at
-# every level (§2.1; it is a review-queue entry, not an illegal answer), so every
+# every level (a review-queue entry under the disposition model, not an illegal answer), so every
 # segment can carry a record whatever the slider says, and the per-segment term
 # below is level-invariant by construction. That term is the larger half of the
 # budget on a real pair, so the four figures are closer together than the
 # argument for separating them suggests — which is itself the answer to whether
-# `replacement` needs a schema-level bound. Task 38 asked the question with
-# numbers: on the ~10 kB pair the field is **5.6% of the budget at `off`** and
-# the per-record scaffolding is **66.5%**, so the bound is a correctness guard
-# and not a way into a context window. `DECISIONS.md` entry 14.
+# `replacement` needs a schema-level bound. The numbers bear this out: on the
+# ~10 kB pair the field is **5.6% of the budget at `off`** and the per-record
+# scaffolding is **66.5%**, so the bound is a correctness guard and not a way
+# into a context window.
 #
 # The cost of this: `fidelity` now reaches `max_tokens`, so two levels of one
 # fixture differ in the cassette key by two components rather than one. That is
@@ -606,7 +606,7 @@ FIXED_COPIES = 2
 # *utilisation* observed over thirteen units rather than from the largest trace,
 # because a trace sized against the largest trace refuses the incumbent model's
 # window on a real pair while buying headroom the measurement says is already
-# there. `DECISIONS.md` entry 17 has the thirteen figures and the arithmetic.
+# there.
 REASONING_ALLOWANCE = 6144
 BUDGET_STEP = 256
 
@@ -689,7 +689,7 @@ def composes(fidelity: str) -> tuple[str, ...]:
 #
 #   merged_document             yes -- stating both sides of a disputed value
 #                                      under two attributions lengthens the
-#                                      merge, and §2.4 calls that selection, so
+#                                      merge, and that counts as selection, not copy-editing, so
 #                                      it is legal at `off`
 #   decisions[].candidates[i]   no  -- each a span of its own document
 #   decisions[].chosen          yes -- the *longest* of the candidates each
@@ -736,7 +736,7 @@ def replacements(document: int, segments: int, fidelity: str) -> int:
     Taking the min means the cap only helps where it binds: on sources with more
     characters per segment than `REPLACEMENT_MAX`. On the ~10 kB pair, at 54
     characters a segment, it does not bind and this term is exactly what it was
-    before task 38. That is entry 14's finding, and it is why this function
+    before it was split out on its own, which is why this function
     exists as a named term rather than being folded into the copy count.
     """
     copies = int(document * HEADROOM) if composes(fidelity) else document
@@ -745,7 +745,7 @@ def replacements(document: int, segments: int, fidelity: str) -> int:
 
 def verify_title(client: Client, merged_title: str, documents: dict[str, str],
                  candidates: tuple[str, ...]) -> reconcile.Finding | None:
-    """Check a written title against the sources, as a claim. DECISIONS 450.
+    """Check a written title against the sources, as a claim.
 
     Only `synthesise` reaches here, and only for a title that is not already a
     source title byte for byte: taking one unchanged is correct at every policy
@@ -797,7 +797,7 @@ PER_MISMATCH = parsing.MISMATCH_MAX + len('"mismatch": "",')
 
 # And it is granted as a whole step, added *after* the rounding, for two
 # reasons that both come from this being a fixed cost rather than a scaling
-# one (500).
+# one.
 #
 # Rounded *in*, it gave one fixture a whole 256-token step and its neighbour
 # none, which broke the registered tie between `disjoint_domains` and
@@ -841,7 +841,7 @@ def budget_tokens(documents: dict[str, str], fidelity: str) -> int:
     )
     rounded = -(-int(body / CHARS_PER_TOKEN) // BUDGET_STEP) * BUDGET_STEP
     # `mismatch` is added *after* the rounding, like `REASONING_ALLOWANCE` and
-    # for the same reason (500): it is a fixed cost per response that does not
+    # for the same reason: it is a fixed cost per response that does not
     # scale with the document, so rounding it in gives one fixture a whole
     # 256-token step and its neighbour none. That broke the registered tie
     # between `disjoint_domains` and `disjoint_sources`, which are held to one
@@ -866,7 +866,7 @@ def request_tokens(rendered: str, budget: int) -> int:
     documents. Estimating it from the sources understates it by around 9% on the
     canonical pair, because the rules, the worked example and the segment
     scaffolding are all prompt too, and 9% was the entire margin the last time
-    this number was argued about (`DECISIONS.md` entry 15).
+    this number was argued about.
     """
     return -(-len(rendered) // CHARS_PER_TOKEN) + budget
 
@@ -1038,7 +1038,7 @@ def merge_documents(
         base_filename=base,
         sources=sources,
     )
-    # DECISIONS 443. An explicit `max_tokens` still wins. Otherwise the profile
+    # An explicit `max_tokens` still wins. Otherwise the profile
     # decides: `CEILING_MODEL` sends no ceiling and the endpoint applies its
     # own, because a flat `REASONING_ALLOWANCE` cannot hold for a model that
     # scales reasoning with difficulty. `budget` is therefore `None` on the
@@ -1052,15 +1052,15 @@ def merge_documents(
     else:
         budget = budget_tokens(documents, policy.fidelity)
 
-    # Task 41. The budget is computed from the documents and the level; whether
+    # The budget is computed from the documents and the level; whether
     # it fits is a property of the server, and until now nothing compared the
     # two. Asked here because this is the only place a merge budget is turned
     # into a request, and asked *before* the request, because the two failures
     # it prevents are both silent-ish and both expensive: a trimmed prompt is
     # never reported at all, and a truncated answer is reported only after the
     # generation has been paid for. `served_window` returns None for three
-    # reasons now, not two: replay, dry run, or -- DECISIONS 179, Brief AL item
-    # 1 -- an endpoint that does not expose `/api/ps` at all. The first two send
+    # reasons now, not two: replay, dry run, or an endpoint that does not
+    # expose `/api/ps` at all. The first two send
     # nothing and need no guard of either kind; the third takes the call for
     # real with no preflight guard in front of it, and the check below is what
     # stands in its place.
@@ -1092,7 +1092,7 @@ def merge_documents(
     )
     payload = completion.payload
 
-    # Brief AL item 2. `served` is `None` for two different reasons and only
+    # `served` is `None` for two different reasons and only
     # one of them needs a check here: a replay or dry run sent nothing, so
     # there is nothing to have been truncated, but an endpoint that could not
     # say what it serves (`window_mechanism` starts "post-hoc") just took a
@@ -1122,7 +1122,7 @@ def merge_documents(
     # case, where nothing preflighted at all; this one answers that *and* the
     # case a successful preflight still leaves open, because `measured()`
     # confirms its figure to only `PROBE_FILL` of itself and a prompt in the
-    # top of that band passes the guard unverified (DECISIONS 350). Costs a
+    # top of that band passes the guard unverified. Costs a
     # comparison of two numbers the ledger row already carries.
     window.assert_prompt_not_trimmed(
         client.usage.ledger[-1] if client.usage.ledger else {}, what=what)

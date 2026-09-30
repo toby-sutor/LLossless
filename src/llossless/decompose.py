@@ -75,17 +75,17 @@ class Claim:
         return asdict(self)
 
 
-# How many times a claim list writes its document out, counted in tokens, for
-# the output ceiling (`budget_tokens`). A claim restates part of a sentence (one
-# copy of the document), quotes that sentence as its span (a second) and
-# carries its own scaffolding -- key names, quotes, the line number -- which on
-# short lines costs about a third. That is three copies for a decomposer that
-# makes one claim per sentence, and the ceiling allows two of them: the 27B
-# made 2.63 times the 8B's output on the same narrative document, splitting
-# what the 8B kept whole. Measured against the constant rather than fitted to
-# it: over the 282 recorded answers on two models the most any wrote was 3.82
-# copies (qwen3:8b, a 135-character document), and 3.46 on the 27B.
-# DECISIONS 587.
+# How many times a claim list writes its document out, counted in
+# tokens, for the output ceiling (`budget_tokens`). A claim restates
+# part of a sentence (one copy of the document), quotes that sentence as
+# its span (a second) and carries its own scaffolding (key names,
+# quotes, the line number), which on short lines costs about a third.
+# That is three copies for a decomposer that makes one claim per
+# sentence, and the ceiling allows two of them: the 27B made 2.63 times
+# the 8B's output on the same narrative document, splitting what the 8B
+# kept whole. Measured against the constant rather than fitted to it:
+# over the 282 recorded answers on two models the most any wrote was
+# 3.82 copies (qwen3:8b, a 135-character document), and 3.46 on the 27B.
 CLAIM_COPIES = 6
 
 
@@ -93,18 +93,18 @@ def budget_tokens(text: str, *, thinking: bool) -> int:
     """`max_tokens` for decomposing `text`, sized from the document before the call.
 
     The decompose role had no ceiling, so a generation that never ended was
-    bounded only by `--timeout`: Phase 4 ran one for 904 seconds (427, 429).
+    bounded only by `--timeout`: one run went 904 seconds before it stopped.
     This is `merge.budget_tokens`' shape applied to the one-document role:
     `CLAIM_COPIES` of the document, rounded up to a whole `BUDGET_STEP`, plus
     one more step added after the rounding as a fixed per-response floor --
     `MISMATCH_ALLOWANCE`'s reason, and what keeps a two-line document clear,
     where the scaffolding outweighs the text.
 
-    `thinking` adds `merge.REASONING_ALLOWANCE`, the one measurement of a
-    reasoning trace this project has. Without it a reasoning model asked to
-    think spends the ceiling reasoning and returns nothing, which is what 385
-    recorded on the merge role. With thinking off nothing is reasoned, so
-    nothing is allowed for it and the bound on a runaway stays tight.
+    `thinking` adds `merge.REASONING_ALLOWANCE`, the one measurement of
+    a reasoning trace this project has. Without it a reasoning model
+    asked to think spends the ceiling reasoning and returns nothing, as
+    observed on the merge role. With thinking off nothing is reasoned,
+    so nothing is allowed for it and the bound on a runaway stays tight.
 
     `max_tokens` is a cassette-key component, so this re-keys every decompose
     recording made without it. That is why it landed with a re-record.
@@ -122,16 +122,16 @@ def budget_tokens(text: str, *, thinking: bool) -> int:
 def fit_to_window(ceiling: int | None, *, prompt_tokens: int, served) -> tuple[int, int | None]:
     """(tokens the preflight charges, `max_tokens` sent) for one decompose call.
 
-    DECISIONS 588. The ceiling is a runaway cap, not a forecast of the answer,
-    and the window already caps a runaway: a generation cannot run past what
-    the window leaves after the prompt. So the ceiling is cut to that room
-    rather than charged whole, and the preflight charges the prompt plus one
-    `BUDGET_STEP`, the per-response floor every ceiling carries. Charging the
-    whole ceiling (587) refused every document over about 13,000 characters at
-    32,768, though the ceiling allows 6 copies of the document and the most any
-    recorded answer wrote is 3.82. Merge charges its whole budget on purpose:
-    there the budget is the expected size of the output, so a window that
-    cannot hold it cannot hold the merge.
+    The ceiling is a runaway cap, not a forecast of the answer, and the
+    window already caps a runaway: a generation cannot run past what the
+    window leaves after the prompt. So the ceiling is cut to that room
+    rather than charged whole, and the preflight charges the prompt plus
+    one `BUDGET_STEP`, the per-response floor every ceiling carries.
+    Charging the whole ceiling refused every document over about 13,000
+    characters at 32,768, though the ceiling allows 6 copies of the
+    document and the most any recorded answer wrote is 3.82. Merge charges
+    its whole budget on purpose: there the budget is the expected size of
+    the output, so a window that cannot hold it cannot hold the merge.
 
     `served` is None where no window is known (a replay or a dry run, which
     send nothing): the ceiling goes out as is. Where the cut does not bite --
@@ -231,21 +231,21 @@ def decompose_text(
     """
     prompt = prompt or prompts.load("decompose")
     rendered = prompt.render(document=number_lines(text))
-    # The ceiling, on merge's rule for which profiles get one (443): a
+    # The ceiling, on merge's rule for which profiles get one: a
     # `CEILING_MODEL` profile sends none and the endpoint applies its own.
     if (structured.profile_for(client.settings.profile).output_ceiling
             == structured.CEILING_MODEL):
         budget = None
     else:
         budget = budget_tokens(text, thinking=client.thinking_for("decompose", None))
-    # Task 41's guard, which merge has had since it was written and this role
-    # never did. An overrun prompt is trimmed from the front by the server and
-    # answered anyway, so the claims would come from the tail of the document
-    # with nothing in the report saying so. The output is charged as a small
-    # reserve, and the ceiling is cut to what the window leaves (588): vLLM
-    # refuses a request whose prompt and `max_tokens` exceed the model length,
-    # and ollama shifts the prompt out of the context to make room for a long
-    # generation, so the ceiling sent must fit beside the prompt.
+    # A guard merge has had since it was written, and this role never did
+    # until now. An overrun prompt is trimmed from the front by the server
+    # and answered anyway, so the claims would come from the tail of the
+    # document with nothing in the report saying so. The output is charged
+    # as a small reserve, and the ceiling is cut to what the window leaves:
+    # vLLM refuses a request whose prompt and `max_tokens` exceed the model
+    # length, and ollama shifts the prompt out of the context to make room
+    # for a long generation, so the ceiling sent must fit beside the prompt.
     if not client.sends_nothing:
         served = client.served_window("decompose")
         needed, sent = fit_to_window(

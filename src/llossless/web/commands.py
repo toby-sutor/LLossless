@@ -1,7 +1,7 @@
 """Which programs this server may answer a merge with. The operator's list, on disk.
 
 `backend.py` is the second way a request can be answered: a program, the prompt
-on its stdin, the answer on its stdout (483). On the command line that is
+on its stdin, the answer on its stdout. On the command line that is
 `--answer-with`, and it is safe there for a reason worth writing down --
 whoever types a flag already has a shell, so naming a program is not an
 escalation. **A web form is not in that position.** A field that accepts a
@@ -49,7 +49,7 @@ app default is not strategy. I don't wanna use the most expensive model Fable
 for such tasks."* So `KnownTool.models` declares the models the tool can be
 told to use and the exact argv that tells it, discovery emits one route per
 model, and `_row` **refuses a route that states none** -- a hand-written one
-as well as a discovered one. That last part reverses half of 517, which let
+as well as a discovered one. That last part reverses half of an earlier rule, which let
 the model be omitted and recorded the run under the route id. The name was
 honest and the run was not: the program still used its own default and nobody
 could see which.
@@ -76,8 +76,8 @@ nothing at all, and `_write` copies an unusable row back out verbatim rather
 than dropping it. The refusal still binds -- `get` raises that row's own
 reason for that row's own id -- it just stops binding rows it was never about.
 
-**A row this page wrote, this page retires.** 526 made an unstated model a
-refusal, which turned every route the *pre-526* discovery code had written into
+**A row this page wrote, this page retires.** An earlier change made an unstated model a
+refusal, which turned every route the discovery code had already written into
 an unusable row: `discovered: true`, the tool's id, no model. Asking the
 operator to hand-edit a file they never hand-wrote is not an answer, so
 `migrate()` drops exactly that shape at startup and `retired` says so on the
@@ -129,10 +129,10 @@ carries it: unstated means the default a command backend resolves for itself
 (`config.COMMAND_TIMEOUT`), and a route whose program is slower than that
 states its own seconds. Optional where the window is required, because the two
 are different kinds of missing -- an unstated window leaves a run with no guard
-at all, an unstated timeout leaves it with a measured default (533).
+at all, an unstated timeout leaves it with a measured default.
 
 **The command is never served, and the label is never inferred.** A command is
-a local path as often as not -- `internal/tests/scan_release.py` scans the
+a local path as often as not -- the release scan checks the
 published set for exactly that shape -- so `describe()` answers with the id,
 the label and the route's own settings, and there is no route on this server
 that returns the string. The label is whatever the operator wrote, rendered
@@ -141,8 +141,8 @@ screen produces a wrong bill.
 
 **That rule binds discovery twice over.** What `shutil.which` answers with is
 an absolute path under whichever account this server runs as, which is the
-exact shape `scan_release.py` refuses and which already cost this feature one
-fixture (522). So the resolved path is held in the store and in the file and
+exact shape the release scan refuses and which already cost this feature one
+fixture. So the resolved path is held in the store and in the file and
 goes into **no** payload: `discovered()` answers with an id, a label, whether
 it was found and whether it is on, and there is nothing on it a reader could
 reconstruct a path from. The label comes from the table rather than from the
@@ -169,13 +169,13 @@ from ..config import COMMAND_ENVELOPES, COMMAND_TIMEOUT, ENVELOPE_RAW, ENVELOPE_
 from ..structured import PROFILES
 
 # The model's own web tools, by the name the CLI's allowlist flag takes, and
-# what each costs to permit (537).
+# what each costs to permit.
 #
 # **Neither is written into a route, and below `sourced` neither is on.** A
 # `claude --print` call with no allowlist says in the text that it needs
 # permission and searches nothing, so a route this build writes answers from
 # what the model knows. At `sourced` both are granted automatically on the
-# argv a run executes (`config.AUTO_GRANT`, 578), and never in the file.
+# argv a run executes (`config.AUTO_GRANT`), and never in the file.
 #
 # **Two entries rather than one switch, because the risk differs.** This
 # tool's entire input is documents somebody supplied, and the prompts already
@@ -192,7 +192,7 @@ from ..structured import PROFILES
 # a tool name in an argv can come from, so there is no expression anywhere
 # that joins a submitted string to an allowlist flag.
 #
-# **The table moved to `config` and the names did not** (548). `sourced` is a
+# **The table moved to `config` and the names did not.** `sourced` is a
 # fidelity level, so the command line reaches this decision too, and `config`
 # is the module both paths already import -- this one imports it and nothing in
 # it may import this one. Re-exported under the names this module has always
@@ -223,7 +223,7 @@ ALLOW_TOOLS_FLAG = config_web.ALLOW_TOOLS_FLAG
 # Moved to `config` and re-exported here, exactly as the tool names above were
 # and for the same reason: the command line needs this rule too, `config` is
 # the module both paths already import, and a second implementation of one
-# rule is a second answer to it (555). The names stay as this module has
+# rule is a second answer to it. The names stay as this module has
 # always spelled them, so every comment below and every test that reads them
 # still means what it says.
 RESULT_FORMAT_FLAG = config_web.RESULT_FORMAT_FLAG
@@ -233,7 +233,7 @@ _carries_result_args = config_web.carries_result_args
 
 # The profile a route gets when it does not name one. `subscription` is the
 # profile that exists for this backend: one rung, no `temperature`, no `seed`,
-# because there is no request body to put them in (483). Naming a different one
+# because there is no request body to put them in. Naming a different one
 # is permitted -- an operator's wrapper may genuinely constrain output -- and
 # it is their explicit choice rather than this module's guess.
 DEFAULT_PROFILE = "subscription"
@@ -347,8 +347,8 @@ class ToolModel:
     standard the existing ones were held to.
 
     `preselect` marks the row an untouched page is pointed at when the
-    operator wrote no route of their own (612): the operator's ruling on 609's
-    grid, Opus. At most one per tool, and never the dearest row.
+    operator wrote no route of their own: Opus, the operator's pick from the
+    measured grid. At most one per tool, and never the dearest row.
     """
 
     id: str
@@ -387,18 +387,18 @@ class KnownTool:
     written into. The two are one decision written twice on purpose: a command
     carrying `--output-format json` whose route says `raw` hands the merge an
     envelope to parse, and `_row` refuses the pair when they disagree -- in
-    both directions, and only since 541, which is when the refusal caught up
-    with the three comments that already described it.
+    both directions, a check that was added only after the three comments
+    that already described the rule.
 
-    Worth the argument because of what the envelope carries. 483 lists three
+    Worth the argument because of what the envelope carries. There are three
     things a command backend cannot know, and two of them arrive here: the
     token counts, and -- the reason this was added -- `server_tool_use`, the
     per-call count of whether the model went and looked anything up. A run
     that cannot read that counter cannot honestly say where a citation came
     from, and "the model says it searched" is a claim rather than a
-    measurement (537).
+    measurement.
 
-    `models` is why one discovered tool becomes **several routes**. 518's rule
+    `models` is why one discovered tool becomes **several routes**. The rule
     is that the picker is one list and every row in it is a route to a model;
     a dropdown beside a route would be a second piece of state to misread, and
     the whole point of this milestone is that the row a reader highlights is
@@ -406,8 +406,8 @@ class KnownTool:
     own id, its own label and its own argv.
 
     `window` is **declared, not measured**. A command backend cannot be asked
-    for its context window and there is no token count to check afterwards
-    (483), so some number has to be written down before the first call. This
+    for its context window and there is no token count to check afterwards,
+    so some number has to be written down before the first call. This
     one is the conservative figure for the tool's documented default; an
     operator who knows better edits the route in the file, which is the same
     row this writes.
@@ -494,8 +494,8 @@ KNOWN_TOOLS: tuple[KnownTool, ...] = (
 def expansions() -> tuple[tuple[KnownTool, ToolModel], ...]:
     """Every route the table can produce, in the order the page offers them.
 
-    One tool becomes one route per model, which is 518's rule -- one list,
-    every row a route to a model -- applied to the case that produced it. The
+    One tool becomes one route per model: one list, every row a route to a
+    model, applied to the case that produced it. The
     order is `rank` within a tool and table order between tools, so the first
     command route a page meets is the cheapest one to be wrong about.
     """
@@ -523,13 +523,13 @@ assert all(tool.models for tool in KNOWN_TOOLS)
 # claims a model in its label and asks the CLI for nothing.
 assert all(model.select and model.model for _tool, model in expansions())
 # One preselected row per tool at most, and never the dearest: the operator's
-# instruction that Fable is not the default still holds under 612.
+# instruction that Fable is not the default still holds here.
 assert all(sum(model.preselect for model in tool.models) <= 1 for tool in KNOWN_TOOLS)
 assert not any(model.preselect and model.rank == max(m.rank for m in tool.models)
                for tool in KNOWN_TOOLS for model in tool.models)
 
-# The merge effort levels a request may choose on a route (613; `max` added
-# by 615). The grid in 609 measured the first four, and the page's slider has
+# The merge effort levels a request may choose on a route (`max` added
+# later). An earlier grid measured the first four, and the page's slider has
 # one stop per level. `max` is a fifth stop nobody has measured -- the
 # operator's ruling was to offer it anyway, with a warning rather than a
 # refusal: the card says the level was never tested and that it may use a
@@ -544,7 +544,7 @@ assert set(EFFORT_CHOICES) <= set(config_web.EFFORT_LEVELS)
 
 
 # The oldest CLI that can run a model, keyed by the program and the model id a
-# route asks for (661). Read off the refusal itself, not a changelog: Claude
+# route asks for. Read off the refusal itself, not a changelog: Claude
 # Code 2.1.274, asked for `claude-opus-5-5`, answered `API Error: 400 Claude
 # Code 2.1.274 does not support this model; version 2.1.280 or newer is
 # required` (`api_error_code: claude_code_version_too_old`; the envelope is
@@ -567,7 +567,7 @@ _VERSION = re.compile(r"\d+\.\d+\.\d+")
 
 
 def read_cli_version(program: str) -> str:
-    """The version the program's install names, or `` when it names none (661).
+    """The version the program's install names, or `` when it names none.
 
     `program` is a path this module already holds: a discovered `KNOWN_TOOLS`
     binary, or the first word of a route in the file. The link is resolved
@@ -596,7 +596,7 @@ def too_old_for(program: str, version: str) -> list[dict]:
 
 
 def preselected(route_id: str) -> bool:
-    """Whether a discovered route with this id is the one a page starts on (612)."""
+    """Whether a discovered route with this id is the one a page starts on."""
     return any(model.preselect and model.id == route_id
                for _tool, model in expansions())
 
@@ -648,7 +648,7 @@ class Route:
     `LLOSSLESS_MODEL`, which the report, the banner and the cassette key all
     read, so an operator who knows their wrapper reaches Opus 5 says so and has
     the run recorded under that name. An operator who does not say has their
-    row refused by `_row` rather than filled in here (526): the page shows
+    row refused by `_row` rather than filled in here: the page shows
     their label either way, and inferring a model from a command is how a
     correct-looking screen produces a wrong bill.
 
@@ -664,7 +664,7 @@ class Route:
     profile: str = DEFAULT_PROFILE
     model: str = ""
     # Seconds one call through this route gets, or `None` for the default a
-    # command backend resolves for itself (`config.COMMAND_TIMEOUT`, 533).
+    # command backend resolves for itself (`config.COMMAND_TIMEOUT`).
     #
     # Here rather than on the page, and for the reason `window` is here: this
     # is a property of the program the operator put in the file, and the
@@ -689,9 +689,9 @@ class Route:
     # `result` (stdout is a JSON result envelope that also carries the
     # usage block). Declared here because this is where the argv is declared,
     # and the two have to agree -- a command without its output-format
-    # argument cannot produce the envelope a route claims for it (537).
-    # `_row` refuses the disagreement; `_carries_result_args` is the reader
-    # (541).
+    # argument cannot produce the envelope a route claims for it.
+    # `_row` refuses the disagreement; `_carries_result_args` is the
+    # reader.
     #
     # Default `raw`, so a row an operator wrote before this existed means what
     # it meant then.
@@ -703,7 +703,7 @@ class Route:
     # the route the operator configured, like the model alias beside it -- not
     # a browser input and not a per-request field. A submitter chooses among
     # the operator's routes; they never describe one, and that rule is what
-    # this whole module is (537).
+    # this whole module is.
     #
     # Separately selectable rather than one switch, because the two carry
     # different risk. See `WEB_TOOLS`.
@@ -737,7 +737,7 @@ class Route:
 
         `config.COMMAND_TIMEOUT` and never `DEFAULT_TIMEOUT`: every route here
         is a command backend by construction, so the figure that applies is
-        the one measured against a subprocess (533).
+        the one measured against a subprocess.
         """
         return COMMAND_TIMEOUT if self.timeout is None else self.timeout
 
@@ -756,13 +756,13 @@ class Route:
 
     @property
     def retrieval(self) -> tuple[str, ...]:
-        """The web tools a `sourced` run through this route would be permitted (548).
+        """The web tools a `sourced` run through this route would be permitted.
 
         The operator's own grant where the file carries one, and otherwise the
         automatic grant `config.AUTO_GRANT` makes for a program this build
         recognises. Empty means a `sourced` run naming this route is refused
         rather than quietly answered from recall -- because it cannot retrieve,
-        or, since 568, because it answers in plain text and so cannot report
+        or because it answers in plain text and so cannot report
         whether it did. The marker the page draws from this must not promise
         retrieval on a route the level will refuse.
 
@@ -786,10 +786,10 @@ class Route:
         False for `subscription`, and the reason is not a reservation about the
         backend. Every measured figure in this project was produced at
         `json_schema`; this route answers at `prompt`, sends no `temperature`
-        and no `seed`, and is therefore not reproducible by construction (483).
+        and no `seed`, and is therefore not reproducible by construction.
         A figure measured over an endpoint, rendered beside it, would be a
         number measured under conditions this run does not meet; the figures
-        the catalogue does carry for such a route (`command_routes`, 597) were
+        the catalogue does carry for such a route (`command_routes`) were
         measured through the route itself and rank only against each other.
         """
         return self.tier == PUBLISHED_TIER or not self.tier
@@ -835,7 +835,7 @@ class Route:
             "discovered": self.discovered,
             # Which web tools a `sourced` run through this route would be
             # permitted, and whether that permission was the operator's own
-            # grant or this build's automatic one (548).
+            # grant or this build's automatic one.
             #
             # **Served rather than derived by the page**, the rule
             # `comparable` and `detects_invention` already follow: a page that
@@ -848,12 +848,12 @@ class Route:
             "retrieval": list(self.retrieval),
             "retrieval_granted": bool(self.web_tools),
             # The merge effort a request may choose for this route, and what it
-            # gets when it chooses none (613), or null for a route that takes
+            # gets when it chooses none, or null for a route that takes
             # none. Served rather than derived by the page, on `retrieval`'s
             # terms: the page is never shown the command it would be read off.
             "effort": self.effort(chosen),
             # The route an untouched page starts on when the operator wrote
-            # none of their own (612). Only ever a discovered row.
+            # none of their own. Only ever a discovered row.
             "preselect": self.discovered and preselected(self.id),
         }
 
@@ -864,7 +864,7 @@ class Route:
         The two refusals `effort_levels` always made, factored out so
         `single_level_model` can ask the same question without repeating them:
         a program this build has not read, or a command that already states
-        its own level (562's rule 1), takes no flag from this build either way
+        its own level, takes no flag from this build either way
         -- whatever the model is.
         """
         argv = config_web._argv(self.command)
@@ -873,7 +873,7 @@ class Route:
 
     @property
     def single_level_model(self) -> bool:
-        """Does this route's stated `--model` take one level, not a scale (688, ruling 11)?
+        """Does this route's stated `--model` take one level, not a scale?
 
         Read off the argv the way `effort_levels` already is, so the two
         agree: a route this build cannot put a flag on is neither offered a
@@ -885,13 +885,13 @@ class Route:
 
     @property
     def effort_levels(self) -> tuple[str, ...]:
-        """The merge levels a request may choose on this route, or none (613).
+        """The merge levels a request may choose on this route, or none.
 
         None for a program whose flags this build has not read -- appending
         `--effort` to it breaks a working route -- none for a command that
-        already states its own level, which wins over any request (562's rule
-        1), so a level the request named would be one the run ignored -- and
-        none for a single-level model (688, ruling 11): `effort` names that
+        already states its own level, which wins over any request, so a
+        level the request named would be one the run ignored -- and
+        none for a single-level model: `effort` names that
         case on its own rather than through an empty list a page cannot tell
         apart from "this route has nothing to say about effort at all".
         """
@@ -902,11 +902,11 @@ class Route:
     def effort(self, chosen: dict[str, str] | None = None) -> dict | None:
         """`{levels, default}` for the merge on this route, `{single_level,
         label}` for one whose model takes one level instead of a scale, or
-        None for a route that takes neither (613; 688 ruling 11).
+        None for a route that takes neither.
 
         `default` is the level a request naming none gets: `config.effort_of`
         over the command, with `chosen` -- the server's own `LLOSSLESS_EFFORT*`
-        -- where the operator set one, and the per-model table (612) where not.
+        -- where the operator set one, and the per-model table where not.
         """
         if self.single_level_model:
             return {"single_level": True, "label": config_web.SINGLE_LEVEL_LABEL}
@@ -915,7 +915,7 @@ class Route:
             return None
         return {"levels": list(levels),
                 "default": config_web.effort_of(self.command, "merge", chosen),
-                # The levels 612 keeps out of every default at `sourced`, so
+                # The levels kept out of every default at `sourced`, so
                 # the page can say so beside them without a word list of its own.
                 "not_at_sourced": [level for level in levels
                                    if level in config_web.MERGE_EFFORT_NOT_AT_SOURCED]}
@@ -943,7 +943,7 @@ class Route:
         # The field is how an operator grants retrieval, and a route that
         # never shows it is a feature nobody discovers; an empty list in the
         # file beside `command` is the one place the two can be edited
-        # together, which `_row` then requires (537).
+        # together, which `_row` then requires.
         row["web_tools"] = list(self.web_tools)
         if self.discovered:
             row["discovered"] = True
@@ -955,7 +955,7 @@ class Route:
         `LLOSSLESS_WINDOW` rather than a per-role map, because the route is
         one program answering every role and `config` refuses a command backend
         that leaves any role's window unstated -- a map covering two of three
-        leaves the third exactly as blind as saying nothing (483).
+        leaves the third exactly as blind as saying nothing.
 
         Both model variables, because `config.from_env` reads
         `LLOSSLESS_MERGE_MODEL` for the merge and `LLOSSLESS_MODEL` for the
@@ -968,7 +968,7 @@ class Route:
         field any profile could put a thinking-off instruction in. The
         `subscription` profile says so out loud and `build_body` raises
         `ThinkingNotHonoured` rather than sending a request whose answer
-        would be filed under a `thinking=False` cassette key (483); any
+        would be filed under a `thinking=False` cassette key; any
         other profile would build that field and have `backend.py` drop it
         silently, which is the same lie without the refusal. So the only
         configuration a command route can honestly run under is thinking on
@@ -992,13 +992,13 @@ class Route:
             # `LLOSSLESS_TIMEOUT` was set for the endpoint this server was
             # started with, and a run that contacts no endpoint must not
             # inherit a bound chosen for one. `:g` because the file may hold
-            # either an int or a float and `config` parses both (533).
+            # either an int or a float and `config` parses both.
             "LLOSSLESS_TIMEOUT": f"{self.seconds:g}",
             "LLOSSLESS_PROFILE": self.profile,
             "LLOSSLESS_MODEL": self.model_name,
             "LLOSSLESS_MERGE_MODEL": self.model_name,
             # How the command's stdout is read, from the same row that holds
-            # the argv it has to agree with (537). No variable for `web_tools`:
+            # the argv it has to agree with. No variable for `web_tools`:
             # the grant is in the argv, the run makes no use of the list, and
             # a second copy in the environment would be a claim about a
             # permission nothing downstream can check. What the run learns
@@ -1023,8 +1023,8 @@ class Unusable:
     because it did not understand it, which is a larger claim over that file
     than switching a row on.
 
-    `retired` is the one shape this module is allowed to drop -- a route the
-    *pre-526* version of this page wrote, recognised by `discovered` plus a
+    `retired` is the one shape this module is allowed to drop: a route the
+    earlier version of this page wrote, recognised by `discovered` plus a
     `KNOWN_TOOLS` id plus no model. See `Commands.migrate`.
     """
 
@@ -1167,7 +1167,7 @@ class Commands:
         # where none is without installing or deleting a program, which is the
         # only way the "nothing was found" half of this can be driven at all.
         self._which = shutil.which if which is None else which
-        # `read_cli_version`, unless a caller supplies one (661): the same
+        # `read_cli_version`, unless a caller supplies one: the same
         # seam, for the one other thing this object reads off the machine.
         self._version = read_cli_version if version is None else version
         # **A caller that describes a machine describes all of it.** `search`
@@ -1303,13 +1303,13 @@ class Commands:
 
     @staticmethod
     def _is_retired(key: str, value) -> bool:
-        """Is this the row the *pre-526* discovery code wrote? See `migrate`.
+        """Is this the row the earlier discovery code wrote? See `migrate`.
 
         Three things at once, and all three are needed. `discovered` says this
         page wrote it, so retiring it is this page undoing its own work rather
         than editing the operator's. The key being a `KNOWN_TOOLS` **tool** id
         rather than a model id says it predates the split into one route per
-        model. And an unstated model is what 526 refused, which is why the row
+        model. And an unstated model is what the current rule refuses, which is why the row
         is unusable in the first place. A row that a later build writes cannot
         match, because every row `enable` writes states a model.
         """
@@ -1433,12 +1433,12 @@ class Commands:
 
         model = value.get("model")
         if not isinstance(model, str) or not model.strip():
-            # **The fix, then the reason, and the fix is one field.** The
-            # first version of this said the rule at length and never said
-            # what to do, and the operator met it as a wall of text about a
-            # file they had not written. The reasoning is in DECISIONS 526;
-            # what belongs here is the file, the route, the field and an
-            # example of it.
+            # **The fix, then the reason, and the fix is one
+            # field.** The first version of this said the rule
+            # at length and never said what to do, and the
+            # operator met it as a wall of text about a file
+            # they had not written. What belongs here is the
+            # file, the route, the field and an example of it.
             example = expansions()[0][1].model if expansions() else "haiku"
             raise CommandsError(
                 f"{self.path}'s route {name!r} has no `model`. Add the name "
@@ -1452,7 +1452,7 @@ class Commands:
         # rather than falling back to `raw`, because a route whose command
         # carries `--output-format json` and whose file says `raw` hands the
         # merge an envelope to parse and reports the confusion as a model
-        # fault (537).
+        # fault.
         shape = value.get("envelope") or ENVELOPE_RAW
         if shape not in COMMAND_ENVELOPES:
             raise CommandsError(
@@ -1463,7 +1463,7 @@ class Commands:
                 f"counts and the counter saying whether the model searched.")
 
         # And the envelope has to agree with the argv, which is the half three
-        # comments in this module said was here and was not (541). Membership
+        # comments in this module said was here and was not. Membership
         # was all that was checked, so `envelope: result` on a command with no
         # `--output-format json` loaded, ran, and failed inside the merge as a
         # model fault. `web_tools` two blocks down has always been checked this
@@ -1581,7 +1581,7 @@ class Commands:
         return out
 
     def _cli(self, route: Route) -> dict:
-        """The version of the CLI a route runs, and the models it is too old for (661).
+        """The version of the CLI a route runs, and the models it is too old for.
 
         Read only when the route's program is named like a `KNOWN_TOOLS`
         program -- the one CLI whose install layout this build has read and
@@ -1666,7 +1666,7 @@ class Commands:
         The one function that produces a filesystem path in this module, and
         the reason every caller of it is inside this file: what it answers with
         is an absolute path under whichever account the server runs as, and
-        `internal/tests/scan_release.py` refuses that shape anywhere in the
+        the release scan refuses that shape anywhere in the
         published set for a reason that is not about credentials -- it names a
         person and a machine layout. `discovered()` reduces it to a boolean
         before anything can be served.
@@ -1710,7 +1710,7 @@ class Commands:
         """The table, checked against `PATH`. **Never a path, never an argv.**
 
         One row per *route* rather than per tool: `claude` found once is four
-        rows, one per model, because 518's rule is that every row a reader
+        rows, one per model, under the rule that every row a reader
         chooses between is a route to a model. A tool with a model selector
         beside it would be a second piece of state to misread, which is the
         thing that rule exists to prevent.
@@ -1751,7 +1751,7 @@ class Commands:
                 # app default is not strategy.
                 "model": model.model,
                 "available": bool(where),
-                # The version its install names, or null (661). The string
+                # The version its install names, or null. The string
                 # only; `where` stays in this process, and nothing is run.
                 "version": (self._version(where) or None) if where else None,
                 "enabled": row is not None,
@@ -1829,7 +1829,7 @@ class Commands:
             # The envelope the argv just asked for, written into the same row.
             # A route enabled from the table has its `--output-format` and its
             # `envelope` field set together, which is the agreement `_row`
-            # then requires of a hand-written one (541). Both come from
+            # then requires of a hand-written one. Both come from
             # `RESULT_ARGS`, so the argv this writes and the check that reads
             # it cannot drift apart.
             envelope=tool.envelope,
@@ -1881,17 +1881,17 @@ class Commands:
         """Retire the rows an earlier build of this page wrote. At startup, once.
 
         **The one case where this module changes a row nobody asked it to.**
-        526 made an unstated model a refusal, and every route the version of
+        An earlier change made an unstated model a refusal, and every route the version of
         discovery before it had written stated none -- `discovered: true`, the
         tool's own id, one command and no `--model`. The operator's file had
-        exactly one row in it and it was that one, so 526 turned a working
+        exactly one row in it and it was that one, so that change turned a working
         feature into an empty picker and a wall of text about a file they had
         never opened. Telling them to hand-edit it is not an answer; the row
         is this page's, so retiring it is this page's job.
 
         **Dropped, not rewritten, and that is the honest half.** The old row
         ran whatever the CLI defaults to. There is no mapping from that to one
-        of four aliases that is not a guess, and a guess here is the thing 526
+        of four aliases that is not a guess, and a guess here is the thing that rule
         exists to refuse -- writing four routes would switch on the dearest
         model the operator said they did not want, and writing one would pick
         for them. What they get is the four rows discovery already offers,

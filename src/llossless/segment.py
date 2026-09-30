@@ -1,6 +1,6 @@
 """Split a source document into the segments a merge is accountable for.
 
-This is the denominator. `internal/docs/M7-fidelity.md` §1 records what its absence
+This is the denominator. Its absence was measured once, and here is what it
 cost: a merge that was a concatenation, that had dropped both titles and both
 summary fields, scored 12/12 forward and 26/26 grounded, because the chain
 `source -> decompose -> claims -> verify` only ever measured the verify half.
@@ -9,14 +9,14 @@ fields never entered a denominator and a check that examined nothing passed.
 
 Segmentation is that missing fraction's bottom half, and it is mechanical: no
 model, no randomness, same text in, same ids out. It is also shared. The merge
-prompt renders these segments and these ids (`docs/M7-prompts/NOTES.md`,
-"Source rendering for merge.md") and the coverage checker looks for the same
+prompt renders these segments and these ids, and the coverage checker looks
+for the same
 ones, because two segmentations would mean the reconciler comparing two
 different denominators — which is the original defect wearing a different hat.
 
 ## Segments partition; spans annotate
 
-M7 task 6 lists eight things to split a document into: "title, headings, fenced
+This splits a document into eight things: "title, headings, fenced
 blocks, list items, sentences, links, code spans, numeric/version tokens". The
 first five are ranges of the document that do not overlap; the last three sit
 *inside* those ranges. Emitting all eight as segments would count a sentence
@@ -24,8 +24,8 @@ once and its link again, so the denominator would exceed the document, and the
 prompt's rendering — one segment per line, id and pipe, "the prefix is not part
 of the text" — has nowhere to put a segment nested in another.
 
-So `Segment` is a partition and `Span` is an annotation on one. Coverage (task
-7) counts segments; the verbatim integrity check (task 9) reads spans and
+So `Segment` is a partition and `Span` is an annotation on one. Coverage
+counts segments; the verbatim integrity check reads spans and
 consults nothing else. Both numbers are then about something, which is the
 whole exercise.
 
@@ -36,15 +36,15 @@ fence, and it is not honoured here. The one real input in hand that indents is
 a JSON fragment whose three indented lines are three distinct fields — a
 title, a summary, and a body — and folding them into one opaque block would
 erase exactly the distinction this milestone exists to measure. Fenced blocks
-are recognised because §2.3 names them; indentation is treated as leading
+are recognised because the invariant core names them; indentation is treated as leading
 whitespace and stripped.
 
-*Shell commands, configuration snippets and log output outside code.* §2.3
+*Shell commands, configuration snippets and log output outside code.* The invariant core
 calls all three invariant, and none is identifiable in running prose by any
 rule that does not also catch ordinary sentences. Inside a fence or a code
 span they are covered, and outside one they are not covered at all. Stated
 rather than approximated: a check that silently covers three of eight verbatim
-classes is the shape of defect M7 is about.
+classes is the shape of the defect this module exists to prevent.
 
 *The unit half of "numeric values with units".* A `numeric` span is the number
 token and any suffix attached to it without a space — `8443`, `1.2`, `07:15`,
@@ -52,7 +52,7 @@ token and any suffix attached to it without a space — `8443`, `1.2`, `07:15`,
 not part of what gets checked. Including it would demand "512 concurrent"
 survive verbatim when only "512" is the value, and excluding the number's own
 suffix would let "30 seconds" become "30s" unnoticed. The token is checked, the
-unit is shown, and task 9 says which of the two it did.
+unit is shown, and the report says which of the two it did.
 
 *Setext headings underlined with dashes.* `=` underlines are recognised; `-`
 underlines collide with horizontal rules and with YAML front matter, and
@@ -75,7 +75,7 @@ SENTENCE = "sentence"
 
 KINDS = (TITLE, HEADING, CODE_BLOCK, LIST_ITEM, TABLE_ROW, SENTENCE)
 
-# Span kinds — the inline members of §2.3's invariant core. `link` and `url`
+# Span kinds: the inline members of the invariant core. `link` and `url`
 # are the one pair allowed to nest: a link's display text may be reworded where
 # the fidelity level permits, and its destination may never be, so the
 # destination is checked whether or not the whole link survived intact.
@@ -100,7 +100,7 @@ TITLE_MAX_CHARS = 120
 # sentences, and because a wrong split costs one extra segment that is still
 # found in the merge — visible, and cheap, unlike a wrong join.
 #
-# The German half (627) is held to the same test: a word goes in only if it
+# The German half is held to the same test: a word goes in only if it
 # qualifies what *follows* it -- "bzw. X", "ca. 30", "vgl. Kapitel", "Nr. 5",
 # "ggf. später" -- so a full stop after it is, in practice, never the end of a
 # sentence. "usw." and "etc." close an enumeration and do end sentences, and
@@ -116,7 +116,7 @@ ABBREVIATIONS = frozenset({
 
 # What can open a parenthetical or a quotation in front of a word. Taken off
 # the front of the word before a period only when nothing was taken off its
-# back (627): "(z." is an abbreviation inside a bracket that is still open,
+# back: "(z." is an abbreviation inside a bracket that is still open,
 # while "(A)." is a closed parenthetical and the stop after it is a real end.
 _OPENERS = "([\"'“„‚‘"
 
@@ -157,7 +157,7 @@ _UNIT_AFTER = re.compile(r"\s([A-Za-z][A-Za-z/]{0,14})")
 #
 # The lookahead only finds a candidate; `_opens_sentence` decides. It used to
 # be `[A-Z0-9]`, so a sentence opening on `Ä`, `Ö`, `Ü` or any other non-ASCII
-# capital was joined to the one before it (628), and `re` has no class for "an
+# capital was joined to the one before it, and `re` has no class for "an
 # uppercase letter in any script". `str.isupper` is that class.
 #
 # The closer class held only the straight and English-curly shapes (`"'’)]`)
@@ -185,7 +185,7 @@ _SENTENCE_OPENERS = "\"'“„«»‚‘‹›(["
 
 # German writes an ordinal as a number and a full stop: "im 19. Jahrhundert",
 # "am 3. Oktober". Followed by a capital that is exactly the shape of a
-# sentence end, so the split is refused only for two closed lists (628). A
+# sentence end, so the split is refused only for two closed lists. A
 # month after a day number of 1 to 31 is a date. A noun from `_ORDINAL_NOUNS`
 # after a number of up to three digits is an ordinal only when an article or
 # an article-preposition contraction from `_ORDINAL_CONTEXT` comes before the
@@ -242,7 +242,7 @@ def flatten_with_breaks(
     """Collapse whitespace to single spaces, recording which spaces were newlines.
 
     The join at the heart of `emit` is what made a three-line signature block
-    arrive as one segment whose text occurs nowhere in the source (374). The
+    arrive as one segment whose text occurs nowhere in the source. The
     partition must not move -- segment counts are a registered denominator --
     so the break is recorded rather than made into a boundary, exactly as
     `notation` records a stripped bullet instead of dropping it.
@@ -252,7 +252,7 @@ def flatten_with_breaks(
 
     The third tuple is the **indentation that followed each break**, one entry
     per index, and it exists because a model cannot reproduce what it was
-    never shown (496). Line breaks were recorded and restored from the start;
+    never shown. Line breaks were recorded and restored from the start;
     the whitespace after them was not, so a merge of an indented document was
     handed every line flush left and wrote it back that way. Recorded here
     rather than kept in `text` for the same reason `breaks` is: `text` is what
@@ -297,7 +297,7 @@ class Segment:
     no leading indent — because `README.md` is explicit that LLossless does
     not score notation. `code_block` is the exception and keeps every byte
     including its fences, since a fence is not notation around the content, it
-    *is* the content's boundary and §2.3 makes the whole block invariant.
+    *is* the content's boundary and the invariant core makes the whole block invariant.
 
     `text` is the form the reconciler *matches* on, and no longer the form the
     merge model is *shown*. The rule that justified showing it was "a fact does
@@ -307,14 +307,14 @@ class Segment:
     correctly reported the conjunction as invented, because it is. Two facts do
     change when two bullets become one sentence. So `notation` records what was
     stripped, `render_sources` puts it back for the model, and `plain` takes it
-    off the merge again at comparison time. `internal/docs/DECISIONS.md` entry 115.
+    off the merge again at comparison time.
 
     A segment never contains a newline except in a `code_block`. Wrapped lines
     are joined with a single space before sentences are split out, so that a
     merge which rewraps a paragraph still contains the segment; the comparison
     that finds it must normalise interior whitespace on both sides, exactly as
     `verify.locate` already does for evidence spans. Cited by name and not by
-    line: M6 entry 15's whole finding is that line citations decay, and this
+    line, since line citations are known to decay, and this
     module adds none.
     """
 
@@ -333,7 +333,7 @@ class Segment:
     # caller re-reading `Document.text` would have to re-derive the fence rule
     # to tell them apart. Required, with no default: a segment whose paragraph
     # is unknown would silently join whatever precedes it, which is the exact
-    # loss this field exists to stop (410).
+    # loss this field exists to stop.
     paragraph: int
     level: int = 0
     # What was stripped from the front of the source line: `## `, `- `, `> `,
@@ -346,16 +346,16 @@ class Segment:
     # Where this segment's text had a line break in the source. Indices into
     # `text`, each naming a space that stood for a newline. Recorded rather
     # than made into a boundary: the partition is a registered denominator and
-    # moving it would redefine a registered quantity (374). `rendered` puts
+    # moving it would redefine a registered quantity. `rendered` puts
     # them back; nothing compares on them, since `text` is unchanged and stays
     # the form every match is made against.
     breaks: tuple[int, ...] = ()
     # The indentation each break was followed by, one entry per `breaks`
-    # index (496). Empty for a document that indents nothing, which is every
+    # index. Empty for a document that indents nothing, which is every
     # prose fixture in this repository -- so this changes no rendering, no
     # cassette key and no comparison for any of them. `text` is untouched.
     indents: tuple[str, ...] = ()
-    # The whitespace this segment's own first line began with (496). Shown by
+    # The whitespace this segment's own first line began with. Shown by
     # `rendered`, absent from `text` for the reason `indents` is: `text` is
     # what every comparison searches for, and a leading space would make it
     # match nothing.
@@ -509,7 +509,7 @@ def find_spans(text: str) -> tuple[Span, ...]:
         # merge. `AD 30-33,` is one token with an ASCII hyphen and two -- `30`
         # and `33,` -- with an en dash, which the range pattern does not know;
         # at `high` the model split the sentence, the comma became a stop, and
-        # `33,` was reported as a numeral that did not survive (389).
+        # `33,` was reported as a numeral that did not survive.
         #
         # Trailing only. Interior separators are part of the value and must
         # not move: `2,000,000,000` keeps its commas and `30-33` its hyphen,
@@ -545,7 +545,7 @@ def _is_abbreviation(word: str) -> bool:
     holds honorifics, for which the following capital is a name, and the
     German abbreviations that qualify what follows them.
 
-    An opening bracket or quote in front of the word is not part of it (627).
+    An opening bracket or quote in front of the word is not part of it.
     `(z. B. drei ...)` was read as the word `(z`, which is two characters and
     no initial, so the German "for example" ended a sentence at `(z.` and the
     merge was held to account for a fragment. The opener comes off only when
@@ -567,7 +567,7 @@ def _is_abbreviation(word: str) -> bool:
 
 def _opens_sentence(masked: str, index: int) -> bool:
     """Can the text at `index` begin a sentence? Openers, then a capital in
-    any script or an ASCII digit (628). A masked span (`\\x00`) is neither,
+    any script or an ASCII digit. A masked span (`\\x00`) is neither,
     as it was under the old `[A-Z0-9]` class."""
     while index < len(masked) and masked[index] in _SENTENCE_OPENERS:
         index += 1
@@ -578,7 +578,7 @@ def _opens_sentence(masked: str, index: int) -> bool:
 
 
 def _is_ordinal(text: str, start: int, match: re.Match[str]) -> bool:
-    """Is the stop at `match` a German ordinal's, not a sentence end? (628)
+    """Is the stop at `match` a German ordinal's, not a sentence end?
 
     Read from the unmasked `text`, because `_mask` blanks every number. Only
     a bare `.` and a gap qualify: `19.)` or `19.“` closed something and ends
@@ -647,7 +647,7 @@ def _take_block(lines: list[str], index: int) -> tuple[list[tuple[int, str]], in
     complete unit and the next line is not its continuation.
 
     Both rules apply to the first line as well as the rest, and that is the
-    fix for `internal/docs/DECISIONS.md` entry 115. They used to be skipped while the
+    fix: they used to be skipped while the
     block was empty, so the one caller that starts mid-block — the bullet
     branch, gathering an item's continuation lines — swallowed whatever
     followed the item, including the next bullet. Two atomic facts written as
@@ -664,7 +664,7 @@ def _take_block(lines: list[str], index: int) -> tuple[list[tuple[int, str]], in
     consecutive one-record-per-line text, such as the `"field": "value",` lines
     of a JSON fragment. Without it those lines join into one segment, and two
     fields that were separately droppable become one absence — which is exactly
-    the distinction `internal/docs/M7-fidelity.md` §1 says went missing. The cost when
+    the distinction that used to go missing. The cost when
     it is wrong is one extra segment on a paragraph that wrapped after a comma,
     and an over-split segment is still found by a whitespace-normalised search
     of the merge, so it is visible rather than silent.
@@ -676,7 +676,7 @@ def _take_block(lines: list[str], index: int) -> tuple[list[tuple[int, str]], in
             break
         if index + 1 < len(lines) and _SETEXT.match(lines[index + 1]):
             break
-        # The line with its indentation, not `stripped` (496). `emit` keeps
+        # The line with its indentation, not `stripped`. `emit` keeps
         # the leading whitespace and collapses only the interior, so the
         # indent survives as far as `flatten_with_breaks`, which records it
         # against the break it follows. Trailing whitespace goes here, since
@@ -741,7 +741,7 @@ class _Builder:
             body, breaks, indents = text, (), ()
         else:
             body, breaks, indents = flatten_with_breaks(text)
-            # The segment's *own* opening indent (496). `flatten_with_breaks`
+            # The segment's *own* opening indent. `flatten_with_breaks`
             # strips leading whitespace, which is right for `text` -- every
             # comparison is made against it and a segment that began with
             # spaces would match nothing. But a segment that opens a nested
@@ -795,7 +795,7 @@ class _Builder:
         pieces: list[str] = []
         offset = 0
         for number, raw in block:
-            # Leading whitespace kept, interior whitespace collapsed (496).
+            # Leading whitespace kept, interior whitespace collapsed.
             # The indent is what tells a reader -- and a merge model -- how a
             # line sits under the one above it, and `flatten_with_breaks`
             # further down can only record what reaches it. Collapsing it here
@@ -818,7 +818,7 @@ class _Builder:
                 (number for at, number in reversed(starts) if at <= start),
                 block[0][0] if block else 0,
             )
-            # The whitespace this sentence's own line began with (496). The
+            # The whitespace this sentence's own line began with. The
             # splitter hands back a sentence starting at its first non-space
             # character, so the indent has to be recovered here, from the
             # joined text between the preceding newline and `start`. Only
@@ -863,7 +863,7 @@ def segment_document(text: str, letter: str, filename: str = "") -> Document:
             # Not emitted and not skipped -- but no longer thrown away. The
             # blank line is the only thing in the source that says which
             # sentences shared a paragraph, and `render_sources` is graded on
-            # showing the model the document's shape (410).
+            # showing the model the document's shape.
             builder.end_paragraph()
             index += 1
             continue
@@ -891,7 +891,7 @@ def segment_document(text: str, letter: str, filename: str = "") -> Document:
                 builder.skip(opened_at,
                              f"fence opened at line {opened_at} never closed; "
                              f"everything after it is one code block")
-            # No notation: a fence is inside `text` already, and §2.3 makes
+            # No notation: a fence is inside `text` already, and the invariant core makes
             # the block invariant byte for byte, arrows included or not at all.
             builder.emit(CODE_BLOCK, "\n".join(block), number)
             continue
@@ -990,7 +990,7 @@ def segment_document(text: str, letter: str, filename: str = "") -> Document:
             # neither is markdown. The alternative is that documents without
             # markup have no title segment at all, and a title that is not a
             # segment is a title nothing can report as dropped — which is one
-            # of the two things §1 says actually went missing.
+            # of the two kinds of silent loss this tool exists to catch.
             builder.emit(TITLE, joined, number, notation=quoted)
         else:
             builder.emit_prose(paragraph, notation=quoted, continuation=quoted)
@@ -1068,7 +1068,7 @@ def plain(text: str) -> str:
     markers, bullets, arrows and the pipes around a table row come off, and
     nothing else is touched.
 
-    Fenced blocks are copied out byte for byte. §2.3 makes a fence invariant,
+    Fenced blocks are copied out byte for byte. The invariant core makes a fence invariant,
     and a `#` comment or a `- item` inside a YAML block is content: stripping
     it would make the block's own verbatim check fail on the merge that kept it
     perfectly. That is the one place this function has to know about state, and
@@ -1124,7 +1124,7 @@ def render_sources(documents: list[Document], base: str) -> str:
 
     Rendered from `Segment.text` **with `Segment.notation` put back in front of
     it**, so the model sees a list as a list and a heading as a heading. It was
-    the stripped form until entry 115, on the argument that the model should be
+    the stripped form until it changed, on the argument that the model should be
     shown exactly the string the reconciler will look for; a live merge showed
     what that costs. Shown two list items as two bare lines, the models tested
     wrote one sentence carrying both, and the reverse pass reported the
@@ -1135,18 +1135,18 @@ def render_sources(documents: list[Document], base: str) -> str:
     half of this: it takes the same notation off the merge before any
     comparison, so both sides are the stripped form and the coverage checker is
     still measuring the merge rather than the segmenter. A `code_block` is
-    rendered exactly as it was captured, fences and all, because §2.3 makes it
+    rendered exactly as it was captured, fences and all, because the invariant core makes it
     invariant byte for byte; a table row gets its pipes back around the cells.
 
     A blank line separates one source paragraph from the next, inside the
-    block. Until entry 410 there was none, anywhere, inside a `<document>`: the
+    block. Until an earlier version there was none, anywhere, inside a `<document>`: the
     merge model was shown 23 sentences as 23 lines and had no way to know that
     seven of them shared a paragraph, so what it wrote back was a structure it
     invented rather than the document's. `decompose.number_lines` had treated a
     blank line as load-bearing since it was written, and `verify.reference_text`
     hands over the raw text untouched; the merge was the one pass blind to the
     structure it has to reproduce. Nothing here judges what the model does with
-    it -- entry 391 counts added structure and grades none of it, and `high`
+    it: added structure is counted and none of it graded, and `high`
     is licensed to restructure freely (`prompts/fidelity/high.merge.md`). This
     shows the shape; it does not require it.
 
@@ -1183,7 +1183,7 @@ def render_sources(documents: list[Document], base: str) -> str:
             # A segment whose source spanned several lines is shown spanning
             # several lines, under a blank id. Without this the model is handed
             # a string that occurs nowhere in its input and is then graded on
-            # reproducing the input exactly (374).
+            # reproducing the input exactly.
             head, *rest = shown.split("\n")
             lines.append(f"{segment.id}| {head}")
             lines += [f"{' ' * len(segment.id)}| {part}" for part in rest]

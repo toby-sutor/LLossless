@@ -88,7 +88,7 @@ NOT_GRADED = "not_graded"  # MISSING asserts no span, so there is none to locate
 # claim missing from the merge was dropped; a claim missing from the sources was
 # invented. They land in different sections of the report.
 #
-# M7 task 24. PARTIAL gets a name per direction for the same reason MISSING
+# PARTIAL gets a name per direction for the same reason MISSING
 # does, and the asymmetry is sharper here than anywhere else in this table: a
 # source claim the merge states only part of is a *fact with a piece missing*,
 # and a merge claim the sources state only part of is a *fact with a piece
@@ -99,8 +99,8 @@ NOT_GRADED = "not_graded"  # MISSING asserts no span, so there is none to locate
 # default. The whole argument for the label is that neither SUPPORTED nor
 # MISSING describes it, so mapping it to "none" would be folding it back into
 # SUPPORTED through the back door and passing the run. Whether a finding of this
-# class belongs in the exit code or in a review queue is §2.5's question and
-# task 27's to answer; until then it counts, which is the direction that fails
+# class belongs in the exit code or in a review queue is still an open
+# question; until then it counts, which is the direction that fails
 # loudly rather than quietly.
 FINDINGS = {
     ("SUPPORTED", SOURCE_TO_MERGED): "none",
@@ -139,9 +139,9 @@ assert set(FINDINGS) == {
 # between a run of minutes and a run of hours. Batching is a stated trade: the
 # whole batch shares a fate, and a batch that cannot be parsed errors every
 # claim in it rather than some -- which is what Pass C's salvage narrows to a
-# single record (194).
+# single record.
 #
-# **The figure is the backend's, not this module's** (551, corrected by 558).
+# **The figure is the backend's, not this module's**.
 # It is now resolved from `Settings.verify_batch`, because a command backend's
 # cost per call is ~26-30 s of fixed plus ~1.3-1.5 s a claim -- measured, four
 # batch sizes -- so time per claim falls as the batch grows and 25 there pays
@@ -151,11 +151,11 @@ assert set(FINDINGS) == {
 # the constant for `COMMAND_TIMEOUT`'s reason.
 DEFAULT_BATCH = config.DEFAULT_VERIFY_BATCH
 
-# The verify role's output ceiling (DECISIONS 668), sized per batch before the
-# call, the way `decompose.budget_tokens` sizes decompose's from the document
-# (587). Without one, a runaway was bounded only by the platform's cut: the
-# 27B's reverse call on `attribution_invented` ran for about 275 s and 11,000
-# characters before it was stopped (608).
+# The verify role's output ceiling, sized per batch before the call, the way
+# `decompose.budget_tokens` sizes decompose's from the document. Without one,
+# a runaway was bounded only by the platform's cut: the 27B's reverse call on
+# `attribution_invented` ran for about 275 s and 11,000 characters before it
+# was stopped.
 #
 # What an answer writes is known from the prompt, one record per claim: the
 # claim id echoed, a verdict label, an evidence span quoted from the reference
@@ -172,7 +172,7 @@ DEFAULT_BATCH = config.DEFAULT_VERIFY_BATCH
 # in `tests/responses/` (553 with the gitignored `tests/eval/` corpora), none
 # cut, the smallest margin 2.64x, the 27B's 1,261 tokens against 3,328
 # (`test_verify.test_no_recorded_verify_answer_is_one_the_ceiling_would_cut`).
-# `attribution_invented`'s reverse batch, the 608 runaway, gets 768 tokens.
+# `attribution_invented`'s reverse batch, the runaway case above, gets 768 tokens.
 EVIDENCE_COPIES = 2
 RECORD_SCAFFOLD = 160
 
@@ -183,11 +183,11 @@ def budget_tokens(claims: list[Claim], *, thinking: bool) -> int:
     `decompose.budget_tokens`' shape: the answer's expected characters over
     `CHARS_PER_TOKEN`, rounded up to a whole `BUDGET_STEP`, plus one more step
     as the per-response floor, plus `REASONING_ALLOWANCE` with thinking on so
-    a reasoning model is not cut while it reasons (385). A runaway, the
+    a reasoning model is not cut while it reasons. A runaway, the
     failure this exists for, stops here instead of at the platform's cut.
 
     `max_tokens` is a cassette-key component, so this re-keys every verify
-    recording made without it (668): they read UNMEASURED until the operator
+    recording made without it: they read UNMEASURED until the operator
     orders the re-record.
     """
     body = sum(EVIDENCE_COPIES * escaped_length(render_claims([claim]))
@@ -200,7 +200,7 @@ def budget_tokens(claims: list[Claim], *, thinking: bool) -> int:
 def ceiling_for(client: Client, claims: list[Claim]) -> int | None:
     """The ceiling a verify call sends, before the window cut: none on a `CEILING_MODEL` profile.
 
-    Merge's rule for which profiles get one (443), which decompose follows:
+    Merge's rule for which profiles get one, which decompose follows:
     such a profile sends no ceiling and the endpoint applies its own.
     """
     if (structured.profile_for(client.settings.profile).output_ceiling
@@ -298,7 +298,7 @@ class Verdict:
     # pre-pass had to cap it. Informational, not a finding: the label and its
     # grounding are unaffected, so this does not route through `finding` or
     # `FINDINGS` -- it says the argument for the label may have been cut
-    # short, not that the label is wrong. DECISIONS.md entry 190.
+    # short, not that the label is wrong.
     rationale_capped: bool = False
 
     @property
@@ -321,7 +321,7 @@ class Verdict:
 
 @dataclass(frozen=True)
 class Unusable:
-    """One verdict the tool refused to grade, and why. Pass C, `DECISIONS.md` 194.
+    """One verdict the tool refused to grade, and why. Pass C.
 
     Not a verdict and not a finding. It is the record that a claim was
     submitted and came back unusable, kept so the claim cannot quietly leave
@@ -434,7 +434,7 @@ def _split(expected_ids: list[str], sources: tuple[str, ...],
         # `verdict_defects` has already said what a payload that is not an
         # object is, in the wording the repair loop feeds back; the three
         # checks below read it with `.get` and would raise on the way to
-        # repeating that (554). Its complaint is returned as it stands.
+        # repeating that. Its complaint is returned as it stands.
         if not isinstance(payload, dict):
             return defects, tainted
         items = [item for item in payload.get("verdicts", []) if isinstance(item, dict)]
@@ -545,7 +545,7 @@ def salvage(
     direction: str,
     index_base: int = 0,
 ) -> tuple[dict, tuple[parsing.Truncation, ...], tuple[Unusable, ...]] | None:
-    """Grade what is gradeable, or nothing. Pass C, `DECISIONS.md` entry 194.
+    """Grade what is gradeable, or nothing. Pass C.
 
     Returns the payload with the unusable records removed and a record of each
     one removed, or `None` where nothing can be salvaged and the batch must
@@ -663,7 +663,7 @@ def verify_claims(
     happened to answer in. Raises client.SchemaFailure if a batch could not be
     made to answer usably; that propagates rather than degrading to MISSING.
 
-    `unusable` is Pass C's opt-in (`DECISIONS.md` entry 194). Left `None`, this
+    `unusable` is Pass C's opt-in. Left `None`, this
     function behaves exactly as it always has: one unusable record fails the
     batch and the `SchemaFailure` propagates. Given a list, an unusable record
     is dropped, appended to that list, and the rest of the batch is graded --
@@ -688,7 +688,7 @@ def verify_claims(
     reference = reference_text(direction, documents)
     sources = tuple(files)
     # Resolved from the backend where the caller stated nothing, which is the
-    # pipeline's case (551). A stated figure is used exactly as stated on
+    # pipeline's case. A stated figure is used exactly as stated on
     # either backend -- the two recording harnesses state 25 so the corpus
     # keeps the size it was made at -- and `Settings.verify_batch` is the one
     # place the two defaults differ, the way `call_timeout` already is.
@@ -711,7 +711,7 @@ def verify_claims(
                             # The note went last because `render` used to
                             # rescan what it had already substituted, so
                             # whatever went first was exposed to every later
-                            # field. Task 25 made `render` single-pass and the
+                            # field. `render` became single-pass and the
                             # ordering stopped being load-bearing: the document
                             # above is untrusted and was the field that
                             # mattered, not this one. Kept last anyway, because
@@ -731,7 +731,7 @@ def verify_claims(
         #
         # The ceiling is cut to what the window leaves and the preflight
         # charges the prompt plus one step, on decompose's rule and with its
-        # function (588): the ceiling is a runaway cap, so it must not refuse
+        # function: the ceiling is a runaway cap, so it must not refuse
         # a batch the window can answer. A replay knows no window and sends
         # the ceiling as is.
         budget = ceiling_for(client, batch)
@@ -802,7 +802,7 @@ def verify_claims(
     # that can miss. Keeping the assertion makes that guarantee visible here.
     # With salvage on, the guarantee weakens in one direction only: a claim can
     # be absent because its record was refused, but nothing may appear that was
-    # never asked about. Pass C, `DECISIONS.md` entry 194.
+    # never asked about. Pass C.
     asked = {claim.id for claim in claims}
     if unusable is None:
         assert found.keys() == asked
@@ -812,10 +812,10 @@ def verify_claims(
 
 
 # --------------------------------------------------------------------------
-# Task 23 — grading what the merge declared
+# Grading what the merge declared
 # --------------------------------------------------------------------------
 #
-# §2.1: the merger declares, the verifier checks. `reconcile.findings` already
+# The rule: the merger declares, the verifier checks. `reconcile.findings` already
 # holds a declaration against the two texts — the segment exists, the
 # replacement resolves, the disposition is permitted at this level — and every
 # one of those is a set difference or a string containment. What none of them
@@ -839,11 +839,11 @@ UNCHECKED = "unchecked"
 GRADES = (CONFIRMED, REJECTED, UNCHECKED)
 
 # What each disposition predicts the forward pass will say about a claim drawn
-# from the segment it names. Read off §2.1's six one-line definitions and
-# nothing else.
+# from the segment it names. Read off each disposition's own one-line
+# definition and nothing else.
 #
 # `superseded` is the only row with more than one label, and the reason is worth
-# stating as a principle because task 24's decision follows from it: it is the
+# stating as a principle: it is the
 # only one of the five that describes *where the text came from* rather than
 # what happened to the content. The other four each promise something about the
 # content — same content in other words, content survives inside a broader
@@ -856,14 +856,14 @@ GRADES = (CONFIRMED, REJECTED, UNCHECKED)
 # SUPPORTED there would reject every correctly-resolved conflict in the suite.
 #
 # So PARTIAL confirms `superseded` and rejects the other four, and that is the
-# whole of task 24's decision at this table.
+# whole of what this table decides.
 #
 # **It rejects `subsumed` deliberately, against the reading that looks obvious.**
 # "Survives inside a broader or combined statement" is the shape PARTIAL has, so
 # accepting it there is the tempting default — and it is exactly the hole. It
 # would make `subsumed` the one declaration that confirms itself by losing
 # content: declare it, fold half the fact away, and the grade says the merge
-# described itself correctly. §2.6's own scope note flags this: the declared-loss
+# described itself correctly. This is already flagged: the declared-loss
 # budget counts `dropped` only and excludes `subsumed`, and says in as many
 # words that if quiet loss turns out to be hiding in `subsumed` it wants its own
 # threshold, measured. A PARTIAL against a subsumed segment is the first
@@ -902,7 +902,7 @@ PREDICTED = {
 assert tuple(PREDICTED) == parsing.DISPOSITIONS
 # Every verdict label appears in at least one row, which means a label cannot be
 # added to `parsing.VERDICTS` without someone deciding, per disposition, whether
-# it confirms. It stopped task 24 exactly as intended, and it stays for the next
+# it confirms. That is exactly what this assert is for, and it stays for the next
 # label rather than being retired now that it has fired once.
 assert set().union(*PREDICTED.values()) == set(parsing.VERDICTS)
 
@@ -930,8 +930,8 @@ class Graded:
     detail: str
     claims: tuple[str, ...] = ()
     reason: str = ""
-    # The span the merge said now carries this content. Persisted since
-    # DECISIONS 448 because every check that reads a declaration turns on it and
+    # The span the merge said now carries this content. Persisted, because
+    # every check that reads a declaration turns on it and
     # the report did not keep it: re-scoring a saved report showed every record
     # as "replacement missing", which is indistinguishable from a model that
     # really omitted one. Two defects were mis-diagnosed that way in one
@@ -1002,7 +1002,7 @@ def attribute(claims: list[Claim], documents: list[segment.Document]) -> dict[st
 # rather than performed is still caught. Soundness belongs to the reverse
 # pass, where `DERIVED` is the label for it, and that pass asks a model.
 #
-# `DECISIONS.md` entry 26.
+# The three rows above are the whole of what a location can decide.
 LOCATED = {
     # declared     confirmed by         rejected by
     "dropped":    (reconcile.ABSENT,    reconcile.PRESENT),
@@ -1040,7 +1040,7 @@ def _by_title(
     A title the merge kept is skipped by that loop, so its absence from
     `charged` means nothing was asked, not that something passed.
 
-    `DECISIONS.md` entry 26.
+    The same rule `LOCATED` applies: read what already ran, never recompute it.
     """
     text = titles.get(record_id)
     if text is None or not merged_title or text == merged_title:
@@ -1089,7 +1089,7 @@ def _by_text(record_id: str, disposition: str, located: dict) -> Graded | None:
 
 def _covering(disposition: str, replacement: str, fidelity: str,
               documents: dict[str, str]) -> bool:
-    """Is this record a covering reconciliation, by check 5's own test (489)?
+    """Is this record a covering reconciliation, by check 5's own test?
 
     Three conditions, and all three are the ones `reconcile.verbatim` already
     applies, asked through the same function so the two cannot drift: the
@@ -1137,7 +1137,7 @@ def grade_declarations(
     comparison can settle, and a declaration it does not settle stays
     `unchecked` with the reason it already had. Without it the grader behaves
     exactly as before, which is what `verify` runs on, since nothing there
-    declared anything. `DECISIONS.md` entry 26.
+    declared anything.
 
     Declarations come back in the order they were declared, one per record.
     First record per segment wins, as in `reconcile.findings`: `parsing.check_merge`
@@ -1180,7 +1180,7 @@ def grade_declarations(
         # `verify` run or a hand-built record rather than a merge that stayed
         # silent -- and the report says which of those it is.
         reason = str(record.get("reason", "")).strip()
-        # 448: kept on the record so a saved report can answer the question
+        # Kept on the record so a saved report can answer the question
         # the checks ask of it. `.get(key, "")` does not protect against a
         # key present with a null value, which every model writes.
         _raw_replacement = record.get("replacement")
@@ -1189,8 +1189,8 @@ def grade_declarations(
             continue
         seen.add(identifier)
         expected = PREDICTED.get(disposition)
-        # A covering reconciliation predicts a wider set than a combining one
-        # (489). `PREDICTED` is read off §2.1's definitions and says
+        # A covering reconciliation predicts a wider set than a combining one.
+        # `PREDICTED` is read off each disposition's own definition and says
         # `reconciled` promises the segment's claim survives -- SUPPORTED --
         # which is right when two documents state complementary halves of one
         # fact. It is wrong for the other thing this disposition carries at
@@ -1198,9 +1198,9 @@ def grade_declarations(
         # *narrower* source denies at one edge, so that source's claim comes
         # back CONTRADICTED **by construction**. Demanding SUPPORTED rejects
         # every correctly-covered conflict, which is the same argument the
-        # `superseded` row already makes one table up, and the state 489 found
-        # on a live run: the prompt granted the licence, check 5 honoured it,
-        # and this line refused it.
+        # `superseded` row already makes one table up, and that is exactly
+        # what one live run found: the prompt granted the licence, check 5
+        # honoured it, and this line refused it.
         #
         # Narrow on purpose, and on the same three conditions check 5 uses:
         # the level, the disposition, and the replacement actually being built
@@ -1354,7 +1354,7 @@ def verify_coverage(
     identical in a coverage table and mean opposite things.
 
     **No `unusable` accumulator, and that is a decision rather than an
-    omission** (`DECISIONS.md` entry 507). Pass C drops the record a verify
+    omission**. Pass C drops the record a verify
     batch could not grade and keeps the rest; here the record *is* the claim,
     so dropping it would delete the evidence that the claim was ever extracted
     and renumber every claim after it -- `decompose.claim_id` numbers by
@@ -1392,7 +1392,7 @@ def verify_coverage(
     # be located in. Read before the call rather than after it, because the
     # semantic check needs it -- `check_coverage` given no filenames checks
     # the shape of an attribution and not its truth, which is the weaker half
-    # of the same check (505).
+    # of the same check.
     #
     # Built from `merged` rather than through `target_files`, which
     # subscripts `documents[MERGED]`. Under `--dry-run` there is no merged
@@ -1415,7 +1415,7 @@ def verify_coverage(
     # rationale is a fact about the answer and the report has a section for
     # it; taking `.payload` alone made `rationale_capped` False on every
     # coverage verdict and printed "None." under a run that had capped one.
-    # `DECISIONS.md` entries 190 and 500, and 503's own stated point.
+    # The distinction matters: a rationale capped here must still read as capped.
     capped = {t.path for t in completion.truncations}
 
     lines = text.splitlines()
@@ -1447,7 +1447,7 @@ def verify_coverage(
         # reply at `full` came back `attribution_error`, because
         # `verify_claims` keeps the empty string and lets the check fail it.
         # A missing attribution is a finding; supplying the only plausible
-        # answer on the model's behalf is the tool deciding the result (505).
+        # answer on the model's behalf is the tool deciding the result.
         named = str(item.get("evidence_source", "")).strip()
         rationale = str(item.get("rationale", ""))
         verdicts.append(Verdict(

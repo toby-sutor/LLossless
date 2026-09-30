@@ -17,7 +17,7 @@ what the HTTP path gives.**
 
 - *Token counts.* There is no usage block to read, so `usage.normalise` is
   handed an envelope without one and answers `None`. That is `unmeasured`,
-  never zero (480), and it takes out the post-hoc overrun check with it.
+  never zero, and it takes out the post-hoc overrun check with it.
 - *A context window to probe.* `/api/ps` is an HTTP endpoint. `config`
   refuses a command backend that has not been told its window, because with
   the token counts gone as well there is nothing left to notice an overrun.
@@ -47,7 +47,7 @@ from .config import ENVELOPE_RESULT as RESULT
 from .config import dropped_env_names
 from .transport import Cancelled, Response, TransportError
 
-# How a command's stdout is read, declared per route and never sniffed (537).
+# How a command's stdout is read, declared per route and never sniffed.
 #
 # RAW is what this backend has always done and stays the default: stdout is
 # the answer, byte for byte. It is the only shape that works for an arbitrary
@@ -95,17 +95,17 @@ ANSWER_ON = "stdout"
 # here. A stream renews that clock on every chunk; a subprocess has no chunks,
 # so the same figure means something stricter on this path than on the HTTP
 # one -- which is why the two backends resolve different defaults out of one
-# unstated setting (`config.COMMAND_TIMEOUT`, 533).
+# unstated setting (`config.COMMAND_TIMEOUT`).
 STDERR_EXCERPT = 600
 
-# The filter itself, and why each prefix is on it, lives in `config.py` (I8,
-# 680) and not here: `Provenance` has to report the same names a live call
+# The filter itself, and why each prefix is on it, lives in `config.py`
+# and not here: `Provenance` has to report the same names a live call
 # withheld without importing this module to ask, because this module imports
 # `transport` and a replay must never load that
 # (`acceptance_replay_never_loads_the_transport_module`). See
 # `config.DROPPED_ENV_PREFIXES` for the reasoning behind each one, and
-# `config.KEPT_CREDENTIAL_NAMES` for the one `CLAUDE_CODE_` name (680
-# follow-up) the filter deliberately still hands the child: the subscription
+# `config.KEPT_CREDENTIAL_NAMES` for the one `CLAUDE_CODE_` name
+# the filter deliberately still hands the child anyway: the subscription
 # login token, which a `CLAUDE_CODE_` prefix drop would otherwise withhold
 # along with the session markers it exists to catch.
 # (`dropped_env_names` itself is imported above, beside the module's other
@@ -147,11 +147,11 @@ class CommandError(TransportError):
     two mechanisms failed.
 
     `result`, `api_error_status`, `api_error_code` and `terminal_reason` are
-    the envelope's own classifying fields (I6), carried as attributes and not
+    the envelope's own classifying fields, carried as attributes and not
     only folded into the message: a runner telling a usage limit or a vendor
     API error apart from an ordinary model fault reads these rather than
     re-parsing a sentence. `None` when the envelope did not parse or did not
-    name one -- which is every failure this class described before 680, and
+    name one: every failure this class described before this addition, and
     every plain subprocess fault (a missing program, a timeout) still.
     """
 
@@ -181,8 +181,8 @@ def _classify_envelope(stdout: str) -> dict:
     stderr is quoted at, and for the same reason), `api_error_status`,
     `api_error_code`, `terminal_reason` and `subtype`, each present only when
     the envelope named it. This is what turns "'claude' exited 1" into
-    something a runner can tell a usage limit or a vendor API error apart from
-    (I6): the real 2.1.274 probe carried `terminal_reason: "api_error"` in
+    something a runner can tell a usage limit or a vendor API error apart from:
+    the real 2.1.274 probe carried `terminal_reason: "api_error"` in
     stdout on a non-zero exit, and this backend used to quote stderr alone and
     drop it.
     """
@@ -252,7 +252,7 @@ def envelope_for(content: str, server_tool_use: dict | None = None,
 
     No token counts, ever, on this path. A `RESULT` envelope has them --
     `input_tokens`, `output_tokens`, `cache_read_input_tokens` -- and they are
-    deliberately left where they were found (537). Under Anthropic's spelling
+    deliberately left where they were found. Under Anthropic's spelling
     `input_tokens` is what was *not* served from cache, and a measured call in
     this project routinely reads 908 uncached against 5,370 cache reads; the
     post-hoc trim guard compares the reported prompt count against the
@@ -268,7 +268,7 @@ def envelope_for(content: str, server_tool_use: dict | None = None,
     the command reported them.
 
     `server_tool_use` is the first, and it has one convention. **It is also
-    blind to this backend**, which was measured after it was added (548): it
+    blind to this backend**, which was measured after it was added: it
     counts Anthropic's *server-side* web tools, the CLI's own `WebFetch` runs
     locally in the CLI process, and a call that demonstrably fetched still
     reported `{"web_search_requests": 0, "web_fetch_requests": 0}`. It is
@@ -280,8 +280,8 @@ def envelope_for(content: str, server_tool_use: dict | None = None,
     a round trip, so it costs a turn, and a fetch costs two tool calls because
     `WebFetch` is deferred: `ToolSearch` loads it, then it runs, then the model
     answers -- three turns, against one or two for a call that retrieved
-    nothing (564, correcting 548's two). Under the isolated argv nothing is
-    deferred and a fetch is two turns; the floor follows the argv (610). It is
+    nothing. Under the isolated argv nothing is
+    deferred and a fetch is two turns; the floor follows the argv. It is
     a count of *turns* and not of fetches, which is what every reader of it says.
 
     `usage.normalise` finds no token field in either and answers None, so the
@@ -389,7 +389,7 @@ def read_result(stdout: str, named: str
     # something this backend cannot learn any other way, and passing the text
     # on would file a refusal as a model answer.
     #
-    # Checked before the `result` key's presence below, and not after (I6): a
+    # Checked before the `result` key's presence below, and not after: a
     # turn that ends `error_max_turns` carries no `result` at all, and asking
     # the presence question first reported that real failure as a
     # misconfigured route -- the same sentence a genuinely wrong
@@ -425,8 +425,8 @@ def read_result(stdout: str, named: str
             models_named(envelope.get("modelUsage"), used))
 
 
-# How long a cancelled program is given to exit on SIGTERM before SIGKILL
-# (639). Long enough for a CLI to write its own state and exit cleanly, short
+# How long a cancelled program is given to exit on SIGTERM before SIGKILL.
+# Long enough for a CLI to write its own state and exit cleanly, short
 # enough that "cancel" still means stopped before anybody wonders.
 TERMINATE_GRACE_SECONDS = 5.0
 
@@ -470,7 +470,7 @@ def run_cancellable(argv: list[str], *, input: str, timeout: float, cancel,
     `on_start(pid)` is for the suite, which asserts the process is gone.
 
     `env`, like `subprocess.run`'s own keyword, replaces the child's whole
-    environment rather than adding to the parent's (I8) -- `None` is the one
+    environment rather than adding to the parent's: `None` is the one
     value that still means "inherit everything", and `post_json` never passes
     that value here.
     """
@@ -524,7 +524,7 @@ def post_json(
     argument assembly and the envelope, and a test that does not replace it
     really does start a process.
 
-    `cancel`, a `threading.Event`, is the web server's (639): with one, the
+    `cancel`, a `threading.Event`, is the web server's: with one, the
     program runs under `run_cancellable`, and setting it stops the program's
     process group, SIGTERM then SIGKILL, and raises `Cancelled`. Without one
     nothing here changes, which is every command-line run.
@@ -535,11 +535,11 @@ def post_json(
     # The basename in every message below, never `argv[0]`. An operator who
     # names an absolute path has put their home directory in the command, and
     # these strings reach stderr, a captured log, and from there a decision
-    # entry -- which is the route 297 exists about. The full path stays in the
+    # entry: exactly the leak this guards against. The full path stays in the
     # environment where it was set.
     named = os.path.basename(argv[0]) or argv[0]
     prompt = messages_to_prompt(payload.get("messages") or [])
-    # Built explicitly rather than inherited (I8): see `_child_env` for what
+    # Built explicitly rather than inherited: see `_child_env` for what
     # is dropped and kept, and why.
     child_env = _child_env()
 
@@ -559,7 +559,7 @@ def post_json(
         # explained why the bound is strict here and left the reader with
         # nothing to do about it -- which is how the operator met it: a
         # correct sentence about a subprocess, and no sentence about the
-        # setting that would have let the call finish (533).
+        # setting that would have let the call finish.
         raise CommandError(
             f"{named!r} produced nothing for {timeout:.0f}s and was stopped. "
             f"A subprocess has no stream to renew the clock, so this bounds "
@@ -576,7 +576,7 @@ def post_json(
 
     if done.returncode != 0:
         excerpt = (done.stderr or "").strip()[:STDERR_EXCERPT]
-        # stdout is parsed too, not only stderr (I6): a CLI that exits
+        # stdout is parsed too, not only stderr: a CLI that exits
         # non-zero can still have written the result envelope, and that is
         # where a usage limit or a vendor API error names itself
         # (`api_error_status`, `api_error_code`, `terminal_reason`) --
@@ -624,7 +624,7 @@ def post_json(
             f"{', '.join(ENVELOPES)}"
         )
 
-    # One attempt, so the answering attempt is the whole call (681). What the
+    # One attempt, so the answering attempt is the whole call. What the
     # program did inside that call -- the CLI's own retries and backoff among
     # them -- is invisible from here and is in this figure; `cli_timing` is
     # the program's own account, where its envelope gave one.
@@ -639,7 +639,7 @@ def post_json(
 
 
 def cli_timing(stdout: str) -> dict | None:
-    """`duration_ms` and `duration_api_ms` off a `RESULT` envelope, or `None` (681).
+    """`duration_ms` and `duration_api_ms` off a `RESULT` envelope, or `None`.
 
     Kept off the synthesised envelope, and so out of any cassette body: a
     call's time is how it ran, not what it answered, and a recording that

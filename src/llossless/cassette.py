@@ -57,7 +57,7 @@ _UNSAFE = re.compile(r"[^a-z0-9_-]")
 # decides, which is exactly what every replay did before the field existed.
 # Not a claim that the recording was strict. Unstamped recordings made under
 # `--field-order any` exist (the deepseek-r1 arms), and they keep replaying
-# the way they always have: with the flag (DECISIONS 583).
+# the way they always have: with the flag.
 UNSTAMPED_FIELD_ORDER = config.FIELD_ORDERS[0]
 
 
@@ -80,7 +80,7 @@ class MissingCassette(RuntimeError):
         self.key = key
         self.role = role
         # Where it looked, so a consumer can ask whether that corpus is stale
-        # by ruling (`tests/stale_corpus.py`, DECISIONS 668) rather than broken.
+        # by ruling (`tests/stale_corpus.py`) rather than broken.
         self.directory = directory
 
 
@@ -125,7 +125,7 @@ class ConflictingCassettes(RuntimeError):
     matters is not "the wrong answer" but "an answer nobody knew was a choice".
 
     Neither recording is wrong. Both are true records of what the model said on
-    their day, and the non-determinism between them is measured — `M9` A.34 puts
+    their day, and the non-determinism between them is measured; an earlier study puts
     it at 14 of 240 multi-sample units. The fix is in resolution, not in the
     data: put the two recordings in two directories, because a directory is a
     corpus and a corpus is one measurement.
@@ -169,7 +169,7 @@ def guard_sources(store: Store, current: str | None) -> None:
     `current` of None waives this entirely — that is exactly what
     --mixed-sources buys, and nothing more.
 
-    No endpoint check here any more. Entry 405: a corpus keyed on content
+    No endpoint check here any more. A corpus keyed on content
     (`key_for` — role, model, tier, prompt, messages, schema, temperature,
     seed, max_tokens, thinking, sample) answers "what did this model say to
     this prompt", and that question has one answer regardless of which box
@@ -184,7 +184,7 @@ def guard_sources(store: Store, current: str | None) -> None:
     matters and is not yet a guard: the model plus its quantization, which
     changes the answer and is in neither this key nor any check today. Adding
     it is a schema bump against the committed corpus and is deliberately not
-    done here — see DECISIONS 405.
+    done here.
     """
     if current is None:
         return
@@ -204,7 +204,7 @@ def secure_dir(path: Path) -> Path:
     and the merge. `.gitignore` withholds `/assets/` because it "carries the
     source documents' content"; this is a second copy of that content and was
     held to a weaker rule: `mkdir` with no mode let the umask decide, which on
-    the development machine meant 0755 directories and 0644 files (325).
+    the development machine meant 0755 directories and 0644 files.
 
     Three things this does that a bare `mkdir(mode=...)` does not:
 
@@ -213,8 +213,8 @@ def secure_dir(path: Path) -> Path:
       change would have kept 0755 for ever -- and every existing cache is
       exactly the case this was written for.
     * **It tightens the ancestors it creates.** `parents=True` makes
-      intermediates at the default mode, so `~/.cache/claimcheck/responses`
-      left `~/.cache/claimcheck` world-readable while its child was not, and
+      intermediates at the default mode, so `~/.cache/llossless/responses`
+      left `~/.cache/llossless` world-readable while its child was not, and
       the dumps and the capability record live in that parent.
     * **It only ever narrows.** An owner who has deliberately widened something
       above the cache is not overruled: nothing outside the tree being created
@@ -359,7 +359,7 @@ class Cassette:
     endpoint_id: str = ""
     # Which rule made that id -- `config.ENDPOINT_ID_SCHEME`. An id is a digest
     # and says nothing about how it was derived, so two schemes' ids sit side by
-    # side in one tally looking like two machines. Stamped from DECISIONS 438,
+    # side in one tally looking like two machines. This is stamped when written,
     # and absent means scheme 1, because the scheme that had no marker is the
     # only one a file without a marker can have been written under. This is the
     # field the next such change migrates *from*: 818 cassettes were left
@@ -592,7 +592,7 @@ class Store:
         to be there when the rule changes again. It was not there when the rule
         changed the first time, and 818 recorded ids are stuck under the old one
         as a result: they are readable, and they cannot be converted, because
-        nothing beside them says what they were made from -- DECISIONS 438.
+        nothing beside them says what they were made from.
         """
         path = self.directory / filename(role, key)
         if path.exists() and not force:
@@ -638,11 +638,11 @@ class Store:
 class ChainedStore:
     """A primary `Store`, plus a read-only `local/` overlay checked on miss.
 
-    Pre-405 this existed because `guard_sources` refused to deepen one
+    This existed because `guard_sources` refused to deepen one
     directory with cassettes from two endpoints, so a corpus recorded against
     a hosted endpoint could only be *extended* by a cassette recorded honestly
     against a different one, never mixed into the same directory. That refusal
-    is gone (DECISIONS 405), but the overlay is still worth having: it keeps
+    is gone, but the overlay is still worth having: it keeps
     what was recorded against the local card physically separate from what was
     recorded against a rented pod, which is a fact a human may still want to
     read off the directory layout even though nothing enforces it any more.

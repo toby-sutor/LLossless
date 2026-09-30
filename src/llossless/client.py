@@ -54,7 +54,7 @@ EMPTY_RESPONSE_ATTEMPTS = 3
 # ladder is cheap to have made and cheap to ask again about; a loop is the most
 # expensive answer a model can give. The two measured cases were the slowest
 # call in their sweep by a factor of 20, and a 34,461-character generation that
-# burned 904 seconds on a metered endpoint (`DECISIONS.md` entries 404, 427).
+# burned 904 seconds on a metered endpoint.
 # Five attempts at that is five runaway generations for one document.
 #
 # It is re-asked once rather than not at all because the re-ask is not the same
@@ -128,8 +128,8 @@ class ConcurrentCall(RuntimeError):
     make an overlapping call correct and slow, which is the opposite of what
     anyone reaching for one wants, and it would hide the fact that the caller's
     pipeline is asking for something this client does not offer.
-    `internal/docs/parallelism.md` has the dependency graph, the measured win
-    and the list of what a parallel `Client` would have to fix first.
+    A separate design note has the dependency graph, the measured win, and
+    the list of what a parallel `Client` would have to fix first.
     """
 
 
@@ -176,8 +176,8 @@ class SchemaFailure(RuntimeError):
         # means what it says -- this unit of work has no usable answer -- and
         # nothing here changes an exit code. It is carried so a caller that can
         # tell one bad record from a bad response has the evidence to do it
-        # (`verify.salvage`, `DECISIONS.md` entry 194), on the same principle as
-        # Brief AQ v2 item 1: what the run already paid for is not thrown away.
+        # (`verify.salvage`), on the same principle applied elsewhere: what
+        # the run already paid for is not thrown away.
         self.payload = payload
         self.defects = defects
         self.truncations = truncations
@@ -203,7 +203,7 @@ class Usage:
     # the endpoint was asked twice and gave nothing acceptable either time, and
     # the run still has verdicts out of it. Written by the caller that did the
     # salvaging, not here -- `complete` raises the same failure whether or not
-    # anyone can use what is attached to it. Pass C, `DECISIONS.md` entry 194.
+    # anyone can use what is attached to it.
     salvaged: int = 0
     # The legacy pair, kept because a dozen callers subtract one reading from
     # another to attribute spend to a unit of work. They mirror
@@ -213,17 +213,17 @@ class Usage:
     prompt_tokens: int = 0
     completion_tokens: int = 0
     # The full picture, normalised across vendors, with unmeasured calls
-    # counted rather than folded into zero. See usage.Tokens and DECISIONS 138.
+    # counted rather than folded into zero. See `usage.Tokens`.
     tokens: TokenTally = field(default_factory=TokenTally)
     # Whether the model went and looked anything up, read off the response
-    # rather than asked for (537). Three states -- searched, not-searched,
+    # rather than asked for. Three states: searched, not-searched,
     # unmeasured -- and the third is why this is a tally and not a count: an
     # endpoint that never reports is not an endpoint that reported zero. This
     # says nothing about *this* process, which opens no socket for any
     # purpose; a model's own retrieval happens on the serving side, which is
     # exactly why a counter it wrote down is the only honest way to know.
     searches: SearchTally = field(default_factory=SearchTally)
-    # The same question through the instrument that can see this backend (548).
+    # The same question through the instrument that can see this backend.
     # `searches` reads `server_tool_use`, which counts Anthropic's server-side
     # web tools and is structurally blind to a CLI's local `WebFetch` -- a call
     # that demonstrably fetched reported zero. A tool call costs a turn, so
@@ -241,11 +241,11 @@ class Usage:
     # the recorded corpus.
     thinking_ignored: set[str] = field(default_factory=set)
     # One row per response body this run charged, in the order they were
-    # charged. Written at `Client._record_usage` beside the totals above --
-    # entry 138's single write point -- so a run cannot carry a ledger that
-    # disagrees with its own totals. Entry 168.
+    # charged. Written at `Client._record_usage` beside the totals above, the
+    # single write point, so a run cannot carry a ledger that disagrees with
+    # its own totals.
     ledger: list[dict] = field(default_factory=list)
-    # Live calls this run made and did not charge to the ledger (681): a blank
+    # Live calls this run made and did not charge to the ledger: a blank
     # answer re-asked, a call the platform failed, a cancel. Kept apart because
     # `ledger` is compared verbatim against a replay, which never meets them.
     # Written at `Client._discard` only; `provenance` reads both lists.
@@ -258,7 +258,7 @@ class Usage:
     #                        it. The guard ran, against their number.
     #   "post-hoc: <reason>" the endpoint could not say, nothing preflighted,
     #                        and the run fell back to a per-draw truncation
-    #                        check instead (Brief AL item 2).
+    #                        check instead.
     #
     # Three strings and not two, because a run guarded against a number an
     # operator typed and a run guarded against a number a server confirmed are
@@ -273,7 +273,7 @@ class Usage:
     wire_thinking: dict[str, bool] = field(default_factory=dict)
     # Live calls per role. `calls` is the run's total and cannot answer the one
     # question a per-role endpoint setup has to ask: did *this* box answer for
-    # *this* role? Entry 423. Counted beside `calls` at the single place a live
+    # *this* role? Counted beside `calls` at the single place a live
     # call is charged, so the two cannot disagree; a role absent here made no
     # live call, which a replay, a cache hit and a dry run all look like and
     # which the artefacts a role leaves cannot tell apart.
@@ -301,8 +301,8 @@ class Completion:
     A dataclass rather than the bare payload so `truncations` has somewhere to
     live that is not a reserved key inside the payload itself -- the model's
     JSON and the parser's own report about that JSON stay two different
-    objects. Empty `truncations` on the common case, a response that needed no
-    capping. `DECISIONS.md` entry 190.
+    objects. Empty `truncations` on the common case, a response that needed
+    no capping.
     """
 
     payload: dict
@@ -377,7 +377,7 @@ class Client:
         self._cache = Store(settings.cache_dir / "responses") if settings.use_cache else None
 
         # The revision this run is made under, stamped once at init and never
-        # re-read per call (I7): a sweep is one process, and re-reading per
+        # re-read per call: a sweep is one process, and re-reading per
         # call would let a corpus straddle an edit while reporting each half
         # honestly, which is the outcome the guard below exists to prevent
         # rather than to document. Read regardless of whether this run
@@ -392,10 +392,10 @@ class Client:
 
         self._source = source_state()
         if self._record is not None:
-            # --mixed-sources waives this entirely, which is what it always
-            # bought once the endpoint half of the guard was removed
-            # (DECISIONS 405): the claim that an edit provably cannot reach
-            # the model.
+            # --mixed-sources waives this entirely. With no endpoint half of
+            # the guard left to fall back on, waiving the source check gives
+            # up the whole claim: that an edit provably cannot reach the
+            # model.
             guard_sources(
                 self._record,
                 None if settings.allow_mixed_sources else self._source,
@@ -420,7 +420,7 @@ class Client:
         # `_fetch` was read under when it was made, or None when the answer
         # came from the wire or the cache. `_reading_order` turns it into the
         # order this run reads the answer under; `_orders_read` keeps every
-        # such order a replay used, for `resolved_field_order` (DECISIONS 583).
+        # such order a replay used, for `resolved_field_order`.
         self._recorded_order: str | None = None
         self._orders_read: set[str] = set()
 
@@ -533,7 +533,7 @@ class Client:
         so the two conditions record separately without any further help.
 
         **One unit of work at a time on one client, and a second caller is
-        refused rather than queued.** The paragraph above has said since M5
+        refused rather than queued.** The paragraph above has long said
         that a client is one pacer and one usage counter; nothing asserted it,
         and what the assertion buys is that the way it fails stops being
         silent. See `ConcurrentCall` for the measurement: two overlapping calls
@@ -557,9 +557,9 @@ class Client:
                     f"from a one-slot field held for the whole request, so "
                     f"two overlapping calls file one of them twice and lose "
                     f"the other. Give each thread its own Client, or run the "
-                    f"calls in sequence. internal/docs/parallelism.md has the "
-                    f"dependency graph and what a parallel Client would have "
-                    f"to fix first."
+                    f"calls in sequence. A Client shared across threads would "
+                    f"need a ledger row per call instead of the one-slot field "
+                    f"it has now."
                 )
             self._caller = caller
         try:
@@ -620,7 +620,7 @@ class Client:
             # Reset per attempt, not once above: a first attempt that parsed
             # and a second that did not must not report the first attempt's
             # object as the last word. Same hazard `_dump_discard` closed for
-            # `dump` (entry 184 item 2).
+            # `dump`.
             final = None
             raw, tier = self._fetch(
                 role=role,
@@ -633,7 +633,7 @@ class Client:
                 thinking=thinking,
                 attempt=attempt,
             )
-            # The row `_fetch` just filed for this answer, on every path (681):
+            # The row `_fetch` just filed for this answer, on every path:
             # what became of it is written onto it below, as `outcome`.
             filed = self.usage.ledger[-1]
             order = self._reading_order()
@@ -656,26 +656,26 @@ class Client:
                 last = exc if isinstance(exc, parsing.ParseError) else parsing.ParseError(str(exc))
                 dump = self._dump_attempt(role, attempt, raw)
                 if refuse_at_ceiling:
-                    # DECISIONS 668, extended at 680 (the cosmetic fix at the
-                    # old `client.py:643`). An answer that stopped on its
-                    # ceiling and does not parse is a prefix, and the same
-                    # request at the same ceiling stops at the same place, so
-                    # it is refused here, on the first attempt, as the length
-                    # refusal it is (`window.Truncated`), rather than repaired
-                    # `SCHEMA_ATTEMPTS` times at the full ceiling or handed
-                    # to salvage as a partial answer. Opt-in: the verify role
-                    # asks for it; decompose and merge keep their repair path.
+                    # An answer that stopped on its ceiling and does not
+                    # parse is a prefix, and the same request at the same
+                    # ceiling stops at the same place, so it is refused
+                    # here, on the first attempt, as the length refusal it
+                    # is (`window.Truncated`), rather than repaired
+                    # `SCHEMA_ATTEMPTS` times at the full ceiling or
+                    # handed to salvage as a partial answer.
+                    # Opt-in: the verify role asks for it; decompose and
+                    # merge keep their repair path.
                     #
                     # No longer gated on `max_tokens is not None`: a frontier
-                    # profile sends no ceiling of its own (B1), so a response
-                    # the endpoint cut on *its* own limit used to fall through
-                    # to the ordinary schema ladder and be asked again
+                    # profile sends no ceiling of its own, so a response the
+                    # endpoint cut on *its* own limit used to fall through to
+                    # the ordinary schema ladder and be asked again
                     # `SCHEMA_ATTEMPTS` times at a request that cannot answer
-                    # differently -- five requests where the 27B, which does
+                    # differently: five requests where the 27B, which does
                     # send a ceiling, pays one. `ceiling_cut` reads
                     # `finish_reason` first and needs no ceiling for that
-                    # signature; the cell is excluded from scoring either way
-                    # (678), so this is spend saved, not a figure changed.
+                    # signature; the cell is excluded from scoring either way,
+                    # so this is spend saved, not a figure changed.
                     cut = ceiling_cut(raw, self.usage.ledger[-1] if self.usage.ledger else {},
                                       max_tokens)
                     if cut is not None:
@@ -833,8 +833,8 @@ class Client:
         say whether it refused on a measurement or on a report.
 
         `window.WindowUnknown` is not caught here. An endpoint that will not say
-        what it is serving is a fact about the run, and the alternative -- a
-        default -- is precisely the hard-coded number task 41 exists to remove.
+        what it is serving is a fact about the run, and the alternative, a
+        default, is precisely the hard-coded number this file no longer uses.
 
         **A stated window is answered first, and it is not that default.**
         `Settings.window` is `None` unless an operator named a figure, and a
@@ -851,7 +851,7 @@ class Client:
 
         `window.WindowUnmeasurable` *is* caught here, and is a different fact:
         the endpoint does not expose `/api/ps` at all, which no load request or
-        retry changes. Brief AL item 1. Returning `None` in that case is not a
+        retry changes. Returning `None` in that case is not a
         default either -- no window value is invented and none is declared --
         it is the same "nothing constrains this" answer replay and dry run
         already return, for a third reason. `Client.usage.window_mechanism`
@@ -869,21 +869,21 @@ class Client:
         confirmed by probe -- a prompt of that size sent and the endpoint's own
         `prompt_tokens` read back -- before it is used, and only a measured
         window reaches `window.guard`. On this project's pod both models
-        confirmed their report on 2026-08-17, at 40,960 and 65,536;
-        `DECISIONS.md` entry 18 has the measurement, and the wrong one that
-        preceded it.
+        confirmed their report on 2026-08-17, at 40,960 and 65,536,
+        replacing an earlier, wrong figure that a first pass on this pod
+        had recorded.
         """
         from . import window
 
         if self._replay is not None or self.settings.dry_run:
             return None
         model = self.settings.model_for(role)
-        # Per-role since entry 421: two endpoints serve two windows, and the
+        # Per-role: two endpoints serve two windows, and the
         # run-wide figure is the fallback rather than the answer.
         stated_window = self.settings.window_for(role)
         if stated_window is not None:
-            # Named by `settings.window_declared_by` rather than fixed here
-            # (605): a shell operator's `--window` / `LLOSSLESS_WINDOW` is the
+            # Named by `settings.window_declared_by` rather than fixed here:
+            # a shell operator's `--window` / `LLOSSLESS_WINDOW` is the
             # default, and `web.jobs.web_settings` replaces it with the page's
             # own field when the request is what stated the figure -- one
             # attribution, read off the object that carries it, not guessed
@@ -892,8 +892,8 @@ class Client:
                                    declared_by=self.settings.window_declared_by)
             # Assigned, not `setdefault`. The reason used to be that one
             # stated figure covered the whole run, so no earlier answer for
-            # this role could exist to disagree with; entry 421 made the
-            # figure per-role and that reason went away. The assignment
+            # this role could exist to disagree with. The figure was later
+            # made per-role, and that reason went away. The assignment
             # stands on a better one: this is the figure the operator
             # declared for *this* role, so it is the answer, and a stale
             # entry left from an earlier call is exactly what must not win.
@@ -902,7 +902,7 @@ class Client:
             # guarded it, so the two cannot come apart.
             self.usage.window_mechanism[role] = window.mechanism(served)
             return served
-        # Keyed by model *and* endpoint since entry 421. A model id is not a
+        # Keyed by model *and* endpoint. A model id is not a
         # deployment: the same `qwen3:8b` served by a rented 24 GB card and by
         # the operator's own box are two windows, and keying on the id alone
         # would hand the second role the first one's measurement. The probe
@@ -1048,7 +1048,7 @@ class Client:
                 # keeps its name.
                 #
                 # `command_for`, not `command`: the effort level is per
-                # role since 562, so two roles answered by the same
+                # role, so two roles answered by the same
                 # program are asked for different amounts of reasoning
                 # and did not send the same request. A key that read the
                 # route would let a `low` decompose answer a `high` one.
@@ -1065,8 +1065,8 @@ class Client:
         #
         # `request_sha256` is over the bytes actually sent. `prompt_sha256` is
         # the unrendered template file and is constant across draws by
-        # construction, so it cannot tell two draws apart and cannot settle
-        # entry 167 -- `request_sha256` is the field that can. Both are here
+        # construction, so it cannot tell two draws apart or say which one
+        # produced a given answer: `request_sha256` is the field that can. Both are here
         # because they answer different questions: which prompt version ran,
         # and what was sent under it.
         self._pending_call = {
@@ -1090,8 +1090,8 @@ class Client:
             })).hexdigest(),
             # Carried onto every ledger row so `window.assert_untruncated` can
             # read a call's own ceiling back off the ledger rather than being
-            # passed it separately -- the same "the run already reports this
-            # exactly" figure Brief AL item 2 asks the check to use. `None` for
+            # passed it separately: the same principle applies elsewhere too,
+            # that a check should use a figure the run already reports. `None` for
             # a role with no ceiling, which the check already treats as
             # nothing to test.
             "max_tokens": max_tokens,
@@ -1124,7 +1124,7 @@ class Client:
             note(tier, cassette.raw)
             # How the recording run read this answer, which is the one
             # condition of the recording the key cannot carry: it changes how
-            # the answer is read, not what was asked (DECISIONS 583).
+            # the answer is read, not what was asked.
             self._recorded_order = cassette.field_order
             return cassette.raw, tier
 
@@ -1161,7 +1161,7 @@ class Client:
                 if cached is None:
                     continue
                 if cached.endpoint_id and cached.endpoint_id != self.settings.endpoint_id_for(role):
-                    # Advisory only, since DECISIONS 405: the endpoint is not
+                    # Advisory only: the endpoint is not
                     # in the key on purpose — it answers "what did this model
                     # say to this prompt", and that question has one answer
                     # regardless of which box asked it. A skip used to treat
@@ -1188,8 +1188,8 @@ class Client:
                 # Deliberately not `self.tier = cache_tier`. A cached answer
                 # says what one request got, not what the endpoint can do now,
                 # so the first live call of this process still starts the
-                # ladder at the top. That is entry 1's rule applied to the one
-                # place it could sneak back in.
+                # ladder at the top, the same rule that holds everywhere
+                # else, applied to the one place it could sneak back in.
                 if self.tier_source == "probed":
                     self.tier_source = "cached"
                 return cached.raw, cache_tier
@@ -1292,15 +1292,15 @@ class Client:
             if self.settings.pinned
             else structured.tiers_from(self.tier or structured.TIERS[0])
         )
-        # Per-role since entry 421. `role` has always been in scope here; what
+        # Per-role. `role` has always been in scope here; what
         # changed is that the endpoint is now asked for by it, so a frontier
         # merge and a local decompose can be one run.
         # Empty for a command backend, which has no URL to build and nothing
         # to build one from. Kept as one name rather than branching twice:
         # everything between here and the call reads the same either way.
         #
-        # `command_for` carries this role's effort level on the argv
-        # (562). It is the one place the flag is appended, so what is
+        # `command_for` carries this role's effort level on the argv.
+        # It is the one place the flag is appended, so what is
         # executed and what `provenance` prints are read off one function.
         command = self.settings.command_for(role)
         url = ("" if command
@@ -1345,14 +1345,14 @@ class Client:
                     raise
                 last = exc
                 continue
-            # A cancel ends the pause early rather than after it (639). What
-            # the pause really took is this call's own wait (681); a stand-in
+            # A cancel ends the pause early rather than after it. What
+            # the pause really took is this call's own wait; a stand-in
             # pacer that reports nothing waited nothing this run can measure.
             paced = self._pace(**({} if self.cancel is None
                                   else {"sleep": self.cancel.wait})) or 0.0
             # Again after the pause: `--min-interval` can sleep for minutes,
             # and a cancel that arrived during it must not be followed by a
-            # call (639).
+            # call.
             self._stop_if_cancelled()
             if self._last_call_ended:
                 # Achieved, not requested. A sweep planned at 15 s a call can
@@ -1380,7 +1380,7 @@ class Client:
                         host=self.settings.endpoint_name,
                         model=model,
                         # Declared by whoever configured the command, not
-                        # detected from what it writes (537). A route that
+                        # detected from what it writes. A route that
                         # answers with a result envelope gets its token counts
                         # and its `server_tool_use` counter read; one that does
                         # not stays `unmeasured` on both, which is what it was.
@@ -1392,7 +1392,7 @@ class Client:
                         url,
                         body,
                         # Read here, on the calling thread, and bound into the
-                        # call: the key source is a ContextVar (468), and a
+                        # call: the key source is a ContextVar, and a
                         # thread started without this context would read the
                         # process environment -- the operator's key -- instead
                         # of the submitter's. `test_web_accounts` caught that.
@@ -1409,7 +1409,7 @@ class Client:
                 structured.read_content(tier, envelope)  # shape check before committing
             except transport.Cancelled as exc:
                 # Not a fault and not a tier question: the run was cancelled
-                # during this call (639). The call was counted above when it
+                # during this call. The call was counted above when it
                 # was sent, which is what it is -- made, and possibly billed.
                 self.usage.seconds += time.monotonic() - started
                 self._last_call_ended = time.monotonic()
@@ -1441,8 +1441,8 @@ class Client:
                     detail=str(exc),
                 )
                 # And a row for the report, from the same place and for the
-                # same reason (681): a blank is excluded from the cell's time
-                # and cost (678), and excluded is not the same as unrecorded.
+                # same reason: a blank is excluded from the cell's time
+                # and cost, and excluded is not the same as unrecorded.
                 self._discard(blank_kind(envelope), tier, exc, paced=paced,
                               started=started, response=response, envelope=envelope)
                 # The generation was not blank. `finish_reason: "length"` with
@@ -1498,7 +1498,7 @@ class Client:
                 self.usage.seconds += time.monotonic() - started
                 self._last_call_ended = time.monotonic()
                 # A call the platform lost, or a rung it refused: not the
-                # model's answer, whatever happens next (681).
+                # model's answer, whatever happens next.
                 self._discard(DISCARD_PLATFORM, tier, exc, paced=paced,
                               started=started, response=response, envelope=envelope)
                 if self._reasoning_effort and structured.rejected_field(exc, "reasoning_effort"):
@@ -1527,10 +1527,10 @@ class Client:
             self.usage.seconds += time.monotonic() - started
             self._last_call_ended = time.monotonic()
             # Read off `body`, the dict actually serialised onto the wire for
-            # this call -- not rebuilt, not the module constants it was built
-            # from. Brief AL item 3: DECISIONS 178 already ruled out rebuilding
-            # a body to check one, because a rebuild proves the rebuild, and
-            # `body` here is the original, never a second construction of it.
+            # this call, not rebuilt, not the module constants it was built
+            # from. Rebuilding a body to check one already proved unreliable:
+            # a rebuild only proves the rebuild, and `body` here is the
+            # original, never a second construction of it.
             self._record_usage(envelope, tier=tier, source="live",
                                latency_ms=response.latency_ms,
                                timing=call_timing(response, paced), wire={
@@ -1581,7 +1581,7 @@ class Client:
         whole use of a ledger is that it can be added up and checked against a
         bill.
 
-        Entry 138's rule holds per call as it holds per run: a response whose
+        The same rule holds per call as it holds per run: a response whose
         vendor reported no usage has no token keys in its row. Not zero -- the
         row is still there, because a call that happened is a line on the bill
         whether or not its size was reported, and a spend reconciliation that
@@ -1591,17 +1591,17 @@ class Client:
         counts = self.usage.tokens.add(envelope)
         # The same envelope, the same single write point, and the same
         # unknown-is-not-zero rule. Here rather than anywhere else for
-        # entry 138's reason: two write points would let a run carry a
+        # the same reason: two write points would let a run carry a
         # search count that disagrees with its own call count.
         self.usage.searches.add(envelope)
         # And the turn count beside it, at the same single write point and
-        # under the same unknown-is-not-zero rule (548). Its floor is read off
+        # under the same unknown-is-not-zero rule. Its floor is read off
         # the argv this call executed: under the isolation one retrieval is
-        # two turns, not three, and the older floor would read it as none (610).
+        # two turns, not three, and an unadjusted floor would read it as none.
         role = (self._pending_call or {}).get("role")
         executed = (self.settings.command_for(role) if role in config.ROLES
                     else config.command_with_isolation(self.settings.command))
-        # Filed by role as well (665): `sourced` is judged on the merge's
+        # Filed by role as well: `sourced` is judged on the merge's
         # calls, which is where every citation it reports was written.
         self.usage.turns.add(envelope, web_only=config.only_web_tools(executed),
                              role=role if role in config.ROLES else None)
@@ -1615,7 +1615,7 @@ class Client:
         answered = answered_by(envelope)
         if answered is not None:
             row["answered_by"] = answered
-        # The HTTP path's own version of the same fact (B7, 680): a vendor
+        # The HTTP path's own version of the same fact: a vendor
         # endpoint's bare `model` field, kept under its own key rather than
         # folded into `answered_by` above -- see `usage.served_model` for why
         # the two must not merge. Mutually exclusive by construction: a
@@ -1624,7 +1624,7 @@ class Client:
         served = served_model(envelope)
         if served is not None:
             row["served_model"] = served
-        # The call's wall time, on the live row only (575): the one per-call
+        # The call's wall time, on the live row only: the one per-call
         # figure a `--no-cache` run left nowhere, since the cassette that also
         # records it is not written. A replay or a cache hit made no request
         # and has no time of its own, so the key is absent there, not zero --
@@ -1632,7 +1632,7 @@ class Client:
         # as how a call ran rather than what it asked.
         if latency_ms is not None:
             row["latency_ms"] = latency_ms
-        # How that time was spent (681), on the live row only and for the
+        # How that time was spent, on the live row only and for the
         # same reason: `attempts`, `answer_ms`, `failed_ms`, `waited_ms`,
         # `ttfb_ms` and a command route's own `cli_duration*_ms`. See
         # `call_timing`. Each is exempt by name from the replay comparison.
@@ -1676,7 +1676,7 @@ class Client:
                 self.usage.completion_tokens += counts["output"]
                 row["completion_tokens"] = counts["output"]
             # Cached input, per row, because that is where it has to be to be
-            # *costed* (488): cache reads bill at a tenth to a fifth of the
+            # *costed*: cache reads bill at a tenth to a fifth of the
             # input rate, and a run that read 7,449 of 21,405 input tokens from
             # cache is over-charged by 8% without this. The run-wide totals
             # already carry the same figure, but a run can put three roles on
@@ -1688,7 +1688,7 @@ class Client:
             if "cached" in counts:
                 row["cached_tokens"] = counts["cached"]
             # A total above input plus output is output the vendor billed and
-            # did not count as output (624). Google's compatibility endpoint
+            # did not count as output. Google's compatibility endpoint
             # reports `completion_tokens` without the thinking tokens and
             # `total_tokens` with them -- 7 in, 5 out, 253 total on a
             # three-word answer from gemini-3.8-flash -- and its pricing page
@@ -1721,8 +1721,8 @@ class Client:
         reading. A demotion inside one process means the run is not the run it
         started as: earlier calls were answered at a stronger rung, later ones
         will not be, and because `tier` is part of the cassette key the corpus
-        now has two halves. That is the failure M4 spent a sweep discovering
-        from a journal afterwards, so it is said at the moment it happens.
+        now has two halves. That is a failure an earlier sweep discovered
+        only afterwards, from a journal, so it is said at the moment it happens.
 
         A resolution that merely differs from the last recorded one is
         ordinary: it is what re-deriving the answer every process is for, and
@@ -1756,7 +1756,7 @@ class Client:
                 f"record only -- the ladder re-derives this every run."
             )
 
-    # The web server's cancel (639): a `threading.Event`, set on the instance
+    # The web server's cancel: a `threading.Event`, set on the instance
     # by `web.jobs._run_merge` after construction. With one, `_live` makes no
     # call after it is set, abandons the call in flight, and has a command
     # backend stop its program. `None` here, which is every command-line run,
@@ -1765,7 +1765,7 @@ class Client:
     cancel = None
 
     def _stop_if_cancelled(self) -> None:
-        """Raise `Cancelled` if the run was cancelled, before the next call (639)."""
+        """Raise `Cancelled` if the run was cancelled, before the next call."""
         if self.cancel is not None and self.cancel.is_set():
             from .transport import Cancelled
             raise Cancelled(
@@ -1773,11 +1773,11 @@ class Client:
                 f"{self.usage.calls} call(s) had been made")
 
     # How often a waiting caller looks at the cancel flag while a call is in
-    # flight (639).
+    # flight.
     CANCEL_POLL_SECONDS = 0.1
 
     def _abandonable(self, call):
-        """`call(sleep)` in a thread this client can walk away from (639).
+        """`call(sleep)` in a thread this client can walk away from.
 
         Without a cancel flag it is `call(time.sleep)` on this thread, exactly
         as before. With one, the request runs on a daemon thread and this one
@@ -1833,7 +1833,7 @@ class Client:
         run pays nothing for it.
 
         Returns the seconds it actually waited, measured rather than asked
-        for: the next call's own `waited_ms` carries it (681), because a pause
+        for: the next call's own `waited_ms` carries it, because a pause
         is not the model's time and a cell's speed must not include it.
         """
         if self.settings.min_interval <= 0 or not self._last_call_ended:
@@ -1853,7 +1853,7 @@ class Client:
 
         These two directories hold response bodies, and a response body is the
         merge -- the documents' content, rearranged. They were justified on the
-        grounds that they land in "the same gitignored `.claimcheck-cache/`",
+        grounds that they land in "the same gitignored `.llossless-cache/`",
         which was true of a checkout and stopped being true the day the package
         became installable: an installed user has no git, so nothing there is
         gitignored, and `--no-cache` was switching off the cassettes while these
@@ -1862,7 +1862,7 @@ class Client:
         With the cache off they go to a directory made for this process, under
         the system temporary directory, and the path is printed once on stderr.
         Debugging survives -- the files are still there and still named -- and
-        nothing outlives the machine's own cleanup. DECISIONS 311.
+        nothing outlives the machine's own cleanup.
         """
         if self.settings.use_cache:
             return self.settings.cache_dir
@@ -1921,7 +1921,7 @@ class Client:
 
     def _discard(self, kind: str, tier: str, exc: BaseException, *, paced: float,
                  started: float, response=None, envelope: dict | None = None) -> None:
-        """File a live call that produced no ledger row under `Usage.discarded` (681).
+        """File a live call that produced no ledger row under `Usage.discarded`.
 
         A blank re-asked, a call the platform lost, a rung refused, a cancel:
         each was counted in `usage.calls` when it went out, and none reaches
@@ -1930,7 +1930,7 @@ class Client:
         tokens the vendor reported for it (a blank can be billed: 763
         completion tokens for zero characters, measured), and its time split
         the way a ledger row's is. `kind` is one of `DISCARD_KINDS`, and
-        `counted_as` says whether 678 excludes it or it waits for a ruling.
+        `counted_as` says whether the freeze excludes it or it waits for a ruling.
 
         Not in `ledger`, and not in `usage.tokens`: the totals and the ledger
         keep the meaning every published figure was read under, and a replay,
@@ -1996,12 +1996,12 @@ def ceiling_cut(raw: str, row: dict, max_tokens: int | None) -> str | None:
     `window.assert_untruncated`'s test and the one a vendor that reports no
     finish reason still leaves.
 
-    `max_tokens` is `None` when this tool sent no ceiling of its own -- every
-    frontier profile but `openai-compatible` (B1) -- and `finish_reason` is
-    still read and still enough on its own (680, the cosmetic fix at
-    `client.py:643`): the endpoint applied *some* limit even though this tool
-    did not ask for one, and a response that stopped there and does not parse
-    is a cut prefix either way. Only the second signature, the completion
+    `max_tokens` is `None` when this tool sent no ceiling of its own,
+    every frontier profile but `openai-compatible`, and `finish_reason`
+    is still read and still enough on its own: the endpoint applied
+    *some* limit even though this tool did not ask for one, and a
+    response that stopped there and does not parse is a cut prefix
+    either way. Only the second signature, the completion
     count against a ceiling, needs one to compare against, so it is skipped
     rather than raising when there is none to check.
     """
@@ -2041,11 +2041,11 @@ def reasoned(raw: str) -> bool:
     return parsing.LEADING_REASONING.match(content) is not None
 
 
-# -- accounting (681) --------------------------------------------------------
+# -- accounting ---------------------------------------------------------------
 #
-# What a benchmark cell is charged with. 678: "Retries are not counted in
+# What a benchmark cell is charged with: retries are not counted in
 # speed or cost. A cell's cost and time are those of the attempt that
-# produced its answer", and an empty response, a timeout or a platform
+# produced its answer, and an empty response, a timeout or a platform
 # failure is excluded. A schema repair is not one of those: it is the model
 # failing the format it was asked for, so it stays in the model's cost and
 # time. Written down here, once, so `provenance` sums what this file decided
@@ -2056,26 +2056,26 @@ def reasoned(raw: str) -> bool:
 OUTCOME_ANSWER = "answer"    # its payload was returned: the answering attempt
 OUTCOME_REPAIR = "repair"    # did not parse, asked again with the fault quoted
 OUTCOME_FAILED = "failed"    # did not parse, and the unit of work gave up
-OUTCOME_CEILING = "ceiling"  # cut at an output ceiling and refused (668, 680)
+OUTCOME_CEILING = "ceiling"  # cut at an output ceiling and refused
 # Charged to the model: the answer, and the model's own format failures.
 MODEL_OUTCOMES = frozenset({OUTCOME_ANSWER, OUTCOME_REPAIR, OUTCOME_FAILED})
-# Not ruled: a runaway cut at the ceiling is the model's generation, and 680
-# says the cell is excluded from scoring either way. 678 names neither.
+# Not ruled: a runaway cut at the ceiling is the model's generation, but
+# the cell is excluded from scoring either way; neither rule names it.
 UNRULED_OUTCOMES = frozenset({OUTCOME_CEILING})
 
-# A discarded call's `kind`, and how 678 counts it (`counted_as`).
+# A discarded call's `kind`, and how it is counted (`counted_as`).
 EXCLUDED = "excluded"
 UNRULED = "unruled"
 DISCARD_BLANK = "blank"            # EmptyBody, or empty content with no named reason
 DISCARD_PLATFORM = "platform"      # the transport or the command failed, or a rung was refused
-DISCARD_CANCELLED = "cancelled"    # the run was cancelled with the call in flight (639)
+DISCARD_CANCELLED = "cancelled"    # the run was cancelled with the call in flight
 DISCARD_BLANK_LENGTH = "blank_length"    # empty content, finish_reason "length"
 DISCARD_BLANK_REFUSAL = "blank_refusal"  # empty content, finish_reason "content_filter"
 DISCARD_KINDS = {
     DISCARD_BLANK: EXCLUDED,
     DISCARD_PLATFORM: EXCLUDED,
     DISCARD_CANCELLED: EXCLUDED,
-    # Both are empty responses, which 678 excludes, and both are arguably the
+    # Both are empty responses, excluded from scoring, and both are arguably the
     # model's own: a budget spent reasoning into the wall, a safety refusal.
     # Neither is guessed at; both wait for the operator's ruling.
     DISCARD_BLANK_LENGTH: UNRULED,
@@ -2103,7 +2103,7 @@ def blank_kind(envelope: dict | None) -> str:
 
 
 def call_timing(response, paced: float) -> dict:
-    """A live call's time, split the way the report charges it (681).
+    """A live call's time, split the way the report charges it.
 
       `attempts`             transport attempts, retries included
       `answer_ms`            the attempt that returned this body, alone

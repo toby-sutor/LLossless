@@ -85,8 +85,8 @@ server. Every route that reaches a job goes through that one function: the
 status, the report, the merged document, the deletion and the event stream.
 
 And one that is not optional anywhere: **every response carrying a report goes
-through `redact`**. See that module; DECISIONS 459 left it open and this is the
-call site that closes it.
+through `redact`**. See that module; a gap in what it redacts was left open, and
+this call site closes it.
 
 **No route returns a key, including the ones that set them.** `/settings/keys`
 answers with a variable name, a boolean and four characters; `PUT` and `DELETE`
@@ -170,8 +170,8 @@ SETTINGS_FIELDS = {
     "verify_depth": "LLOSSLESS_VERIFY_DEPTH",
     "title_policy": "LLOSSLESS_TITLE_POLICY",
     "loss_budget": "LLOSSLESS_LOSS_BUDGET",
-    # The context window the submitter states for a typed model id, in tokens
-    # (604). A number, bounded by `jobs.stated_window_refusal`.
+    # The context window the submitter states for a typed model id, in tokens.
+    # A number, bounded by `jobs.stated_window_refusal`.
     "window": "LLOSSLESS_WINDOW",
 }
 # `endpoint` is not a setting and is not on `REQUEST_SETTABLE`: it names one of
@@ -184,7 +184,7 @@ SETTINGS_FIELDS = {
 # the server. A request never carries a command: that is the whole of
 # `web/commands.py`, and `jobs.REQUEST_SETTABLE` states the same rule from the
 # other side by not holding `LLOSSLESS_COMMAND`.
-# `effort` is the merge's effort level on a command route (613), and it is not
+# `effort` is the merge's effort level on a command route, and it is not
 # a setting for `command_route`'s reason: it is valid only beside a route that
 # can carry it, which `jobs.route_plan` checks against the operator's file.
 SUBMIT_FIELDS = frozenset({"documents", "base", "endpoint", "command_route",
@@ -416,7 +416,7 @@ def check_host(headers) -> None:
 def presented_token(headers) -> str:
     """The `X-LLossless-Token` header's value, or ``.
 
-    The pre-rename `X-Claimcheck-Token` was read too until 651 and is ignored
+    The pre-rename header name was read too until the rename completed and is ignored
     now, as any other unknown header is.
     """
     return header(headers, credentials.TOKEN_HEADER)
@@ -804,7 +804,7 @@ def fidelity_levels() -> list[dict]:
     """Every level, in `config.FIDELITY_LEVELS` order, described for a person.
 
     **This used to serve the prompt fragment's opening paragraph, and that was
-    the defect** (550). The argument for it was that the sentence shown to the
+    the defect.** The argument for it was that the sentence shown to the
     operator and the sentence shown to the model should be one sentence, so a
     level whose rules changed could not go on being described by a summary
     somebody wrote once. The argument is sound about drift and wrong about
@@ -843,11 +843,11 @@ def fidelity_levels() -> list[dict]:
         "value": level,
         "name": config.fidelity_name(level),
         "default": level == config.DEFAULT_FIDELITY,
-        # The level that asks the model to look facts up (548), flagged so the
-        # page's effort card can say what it says about it (613) without
+        # The level that asks the model to look facts up, flagged so the
+        # page's effort card can say what it says about it without
         # learning the level's name.
         "retrieves": level == config.SOURCED,
-        # Whether this level lets the merge declare an addition at all (716):
+        # Whether this level lets the merge declare an addition at all:
         # `merge.ADDS`, the same flag `merge_schema` reads to decide whether a
         # model at this level is even handed the field. The page's checks
         # tile reads this to tell "this level does not ask for that" apart
@@ -880,12 +880,12 @@ def verify_depths() -> list[dict]:
     when the cheaper depth is picked, for the source count actually loaded
     rather than for an assumed two. `exact` says whether their sum is the
     run's cost or its lower bound -- `full` batches its two verify steps, 25
-    claims a call over HTTP and 100 through a command, so there it is a floor
-    (505) -- and the page renders the two cases in different words. See
+    claims a call over HTTP and 100 through a command, so there it is a floor,
+    and the page renders the two cases in different words. See
     `config.merge_model_calls` for why no dollar figure is offered beside it.
 
     What is deliberately *not* on these rows is any detection figure. One is
-    published now (585): the 2026-09-24 re-run measured what the cheap depth
+    published now: the 2026-09-24 re-run measured what the cheap depth
     costs in detection, and it is served beside the rows as
     `verify_depth.quality_delta`, the catalogue's `verify_depth` block as
     `catalogue.load` validated it -- split by probe direction, with the class
@@ -993,7 +993,7 @@ class Api:
     keys: object = None
     # The account store, and `None` is a configuration rather than a missing
     # value: it means *this server has no accounts at all*, which is the
-    # single-tenant arrangement 467 describes and is what a library caller
+    # single-tenant arrangement, and is what a library caller
     # embedding `build` gets unless it asks for more. `server.serve` -- the
     # command an operator actually runs -- always supplies one, so the mode
     # below with no identity in it is not reachable from the command line.
@@ -1123,7 +1123,7 @@ class Api:
         """The `Host` check, when and only when this server bound loopback.
 
         The discriminator changed with this milestone and the change is the
-        honest one. 461 switched the check off whenever a *token* was
+        honest one. An earlier change switched the check off whenever a *token* was
         configured, because a deployment reached over a network is reached by
         some name and every such name fails the loopback test -- true, but it
         tied a transport question to whether a secret happened to be set, so a
@@ -1150,7 +1150,7 @@ class Api:
         Four arrangements, in the order they are decided, and each is a
         configuration rather than a fallback:
 
-          no account store      461's server. The token if one is configured,
+          no account store      the base server. The token if one is configured,
                                 the `Host` check as the transport guard, and
                                 no identity -- everybody who gets in is the
                                 same person. `server.build` gives this to a
@@ -1323,7 +1323,7 @@ class Api:
             return Response(200, dump(self.health(who) if parts[0] == "health"
                                       else self.config(who)))
         if parts == ("defaults",):
-            # The caller's saved run settings (674). Their own and nobody
+            # The caller's saved run settings. Their own and nobody
             # else's: the file is named by `who`, never by the request.
             if method == "GET":
                 return Response(200, dump(self.get_defaults(who)))
@@ -1383,12 +1383,12 @@ class Api:
                 return self.delete(parts[1], who)
             raise self._wrong_method(method, "GET, DELETE")
         if len(parts) == 3 and parts[0] == "runs" and parts[2] == "cancel":
-            # A POST under a run (639): cancel it.
+            # A POST under a run: cancel it.
             if method != "POST":
                 raise self._wrong_method(method, "POST")
             return self.cancel(parts[1], who)
         if len(parts) == 3 and parts[0] == "runs" and parts[2] == "retry":
-            # The other (660): start a new run from this one's documents.
+            # The other: start a new run from this one's documents.
             if method != "POST":
                 raise self._wrong_method(method, "POST")
             return self.retry(parts[1], who)
@@ -1819,11 +1819,11 @@ class Api:
                 # Stated as a field rather than left for the page to know, and
                 # read by `renderDepthDelta` rather than mirrored in a static
                 # sentence: a served field no surface reads is one that can go
-                # out of step with the page in silence (540).
+                # out of step with the page in silence.
                 #
                 # The catalogue's `verify_depth` block, which `catalogue.load`
-                # has already validated with its run, artefacts and derived_by
-                # (585): the 2026-09-24 re-run, K = 1, one model, 13 fixtures,
+                # has already validated with its run, artefacts and derived_by:
+                # the 2026-09-24 re-run, K = 1, one model, 13 fixtures,
                 # with the comparator's registered conditions met. Served
                 # whole, like the catalogue itself, so the page renders the
                 # figures the loader checked rather than a copy of them.
@@ -1855,7 +1855,7 @@ class Api:
                 "max_documents": merge.MAX_SOURCES,
                 "max_body_bytes": MAX_BODY_BYTES,
                 "max_label": LABEL_MAX,
-                # The bounds on a stated window (604), so the page refuses
+                # The bounds on a stated window, so the page refuses
                 # the figure the server would refuse, in the same terms.
                 "min_window": STATED_WINDOW_MIN,
                 "max_window": STATED_WINDOW_MAX,
@@ -1875,7 +1875,7 @@ class Api:
                     self.store.retention_seconds),
             },
             # Which settings a `POST /runs` body may carry, for a client
-            # that is not this page (546). Deliberately unread by `app.js`:
+            # that is not this page. Deliberately unread by `app.js`:
             # this page knows its own form and would learn nothing from being
             # told, and a control built from this list would be a control with
             # no label and no explanation. It is here because `/api/v1/` is
@@ -1886,7 +1886,7 @@ class Api:
             "settable": sorted(SETTINGS_FIELDS),
             # The command routes this operator configured, **by id and label
             # and never by command**. A command is a local path as often as
-            # not, and `internal/tests/scan_release.py` scans the published set
+            # not, and the release scan checks the published set
             # for exactly that shape; there is no route on this server that
             # returns the string, and `tests/test_web_commands.py` asserts it
             # is absent from this payload, from a report and from the HTML
@@ -1897,8 +1897,8 @@ class Api:
             # all, which is the right thing for a capability that runs a
             # program.
             "commands": {
-                # Each route's merge effort levels and default come with it
-                # (613); the default reads this server's own
+                # Each route's merge effort levels and default come with it;
+                # the default reads this server's own
                 # `LLOSSLESS_EFFORT*`, so it is what a request naming no level
                 # gets.
                 "routes": self.routes.describe(self._effort_chosen()),
@@ -1913,8 +1913,8 @@ class Api:
                 # table in `commands.KNOWN_TOOLS`. Four facts per row and
                 # **never the resolved path**: that is an absolute path under
                 # whichever account the server runs as, which is the shape
-                # `internal/tests/scan_release.py` refuses and the one that
-                # already caught this feature once (522).
+                # the release scan refuses and the one that
+                # already caught this feature once.
                 #
                 # Served to every reader rather than to the operator alone.
                 # Which CLIs exist on a machine everybody here already sends
@@ -2023,7 +2023,7 @@ class Api:
                 # page has no vocabulary for it.
                 "kind": discover.kind_of(row["base_url"]),
                 # Whether a model the catalogue does not know needs its window
-                # stated to run here (604): true for a vendor, which cannot
+                # stated to run here: true for a vendor, which cannot
                 # report one, unless this server states one for every role.
                 # The page makes its "Context window" field required on it,
                 # and `endpoint_plan` refuses on the same predicate.
@@ -2040,7 +2040,7 @@ class Api:
             "default_kind": discover.kind_of(settings.base_url),
         }
 
-    # -- saved defaults (674) --------------------------------------------
+    # -- saved defaults ----------------------------------------------------
 
     def offer(self, who=None) -> defaults.Offer:
         """What this server offers this caller now, for checking saved defaults.
@@ -2184,7 +2184,7 @@ class Api:
         at. What is never reported is a value, and there is no route here that
         takes a variable name and answers anything about it.
         """
-        # Each row with the address the page may offer for it (676): the
+        # Each row with the address the page may offer for it: the
         # provider's well-known one, or an example for the field's
         # placeholder. An offer, not a setting -- `base_url` and
         # `endpoint_configured` still say only what is stored.
@@ -2400,7 +2400,7 @@ class Api:
         """The same, and a refusal for a key with no address of its own.
 
         **A member must configure their own endpoint before they may store a
-        key against it**, and the refusal is 469's rule rather than a
+        key against it**, and the refusal is a routing rule rather than a
         permission. A key with no recorded address is a key that goes to
         whichever address is in effect -- the operator's shared one, or the
         server's own default -- and that is exactly the pairing
@@ -2460,7 +2460,7 @@ class Api:
         if who is not None and not who.operator:
             # A user's keys do not go into any environment, which is the whole
             # of what makes this multi-tenant: `os.environ` is per process and
-            # a second user's key in it is the arrangement 467 described. They
+            # a second user's key in it is exactly the arrangement this rules out. They
             # are read out of their file at the moment a job runs and handed to
             # `config.keys_for_this_run`, which is per thread.
             return
@@ -2483,8 +2483,8 @@ class Api:
         """Is this job this account's? One expression, and every route uses it.
 
         On a server with no account store both sides are ``, so everything
-        belongs to everybody -- which is 467's single-tenant server, stated
-        rather than implied.
+        belongs to everybody: the single-tenant server stated rather than
+        implied.
         """
         return getattr(job, "owner", "") == (who.id if who is not None else "")
 
@@ -2558,7 +2558,7 @@ class Api:
         """
         payload = job.status()
         payload["expires_in"] = self.store.forgets_in(job)
-        # Where a queued run stands (660): "position 2 of 3". The queue is
+        # Where a queued run stands: "position 2 of 3". The queue is
         # every account's, since the workers are, so this is a count of other
         # people's runs and nothing else about them. None when not queued.
         place = self.store.queue_position(job)
@@ -2595,7 +2595,7 @@ class Api:
             # `MergeRequest` deliberately has no access to.
             raise ApiError(400, "bad_command_route", str(exc)) from None
         except EffortRefused as exc:
-            # The route exists and cannot carry the level (613), found only
+            # The route exists and cannot carry the level, found only
             # once the operator's file is read. The field's own code, for the
             # reason `bad_command_route` has one.
             raise ApiError(400, "bad_effort", str(exc)) from None
@@ -2625,7 +2625,7 @@ class Api:
         return Response(204, b"", content_type=JSON_TYPE)
 
     def cancel(self, job_id: str, who=None) -> Response:
-        """Cancel a run: 202 and its status, for its submitter or the operator (639).
+        """Cancel a run: 202 and its status, for its submitter or the operator.
 
         **Who.** The submitter, by `_owns`, or an operator (`who.operator`),
         who is the person paying for the endpoints everybody shares and so the
@@ -2655,7 +2655,7 @@ class Api:
         return Response(202, dump(self._with_expiry(job)))
 
     def retry(self, job_id: str, who=None) -> Response:
-        """Start a new run from a failed or interrupted one's documents (660).
+        """Start a new run from a failed or interrupted one's documents.
 
         202, the new run's status and its `Location`, exactly as `submit`
         answers -- it is a submit, of the documents and settings the old run
@@ -2801,8 +2801,8 @@ class Api:
         members: list[tuple[str, str]] = []
         # The sources as submitted, under the labels the operator gave them --
         # the same labels the report's own tables name, so a reader can line
-        # the two up. Read from the job's request, which since 660 is itself
-        # read back from the job's `sources.json` after a restart.
+        # the two up. Read from the job's request, which after a restart is
+        # itself read back from the job's `sources.json`.
         taken: set[str] = set()
         for label, text in (job.request.documents or {}).items():
             name = _zip_name(label)

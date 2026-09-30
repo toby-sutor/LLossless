@@ -168,9 +168,9 @@ def _unterminated(text: str, start: int, closer: str, depth: int, in_string: boo
     both as "the response was probably cut off", which sends the reader to
     max_tokens. That is right for exactly one of them.
 
-    `tests/eval/m4-tier-latch/failures/20260808T172542Z-verify-001.txt` is the
-    other. It is a complete document -- `finish_reason: "stop"`, six braces
-    against six, ending on its own `}` -- and it reads
+    A complete document is the other, and one was recorded on a real run: it
+    has `finish_reason: "stop"`, six braces against six, ending on its own
+    `}` -- and it reads
     `"claim\\n },\\n {\\n "claim_id": ...`: a string opened and left unclosed at a
     raw newline. Every quote after it is read with inverted parity, three
     closing braces are swallowed as string content, and the scan runs off the
@@ -293,7 +293,7 @@ def validate(value: object, schema: dict, path: str = "$") -> list[str]:
 # Step 6: semantic checks the schema cannot express
 # --------------------------------------------------------------------------
 
-# M7 task 24 added PARTIAL, last because that is where both verify prompts list
+# PARTIAL was added last, because that is where both verify prompts list
 # it. It is the label for a claim the reference text states part of and does not
 # contradict the rest of, and it exists because the two places it could have
 # been folded into are both wrong in a way that matters. Folded into MISSING it
@@ -304,9 +304,9 @@ def validate(value: object, schema: dict, path: str = "$") -> list[str]:
 VERDICTS = ("SUPPORTED", "CONTRADICTED", "MISSING", "PARTIAL")
 
 # The fifth label, and it exists at one fidelity level only. `high` may combine
-# complementary facts into a statement neither document makes on its own
-# (Brief DS), and the reverse pass needs a way to say "no single source states
-# this and the sources state it together" that is neither SUPPORTED -- which
+# complementary facts into a statement neither document makes on its own, and
+# the reverse pass needs a way to say "no single source states this and the
+# sources state it together" that is neither SUPPORTED -- which
 # would claim one span carries it -- nor MISSING, which would call a licensed
 # combination an invention.
 #
@@ -335,7 +335,7 @@ DERIVED = "DERIVED"
 # Written as membership so the next level joins by being named here, and
 # asserted below against `FIDELITY_LEVELS` so a level that is *not* named is a
 # deliberate omission rather than a forgotten one. `sourced` is named because
-# it keeps every licence `open` has, joint derivation included (548); what it
+# it keeps every licence `open` has, joint derivation included; what it
 # changes is where a *declared* statement came from, which is a question about
 # `additions` and not about this label set.
 DERIVES = frozenset({"high", "open", "sourced"})
@@ -384,7 +384,7 @@ EVIDENCED = ("SUPPORTED", "CONTRADICTED", "PARTIAL")
 
 # How long a rationale may be. Must match the number both verify prompts state.
 #
-# The M3 corpus is what put a truncation check here. Three of 240 recorded
+# An earlier corpus is what put a truncation check here. Three of 240 recorded
 # rationales sat exactly at the cap, all the same probe, all cut mid-sentence,
 # and all of them spent the budget arguing away from the label they had already
 # filed. Raising the cap was the obvious response and is not the one taken: a
@@ -395,7 +395,7 @@ EVIDENCED = ("SUPPORTED", "CONTRADICTED", "PARTIAL")
 # sentence is still unreadable — it just no longer costs a finding.
 RATIONALE_MAX = 400
 
-# M7. The merge's disposition contract, and the five values a departure can
+# The merge's disposition contract, and the five values a departure can
 # take. `retained` is deliberately not among them: silence *is* the claim of
 # verbatim retention, so a segment with no record is asserting that it survived
 # character for character, and a string comparison checks it. Adding `retained`
@@ -447,7 +447,7 @@ DISPOSITION_FIELDS = ("segment", "disposition", "replacement", "reason")
 DECISION_FIELDS = ("slot", "candidates", "chosen", "reason")
 
 # What the merge says about a statement it added from outside the documents.
-# `open` alone may emit these (481, 482), and the list is what buys the
+# `open` alone may emit these, and the list is what buys the
 # softer treatment: an addition the merge did not declare is a hallucination
 # by every test this tool has, and stays one.
 #
@@ -459,7 +459,7 @@ DECISION_FIELDS = ("slot", "candidates", "chosen", "reason")
 # they do not discuss corrects nothing, and forcing it to name a victim would
 # make it invent one. Where it is filled it quotes the document's own words,
 # so the record holds what was changed *from* beside what it was changed *to*
-# and a reader can see the swap without going back to the sources (537).
+# and a reader can see the swap without going back to the sources.
 #
 # `basis` and `source` are the pair that carries the operator's second ask --
 # *"provide sources when it replaces a statement"* -- and they are two fields
@@ -491,7 +491,7 @@ CITATION, OWN_KNOWLEDGE = BASES
 def decision_fields(may_choose: bool | None = None) -> tuple[str, ...]:
     """The decision fields a level must emit, in order. One source of truth.
 
-    383 made the schema and the emptiness check level-aware and left the
+    The schema and the emptiness check became level-aware, but left the
     field-order check demanding all four, so a model handed a schema saying
     `chosen` was optional had its record refused for omitting it -- at `off`,
     `low` and `mid`, which is nearly every merge. The lesson is not that a
@@ -511,10 +511,10 @@ CANDIDATE_FIELDS = ("text", "document")
 # on purpose: a rationale argues a label it might be wrong about, while a reason
 # names which of two wordings was taken. The prompt asks for one sentence.
 #
-# Cut from 200 by task 39, and the cut is the larger half of that task's budget
-# saving: the reason is charged twice per segment, once in `PER_DISPOSITION` and
-# once in `per_decision`, so 120 characters off each is 240 off every segment.
-# `DECISIONS.md` entry 15 has the arithmetic.
+# Cut from 200, which is the larger half of the resulting budget saving: the
+# reason is charged twice per segment, once in `PER_DISPOSITION` and once in
+# `per_decision`, so 120 characters off each is 240 off every segment, and
+# that arithmetic is what the cut was worth against the budget.
 #
 # The objection this overrules is that a shorter reason degrades the review
 # queue. It does not, because the reason is not what the reviewer reads: the
@@ -531,15 +531,15 @@ REASON_MAX = 80
 # reserve output for that. So a replacement longer than the cap is given as its
 # two ends -- the first and last `ANCHOR_HALF` characters, joined by `ELISION` --
 # which is enough for `reconcile` to resolve it against the merge and enough for
-# a reader to see which span is meant. `DECISIONS.md` entry 11.
+# a reader to see which span is meant.
 #
 # The figure is argued, not measured: no recorded run carries a replacement to
 # measure, because the report's `declarations` are the graded view and drop the
 # field. It is `REASON_MAX` plus room, on the reasoning that a replacement quotes
 # a sentence where a reason writes one, and quoting a whole sentence unelided
-# should be the ordinary case rather than the exception. Entry 14 records what
-# the cap is worth against the budget, which is less than entry 11 assumed.
-# How long the merge's mismatch warning may be (500). Its own cap, not
+# should be the ordinary case rather than the exception. What the cap is worth
+# against the budget turned out to be less than the earlier estimate assumed.
+# How long the merge's mismatch warning may be. Its own cap, not
 # `REASON_MAX`: that one is sized for "name the slot and the choice" in a
 # decision record, and reusing it here cut a real sentence dead at 80
 # characters -- *"...in different, non"* -- because a vendor enforcing
@@ -595,20 +595,20 @@ def unfinished(rationale: str) -> bool:
     cut-off rationale is how it ends: mid-word, or mid-clause, or anywhere that
     is not the end of a sentence.
 
-    Measured against the 240 recorded M3 rationales this fires on exactly the
-    three known-truncated ones and on nothing else, so the stricter rule costs
-    no false rejections on real output. Re-measured in task 40 across all three
-    bake-off arms, against 6,181 real reasons and rationales and 74,172
-    constructed cuts of them: 99.5% recall at a 0.1% false-positive rate, which
-    no candidate replacement beat on both axes. The nearest rival, "the last
-    word is not one the corpus uses", takes no false positives at all and finds
-    barely half the cuts — a cut lands on a word boundary often enough that
-    shape alone cannot see it. The predicate is right; where it is *asked* is
-    what moved — see `_cap_field`, which gates it on the field's cap for the
-    same reason `_check_reason` and `check_verdicts` used to: each field has
-    exactly one truncation path and it lands on the cap. Pass B (entry 190)
-    moved the call itself out of the semantic checks and into the pre-pass,
-    but not the gate.
+    Measured against 240 recorded rationales from an earlier corpus, this
+    fires on exactly the three known-truncated ones and on nothing else, so
+    the stricter rule costs no false rejections on real output. Measured
+    again later across all three bake-off arms, against 6,181 real reasons
+    and rationales and 74,172 constructed cuts of them: 99.5% recall at a
+    0.1% false-positive rate, which no candidate replacement beat on both
+    axes. The nearest rival, "the last word is not one the corpus uses",
+    takes no false positives at all and finds barely half the cuts — a cut
+    lands on a word boundary often enough that shape alone cannot see it.
+    The predicate is right; where it is *asked* is what moved — see
+    `_cap_field`, which gates it on the field's cap for the same reason
+    `_check_reason` and `check_verdicts` used to: each field has exactly one
+    truncation path and it lands on the cap. Pass B moved the call itself
+    out of the semantic checks and into the pre-pass, but not the gate.
 
     An empty rationale is not this function's business; it is a missing answer
     rather than an interrupted one.
@@ -643,7 +643,7 @@ class RepeatFault(str):
 # counted hundreds of times. That is why the place is part of the key: the
 # duplicate-claim check at the reconcile layer excludes same-line repeats for the
 # opposite reason and both are right, because they are asking about different
-# documents (`DECISIONS.md` entries 404, 415).
+# documents.
 #
 # ## The number, and the margin on both sides
 #
@@ -654,7 +654,7 @@ class RepeatFault(str):
 # the near-total concatenation the operator has confirmed correct, has nine
 # recorded decomposes across three models and reaches **1**. The degenerate
 # response this guard was written for reached **450**: 489 claims of which 41
-# were unique, one sentence 449 times on one line (entry 404).
+# were unique, one sentence 449 times on one line.
 #
 # So the limit is set at 8: four times the worst honest observation, and a
 # fifty-sixth of the defect. It is deliberately not the midpoint of 2 and 450 --
@@ -669,7 +669,7 @@ CLAIM_REPEAT_LIMIT = 8
 
 
 def not_an_object(payload: object, wanted: str = "") -> list[str]:
-    """The one complaint a response that is not a JSON object earns (554).
+    """The one complaint a response that is not a JSON object earns.
 
     Every semantic checker below reads its payload with `.get`, and a model
     that answers with a bare array -- an ordinary thing for a model to do --
@@ -750,7 +750,7 @@ def check_claims(payload: dict) -> list[str]:
 # A resolver: given the `slot` string a decision names, how many candidates the
 # source documents offered for it -- or None where that cannot be determined
 # from the documents, which is not the same answer and must not be rounded to
-# one. `merge.available_candidates` builds one; see `DECISIONS.md` entry 23.
+# one. `merge.available_candidates` builds one.
 AvailableCandidates = Callable[[str], int | None]
 
 
@@ -791,7 +791,7 @@ def check_merge(payload: dict, available: AvailableCandidates | None = None,
     table showing 0/81 dropped facts is indistinguishable from a merge model
     that answered with "".
 
-    M7 gave the merge two record lists as well, `open` later added a third,
+    An earlier version gave the merge two record lists as well, `open` added a third,
     and this function checks their *shape* and nothing else. **Where the line falls matters, because everything
     said here is fed back verbatim on retry and is therefore a prompt.** A
     replacement that does not resolve in the merged document, a segment id that
@@ -877,10 +877,10 @@ def check_merge(payload: dict, available: AvailableCandidates | None = None,
             errors.append(f"{at}.slot is empty; name what was being chosen")
         # `chosen` is required where the level may choose and optional where it
         # may not. At `off`, `low` and `mid` the merge is forbidden to pick a
-        # winner (382), so a decision record there is how a disagreement gets
+        # winner, so a decision record there is how a disagreement gets
         # recorded *without* one -- the slot and the candidates, and nothing
         # taken. Demanding `chosen` at those levels would make the only record
-        # of a conflict impossible to emit, which is the gap 383 closes.
+        # of a conflict impossible to emit, which is the gap this function closes.
         # `None` means the level was not threaded here, and then the strict
         # reading applies: a record with no choice is a record of nothing.
         if may_choose is not False and not str(record.get("chosen", "")).strip():
@@ -895,9 +895,9 @@ def check_merge(payload: dict, available: AvailableCandidates | None = None,
         # documents, and until `available` existed this function had no way to
         # read them -- so it charged the model whenever the count was short,
         # including when the sources offered exactly one. That was the dominant
-        # attrition cause in task 40's Phase C: five decisions rejected, four of
-        # them on slots where a second candidate did not exist to be named.
-        # `DECISIONS.md` entry 23.
+        # attrition cause measured in one earlier run: five decisions rejected,
+        # four of them on slots where a second candidate did not exist to be
+        # named, exactly the false rejections `available` exists to prevent.
         #
         # Zero is still always an error: a decision that names nothing chose
         # nothing, whatever the documents held.
@@ -924,7 +924,7 @@ def check_merge(payload: dict, available: AvailableCandidates | None = None,
 
         errors += _check_reason(record, at)
 
-    # A third list, and only at a level whose schema offers the key (482). At
+    # A third list, and only at a level whose schema offers the key. At
     # every other level `additions` is absent and this loop does not run, which
     # is why nothing here tests the fidelity: the schema has already decided
     # whether the model was allowed to speak, and a payload carrying the key
@@ -968,8 +968,8 @@ def _check_reason(record: dict, at: str) -> list[str]:
     `parsing.parse`'s pre-pass (`_truncate_capped_fields`), which runs before
     this function ever sees the record: a `reason` this function reads has
     already been capped to `REASON_MAX` if it needed to be, and the
-    mid-sentence case is now a `Truncation`, not a defect. `DECISIONS.md`
-    entry 190.
+    mid-sentence case is now a `Truncation`, not a defect, so a response is
+    never rejected for a fault this pass already fixed.
     """
     reason = str(record.get("reason", "")).strip()
     if not reason:
@@ -978,7 +978,7 @@ def _check_reason(record: dict, at: str) -> list[str]:
 
 
 def _check_basis(record: dict, at: str) -> list[str]:
-    """`basis` and `source`, and the dependency between them (537).
+    """`basis` and `source`, and the dependency between them.
 
     Shape, like everything else this file checks. Whether a cited source says
     what the record claims it says is unanswerable here and unanswerable
@@ -1111,7 +1111,7 @@ def verdict_defects(
     flattening of this and is what the repair loop still uses, so nothing about
     what gets sent back to a model changes here.
 
-    The pairing is what Pass C reads (`DECISIONS.md` entry 194). A defect with
+    The pairing is what Pass C reads. A defect with
     an index is a fault in one record and says nothing about the other records
     in the batch; a defect with `None` is a fault in the answer as a whole, and
     no subset of it can be trusted. Deriving that split here, from the check
@@ -1134,7 +1134,7 @@ def verdict_defects(
     """
     if not isinstance(payload, dict):
         # Response-level, so `None`: there is no record to blame a payload
-        # that has no records for Pass C to salvage around (554).
+        # that has no records for Pass C to salvage around.
         return [(None, message) for message in not_an_object(payload, "verdicts")], set()
     defects: list[tuple[int | None, str]] = []
     seen: dict[str, int] = {}
@@ -1200,7 +1200,7 @@ def _check_evidence(
     the unfused one keeps them under `$.verdicts[i]`. The rules do not differ
     by which list a record arrived in, and the one thing that must never
     differ is *which* rules ran: `check_coverage` reached this function through
-    nothing at all until entry 505, so a coverage run graded an unattributed
+    nothing at all until a later fix, so a coverage run graded an unattributed
     span as grounded and a `full` run over the same reply called it an
     attribution error. Parameterising the path is what makes one
     implementation serve both; a second copy would be a second answer.
@@ -1338,7 +1338,7 @@ def _truncate_capped_fields(payload: dict) -> list[Truncation]:
     if not isinstance(payload, dict):
         # A response that is not an object at all, which is the widest case of
         # the shape this pass is already silent about. Nothing here can be
-        # capped and the fault is `parse`'s to report (554).
+        # capped and the fault is `parse`'s to report.
         return []
     truncations: list[Truncation] = []
     for i, record in enumerate(payload.get("dispositions") or []):
@@ -1374,7 +1374,7 @@ def _truncate_capped_fields(payload: dict) -> list[Truncation]:
         # `source` is capped here for the reason every other free-text field
         # is: a vendor enforcing `maxLength` during constrained decoding cuts
         # mid-word in silence, and a half URL that nobody said was cut reads
-        # as a source the tool mangled rather than one the model overran (500).
+        # as a source the tool mangled rather than one the model overran.
         capped = _cap_field(record, "source", SOURCE_MAX, at)
         if capped is not None:
             truncations.append(capped)
@@ -1382,7 +1382,7 @@ def _truncate_capped_fields(payload: dict) -> list[Truncation]:
         if capped is not None:
             truncations.append(capped)
     # The merge's mismatch warning, capped and declared rather than clipped in
-    # silence (500). A vendor enforcing `maxLength` cuts mid-word and hands
+    # silence. A vendor enforcing `maxLength` cuts mid-word and hands
     # back a sentence that reads as a fault in the tool; cutting it here logs
     # a `Truncation` the report can show, and the schema's larger cap now
     # makes reaching it unlikely rather than routine.
@@ -1401,7 +1401,7 @@ def _truncate_capped_fields(payload: dict) -> list[Truncation]:
     # because one record carries both halves. Reaching them from here rather
     # than from a second pre-pass is the point: a field with a `maxLength` in
     # the schema and no cap here is a field a vendor clips mid-word in silence,
-    # and that has already happened once (500).
+    # and that has already happened once.
     for i, record in enumerate(payload.get("claims") or []):
         if not isinstance(record, dict) or "rationale" not in record:
             continue
@@ -1439,9 +1439,9 @@ def parse(text: str, schema: dict, semantic=None, *,
     `truncations` is a record of every field `_truncate_capped_fields` had to
     shorten before validation ran, in payload order. It is never a defect: a
     length violation stops being fatal here, which is the whole point of
-    Pass B (`DECISIONS.md` entry 190) — the document, and the record naming
-    it, both survive; only the field that overran its cap is capped and
-    logged. Empty on a response that needed no capping.
+    Pass B — the document, and the record naming it, both survive; only
+    the field that overran its cap is capped and logged. Empty on a
+    response that needed no capping.
 
     Under `field_order="any"` an order fault is not a fault: the message is
     dropped before anything is counted, so a record whose keys are shuffled and
@@ -1454,7 +1454,7 @@ def parse(text: str, schema: dict, semantic=None, *,
         return forgiven(found, field_order)
 
     payload = loads(text)
-    # A response that is not a JSON object at all stops here (554). Everything
+    # A response that is not a JSON object at all stops here. Everything
     # below reads the payload with `.get` -- the capping pre-pass first, then
     # the schema walk's property loop, then the semantic checker -- so a model
     # that answered with a bare array used to leave this function as an

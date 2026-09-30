@@ -2,7 +2,7 @@
 
 Every prompt is loaded from prompts/*.md and hashed. The hash goes in the
 report, so a run can be reproduced and a prompt tweak is visible rather than
-silent. It is also what makes the M5 verdict cache correct: change the prompt,
+silent. It is also what makes the verdict cache correct: change the prompt,
 change the hash, recompute.
 """
 
@@ -21,8 +21,8 @@ from pathlib import Path
 # this module wherever site-packages happens to be. This used to be
 # `parents[2] / "prompts"` alone, which in a wheel resolves to the directory
 # above site-packages and does not exist -- every command that loads a prompt
-# refused, and gate 3 did not notice because `--help` loads none of them
-# (pre-release review B1).
+# refused, and gate 3 did not notice because `--help` loads none of them,
+# a pre-release review finding.
 #
 # A checkout: `_prompts` is a build-time copy and is not in the source tree, so
 # the repository's own `prompts/` answers, unchanged. That ordering is
@@ -124,8 +124,8 @@ def load(name: str, directory: Path | None = None) -> Prompt:
         # Two different failures, and an operator can only act on one of them.
         # A missing file under a directory that exists is a prompt name that is
         # wrong. No directory at all is an install that shipped no prompts, and
-        # the message has to name every place that was looked in -- the whole
-        # of B1 was a refusal naming one path that told nobody why it was that
+        # the message has to name every place that was looked in: an earlier
+        # review finding was a refusal naming one path that told nobody why it was that
         # path.
         if base.is_dir():
             why = ""

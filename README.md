@@ -310,7 +310,7 @@ flowchart LR
 
 ## Lessons learned
 
-LLossless started in March 2026 as a question: when a large language model (LLM) merges two knowledge-base articles, what does it leave out? It was built in milestones, each ending in a written review, with every deliberate decision in a numbered log. A few of the things it taught:
+LLossless started in March 2026 as a question: when a large language model (LLM) merges two knowledge-base articles, what does it leave out? It was built in milestones, each ending in a written review. A few of the things it taught:
 
 - **Reading finds the loud errors, and a diff finds the quiet ones.** The answer key for a document with planted factual errors was first typed by reading two versions side by side; a word diff found about twice as many, the swapped words and decimal commas a model carries through unnoticed.
 - **A script can beat a model.** A mechanical union, one document plus every paragraph of the other that it does not already contain, deviated from the hand-written reference merges less than one frontier model's run did. So the benchmark scores it beside every model.
@@ -323,7 +323,7 @@ LLossless started in March 2026 as a question: when a large language model (LLM)
 
 LLossless is designed and maintained by [**Toby Sutor**](https://www.linkedin.com/in/tobysu/).
 
-It was built by one person working with AI coding agents. The code, tests and documentation were written by Claude, through Claude Code, under the author's direction: the author set the goals and the quality bar, made the rulings recorded in the decision log, reviewed the results, and caught much of what the agents missed. This is stated openly because it bears on what the tool is for: a tool built on the rule that a language model's output must be checked, not trusted, was itself built by checking a language model's output, and several of the lessons above come from doing that.
+It was built by one person working with AI coding agents. The code, tests and documentation were written by Claude, through Claude Code, under the author's direction: the author set the goals and the quality bar, made the design rulings, reviewed the results, and caught much of what the agents missed. This is stated openly because it bears on what the tool is for: a tool built on the rule that a language model's output must be checked, not trusted, was itself built by checking a language model's output, and several of the lessons above come from doing that.
 
 ## Status and contributing
 
@@ -335,7 +335,7 @@ Elastic-2.0, the Elastic License 2.0, with the text in `LICENSE`. It is source-a
 
 If you are interested in a commercial licence that allows hosted or managed services, please contact the author directly.
 
-Five directories are excluded from this licence. The fixture corpora in `tests/pairs/`, the hand-written document pairs in `tests/handwritten/`, the raw model-study outputs in `arms/`, the graded run records in `paper/records/` and the annotated pages in `annotated/` are under Creative Commons Attribution 4.0 International, which permits commercial use. Each carries its own `LICENSE`, and that file governs its directory rather than this one. [How it works](docs/how-it-works.md#what-is-in-a-release) says how the licence text is pinned.
+Four directories are excluded from this licence. The fixture corpora in `tests/pairs/`, the hand-written document pairs in `tests/handwritten/`, the raw model-study outputs in `arms/` and the annotated pages in `annotated/` are under Creative Commons Attribution 4.0 International, which permits commercial use. Each carries its own `LICENSE`, and that file governs its directory rather than this one. [How it works](docs/how-it-works.md#licence) says where the licence text and the copyright notice live.
 
 ## Documentation
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the published arm bundle from a run directory, and gate it.
 
-Brief AY item 2. The three model-study arms ran on a rented pod; their raw
+The three model-study arms ran on a rented pod; their raw
 outputs lived only in the scratchpad, so the paper's model study was
 recomputable from the per-arm records but not readable at the level of what a
 model actually wrote. This copies those outputs into the repository.
@@ -12,16 +12,16 @@ Copying is the easy half. The gate is the point:
   calling in its first line of stderr, which is right for an operator at a
   terminal and wrong in a published file, and the window probe repeats it. 22
   of 267 files in the first build carried it. Every file is put through
-  `scripts/stream_redact.scrub`, which is the repository's one definition of
-  what a secret looks like (DECISIONS 91, 92) - not a second pattern written
-  here.
+  `scripts/stream_redact.scrub`, which is the repository's one
+  definition of what a secret looks like - not a second pattern
+  written here.
 * **The provider is in the run scripts, by name rather than by shape.** Both
   runners export an endpoint label built from the name of the company the pod
   was rented from. No address pattern can see that, the first build shipped it,
-  and the release scan caught it three commits later (DECISIONS 222). The
+  and the release scan caught it three commits later. The
   detector is `internal/tests/providers.py`, withheld because the literal cannot live in
   a published file, and imported here by name.
-* **A scan that has not fired on this input proves nothing** (DECISIONS 217).
+* **A scan that has not fired on this input proves nothing.**
   `--self-test` plants every leak class into a copy and requires the gate to
   refuse it, so a build that reports clean has been shown to be capable of
   reporting dirty.

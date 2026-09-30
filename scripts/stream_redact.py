@@ -1,10 +1,10 @@
 """Redact secrets from a runner's stdout and stderr, before the first line.
 
-DECISIONS 91: a bespoke runner put an endpoint address into a transcript
+A bespoke runner put an endpoint address into a transcript
 through an HTTP error's *traceback*, which no print site can redact after the
 fact. So the streams are wrapped at import, not at each call.
 
-DECISIONS 92: the credential classes are covered too. `.env` holds real paid-API
+The credential classes are covered too. `.env` holds real paid-API
 credentials and an exception carrying one is the same path the 404 took.
 
 Two sources, deliberately:

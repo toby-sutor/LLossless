@@ -1,6 +1,6 @@
 """Progress as structured events, for a browser watching a run it cannot hold open.
 
-A merge takes between 23 and 4,559 seconds, measured over `paper/records/*.json`.
+A merge takes between 23 and 4,559 seconds, measured over the graded run records (withheld with the paper).
 Nothing about that is compatible with a request/response cycle, so the web UI
 submits work and then watches it, and this module is the watching half: a
 `Console` subclass that records what the engine says instead of printing it, an
@@ -59,9 +59,9 @@ from ..console import Console
 from . import diagnose
 
 # Every kind an event can have, and where each one comes from. A registry
-# rather than a free string: W4 renders these into a page and W8 translates
-# them, and a kind invented at a call site is a kind with no renderer and no
-# translation, discovered by a reader who sees a blank row.
+# rather than a free string: `app.js` renders these into a page and `i18n`
+# translates them, and a kind invented at a call site is a kind with no
+# renderer and no translation, discovered by a reader who sees a blank row.
 #
 # The first eight are `Console`'s eight public methods, named after the method
 # rather than after what the method prints, so that a reader who has the
@@ -163,7 +163,7 @@ class Event:
 
     @classmethod
     def from_dict(cls, payload: dict) -> Event:
-        """The inverse of `as_dict`, for a log read back off disk (660).
+        """The inverse of `as_dict`, for a log read back off disk.
 
         Raises `ValueError`, `KeyError` or `TypeError` on anything that is not
         an event this module wrote; `EventLog.restore` decides what that means.
@@ -189,7 +189,7 @@ class EventLog:
     iteration, so a slow reader cannot stall a merge.
 
     `wait()` exists so that an SSE endpoint does not have to poll. Without it
-    W4's stream loop would sleep on a timer, which either wastes the wakeups or
+    the stream loop would sleep on a timer, which either wastes the wakeups or
     adds latency to every line the operator is watching for; with it, the
     endpoint blocks until the worker appends something or the timeout expires,
     and the timeout is then only a keep-alive interval rather than a polling
@@ -204,13 +204,13 @@ class EventLog:
         # already been delivered, and a browser holding that id would ask for
         # the tail after it and be told there was none. See `forget()`.
         #
-        # An argument since 660, for the same reason: a job reloaded after a
+        # An argument for the same reason: a job reloaded after a
         # restart carries on from the id its log had reached, so a browser that
         # held `Last-Event-ID: 57` across the restart is still answerable.
         self._next_id = max(1, int(next_id))
         self._condition = threading.Condition()
         self._closed = False
-        # Where each event is appended as it is emitted, or None (660). The
+        # Where each event is appended as it is emitted, or None. The
         # file is what a server restarted after a crash reads to say what a
         # run had done before the stop -- the only account of it that reached
         # disk, since the report is written on the way out and a killed
@@ -220,7 +220,7 @@ class EventLog:
 
     @property
     def next_id(self) -> int:
-        """The id the next event will get. Persisted with a tombstone (660)."""
+        """The id the next event will get. Persisted with a tombstone."""
         with self._condition:
             return self._next_id
 
@@ -474,19 +474,19 @@ class WebConsole(Console):
         never have to infer from an *absent* field.
 
         `retrieval` joins on those terms and for a sharper version of the same
-        reason (548). A run whose model was granted a web tool may put text
+        reason. A run whose model was granted a web tool may put text
         from these documents into a query or a fetch, and at `sourced` that
         grant is made automatically rather than by hand -- so the one thing it
         must not be is invisible. Sent whatever it is, and the page renders the
         empty case as a sentence rather than as a missing row.
 
         `roles` is this console's alone, and `jobs.banner_roles` says when it is
-        sent: when `model` and `endpoint` describe one role and not the run
-        (576). The terminal names split roles on lines of their own, which
+        sent: when `model` and `endpoint` describe one role and not the run.
+        The terminal names split roles on lines of their own, which
         `cli.main` prints, so `Console.banner` has no such argument.
 
         `effort` is the merge's effort level on a command run, read off the
-        argv the merge will execute (613): the page's slider chose it, or the
+        argv the merge will execute: the page's slider chose it, or the
         route's default did, and the header is where a person watching the run
         checks which. `None` for an HTTP run, which has no level. Like `roles`,
         this console's alone: the terminal prints the level in the Decoding
@@ -512,7 +512,7 @@ class WebConsole(Console):
 # SSE
 # --------------------------------------------------------------------------
 
-# The browser's reconnect delay, in milliseconds, if W4 chooses to state one.
+# The browser's reconnect delay, in milliseconds, if `app.js` chooses to state one.
 # Not sent by default: the EventSource default is 3 seconds, which is a
 # reasonable answer for a run that lasts an hour, and a value invented here
 # would be this module making a policy decision about a server it is not.

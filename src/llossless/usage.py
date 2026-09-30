@@ -19,7 +19,7 @@ unmeasured arm support opposite conclusions about cost.
 keeps the fields the metric needs and drops whatever a vendor invents next
 week. The provider's own block is already stored verbatim in every cassette's
 `response.raw`, so nothing here has to preserve it; this module is the reader,
-not the archive. See DECISIONS 138.
+not the archive.
 
 *No prices live in this codebase.* Tokens are a measurement and a price is a
 dated fact about a vendor's website. Cost is computed offline, in the paper
@@ -65,7 +65,7 @@ FIELDS: dict[str, tuple[tuple[str, ...], ...]] = {
 NAMES = tuple(FIELDS)
 
 # Whether the model reached the network on its own account, and how often.
-# Read, never asked for (537).
+# Read, never asked for.
 #
 # The distinction this exists to keep is the one the whole module is about. A
 # model that says it searched has made a claim; `server_tool_use` is a count
@@ -92,7 +92,7 @@ SERVER_TOOL_FIELDS: dict[str, tuple[tuple[str, ...], ...]] = {
 SERVER_TOOL_NAMES = tuple(SERVER_TOOL_FIELDS)
 
 # How many turns one call took, which is the one instrument that answers "did
-# the model use a tool" on a command backend (548).
+# the model use a tool" on a command backend.
 #
 # **`SERVER_TOOL_FIELDS` above is structurally blind to it and this is not.**
 # That block counts Anthropic's server-side web tools; the subscription CLI's
@@ -104,16 +104,16 @@ SERVER_TOOL_NAMES = tuple(SERVER_TOOL_FIELDS)
 # run that fetched a hundred pages.
 #
 # A tool call costs a round trip, so it costs a turn -- and a retrieval costs
-# two tool calls, not one (564). `WebFetch` is a *deferred* tool in this CLI:
+# two tool calls, not one. `WebFetch` is a *deferred* tool in this CLI:
 # traced through `--output-format stream-json`, one fetch is `ToolSearch`
 # loading its schema, then `WebFetch`, then the answer, and `num_turns` reads
-# 3. 548 recorded one fetch as 2 turns and that was wrong by one. A plain
+# 3, not the 2 an earlier reading assumed. A plain
 # answer measured 1 turn on every configuration tried here and 2 on the
-# operator's; a web search 4 to 6 (578). `MOST_TURNS_WITHOUT_RETRIEVAL` below
+# operator's; a web search 4 to 6. `MOST_TURNS_WITHOUT_RETRIEVAL` below
 # sits between the two readings of a plain answer and the lowest reading of a
 # retrieval, so it is right on both.
 #
-# **That was the shipped argv, and the isolation changed it (610).** Under
+# **That was the shipped argv, and the isolation changed it.** Under
 # `--safe-mode` with a `--tools` naming the web tools alone there is no
 # `ToolSearch` to load them through, so one fetch is 2 turns and one search is
 # 2 -- three draws each, the same session's shipped argv reading 3 and 3 --
@@ -179,10 +179,10 @@ def normalise(envelope: dict | None) -> dict[str, int] | None:
             break
     # A usage block carrying no *token* field is unmeasured, not measured-at-
     # nothing. This became reachable when `backend.envelope_for` started
-    # sending a block holding `server_tool_use` and nothing else (537): an
+    # sending a block holding `server_tool_use` and nothing else: an
     # empty dict here counts the call as measured, `Tokens.describe` then
     # prints "0 in, 0 out", and a run that reported no tokens reads as a run
-    # that consumed none. That is 480's inversion arriving through a new door,
+    # that consumed none. That is the same inversion arriving through a new door,
     # and the rule that closes it is the module's own.
     return counts or None
 
@@ -258,7 +258,7 @@ def answered_by(envelope: dict | None) -> dict | None:
 
 
 def served_model(envelope: dict | None) -> str | None:
-    """The HTTP response's own top-level `model` field, when it named one (B7, 680).
+    """The HTTP response's own top-level `model` field, when it named one.
 
     Kept apart from `answered_by` on purpose, and reading a different key
     than that function does -- not folded into it, and not read by it: a
@@ -291,8 +291,8 @@ SEARCH_STATES = (SEARCHED, NOT_SEARCHED, UNMEASURED)
 class Searches:
     """A run's account of whether the model went and looked anything up.
 
-    Three states, and the third is why this is a class rather than an int
-    (537):
+    Three states, and the third is why this is a class rather than an int,
+    not just a bool:
 
       searched     some call reported a non-zero count. The model reached the
                    network in its own process, which is where a real citation
@@ -382,12 +382,12 @@ class Searches:
 # The three states of the turn counter, written once, and deliberately not the
 # three above. `searched` is a count of web requests; this is a count of turns,
 # and giving the two one vocabulary is how a report ends up saying "searched"
-# about a number that cannot see a search (548).
+# about a number that cannot see a search.
 TOOL_USE = "tool-use"
 NO_TOOL_USE = "no-tool-use"
 TOOL_USE_STATES = (TOOL_USE, NO_TOOL_USE, UNMEASURED)
 
-# What a `sourced` run owes its reader about retrieval, in three words (568).
+# What a `sourced` run owes its reader about retrieval, in three words.
 # Not `TOOL_USE_STATES` renamed: the two disagree on a run where some calls
 # reported and some did not. `state` calls that run `no-tool-use` off the
 # calls that reported; this calls it `unmeasured`, because a call that did not
@@ -397,9 +397,9 @@ RETRIEVED = "retrieved"
 NOT_RETRIEVED = "not-retrieved"
 RETRIEVAL_STATES = (RETRIEVED, NOT_RETRIEVED, UNMEASURED)
 
-# The most turns a call can take without having retrieved anything (564).
+# The most turns a call can take without having retrieved anything.
 #
-# Was `TURNS_WITHOUT_TOOLS = 1`, from 548's measurement of one fetch as two
+# Was `TURNS_WITHOUT_TOOLS = 1`, from an earlier measurement of one fetch as two
 # turns, and that threshold overstated on every command-backend run: a call
 # that spent a turn and retrieved nothing -- a deferred tool loaded and never
 # called, or the second turn the operator's plain answers report -- counted as
@@ -415,14 +415,14 @@ RETRIEVAL_STATES = (RETRIEVED, NOT_RETRIEVED, UNMEASURED)
 MOST_TURNS_WITHOUT_RETRIEVAL = 2
 
 # The same floor for a call whose argv left the model no tool but the web tools
-# (610, `config.only_web_tools`). Nothing else can spend a turn there -- no
+# (`config.only_web_tools`). Nothing else can spend a turn there: no
 # `ToolSearch`, no hook, no other tool -- so the first turn past the answer is
 # a web tool call. Measured: a plain answer 1 turn, one fetch 2, one search 2.
 MOST_TURNS_WITHOUT_RETRIEVAL_WEB_ONLY = 1
 
 
 class Turns:
-    """A run's account of whether the model used a tool, read off `num_turns` (548).
+    """A run's account of whether the model used a tool, read off `num_turns`.
 
     `Searches`' sibling, and the two are kept apart on purpose. They answer the
     same question through different instruments and they disagree on this
@@ -433,7 +433,7 @@ class Turns:
 
       tool use     some call took more turns than a retrieval-free call can
                    (`MOST_TURNS_WITHOUT_RETRIEVAL`, or `..._WEB_ONLY` under
-                   the isolated argv, 610). The model called a tool and, with
+                   the isolated argv). The model called a tool and, with
                    retrieval as the only grant, retrieved.
       no tool use  no call that reported went past that floor. The model may
                    have spent a turn loading a tool, and fetched nothing, so
@@ -452,7 +452,7 @@ class Turns:
         self.calls = 0
         self.with_tools = 0
         self.unmeasured = 0
-        # The same tally per role, beside the run-wide one (665). At `sourced`
+        # The same tally per role, beside the run-wide one. At `sourced`
         # the grant is run-wide, so decompose and verify calls may retrieve
         # too -- measured on CLI 2.1.274, five of seven low-effort verify and
         # decompose calls of one voyager run took 2-5 turns -- and a run-wide
@@ -463,12 +463,12 @@ class Turns:
 
     def add(self, envelope: dict | None, *, web_only: bool = False,
             role: str | None = None) -> int | None:
-        """Tally one call. `web_only` is `config.only_web_tools` of its argv (610).
+        """Tally one call. `web_only` is `config.only_web_tools` of its argv.
 
         Per call rather than per run, because the floor is a property of the
         argv a call executed; the floors are read here, at call time, so both
         stay one name each. `role`, where the caller knows it, also files the
-        call under `roles[role]` (665).
+        call under `roles[role]`.
         """
         if role is not None:
             self.roles.setdefault(role, Turns()).add(envelope, web_only=web_only)
@@ -498,7 +498,7 @@ class Turns:
 
     @property
     def retrieval(self) -> str:
-        """`retrieved`, `not-retrieved` or `unmeasured` (568).
+        """`retrieved`, `not-retrieved` or `unmeasured`.
 
         Retrieved as soon as one call crossed the floor, whatever the others
         reported. Not retrieved only when **every** call reported and none
@@ -535,7 +535,7 @@ class Turns:
                     f"count)")
         if not self.with_tools:
             # The total rather than "one turn each", which stopped being true
-            # when the floor moved to two (564).
+            # when the floor moved to two.
             line = (f"no tool use ({self.calls} call(s), {self.total} turn(s) "
                     f"in total)")
         else:

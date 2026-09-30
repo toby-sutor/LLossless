@@ -147,7 +147,7 @@ const CONFLICT_KINDS = ["undeclared_rewording", "invented_segment",
 /**
  * The finding kinds with a section of their own, outside the partition above.
  *
- * `reconcile.MISATTRIBUTED` (572). It is deliberately not one of the
+ * `reconcile.MISATTRIBUTED`. It is deliberately not one of the
  * reconciler's `FINDING_KINDS` -- it reads no disposition record and is not
  * one of the nine checks -- and the report gives it an **Attributions**
  * section of its own on both commands. The page does the same rather than
@@ -157,7 +157,7 @@ const CONFLICT_KINDS = ["undeclared_rewording", "invented_segment",
  * `tests/test_web_static.py` holds this list to the engine's constant.
  */
 const ATTRIBUTION_KINDS = ["misattributed"];
-// The number format's five kinds (601, and a document against its language).
+// The number format's five kinds, and a document against its language.
 // Which of them moved the exit code is read from the report's own
 // `number_format.faults`, never restated here.
 const NUMBER_KINDS = ["other_convention", "readable_two_ways",
@@ -389,11 +389,11 @@ function associate(label, control) {
 /**
  * A number the way this page shows numbers: grouped, and never invented.
  *
- * In the page's own language, not the browser's (606). `toLocaleString`'s
+ * In the page's own language, not the browser's. `toLocaleString`'s
  * `undefined` locale reads the browser's configured language, which is
  * routinely not the one the page is rendering in -- a German reader on an
  * English-configured work laptop is the ordinary case LLossless's own
- * number-convention check (601, 602) exists to catch in a *document*, and the
+ * number-convention check exists to catch in a *document*, and the
  * German page showing "4,096" was the same defect in the tool itself. The
  * page's own tag (`locale.tag`, set from what the server actually served,
  * `loadLocale`) is the one this and every other number on the page must use;
@@ -480,11 +480,11 @@ function shorten(text, limit) {
  *   typed; sent as `window` only while an id is in charge. See `typedWindow`
  * @property {string} runId
  * @property {boolean} hasRun has a run been submitted, followed or replayed
- *   this page load (717)? Drives whether the Current run tab is offered as
+ *   this page load? Drives whether the Current run tab is offered as
  *   live or `aria-disabled`; `startOver` puts it back to false, matching the
  *   pane it empties.
  * @property {boolean} running
- * @property {boolean} cancelling a cancel was taken and the run has not landed (639)
+ * @property {boolean} cancelling a cancel was taken and the run has not landed
  * @property {EventSource|null} stream
  * @property {number} pollTimer
  * @property {number} tickTimer
@@ -508,20 +508,20 @@ function shorten(text, limit) {
  *   Set from `forgotten_at`, and by a 410 from any download -- which outranks
  *   the countdown, because a suspended tab's elapsed time under-counts
  * @property {string} effort the merge effort level the slider is set to, or
- *   "" before a subscription route that takes one has been picked (613)
+ *   "" before a subscription route that takes one has been picked
  * @property {string} effortRoute the route `effort` was set for, so picking
  *   another route starts from that route's own default
  * @property {number} retentionTimer the interval that re-renders the note
  * @property {number} historyTimer the next history refresh while a run in the
- *   list is queued or running, so a queue position moves without a reload (660)
+ *   list is queued or running, so a queue position moves without a reload
  * @property {string} retryId the followed run the Retry button would retry,
- *   or "" when it is hidden (660)
+ *   or "" when it is hidden
  * @property {Set<string>} notify runs the reader asked to be notified about,
- *   by id; filled only by a click on "Notify me" (660)
+ *   by id; filled only by a click on "Notify me"
  * @property {Set<string>} notified runs already notified, so a finish is
  *   announced once however many polls see it
  * @property {any} defaults the reader's saved settings as the server kept
- *   them, or null when there are none (674)
+ *   them, or null when there are none
  * @property {{field: string, value: string}[]} defaultsDropped saved values
  *   the server or this page could not use, each named in the notice
  * @property {string} defaultsProblem why the saved settings could not be read
@@ -561,7 +561,7 @@ const store = {
   // `refreshIdleStatus` refresh the idle label without stepping on the
   // running one.
   running: false,
-  // A cancel was asked for and the server took it (639): the status line
+  // A cancel was asked for and the server took it: the status line
   // says "cancelling" until the run lands, whatever the stream says.
   cancelling: false,
   stream: null,
@@ -586,7 +586,7 @@ const store = {
   retryId: "",
   notify: new Set(),
   notified: new Set(),
-  // The reader's saved settings (674), as the server kept them, or null when
+  // The reader's saved settings, as the server kept them, or null when
   // there are none. `defaultsDropped` is what the server or this page could
   // not use, as `{field, value}`; `defaultsProblem` is why they could not be
   // read at all. `defaultsApplied` holds them to one application per page:
@@ -627,7 +627,7 @@ async function getJson(path) {
  * A 204 is read to its end before it is answered, although it has no body.
  * Returning on the status alone left the response unread, and the browser
  * then cancelled it and reported the request as failed: sign-out's `DELETE`
- * showed as `net::ERR_ABORTED` after its 204 had arrived (649).
+ * showed as `net::ERR_ABORTED` after its 204 had arrived.
  * @param {string} method
  * @param {string} path
  * @param {any} payload
@@ -751,7 +751,7 @@ function removeDocument(index) {
 
 /**
  * The line under the panes: how many documents *have text*, not how many
- * panes are open (654). A fresh page has two empty panes and used to read
+ * panes are open. A fresh page has two empty panes and used to read
  * "2 documents added ... needs at least 2" over zero characters typed
  * anywhere -- a fact about the empty tabs, not about what the operator had
  * done. Its own function, called on every keystroke as well as on
@@ -839,7 +839,7 @@ function documentTab(doc, index) {
   const atFloor = store.docs.length <= minDocuments();
   close.setAttribute("aria-disabled", atFloor ? "true" : "false");
   // The reason reaches a screen reader through `refuse` once the press is
-  // made (654); this is the same sentence, reachable on hover before it is.
+  // made; this is the same sentence, reachable on hover before it is.
   if (atFloor) close.title = t("documents.refused.min", { min: minDocuments() });
   else close.removeAttribute("title");
   close.addEventListener("click", (event) => {
@@ -966,7 +966,7 @@ function looksBinary(text) {
  * dropping three files produced one document and no explanation. It also
  * wrote straight over whatever was in the pane.
  *
- * Three rules, and the reasons are in `internal/docs/DECISIONS.md` (559):
+ * Three rules:
  *
  * - **Nothing typed is ever written over.** Placement starts at the pane the
  *   files were dropped on and walks forward over any pane that already holds
@@ -1113,7 +1113,7 @@ function renderFidelity() {
     const span = document.createElement("span");
     setText(span, level.name);
     // Where its stop is, as a fraction of the track: the stylesheet puts the
-    // word under the thumb there (686).
+    // word under the thumb there.
     span.style.setProperty("--at", String(levels.length > 1 ? position / (levels.length - 1) : 0));
     if (position === index) span.classList.add("on");
     return span;
@@ -1122,14 +1122,14 @@ function renderFidelity() {
 
   const level = levels[index];
   // Three strings, three places, out of the catalogue and keyed by the value
-  // `/config` just gave us -- the same shape as `t("basis." + value)` (550).
+  // `/config` just gave us -- the same shape as `t("basis." + value)`.
   // The page holds no level vocabulary of its own: it does not know the word
   // `open`, and it never sees the prompt the model is given, which is where
   // this copy used to come from and why it read *"you are expected"* at a
   // person choosing a setting.
   const copy = (/** @type {string} */ part) =>
     level ? t("fidelity." + String(level.value) + "." + part) : "";
-  // One short line under the slider, one line high at every level (673); the
+  // One short line under the slider, one line high at every level; the
   // summary, what it buys and what it costs are in the Compare levels dialog
   // (`renderCompare`) and in the slider's `aria-valuetext` below.
   setText(el("fidelity-brief"), level ? t("brief.level." + String(level.value)) : "");
@@ -1144,7 +1144,7 @@ function renderFidelity() {
     if (!picked) return;
     store.fidelity = picked.value;
     renderFidelity();
-    // The effort card's one fidelity-dependent line (613).
+    // The effort card's one fidelity-dependent line.
     renderEffortCard();
   };
 }
@@ -1189,7 +1189,7 @@ function renderVerifyDepth() {
     const heading = document.createElement("span");
     heading.className = "stacked-title";
     const name = document.createElement("span");
-    // The depth's name and what it does, from the catalogue by value (643):
+    // The depth's name and what it does, from the catalogue by value:
     // `/config` serves both in English, and a German page rendered them as
     // served.
     setText(name, depthName(String(depth.value || "")));
@@ -1203,8 +1203,8 @@ function renderVerifyDepth() {
     heading.appendChild(cost);
     body.appendChild(heading);
     // One short line in the option, and the whole sentence behind a "?"
-    // beside it (673). The short line keeps what the option does not check
-    // in the option itself, for the reason the sentence was there (643).
+    // beside it. The short line keeps what the option does not check
+    // in the option itself, for the reason the sentence was there.
     const brief = document.createElement("span");
     brief.className = "stacked-brief";
     setText(brief, t("brief.depth." + String(depth.value || "")));
@@ -1226,7 +1226,7 @@ function renderVerifyDepth() {
 /**
  * What the cheap depth costs in detection, from the field rather than from here.
  *
- * `/config` has carried `verify_depth.quality_delta` since 504 and nothing read
+ * `/config` has carried `verify_depth.quality_delta` for a while and nothing read
  * it, while the paragraph under the picker was a static catalogue string. The
  * two could not disagree out loud: setting a measured delta on the server would
  * have left the page saying "unmeasured" and nothing would have gone red. A
@@ -1234,7 +1234,7 @@ function renderVerifyDepth() {
  *
  * The page still invents no figure. `unmeasured` selects the sentence that says
  * there is none. Anything else is the catalogue's `verify_depth` block, which
- * the server validated with its run, artefacts and derived_by (585), and every
+ * the server validated with its run, artefacts and derived_by, and every
  * number below is one of its fields, formatted by `figure` and put into a
  * sentence the catalogue owns. Nothing here adds, divides, rounds or compares a
  * figure: the block publishes the speedup rather than two timings, and the
@@ -1242,7 +1242,7 @@ function renderVerifyDepth() {
  *
  * It names no depth either. The measured depths are the block's entries other
  * than its `comparator`, and their names come from the served rows by value.
- * What a depth cannot reach is no longer said here (673): the option's own
+ * What a depth cannot reach is no longer said here: the option's own
  * short line says it, and the paragraph sits behind the picker's "?".
  */
 function renderDepthDelta() {
@@ -1268,7 +1268,7 @@ function renderDepthDelta() {
   for (const entry of measured) {
     if (!base || entry === base) continue;
     const depth = nameOf(entry.value);
-    // What a depth cannot catch is said in its option's own line (673); the
+    // What a depth cannot catch is said in its option's own line; the
     // benchmark sentence that used to repeat it here is gone.
     const mine = entry.source_to_merged || {};
     const theirs = base.source_to_merged || {};
@@ -1311,7 +1311,7 @@ function renderDepthDelta() {
  * And at a depth whose count is only a floor it says so, because the server
  * says so. `full` batches each verify pass, 25 claims a call over HTTP and
  * 100 through a command, so long documents cost more than the figure and
- * never less; a minimum rendered as a quote is read as a quote (505).
+ * never less; a minimum rendered as a quote is read as a quote.
  */
 function renderDepthEstimate() {
   const depths = (store.config.verify_depth || {}).depths || [];
@@ -1387,14 +1387,14 @@ function renderTitlePolicy() {
   fill(el("title-policy"), group);
   const active = policies.find(
     (/** @type {any} */ policy) => policy.value === store.titlePolicy);
-  // From the catalogue by value (643), for `renderVerifyDepth`'s reason.
+  // From the catalogue by value, for `renderVerifyDepth`'s reason.
   setText(el("title-explains"), active ? t("title." + String(active.value) + ".explains") : "");
-  // The one line under the pills (673); the sentence above sits behind "?".
+  // The one line under the pills; the sentence above sits behind "?".
   setText(el("title-brief"), active ? t("brief.title." + String(active.value)) : "");
 }
 
 /**
- * A verification depth's name in the reader's language, by its value (643).
+ * A verification depth's name in the reader's language, by its value.
  * @param {string} value
  * @returns {string}
  */
@@ -1419,7 +1419,7 @@ function renderLossBudget() {
 }
 
 /**
- * The picker, and everything that decides what it has selected (631).
+ * The picker, and everything that decides what it has selected.
  *
  * The picker lists only the rows this reader can run (`pickerRows`); every
  * catalogue row, with its measured figures, is `renderScorecard`'s. The
@@ -1431,12 +1431,12 @@ function renderModels() {
   // **A selection that is no longer offered is not a selection.** Switching a
   // discovered route off removes its row while `store.mergeModel` still names
   // it, and the page then held an id nothing matches: the button read `route
-  // not identified` -- honest, and the state before 524 read `metered API`,
+  // not identified` -- honest, and it used to read `metered API`,
   // which was not -- and `chosenModel` would have sent the prefixed row id to
   // an endpoint as a model name. Clearing it here puts the preselection below
   // back in charge, which is the one place that decides what an untouched page
   // is pointed at.
-  // A retired row (618) is shown, with its figures, and never offered: a
+  // A retired row is shown, with its figures, and never offered: a
   // selection that names one is cleared like any selection no longer offered.
   const offered = new Set(models.filter((/** @type {any} */ model) => !isRetired(model))
     .map((/** @type {any} */ model) => model.id));
@@ -1454,7 +1454,7 @@ function renderModels() {
   // affects: the button names the route it is about to use, so a reader who
   // wanted the metered one sees that they have to say so.
   //
-  // **And among the command routes, the Opus route** (612), the operator's
+  // **And among the command routes, the Opus route**, the operator's
   // ruling on the subscription grid. A route the operator wrote themselves
   // still comes first, because it is a deliberate act by somebody with a
   // shell; then the discovered row the server marks `preselect`; then the
@@ -1474,8 +1474,8 @@ function renderModels() {
     store.splitRoles = false;
     store.checkModel = store.mergeModel;
   }
-  // **A check selection the Check column cannot offer is not a selection**
-  // (570), the rule two paragraphs up applied to the second role. The column
+  // **A check selection the Check column cannot offer is not a selection**,
+  // the rule two paragraphs up applied to the second role. The column
   // disables a command row under an HTTP merge, and the preselection above
   // prefers a command row, so a cleared check role could land on one the
   // column would never let a reader pick. It is joined back to the merge's
@@ -1487,7 +1487,7 @@ function renderModels() {
   }
   const split = /** @type {HTMLInputElement} */ (el("split-models"));
   split.checked = store.splitRoles;
-  // **The reason and the state are one value** (596): the box is disabled
+  // **The reason and the state are one value**: the box is disabled
   // exactly when `splitBlocked` has a sentence, and that sentence is what the
   // tooltip, the visible hint and `aria-describedby` carry. A second copy of
   // the condition for the text would be free to drift from the one that
@@ -1514,7 +1514,7 @@ function renderModels() {
     && models.some((/** @type {any} */ model) => routeOf(model)));
   setText(routesNote, routesNote.hidden ? "" : t("models.split.commands"));
 
-  // **Only what this reader can run** (631). A row with no endpoint and a
+  // **Only what this reader can run**. A row with no endpoint and a
   // retired row are the scorecard's alone; with nothing left, a sentence says
   // so and offers the credentials sheet instead of an empty table.
   const nothing = renderPickerRows(models) === 0;
@@ -1527,7 +1527,7 @@ function renderModels() {
 }
 
 /**
- * The picker's rows, in the order its headers ask for (635). Returns how many.
+ * The picker's rows, in the order its headers ask for. Returns how many.
  *
  * Only the rows: the radios read `store.mergeModel` and `store.checkModel`,
  * so a sort redraws them checked where they were and never changes which
@@ -1545,11 +1545,11 @@ function renderPickerRows(models) {
 }
 
 /**
- * The rows the picker offers: every row `pickable` builds that can be run (631).
+ * The rows the picker offers: every row `pickable` builds that can be run.
  *
  * `reachable` is the endpoint half -- a provider with an endpoint configured,
  * or no provider at all, which is a command route or a row for the server's
- * own endpoint -- and a retired row is never offered (618), whatever its
+ * own endpoint -- and a retired row is never offered, whatever its
  * endpoint. The order is `pickable`'s, so the command routes stay first.
  * @param {any[]} models the rows `pickable` built
  * @returns {any[]}
@@ -1560,7 +1560,7 @@ function pickerRows(models) {
 }
 
 /**
- * The name, and the route badge after it, as one span (565).
+ * The name, and the route badge after it, as one span.
  *
  * The name in a span of its own so it stays whole while the badge after it
  * may drop to the next line: the `<wbr>` is the one place the line may break.
@@ -1601,11 +1601,11 @@ function modelNameLine(model) {
  * The short markers a command row carries, each said in full once under the
  * table by `renderRouteCaveats`.
  *
- * A route the catalogue measured and this server does not serve (631) has no
+ * A route the catalogue measured and this server does not serve has no
  * served `comparable`, `retrieval` or sharing to report, so it carries the
  * sentence that it is not switched on here and its measured level alone.
  *
- * A marker with `why` carries its explanation on the marker itself (638):
+ * A marker with `why` carries its explanation on the marker itself:
  * `markLine` gives it a `title` for a pointer and `aria-describedby` for the
  * keyboard, pointing at a hidden element that holds the same sentence.
  * @param {any} model
@@ -1617,7 +1617,7 @@ function routeMarks(model) {
   /** @type {{text: string, why?: string, hook?: string}[]} */
   const marks = [];
   const say = (/** @type {string} */ text) => marks.push({ text });
-  // **The model the alias answers as now, first** (675). A served row is
+  // **The model the alias answers as now, first**. A served row is
   // named by its label, which names an alias and no version; this is where
   // the reader learns which model a run through it gets today. An unserved
   // row already carries it in its name (`routeNameNow`).
@@ -1629,8 +1629,8 @@ function routeMarks(model) {
     say(t("models.route.unserved"));
   } else {
     if (!route.comparable) {
-      // Plain words on the row and the reason one hover or one Tab away
-      // (638). The tier's identifier (`prompt`) used to follow the marker in
+      // Plain words on the row and the reason one hover or one Tab away.
+      // The tier's identifier (`prompt`) used to follow the marker in
       // brackets; it is a profile's internal name, and the sentence behind
       // the marker now says what it means without naming it.
       marks.push({ text: t("models.route.mark.incomparable"),
@@ -1640,7 +1640,7 @@ function routeMarks(model) {
     // **The grant, on the row.** A `sourced` run through this route lets the
     // model reach the network, and at that level the grant is made
     // automatically rather than written by hand -- so the one place it must
-    // not be is invisible (548). `retrieval` is served rather than derived
+    // not be is invisible. `retrieval` is served rather than derived
     // here for `comparable`'s reason: a page that worked it out by matching
     // a command it is never shown against a program name it would have to
     // learn is a page carrying vocabulary it is supposed to be given.
@@ -1648,21 +1648,21 @@ function routeMarks(model) {
       say(t("models.route.mark.retrieval",
             { tools: (route.retrieval || []).join(", ") }));
     }
-    // **A model the server's CLI is too old to run** (661). Served, not
+    // **A model the server's CLI is too old to run**. Served, not
     // derived: the server read the CLI's version off its install and holds
     // the table of minimums, and the page only says what it was told.
     const old = cliTooOld(route, route.model);
     if (old) say(t("models.route.mark.cli_old", old));
   }
-  // **The level this row's figures were measured at** (613). The effort
+  // **The level this row's figures were measured at**. The effort
   // slider shows figures from other levels for the same model, and a row
   // that named none would read as true of all of them.
   if (model.measured && model.measured.merge_effort) {
     say(t("models.route.mark.effort",
           { level: effortName(String(model.measured.merge_effort)) }));
   }
-  // **Figures for a model the alias no longer answers as** (661): the row's
-  // numbers stay, named as the model they were measured on (675: by its
+  // **Figures for a model the alias no longer answers as**: the row's
+  // numbers stay, named as the model they were measured on (by its
   // catalogue name, "measured on Claude Opus 5"), and the reason, with the
   // ranking rule, one hover or one Tab away.
   const entry = routeEntry(route);
@@ -1677,7 +1677,7 @@ function routeMarks(model) {
 }
 
 /**
- * A row's markers as one line, `·` between them (638).
+ * A row's markers as one line, `·` between them.
  *
  * A marker with a `why` is its own focusable span: `title` for a pointer,
  * `aria-describedby` for a screen reader, at `describedBy`, a hidden element
@@ -1699,7 +1699,7 @@ function markLine(marks, describedBy) {
       piece.setAttribute("tabindex", "0");
       piece.setAttribute("aria-describedby", describedBy);
       // A marker explained by a sentence of its own points at that sentence's
-      // hidden copy in the same table (675): `<hook>-picker`, `<hook>-scorecard`.
+      // hidden copy in the same table: `<hook>-picker`, `<hook>-scorecard`.
       if (mark.hook) {
         piece.setAttribute("aria-describedby",
           describedBy.replace("incomparable-why", mark.hook));
@@ -1711,7 +1711,7 @@ function markLine(marks, describedBy) {
 }
 
 /**
- * "measured on the free tier", for a row whose figures were, or "" (632).
+ * "measured on the free tier", for a row whose figures were, or "".
  *
  * Not a `routeMarks` addition: that function's markers belong to a command
  * route (`routeOf(model)`), and a free-tier row is answered over an ordinary
@@ -1719,7 +1719,7 @@ function markLine(marks, describedBy) {
  * is billed per token, so the endpoint kind is not what changed. What changed
  * is what these particular figures cost to make, and that is a fact about
  * the row rather than about its route, so it is checked and shown on every
- * row the catalogue marks `measured.billed: "free-tier"` (625), independent
+ * row the catalogue marks `measured.billed: "free-tier"`, independent
  * of `routeOf`.
  * @param {any} model
  * @returns {string}
@@ -1747,10 +1747,10 @@ function appendFreeTierNote(name, model) {
 }
 
 /**
- * One picker row: the radios, the name, one meta line and two figures (631).
+ * One picker row: the radios, the name, one meta line and two figures.
  *
  * The meta line is the route's markers on a command row -- the retrieval
- * grant must never be invisible where the row is picked (548) -- and the
+ * grant must never be invisible where the row is picked -- and the
  * provider on every other row, so two rows for one model are told apart by
  * where they go. The two figures are the cost cell, whose words for a plan,
  * a free tier and GPU minutes are `costCell`'s own, and the silent-loss band:
@@ -1773,7 +1773,7 @@ function pickerRow(model) {
   } else {
     // Where it goes and what it is asked for: the provider, and the wire
     // name `chosenModel` sends, each kept whole with the one space between
-    // them as the only break (565). A listed row's name already is its wire
+    // them as the only break. A listed row's name already is its wire
     // name, so it is not said twice.
     meta.className = "model-meta mono model-wire";
     const parts = [String(model.provider || "")];
@@ -1790,12 +1790,12 @@ function pickerRow(model) {
   appendFreeTierNote(name, model);
   row.appendChild(name);
   row.appendChild(costCell(model));
-  // Seconds and deviations, back on the main page (655): 631 moved every
-  // figure but cost and silent loss to the scorecard on the operator's "only
-  // runnable models" ruling, not on a request to drop columns, and that was
-  // an overreach. Band only, as silent loss already was: the raw number and
-  // the test count it was formed over stay in the scorecard, so this row's
-  // height does not change.
+  // Seconds and deviations, back on the main page: they had moved to the
+  // scorecard on the operator's "only runnable models" ruling, not on a
+  // request to drop columns, and that was an overreach. Band only, as
+  // silent loss already was: the raw number and the test count it was
+  // formed over stay in the scorecard, so this row's height does not
+  // change.
   row.appendChild(bandOnlyCell(model.measured, "seconds_per_merge",
                                RANK_SCALES.seconds_per_merge));
   row.appendChild(bandOnlyCell(model.measured, "silent_loss_per_pair",
@@ -1808,7 +1808,7 @@ function pickerRow(model) {
 /**
  * A figure's band word and colour and nothing else, or the word for none.
  *
- * The picker's second figure (631): the number itself, and the pair count it
+ * The picker's second figure: the number itself, and the pair count it
  * was formed over, are in the scorecard. An unmeasured figure is uncoloured
  * and says so, never a band.
  * @param {any} measured
@@ -1830,7 +1830,7 @@ function bandOnlyCell(measured, field, scale) {
 }
 
 /* ------------------------------------------------------------------ */
-/* the model scorecard (631)                                           */
+/* the model scorecard                                                 */
 /* ------------------------------------------------------------------ */
 
 /**
@@ -1841,7 +1841,7 @@ function bandOnlyCell(measured, field, scale) {
 const UNSERVED_PREFIX = "catalogue-route:";
 
 /**
- * Every row the scorecard shows: every catalogue model and every route (631).
+ * Every row the scorecard shows: every catalogue model and every route.
  *
  * `pickable`'s rows without the ones an endpoint listed -- those carry no
  * figures and are in the picker -- and, after the served command routes,
@@ -1927,7 +1927,7 @@ const SCORECARD_SORT_HEADS = {
 };
 
 /**
- * The picker's sortable headers (635, 655): the same columns, hooks of their
+ * The picker's sortable headers: the same columns, hooks of their
  * own. The Use and Check columns hold radios and do not sort.
  * @type {Record<string, {head: string, control: string, title: string}>}
  */
@@ -1941,7 +1941,7 @@ const PICKER_SORT_HEADS = {
 };
 
 /**
- * One table's sort (631, 635): a key of `SCORECARD_SORTS` and a direction,
+ * One table's sort: a key of `SCORECARD_SORTS` and a direction,
  * or "" for the served order, with the headers it paints, where it is kept
  * per browser, and what redraws the table. A per-viewer convenience, not
  * form state, so "Start over" leaves it alone.
@@ -2014,7 +2014,7 @@ function sortFigure(model, field) {
 
 /**
  * A table's rows in the order `key` and `direction` ask for: the scorecard's
- * and, since 635, the picker's, through this one function.
+ * and, added later, the picker's, through this one function.
  *
  * Retired rows after every live row, whichever way. Within each, a row with
  * no figure for a field sorts after every row that has one **in both
@@ -2022,8 +2022,8 @@ function sortFigure(model, field) {
  * brings the unmeasured ones to the top. Ties keep the served order, so the
  * sort is stable. An unknown key is the served order.
  *
- * **Figures measured on a model the route no longer runs** (675,
- * `measuredOnOtherModel`) sort after every row that has a figure of its own
+ * **Figures measured on a model the route no longer runs**
+ * (`measuredOnOtherModel`) sort after every row that has a figure of its own
  * for the field, in both directions, and before the rows that have none:
  * they are not the figures of the model a run gets today, so they never
  * rank among those, and they are still measured figures, so they do not
@@ -2080,7 +2080,7 @@ function paintSortHeads(state) {
 
 /**
  * Every figure column's help icon, on both tables: its hook and the
- * catalogue key for what it explains (655). Not "Model" or "Use"/"Check" --
+ * catalogue key for what it explains. Not "Model" or "Use"/"Check" --
  * those are not a figure -- and one key per meaning, carried by two icons
  * (a picker one and a scorecard one) because the dialog is a second subtree
  * with its own hidden paragraph for `aria-describedby` to reach.
@@ -2098,8 +2098,8 @@ const COLUMN_HELP = [
 ];
 
 /**
- * `title` and `aria-label` on every column-help icon (655): the mouse half
- * of the pattern 638 set for a row marker, `aria-describedby` and the
+ * `title` and `aria-label` on every column-help icon: the mouse half
+ * of the same pattern set for a row marker, `aria-describedby` and the
  * hidden paragraph it points at being static markup that `applyStringsIn`
  * already keeps in the current language. Not `data-t` on the icon itself --
  * that would overwrite the visible "?" with the sentence. Static, so one
@@ -2116,7 +2116,7 @@ function paintColumnHelp() {
 }
 
 /**
- * A header was clicked: ascending first, then each click reverses (631).
+ * A header was clicked: ascending first, then each click reverses.
  * @param {SortState} state
  * @param {string} key
  */
@@ -2130,7 +2130,7 @@ function sortBy(state, key) {
 }
 
 /**
- * The scorecard: every catalogue row with its measured figures, sorted (631).
+ * The scorecard: every catalogue row with its measured figures, sorted.
  *
  * `deviations` is deliberately not shown. It is a raw count over each row's
  * own `pairs`, and two rows with different `pairs` cannot be compared by it --
@@ -2150,8 +2150,8 @@ function renderScorecard() {
   el("commands-hint").hidden = commandRoutes().length === 0;
 
   // `/config` serves `catalogue.notes` in English, unconditionally -- it is
-  // part of the served contract (643's reasoning: other clients may read
-  // it) -- but the page no longer prints it as served (656). It reads
+  // part of the served contract, since other clients may read
+  // it -- but the page no longer prints it as served. It reads
   // `models.catalogue.notes` instead, pinned equal to the shipped
   // catalogue's own text by `test_contract_parity`, so a German page reads
   // German rather than the vendor-neutral disclaimer a German reader cannot
@@ -2215,7 +2215,7 @@ function scorecardRow(model) {
   // unstated case left to render: the line names the model the program will
   // be told to use.
   //
-  // **Two unbreakable halves with one place to break between them** (565).
+  // **Two unbreakable halves with one place to break between them**.
   // Wrapping the whole line would let the browser break a model id at its
   // hyphens, and a wire name split as `claude-haiku-` / `4-5-20251001` is a
   // different string to the reader who has to type it. So the id and the
@@ -2232,7 +2232,7 @@ function scorecardRow(model) {
     meta.appendChild(size);
   }
   name.appendChild(meta);
-  // **When, and by which build, this row's figures were measured** (618).
+  // **When, and by which build, this row's figures were measured**.
   // The table holds rows measured on different days by different commits
   // of this tool, and a figure with no date reads as current. Its own line,
   // allowed to wrap between the date and the commit, so it can never widen
@@ -2244,19 +2244,19 @@ function scorecardRow(model) {
     setText(line, when);
     name.appendChild(line);
   }
-  // **Markers here, and the sentences they stand for once under the table**
-  // (531). A subscription row genuinely is not comparable to the measured
+  // **Markers here, and the sentences they stand for once under the table**.
+  // A subscription row genuinely is not comparable to the measured
   // figures, and it genuinely is shared by everybody on this instance; the
   // full sentences are `renderRouteCaveats`', below the table, for every
   // marker actually on a row. Not a `title` tooltip: hover does not exist on
   // touch and is not reliably announced.
   const marks = routeMarks(model);
   if (marks.length) name.appendChild(markLine(marks, "incomparable-why-scorecard"));
-  // A free-tier row (632): its own line rather than folded into `marks`,
+  // A free-tier row: its own line rather than folded into `marks`,
   // since `routeMarks` is a command route's own markers and this is true of
   // an ordinary metered row just as much.
   appendFreeTierNote(name, model);
-  // **A retired row says so, dated** (618). Its figures stay, because they
+  // **A retired row says so, dated**. Its figures stay, because they
   // were measured; this line says why it can no longer be picked and what
   // to use instead. Words, not a colour, for the reason below.
   if (isRetired(model)) {
@@ -2278,7 +2278,7 @@ function scorecardRow(model) {
   // a cell that opened on them would be the wall of text this dialog exists
   // to hold rather than show. English, as the catalogue is -- a measurement
   // record (who ran it, at which commit, over how many pairs), not page
-  // prose, so it stays English rather than being translated (656). `lang`
+  // prose, so it stays English rather than being translated. `lang`
   // marks that for a screen reader, which is invisible to everyone else, so
   // on a page in any other language the summary also says so in words --
   // closed or open, never merely by the paragraph's language attribute --
@@ -2343,17 +2343,17 @@ const RANK_SCALES = {
   seconds_per_merge: { good: 120, poor: 300 },
   // None at all is the only good answer -- silent loss is the defect this
   // tool exists to find -- and averaging one or more per pair is poor. None
-  // is also the column's ideal, so it reads "excellent" (598) and nothing on
+  // is also the column's ideal, so it reads "excellent" and nothing on
   // this scale is "good": a positive rate goes straight to fair.
   silent_loss_per_pair: { good: 0, poor: 1, ideal: 0 },
-  // Ruling 16 (2026-09-28): anchored to the mechanical-union floor DECISIONS
-  // 684 N5 defines, not to where the catalogue's own rows happen to sit
-  // (682's rule, which this replaces). `poor` starts AT the floor -- a merge
-  // no better than gluing the two sources together mechanically is poor, not
-  // fair -- and `good` is at or below half the floor; `fair` is the gap
-  // between. Halving is the only floor-derived split available with no
-  // second reference point, so it is the rule rather than a second
-  // measurement.
+  // As of 2026-09-28, anchored to the mechanical-union floor N5
+  // defines, not to where the catalogue's own rows happen to
+  // sit. `poor` starts AT the floor -- a merge no better than
+  // gluing the two sources together mechanically is poor, not
+  // fair -- and `good` is at or below half the floor; `fair` is
+  // the gap between. Halving is the only floor-derived split
+  // available with no second reference point, so it is the rule
+  // rather than a second measurement.
   // GENERATED by `python3 tests/rank_scale_floor.py --write` from
   // `lineup_figures.baselines`/`_floor` over the nine registered pairs
   // (`run_lineup.PAIRS`, base `source_a.md`), scored with no model call;
@@ -2487,13 +2487,13 @@ function routeLabel(kind) {
  * would be a judgement invented out of an absence, which is this project's
  * most repeated failure and is the same rule the `notchecked` chip follows.
  *
- * **"excellent" is the ideal and nothing else** (598): a figure exactly at its
+ * **"excellent" is the ideal and nothing else**: a figure exactly at its
  * column's `ideal`, which only the two rate columns have -- no silent loss at
  * all, no deviation at all. Cost and speed have no ideal, so they never reach
  * it. Not "perfect": these figures come from a handful of pairs, and the word
  * must not claim more than a handful of pairs can show.
  * `poorInclusive` makes the poor boundary itself poor rather than fair --
- * `deviations_per_pair`'s scale sets it because 684 N5's floor is a value a
+ * `deviations_per_pair`'s scale sets it because N5's floor is a value a
  * real row can land on exactly, and "poor" there means "at or worse than a
  * mechanical union", not "strictly worse". Every other scale leaves it unset
  * and keeps the plain `value > scale.poor` split.
@@ -2565,7 +2565,7 @@ function pickable() {
   // produces a wrong bill.
   //
   // `measured` is the catalogue's figures for this route when it has any
-  // (`routeFigures`, 597) and otherwise null, the catalogue's own word for a
+  // (`routeFigures`) and otherwise null, the catalogue's own word for a
   // route nobody has run through this tool. Either way the route answers at a
   // rung the endpoint rows were not measured at, and `route.comparable`
   // carries that half, from the server.
@@ -2605,7 +2605,7 @@ function pickable() {
 }
 
 /**
- * The catalogue's measured block for one command route, or null (597).
+ * The catalogue's measured block for one command route, or null.
  *
  * Matched on the route's id, its model alias and its profile together: the
  * figures describe that route running that model in that request shape, and
@@ -2623,7 +2623,7 @@ function routeFigures(route) {
 }
 
 /* ------------------------------------------------------------------ */
-/* the merge effort slider (613)                                       */
+/* the merge effort slider                                             */
 /* ------------------------------------------------------------------ */
 
 /**
@@ -2645,7 +2645,7 @@ function chosenRouteRow() {
 }
 
 /**
- * The catalogue's per-effort figures for one command route, or null (613).
+ * The catalogue's per-effort figures for one command route, or null.
  *
  * Matched as `routeFigures` matches: the route's id, its model alias and its
  * profile together. Null for a route nobody ran the grid through -- Fable,
@@ -2662,7 +2662,7 @@ function routeEffortFigures(route) {
 
 /**
  * The catalogue's figures for models this route's program was pinned to by
- * full id rather than through the route's own alias (661), or `[]`.
+ * full id rather than through the route's own alias, or `[]`.
  *
  * Matched as `routeEffortFigures` matches. Each block names the id it asked
  * for and the id that answered; the card shows each under its own heading,
@@ -2691,7 +2691,7 @@ function routeEntry(route) {
 
 /**
  * What the route's alias answers as now, when that is no longer the model its
- * own figures were measured on (661), or null. Then those figures are history
+ * own figures were measured on, or null. Then those figures are history
  * and the pinned block for the new model, if the card has one, comes first.
  * @param {any} route
  * @returns {{model: string, checked_on: string, cli_version: string}|null}
@@ -2702,15 +2702,15 @@ function aliasNow(route) {
 }
 
 /**
- * The model id this route's figures are current for right now (704, 708):
+ * The model id this route's figures are current for right now:
  * `alias_now.model` when the alias has moved past what the route's own
  * `measured`/`measured_by_effort` were measured on, else the route's own
  * `resolved_model`. A route with no `alias_now` is not a route with no
  * current model: it is one whose alias and `resolved_model` already
- * agree, which is the ordinary case (`aliasNow`'s own docstring) and, since
- * 708, the opus route's: its `measured_by_effort` grid and `alias_now` are
+ * agree, which is the ordinary case (`aliasNow`'s own docstring) and is now
+ * also the opus route's: its `measured_by_effort` grid and `alias_now` are
  * gone together, leaving `resolved_model` itself as the only source of
- * "what this route runs today". A pinned block (661) whose own
+ * "what this route runs today". A pinned block whose own
  * `resolved_model` matches this is the figures for that model, wherever the
  * answer came from, an alias check or the route's own measurement,
  * rather than only where `alias_now` happens to be set.
@@ -2725,7 +2725,7 @@ function currentRouteModel(route) {
 
 /**
  * A model id's name from the catalogue's own `models` row, matched on `id` or
- * `api_model`, or the id itself when no row names it (675). Never a name
+ * `api_model`, or the id itself when no row names it. Never a name
  * typed for the occasion: the next alias move then needs only `alias_now`.
  * @param {string} id
  * @returns {string}
@@ -2737,7 +2737,7 @@ function catalogueModelName(id) {
 }
 
 /**
- * A catalogue route's name today (675): after the model its alias answers as
+ * A catalogue route's name today: after the model its alias answers as
  * now when `alias_now` says that moved -- that model's catalogue name and the
  * route's suffix, "Claude Opus 5.5 (subscription)" -- and otherwise the
  * entry's stored `display_name`, which stays in the file as what the figures
@@ -2754,7 +2754,7 @@ function routeNameNow(entry) {
 
 /**
  * Whether a command row's figures were measured on a model its alias no
- * longer answers as (661, 675): the entry's `resolved_model` differs from
+ * longer answers as: the entry's `resolved_model` differs from
  * `alias_now.model` and the row has figures. Such a row is marked "measured
  * on <that model>" and ranks after every current figure (`scorecardOrder`).
  * @param {any} model a picker or scorecard row
@@ -2769,7 +2769,7 @@ function measuredOnOtherModel(model) {
 
 /**
  * `{needs, found}` when the server's CLI for this route is older than `model`
- * requires (661), or null. Only ever the server's own answer: `cli_too_old`
+ * requires, or null. Only ever the server's own answer: `cli_too_old`
  * lists the models the version its install names falls short of, and
  * `cli_version` is that version.
  * @param {any} route
@@ -2792,9 +2792,9 @@ function timesText(ratio) {
 }
 
 /**
- * `max` against the level below it in the same block, in plain words (661):
+ * `max` against the level below it in the same block, in plain words:
  * whether it fixed more, the same or fewer, by the ranges' overlap rule the
- * grid registered (609), and how much more time and usage it took. Null when
+ * grid registered, and how much more time and usage it took. Null when
  * the block does not carry both levels for a pair the card shows.
  * @param {any} block
  * @param {string} level
@@ -2830,7 +2830,7 @@ function effortComparison(block, level, lower) {
 }
 
 /**
- * Does any block on this card carry `max` beside a cheaper `xhigh` (661)?
+ * Does any block on this card carry `max` beside a cheaper `xhigh`?
  * Then the cost warning says what was measured rather than that nothing was.
  * @param {any[]} blocks
  * @returns {boolean}
@@ -2857,7 +2857,7 @@ function effortPairsText(block) {
 }
 
 /**
- * One pinned block's section of the card (661): whose figures these are, the
+ * One pinned block's section of the card: whose figures these are, the
  * figures at this level or the unmeasured sentence, `max` against `xhigh` in
  * plain words, the CLI note, and when and how it was measured.
  * The block for the model the route's alias answers as now (`aliasNow`) is
@@ -2874,12 +2874,12 @@ function pinnedSection(route, primary, block, level) {
   const head = document.createElement("p");
   head.className = "effort-model";
   const now = aliasNow(route);
-  // 704, 708: "current" is this pinned block's own `resolved_model` matching
-  // what the route runs today (`currentRouteModel`), not only whether
-  // `alias_now` happens to be set. A route whose alias and `resolved_model`
-  // already agree (no `alias_now`, e.g. opus since 708) has no checked date
-  // to show, so it reads as plainly asked for by full id rather than as
-  // "checked on" a date that was never recorded.
+  // "Current" is this pinned block's own `resolved_model` matching what
+  // the route runs today (`currentRouteModel`), not only whether
+  // `alias_now` happens to be set. A route whose alias and
+  // `resolved_model` already agree (no `alias_now`, e.g. the opus route)
+  // has no checked date to show, so it reads as plainly asked for by
+  // full id rather than as "checked on" a date that was never recorded.
   const current = currentRouteModel(route);
   const isCurrent = Boolean(current) && current === block.requested_model;
   setText(head, isCurrent && now
@@ -2986,7 +2986,7 @@ function effortCardRows(block, level) {
 }
 
 /**
- * The level a submitted run carries, or undefined (613).
+ * The level a submitted run carries, or undefined.
  *
  * Only beside a route whose served row says it takes one, and only a level
  * that row lists: a slider left on a level the newly picked route does not
@@ -3010,7 +3010,7 @@ function renderEffort() {
   const levels = (choice && choice.levels) || [];
   const block = el("effort-block");
   // The one-level line takes the slider's place for a model this build knows
-  // has no graded scale (688, ruling 11) -- shown instead of the control
+  // has no graded scale -- shown instead of the control
   // rather than beside it, the same way `effort-block` itself replaces
   // nothing for a route with no effort concept at all.
   const singleLevel = el("effort-single-level");
@@ -3020,7 +3020,7 @@ function renderEffort() {
   block.hidden = !levels.length;
   if (!levels.length) {
     // Lives beside the submit button, outside `effort-block`, so hiding that
-    // block does not hide it too (615): a route with no effort level at all
+    // block does not hide it too: a route with no effort level at all
     // must not leave a stale `max` warning from whatever was picked before it.
     const submitWarning = el("effort-submit-max-warning");
     submitWarning.hidden = true;
@@ -3049,7 +3049,7 @@ function renderEffort() {
 
 /**
  * The lowest merge effort measurably as good as the best, from a route's
- * catalogue figures (673), or null. Nothing is typed in: the level is found
+ * catalogue figures, or null. Nothing is typed in: the level is found
  * in the block each time the route is picked.
  *
  * The rule is the operator's. Over the pairs measured at every level, sum
@@ -3060,12 +3060,12 @@ function renderEffort() {
  * **Only a measurement of what the route runs now.** The block's resolved
  * model must be the one the route answers as today (`alias_now` when the
  * alias has moved on, else the route's own), and it must have run in safe
- * mode, which is how every command route runs since 610: a block from
+ * mode, which every command route now runs in: a block from
  * before is a measurement of another configuration, which is also why
  * Sonnet's, stale on the current CLI, is not used. It must cover the
  * slider's lowest level and at least one above the answer, or "as good as
  * any higher level" says nothing. The route's own block is tried first,
- * then its pinned blocks (661).
+ * then its pinned blocks.
  * @param {any} route
  * @returns {{level: string, block: any, pairs: string[]}|null}
  */
@@ -3160,7 +3160,7 @@ function renderEffortCard() {
   fill(el("effort-ticks"), levels.map((/** @type {string} */ each, /** @type {number} */ position) => {
     const span = document.createElement("span");
     setText(span, effortName(each));
-    // Under its thumb position, as the fidelity words are (686).
+    // Under its thumb position, as the fidelity words are.
     span.style.setProperty("--at", String(levels.length > 1 ? position / (levels.length - 1) : 0));
     if (each === level) span.classList.add("on");
     return span;
@@ -3170,7 +3170,7 @@ function renderEffortCard() {
   const block = routeEffortFigures(route);
   const pinned = routePinnedFigures(route);
   // Whose figures the route's own block holds, said only when a pinned block
-  // sits beside it (661): alone, the card is about the route and needs no
+  // sits beside it: alone, the card is about the route and needs no
   // heading; beside another model's figures, it must say which model is which.
   // Where the alias answers as another model now, the route's own figures are
   // history and say so, and that model's block goes above them.
@@ -3181,7 +3181,7 @@ function renderEffortCard() {
     ? "effort.card.model.history.before_safe_mode" : "effort.card.model.history";
   setText(model, model.hidden ? "" : t(now ? history : "effort.card.model.route", {
     model: String(block.resolved_model), alias: String(route.model || "") }));
-  // 704, 708: a pinned block is "current" when its own `resolved_model`
+  // A pinned block is "current" when its own `resolved_model`
   // matches what the route runs today (`currentRouteModel`), whether that
   // answer came from `alias_now` or, once the two agree, from the route's
   // own `resolved_model` directly, not only when `alias_now` is set.
@@ -3205,14 +3205,14 @@ function renderEffortCard() {
   unmeasured.hidden = Boolean(rows);
   setText(unmeasured, rows ? "" : t("effort.card.unmeasured"));
 
-  // `max` (615): a fifth stop the grid never ran, so `rows` above is already
+  // `max`: a fifth stop the grid never ran, so `rows` above is already
   // null for it and the unmeasured sentence already shows. This is the
   // further cost warning the operator asked for, in the card and, so it
   // cannot be missed by picking the last stop and never reading the card,
   // repeated by the submit button below.
   //
-  // Where a block on the card measured `max` and it cost more than `xhigh`
-  // (661), the warning says so instead of calling the level untested; the
+  // Where a block on the card measured `max` and it cost more than `xhigh`,
+  // the warning says so instead of calling the level untested; the
   // cost warning itself stays either way.
   const atMax = level === "max";
   const warningText = maxMeasuredDearer([block, ...pinned])
@@ -3224,7 +3224,7 @@ function renderEffortCard() {
   submitWarning.hidden = !atMax;
   setText(submitWarning, atMax ? warningText : "");
 
-  // The ruling in 612 is about the default; the choice is the requester's, so
+  // The default is only a preselection; the choice is the requester's, so
   // a level it keeps out of `sourced` is said out loud there rather than
   // refused. Both halves are served: the levels on the route, the flag on the
   // fidelity level.
@@ -3331,11 +3331,11 @@ function renderRouteCaveats() {
   // What the retrieval marker means, and the half of it a marker cannot say:
   // *when* the grant applies. It is the `sourced` level that turns it on, and
   // a reader who saw the marker and not that sentence would think every run
-  // through this row reaches the network (548).
+  // through this row reaches the network.
   if (routes.some((/** @type {any} */ route) => (route.retrieval || []).length)) {
     said.push(t("models.route.caveat.retrieval"));
   }
-  // A free-tier row (632). Not gated on `commandRoutes()`, the way the four
+  // A free-tier row. Not gated on `commandRoutes()`, the way the four
   // above are: the marker itself is not a command-route marker (see
   // `freeTierNote`), so its caveat is asked of the same rows the marker
   // could appear on -- everything the scorecard shows.
@@ -3412,9 +3412,9 @@ function reachable(model) {
 /**
  * Why "Use a different model for the checks" is disabled, or "" when it is not.
  *
- * **One condition, and it is the whole of it** (596): a command route is
+ * **One condition, and it is the whole of it**: a command route is
  * picked for the merge. A route runs one program for every role -- the
- * engine holds one `command` for the run (483) -- so there is no second model
+ * engine holds one `command` for the run -- so there is no second model
  * for the checks to go to, and `renderModels` forces the split off under it.
  * Nothing else disables the box: a typed id, a run in flight and a server
  * with one reachable row all leave it enabled. The sentence names the picked
@@ -3466,7 +3466,7 @@ function useCell(model, open) {
     store.mergeModel = model.id;
     if (!store.splitRoles) store.checkModel = model.id;
     // **Crossing between a command route and anything else re-renders the
-    // table** (566). `renderModels` is what sets the split control from
+    // table**. `renderModels` is what sets the split control from
     // `chosenRoute()`, and this handler used to call only
     // `refreshIdleStatus`: in a browser the button moved to `metered API`
     // while `Use a different model for the checks` stayed disabled from the
@@ -3484,7 +3484,7 @@ function useCell(model, open) {
         .find((input) => /** @type {HTMLInputElement} */ (input).value === model.id);
       if (chosen instanceof HTMLInputElement) chosen.focus();
     }
-    // A row picked here may be one the catalogue states no window for (605):
+    // A row picked here may be one the catalogue states no window for:
     // `renderModels` is not always called above, so this is the one place a
     // plain pick -- no route crossed -- would otherwise leave the field
     // showing the previous row's answer.
@@ -3518,8 +3518,8 @@ function checkCell(model, open) {
   radio.name = "model-check";
   radio.value = model.id;
   radio.checked = store.checkModel === model.id;
-  // **A row the merge's route cannot reach is not offered for the checks**
-  // (570). It used to be: a subscription row's radio was live under a metered
+  // **A row the merge's route cannot reach is not offered for the checks**.
+  // It used to be: a subscription row's radio was live under a metered
   // merge, and picking it sent that route's model name, as a model, over the
   // metered route -- while the button went on naming the metered API alone.
   const answers = answersChecks(model);
@@ -3532,7 +3532,7 @@ function checkCell(model, open) {
   if (!answers) radio.setAttribute("aria-describedby", "split-routes");
   radio.addEventListener("change", () => {
     store.checkModel = model.id;
-    // Same reason as the merge radio above (605): the check role can name a
+    // Same reason as the merge radio above: the check role can name a
     // row the catalogue states no window for just as the merge role can.
     renderCustomWindow();
     refreshIdleStatus();
@@ -3542,11 +3542,11 @@ function checkCell(model, open) {
 }
 
 /**
- * Can this row answer the checks, given the row picked for the merge? (570)
+ * Can this row answer the checks, given the row picked for the merge?
  *
  * **A run answers through one command or over HTTP, never both.** The engine
  * holds one `command` for the whole run -- per-role endpoints are dead
- * configuration beside it (483) -- so there is no run in which the merge goes
+ * configuration beside it -- so there is no run in which the merge goes
  * to a metered API and the checks go to a subscription. The page used to offer
  * that pairing anyway, and the request it built carried the subscription
  * route's model name as an ordinary model: on the discovered `claude` routes
@@ -3556,7 +3556,7 @@ function checkCell(model, open) {
  *
  * The server cannot refuse that request, which is why the rule is here. It is
  * byte for byte the request a reader makes by picking the metered row for the
- * checks -- 519's second shape, a well-formed metered request that says
+ * checks: a second, well-formed metered request that says
  * nothing about what the page was showing.
  *
  * Under a command merge the split is forced off (`renderModels`), so the only
@@ -3578,7 +3578,7 @@ function answersChecks(model) {
  * **The one reader**, so the checkbox is the switch everywhere at once: the
  * request, the button, the summary and the disabled radios all ask this. An
  * id counts only while "Use a model id not in the table" is ticked; unticking
- * also clears the field, so nothing typed can ride along unseen (591).
+ * also clears the field, so nothing typed can ride along unseen.
  * @returns {string}
  */
 function typedId() {
@@ -3641,7 +3641,7 @@ function renderCustomModel() {
   else if (row) note = t("models.custom.known", { model: typed, provider: String(row.provider) });
   else if (typed) note = t("models.custom.active", { model: typed, url: endpointLabel() });
   setText(el("custom-model-note"), note);
-  // A typed id naming a retired row (621). `typedRow` finds it, because a
+  // A typed id naming a retired row. `typedRow` finds it, because a
   // retired row is still in `pickable()` with its radios disabled, and the
   // server routes the id by that row -- so a typed `claude-opus-5` reaches
   // the vendor that refuses it. Warned, never blocked: the operator may know
@@ -3656,7 +3656,7 @@ function renderCustomModel() {
 }
 
 /**
- * The warning for a typed id that names a retired row (621), in the page's
+ * The warning for a typed id that names a retired row, in the page's
  * language, out of the row's own `retired` block.
  * @param {string} typed
  * @param {any} retired
@@ -3679,7 +3679,7 @@ function retiredWarning(typed, retired) {
  * this row: `route_plan` refuses `window` beside one, because the route's own
  * file states it.
  *
- * Closes the gap 604 left on the table's own side of it (605): a typed copy
+ * Closes the gap left on the table's own side of it: a typed copy
  * of such an id already had somewhere to state the window; a row picked
  * straight from the table did not.
  * @returns {any}
@@ -3700,8 +3700,8 @@ function pickedUnknownModel() {
 /**
  * Is the context window field in charge of anything right now?
  *
- * Ticked open (604) -- whatever it states, even nothing yet -- or, with the
- * checkbox off, a picked row `pickedUnknownModel` finds (605). The two never
+ * Ticked open -- whatever it states, even nothing yet -- or, with the
+ * checkbox off, a picked row `pickedUnknownModel` finds. The two never
  * overlap: the radios are disabled while an id is typed, so a picked row only
  * counts while there is no typed one to override it.
  * @returns {boolean}
@@ -3713,7 +3713,7 @@ function windowFieldActive() {
 /**
  * The context window field, and the sentence under it saying whether the
  * model in charge -- typed or picked from the table -- needs it and where the
- * figure is (604, 605).
+ * figure is.
  *
  * The rule is the server's: `endpoints.providers[].window_required` is
  * `jobs.window_unreportable`, the predicate `endpoint_plan` refuses on, so
@@ -3832,8 +3832,8 @@ function windowSubjectLabel() {
  *
  * The page's half of the server's two refusals: a figure outside the bounds
  * it serves (`api._overrides`, `bad_window`), and no figure where the
- * destination cannot report one (`endpoint_plan`) -- for a typed id (604) or
- * a row picked straight from the table (605), whichever is in charge.
+ * destination cannot report one (`endpoint_plan`) -- for a typed id or
+ * a row picked straight from the table, whichever is in charge.
  * @returns {string}
  */
 function windowRefusal() {
@@ -3880,7 +3880,7 @@ function option(value, label) {
 }
 
 /**
- * Whether a catalogue row is retired (618): shown with its figures, never offered.
+ * Whether a catalogue row is retired: shown with its figures, never offered.
  * @param {any} model
  * @returns {boolean}
  */
@@ -3889,7 +3889,7 @@ function isRetired(model) {
 }
 
 /**
- * The retired row's sentence, from the catalogue's own `retired` block (618).
+ * The retired row's sentence, from the catalogue's own `retired` block.
  * @param {any} retired
  * @returns {string}
  */
@@ -3904,16 +3904,16 @@ function retiredSentence(retired) {
 }
 
 /**
- * "measured <date>" for a row's figures, or "" (618).
+ * "measured <date>" for a row's figures, or "".
  *
  * Read off the measured block's own `measured_on`, which `catalogue.py`
  * requires of every block, so the line says what the figures' `derived_by`
  * checks and nothing the page worked out. An unmeasured row has no line:
  * there is no measurement to date.
  *
- * The commit this run was measured at (`llossless_commit` or the pre-rename
- * `claimcheck_commit`) is read by `catalogue.py` and kept in the row's own
- * data, but not printed here (717): a commit id names nothing to a reader
+ * The commit this run was measured at (`llossless_commit`, or its pre-rename
+ * fallback field) is read by `catalogue.py` and kept in the row's own
+ * data, but not printed here: a commit id names nothing to a reader
  * holding only the published copy, which is what a public page's reader
  * always is. A user's own run keeps its "LLossless commit" provenance row --
  * that copy is never published, and the commit it names is the one that ran
@@ -3985,7 +3985,7 @@ function costCell(model) {
   // branch on this page that can produce a price for a route.
   const route = routeOf(model);
   // `route.cost` is always served for a route this server runs; only a
-  // catalogue route it does not serve can lack one (631), and that row then
+  // catalogue route it does not serve can lack one, and that row then
   // reads its measured block like any other.
   if (route && route.cost) {
     cell.classList.add("onplan");
@@ -4001,7 +4001,7 @@ function costCell(model) {
   const measured = model.measured;
   const value = measured ? figure(measured.usd_per_merge, 3) : null;
   if (value === null && measured && measured.billed === "free-tier") {
-    // Measured, and billed nothing: a vendor's free tier (625). A word, as a
+    // Measured, and billed nothing: a vendor's free tier. A word, as a
     // subscription row's is, and not "unmeasured" -- the run happened -- nor
     // a zero, which would read as a price.
     cell.classList.add("freetier");
@@ -4154,11 +4154,11 @@ function unreachableChoice() {
     }
   }
   // A row picked here, not typed, can still be one the catalogue states no
-  // window for (605): reachability comes first because a provider with no
+  // window for: reachability comes first because a provider with no
   // endpoint at all is the more basic problem.
   const stated = windowRefusal();
   if (stated) return stated;
-  // The second guard on 570, behind the disabled radio and the re-join in
+  // The second guard here, behind the disabled radio and the re-join in
   // `renderModels`: if a check role on a row the merge's route cannot reach is
   // ever reached anyway, the button refuses rather than sending that row's
   // model name down the merge's route. Not a fallback to the merge's row
@@ -4191,7 +4191,7 @@ function refreshIdleStatus() {
     return;
   }
   const state = readiness();
-  // Amber for "more input needed", green for "ready" (640): the one line on
+  // Amber for "more input needed", green for "ready": the one line on
   // this page a reader has to act on before anything else can happen.
   say(state.ready ? "ok" : "warn",
       t(state.ready ? "word.ready" : "word.notready"), state.text);
@@ -4205,14 +4205,14 @@ function refreshIdleStatus() {
 }
 
 /**
- * Can this form be submitted, and what the status line says about it (640).
+ * Can this form be submitted, and what the status line says about it.
  *
  * The documents first, because a fresh page has two empty panes and that is
  * the first thing to fix: none with text asks for the minimum, and otherwise
  * each empty one is named, as its tab names it. Then the model choice
  * (`unreachableChoice`). Ready says how many documents will be merged. The
  * button is disabled exactly when this says not ready. `step` names the
- * input step that holds a documents reason (673); the one reason without a
+ * input step that holds a documents reason; the one reason without a
  * step is the model choice (`blockingStep`).
  * @returns {{ready: boolean, text: string, step?: string}}
  */
@@ -4254,7 +4254,7 @@ function readiness() {
  * @returns {string}
  */
 function submitLabel() {
-  // **Both roles, whenever they are billed differently** (570). With the
+  // **Both roles, whenever they are billed differently**. With the
   // split on, the checks are a second destination, and a label naming only
   // the merge's route described half the run at the moment the money is
   // committed: a metered merge with local checks read `metered API` alone.
@@ -4267,7 +4267,7 @@ function submitLabel() {
 }
 
 /**
- * Which kind of route the checks are about to take, in a word (570).
+ * Which kind of route the checks are about to take, in a word.
  *
  * `chosenRouteKind`'s twin, read off `store.checkModel` -- which is what
  * `chosenModel("check")` sends -- and only while the roles are split. Joined,
@@ -4432,11 +4432,11 @@ function submission() {
     // this body that carries a command string, and `jobs.REQUEST_SETTABLE`
     // holds the other end of that by not carrying `LLOSSLESS_COMMAND`.
     command_route: chosenRoute() || undefined,
-    // The stated window, only beside a typed id (604). `windowRefusal` has
+    // The stated window, only beside a typed id. `windowRefusal` has
     // already stopped the button on a figure that is not a whole number in
     // the server's bounds, so what reaches here is one.
     window: typedWindow(),
-    // The merge's effort level, only beside a route that takes one (613):
+    // The merge's effort level, only beside a route that takes one:
     // the slider's position, which the server maps onto the merge's argv.
     effort: chosenEffort(),
   };
@@ -4448,7 +4448,7 @@ function submission() {
 }
 
 /* ------------------------------------------------------------------ */
-/* saved defaults (674)                                                */
+/* saved defaults                                                      */
 /* ------------------------------------------------------------------ */
 
 /**
@@ -4668,7 +4668,7 @@ function currentDefaults() {
 /**
  * Save the settings a run started with. Called once the server accepted it.
  *
- * The box is left exactly as the reader set it (717): it used to untick
+ * The box is left exactly as the reader set it: it used to untick
  * itself the moment a save worked, "does not remain checked after starting a
  * merge, that is rather unexpected" in the operator's own words. It now
  * stays ticked here and from then on tracks whether the page's current
@@ -4694,7 +4694,7 @@ async function saveDefaults(chosen) {
 }
 
 /**
- * Ask, then reset (723). "Reset to server defaults" both forgets the saved
+ * Ask, then reset. "Reset to server defaults" both forgets the saved
  * set on the server and puts every live control on the page back to the
  * server's own defaults at once, so it is asked for the same way
  * `confirmStartOver` is: a `<dialog>`, not `window.confirm`, "Keep my
@@ -4737,7 +4737,7 @@ async function resetDefaults() {
   store.defaultsNote = null;
   store.defaultsReset = true;
   clearSettings();
-  // Nothing left to be in step with (717): `syncSaveDefaultsChecked` no
+  // Nothing left to be in step with: `syncSaveDefaultsChecked` no
   // longer touches the box once `store.defaults` is null, so this is the one
   // place that has to.
   input("save-defaults").checked = false;
@@ -4771,7 +4771,7 @@ async function updateDefaults() {
 }
 
 /**
- * The notice's own dismissal (674/686), scoped to the dropped set it was
+ * The notice's own dismissal, scoped to the dropped set it was
  * shown for. `localStorage` in a `try`, the same pattern as `storedLocale`:
  * Dismiss must not silence a *later*, different drop, so it is keyed by a
  * hash of the set rather than a bare flag, and a browser that refuses
@@ -4855,7 +4855,7 @@ function renderDefaults() {
     said = t("defaults.dropped", { list: named.map(droppedName).join(", ") });
   }
   // The persisted half of Dismiss: hidden in this browser only while the
-  // dropped set is the one it was pressed for (686); a later, different drop
+  // dropped set is the one it was pressed for; a later, different drop
   // is not silenced by an old click.
   const dismissedForThisDrop = store.defaultsDropped.length > 0
     && !store.defaultsUpdateProblem
@@ -4894,7 +4894,7 @@ function renderSaveDefaults() {
  * Order-independent equality over the plain shapes `currentDefaults` and a
  * saved-defaults object are built from: strings, numbers, booleans and
  * nested objects such as `model`, no arrays. `JSON.stringify` alone is not
- * enough (717): insertion order is not guaranteed to match between a value
+ * enough: insertion order is not guaranteed to match between a value
  * this page just built and the same value read back from the server.
  * @param {any} a
  * @param {any} b
@@ -4910,7 +4910,7 @@ function sameShape(a, b) {
 
 /**
  * The box beside Run stops being a one-shot request the moment a saved set
- * exists (717): it becomes a live "are these my saved defaults" reading,
+ * exists: it becomes a live "are these my saved defaults" reading,
  * ticked exactly while the settings the page would submit now agree with
  * what is saved. Called after every settings change and once at load; never
  * from the box's own `change` handler, the one place a reader's click has to
@@ -4949,7 +4949,7 @@ function setRunning(running) {
   // stepping away from a run.
   /** @type {HTMLButtonElement} */ (el("start-over")).disabled = running;
   // The save-defaults cell follows the run: the box while idle, the note
-  // while a run goes (674). A success note ends with the run.
+  // while a run goes. A success note ends with the run.
   if (!running && store.defaultsNote && store.defaultsNote.tone === "ok") store.defaultsNote = null;
   renderSaveDefaults();
 }
@@ -4958,7 +4958,7 @@ function setRunning(running) {
 async function submit() {
   const button = /** @type {HTMLButtonElement} */ (el("submit"));
   // Read at the click, before anything changes, so what is saved is what was
-  // sent (674). Saved only once the server has accepted the run.
+  // sent. Saved only once the server has accepted the run.
   const keep = input("save-defaults").checked ? currentDefaults() : null;
   store.defaultsNote = null;
   enableRunTab();
@@ -5130,7 +5130,7 @@ function startOver() {
   stopWatching();
   showRetry("");
   store.runId = "";
-  // Back to a pane with nothing in it (717): the Current run tab goes back to
+  // Back to a pane with nothing in it: the Current run tab goes back to
   // `aria-disabled`, matching the same pane on a first page load.
   store.hasRun = false;
   const runTab = document.getElementById("output-tab-run");
@@ -5159,14 +5159,14 @@ function startOver() {
   // `renderLossBudget` only writes the default into an *empty* field, so the
   // field is emptied here rather than left holding the last typed figure.
   /** @type {HTMLInputElement} */ (el("loss-budget")).value = "";
-  // A clean slate for the box too (717): if there is a saved set, applying it
+  // A clean slate for the box too: if there is a saved set, applying it
   // below puts the controls back on exactly what it holds and
   // `syncSaveDefaultsChecked` (through `refreshIdleStatus` further down) picks
   // this up as ticked again; if there is none, this is the only place left to
   // set it, since that function only ever touches the box once a save exists.
   input("save-defaults").checked = false;
   // Back to where this reader starts: their saved settings when they have
-  // some (674). Nothing is named again that the notice already named.
+  // some. Nothing is named again that the notice already named.
   if (store.defaults) {
     const named = store.defaultsDropped.slice();
     applyDefaults(store.defaults);
@@ -5207,7 +5207,7 @@ function stopWatching() {
 }
 
 /**
- * Follow a run the page did not submit: one from the history list (660).
+ * Follow a run the page did not submit: one from the history list.
  *
  * What a reader who comes back after a restart, or from another tab, needs:
  * the same progress panel and the same status line a submit gives, attached
@@ -5237,7 +5237,7 @@ function follow(id) {
 }
 
 /**
- * Show the log of a run that has stopped: an interrupted or failed one (660).
+ * Show the log of a run that has stopped: an interrupted or failed one.
  *
  * Not `follow`: that polls at once, finds the run over and closes the stream
  * before the replay has arrived, so the reader saw an empty log and the
@@ -5289,7 +5289,7 @@ function replay(id) {
 }
 
 /**
- * The run-card Retry button, for `id`, or hidden for "" (660).
+ * The run-card Retry button, for `id`, or hidden for "".
  * @param {string} id
  */
 function showRetry(id) {
@@ -5300,7 +5300,7 @@ function showRetry(id) {
 }
 
 /**
- * Ask, then retry (660). The dialog says the new run is billed again before
+ * Ask, then retry. The dialog says the new run is billed again before
  * anything is sent; "Do not retry", Escape and the backdrop all leave it.
  * On success the page follows the new run, which names the old one.
  * @param {string} id
@@ -5336,7 +5336,7 @@ async function confirmRetry(id) {
 }
 
 /**
- * Can this browser show a notification the reader could still allow? (660)
+ * Can this browser show a notification the reader could still allow?
  *
  * False where there is no `Notification` at all -- an older browser, an
  * insecure origin -- and where the reader has already refused, so the button
@@ -5349,7 +5349,7 @@ function notifiable() {
 }
 
 /**
- * The "Notify me" button for the followed run, or hidden (660).
+ * The "Notify me" button for the followed run, or hidden.
  * @param {string} id
  */
 function showNotify(id) {
@@ -5362,7 +5362,7 @@ function showNotify(id) {
 
 /**
  * Ask the browser for permission -- here, on a click, and nowhere else -- and
- * remember that this run should be announced when it lands (660). Silent on
+ * remember that this run should be announced when it lands. Silent on
  * every failure: a refusal hides the button and nothing else changes.
  */
 async function askToNotify() {
@@ -5381,7 +5381,7 @@ async function askToNotify() {
 }
 
 /**
- * Announce a run that landed, once, if the reader asked (660). The title is
+ * Announce a run that landed, once, if the reader asked. The title is
  * "Run finished" or "Run failed" and the body the short id: nothing of any
  * document, since a notification is shown outside this page and can sit on
  * a locked screen.
@@ -5404,7 +5404,7 @@ function announceLanding(run) {
 
 /**
  * The "Cancel run" button, shown while the page follows a queued or running
- * run (639). Enabled again every time it is shown, so a cancel refused for a
+ * run. Enabled again every time it is shown, so a cancel refused for a
  * run that had just finished does not leave the next run's button dead.
  * @param {boolean} shown
  */
@@ -5415,7 +5415,7 @@ function showCancelRun(shown) {
 }
 
 /**
- * Ask, then cancel (639). The dialog says what a cancel cannot undo -- the
+ * Ask, then cancel. The dialog says what a cancel cannot undo -- the
  * calls already made are billed -- before anything is sent; "Keep it
  * running", Escape and the backdrop all leave the run alone.
  */
@@ -5476,7 +5476,7 @@ function startTicking() {
 }
 
 /**
- * The pipeline stage a progress message belongs to, in a reader's words (714).
+ * The pipeline stage a progress message belongs to, in a reader's words.
  *
  * The stream's messages are the command line's own ("decompose: asking
  * qwen/qwen3-8b", "verify (forward)"), and the status line under the Run
@@ -5533,8 +5533,8 @@ function onEvent(kind, event) {
  * depth, retrieval -- and its docstring says why: *"here they are seven fields,
  * because the page has seven places to put them"*. The page had none. It rendered every
  * event as its kind plus `message`, and `message` for a banner is the short
- * form `claimcheck merge`, so the first thing an operator saw of their run was
- * **"BANNER / claimcheck merge"** (500).
+ * form of the merge invocation under the tool's old name, so the first
+ * thing an operator saw of their run was **"BANNER / merge"**.
  *
  * Pairs rather than a joined string, which is the change from that fix. The
  * joined form put five dot-separated values in the column every other row uses
@@ -5544,7 +5544,7 @@ function onEvent(kind, event) {
  * user why that is"*. `bannerRow` gives each value its own name and makes the
  * whole thing a header for the run; this function is where the seven are read,
  * and it is still the only place they are read. An eighth, `roles`, arrives
- * only when the model and the endpoint are one role's and not the run's (576).
+ * only when the model and the endpoint are one role's and not the run's.
  * @param {any} payload
  * @returns {Array<[string, string, string?]>} catalogue key, value, and a
  *   literal label for a role group the catalogue has no name for
@@ -5568,18 +5568,18 @@ function bannerFields(payload) {
     ["banner.fidelity", f.fidelity],
     ["banner.depth", f.depth],
     // Before the window rather than after it, because it is the one field on
-    // this line that says something may leave the machine (548). A grant the
+    // this line that says something may leave the machine. A grant the
     // model has is decided before the first call and cannot change once the
     // run is going, so it belongs where the endpoint is: on the line that says
     // what is about to happen, not only in the block read afterwards.
     ["banner.retrieval", f.retrieval],
     ["banner.window", f.window],
-    // The merge's effort level on a command run (613), the slider's choice or
+    // The merge's effort level on a command run, the slider's choice or
     // the route's default, named the way the slider names it.
     ["banner.effort", f.effort ? effortName(String(f.effort)) : ""],
   ];
   // Each role apart, when the server says one Model and one Endpoint row
-  // would each describe one role and not the run (576). The groups replace
+  // would each describe one role and not the run. The groups replace
   // those two rows where they stood: kept beside them, the check's model
   // would still read as the run's. The route is the one the run was billed
   // under, in the words the button used before the click.
@@ -5727,7 +5727,7 @@ async function poll(id) {
     return;
   }
   if (status.state === "queued") {
-    // Where it stands (660), from the server's own count on every poll, so
+    // Where it stands, from the server's own count on every poll, so
     // the number moves as the runs ahead of it start.
     if (typeof status.queue_position === "number") {
       say("busy", t("word.queued"), t("status.queued.position", {
@@ -5742,7 +5742,7 @@ async function poll(id) {
   stopWatching();
   announceLanding(status);
   if (status.state === "interrupted") {
-    // The server stopped under it (660). Never re-run on its own; the reader
+    // The server stopped under it. Never re-run on its own; the reader
     // decides, with the Retry beside this line.
     say("bad", t("word.interrupted"), t("status.interrupted"));
     showRetry(status.retryable ? id : "");
@@ -5751,7 +5751,7 @@ async function poll(id) {
     return;
   }
   if (status.state === "cancelled") {
-    // What the cancel left billed (639), from the report's own count.
+    // What the cancel left billed, from the report's own count.
     store.cancelling = false;
     say("warn", t("word.cancelled"), typeof status.calls_made === "number"
       ? t("status.cancelled", { n: status.calls_made })
@@ -6030,7 +6030,7 @@ function forgetShownRun() {
  * The bytes are handed over through a `blob:` URL belonging to this document,
  * which reaches no network. The report page's own control is **not** this
  * mechanism: that page is sandboxed into an opaque origin and cannot ask this
- * server for anything, so it carries the file in a `data:` URL instead (534).
+ * server for anything, so it carries the file in a `data:` URL instead.
  * Two controls, two mechanisms, and the difference is the isolation rather
  * than a preference.
  * @param {string} url
@@ -6094,7 +6094,7 @@ function wireDownload(anchor, template) {
 /* ------------------------------------------------------------------ */
 
 /**
- * Select exactly the merged document, and nothing else on the page (561).
+ * Select exactly the merged document, and nothing else on the page.
  *
  * The operator: *"if we select the text box and press ctrl+a it would select
  * the text in the box and not the entire website"*. The box is a `<pre>`, so
@@ -6175,8 +6175,8 @@ async function copyMerged() {
 /* ------------------------------------------------------------------ */
 
 /**
- * Select exactly the CLI-equivalent block's command, and nothing else (561's
- * reason, applied to the second `<pre>` this page grew).
+ * Select exactly the CLI-equivalent block's command, and nothing else (the
+ * same reason as above, applied to the second `<pre>` this page grew).
  * @returns {boolean} false when there is nothing to select
  */
 function selectCliCommand() {
@@ -6303,7 +6303,7 @@ function renderCliEquivalent(payload) {
  */
 function renderReport(report) {
   // The copy note is about an action, and this function runs again on a
-  // language change (561). A sentence saying "Copied." in the language the
+  // language change. A sentence saying "Copied." in the language the
   // reader has just left is a stale string in the wrong language, and the
   // action it describes is over.
   el("copy-note").hidden = true;
@@ -6441,7 +6441,7 @@ const RETRIEVAL_KEYS = {
 };
 
 /**
- * What a run at the retrieving level achieved, on the verdict (571).
+ * What a run at the retrieving level achieved, on the verdict.
  *
  * `sourcing.retrieval` is `retrieved`, `not-retrieved`, `unmeasured`, or empty
  * below that level, where nothing was promised -- the server works it out
@@ -6470,7 +6470,7 @@ function retrievalAdvice(report) {
     // A run with no silent call counted -- none reported at all -- has no
     // number to give, and "0 of its calls" would read as none being silent.
     k: silent ? silent : t("word.all"),
-    // The merge's calls on a merge (665): the counts are the merge role's,
+    // The merge's calls on a merge: the counts are the merge role's,
     // and "none of its 1 call(s)" over a run that made six would be a false
     // sentence with a true number in it.
     calls: sourcing.retrieval_judged_on === "merge"
@@ -6517,7 +6517,7 @@ function suspendedGuarantee(report) {
  * them carries a word as well as a colour.
  *
  * `notchecked` and `notapplicable` read alike at a glance and mean two
- * different things (716): a check that did not run is a gap in the answer,
+ * different things: a check that did not run is a gap in the answer,
  * one that does not apply at the chosen level was never asked for, the same
  * way this level's schema never hands the merge the field. Telling them
  * apart is why the summary tile's "N did not run" counts the first and not
@@ -6572,7 +6572,7 @@ function sectionState(chip, ran, count) {
  *
  * Only ever marks. A section that has findings in it, or that could not be
  * checked at all, is the one a reader has to see without going looking. The
- * sections are tabs since 673, not folds, so the mark is what
+ * sections are tabs, not folds, so the mark is what
  * `syncFindingTabs` reads to pick the tab a new result opens on; the marks
  * are cleared by `renderReport` before the renderers run.
  * @param {string} hook
@@ -6597,7 +6597,7 @@ function emptyNote(ran, emptyKey) {
 
 /**
  * A short, stable id for one finding, addition or verdict, built from its own
- * content rather than from where it happens to land in any one list (717).
+ * content rather than from where it happens to land in any one list.
  *
  * `renderReview`'s list and a section's own list walk the same findings
  * through two different filters and orders -- `renderNumbers` sorts faults
@@ -6626,7 +6626,7 @@ function findingId(family, content) {
  * @param {Array<[string, string, boolean]>} detail name, value, quote it
  * @param {string} tone
  * @param {HTMLElement|null} [extra] one block below the named detail
- * @param {string} [id] this entry's `findingId`, so the review list (488, 717)
+ * @param {string} [id] this entry's `findingId`, so the review list
  *   can jump a reader here directly; omitted for a card nothing ever jumps to.
  * @returns {HTMLElement}
  */
@@ -6656,14 +6656,14 @@ function findingItem(label, text, detail, tone, extra, id) {
 }
 
 /**
- * The two sides of one finding, one directly above the other (561).
+ * The two sides of one finding, one directly above the other.
  *
  * **The same three lines the Markdown report writes**, in the same order, with
  * the labels padded to one width so the texts start in the same column -- that
  * column is the whole request: *"so the difference can be read by scanning
  * down a column rather than along a sentence"*. The strings are localised
  * here, as the row's own labels already were, but the *diff* is the engine's
- * published one; the page never diffs anything itself (544's rule).
+ * published one; the page never diffs anything itself.
  *
  * Returns null where there is nothing to stack, and where there is only one
  * side: a disclosure over a single line is a control that hides one line.
@@ -6693,7 +6693,7 @@ function stackPanel(finding) {
  * keeps the prompt-leak and restated-claim findings in their own blocks,
  * because they are not among the nine mechanical checks. The page read only
  * the first block, so those two families were counted in the checks table --
- * "Restated claims, 1 to read" -- and rendered nowhere at all (488). An
+ * "Restated claims, 1 to read" -- and rendered nowhere at all. An
  * operator reading a long document saw a chip pointing at an item no section
  * contained.
  *
@@ -6708,13 +6708,13 @@ function structuralFindings(report) {
     ...((report.structural || {}).findings || []),
     ...((report.prompt_leaks || {}).findings || []),
     ...((report.restated_claims || {}).findings || []),
-    // The fourth block (569), and the reason this collector exists: a merge
+    // The fourth block, and the reason this collector exists: a merge
     // that credited a fact to the wrong document exits 1, and until this line
-    // the page showed that exit and no section holding the reason (572). It
+    // the page showed that exit and no section holding the reason. It
     // goes to a section of its own, not to either partition below, so the two
     // renderers that filter by kind skip it and `renderAttributions` takes it.
     ...((report.attributions || {}).findings || []),
-    // The fifth (601): a decimal written in the other convention, a numeral
+    // The fifth: a decimal written in the other convention, a numeral
     // readable two ways, a merged value that changed, a document whose
     // numerals go against its language. Its own section again,
     // `renderNumbers`, and the partitions below skip it by kind.
@@ -6723,13 +6723,13 @@ function structuralFindings(report) {
 }
 
 /**
- * What a clean run says, affirmatively and with its denominators (495).
+ * What a clean run says, affirmatively and with its denominators.
  *
  * The old string read "Nothing was dropped, contradicted or invented that
  * this tool could find" and had three faults. It was negative, where the
  * result is positive. It listed three failure classes and not the fourth --
  * `partially_dropped` -- which is the narrowing `report.verdict_line`'s own
- * comment says task 13 already had to fix in the CLI's version of this
+ * comment says already had to be fixed in the CLI's version of this
  * sentence. And "that this tool could find" hedges without informing: a
  * reader cannot act on it, while the number of claims checked is exactly what
  * tells them how much the clean result is worth.
@@ -6764,15 +6764,15 @@ function cleanAdvice(report) {
 }
 
 /**
- * What to tell a reader to do (488, 717).
+ * What to tell a reader to do.
  *
  * `advice.look` used to name which sections held something -- "Conflicts and
  * omitted content below need a look" -- because the review list above them
  * was itself unnamed and unreachable: a run whose one finding was a
  * misattribution sent the reader to two empty sections while the item sat in
- * a third (572), so naming the *right* sections became the fix. Now that the
+ * a third, so naming the *right* sections became the fix. Now that the
  * review list ("What needs your attention") names each item's own section and
- * jumps a reader straight to it on a click (717), the sentence naming
+ * jumps a reader straight to it on a click, the sentence naming
  * sections again in prose above that list is the thing it used to fix
  * happening a second time, in German rendered from a mid-sentence list of
  * capitalised section names that read as a grammar mistake. One plain
@@ -6787,7 +6787,7 @@ function cleanAdvice(report) {
 function adviceFor(report) {
   const code = report.exit_code;
   if (code === 0) return cleanAdvice(report);
-  // 665. A 2 whose only reason is a `sourced` merge that looked nothing up:
+  // A 2 whose only reason is a `sourced` merge that looked nothing up:
   // the run finished, so "part of the check did not complete" would be false.
   // Served as a boolean, `recall_only`'s rule: the page holds no fidelity
   // vocabulary and does not work out which level retrieves.
@@ -6801,7 +6801,7 @@ function adviceFor(report) {
 }
 
 /**
- * The merge's own warning that these documents may not belong together (497).
+ * The merge's own warning that these documents may not belong together.
  *
  * Above the review list and below the verdict, because it is not a finding
  * and must not be read as one: a merge of a C# file and a Java file can be
@@ -6824,7 +6824,7 @@ function renderMismatch(report) {
 }
 
 /**
- * Everything that needs a decision, in one list, above the sections (488).
+ * Everything that needs a decision, in one list, above the sections.
  *
  * The operator's report: a long document produces dozens of green rows and
  * one amber chip, and finding the chip is work this page should not be
@@ -6842,13 +6842,13 @@ function renderMismatch(report) {
  * banner already says the run was clean.
  *
  * **This is not the report's `Review queue`, and the two are deliberately
- * different things** (545). That section is 2.5's list -- claims the merge
- * declared dropped and the forward pass confirms are gone -- with a membership
+ * different things**. That section is the findings-versus-queue list: claims the merge
+ * declared dropped and the forward pass confirms are gone, with a membership
  * rule and a budget line of its own; this is an index over sections that
  * already exist, and it has no counterpart in the Markdown report because a
  * Markdown report is read top to bottom with every section present. The page
  * is a set of collapsible panels where the one item that matters can be behind
- * a closed one, which is the whole of 488. The report's queue has its
+ * a closed one, which is exactly the failure this view exists to prevent. The report's queue has its
  * counterpart here in `renderOmitted`, wider by construction: it lists every
  * `dropped` declaration rather than only the confirmed ones.
  * @param {any} report
@@ -6887,7 +6887,7 @@ function renderReview(report) {
     const record = additions[i] || {};
     // The label follows the record's own basis. It read "stated without a
     // source" for every addition, which went false the moment one could carry
-    // a citation (537) -- and false in the direction that matters, because a
+    // a citation -- and false in the direction that matters, because a
     // reader scanning this list would take a cited record for an uncited one
     // and stop weighing it.
     const basis = String(record.basis || "");
@@ -6910,7 +6910,7 @@ function renderReview(report) {
 
 /**
  * One row of the review list: what it is, what it is about, the one-line
- * decision it calls for, and where it lives (488, 717). The whole row is a
+ * decision it calls for, and where it lives. The whole row is a
  * button -- clicking it, or pressing Enter or Space on it, switches to the
  * section's own tab if another one is showing, scrolls the matching card
  * into view, moves focus onto it and flashes it briefly, through
@@ -6944,7 +6944,7 @@ function reviewItem(label, detail, sectionKey, jumpId) {
 }
 
 /**
- * Bring one finding into view from the review list (488, 717).
+ * Bring one finding into view from the review list.
  *
  * Switches to its section's finding-tab first, only when another one is
  * current -- a section a renderer hid takes its tab with it (`syncFindingTabs`),
@@ -7115,7 +7115,7 @@ function renderAdditions(report) {
        // `setText` is what puts a detail on the page, so a source is never an
        // anchor. A link is an invitation, and an invitation the page drew
        // reads as a destination the page has been to -- which is exactly the
-       // impression a fabricated citation needs in order to do damage (537).
+       // impression a fabricated citation needs in order to do damage.
        // `t` answers with the key itself when a string is missing, which is
        // this file's convention and the right one here: an unrecognised basis
        // is visible rather than silently rendered as one of the two.
@@ -7139,7 +7139,7 @@ function renderAdditions(report) {
   // Two facts, in the section that lists the sources rather than in a
   // footnote elsewhere: what this tool did about them, which is nothing and
   // never changes, and what the model did, which is a measurement with three
-  // states off `server_tool_use`. `unmeasured` is not `not-searched` (537).
+  // states off `server_tool_use`. `unmeasured` is not `not-searched`.
   const sourcing = report.sourcing || {};
   const state = String(sourcing.state || "unmeasured");
   const searched = (Number(sourcing.web_search) || 0)
@@ -7149,18 +7149,18 @@ function renderAdditions(report) {
                 "not-searched": "section.additions.notsearched"};
   const toolUse = sourcing.tool_use || {};
   const toolState = String(toolUse.state || "unmeasured");
-  // What the level that promised retrieval achieved, or "" below it (571).
+  // What the level that promised retrieval achieved, or "" below it.
   const outcome = String(sourcing.retrieval || "");
   const about = document.createElement("p");
   about.className = "hint";
   // **The blind counter keeps its number and loses its conclusion** once the
-  // turn counter has reported (548). `not-searched` ends "so every source here
+  // turn counter has reported. `not-searched` ends "so every source here
   // is recalled rather than looked up", and beside a turn count that saw tool
   // use that half is simply false: `server_tool_use` counts a vendor's
   // server-side tools and cannot see a command backend's local one.
   //
-  // **And it loses it at the retrieving level whether or not turns reported**
-  // (571). A run there is a command run by construction -- the level refuses
+  // **And it loses it at the retrieving level whether or not turns reported**.
+  // A run there is a command run by construction -- the level refuses
   // HTTP -- so the counter is blind on every one of them, and over an
   // unmeasured turn count its zero was the only instrument on the page: it
   // said "every source here is recalled" about a run nobody measured, which
@@ -7189,7 +7189,7 @@ function renderAdditions(report) {
     setText(silent, t("toolstate.unmeasured"));
     blocks.push(silent);
   }
-  // The second instrument, before the first rather than instead of it (548).
+  // The second instrument, before the first rather than instead of it.
   // `state` above is read off `server_tool_use`, which counts a vendor's
   // server-side web tools and is blind to a command backend's own -- measured:
   // a call that demonstrably fetched reported zero. `tool_use` counts turns,
@@ -7201,9 +7201,9 @@ function renderAdditions(report) {
     turns.className = "hint";
     // `state` is read off the calls that reported, so one silent call beside
     // two short ones is `no-tool-use` -- whose sentence concludes "retrieved
-    // nothing" over a call that may be the one that fetched (568). The
+    // nothing" over a call that may be the one that fetched. The
     // counter's own `retrieval` is `unmeasured` there, and that is what is
-    // said (571).
+    // said.
     setText(turns, t(toolSentenceKey(toolUse),
                      { n: Number(toolUse.calls_with_tool_use) || 0,
                        turns: Number(toolUse.turns) || 0 }));
@@ -7225,8 +7225,8 @@ function renderAdditions(report) {
       blocks.push(recall);
     }
   }
-  // A declared correction is still a finding and still moves the exit code
-  // (490's rule, applied). Said where the reader meets the row that caused
+  // A declared correction is still a finding and still moves the exit code.
+  // Said where the reader meets the row that caused
   // it, so a clean-looking declaration beside a red banner is explained.
   const corrections = records.filter(
     (/** @type {any} */ row) => String((row || {}).corrects || "").trim()).length;
@@ -7241,7 +7241,7 @@ function renderAdditions(report) {
 }
 
 /**
- * Which `toolstate.*` sentence the turn counter's reading earns (571).
+ * Which `toolstate.*` sentence the turn counter's reading earns.
  *
  * `state` alone, except where some calls reported and some did not: then
  * `state` is `no-tool-use` off the ones that reported and its sentence says
@@ -7311,9 +7311,9 @@ function renderOmitted(report) {
 }
 
 /**
- * Sentences the merge credited to a source that does not state them (572).
+ * Sentences the merge credited to a source that does not state them.
  *
- * The page's half of 569. The engine publishes `attributions: {ran,
+ * The page's half of it. The engine publishes `attributions: {ran,
  * predicate, findings}` on both commands and moves the exit code to 1 on a
  * firing; `structuralFindings` collects the findings and this is the section
  * that shows them, so a run whose only finding is a misattribution has a
@@ -7342,7 +7342,7 @@ function renderAttributions(report) {
 }
 
 /**
- * One misattribution as a row: issue, source, merge, why (552, 561).
+ * One misattribution as a row: issue, source, merge, why.
  *
  * `structuralItem`'s layout with one field renamed, and the rename is the
  * point. `document` on this finding is the source the merge *named*, which is
@@ -7369,7 +7369,7 @@ function attributionItem(report, finding) {
 }
 
 /**
- * How each document writes its decimals, and the numerals that break it (601).
+ * How each document writes its decimals, and the numerals that break it.
  *
  * The page's half of `numerals.check`. Hidden when nothing was flagged, the
  * report's rule for its own **Number format** section; whether the check ran
@@ -7427,7 +7427,7 @@ function renderNumbers(report) {
 }
 
 /**
- * The word diff's notation, once above a list that uses it (552).
+ * The word diff's notation, once above a list that uses it.
  *
  * `[-...-]` and `{+...+}` carry the difference without colour, which is what
  * lets one rendering serve the page, the Markdown report and a terminal. A
@@ -7514,7 +7514,7 @@ function judgedAgainst(report, direction) {
  * @returns {HTMLElement}
  */
 function structuralItem(finding) {
-  // **Issue, source, merge, why -- in one row** (552). The operator's report:
+  // **Issue, source, merge, why -- in one row**. The operator's report:
   // *"the user does not need to refer to sections or the documents but gets
   // the full understanding of the claims directly in one row"*. `detail` is
   // the why and was all a row carried, so a reader met "this is reworded" and
@@ -7531,7 +7531,7 @@ function structuralItem(finding) {
     [t("detail.segment"), shorten(String(finding.segment || ""), 300), true],
     [t("detail.source"), String(finding.document || ""), false],
   ];
-  // The compact form stays on the row (552) and the stack goes below it (561).
+  // The compact form stays on the row and the stack goes below it.
   // Both, because they answer two questions: the one-liner says *what* changed
   // at a glance and earns its place in a list of rows, and the stack says what
   // the two texts are -- the question a reader asks next and used to have to
@@ -7568,7 +7568,7 @@ function statusWord(verdict) {
 }
 
 /**
- * Does this claim's verdict ask the reader for anything? (495)
+ * Does this claim's verdict ask the reader for anything?
  *
  * `finding: "none"` is a claim that came back clean, and an absent verdict is
  * one nothing was said about -- which is *not* clean and is not a finding
@@ -7620,7 +7620,7 @@ function renderClaims(report) {
   });
 
   // Sortable by status, because on a long document this table is where the
-  // one item that matters hides (495). 140 rows on the operator's `unrelated`
+  // one item that matters hides. 140 rows on the operator's `unrelated`
   // run, all but a handful green.
   //
   // Two states and not three: reading order, and everything that needs a
@@ -7672,7 +7672,7 @@ function renderClaims(report) {
 }
 
 /**
- * What the run cost, or why there is no figure (488).
+ * What the run cost, or why there is no figure.
  *
  * Never a bare number and never `$0.00`. The figure is arithmetic over a
  * table of rates somebody read off a pricing page on a stated date, so the
@@ -7710,7 +7710,7 @@ function costSentence(block) {
 
 /**
  * Whether this run's fidelity level ever hands the merge the `additions`
- * field at all (716).
+ * field at all.
  *
  * Read from `/config`'s own `adds` flag (`merge.ADDS`, served per level)
  * rather than from the level's name, the rule every picker on this page
@@ -7760,7 +7760,7 @@ function renderChecks(report) {
     ["check.decisions", decisions.ran ? "ungraded" : "notchecked", 0,
      t("check.decisions.note", { n: (decisions.records || []).length })],
     // `notapplicable` where the level never hands the merge the field at
-    // all (716) -- most runs, and not a gap in the answer. Where it is
+    // all -- most runs, and not a gap in the answer. Where it is
     // applicable, `notchecked` would mean the report is missing the field
     // entirely, which does not happen at `open`/`sourced` (`additions` is
     // `required` there); `ungraded` otherwise, the same as before: nothing
@@ -7779,16 +7779,16 @@ function renderChecks(report) {
        claims: figure(restated.claims) || "0",
        source: figure(restated.source_claims) || "0",
      })],
-    // Whether the attribution check ran, on every run (572). Its section is
+    // Whether the attribution check ran, on every run. Its section is
     // hidden when clean, so this row is where "checked, clean" and "not
     // checked" are told apart for it.
     ["check.attributions", attributions.ran ? "clean" : "notchecked",
      (attributions.findings || []).length, t("check.attributions.note")],
-    // The number format (601), on every run for the attribution row's reason:
+    // The number format, on every run for the attribution row's reason:
     // its section is hidden when nothing was flagged.
     ["check.numbers", numbers.ran ? "clean" : "notchecked",
      (numbers.findings || []).length, t("check.numbers.note")],
-    // What the merge actually did, beside what was asked of it (488). The
+    // What the merge actually did, beside what was asked of it. The
     // row used to give the two counts and the ceiling and leave the division
     // to the reader, so a run at 0.4% and a run at 2.9% read identically
     // against a 3% ceiling -- one is nowhere near it and the other is about
@@ -7829,7 +7829,7 @@ function renderChecks(report) {
      })],
   ];
 
-  // Anything that is not clean, first (488). A long document produces dozens
+  // Anything that is not clean, first. A long document produces dozens
   // of rows and one of them matters; the operator's report was that a single
   // amber chip among them is unfindable, and hunting for it is not work this
   // page should be making anybody do.
@@ -7909,8 +7909,8 @@ function renderProvenance(report) {
   const decoding = provenance.decoding || {};
   const counts = provenance.counts || {};
   const windows = provenance.window || {};
-  // What the model was permitted to reach for, and what the turn counter saw
-  // (548). Two facts on one row and in this order, because the permission is
+  // What the model was permitted to reach for, and what the turn counter saw.
+  // Two facts on one row and in this order, because the permission is
   // the half no counter carries: a run that did not look and a run that could
   // not look are the same empty result and opposite conclusions about the
   // citations under it.
@@ -7926,8 +7926,8 @@ function renderProvenance(report) {
 
   // Whether the command backend that answered ran isolated: safe mode, and
   // the exact `--tools` grant, per role, off the argv `command_for` really
-  // built (611). Unlike `retrieval` above, this is not empty below `sourced`
-  // -- 610 put safe mode on at every level -- so it is the only place a
+  // built. Unlike `retrieval` above, this is not empty below `sourced`
+  // -- safe mode is on at every level -- so it is the only place a
   // `high` report says the operator's own CLAUDE.md, skills, plugins and MCP
   // servers were kept out of the run. Roles that share a state are named
   // together, the `windowSaid` shape above: the roles share one command by
@@ -7983,7 +7983,7 @@ function renderProvenance(report) {
     .filter(Boolean).join(" ");
 
   // How each role was paid for, as the server recorded it when it chose the
-  // route (570): the words the submit button used before the click, said
+  // route: the words the submit button used before the click, said
   // after it, per role. `endpointKind` rather than the raw word, so a kind a
   // newer server sends reads `route not identified` rather than throwing in
   // `routeLabel`. Roles sharing a route are named together, and named every
@@ -8019,7 +8019,7 @@ function renderProvenance(report) {
       ? said : roles.join(", ") + ": " + said)
     .join(" · ");
 
-  // How hard each role was asked to think, as the run recorded it (567).
+  // How hard each role was asked to think, as the run recorded it.
   // `decoding.effort` is a role -> level map read back off the argv the
   // backend really ran, so a page that printed a level of its own would be
   // printing the build's default rather than the run's. Per role and never
@@ -8028,7 +8028,7 @@ function renderProvenance(report) {
   // Absent on an HTTP run, where there is no level, and then nothing is said.
   const effort = Object.entries(decoding.effort || {})
     .map(([role, level]) => role + "=" + String(level));
-  // A model with one level rather than a scale (688, ruling 11). The roles
+  // A model with one level rather than a scale. The roles
   // come off the report; the sentence is this page's own translated string,
   // not the engine's English label -- `decoding.effort_single_level`'s value
   // is data for a CLI or a JSON reader, and this panel is localised.
@@ -8051,14 +8051,14 @@ function renderProvenance(report) {
   ].filter(Boolean).join(", ")
     + (reasoned ? "; " + t("provenance.reasoned_anyway", { roles: reasoned }) : "")
     // A single-level model, beside a graded one where a run used both kinds
-    // of backend across roles (688, ruling 11).
+    // of backend across roles.
     + (singleLevel ? "; " + t("provenance.effort_single_level", { roles: singleLevel }) : "")
     // A level asked for and dropped, beside the ones that went out. It is
     // dropped rather than refused, so this clause is the only place an
     // operator who set one for an HTTP endpoint learns it went nowhere.
     + (ignored ? "; " + t("provenance.effort_ignored", { roles: ignored }) : "")
     // Whose choice a level was, when it was the requester's on the effort
-    // slider (613): the report's own clause, in the page's words.
+    // slider: the report's own clause, in the page's words.
     + (requested.length
       ? "; " + t("provenance.effort_requested", { roles: requested.join(", ") }) : "");
 
@@ -8131,7 +8131,7 @@ function renderProvenance(report) {
 /**
  * Every run this server still holds, as tombstones.
  *
- * Since 660 the list is also where a reader who comes back -- after a few
+ * The list is also where a reader who comes back -- after a few
  * hours, or after the server restarted -- picks their runs up: a queued run
  * says where it stands and can be followed, an interrupted or failed one can
  * be retried, and while anything in it is queued or running the list asks
@@ -8167,7 +8167,7 @@ async function refreshHistory() {
       }) : ""));
     const when = document.createElement("span");
     when.className = "when";
-    // The page's language, not the browser's (606) -- same reason as `figure`,
+    // The page's language, not the browser's -- same reason as `figure`,
     // and the same fallback: a date is formatted digits too.
     setText(when, run.created_at
       ? new Date(run.created_at * 1000).toLocaleString(locale.tag || "en") : "");
@@ -8180,11 +8180,11 @@ async function refreshHistory() {
     item.appendChild(id);
     item.appendChild(summary);
     item.appendChild(when);
-    // A cancelled run's report is the account of what ran (639), and it
+    // A cancelled run's report is the account of what ran, and it
     // opens by saying it was cancelled.
     if (state === "done" || state === "cancelled") item.appendChild(open);
     // Follow a live run; replay the log of one that stopped short, which is
-    // where an interrupted run's finished steps are (660).
+    // where an interrupted run's finished steps are.
     const followable = state === "queued" || state === "running";
     if ((followable || state === "interrupted" || state === "failed")
         && store.runId !== runId) {
@@ -8204,7 +8204,7 @@ async function refreshHistory() {
       item.appendChild(again);
     }
     if ((state === "interrupted" || state === "failed") && run.error) {
-      // What ran before the stop, from what reached the server's disk (660).
+      // What ran before the stop, from what reached the server's disk.
       // The server's own sentence, which names steps and never a document.
       const why = document.createElement("span");
       why.className = "note";
@@ -8220,7 +8220,7 @@ async function refreshHistory() {
 }
 
 /**
- * A run's state in the reader's language (639); the raw state for one this
+ * A run's state in the reader's language; the raw state for one this
  * page has no word for, rather than a blank.
  * @type {Record<string, string>}
  */
@@ -8292,9 +8292,9 @@ function renderSession() {
   el("sign-out").hidden = !signedIn;
   const name = signedIn ? String(session.user.username || "") : "";
   const said = signedIn ? t("auth.as", { name: name }) : "";
-  // The name is shown in full and alone (673): the sentence around it is the
+  // The name is shown in full and alone: the sentence around it is the
   // part that changes with the language, so it goes to a screen reader and to
-  // `title`, and the row keeps one width in every language (649) without
+  // `title`, and the row keeps one width in every language without
   // cutting the name off.
   setText(el("session-user"), name);
   setText(el("session-said"), said);
@@ -8407,7 +8407,7 @@ async function signOut() {
   }
   stopWatching();
   store.runId = "";
-  // A fresh page for whoever signs in next (674): the documents, the settings
+  // A fresh page for whoever signs in next: the documents, the settings
   // and the result on screen were this reader's, and a page that kept them
   // showed them to the next account on this browser.
   window.location.reload();
@@ -8539,7 +8539,7 @@ async function changePassword() {
  * characters the server reports. There is no state here that a key could
  * survive in.
  *
- * **It renders the provider rows and nothing else** (561). It used to call
+ * **It renders the provider rows and nothing else**. It used to call
  * `renderCommandTools` as well, which made two owners for one panel: this one
  * rendering from whatever `store.config` still held, and `reloadAfterSettings`
  * rendering again once it had refetched. Measured on a toggle, the sequence
@@ -8725,7 +8725,7 @@ function commandToolRow(tool, editable) {
   setText(find(row, "command-toggle-text"), t("commands.enable"));
   toggle.checked = Boolean(tool.enabled);
   // Which route this box is, in the DOM, so the rebuilt panel can be asked for
-  // the same one afterwards (561). The `data-cc` hooks are how this page finds
+  // the same one afterwards. The `data-cc` hooks are how this page finds
   // *a* control of a kind, and every row carries the same ones; this says
   // *which* row, which is the question a focus restore has to answer. By id
   // rather than by position: a retired route shortens the list between the
@@ -8765,7 +8765,7 @@ function commandToolRow(tool, editable) {
     // which is where it was found.
     await reloadAfterSettings();
     setText(el("commands-note"), said);
-    // Put the keyboard back where it was (561). The panel is rebuilt from the
+    // Put the keyboard back where it was. The panel is rebuilt from the
     // server's answer, so the control that was just used is a different
     // element by the time the answer arrives, and focus had been landing on
     // `body` -- which sends the next Tab back to the top of the sheet. Found
@@ -8854,7 +8854,7 @@ function providerRow(provider, readOnly) {
   // `tests/test_web_static.py` refuses any address in a shipped file, on the
   // grounds that a self-hosted page must reach nothing off this machine, and
   // it is right to refuse a literal it cannot tell from a live one.
-  // The server's example for a provider with no well-known address (676):
+  // The server's example for a provider with no well-known address:
   // served, never written here, for the reason above.
   url.placeholder = provider.example_url
     ? t("settings.endpoint.example", { url: String(provider.example_url) })
@@ -8865,7 +8865,7 @@ function providerRow(provider, readOnly) {
   const listed = (provider.models || []).length;
   // A vendor's listing needs a key, and the probe never sends one, so a
   // stored vendor address usually lists nothing. Its catalogue rows are in
-  // the picker all the same (676): say that, not "type a model id".
+  // the picker all the same: say that, not "type a model id".
   const known = ((store.config && store.config.catalogue && store.config.catalogue.models) || [])
     .filter((/** @type {any} */ model) => model.provider === provider.name && !isRetired(model)).length;
   setText(note, provider.base_url
@@ -8890,7 +8890,7 @@ function providerRow(provider, readOnly) {
     url.disabled = true; urlSave.disabled = true; urlClear.disabled = true;
     return row;
   }
-  // **The well-known address, offered** (676). With none stored, the field
+  // **The well-known address, offered**. With none stored, the field
   // holds the provider's usual address and the row shows it as a line with
   // "Change address", so a person only pastes a key; saving the key saves
   // this address first, as an explicit value. A stored address that is the
@@ -8941,7 +8941,7 @@ function providerRow(provider, readOnly) {
     const key = field.value;
     field.value = "";
     if (!key) return;
-    // **A key goes to the address on screen, and only there** (676). When
+    // **A key goes to the address on screen, and only there**. When
     // the address shown is not the one stored -- the offered well-known one,
     // or an edit not yet saved -- it is saved first, which clears any key
     // bound to the old one (`Endpoint.moved_to`), and the key is then stored
@@ -9108,8 +9108,8 @@ function renderLocalePicker() {
  */
 async function changeLocale(tag) {
   // A document still under the name the page gave it -- "document 2" -- was
-  // named in the old language and nobody typed it, so it follows the new one
-  // (640); the status line names it. A name somebody typed is theirs and is
+  // named in the old language and nobody typed it, so it follows the new one;
+  // the status line names it. A name somebody typed is theirs and is
   // never touched. Matched by the old template with its number, so a pane
   // that moved when another was removed keeps its own number.
   const template = t("documents.untitled", { n: "\u0000" });
@@ -9140,7 +9140,7 @@ async function changeLocale(tag) {
   applyStrings();
   renderLocalePicker();
   // The header's one sentence the catalogue pass cannot reach: it carries the
-  // user's name (673; it stayed in the old language before).
+  // user's name, and it used to stay in the old language.
   renderSession();
   if (store.config) renderControls();
   renderDocuments();
@@ -9158,7 +9158,7 @@ async function changeLocale(tag) {
 }
 
 /* ------------------------------------------------------------------ */
-/* the workbench: step tabs, output tabs, finding tabs (673)           */
+/* the workbench: step tabs, output tabs, finding tabs                 */
 /* ------------------------------------------------------------------ */
 
 /**
@@ -9423,7 +9423,7 @@ function renderStepStates() {
     .filter(Boolean).join(", ");
   paint("settings", settings, true);
   // The effort slider lives on the Settings step and shows only for a route
-  // that takes it (673). When it appears, the tab says "new" until the step
+  // that takes it. When it appears, the tab says "new" until the step
   // is opened, so a reader who picked such a route cannot miss it.
   const effortShown = !el("effort-block").hidden;
   if (effortShown && !layout.effortShown) layout.effortSeen = layout.step === "settings";
@@ -9460,7 +9460,7 @@ function modelSummary() {
  */
 function showOutput(which) {
   const tab = document.getElementById(which === "history" ? "output-tab-history" : "output-tab-run");
-  // `aria-disabled` (717), not `hidden`: both tabs are always on the page, and
+  // `aria-disabled`, not `hidden`: both tabs are always on the page, and
   // one with nothing behind it yet refuses a click or an arrow-key selection
   // the same way, while a caller that has just put something behind it
   // (`enableRunTab`, `refreshHistory`) clears the attribute before it ever
@@ -9472,7 +9472,7 @@ function showOutput(which) {
 
 /**
  * The Current run tab stops being `aria-disabled` the moment there is a run
- * behind it: submitted, followed from the list, or replayed (717). Idempotent,
+ * behind it: submitted, followed from the list, or replayed. Idempotent,
  * so every caller can call it without first asking whether it already ran.
  */
 function enableRunTab() {
@@ -9493,7 +9493,7 @@ function revealRun(scrollPage) {
 }
 
 /**
- * The Previous runs tab is always shown (717) but stays `aria-disabled` while
+ * The Previous runs tab is always shown but stays `aria-disabled` while
  * the list it opens is empty, exactly as `history-section` (`refreshHistory`)
  * is: a reader on it when the last entry disappears is put back on the
  * current run rather than left on a tab that no longer answers a click.
@@ -9551,7 +9551,7 @@ function watchBars() {
 
 
 /**
- * A "?" that shows `content` on hover and on keyboard focus (673): the
+ * A "?" that shows `content` on hover and on keyboard focus: the
  * button is named for a screen reader and described by the text it opens.
  * The static ones are markup (`.help` in `index.html`); this builds the ones
  * that live inside a rendered option.
@@ -9606,7 +9606,7 @@ function markedSample(text) {
 }
 
 /**
- * The examples dialog (673): one tab a level this server offers, each with
+ * The examples dialog: one tab a level this server offers, each with
  * the sample merge (the words changed from the level before it marked), a
  * line saying what changed, and the level's short line with its summary,
  * what it buys and what it costs (the sentences `--fidelity --help` prints)
@@ -9618,7 +9618,7 @@ function markedSample(text) {
  * `.compare-panel` is a tall, multi-paragraph block inside a `<dialog>`,
  * so the popup's containing block became the whole panel, not the small
  * "?" button. It opened far below the button, overlapped the dialog's own
- * "Close" button and was clipped by the dialog's edge (711, reported as
+ * "Close" button and was clipped by the dialog's edge (reported as
  * "the dialog gets garbled up"). A `<details>` in normal flow cannot
  * escape its container like that: opening it just pushes the panel, and
  * the dialog, taller. It also needs no separate keyboard wiring.
@@ -9818,7 +9818,7 @@ function wireLayout() {
   // A step's state follows every edit in the input pane, including the
   // controls whose own handlers do not come back through `refreshIdleStatus`
   // (the fidelity slider, the verify-depth radios, title policy, the loss
-  // field): the save-defaults box has to follow the same edits (717), so it
+  // field): the save-defaults box has to follow the same edits, so it
   // unticks the moment they take the settings away from what is saved.
   const onEdit = () => { renderStepStates(); syncSaveDefaultsChecked(); };
   el("input-body").addEventListener("input", onEdit);
@@ -9865,7 +9865,7 @@ function wire() {
   wireDownload(el("download-bundle"), ROUTES.bundle);
   el("copy-merged").addEventListener("click", () => void copyMerged());
   el("cli-copy").addEventListener("click", () => void copyCliCommand());
-  // **On the box, not on the document** (561). A document-level handler would
+  // **On the box, not on the document**. A document-level handler would
   // have to decide for itself whether the reader meant this box, and it would
   // own Ctrl+A everywhere else on the page while it did. Hung here, the
   // shortcut exists exactly where the reader is: the `<pre>` carries
@@ -9882,7 +9882,7 @@ function wire() {
     if (!selectMerged()) return;
     key.preventDefault();
   });
-  // **Escape closes the stacked view** (557, 561). The rule 557 settled for
+  // **Escape closes the stacked view**. The rule settled for
   // the credentials sheet is that everything dismissible on this page agrees
   // with Escape, and a disclosure is dismissible. Only when the keyboard is
   // inside the open one: Escape over the page at large belongs to the dialogs,
@@ -9961,7 +9961,7 @@ function wire() {
   const dialog = /** @type {HTMLDialogElement} */ (el("settings-dialog"));
   el("open-settings").addEventListener("click", () => {
     void loadProviders();
-    // The commands panel's other owner (561). `loadProviders` used to do this
+    // The commands panel's other owner. `loadProviders` used to do this
     // on the way past, which is what gave one panel two renderers; opening the
     // sheet renders it from the `/config` this page already holds, exactly as
     // before, and the toggle path renders it once from the `/config` it has
@@ -10003,7 +10003,7 @@ function wire() {
       input(hook).value = "";
     }
   });
-  // **The model scorecard** (631), on the credentials sheet's pattern:
+  // **The model scorecard**, on the credentials sheet's pattern:
   // `showModal`, Escape and the backdrop left to the dialog itself, the one
   // way out focused on open by its `autofocus`, and focus put back on the
   // button that opened it, because the element the keyboard was on is inside
@@ -10038,8 +10038,8 @@ function wire() {
     });
   }
   el("sign-out").addEventListener("click", () => void signOut());
-  // Saved defaults (674): the reset in the Tuning step, the notice's own
-  // dismissal (persisted per dropped set, 686), "Update my defaults" beside
+  // Saved defaults: the reset in the Tuning step, the notice's own
+  // dismissal (persisted per dropped set), "Update my defaults" beside
   // it, and a failure note that ends when the box is touched.
   el("defaults-reset").addEventListener("click", () => void confirmResetDefaults());
   el("defaults-dropped-close").addEventListener("click", () => {
@@ -10130,7 +10130,7 @@ async function start() {
     renderPill("unreachable");
     return;
   }
-  // Saved defaults first, then the server's for anything missing (674): the
+  // Saved defaults first, then the server's for anything missing: the
   // store is filled before `renderControls`, whose renderers keep any value
   // they offer. Once per page, so a second sign-in keeps what was set since.
   await loadDefaults();

@@ -34,7 +34,7 @@ from . import __version__
 USER_AGENT = f"llossless/{__version__}"
 
 # 529 (Anthropic's `overloaded_error`) and 524 (Cloudflare origin timeout)
-# joined the OpenAI/Google-shaped codes at 680 (B3): both were fatal on the
+# joined the OpenAI/Google-shaped codes later: both were fatal on the
 # first attempt, so an Anthropic overload ended the call where an identical
 # OpenAI or Google 503 got two more tries, and only the runner's own re-run
 # stood between that and an exclusion the common-pairs rule then spread to
@@ -53,7 +53,7 @@ class TransportError(RuntimeError):
 
 
 class Cancelled(RuntimeError):
-    """The run was cancelled: no further call is made (639).
+    """The run was cancelled: no further call is made.
 
     Raised by `Client` before a call it will not make and in place of one it
     abandoned in flight, and by `backend.post_json` for a program it stopped.
@@ -85,15 +85,15 @@ class HTTPStatusError(TransportError):
 
 @dataclass(frozen=True)
 class Response:
-    """One answered request, and how its time was spent (681).
+    """One answered request, and how its time was spent.
 
-    `latency_ms` keeps the meaning it has had since 575: the wall time from
+    `latency_ms` has kept the same meaning throughout: the wall time from
     the first attempt going out to the answer arriving, so it spans every
     transport attempt *and* the backoff sleeps between them. It is not the
     answering attempt's time, and it never includes `Client._pace`.
 
     The four fields after `attempts` split that span, so a report can charge a
-    benchmark cell with the attempt that produced its answer alone (678) and
+    benchmark cell with the attempt that produced its answer alone and
     show everything else apart:
 
       `answer_ms`  the attempt that returned this body, alone
@@ -133,7 +133,7 @@ def _ms(seconds: float) -> int:
 
 def _stamp(exc: Exception, *, attempts: int, failed: float, waited: float,
            answered: float | None = None) -> Exception:
-    """`exc`, carrying the attempts it took and how their time was spent (681).
+    """`exc`, carrying the attempts it took and how their time was spent.
 
     Attributes rather than a new exception class, so every handler that
     catches these by class today still does. `Client` reads them off a failed
@@ -168,7 +168,7 @@ def _opener(ca_bundle: str | None) -> urllib.request.OpenerDirector:
     the rest of its defaults, with a comment naming `ProxyHandler` and stopping
     there. The defaults it did not name are `FileHandler`, `FTPHandler` and
     `DataHandler`, and the first of those turned `LLOSSLESS_BASE_URL=file://...`
-    into a local file read whose bytes were parsed as a model answer (323).
+    into a local file read whose bytes were parsed as a model answer.
 
     `config.check_base_url` refuses that URL before a client is built, which is
     where the refusal belongs and where the error message can be useful. This is
@@ -181,7 +181,7 @@ def _opener(ca_bundle: str | None) -> urllib.request.OpenerDirector:
                                `http://localhost:11434/v1`.
       `HTTPSHandler`           with this project's TLS context, so
                                `LLOSSLESS_CA_BUNDLE` is honoured.
-      `_RefuseRedirects`       DECISIONS 91's threat: a redirect is how a
+      `_RefuseRedirects`       the threat: a redirect is how a
                                bearer token reaches a host nobody configured.
       `HTTPErrorProcessor`     turns non-2xx into `HTTPError`, which the
                                callers here are written against.
@@ -258,7 +258,7 @@ def timed_out(host: str, timeout: float, *, sent: bool) -> TransportError:
     did not arrive in time, which means the endpoint is up and generating, and
     the budget is the thing that was wrong.
 
-    Both printed as a timeout until M5, and an operator reading "localhost did
+    Both printed as a timeout until this was fixed, and an operator reading "localhost did
     not respond within 300s" cannot tell which happened. That line is in
     `tests/responses/m4/sweep-attempt3-aborted.log`; the endpoint was in fact
     alive and thermally throttled to a fifth of its rate, so the answer was
@@ -363,7 +363,7 @@ def reassemble(events: "list[dict]") -> str:
     corpus recorded over a streaming transport replays against one recorded
     without it. Measured equal before it was written: the same request answered
     both ways gave byte-identical `content` (316 chars), byte-identical
-    `reasoning` (579), and the same `usage` (50 and 168 completion tokens),
+    `reasoning`, and the same `usage` (50 and 168 completion tokens),
     which is the evidence that this is a transport detail and not a second kind
     of request.
 
@@ -488,7 +488,7 @@ def post_json(
     opener = _opener(ca_bundle)
     started = time.monotonic()
     last: Exception | None = None
-    # How the span `latency_ms` covers was spent (681): the failed attempts'
+    # How the span `latency_ms` covers was spent: the failed attempts'
     # own time and the sleeps between them, so the answering attempt can be
     # told apart from both. See `Response`.
     failed = waited = 0.0
@@ -517,7 +517,7 @@ def post_json(
                 head = response.readline()
                 # The first line of the body, streamed or not: the one timing
                 # figure a stream makes cheap, and on a non-streamed answer
-                # the moment the whole generation was done (681).
+                # the moment the whole generation was done.
                 first_byte = time.monotonic()
                 streamed = head.lstrip().startswith((b"data:", b":"))
                 body = (reassemble(_events(chain([head], response))) if streamed
@@ -604,7 +604,7 @@ def get_json(
 ) -> Response:
     """GET `url` and return the raw body. Same retry discipline as `post_json`.
 
-    Added for task 41, which has to know the context window the endpoint is
+    Added because a caller has to know the context window the endpoint is
     actually serving before it sends a request sized against a guess. Until
     then this module made exactly one kind of request, to
     `/v1/chat/completions`, and that narrowness was a feature worth naming:
@@ -614,7 +614,7 @@ def get_json(
     It still is. This adds a second *method* to the same endpoint, not a second
     endpoint — callers pass a URL built from `settings.base_url` — and it sends
     no body, so there is nothing here that could carry a document off the box.
-    The alternative was to hard-code the window, which is the failure task 41
+    The alternative was to hard-code the window, which is the failure this
     exists to prevent: the served window is model-dependent, and a number
     written into the source is a number that is wrong for the next model.
 

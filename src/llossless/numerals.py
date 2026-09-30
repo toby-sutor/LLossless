@@ -1,13 +1,13 @@
 """Which way a document writes its decimals, and the numerals that break it.
 
-`internal/docs/number-convention.md` is the account of why this exists; this
-note is what the code does. The `voyager` pair carries four planted errors that
-change nothing but a separator -- "4.5" written "4,5", "17,560" written
-"17.560" -- and across the stored runs the models fixed each in one or two of
-eighteen. A model reads "4,5" as the same quantity in European notation, so to
-it nothing changed. To a reader the same characters can differ by a factor of
-1,000: "17.560" is seventeen point five six in English and seventeen thousand
-five hundred and sixty in German.
+The `voyager` pair carries four planted errors that change nothing
+but a separator: "4.5" written "4,5", "17,560" written "17.560",
+and across the stored runs the models fixed each in one or two of
+eighteen. A model reads "4,5" as the same quantity in European
+notation, so to it nothing changed. To a reader the same
+characters can differ by a factor of 1,000: "17.560" is seventeen
+point five six in English and seventeen thousand five hundred and
+sixty in German.
 
 **No model is asked anything here, and no number is ever rewritten.** Every
 figure is a regular expression, a count and a `Decimal`. The check reports; the
@@ -31,10 +31,10 @@ merge model and the user decide.
 3. **Otherwise the language decides**: English writes a decimal point and
    German a decimal comma. "Otherwise" is an empty vote, a tie, *and a split
    vote*: a document that writes decimals both ways contradicts itself, and its
-   numerals are then no witness to its convention. That last case departs from
-   the rule as first agreed, which let a majority decide a split; DECISIONS
-   601 records why (`voyager`'s source outvotes its one correct decimal two to one
-   with its two planted ones).
+   numerals are then no witness to its convention. That last
+   case departs from the rule as first agreed, which let a
+   majority decide a split: `voyager`'s source outvotes its one
+   correct decimal two to one with its two planted ones.
 4. **With no language either, a split vote goes to its majority**, and a tie or
    an empty vote has no winner. Every ambiguous numeral is then flagged as
    readable two ways, and the user is asked.
@@ -133,7 +133,7 @@ KINDS = (OTHER_CONVENTION, READABLE_TWO_WAYS, READING_CHANGED, READING_RESOLVED,
          AGAINST_LANGUAGE)
 # The one kind that is a fault in the merged document rather than a warning
 # about a text: the merge now states a different value from the source it
-# carries it from. 490's rule for a declared correction applies unchanged --
+# carries it from. The rule for a declared correction applies unchanged:
 # nothing here can tell a correction from a corruption, so it stays a finding.
 FAULTS = frozenset({READING_CHANGED})
 

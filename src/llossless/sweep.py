@@ -1,4 +1,4 @@
-"""One input, every fidelity level, one report. M7 task 30.
+"""One input, every fidelity level, one report.
 
 **The report requires live inference and this module will not fake one.** One
 merge per level, and a merge is a model call; there is no offline
@@ -21,17 +21,17 @@ avoids is a `report.json` on disk with three rows in it, read six months later
 by someone who has no reason to count them.
 
 Which levels a sweep runs is decided per backend, before a call is made, by
-`plan` (577). A level whose own refusal would fire -- `sourced`, on a backend
+`plan`. A level whose own refusal would fire -- `sourced`, on a backend
 that cannot retrieve or cannot say whether it did -- is left out, and said to
 be left out: on stderr before the first level, under the table with the
 refusal's reason, and in the JSON as `left_out`. `incomplete` then counts
 against the levels the plan kept, so leaving one out is never a refusal and
 losing one that was planned always is.
 
-What the report is not: a fidelity-loss *curve*. That is task 31, it needs more
-than one input, and this module deliberately stops at one. A single pair's rows
-are an observation, and calling one document's points a curve is the artefact
-M9 §8.2 spent an appendix on.
+What the report is not: a fidelity-loss *curve*. That needs more
+than one input, and this module deliberately stops at one. A
+single pair's rows are an observation, and calling one document's
+points a curve overstates what a single input can support.
 """
 
 from __future__ import annotations
@@ -95,7 +95,7 @@ def settings_for(settings, level: str):
     """The same settings at one level, as a run at that level resolves them.
 
     Through `config.at_fidelity`, the step `config.resolve` takes, so a row is
-    granted and refused exactly as a single run at its level would be (577).
+    granted and refused exactly as a single run at its level would be.
     The fidelity is the only thing that differs between rows, except at
     `sourced`, where the automatic grant is on the command. Raises
     `ConfigError` where that level refuses this backend; `plan` is the caller
@@ -112,7 +112,7 @@ def plan(settings) -> tuple[dict, dict[str, str]]:
 
     Two maps, in `LEVELS` order: level to the settings its row runs with, and
     level to the refusal that keeps it out. Pure, and called before any call
-    is made, so a sweep that could only ever be partial costs nothing (577).
+    is made, so a sweep that could only ever be partial costs nothing.
 
     A refused level is left out rather than refusing the whole sweep, because
     the refusal is about that level on this backend and says nothing about the
@@ -219,7 +219,7 @@ def render(rows: list[dict], left_out: dict[str, str]) -> str:
     """The comparison table. One input, so these are points and not a curve.
 
     `left_out` is `plan`'s second map, printed under the table with each
-    refusal's own reason, so a table with a level missing says why (577).
+    refusal's own reason, so a table with a level missing says why.
     """
     order = {lv: i for i, lv in enumerate(LEVELS)}
     rows = sorted(rows, key=lambda r: order[r["fidelity"]])
@@ -228,7 +228,7 @@ def render(rows: list[dict], left_out: dict[str, str]) -> str:
     for r in rows:
         # Published name in the table a person reads; `as_dict` below keeps the
         # wire spelling, because the JSON is keyed by it and recorded runs are
-        # written in it (437).
+        # written in it.
         table.append([config.fidelity_name(r["fidelity"])]
                      + [str(r[key]) for _, key in COLUMNS])
     widths = [max(len(row[i]) for row in table) for i in range(len(heads))]
@@ -254,7 +254,7 @@ def render(rows: list[dict], left_out: dict[str, str]) -> str:
     lines.append("")
     lines += textwrap.wrap(
         f"{len(rows)} points from one input. What each notch costs in "
-        "verifiable fidelity is task 31 and needs a corpus; this is one "
+        "verifiable fidelity needs a corpus to measure; this is one "
         "observation.", width=78, initial_indent="  ", subsequent_indent="  ")
     return "\n".join(lines) + "\n"
 
@@ -265,7 +265,7 @@ def as_dict(rows: list[dict], reports: dict[str, dict], paths: dict[str, str],
 
     `levels` is what ran, and `left_out` is every level `plan` kept out with
     the refusal that kept it out, so the file says which rows are absent and
-    why rather than leaving a reader to count them (577).
+    why rather than leaving a reader to count them.
     """
     order = {lv: i for i, lv in enumerate(LEVELS)}
     return {

@@ -15,16 +15,16 @@ Five questions, each with its denominator attached:
 
 ## What an absence means, and the two ways to read it
 
-**On its own, an absent segment is unexplained rather than wrong.** The M4
+**On its own, an absent segment is unexplained rather than wrong.** The
 corpus this was first run over was produced under a prompt that granted the
 merge model wide licence to restructure and reword, and carries no disposition
 records to check an absence against. Over that corpus the absent count is an
 *upper bound on silent loss* and nothing stronger. Read as a defect count it
-would repeat M7's original error in the opposite direction: a number that sounds
+would repeat an old mistake in the opposite direction: a number that sounds
 like it measures fidelity while measuring something else.
 
 `findings` is the other reading, and it needs the merge to have declared
-something. Given the disposition records of `internal/docs/M7-fidelity.md` §2.1 it splits
+something. Given the merge's disposition records it splits
 that same count in two: an absence the merge owned up to goes to the review
 queue with its reason, and an absence it did not is the finding the whole design
 exists to produce. Everything above `findings` still works without any of that,
@@ -41,7 +41,7 @@ and checking the claim needs arithmetic rather than a second opinion.
 
 A segment counts as present when its text occurs in the merge after whitespace
 is collapsed on both sides, allowing the first character's capitalisation to
-differ. That is exactly the tolerance `docs/M7-prompts/NOTES.md` check 2 names,
+differ. That is exactly the tolerance check 2 below applies,
 and it is the tolerance a reader would grant: a sentence lifted into a list, a
 paragraph rewrapped, or a clause that now opens with a lower-case letter because
 it was folded into an attributing sentence has not lost a fact.
@@ -84,7 +84,7 @@ if TYPE_CHECKING:  # pragma: no cover - a type name, never a runtime import
 # before the absence is called a probable rewording rather than a probable
 # silent loss.
 #
-# Plotted, not guessed. Over the 72 recorded M4 merges, 1422 source segments
+# Plotted, not guessed. Over the first corpus's 72 merges, 1422 source segments
 # were examined and 1293 found outright; the 129 that were not are 26 distinct
 # cases repeated across samples and conditions, and their best ratios cluster
 # at 0.3548-0.5915 and at 0.7765-0.8732 with nothing at all in between. That
@@ -174,7 +174,7 @@ def flatten(text: str) -> str:
     the model wrote. `plain` is a no-op on the first — there is no `## ` left to
     take off — and on the second it undoes exactly what `render_sources` showed
     the model. One function, so a new comparison cannot be added that normalises
-    one side and not the other; entry 115.
+    one side and not the other.
 
     Fenced blocks survive it byte for byte, which is what keeps the invariant
     core honest: a code block is one token here and `plain` does not reach
@@ -247,9 +247,9 @@ def token_present(token: str, haystack: str) -> bool:
     """Does this invariant-core token appear in the merge, whole?
 
     Bounded on both sides where the token itself ends in a word character, so
-    `512` is not found inside `5120` and `30` is not found inside `30s`. That
-    second case is the point: `30 seconds` rendered as `30s` is precisely the
-    abbreviation §2.3 forbids, and an unbounded search would call it survival.
+    `512` is not found inside `5120` and `30` is not found inside `30s`. The
+    second is the point: `30 seconds` rendered as `30s` is the abbreviation
+    the invariant core forbids, and an unbounded search would call it survival.
     """
     left = r"(?<!\w)" if _WORD_EDGE.match(token[:1]) else ""
     right = r"(?!\w)" if _WORD_EDGE.match(token[-1:]) else ""
@@ -262,7 +262,7 @@ def similarity(left: str, right: str) -> float:
 
 
 # How a word-level difference is marked, and the one rule the notation has to
-# meet: **it must survive being plain** (552). The report renders on three
+# meet: **it must survive being plain**. The report renders on three
 # surfaces and one of them is a terminal with no colour guarantee, so a
 # difference carried by styling alone would be a difference two of the three
 # readers never see. `wdiff`'s notation is the form that carries itself --
@@ -284,15 +284,15 @@ ADDED = ("{+", "+}")
 # when two texts are versions of one text.
 DIFF_FLOOR = 0.8
 
-# Past this a rendered difference is a paragraph rather than a row, and 531's
-# rule applies: the table stays readable and the detail goes once, nearby. A
+# Past this a rendered difference is a paragraph rather than a row, and the
+# rule for table cells applies: the table stays readable and the detail goes once, nearby. A
 # diff longer than this is truncated with an ellipsis and the two texts stay
 # available in their own fields, so nothing is lost by the cap.
 DIFF_MAX = 600
 
 # How alike the two halves of one changed run must be before the run is marked
-# character by character instead of whole (561). 552 rejected a character diff
-# and was right about the case it judged: run over the *whole* text it marks
+# character by character instead of whole. A character diff was rejected once,
+# rightly for the case it was judged on: run over the *whole* text it marks
 # the insides of unrelated words and is unreadable. This is the other case.
 # The word diff still decides which run changed; this only says where inside
 # that run, and only where the two halves are versions of each other.
@@ -315,9 +315,9 @@ CHAR_FLOOR = 0.5
 # Measured on the cases this project has in hand rather than chosen: one space
 # marks 1 of 18 characters (6%) and `8443.` against `8444.` marks 1 of 5
 # (20%), and both are annotations;
-# 552's own `The breeding` against `Breeding` marks 5 of 12 (42%) and reads
-# worse than the two words whole, which is the case 552 judged and was right
-# about.
+# the rejected case, `The breeding` against `Breeding`, marks 5 of 12 (42%)
+# and reads worse than the two words whole, which is why a character diff was
+# rightly rejected there.
 CHAR_SHARE = 0.34
 
 
@@ -339,7 +339,7 @@ def _refine(left: str, right: str) -> str | None:
     threshold the next reader cannot check:
 
     1. The two halves must be at least `CHAR_FLOOR` alike. Below that they are
-       not versions of one another and marking their insides is 552's defect.
+       not versions of one another and marking their insides is unreadable.
     2. At most `CHAR_SHARE` of the run may end up inside markers, so what is
        shown is a run with a difference in it rather than a bracketed rewrite.
     3. The marked form must be **shorter** than printing both halves whole.
@@ -384,13 +384,13 @@ def difference(source: str, merge: str, floor: float = DIFF_FLOOR) -> str:
     a line break that moved is not a rewording and would otherwise mark the
     whole paragraph.
 
-    **Words decide what changed; characters say where inside it** (561). A
+    **Words decide what changed; characters say where inside it.** A
     `replace` run whose two halves are versions of each other is marked
     character by character by `_refine`, so a one-space difference renders as
     one space rather than as two whole tokens swapped. Every other opcode is
     unchanged, and `_refine` declines wherever the fine form would be longer or
     the halves are too far apart -- so the top-level diff stays word-level and
-    552's judgement about a character diff over whole prose stands.
+    the judgement against a character diff over whole prose stands.
 
     Empty when the two are too far apart to diff usefully (`floor`), when
     either side is missing, or when they are identical. An empty answer is the
@@ -423,7 +423,7 @@ def difference(source: str, merge: str, floor: float = DIFF_FLOOR) -> str:
         # Cut on a word boundary, never mid-marker: a `[-` with no `-]` after
         # it reads as a broken renderer rather than as a truncation.
         #
-        # **The word boundary stopped being enough at 561.** A refined run puts
+        # **A word boundary is not enough on its own.** A refined run puts
         # markers inside a word and can mark a space -- `{+ +}` is the
         # operator's own case -- so `rsplit` on a space can now cut inside a
         # marker and leave exactly the dangling `{+` this rule forbids. So the
@@ -450,7 +450,7 @@ class Located:
     nearest: str = ""
     # And its text. Carried rather than looked up again by the caller: the
     # finding has to show the reader what the merge says instead, and a second
-    # lookup by id is a second chance to name a different segment (552).
+    # lookup by id is a second chance to name a different segment.
     nearest_text: str = ""
 
     @property
@@ -539,12 +539,12 @@ class Order:
     `runs` is the number of contiguous blocks the merge's located segments fall
     into by source document: two sources stapled together give 2, whatever else
     was dropped along the way, and a merge that consolidated even one section
-    gives more. This is the correction M7 task 11 asks for.
+    gives more. It replaces an earlier test, for the reason below.
 
     The predicate it replaces compared the merge against the two sources
     concatenated and called it a staple above a similarity ratio. That test
-    passes only on a near-total concatenation, and the merge that started this
-    milestone was a concatenation *that had dropped both titles and both
+    passes only on a near-total concatenation, and the merge that prompted the
+    change was a concatenation *that had dropped both titles and both
     summary fields* — enough deleted to pull the ratio down, not nearly enough
     to constitute merging. Counting runs asks the question the ratio was
     standing in for: did anything get interleaved?
@@ -600,7 +600,7 @@ class Order:
         `tests/fixtures/attribution_invented/merged.md`, a, a, b.
 
         Sized by the corpus and not by the arms: those two reference merges are
-        the only false positives over all 19 control documents. The M9 arm
+        the only false positives over all 19 control documents. The recorded arm
         units were not consulted in choosing it and are the check on it — of
         the 39 units the predicate fired on, this condition removes 4, and all
         4 are a single segment from one source against a block from the other:
@@ -654,9 +654,9 @@ class Reconciliation:
     def added_breaks(self) -> tuple[tuple[str, str], ...]:
         """Line breaks inside merged segments that no source segment carries.
 
-        Reported, not judged (391). `high.merge.md` licenses restructuring, and
-        378 made an interior line break recorded notation rather than a segment
-        boundary so that the partition would not move -- which together mean a
+        Reported, not judged. `high.merge.md` licenses restructuring, and an
+        interior line break is recorded notation rather than a segment
+        boundary so that the partition does not move, which together mean a
         merge can add structure no source has and nothing in the tool says so.
         This is the saying-so, and deliberately not a finding: adding a break is
         permitted at every level, so there is no rule for a check to enforce.
@@ -696,7 +696,7 @@ class Reconciliation:
 
 
 def locate(document: Document, merged_flat: str, merged: tuple[Segment, ...]) -> Coverage:
-    """Find each of one source's segments in the merge. Task 7's whole job.
+    """Find each of one source's segments in the merge.
 
     A label -- a title or a heading -- is searched for among the merge's own
     labels rather than in the whole flattened merge. Everything else is
@@ -730,12 +730,12 @@ def verbatim(documents: list[Document], merged_flat: str,
              merged_raw: str = "") -> tuple[tuple[Missing, ...], int]:
     """Every invariant-core token in every source, checked against the merge.
 
-    Task 9, and it consults nothing but the two texts — no dispositions, no
-    coverage result, no fidelity level. §2.3 puts these outside the slider, so
+    It consults nothing but the two texts — no dispositions, no coverage
+    result, no fidelity level. The invariant core sits outside the slider, so
     a token that moved is a finding at every level and needs no context to be
     read as one.
 
-    A whole fenced block is one token here: §2.3 makes the block invariant, and
+    A whole fenced block is one token here: the block is invariant as a whole, and
     checking its lines separately would let a merge reorder them and pass.
     """
     absent: list[Missing] = []
@@ -750,7 +750,7 @@ def verbatim(documents: list[Document], merged_flat: str,
                 kind = CODE_BLOCK if isinstance(span, Segment) else span.kind
                 text = flatten(span.text)
                 total += 1
-                # A fenced block is invariant byte for byte (spec 2.3), so it
+                # A fenced block is invariant byte for byte, so it
                 # is compared with its interior whitespace intact. Everything
                 # else keeps the collapse, because in prose a run of spaces is
                 # not content and a line wrap is not a change.
@@ -772,13 +772,13 @@ def verbatim(documents: list[Document], merged_flat: str,
 
 
 def duplication(merged: tuple[Segment, ...]) -> tuple[Duplicate, ...]:
-    """Content the merge states twice. Task 10.
+    """Content the merge states twice.
 
     Exact repeats are counted first, then near-repeats among what is left, at
     the same threshold the coverage pass uses.
 
-    **The near pass is measurement-only and stays that way; entry 53's open
-    condition is closed, and closed negatively (entry 394).** Entry 53 left it
+    **The near pass is measurement-only and stays that way; the question of
+    promoting it is closed, and closed negatively.** It was first left
     unpromoted "until a threshold is chosen against controls, or until a corpus
     with deliberate paraphrased duplication exists to choose one on". Both now
     exist: the corpus is five real merges (`toby-test-2` low and mid,
@@ -835,16 +835,16 @@ def restatements(claims: Sequence["Claim"]) -> tuple[Restatement, ...]:
     above cannot see: a merge that keeps both sources' wordings of the same
     fact, so the document states everything twice. The two wordings are
     different strings, so no exact segment repeat exists and no near-repeat
-    threshold separates them from a correct merge -- entry 394 measured the
-    control maximum (0.970) *above* the worst real positive (0.943), an
+    threshold separates them from a correct merge: the measured control
+    maximum (0.970) sits *above* the worst real positive (0.943), an
     inversion no constant can fix. Asked one level up, at the claim, the same
     corpus separates cleanly, because the decomposer resolves both wordings to
     one sentence.
 
     **The predicate, and every clause of it is load-bearing.**
 
-    * **Byte-identical claim text.** Not a similarity. Entry 402 measured the
-      relaxation and closed it off: the four real positives repeat at 1.000, the
+    * **Byte-identical claim text.** Not a similarity. The relaxation was
+      measured and closed off: the four real positives repeat at 1.000, the
       one miss at 0.500, and eight correct documents sit between them
       (`conflict_surfaced` 0.976, three at 0.850, down to 0.740). Any threshold
       that reaches the miss fires on eight controls first. Exact equality is the
@@ -920,7 +920,7 @@ def restated_findings(claims: Sequence["Claim"]) -> tuple[Finding, ...]:
 
 
 def order(coverages: tuple[Coverage, ...], merged: tuple[Segment, ...]) -> Order:
-    """Did the merge interleave its sources, or set them end to end? Task 11.
+    """Did the merge interleave its sources, or set them end to end?
 
     Each merge segment is attributed to the source document whose segment it
     carries, by exact containment first and then by best similarity above the
@@ -970,8 +970,8 @@ def order(coverages: tuple[Coverage, ...], merged: tuple[Segment, ...]) -> Order
     distinct = len(set(owners_resolved))
 
     # Did each source keep its own order? Dropping segments preserves this, so
-    # a *partial* concatenation stays monotone -- which is the case task 11 is
-    # about -- while a merge that reorders one source's material does not.
+    # a *partial* concatenation stays monotone, which is the case this check
+    # exists for, while a merge that reorders one source's material does not.
     seen: dict[str, int] = {}
     monotone = True
     for document_id, ordinal in attribution:
@@ -1002,8 +1002,8 @@ def reconcile(documents: dict[str, str], merged: str) -> Reconciliation:
     `documents` maps filename to text, in the order the merge was given them,
     which is what fixes the document letters. The merge is segmented by the
     same function as the sources: two segmentations would put the numerator and
-    the denominator on different footings, which is the defect this milestone
-    is about.
+    the denominator on different footings, which is the kind of defect this
+    module exists to expose.
     """
     sources = [
         segment_document(text, document_id(index), filename)
@@ -1025,12 +1025,12 @@ def reconcile(documents: dict[str, str], merged: str) -> Reconciliation:
 
 
 # --------------------------------------------------------------------------
-# Task 19 — the mechanical reconciliation
+# The mechanical reconciliation
 # --------------------------------------------------------------------------
 #
 # Everything below reads the merge's own disposition records and holds them
 # against the two texts. Nine checks, no model, no threshold that was not
-# decided in `internal/docs/M7-fidelity.md`. The ninth reads a measurement made above
+# fixed in the design before it was used. The ninth reads a measurement made above
 # rather than a disposition record, which is the one exception and is argued
 # where it is made.
 
@@ -1038,7 +1038,7 @@ UNDECLARED_ABSENCE = "undeclared_absence"
 UNDECLARED_REWORDING = "undeclared_rewording"
 # Check 2's third kind, and the one that is not about loss. The segment is
 # in the merge; what is wrong is the record saying it left. Deliberately
-# carries no "absence" in the name for that reason -- entry 261.
+# carries no "absence" in the name for that reason.
 FALSE_DEPARTURE = "false_departure"
 INVENTED_SEGMENT = "invented_segment"
 UNRESOLVED_REPLACEMENT = "unresolved_replacement"
@@ -1083,7 +1083,7 @@ FINDING_KINDS = (
     PROMPT_EXAMPLE_LEAK,
 )
 
-# Which of the two questions a kind answers. Entry 420, from `docs/M7`'s A2:
+# Which of the two questions a kind answers. It was split out because
 # the exit code conflated "the merged document is wrong" with "the merge's
 # account of itself is wrong", and on the operator's `universe` pair those two
 # pointed in opposite directions -- every finding at every level was
@@ -1100,8 +1100,8 @@ FINDING_KINDS = (
 #
 # `DECLARED_LOSS_OVER_BUDGET` is DOCUMENT even though it is computed entirely
 # from records. The records are honest and the arithmetic over them is right --
-# what is wrong is that the content really is gone, at a volume past §2.6. The
-# reader's problem is the document.
+# what is wrong is that the content really is gone, at a volume past the
+# declared-loss budget. The reader's problem is the document.
 #
 # `UNRESOLVED_REPLACEMENT` is RECORD, and it is the closest call here. A
 # replacement that resolves to nothing is either a bad pointer or genuinely
@@ -1141,16 +1141,16 @@ assert DOCUMENT_FINDINGS | RECORD_FINDINGS == set(FINDING_KINDS), (
     "every finding kind must be filed as document or record: "
     f"{set(FINDING_KINDS) ^ (DOCUMENT_FINDINGS | RECORD_FINDINGS)}")
 
-# The numbered checks in `findings()`, which is not `len(FINDING_KINDS)` and was
-# until entry 198. Check 2 now produces two kinds, so the two counts came apart:
+# The numbered checks in `findings()`, which is not `len(FINDING_KINDS)`, though
+# it once was. Check 2 now produces two kinds, so the two counts came apart:
 # eleven names, nine checks. The eleventh name, `PROMPT_EXAMPLE_LEAK`, widens
 # that gap for a second and different reason and this number does not move for
 # it. Two reasons, and the first is the weaker one: every check below holds the
 # merge against its *sources*, and a prompt leak is the merge held against the
 # *prompt*, so counting it here would put a third referent under a denominator
 # whose whole job is to say how many times two texts were compared. The second
-# is the one that decides it. `paper/records/*.json` record `checks: 9` and
-# `paper/sections/20-system.tex` says "nine" in prose; those records describe a
+# is the one that decides it. The graded run records (withheld with the paper) show `checks: 9` and
+# the paper's own prose says "nine" too; those records describe a
 # tool that made nine checks and that is a true fact about the day they were
 # written. Moving this constant would silently restate every one of them as a
 # reading taken on a ten-check instrument. A new check that has to rewrite the
@@ -1159,35 +1159,35 @@ assert DOCUMENT_FINDINGS | RECORD_FINDINGS == set(FINDING_KINDS), (
 # -- the report's Structure preamble, the HTML summary, `structural.checks` in
 # the JSON record -- means the checks that ran, and reading it off the kinds
 # would inflate the denominator because one finding was given two names. That is
-# the arithmetic `internal/docs/M7-fidelity.md`'s "The reconciler's denominator is seven
-# at `high`" section refuses in the other direction, and refusing it one way and
+# the arithmetic refused in the other direction, where a check that cannot fire
+# at a level leaves the count rather than passing; refusing it one way and
 # not the other would be worse than doing neither. `tests/test_reconcile.py`
 # counts the `# N.` comments in this module and holds them against this number,
 # so a tenth check cannot be added without moving it.
 CHECKS = 9
 
-# `docs/M7-prompts/NOTES.md`, "Permitted dispositions by level", and the same
+# The permitted dispositions by level. This is the same
 # table the `prompts/fidelity/*.merge.md` fragments state in prose to the
-# model. Two statements of one rule, which M7 §8 warns about -- so
+# model, and a rule written twice is not a rule checked twice, so
 # `tests/test_reconcile.py` reads the fragments and asserts they agree with
 # this, rather than trusting that they were written from it.
 #
 # `dropped` is in none of the rows, and that is not the same as being an
-# error at every level. §2.1 and §2.6 govern: a declared drop goes to the review
-# queue with its reason, and becomes a finding only when the aggregate crosses
-# the budget below. Putting it in this matrix as well would make every declared
-# drop two findings at once and collapse exactly the split that makes declaring
-# worth doing. An earlier draft of NOTES said `dropped` was "always a finding";
-# that sentence was wrong and has been corrected there.
+# error at every level. The disposition model and the loss budget govern: a
+# declared drop goes to the review queue with its reason, and becomes a
+# finding only when the aggregate crosses the budget below. Putting it in this
+# matrix as well would make every declared drop two findings at once and
+# collapse exactly the split that makes declaring worth doing. The asserts
+# after the table hold `dropped` out of every row, so it cannot creep back in.
 # The dispositions that claim the segment is no longer carried as itself, for
 # check 2's converse direction. `duplicate` is absent on purpose: it says
 # another segment already carries this content, so finding that content in
 # the merge is what it predicts rather than a contradiction of it. `reworded`
-# and `dropped` are absent because entry 261 ruled the predicate at these two;
-# both are reachable the same way and neither is claimed to be covered.
+# and `dropped` are absent because the predicate is deliberately ruled at these
+# two; both are reachable the same way and neither is claimed to be covered.
 DEPARTED = ("subsumed", "superseded")
 
-# `mid` gained `subsumed` in Brief DS stage 2, and it is not a widening of what
+# `mid` gained `subsumed` later, and it is not a widening of what
 # mid may write so much as the declaration for something the author's ladder
 # always put here: an obvious detail merge, a closing clause carried into the
 # sentence it belongs to. Combining two statements into one sentence absorbs
@@ -1211,7 +1211,7 @@ DEPARTED = ("subsumed", "superseded")
 class _Permitted(dict):
     """The rows below, readable by either spelling of the strictest level.
 
-    `off` was published as `verbatim` in 437 and kept as an alias, so this
+    `off` was once published as `verbatim` and kept as an alias, so this
     table has to answer to both. A second row would have been the wrong shape:
     it would make `len(PERMITTED)` five and `tuple(PERMITTED)` disagree with
     `config.FIDELITY_LEVELS`, and every caller that iterates the levels --
@@ -1241,7 +1241,7 @@ PERMITTED = _Permitted({
     "mid": ("reworded", "superseded", "subsumed", "duplicate"),
     "high": ("reworded", "superseded", "subsumed", "duplicate", "reconciled"),
     # `open` permits everything `high` does and widens what `reconciled` may
-    # carry, rather than adding a disposition of its own (481). A disposition
+    # carry, rather than adding a disposition of its own. A disposition
     # names what happened to a *source segment*, and the two things `open`
     # adds -- a value covering both candidates, and a statement from outside
     # the documents -- are a wider licence for an existing record and a new
@@ -1251,12 +1251,12 @@ PERMITTED = _Permitted({
     # `high`'s: a disposition names what happened to a *source segment*, and
     # what this level adds -- that a declared statement was retrieved rather
     # than recalled -- is a fact about an `additions` record. There is no sixth
-    # verb for a segment in it (548).
+    # verb for a segment in it.
     "sourced": ("reworded", "superseded", "subsumed", "duplicate", "reconciled"),
 })
 
 # Which levels may carry a value covering two disagreeing source figures,
-# rather than choosing one of them (481). Separate from `PERMITTED` because it
+# rather than choosing one of them. Separate from `PERMITTED` because it
 # is not a disposition: `reconciled` is permitted at `high` too, and what
 # `open` widens is what a reconciled record's replacement may *hold*.
 #
@@ -1267,7 +1267,7 @@ def covers_the_sources(replacement: str, source_texts: dict[str, str]) -> bool:
     """Is every number in this replacement a number some source states?
 
     The one exemption `open` adds to check 5, and it is deliberately the
-    narrowest thing that lets a covering value through (481). Two documents
+    narrowest thing that lets a covering value through. Two documents
     giving a figure as 30-45% and 35-50% disagree about its edges, and
     carrying either alone tells a reader the other document was wrong.
     30-50% tells them what both support -- and destroys two source tokens
@@ -1308,7 +1308,7 @@ assert "nonsense" not in PERMITTED
 assert all(set(row) <= set(parsing.DISPOSITIONS) for row in PERMITTED.values())
 assert not any("dropped" in row for row in PERMITTED.values())
 
-# §2.6, registered at 5% and strictly greater, and 3% by default since 446: at
+# The declared-loss budget, strictly greater and 3% by default (it was 5%): at
 # 100 segments three declared drops pass and four fail. An aggregate guard, and
 # it fires however well each individual drop was argued -- death by a thousand
 # individually-reasonable omissions is the failure mode it exists for. It counts
@@ -1323,7 +1323,7 @@ assert not any("dropped" in row for row in PERMITTED.values())
 
 
 def over_budget(drops: int, segments: int, budget: float) -> bool:
-    """§2.6 as one predicate, because M7 task 27 gave it a second caller.
+    """The declared-loss budget as one predicate, because it has a second caller.
 
     The report has to answer the same question this module does -- a review
     queue with no ceiling is a way of declaring your way to exit 0 -- and the
@@ -1353,7 +1353,7 @@ class Finding:
     detail: str
     segment: str = ""
     document: str = ""
-    # **The two sides, on the row** (552). The operator's report: *"That is
+    # **The two sides, on the row.** The operator's report: *"That is
     # something I think could be made clearer in general in the report so the
     # user does not need to refer to sections or the documents but gets the
     # full understanding of the claims directly in one row. Issue, source,
@@ -1392,7 +1392,7 @@ class Finding:
             # report is the record, and a consumer that diffed the two texts
             # itself would be a second implementation of the rendering rule --
             # which is how the page and the report came to print `citation`
-            # and *cited* for one column (544).
+            # and *cited* for one column.
             "source_text": self.source_text,
             "merge_text": self.merge_text,
             "difference": self.difference,
@@ -1404,15 +1404,15 @@ class Reconciled:
     """The findings, and the declared drops that are not findings.
 
     Both, because a reconciler that returned only the findings would be the
-    place declared losses go to be forgotten. §2.5 keeps them apart -- findings
-    drive the exit code, resolved declared drops are informational -- and
+    place declared losses go to be forgotten. The design keeps them apart: findings
+    drive the exit code, resolved declared drops are informational, and
     keeping them apart requires carrying both.
     """
 
     findings: tuple[Finding, ...]
     declared_drops: tuple[dict, ...]
     segments: int
-    # Line breaks the merge introduced that no source segment carries (391).
+    # Line breaks the merge introduced that no source segment carries.
     # Third thing the reconciler returns and the first that is neither a
     # finding nor a declaration: it is a measurement of the merged document,
     # reported so a reader can see structure the merge added, and carrying no
@@ -1437,7 +1437,7 @@ def _title_checks(
     title_policy: str,
     base: str,
 ) -> list[Finding]:
-    """§2.7's two checks: where the merged title came from, and what happened to the rest.
+    """The two title checks: where the merged title came from, and what happened to the rest.
 
     A title is the clearest case of content that lives in the shape of a
     document rather than in its claims, and it is what the original defect
@@ -1461,7 +1461,7 @@ def _title_checks(
         # These two checks are the only thing that can see a title at all, so
         # returning early here made them blind in the one case where invention
         # is unconstrained: no source title to copy, and no claim drawn from the
-        # one the merge wrote. `DECISIONS.md` entry 10. Absence of a title
+        # one the merge wrote. Absence of a title
         # remains no finding -- nothing was kept from nothing.
         if not found:
             return []
@@ -1471,7 +1471,7 @@ def _title_checks(
         # alone -- while the merge, which puts a blank line after it, does. The
         # line is then carried unchanged and reported as invented, which is a
         # finding about the tool's own definition rather than about the merge
-        # (386). Entry 10's protection is what survives: fire only when the text
+        # itself. What survives is the guard on invention: fire only when the text
         # occurs in no source at all, which is invention by any reading.
         carried = any(
             flatten(found[0].text) in flatten(coverage.document.text)
@@ -1479,7 +1479,7 @@ def _title_checks(
         )
         if carried:
             # `keep-base` has no referent here, and that is a fact about the
-            # input rather than a defect in the merge (386 item 2). Said in the
+            # input rather than a defect in the merge. Said in the
             # measurement the reader already has, not as a finding.
             return []
         if title_policy == "synthesise":
@@ -1488,8 +1488,8 @@ def _title_checks(
             # title is graded as a claim by `merge.verify_title`, never as a
             # string here.
             #
-            # This early return predates that policy (450) and did not know
-            # about it, so it fired entry 10's shape rule on precisely the
+            # This early return predates that policy and did not know
+            # about it, so it fired the copied-title rule on precisely the
             # output `synthesise` exists to produce. `TITLE_NOT_FROM_SOURCE` is
             # a document finding, so a *correct* synthesised title over sources
             # that happen to carry no heading exited 1 -- and untitled sources
@@ -1518,7 +1518,7 @@ def _title_checks(
 
     findings: list[Finding] = []
     if title_policy == "keep-base":
-        # The base's title, always -- with §2.7's one carve-out, which covers
+        # The base's title, always, with the policy's one carve-out, which covers
         # the only case where `keep-base` is plainly wrong without reopening the
         # merit question the policy exists to close.
         owned = [item for document, item in candidates if document.filename == base]
@@ -1533,7 +1533,7 @@ def _title_checks(
             ))
     elif title_policy == "synthesise":
         # The one policy that permits a written title, and the only one where
-        # byte-identity is not the test. DECISIONS 450: a title is a claim, and
+        # byte-identity is not the test. A written title is a claim, and
         # this module grades no claims -- it is set differences, string
         # containment and division, with no reader. So a written title is
         # checked where claims are checked, against the sources, by
@@ -1570,7 +1570,7 @@ def _title_checks(
             why = f"a {record.get('disposition')!r} record"
         elif not any(occurs(merged_flat, part) for part in
                      parsing.anchor_parts(flatten(str(record.get("replacement", ""))))):
-            # §2.7 is specific about the pointer, not only the verb: the record
+            # The title policy is specific about the pointer, not only the verb: the record
             # names the chosen title *as its replacement*. Check 3 only asks that
             # a replacement resolve somewhere in the merge, which a record
             # pointing at an unrelated paragraph satisfies.
@@ -1600,7 +1600,7 @@ def findings(
     base: str,
     budget: float,
 ) -> Reconciled:
-    """Hold a merge to what it declared. `internal/docs/M7-fidelity.md` task 19.
+    """Hold a merge to what it declared.
 
     `result` is this module's own measurement of the two texts, `dispositions`
     is what the merge said it did, and the keyword arguments are the policy
@@ -1610,8 +1610,8 @@ def findings(
     the answer to be recorded. Every check is one of three
     things: a set difference, a string containment, or a division.
 
-    The order below is the order of `docs/M7-prompts/NOTES.md`'s list, so the
-    two can be read side by side.
+    The numbered comments below mark the checks, one to nine, in the
+    order they run.
     """
     if fidelity not in PERMITTED:
         raise ValueError(f"unknown fidelity level {fidelity!r}; "
@@ -1619,7 +1619,7 @@ def findings(
     # One spelling from here down. `PERMITTED` answers to both, but the `==
     # "off"` test in check 2 does not, and a level that arrived as `verbatim`
     # would take the wrong branch there while every other check took the right
-    # one -- the kind of split that reads as a check being flaky (437).
+    # one: the kind of split that reads as a check being flaky.
     fidelity = config.canonical_fidelity(fidelity)
     if title_policy not in config.TITLE_POLICIES:
         raise ValueError(
@@ -1659,8 +1659,8 @@ def findings(
     # that are" -- and this check enforces both of its directions. Silence is
     # the claim of verbatim retention and a record is the claim of a departure;
     # each is checked against the same string comparison, in opposite
-    # directions. Entry 261 is why the converse arrived later than the forward
-    # direction, and why it is one check and not a tenth: two directions of one
+    # directions. It is one check and not a tenth, although the converse came
+    # later than the forward direction: two directions of one
     # sentence are one rule, and this loop already had both operands in hand.
     #
     # Three kinds, not one, because the three are different accusations.
@@ -1670,8 +1670,8 @@ def findings(
     #   undeclared_rewording nothing said, and the merge carries it in altered
     #                        wording. Not loss, and counted apart from it: a
     #                        single total over both reads as loss whichever it
-    #                        was made of, which is the reading entry 198 found
-    #                        in this paper's own headline. Named for the
+    #                        was made of, which is exactly how a headline
+    #                        figure gets misread. Named for the
     #                        verdict rather than `undeclared_change`, because
     #                        `Located.verdict`'s own comment declines to call
     #                        `REWORDED` a change -- it is a reading of a
@@ -1706,7 +1706,7 @@ def findings(
                     # The break survival check, and it runs at `off` alone.
                     # `flatten` collapses whitespace on both sides, so a merge
                     # that dropped a line break still matches and `found` is
-                    # true -- which left the tool restoring structure (374)
+                    # true, which left the tool restoring structure
                     # with no way to say whether the model kept it. At `off`
                     # nothing may be reworded, so a segment carried silently
                     # must carry its breaks too. No new kind: this is check
@@ -1732,7 +1732,7 @@ def findings(
                     f"segment {located.nearest or 'none'} at {located.ratio:.2f})",
                     segment=located.segment.id,
                     document=coverage.document.filename or coverage.document.id,
-                    # Both sides on the row (552). The merge side is carried
+                    # Both sides on the row. The merge side is carried
                     # only where the verdict says there is one: a segment the
                     # merge does not have has no counterpart, and the nearest
                     # match at 0.3 is a coincidence rather than a version of it.
@@ -1759,7 +1759,7 @@ def findings(
                 # Both sides, and here they are the *same* text -- which is
                 # the finding. `difference` answers empty on two identical
                 # strings, so the surfaces print the pair and the reader sees
-                # at once that nothing moved (552).
+                # at once that nothing moved.
                 source_text=located.segment.text,
                 merge_text=str(record.get("replacement", "")),
             ))
@@ -1767,7 +1767,7 @@ def findings(
     # 3. Every replacement resolves to text actually in the merge. The prompt
     # says so in as many words, so a model that writes an unresolvable pointer
     # has been warned in its own instructions. `resolves` rather than `occurs`
-    # since task 38: a replacement over the cap arrives as its two ends, and
+    # because a replacement over the cap arrives as its two ends, and
     # both must be found, in order.
     # `NAMES_A_REPLACEMENT` is the prompt's own list: "Required for reworded,
     # superseded, subsumed and duplicate; empty for dropped." A record from that
@@ -1779,7 +1779,7 @@ def findings(
     # A blank replacement produced no finding at all, and a missing one produced
     # `UNRESOLVED_REPLACEMENT`, a record fault at exit 3 -- a milder penalty than
     # the instruction threatens, on a document that really did lose content.
-    # DECISIONS 448; operator: "if it is genuinely-absent then it is lost."
+    # The operator's rule: "if it is genuinely-absent then it is lost."
     absent_ids = {
         located.segment.id
         for coverage in result.coverages
@@ -1811,7 +1811,7 @@ def findings(
                 # The record's own side and no merge side, because the finding
                 # is that there is no merge side: this replacement is in no
                 # merged text. Naming the nearest thing to it would be the
-                # invention the check exists to report (552).
+                # invention the check exists to report.
                 merge_text=replacement,
             ))
 
@@ -1829,7 +1829,7 @@ def findings(
         ))
 
     # 5. The invariant core, which consults no level and exactly one
-    # disposition. §2.3 puts these outside the slider, so a token that moved is
+    # disposition. It sits outside the slider, so a token that moved is
     # a finding at `high` exactly as at `off`.
     #
     # Two exemptions, and they are one rule read twice: a token is excused when
@@ -1839,11 +1839,11 @@ def findings(
     # replacement both being that wording and resolving in the merge is the
     # evidence that it did.
     #
-    # The first exemption is `dropped`, and M7 task 36 is what made it necessary:
+    # The first exemption is `dropped`, and it became necessary when
     # wiring this module into the pipeline showed that a declared drop of any
     # segment carrying a number, unit, URL or fenced block was two findings at
     # once, and almost every segment worth dropping carries one. That would make
-    # §2.5's split unreachable and §2.6's budget never the binding constraint --
+    # the findings/queue split unreachable and the loss budget never binding:
     # the queue would be empty of everything except prose. A dropped segment's
     # token did not *drift*; it was withdrawn along with the segment it was in,
     # and the review queue and the budget already own withdrawals.
@@ -1853,8 +1853,8 @@ def findings(
     # `duplicate` assert the content survives, so their tokens must survive
     # with it. That holds for three of them, which keep this check. It does not
     # hold for `superseded` when two sources render one number differently:
-    # `merge.md` requires a numeral copied character for character and 367
-    # requires one wording to survive, and where the sources write "two
+    # `merge.md` requires a numeral copied character for character and one
+    # fact in one sentence requires one wording to survive, and where the sources write "two
     # billion" against "2,000,000,000" both rules cannot hold at once. Keeping
     # either loses a numeral; keeping both states the fact twice. So the
     # verbatim rule yields exactly here, and only where the replacement is the
@@ -1862,33 +1862,33 @@ def findings(
     # `superseded` value whose replacement does not resolve is still a finding,
     # and check 3 reports the dangling pointer besides.
     #
-    # The source-segment half is entry 436's narrow fix for B5, and it is the
-    # one thing that made the exemption a hole rather than a carve-out. Until
+    # The source-segment half is a narrow fix for B5 (`tests/test_reconcile.py`),
+    # and without it the exemption was a hole rather than a carve-out. Until
     # then any span that merely `resolves` discharged the check, so a merge
     # could delete a segment outright, point `superseded` at a sentence of its
     # own prose, and the verbatim core would stand down -- at **all four**
     # levels, because no level is consulted here and `superseded` is permitted
-    # everywhere (434, 436). `prompts/merge.md:133` says what `superseded`
+    # everywhere. `prompts/merge.md:133` says what `superseded`
     # means: this segment was superseded *by another source's version*. So the
     # replacement has to be that version. It is a string containment against
-    # the sources, not a threshold and not a similarity score, and it keeps 389
-    # exempt because there A's own wording is a source segment.
+    # the sources, not a threshold and not a similarity score, and it keeps the
+    # rendering case above exempt, because there A's own wording is a source segment.
     #
     # Deliberately **not** one-to-one. The operator's answer keys use
     # `superseded` many-to-one within one document -- `rate_limits` nine times,
     # `bike_docks` folding three segments into one sentence -- so a uniqueness
-    # condition would contradict the corpus's own ground truth (434). Any
+    # condition would contradict the corpus's own ground truth. Any
     # number of segments may name the same other segment's wording.
     #
     # This is a **partial** repair and must not be read as closing B5. It
     # closes the hole for content carrying a verbatim-class token -- a number,
     # unit, URL, version, path or fenced block, which is most real
     # documentation -- and leaves prose-only loss invisible at every level,
-    # because check 5 never looks at prose. `b5_probe.py` still exits 0.
+    # because check 5 never looks at prose. The B5 test still passes.
     #
-    # `internal/docs/DECISIONS.md` entry 7 is untouched by this: it rules on what the
-    # review *queue* takes, which is omissions and never assertions, and a
-    # rendering difference in a surviving fact is neither (389).
+    # The rule for the review *queue* is untouched by this: it takes only
+    # declared drops, which are omissions and never assertions, and a
+    # rendering difference in a surviving fact is neither.
     #
     # The record is the whole test, and deliberately not "the segment is also
     # `ABSENT`". A drop that the merge actually reworded rather than removed
@@ -1959,7 +1959,7 @@ def findings(
     #
     # So a replacement that absorbs many distinct segments has not replaced
     # them, it has deleted them -- which is how a merge declares its way to
-    # exit 0 (entry 426): label every lost segment `superseded` by one
+    # exit 0: label every lost segment `superseded` by one
     # surviving sentence and every record is internally valid.
     #
     # The ceiling is measured, not guessed. Over the nine pairs in
@@ -2028,20 +2028,20 @@ def findings(
     # 7 and 8, together because they are one rule read from both ends.
     found += _title_checks(result, declared, title_policy, base)
 
-    # 9. Content the merge states twice, character for character. Entry 54.
+    # 9. Content the merge states twice, character for character.
     #
     # This is a last mile, not a new detection. `duplication` above has run on
-    # every merge since M7 task 10 and its result has been read by exactly one
+    # every merge since it was written and its result has been read by exactly one
     # line in `src/` -- the line that writes it. A value computed and never
     # reported is not a working check, and the reconciler has been here before:
-    # entry 24's eight checks were built, tested, and seven of them never
+    # an earlier version's eight checks were built, tested, and seven never
     # called. So this closes the loop rather than adding an instrument.
     #
     # **Exact repeats only, permanently.** `duplication` also runs a near-repeat
     # pass at `NEAR_MATCH`, kept for measurement only (see its docstring).
-    # Entry 53 left promoting it open "until a threshold is chosen against
+    # Promoting it was left open "until a threshold is chosen against
     # controls, or until a corpus with deliberate paraphrased duplication
-    # exists to choose one on"; entry 394 closes that question negatively. The
+    # exists to choose one on", and that question is now closed negatively. The
     # corpus is five real merges that restate both sources, and no threshold
     # separates them from the 23 documents the corpus asserts are correct: the
     # controls' highest intra-document similarity (0.970) exceeds the real
@@ -2073,10 +2073,10 @@ def findings(
 
 
 # --------------------------------------------------------------------------
-# A statement credited to a source that does not carry it (569)
+# A statement credited to a source that does not carry it
 # --------------------------------------------------------------------------
 #
-# `attribution_invented` was undetectable by construction (547): the merge
+# `attribution_invented` was undetectable by construction: the merge
 # credits a fact from one source to another, `prompts/decompose.md` rightly
 # reads "the guide states X" as a claim about X, so the attribution never
 # became a claim and the verifier was never asked about it. Teaching the

@@ -130,7 +130,7 @@ def _endpoint(settings: config.Settings) -> tuple[list[str], list[str]]:
 
     A single shared endpoint (the ordinary case) gets `--base-url` -- a real
     flag, and the simpler thing to read -- skipped entirely when it is already
-    the CLI's own default. A run split across providers (421: a frontier merge
+    the CLI's own default. A run split across providers (a frontier merge
     beside a local check) has no flag for that, only `LLOSSLESS_BASE_URL_<ROLE>`,
     so it gets three env lines instead of one.
 
@@ -324,7 +324,7 @@ def render(settings: config.Settings, request: "MergeRequest",
     # know, and the note says so once, rather than promising a level the
     # placeholder plainly cannot deliver.
     #
-    # Except a role whose model is single-level (688, ruling 11): `settings.effort`
+    # Except a role whose model is single-level: `settings.effort`
     # should never carry one here -- the page hides the control and the API
     # refuses a submitted level (`jobs.route_plan`) -- but this is the one
     # placeholder-building path that has to hold even if it somehow did, since

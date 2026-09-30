@@ -4,7 +4,7 @@
   "held_out": true,
   "kind": "guard",
   "description": "Both sources state their facts as bullet lists of separate atomic items, and the merge keeps every item separate; nothing is fused and nothing is lost.",
-  "note": "The regression fixture for docs/DECISIONS.md entry 115. Everything but the bullet structure is held constant: the facts are the shared pool, the values agree with ordering_only, the two sources share one item and contradict in nothing, and the merge consolidates their common section rather than stapling them. The one thing this fixture varies is that every fact arrives as a list item rather than as prose. Under the rendering in force before entry 115 the merge side was shown these lines with their notation stripped, adjacent items were fused into conjoined sentences, and the reverse pass reported the conjunction as invented - a clean fixture failing with an invented finding. That is the must-fire proof; the exit code 0 asserted here, and the four fusion assertions in must_not_extract, are the must-not-fire regression guard. held_out stays true only while no prompt is tuned against it.",
+  "note": "The regression fixture for the change of 2026-08-29 that shows the merge model the document's notation. Everything but the bullet structure is held constant: the facts are the shared pool, the values agree with ordering_only, the two sources share one item and contradict in nothing, and the merge consolidates their common section rather than stapling them. The one thing this fixture varies is that every fact arrives as a list item rather than as prose. Under the rendering in force before that change the merge side was shown these lines with their notation stripped, adjacent items were fused into conjoined sentences, and the reverse pass reported the conjunction as invented - a clean fixture failing with an invented finding. That is the must-fire proof; the exit code 0 asserted here, and the four fusion assertions in must_not_extract, are the must-not-fire regression guard. held_out stays true only while no prompt is tuned against it.",
   "plants": [],
   "merged": "merged.md",
   "prompts": {
@@ -244,7 +244,7 @@
       "expected_verdict": "SUPPORTED",
       "also_acceptable": [],
       "expected_finding": "none",
-      "note": "Reverse-direction guard, and the item this fixture exists for. Under the rendering in force before docs/DECISIONS.md entry 115 the merge model was shown these lines with their bullets stripped, fused an item with its neighbour, and the reverse pass correctly reported the conjoined sentence as invented. Nothing in merged.md is unsupported, so a reverse finding here is over-flagging or a fusion."
+      "note": "Reverse-direction guard, and the item this fixture exists for. Under the rendering in force before 2026-08-29 the merge model was shown these lines with their bullets stripped, fused an item with its neighbour, and the reverse pass correctly reported the conjoined sentence as invented. Nothing in merged.md is unsupported, so a reverse finding here is over-flagging or a fusion."
     },
     {
       "probe_id": "merged-read-timeout",
@@ -301,56 +301,56 @@
       "document": "source_a.md",
       "basis": "absent",
       "pattern": "(?i)\\b8443\\b[^\\n]*\\b30 seconds\\b|\\b30 seconds\\b[^\\n]*\\b8443\\b",
-      "reason": "the listen port and the connect timeout are two list items, one fact each, adjacent in source_a.md and in the merge. A single claim carrying both values is two facts fused into one sentence, which is what the merge model did when it was shown these lines with their bullets stripped: adjacent items became a conjoined sentence and the reverse pass reported it as invented. See docs/DECISIONS.md entry 115."
+      "reason": "the listen port and the connect timeout are two list items, one fact each, adjacent in source_a.md and in the merge. A single claim carrying both values is two facts fused into one sentence, which is what the merge model did when it was shown these lines with their bullets stripped: adjacent items became a conjoined sentence and the reverse pass reported it as invented."
     },
     {
       "assertion_id": "no-fused-connections-and-retries-source-a",
       "document": "source_a.md",
       "basis": "absent",
       "pattern": "(?i)\\b512\\b[^\\n]*\\bretr\\w+|\\bretr\\w+[^\\n]*\\b512\\b",
-      "reason": "the connection limit and the retry limit are two list items, one fact each, adjacent under Limits. They constrain different things, so a claim naming both has fused two facts. See docs/DECISIONS.md entry 115."
+      "reason": "the connection limit and the retry limit are two list items, one fact each, adjacent under Limits. They constrain different things, so a claim naming both has fused two facts."
     },
     {
       "assertion_id": "no-fused-connect-and-read-timeout-source-b",
       "document": "source_b.md",
       "basis": "absent",
       "pattern": "(?i)\\b30 seconds\\b[^\\n]*\\b120 seconds\\b|\\b120 seconds\\b[^\\n]*\\b30 seconds\\b",
-      "reason": "the connect timeout and the read timeout are two list items, one fact each, adjacent in source_b.md and in the merge. A claim carrying both values is a fusion of adjacent items, not a merge. See docs/DECISIONS.md entry 115."
+      "reason": "the connect timeout and the read timeout are two list items, one fact each, adjacent in source_b.md and in the merge. A claim carrying both values is a fusion of adjacent items, not a merge."
     },
     {
       "assertion_id": "no-fused-log-format-and-health-path-source-b",
       "document": "source_b.md",
       "basis": "absent",
       "pattern": "(?i)\\bJSON Lines\\b[^\\n]*/-/healthy|/-/healthy[^\\n]*\\bJSON Lines\\b",
-      "reason": "the access log format and the health check path are two list items, one fact each, adjacent under Logging, and they are unrelated to one another. A claim carrying both has fused two facts. See docs/DECISIONS.md entry 115."
+      "reason": "the access log format and the health check path are two list items, one fact each, adjacent under Logging, and they are unrelated to one another. A claim carrying both has fused two facts."
     },
     {
       "assertion_id": "no-fused-port-and-connect-timeout-merged",
       "document": "merged.md",
       "basis": "absent",
       "pattern": "(?i)\\b8443\\b[^\\n]*\\b30 seconds\\b|\\b30 seconds\\b[^\\n]*\\b8443\\b",
-      "reason": "the listen port and the connect timeout are two list items, one fact each, adjacent in source_a.md and in the merge. A single claim carrying both values is two facts fused into one sentence, which is what the merge model did when it was shown these lines with their bullets stripped: adjacent items became a conjoined sentence and the reverse pass reported it as invented. See docs/DECISIONS.md entry 115."
+      "reason": "the listen port and the connect timeout are two list items, one fact each, adjacent in source_a.md and in the merge. A single claim carrying both values is two facts fused into one sentence, which is what the merge model did when it was shown these lines with their bullets stripped: adjacent items became a conjoined sentence and the reverse pass reported it as invented."
     },
     {
       "assertion_id": "no-fused-connect-and-read-timeout-merged",
       "document": "merged.md",
       "basis": "absent",
       "pattern": "(?i)\\b30 seconds\\b[^\\n]*\\b120 seconds\\b|\\b120 seconds\\b[^\\n]*\\b30 seconds\\b",
-      "reason": "the connect timeout and the read timeout are two list items, one fact each, adjacent in source_b.md and in the merge. A claim carrying both values is a fusion of adjacent items, not a merge. See docs/DECISIONS.md entry 115."
+      "reason": "the connect timeout and the read timeout are two list items, one fact each, adjacent in source_b.md and in the merge. A claim carrying both values is a fusion of adjacent items, not a merge."
     },
     {
       "assertion_id": "no-fused-connections-and-retries-merged",
       "document": "merged.md",
       "basis": "absent",
       "pattern": "(?i)\\b512\\b[^\\n]*\\bretr\\w+|\\bretr\\w+[^\\n]*\\b512\\b",
-      "reason": "the connection limit and the retry limit are two list items, one fact each, adjacent under Limits. They constrain different things, so a claim naming both has fused two facts. See docs/DECISIONS.md entry 115."
+      "reason": "the connection limit and the retry limit are two list items, one fact each, adjacent under Limits. They constrain different things, so a claim naming both has fused two facts."
     },
     {
       "assertion_id": "no-fused-log-format-and-health-path-merged",
       "document": "merged.md",
       "basis": "absent",
       "pattern": "(?i)\\bJSON Lines\\b[^\\n]*/-/healthy|/-/healthy[^\\n]*\\bJSON Lines\\b",
-      "reason": "the access log format and the health check path are two list items, one fact each, adjacent under Logging, and they are unrelated to one another. A claim carrying both has fused two facts. See docs/DECISIONS.md entry 115."
+      "reason": "the access log format and the health check path are two list items, one fact each, adjacent under Logging, and they are unrelated to one another. A claim carrying both has fused two facts."
     }
   ],
   "expected_conflicts": [],
