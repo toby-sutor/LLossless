@@ -1,0 +1,52 @@
+[project]
+name = "llossless"
+version = "0.1.0"
+description = "Merge two documents with an LLM, then verify no factual claim was dropped, contradicted, or invented."
+requires-python = ">=3.11"
+
+# PEP 639. The SPDX expression, not `{ file = "LICENSE" }`: the table form is
+# deprecated, and it says only "some licence, over there" where this says which
+# one. `license-files` still ships the text in the sdist and the wheel.
+# LICENSE is the canonical Elastic License 2.0 text, 93 lines, unchanged, so
+# the identifier here and the text it names are the same licence.
+#
+# Source-available rather than OSI open-source: ELv2 grants use, modification
+# and redistribution, and withholds one thing, offering the software to third
+# parties as a hosted or managed service. `NOTICE` is shipped beside it because
+# ELv2 carries no copyright line of its own the way Apache-2.0's appendix does,
+# and a text kept byte for byte canonical cannot also carry a holder that
+# varies. The two files are checked separately for that reason.
+license = "Elastic-2.0"
+license-files = ["LICENSE", "NOTICE"]
+
+# Zero third-party dependencies. The brief allows three; so far none has earned
+# its place. HTTP is stdlib urllib.request against one configured endpoint.
+dependencies = []
+
+[project.scripts]
+llossless = "llossless.cli:main"
+
+[build-system]
+# Floored and capped. The floor is PEP 639's `license` string, which is a hard
+# error on older hatchling. The ceiling is the half that was missing: a build
+# backend resolved fresh at build time was free to take whatever is current,
+# including a major version that has not been built against. This is the whole
+# supply-chain surface the project has: there are no runtime dependencies.
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llossless"]
+
+# The prompts are package data, not repository data. `prompts.py` used to reach
+# them with `parents[2]`, which walks out of site-packages in an installed
+# wheel, so every command that loads a prompt (every command except `--help`)
+# failed on the artifact this file builds, as the pre-release review found.
+#
+# Force-included rather than moved under `src/llossless/`. The files stay
+# exactly where the manifest, the reports and every document that cites
+# `prompts/merge.md` say they are, and their bytes are copied unchanged, so no
+# prompt hash moves and no cassette is re-keyed. The wheel gets a copy under a
+# name that cannot collide with the `llossless.prompts` module.
+[tool.hatch.build.targets.wheel.force-include]
+"prompts" = "llossless/_prompts"
