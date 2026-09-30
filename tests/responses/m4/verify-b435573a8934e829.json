@@ -1,0 +1,73 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-08-08T18:11:47+00:00",
+  "key": "b435573a8934e8295508c644db4fc715219a3a97fe1934260a73b16c9c10e7d0",
+  "request": {
+    "role": "verify",
+    "model": "qwen3:8b",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Decide whether each claim is supported by the reference text below.\n\nThe reference text is the merged document merged.md. Each claim is\nshown prefixed with its claim id and a pipe.\n\nVerdicts:\nSUPPORTED - the reference text states this claim, or states it in different\n  words with the same meaning\nCONTRADICTED - the reference text states something incompatible with this claim\nMISSING - the reference text neither states nor contradicts this claim\n\nRules:\n- Judge only against the reference text. Ignore outside knowledge.\n- Different wording with identical meaning is SUPPORTED.\n- A different value, number, unit or name for the same attribute is\n  CONTRADICTED, not MISSING.\n- Attribution still counts as stating the claim. If the reference text says\n  that a named document states P, a claim of P is SUPPORTED.\n- If the reference text gives several attributed values for one attribute, and\n  this claim is one of them, the claim is SUPPORTED. Sources disagreeing with\n  each other does not make either claim CONTRADICTED. Report the verdict for\n  the claim in front of you and leave the disagreement to be recorded as a\n  conflict.\n- Partial support is MISSING. Do not extend the claim to make it fit.\n\nOutput:\n- Return exactly one result per claim, in the order the claims are given, each\n  echoing the claim id it answers. Never merge, reorder or omit a claim.\n- Emit the fields in this order: verdict, evidence, evidence_source, rationale.\n- verdict: commit to the verdict first, then explain it. The verdict must never\n  be changed to fit the space available for the rationale.\n- evidence: for SUPPORTED, the exact span of the reference text that states the\n  claim. For CONTRADICTED, the exact span that is incompatible with it. Empty\n  for MISSING.\n- Copy every span character for character, including any spelling, grammatical\n  or formatting errors, unusual capitalisation, and the original number, date\n  and time formats. Do not correct, normalise, expand or abbreviate. A single\n  altered character makes the evidence invalid.\n- evidence_source: the filename the span was copied from. For this pass that is\n  always merged.md.\n- rationale: one sentence, maximum 400 characters, ending in a full stop. If\n  your reasoning does not fit, shorten the rationale until it does. A rationale\n  that stops mid-sentence is rejected, so do not work through the alternatives\n  and let the space run out. Never drop it and never let it alter the verdict.\n\nWorked example - attributed values on both sides of a conflict.\n\nSuppose the reference text contains:\n\n  Unresolved: default cache size.\n  According to the Operator Guide, the default cache size is 64 MB.\n  According to the Deployment Notes, the default cache size is 128 MB.\n  The sources disagree and this merge does not choose between them.\n\nThen \"The default cache size is 64 MB.\" is SUPPORTED, with evidence \"the\ndefault cache size is 64 MB\". \"The default cache size is 128 MB.\" is also\nSUPPORTED, with evidence \"the default cache size is 128 MB\". Neither is\nCONTRADICTED: the reference text states both.\n\nQuote the attributed value your claim matches. Never quote the sentence saying\nthat the sources disagree - that sentence is evidence for neither claim.\n\nWorked example - verbatim evidence.\n\nSuppose the reference text contains:\n\n  The relay ran for tree days without a restart, from 07:15 till 19:45 daily.\n\nFor the claim \"The relay ran for three days without a restart.\", the evidence\nis \"The relay ran for tree days without a restart\" - the misspelling \"tree\" is\npreserved exactly as it appears. Writing \"three\" makes the evidence invalid.\n\nFor the claim \"The relay ran from 07:15 till 19:45 daily.\", the evidence is\n\"from 07:15 till 19:45 daily\". Writing \"from 7:15 am to 7:45 pm\" makes the\nevidence invalid.\n\nReturn JSON matching the provided schema. Nothing else.\n\nREFERENCE TEXT (merged.md):\nThe Vandrell Relay listens on port 8443.\n\nUnresolved: the minimum TLS version.\nsource_a.md states that the minimum TLS version is 1.2.\nsource_b.md states that the minimum TLS version is 1.2.\n\nUnresolved: the maximum concurrent connections.\nsource_a.md states that the maximum concurrent connections is 512.\nsource_b.md states that the maximum concurrent connections is 512.\n\nUnresolved: the read timeout.\nsource_a.md states that the read timeout is 30 seconds.\nsource_b.md states that the read timeout is 30 seconds.\n\nUnresolved: the health check path.\nsource_a.md states that the health check path is /healthz.\nsource_b.md states that the health check path is /healthz.\n\nCLAIMS:\na-listen-port: The relay listens on port 8443.\na-read-timeout: The read timeout is 30 seconds.\na-health-path: The health check path is /healthz.\nb-tls-min: The minimum TLS version is 1.2.\nb-max-connections: The maximum concurrent connections is 512.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "verdicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "claim_id": {
+                "type": "string"
+              },
+              "verdict": {
+                "type": "string",
+                "enum": [
+                  "SUPPORTED",
+                  "CONTRADICTED",
+                  "MISSING"
+                ]
+              },
+              "evidence": {
+                "type": "string"
+              },
+              "evidence_source": {
+                "type": "string"
+              },
+              "rationale": {
+                "type": "string",
+                "maxLength": 400
+              }
+            },
+            "required": [
+              "claim_id",
+              "verdict",
+              "evidence",
+              "evidence_source",
+              "rationale"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "verdicts"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\":\"chatcmpl-240\",\"object\":\"chat.completion\",\"created\":1786212707,\"model\":\"qwen3:8b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"verdicts\\\": [{\\\"claim_id\\\": \\\"a-listen-port\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The Vandrell Relay listens on port 8443.\\\", \\\"evidence_source\\\": \\\"merged.md\\\", \\\"rationale\\\": \\\"The reference text explicitly states the relay listens on port 8443.\\\"}, {\\\"claim_id\\\": \\\"a-read-timeout\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"source_a.md states that the read timeout is 30 seconds.\\\", \\\"evidence_source\\\": \\\"merged.md\\\", \\\"rationale\\\": \\\"The reference text states the read timeout is 30 seconds as per source_a.md.\\\"}, {\\\"claim_id\\\": \\\"a-health-path\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"source_a.md states that the health check path is /healthz.\\\", \\\"evidence_source\\\": \\\"merged.md\\\", \\\"rationale\\\": \\\"The reference text states the health check path is /healthz as per source_a.md.\\\"}, {\\\"claim_id\\\": \\\"b-tls-min\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"source_a.md states that the minimum TLS version is 1.2.\\\", \\\"evidence_source\\\": \\\"merged.md\\\", \\\"rationale\\\": \\\"The reference text states the minimum TLS version is 1.2 as per source_a.md.\\\"}, {\\\"claim_id\\\": \\\"b-max-connections\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"source_a.md states that the maximum concurrent connections is 512.\\\", \\\"evidence_source\\\": \\\"merged.md\\\", \\\"rationale\\\": \\\"The reference text states the maximum concurrent connections is 512 as per source_a.md.\\\"}]}\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":1157,\"completion_tokens\":357,\"total_tokens\":1514}}\n",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "49960de5880e",
+    "claimcheck_source": "008f57215048",
+    "latency_ms": 15648,
+    "attempt": 1
+  }
+}

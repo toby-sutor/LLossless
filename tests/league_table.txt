@@ -1,0 +1,28 @@
+====================================================================================================
+  QUALITY-FIRST LEAGUE TABLE -- lexicographic: coverage, then cost, then speed.
+  No composite score. Disqualifiers are stated, not scored.
+====================================================================================================
+
+  DISQUALIFIED (unusable regardless of cost or speed):
+
+    27b-fp8  (Qwen/Qwen3.8-27B-FP8)  -- for the record: coverage 117/172 (68.0%), n/a/merge, 656.6s/merge
+      - loses content silently (11 segment(s) absent with no disposition declared)
+    8b  (qwen/qwen3-8b)  -- for the record: coverage 68/112 (60.7%), n/a/merge, 471.3s/merge
+      - loses content silently (35 segment(s) absent with no disposition declared)
+      - 1 run(s) produced no report: toby-test-5-low (no report.json/merged.md -- merge step did not complete)
+    claude-haiku-4-5  (claude-haiku-4-5-20251001)  -- for the record: coverage 113/172 (65.7%), $0.0652/merge, 141.6s/merge
+      - loses content silently (11 segment(s) absent with no disposition declared)
+    gpt-5.6-terra  (gpt-5.6-terra)  -- for the record: coverage 140/172 (81.4%), $0.2318/merge, 262.9s/merge
+      - duplicates content (3 instance(s) across its runs)
+
+  SURVIVORS, ranked coverage desc, then cost asc, then speed asc:
+
+  model                      silent-loss           coverage  dup  staple?    $/merge    s/merge  runs
+  ---------------------------------------------------------------------------------------------------
+
+  silent_loss = segments the reconciler could not find in the merge AND that run's own
+  `declarations` list (report.json) names no disposition for. 0 does not mean "nothing
+  was dropped" -- it means every drop was declared, which the reconciler's own findings
+  step already checked for truthfulness.
+
+  Wrote tests/league_table.json

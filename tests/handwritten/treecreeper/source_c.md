@@ -1,0 +1,8 @@
+## Distribution and habitat
+The Eurasian treecreeper is the most widespread member of its genus, breeding in temperate woodlands across the Palearctic from Ireland to Japan. It prefers mature trees, and in most of Europe, where it shares its range with short-toed treecreeper, it tends to be found mainly in coniferous forest, especially spruce and fir. However, where it is the only treecreeper, as in European Russia, or the British Isles, it frequents broadleaved or mixed woodland in preference to conifers. It is also found in parks and large gardens.
+
+The Eurasian treecreeper breeds down to sea level in the north of its range, but tends to be a highland species further south. In the Pyrenees it breeds above 1,370 metres (4,490 feet), in China from 400–2,100 metres (1,300–6,900 ft) and in southern Japan from 1,065–2,135 metres (3,494–7,005 ft). The breeding areas have July isotherms between 14–16 °C and 23–24 °C (73–75 °F) and 72–73 °F).
+
+The Eurasian treecreeper is non-migratory in the milder west and south of its breeding range, but some northern birds move south in winter, and individuals breeding on mountains may descend to a lower altitude in winter. Winter movements and post-breeding dispersal may lead to vagrancy outside the normal range. Wintering migrants of the Asian subspecies have been recorded in South Korea and China, and the nominate form has been recorded west of its breeding range as far as Orkney, Scotland. The Eurasian treecreeper has also occurred as a vagrant to the Channel Islands (where the short-toed is the resident species), Mallorca and the Faroe Islands.
+
+Source: https://en.wikipedia.org/wiki/Eurasian_treecreeper

@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-09-24T21:48:56+00:00",
+  "key": "6bae674e395f0237d647727493c580c756ade28d670f526d6bb74bbb729586f1",
+  "request": {
+    "role": "decompose",
+    "model": "Qwen/Qwen3.8-27B-FP8",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract every independently checkable factual assertion from the document below.\n\nThe document is shown one line per line, each prefixed with its line number and\na pipe. The prefix is not part of the text.\n\nRules:\n- One assertion per claim. Split compound sentences.\n- A single line may contain several sentences, and may therefore yield several\n  claims. Do not treat one line as one claim.\n- Each claim must stand alone without needing surrounding context.\n- Resolve pronouns and references to explicit nouns.\n- Copy values, names, numbers, units and time formats exactly as written. Do not\n  normalise, round, expand or abbreviate them. \"approximately 500\" stays\n  \"approximately 500\"; \"07:15 till 19:45\" stays \"07:15 till 19:45\".\n- Skip headings, formatting, boilerplate and statements of opinion.\n- Skip statements about the documents themselves or about how they were\n  combined, such as a note that two sources disagree. Attributed content is not\n  such a statement: \"the guide states that the timeout is 30 seconds\" is a\n  claim about the timeout, and must be extracted.\n- Do not infer, summarise, or combine information.\n- line: the number shown against the line the claim comes from. If the claim\n  spans several lines, give the first.\n- span: the specific sentence the claim comes from, copied exactly, without the\n  number prefix. If one line contains several sentences, each claim takes only\n  its own sentence as span, never the whole line. The span must appear in the\n  document character for character, including any spelling, grammatical or\n  formatting errors and any unusual capitalisation. Do not correct anything.\n\nWorked example - one line, two claims.\n\n  12| The kiln fired for eleven hours and the glaze cracked in three places.\n\nThis line yields two claims:\n\n  claim: \"The kiln fired for eleven hours.\"\n  line: 12\n  span: \"The kiln fired for eleven hours\"\n\n  claim: \"The glaze cracked in three places.\"\n  line: 12\n  span: \"the glaze cracked in three places\"\n\nBoth claims carry line 12. Neither span is the whole line.\n\nWorked example - fact and opinion in one sentence.\n\n  7| The garden was breathtaking, with eleven rose beds along the south wall.\n\n\"The garden was breathtaking\" is an evaluation and is skipped. \"The garden has\neleven rose beds along the south wall.\" is checkable and is extracted, with\nspan \"with eleven rose beds along the south wall\".\n\nDescriptive prose is not automatically opinion. A stated quantity, position,\nduration, time, name, sequence or event is a fact even in a narrative passage,\nand must be extracted. Only judgements of quality, beauty, value or feeling are\nopinion.\n\nReturn JSON matching the provided schema. Nothing else.\n\nDOCUMENT:\n 1 | # The pretty Rosegarden\n 2 | \n 3 | Once upon a time, there was a princess in a distant country that loved to spend time in her beautiful rosegarden.\n 4 | \n 5 | ## Times\n 6 | \n 7 | She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.\n 8 | From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up. Her mother did not appreciate that she, as a princess, would actually work in the garden, but the princess didn't care.\n 9 | \n10 | ## Winter\n11 | \n12 | The rosegarden lost all his life in winter, so the young lady could not enjoy the beautiful colors and all the life the rosegarden harbored.\n13 | But once spring arrived, it turned back to life and color.\n14 | \n15 | ## Public times\n16 | \n17 | While the rose garden was the private property of the royal family, the young princess insisted on making the garden accessible to the public every March 1st to March 31st.\n18 | During that time, people from all over the country traveled to the castel to enjoy a nice day wandering through the rosegarden just like their beloved princess.\n19 | \n20 | ## Postcards\n21 | \n22 | It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most. They then sent the postcard to their home.\n23 | People were starting to make bets on whether the postcard arrived at their home before they arrived home.\n24 | In many cases, it was a tie because the people and the postcards were usually transported in the same carriage.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "span": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "line",
+              "span"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "claims"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\": \"chatcmpl-b3d16f17c3b6acc3\", \"object\": \"chat.completion\", \"created\": 1790286483, \"model\": \"Qwen/Qwen3.8-27B-FP8\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"{\\n  \\\"claims\\\": [\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.\\\",\\n      \\\"text\\\": \\\"The princess visited the rosegarden every morning from 8 am till 9 am.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.\\\",\\n      \\\"text\\\": \\\"The princess visited the rosegarden right after her breakfast.\\\"\\n    },\\n    {\\n      \\\"line\\\": 8,\\n      \\\"span\\\": \\\"From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up.\\\",\\n      \\\"text\\\": \\\"The princess worked in the rosegarden from 02:00 till 15:30 o'clock.\\\"\\n    },\\n    {\\n      \\\"line\\\": 8,\\n      \\\"span\\\": \\\"From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up.\\\",\\n      \\\"text\\\": \\\"The princess worked in the rosegarden to tidy it up.\\\"\\n    },\\n    {\\n      \\\"line\\\": 17,\\n      \\\"span\\\": \\\"While the rose garden was the private property of the royal family, the young princess insisted on making the garden accessible to the public every March 1st to March 31st.\\\",\\n      \\\"text\\\": \\\"The rose garden was the private property of the royal family.\\\"\\n    },\\n    {\\n      \\\"line\\\": 17,\\n      \\\"span\\\": \\\"While the rose garden was the private property of the royal family, the young princess insisted on making the garden accessible to the public every March 1st to March 31st.\\\",\\n      \\\"text\\\": \\\"The young princess insisted on making the garden accessible to the public every March 1st to March 31st.\\\"\\n    },\\n    {\\n      \\\"line\\\": 18,\\n      \\\"span\\\": \\\"During that time, people from all over the country traveled to the castel to enjoy a nice day wandering through the rosegarden just like their beloved princess.\\\",\\n      \\\"text\\\": \\\"People from all over the country traveled to the castel during the time the garden was accessible to the public.\\\"\\n    },\\n    {\\n      \\\"line\\\": 18,\\n      \\\"span\\\": \\\"During that time, people from all over the country traveled to the castel to enjoy a nice day wandering through the rosegarden just like their beloved princess.\\\",\\n      \\\"text\\\": \\\"People traveled to the castel to wander through the rosegarden.\\\"\\n    },\\n    {\\n      \\\"line\\\": 22,\\n      \\\"span\\\": \\\"It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most.\\\",\\n      \\\"text\\\": \\\"It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery.\\\"\\n    },\\n    {\\n      \\\"line\\\": 22,\\n      \\\"span\\\": \\\"It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most.\\\",\\n      \\\"text\\\": \\\"It became tradition that everyone who visited the rosegarden from the outside tried to draw what they liked most.\\\"\\n    },\\n    {\\n      \\\"line\\\": 22,\\n      \\\"span\\\": \\\"They then sent the postcard to their home.\\\",\\n      \\\"text\\\": \\\"Visitors who visited the rosegarden from the outside sent the postcard to their home.\\\"\\n    },\\n    {\\n      \\\"line\\\": 23,\\n      \\\"span\\\": \\\"People were starting to make bets on whether the postcard arrived at their home before they arrived home.\\\",\\n      \\\"text\\\": \\\"People were starting to make bets on whether the postcard arrived at their home before they arrived home.\\\"\\n    },\\n    {\\n      \\\"line\\\": 24,\\n      \\\"span\\\": \\\"In many cases, it was a tie because the people and the postcards were usually transported in the same carriage.\\\",\\n      \\\"text\\\": \\\"In many cases, the bet on whether the postcard arrived at their home before they arrived home was a tie.\\\"\\n    },\\n    {\\n      \\\"line\\\": 24,\\n      \\\"span\\\": \\\"In many cases, it was a tie because the people and the postcards were usually transported in the same carriage.\\\",\\n      \\\"text\\\": \\\"The people and the postcards were usually transported in the same carriage.\\\"\\n    }\\n  ]\\n}\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 1076, \"total_tokens\": 2090, \"completion_tokens\": 1014}}",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "1ce4c8ef780f",
+    "endpoint_id_scheme": 2,
+    "claimcheck_source": "9da1998c0258",
+    "latency_ms": 53746,
+    "attempt": 1,
+    "field_order": "any"
+  }
+}

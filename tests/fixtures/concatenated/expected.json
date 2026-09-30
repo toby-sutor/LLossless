@@ -1,0 +1,422 @@
+{
+  "schema_version": 4,
+  "fixture": "concatenated",
+  "kind": "guard",
+  "held_out": true,
+  "description": "Two overlapping sources glued together whole, alternated paragraph by paragraph. Both documents state the same five facts - bell count, casting year, ringer count, peal duration, ringing day - in different wordings, and merged.md carries all ten paragraphs, A's version then B's version, five times over. Nothing is dropped, nothing is reconciled and the merge writes nothing of its own. Every probe here is SUPPORTED in both directions and that is not an oversight: the verify pass is right about every claim, because every claim really is carried and really is grounded. The redundancy is a property of the document rather than of any claim in it, and schema_version 4 has no field that can declare it, so this fixture asserts what the schema can say - that `verify` finds nothing - and records the blind spot rather than pretending to test for it. See tests/fixtures/SCHEMA.md, 'concatenated is a guard that records a blind spot'.",
+  "note": "Registered `guard` because its own probes imply exit 0 and `kind` must agree with them, NOT because a concatenation of overlapping sources is a correct merge. It is the concatenation defect: both sources glued together whole instead of merged. `order.sequence` is `aababababab`, so `reconcile.Order.stapled` is false and the existing staple detector cannot see it; the reconciler's own finding count on this merge is 2, and only four fixtures score lower - list_structure and ordering_only at 0, the two disjoint controls at 1 - while every other fixture in the corpus scores 5 or more.",
+  "plants": [],
+  "merged": "merged.md",
+  "prompts": {
+    "source_to_merged": "prompts/verify.md",
+    "merged_to_sources": "prompts/verify_reverse.md"
+  },
+  "claim_count_band": {
+    "source_a.md": [
+      7,
+      14
+    ],
+    "source_b.md": [
+      7,
+      14
+    ],
+    "merged.md": [
+      14,
+      28
+    ]
+  },
+  "probes": [
+    {
+      "probe_id": "a-bell-count",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 3,
+      "text": "Six bells hang in the tower on Carrow Hill.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "six bells hang in the tower"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "six bells",
+          "tower"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "six"
+      ]
+    },
+    {
+      "probe_id": "a-casting-year",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 5,
+      "text": "The six bells were cast in 1782.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "cast in 1782"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "1782"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "1782"
+      ]
+    },
+    {
+      "probe_id": "a-ringer-count",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 7,
+      "text": "A full peal needs eight ringers.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "a full peal needs eight ringers"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "eight ringers"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "eight"
+      ]
+    },
+    {
+      "probe_id": "a-peal-duration",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 9,
+      "text": "A full peal runs for two hours.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "runs for two hours"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "two hours"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "two hours"
+      ]
+    },
+    {
+      "probe_id": "a-ringing-day",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 11,
+      "text": "The bells are rung on the first Sunday of every month.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "the first sunday of every month"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "first Sunday"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "first Sunday"
+      ]
+    },
+    {
+      "probe_id": "b-bell-count",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 3,
+      "text": "There are six bells in the tower above the village.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "we found six of them in the tower"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "six bells",
+          "tower"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "six"
+      ],
+      "note": "The same fact as a-bell-count in the other source's words. Both are SUPPORTED against merged.md because the merge carries both wordings, which is the defect this fixture records."
+    },
+    {
+      "probe_id": "b-casting-year",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 5,
+      "text": "The founder cut the year 1782 into the tenor.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "cut the year 1782 into the tenor"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "1782",
+          "tenor"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "1782"
+      ]
+    },
+    {
+      "probe_id": "b-ringer-count",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 7,
+      "text": "A full peal could not be attempted with fewer than eight ringers.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "fewer than eight ringers"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "eight ringers"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "eight"
+      ]
+    },
+    {
+      "probe_id": "b-peal-duration",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 9,
+      "text": "A full peal took two hours from the first stroke to the last.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "a full peal took two hours"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "two hours"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "two hours"
+      ]
+    },
+    {
+      "probe_id": "b-ringing-day",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 11,
+      "text": "The bells were rung on the first Sunday of the month.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "the first sunday of the month"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "first Sunday"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "first Sunday"
+      ]
+    },
+    {
+      "probe_id": "m-bell-count",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 3,
+      "text": "Six bells hang in the tower on Carrow Hill.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "six bells hang in the tower"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "six bells",
+          "tower"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "six"
+      ],
+      "expected_evidence_source": [
+        "source_a.md",
+        "source_b.md"
+      ],
+      "note": "Every fact in this fixture is stated by both sources, so every reverse probe names both files. A multi-element expected_evidence_source is the only honest answer here and it is the same answer for all five."
+    },
+    {
+      "probe_id": "m-casting-year",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 7,
+      "text": "The six bells were cast in 1782.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "cast in 1782"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "1782"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "1782"
+      ],
+      "expected_evidence_source": [
+        "source_a.md",
+        "source_b.md"
+      ]
+    },
+    {
+      "probe_id": "m-ringer-count",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 11,
+      "text": "A full peal needs eight ringers.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "a full peal needs eight ringers"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "eight ringers"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "eight"
+      ],
+      "expected_evidence_source": [
+        "source_a.md",
+        "source_b.md"
+      ]
+    },
+    {
+      "probe_id": "m-peal-duration",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 15,
+      "text": "A full peal runs for two hours.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "runs for two hours"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "two hours"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "two hours"
+      ],
+      "expected_evidence_source": [
+        "source_a.md",
+        "source_b.md"
+      ]
+    },
+    {
+      "probe_id": "m-ringing-day",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 19,
+      "text": "The bells are rung on the first Sunday of every month.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "the first sunday of every month"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "first Sunday"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "first Sunday"
+      ],
+      "expected_evidence_source": [
+        "source_a.md",
+        "source_b.md"
+      ]
+    }
+  ],
+  "must_not_extract": [],
+  "expected_conflicts": [],
+  "expected_exit_code": {
+    "strict": 0,
+    "lenient": 0
+  }
+}

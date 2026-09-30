@@ -1,0 +1,73 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-08-08T18:53:32+00:00",
+  "key": "782ccf13d969a915920fb94535bff0467343ba98a6cc3edfbe5a3067a73fb92b",
+  "request": {
+    "role": "verify",
+    "model": "qwen3:8b",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Decide whether each claim is supported by the source documents below.\n\nEach claim was taken from a merged document that was written from these\nsources. You are checking the opposite direction from the forward pass: not\n\"did the merge keep this\", but \"did the merge invent this\".\n\nEach source document is shown under a heading giving its filename. The source\ndocuments are: source_a.md, source_b.md. Each claim is shown prefixed with its claim\nid and a pipe.\n\nVerdicts:\nSUPPORTED - at least one source document states this claim, or states it in\n  different words with the same meaning\nCONTRADICTED - a source document states something incompatible with this claim\nMISSING - no source document states or contradicts this claim\n\nRules:\n- Judge only against the source documents. Ignore outside knowledge.\n- Support from any single source is enough. A claim stated in only one source\n  document is SUPPORTED; it does not need to appear in all of them.\n- Different wording with identical meaning is SUPPORTED.\n- A different value, number, unit or name for the same attribute is\n  CONTRADICTED, not MISSING.\n- A claim that names its source is checked against that source's content. If\n  the claim is that a named document states P, and that document states P, the\n  claim is SUPPORTED.\n- If the sources give different values for one attribute, and the claim reports\n  that disagreement, the claim is SUPPORTED. Recording that the sources\n  disagree is a correct statement about them, not a contradiction of either.\n- Partial support is MISSING. Do not extend the claim to make it fit, and do\n  not combine a fragment of one source with a fragment of another to\n  manufacture support the claim does not have.\n- MISSING is the finding this pass exists to produce. A claim in the merged\n  document that no source states is content the merge invented. Do not reach\n  for a generous reading to avoid saying MISSING.\n- Equally, do not reach for MISSING. A source that states the claim in\n  different words, or that supplies the claim in a passage about something\n  else, is still support, and the verdict is SUPPORTED.\n\nOutput:\n- Return exactly one result per claim, in the order the claims are given, each\n  echoing the claim id it answers. Never merge, reorder or omit a claim.\n- Emit the fields in this order: verdict, evidence, evidence_source, rationale.\n- verdict: commit to the verdict first, then explain it. The verdict must never\n  be changed to fit the space available for the rationale.\n- evidence: for SUPPORTED, the exact span of a source document that states the\n  claim. For CONTRADICTED, the exact span that is incompatible with it. Empty\n  for MISSING.\n- Copy every span character for character, including any spelling, grammatical\n  or formatting errors, unusual capitalisation, and the original number, date\n  and time formats. Do not correct, normalise, expand or abbreviate. A single\n  altered character makes the evidence invalid.\n- evidence_source: the filename of the source document the span was copied\n  from, exactly as given in its heading. Give the document you actually quoted.\n  If several sources state the claim, quote one and name that one.\n- rationale: one sentence, maximum 400 characters, ending in a full stop. If\n  your reasoning does not fit, shorten the rationale until it does. A rationale\n  that stops mid-sentence is rejected, so do not work through the alternatives\n  and let the space run out. Never drop it and never let it alter the verdict.\n\nWorked example - verbatim evidence and the correct source name.\n\nSuppose source_b.md contains:\n\n  Operators reported the queue drained in aproximately 40 seconds.\n\nFor the claim \"The queue drained in approximately 40 seconds.\", the verdict is\nSUPPORTED, the evidence is \"the queue drained in aproximately 40 seconds\" with\nthe misspelling preserved, and evidence_source is \"source_b.md\". Naming\nsource_a.md, or correcting the spelling, makes the result invalid even though\nthe verdict is right.\n\nReturn JSON matching the provided schema. Nothing else.\n\nSOURCE DOCUMENTS:\n--- source_a.md ---\n# Vandrell Relay — Configuration Reference\n\nVandrell Relay is a fictional HTTP relay. This document is test data.\n\n## Networking\n\nThe relay listens on port 8443 by default.\nThe default connect timeout is 30 seconds.\nThe default read timeout is 120 seconds.\nThe health check endpoint is /-/healthy.\n\n## Limits\n\nThe relay accepts at most 512 concurrent connections.\nEach request is retried at most 3 times.\nRetry backoff starts at 250 milliseconds and doubles on every attempt.\n\n## Security\n\nThe minimum accepted TLS version is TLS 1.2.\nClient certificate verification is disabled by default.\n\n## Logging\n\nAccess logs are written in JSON Lines format.\nLog files are rotated when they reach 100 megabytes.\n\n--- source_b.md ---\n# Vandrell Relay — Configuration Reference\n\nVandrell Relay is a fictional HTTP relay. This document is test data.\n\n## Logging\n\nAccess logs are written in JSON Lines format.\nLog files are rotated when they reach 100 megabytes.\n\n## Security\n\nThe minimum accepted TLS version is TLS 1.2.\nClient certificate verification is disabled by default.\n\n## Limits\n\nThe relay accepts at most 512 concurrent connections.\nEach request is retried at most 3 times.\nRetry backoff starts at 250 milliseconds and doubles on every attempt.\n\n## Networking\n\nThe relay listens on port 8443 by default.\nThe default connect timeout is 30 seconds.\nThe default read timeout is 120 seconds.\nThe health check endpoint is /-/healthy.\n\n\nCLAIMS:\nM-001: The relay listens on port 8443 by default.\nM-002: The default connect timeout is 30 seconds.\nM-003: The default read timeout is 120 seconds.\nM-004: The health check endpoint is /-/healthy.\nM-005: The relay accepts at most 512 concurrent connections.\nM-006: Each request is retried at most 3 times.\nM-007: Retry backoff starts at 250 milliseconds and doubles on every attempt.\nM-008: The minimum accepted TLS version is TLS 1.2.\nM-009: Client certificate verification is disabled by default.\nM-010: Access logs are written in JSON Lines format.\nM-011: Log files are rotated when they reach 100 megabytes.\nM-012: The relay listens on port 8443 by default.\nM-013: The default connect timeout is 30 seconds.\nM-014: The default read timeout is 120 seconds.\nM-015: The health check endpoint is /-/healthy.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "verdicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "claim_id": {
+                "type": "string"
+              },
+              "verdict": {
+                "type": "string",
+                "enum": [
+                  "SUPPORTED",
+                  "CONTRADICTED",
+                  "MISSING"
+                ]
+              },
+              "evidence": {
+                "type": "string"
+              },
+              "evidence_source": {
+                "type": "string"
+              },
+              "rationale": {
+                "type": "string",
+                "maxLength": 400
+              }
+            },
+            "required": [
+              "claim_id",
+              "verdict",
+              "evidence",
+              "evidence_source",
+              "rationale"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "verdicts"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\":\"chatcmpl-351\",\"object\":\"chat.completion\",\"created\":1786215212,\"model\":\"qwen3:8b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"verdicts\\\": [{\\\"claim_id\\\": \\\"M-001\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The relay listens on port 8443 by default.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-002\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The default connect timeout is 30 seconds.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-003\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The default read timeout is 120 seconds.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-004\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The health check endpoint is /-/healthy.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-005\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The relay accepts at most 512 concurrent connections.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-006\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Each request is retried at most 3 times.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-007\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Retry backoff starts at 250 milliseconds and doubles on every attempt.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-008\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The minimum accepted TLS version is TLS 1.2.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-009\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Client certificate verification is disabled by default.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-010\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Access logs are written in JSON Lines format.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-011\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Log files are rotated when they reach 100 megabytes.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-012\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The relay listens on port 8443 by default.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-013\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The default connect timeout is 30 seconds.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-014\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The default read timeout is 120 seconds.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-015\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The health check endpoint is /-/healthy.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}]}\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":1498,\"completion_tokens\":925,\"total_tokens\":2423}}\n",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "49960de5880e",
+    "claimcheck_source": "008f57215048",
+    "latency_ms": 43601,
+    "attempt": 1
+  }
+}

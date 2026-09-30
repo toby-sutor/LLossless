@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-09-25T02:27:15+00:00",
+  "key": "b0aec105c3eb78d4f3a3e51cd93eb9fa3b31402b24ee95be819df333f60bcbd2",
+  "request": {
+    "role": "decompose",
+    "model": "Qwen/Qwen3.8-27B-FP8",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract every independently checkable factual assertion from the document below.\n\nThe document is shown one line per line, each prefixed with its line number and\na pipe. The prefix is not part of the text.\n\nRules:\n- One assertion per claim. Split compound sentences.\n- A single line may contain several sentences, and may therefore yield several\n  claims. Do not treat one line as one claim.\n- Each claim must stand alone without needing surrounding context.\n- Resolve pronouns and references to explicit nouns.\n- Copy values, names, numbers, units and time formats exactly as written. Do not\n  normalise, round, expand or abbreviate them. \"approximately 500\" stays\n  \"approximately 500\"; \"07:15 till 19:45\" stays \"07:15 till 19:45\".\n- Skip headings, formatting, boilerplate and statements of opinion.\n- Skip statements about the documents themselves or about how they were\n  combined, such as a note that two sources disagree. Attributed content is not\n  such a statement: \"the guide states that the timeout is 30 seconds\" is a\n  claim about the timeout, and must be extracted.\n- Do not infer, summarise, or combine information.\n- line: the number shown against the line the claim comes from. If the claim\n  spans several lines, give the first.\n- span: the specific sentence the claim comes from, copied exactly, without the\n  number prefix. If one line contains several sentences, each claim takes only\n  its own sentence as span, never the whole line. The span must appear in the\n  document character for character, including any spelling, grammatical or\n  formatting errors and any unusual capitalisation. Do not correct anything.\n\nWorked example - one line, two claims.\n\n  12| The kiln fired for eleven hours and the glaze cracked in three places.\n\nThis line yields two claims:\n\n  claim: \"The kiln fired for eleven hours.\"\n  line: 12\n  span: \"The kiln fired for eleven hours\"\n\n  claim: \"The glaze cracked in three places.\"\n  line: 12\n  span: \"the glaze cracked in three places\"\n\nBoth claims carry line 12. Neither span is the whole line.\n\nWorked example - fact and opinion in one sentence.\n\n  7| The garden was breathtaking, with eleven rose beds along the south wall.\n\n\"The garden was breathtaking\" is an evaluation and is skipped. \"The garden has\neleven rose beds along the south wall.\" is checkable and is extracted, with\nspan \"with eleven rose beds along the south wall\".\n\nDescriptive prose is not automatically opinion. A stated quantity, position,\nduration, time, name, sequence or event is a fact even in a narrative passage,\nand must be extracted. Only judgements of quality, beauty, value or feeling are\nopinion.\n\nReturn JSON matching the provided schema. Nothing else.\n\nDOCUMENT:\n 1 | # Fire door inspection at the Millgate depot\n 2 | \n 3 | Every fire door at the Millgate depot is inspected on a fixed round, and the result goes into a paper defect log at the gatehouse.\n 4 | \n 5 | ## Rounds\n 6 | \n 7 | The duty officer walks the north corridor every weekday from 7 am till 8 am, right after the shift handover. A second round covers the workshop and the paint store from 13:05 till 16:20 hours on Wednesdays only. The site manager has asked for a third round for years, but the budget has never allowed it.\n 8 | \n 9 | ## Weather\n10 | \n11 | Frost swells the timber frames on the older doors, so between November and February several of them will not latch unless pulled hard. Once the frames dry out in spring, the same doors close cleanly again.\n12 | \n13 | ## Contractor visits\n14 | \n15 | While the doors are the responsibility of the site, the certified inspection is carried out by an outside contractor who attends every March 1st to March 31st. During that visit the contractor tags each door, photographs the closer, and leaves a signed certificate at the gatehouse for the auditors.\n16 | \n17 | ## Records\n18 | \n19 | It became custom that whoever finds a defect writes it in the log and pins a yellow card to the door itself. The card stays there until the repair is signed off. Staff have started betting on whether the card or the written record is cleared first. In most cases it is a tie, because one officer clears both at the end of the week.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "span": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "line",
+              "span"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "claims"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\": \"chatcmpl-bb11541f9c026071\", \"object\": \"chat.completion\", \"created\": 1790303171, \"model\": \"Qwen/Qwen3.8-27B-FP8\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"{\\n  \\\"claims\\\": [\\n    {\\n      \\\"line\\\": 3,\\n      \\\"span\\\": \\\"Every fire door at the Millgate depot is inspected on a fixed round\\\",\\n      \\\"text\\\": \\\"Every fire door at the Millgate depot is inspected on a fixed round.\\\"\\n    },\\n    {\\n      \\\"line\\\": 3,\\n      \\\"span\\\": \\\"the result goes into a paper defect log at the gatehouse\\\",\\n      \\\"text\\\": \\\"The result of the inspection goes into a paper defect log at the gatehouse.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"The duty officer walks the north corridor every weekday from 7 am till 8 am\\\",\\n      \\\"text\\\": \\\"The duty officer walks the north corridor every weekday from 7 am till 8 am.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"right after the shift handover\\\",\\n      \\\"text\\\": \\\"The duty officer walks the north corridor right after the shift handover.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"A second round covers the workshop and the paint store from 13:05 till 16:20 hours on Wednesdays only\\\",\\n      \\\"text\\\": \\\"A second round covers the workshop and the paint store from 13:05 till 16:20 hours on Wednesdays only.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"The site manager has asked for a third round for years\\\",\\n      \\\"text\\\": \\\"The site manager has asked for a third round for years.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"the budget has never allowed it\\\",\\n      \\\"text\\\": \\\"The budget has never allowed a third round.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"Frost swells the timber frames on the older doors\\\",\\n      \\\"text\\\": \\\"Frost swells the timber frames on the older doors.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"between November and February several of them will not latch unless pulled hard\\\",\\n      \\\"text\\\": \\\"Between November and February, several of the older doors will not latch unless pulled hard.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"Once the frames dry out in spring, the same doors close cleanly again\\\",\\n      \\\"text\\\": \\\"Once the frames dry out in spring, the same doors close cleanly again.\\\"\\n    },\\n    {\\n      \\\"line\\\": 15,\\n      \\\"span\\\": \\\"the doors are the responsibility of the site\\\",\\n      \\\"text\\\": \\\"The doors are the responsibility of the site.\\\"\\n    },\\n    {\\n      \\\"line\\\": 15,\\n      \\\"span\\\": \\\"the certified inspection is carried out by an outside contractor\\\",\\n      \\\"text\\\": \\\"The certified inspection is carried out by an outside contractor.\\\"\\n    },\\n    {\\n      \\\"line\\\": 15,\\n      \\\"span\\\": \\\"who attends every March 1st to March 31st\\\",\\n      \\\"text\\\": \\\"The outside contractor attends every March 1st to March 31st.\\\"\\n    },\\n    {\\n      \\\"line\\\": 15,\\n      \\\"span\\\": \\\"During that visit the contractor tags each door\\\",\\n      \\\"text\\\": \\\"During the visit, the contractor tags each door.\\\"\\n    },\\n    {\\n      \\\"line\\\": 15,\\n      \\\"span\\\": \\\"photographs the closer\\\",\\n      \\\"text\\\": \\\"During the visit, the contractor photographs the closer.\\\"\\n    },\\n    {\\n      \\\"line\\\": 15,\\n      \\\"span\\\": \\\"leaves a signed certificate at the gatehouse for the auditors\\\",\\n      \\\"text\\\": \\\"During the visit, the contractor leaves a signed certificate at the gatehouse for the auditors.\\\"\\n    },\\n    {\\n      \\\"line\\\": 19,\\n      \\\"span\\\": \\\"It became custom that whoever finds a defect writes it in the log\\\",\\n      \\\"text\\\": \\\"It became custom that whoever finds a defect writes it in the log.\\\"\\n    },\\n    {\\n      \\\"line\\\": 19,\\n      \\\"span\\\": \\\"pins a yellow card to the door itself\\\",\\n      \\\"text\\\": \\\"It became custom that whoever finds a defect pins a yellow card to the door itself.\\\"\\n    },\\n    {\\n      \\\"line\\\": 19,\\n      \\\"span\\\": \\\"The card stays there until the repair is signed off\\\",\\n      \\\"text\\\": \\\"The yellow card stays on the door until the repair is signed off.\\\"\\n    },\\n    {\\n      \\\"line\\\": 19,\\n      \\\"span\\\": \\\"Staff have started betting on whether the card or the written record is cleared first\\\",\\n      \\\"text\\\": \\\"Staff have started betting on whether the card or the written record is cleared first.\\\"\\n    },\\n    {\\n      \\\"line\\\": 19,\\n      \\\"span\\\": \\\"In most cases it is a tie\\\",\\n      \\\"text\\\": \\\"In most cases, the card and the written record are cleared at the same time.\\\"\\n    },\\n    {\\n      \\\"line\\\": 19,\\n      \\\"span\\\": \\\"because one officer clears both at the end of the week\\\",\\n      \\\"text\\\": \\\"One officer clears both the card and the written record at the end of the week.\\\"\\n    }\\n  ]\\n}\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 1039, \"total_tokens\": 2244, \"completion_tokens\": 1205}}",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "1ce4c8ef780f",
+    "endpoint_id_scheme": 2,
+    "claimcheck_source": "9da1998c0258",
+    "latency_ms": 64354,
+    "attempt": 1,
+    "field_order": "any"
+  }
+}

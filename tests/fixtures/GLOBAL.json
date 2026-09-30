@@ -1,0 +1,24 @@
+{
+  "schema_version": 4,
+  "description": "must_not_extract assertions that apply to every document of every fixture. These exist for claims that no document in the suite could ever legitimately produce, so scoping them to one fixture would leave the other eleven unguarded. Every entry is basis 'absent' by construction: a global assertion cannot claim the text is present-but-not-a-claim, because that is a property of one document and not of the set.",
+  "must_not_extract": [
+    {
+      "assertion_id": "no-prompt-example-kiln",
+      "basis": "absent",
+      "pattern": "(?i)\\b(kilns?|glaze[sd]?)\\b",
+      "reason": "prompts/decompose.md's first worked example is a line about a kiln firing for eleven hours and a glaze cracking in three places. No fixture document mentions either. A claim naming one is the model returning the prompt's illustration instead of decomposing the document: qwen3:4b did exactly this on four documents in three of three samples."
+    },
+    {
+      "assertion_id": "no-prompt-example-rose-beds",
+      "basis": "absent",
+      "pattern": "(?i)\\b(rose beds?|breathtaking)\\b",
+      "reason": "prompts/decompose.md's second worked example is a garden with eleven rose beds along the south wall, described as breathtaking. Two fixtures contain gardens and roses in their prose, so the pattern names the two phrases that only the prompt uses. Same failure as no-prompt-example-kiln, second illustration."
+    },
+    {
+      "assertion_id": "no-prompt-example-marlbrook",
+      "basis": "absent",
+      "pattern": "(?i)\\b(marlbrook|funiculars?)\\b",
+      "reason": "prompts/merge.md's worked example is the Marlbrook funicular, whose two sources disagree about the interval between cars. No fixture document mentions either word. A claim naming one is the merge model reproducing the prompt's illustration instead of merging its inputs, which is the same failure mode as no-prompt-example-kiln one pass earlier. src/llossless/merge.py runs the raw-text half of this check over the generated document before decompose sees it, because a copied example can be segmented so that no claim matches this pattern."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-08-08T20:50:42+00:00",
+  "key": "b9ea7cc1955a60be2423853b80fa210bc88dd9fbdc6793dafd5133b2ffc0a4a2",
+  "request": {
+    "role": "merge",
+    "model": "qwen3:8b",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Combine the two source documents below into one merged document that carries\nevery fact from both.\n\nRules:\n- Every fact stated in either source must appear in the merge. A fact that is\n  dropped cannot be recovered later, so this is the failure that matters most.\n- Nothing may appear in the merge that neither source states. Do not add\n  context, do not fill gaps from your own knowledge, do not infer a fact from\n  two others.\n- A fact both sources state is stated once, not twice.\n- Where the two sources give different values for the same attribute, state\n  both values, name the document each one came from, and do not choose between\n  them. Say that the sources disagree. Never pick a winner and never average,\n  reconcile or split the difference.\n- Never attribute a fact to a document that does not state it. Attribute a\n  value only when you are surfacing a disagreement, and then only to the\n  document that value actually came from.\n- Copy values, names, numbers, units, dates and time formats character for\n  character. Do not normalise, round, expand or abbreviate them. \"approximately\n  500\" stays \"approximately 500\"; \"07:15 till 19:45\" stays \"07:15 till 19:45\".\n  Copy any spelling, grammatical or formatting error exactly as it stands; do\n  not correct anything.\n- Order, headings and wording are yours to choose. Reorganise, retitle and\n  rewrite as freely as you like. The merge is not graded on prose, only on\n  whether every fact survived it unchanged.\n\nWorked example - one attribute, two values.\n\nSuppose the two sources were:\n\n  marlbrook_handbook.md\n    The Marlbrook funicular climbs 412 metres.\n    The cars run every 20 minutes.\n\n  marlbrook_field_notes.md\n    The Marlbrook funicular climbs 412 metres.\n    The cars run every 15 minutes.\n    The lower station has a ticket office.\n\nThen the merged document is:\n\n  The Marlbrook funicular climbs 412 metres.\n\n  Unresolved: the interval between cars.\n  marlbrook_handbook.md states that the cars run every 20 minutes.\n  marlbrook_field_notes.md states that the cars run every 15 minutes.\n  The sources disagree and this merge does not choose between them.\n\n  The lower station has a ticket office.\n\nThe climb appears once, because both sources state it and they agree. The\ninterval appears twice, once per document, because they disagree - both values\nare kept, each named to the document it came from, and neither is chosen. The\nticket office is stated by one source only, and is carried over unattributed\nlike any other fact.\n\nThis example is an illustration. Nothing from it belongs in your answer unless\nthe documents below happen to state it.\n\nReturn JSON matching the provided schema. Put the entire merged document in\nmerged_document as a single string. Nothing else.\n\nsource_a.md:\n# Vandrell Relay - Operator Guide\n\nThe relay listens on port 8443.\nThe read timeout is 30 seconds.\n\n\nsource_b.md:\n# Vandrell Relay - Deployment Notes\n\nThe relay listens on port 8443.\nThe health check path is /healthz.\nThe minimum TLS version is 1.2.\n\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "merged_document": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "merged_document"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\":\"chatcmpl-484\",\"object\":\"chat.completion\",\"created\":1786222242,\"model\":\"qwen3:8b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"merged_document\\\": \\\"The Vandrell Relay listens on port 8443.\\\\n\\\\nUnresolved: the read timeout and minimum TLS version.\\\\nsource_a.md states that the read timeout is 30 seconds.\\\\nsource_b.md states that the minimum TLS version is 1.2.\\\\n\\\\nThe health check path is /healthz.\\\"\\n}\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":735,\"completion_tokens\":77,\"total_tokens\":812}}\n",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "49960de5880e",
+    "claimcheck_source": "008f57215048",
+    "latency_ms": 4824,
+    "attempt": 1
+  }
+}

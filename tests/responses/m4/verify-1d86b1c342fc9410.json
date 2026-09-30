@@ -1,0 +1,73 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-08-08T20:50:22+00:00",
+  "key": "1d86b1c342fc94103f383653d4bfccf125128e4198243d4ed3eb2f5e28524520",
+  "request": {
+    "role": "verify",
+    "model": "qwen3:8b",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Decide whether each claim is supported by the source documents below.\n\nEach claim was taken from a merged document that was written from these\nsources. You are checking the opposite direction from the forward pass: not\n\"did the merge keep this\", but \"did the merge invent this\".\n\nEach source document is shown under a heading giving its filename. The source\ndocuments are: source_a.md, source_b.md. Each claim is shown prefixed with its claim\nid and a pipe.\n\nVerdicts:\nSUPPORTED - at least one source document states this claim, or states it in\n  different words with the same meaning\nCONTRADICTED - a source document states something incompatible with this claim\nMISSING - no source document states or contradicts this claim\n\nRules:\n- Judge only against the source documents. Ignore outside knowledge.\n- Support from any single source is enough. A claim stated in only one source\n  document is SUPPORTED; it does not need to appear in all of them.\n- Different wording with identical meaning is SUPPORTED.\n- A different value, number, unit or name for the same attribute is\n  CONTRADICTED, not MISSING.\n- A claim that names its source is checked against that source's content. If\n  the claim is that a named document states P, and that document states P, the\n  claim is SUPPORTED.\n- If the sources give different values for one attribute, and the claim reports\n  that disagreement, the claim is SUPPORTED. Recording that the sources\n  disagree is a correct statement about them, not a contradiction of either.\n- Partial support is MISSING. Do not extend the claim to make it fit, and do\n  not combine a fragment of one source with a fragment of another to\n  manufacture support the claim does not have.\n- MISSING is the finding this pass exists to produce. A claim in the merged\n  document that no source states is content the merge invented. Do not reach\n  for a generous reading to avoid saying MISSING.\n- Equally, do not reach for MISSING. A source that states the claim in\n  different words, or that supplies the claim in a passage about something\n  else, is still support, and the verdict is SUPPORTED.\n\nOutput:\n- Return exactly one result per claim, in the order the claims are given, each\n  echoing the claim id it answers. Never merge, reorder or omit a claim.\n- Emit the fields in this order: verdict, evidence, evidence_source, rationale.\n- verdict: commit to the verdict first, then explain it. The verdict must never\n  be changed to fit the space available for the rationale.\n- evidence: for SUPPORTED, the exact span of a source document that states the\n  claim. For CONTRADICTED, the exact span that is incompatible with it. Empty\n  for MISSING.\n- Copy every span character for character, including any spelling, grammatical\n  or formatting errors, unusual capitalisation, and the original number, date\n  and time formats. Do not correct, normalise, expand or abbreviate. A single\n  altered character makes the evidence invalid.\n- evidence_source: the filename of the source document the span was copied\n  from, exactly as given in its heading. Give the document you actually quoted.\n  If several sources state the claim, quote one and name that one.\n- rationale: one sentence, maximum 400 characters, ending in a full stop. If\n  your reasoning does not fit, shorten the rationale until it does. A rationale\n  that stops mid-sentence is rejected, so do not work through the alternatives\n  and let the space run out. Never drop it and never let it alter the verdict.\n\nWorked example - verbatim evidence and the correct source name.\n\nSuppose source_b.md contains:\n\n  Operators reported the queue drained in aproximately 40 seconds.\n\nFor the claim \"The queue drained in approximately 40 seconds.\", the verdict is\nSUPPORTED, the evidence is \"the queue drained in aproximately 40 seconds\" with\nthe misspelling preserved, and evidence_source is \"source_b.md\". Naming\nsource_a.md, or correcting the spelling, makes the result invalid even though\nthe verdict is right.\n\nReturn JSON matching the provided schema. Nothing else.\n\nSOURCE DOCUMENTS:\n--- source_a.md ---\n# Vandrell Relay — Operator Guide\n\nVandrell Relay is a fictional HTTP relay. This document is test data.\n\n## Listening and timeouts\n\nUnless you override it, the relay binds to port 8443.\nA connection that has not been established within 30 seconds is abandoned.\nOnce connected, the relay waits up to 120 seconds for a response.\n\n## Capacity\n\nNo more than 512 connections may be open at the same time.\nA failed request is attempted again up to 3 times.\n\n## Transport security\n\nAnything older than TLS 1.2 is rejected.\n\n## Observability\n\nEvery access log line is a single JSON object.\nLiveness is reported at /-/healthy.\n\n--- source_b.md ---\n# Vandrell Relay — Deployment Notes\n\nVandrell Relay is a fictional HTTP relay. This document is test data.\n\n## Defaults\n\n- Listen port: 8443\n- Connect timeout: 30 seconds\n- Read timeout: 120 seconds\n- Maximum concurrent connections: 512\n- Retry attempts per request: 3\n\n## Requirements\n\n- TLS 1.2 is the oldest protocol version the relay will negotiate.\n- The access log uses JSON Lines, one record per line.\n- Health checks should target /-/healthy.\n\n\nCLAIMS:\nM-001: The relay binds to port 8443.\nM-002: A connection that has not been established within 30 seconds is abandoned.\nM-003: Once connected, the relay waits up to 120 seconds for a response.\nM-004: No more than 512 connections may be open at the same time.\nM-005: A failed request is attempted again up to 3 times.\nM-006: Anything older than TLS 1.2 is rejected.\nM-007: TLS 1.2 is the oldest protocol version the relay will negotiate.\nM-008: Every access log line is a single JSON object.\nM-009: The access log uses JSON Lines, one record per line.\nM-010: Liveness is reported at /-/healthy.\nM-011: Health checks should target /-/healthy.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "verdicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "claim_id": {
+                "type": "string"
+              },
+              "verdict": {
+                "type": "string",
+                "enum": [
+                  "SUPPORTED",
+                  "CONTRADICTED",
+                  "MISSING"
+                ]
+              },
+              "evidence": {
+                "type": "string"
+              },
+              "evidence_source": {
+                "type": "string"
+              },
+              "rationale": {
+                "type": "string",
+                "maxLength": 400
+              }
+            },
+            "required": [
+              "claim_id",
+              "verdict",
+              "evidence",
+              "evidence_source",
+              "rationale"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "verdicts"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\":\"chatcmpl-47\",\"object\":\"chat.completion\",\"created\":1786222222,\"model\":\"qwen3:8b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"verdicts\\\": [{\\\"claim_id\\\": \\\"M-001\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The relay binds to port 8443.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-002\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"A connection that has not been established within 30 seconds is abandoned.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-003\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Once connected, the relay waits up to 120 seconds for a response.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-004\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"No more than 512 connections may be open at the same time.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-005\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"A failed request is attempted again up to 3 times.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-006\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Anything older than TLS 1.2 is rejected.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-007\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"TLS 1.2 is the oldest protocol version the relay will negotiate.\\\", \\\"evidence_source\\\": \\\"source_b.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_b.md.\\\"}, {\\\"claim_id\\\": \\\"M-008\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Every access log line is a single JSON object.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-009\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"The access log uses JSON Lines, one record per line.\\\", \\\"evidence_source\\\": \\\"source_b.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_b.md.\\\"}, {\\\"claim_id\\\": \\\"M-010\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Liveness is reported at /-/healthy.\\\", \\\"evidence_source\\\": \\\"source_a.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_a.md.\\\"}, {\\\"claim_id\\\": \\\"M-011\\\", \\\"verdict\\\": \\\"SUPPORTED\\\", \\\"evidence\\\": \\\"Health checks should target /-/healthy.\\\", \\\"evidence_source\\\": \\\"source_b.md\\\", \\\"rationale\\\": \\\"The claim is directly stated in source_b.md.\\\"}]}\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":1382,\"completion_tokens\":693,\"total_tokens\":2075}}\n",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "49960de5880e",
+    "claimcheck_source": "008f57215048",
+    "latency_ms": 30344,
+    "attempt": 1
+  }
+}

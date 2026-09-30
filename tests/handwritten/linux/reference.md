@@ -1,0 +1,7 @@
+Subject: GNU/Linux — What the Name Actually Means
+
+GNU/Linux refers to the combination of the GNU Project's userland — announced by Richard Stallman in 1983 and largely complete by the early 1990s except for a working kernel — and the Linux kernel, released by Linus Torvalds in 1991 and licensed under GPLv2 from version 0.12 in 1992.
+
+The Free Software Foundation (FSF) advocates the compound name precisely because the kernel alone is not an operating system: glibc (a C library), coreutils (system utilities), bash (shell interpreter), GCC (C compiler), and GRUB (bootloader) do most of the work a user actually touches. In practice, distributions assemble these pieces differently — SUSE and Red Hat ship RPM-based stacks, while Debian and its derivatives, such as Ubuntu, use dpkg — but the GNU layer is the common denominator, with Android for mobile and IoT devices as the notable exception that runs a Linux kernel without most of the other GNU software.
+
+The practical argument for the naming is less about pedantry than provenance: the GPL's copyleft terms are what keep the whole stack inspectable and redistributable, which is the difference between software you can audit and software you have to trust. Twenty-five years of distro drift hasn't changed that underlying bargain — the components rotate, the licence guarantees don't.

@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-09-24T22:51:58+00:00",
+  "key": "743af655d4fd188a03fdc718a7c56e136341f0fc1776a2e425d5698cbdf662ba",
+  "request": {
+    "role": "decompose",
+    "model": "Qwen/Qwen3.8-27B-FP8",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract every independently checkable factual assertion from the document below.\n\nThe document is shown one line per line, each prefixed with its line number and\na pipe. The prefix is not part of the text.\n\nRules:\n- One assertion per claim. Split compound sentences.\n- A single line may contain several sentences, and may therefore yield several\n  claims. Do not treat one line as one claim.\n- Each claim must stand alone without needing surrounding context.\n- Resolve pronouns and references to explicit nouns.\n- Copy values, names, numbers, units and time formats exactly as written. Do not\n  normalise, round, expand or abbreviate them. \"approximately 500\" stays\n  \"approximately 500\"; \"07:15 till 19:45\" stays \"07:15 till 19:45\".\n- Skip headings, formatting, boilerplate and statements of opinion.\n- Skip statements about the documents themselves or about how they were\n  combined, such as a note that two sources disagree. Attributed content is not\n  such a statement: \"the guide states that the timeout is 30 seconds\" is a\n  claim about the timeout, and must be extracted.\n- Do not infer, summarise, or combine information.\n- line: the number shown against the line the claim comes from. If the claim\n  spans several lines, give the first.\n- span: the specific sentence the claim comes from, copied exactly, without the\n  number prefix. If one line contains several sentences, each claim takes only\n  its own sentence as span, never the whole line. The span must appear in the\n  document character for character, including any spelling, grammatical or\n  formatting errors and any unusual capitalisation. Do not correct anything.\n\nWorked example - one line, two claims.\n\n  12| The kiln fired for eleven hours and the glaze cracked in three places.\n\nThis line yields two claims:\n\n  claim: \"The kiln fired for eleven hours.\"\n  line: 12\n  span: \"The kiln fired for eleven hours\"\n\n  claim: \"The glaze cracked in three places.\"\n  line: 12\n  span: \"the glaze cracked in three places\"\n\nBoth claims carry line 12. Neither span is the whole line.\n\nWorked example - fact and opinion in one sentence.\n\n  7| The garden was breathtaking, with eleven rose beds along the south wall.\n\n\"The garden was breathtaking\" is an evaluation and is skipped. \"The garden has\neleven rose beds along the south wall.\" is checkable and is extracted, with\nspan \"with eleven rose beds along the south wall\".\n\nDescriptive prose is not automatically opinion. A stated quantity, position,\nduration, time, name, sequence or event is a fact even in a narrative passage,\nand must be extracted. Only judgements of quality, beauty, value or feeling are\nopinion.\n\nReturn JSON matching the provided schema. Nothing else.\n\nDOCUMENT:\n 1 | # Vandrell Relay — Configuration Reference\n 2 | \n 3 | Vandrell Relay is a fictional HTTP relay. This document is test data.\n 4 | \n 5 | ## Network defaults\n 6 | \n 7 | The relay's default listen port is 8443.\n 8 | Connections that do not complete a handshake inside 30 seconds are dropped.\n 9 | The relay allows a response 120 seconds to arrive before it times out.\n10 | \n11 | ## Capacity and retries\n12 | \n13 | At most 512 connections may be held open concurrently.\n14 | The relay makes up to 3 further attempts after a request fails.\n15 | \n16 | ## Security and observability\n17 | \n18 | The relay will not negotiate any protocol version below TLS 1.2.\n19 | Access log records are emitted one JSON object per line.\n20 | The endpoint /-/healthy answers health checks.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "span": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "line",
+              "span"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "claims"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\": \"chatcmpl-8f5d7d62bab96807\", \"object\": \"chat.completion\", \"created\": 1790290295, \"model\": \"Qwen/Qwen3.8-27B-FP8\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"{\\n  \\\"claims\\\": [\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"The relay's default listen port is 8443.\\\",\\n      \\\"text\\\": \\\"The relay's default listen port is 8443.\\\"\\n    },\\n    {\\n      \\\"line\\\": 8,\\n      \\\"span\\\": \\\"Connections that do not complete a handshake inside 30 seconds are dropped.\\\",\\n      \\\"text\\\": \\\"Connections that do not complete a handshake inside 30 seconds are dropped.\\\"\\n    },\\n    {\\n      \\\"line\\\": 9,\\n      \\\"span\\\": \\\"The relay allows a response 120 seconds to arrive before it times out.\\\",\\n      \\\"text\\\": \\\"The relay allows a response 120 seconds to arrive before it times out.\\\"\\n    },\\n    {\\n      \\\"line\\\": 13,\\n      \\\"span\\\": \\\"At most 512 connections may be held open concurrently.\\\",\\n      \\\"text\\\": \\\"At most 512 connections may be held open concurrently.\\\"\\n    },\\n    {\\n      \\\"line\\\": 14,\\n      \\\"span\\\": \\\"The relay makes up to 3 further attempts after a request fails.\\\",\\n      \\\"text\\\": \\\"The relay makes up to 3 further attempts after a request fails.\\\"\\n    },\\n    {\\n      \\\"line\\\": 18,\\n      \\\"span\\\": \\\"The relay will not negotiate any protocol version below TLS 1.2.\\\",\\n      \\\"text\\\": \\\"The relay will not negotiate any protocol version below TLS 1.2.\\\"\\n    },\\n    {\\n      \\\"line\\\": 19,\\n      \\\"span\\\": \\\"Access log records are emitted one JSON object per line.\\\",\\n      \\\"text\\\": \\\"Access log records are emitted one JSON object per line.\\\"\\n    },\\n    {\\n      \\\"line\\\": 20,\\n      \\\"span\\\": \\\"The endpoint /-/healthy answers health checks.\\\",\\n      \\\"text\\\": \\\"The endpoint /-/healthy answers health checks.\\\"\\n    }\\n  ]\\n}\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 889, \"total_tokens\": 1329, \"completion_tokens\": 440}}",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "1ce4c8ef780f",
+    "endpoint_id_scheme": 2,
+    "claimcheck_source": "9da1998c0258",
+    "latency_ms": 23691,
+    "attempt": 1,
+    "field_order": "any"
+  }
+}

@@ -1,0 +1,5 @@
+The value is extraordinary. A high-speed rail seat that would cost €200 in Europe costs €60. A superb regional meal runs ¥40–80. Four-star city hotels sit comfortably at ¥400–700 a night. You can travel well in China for a fraction of what comparable quality costs in Japan or Western Europe — and exceptionally well for what mid-range costs elsewhere.
+
+The food isn't a cuisine, it's eight of them. "Chinese food" is a category error. Sichuan's numbing peppercorn heat, Cantonese dim sum at its dawn-service source, Xi'an's hand-pulled biang biang noodles and cumin lamb, Shanghai's soup dumplings, Yunnan's mushrooms and mint, Xinjiang's charcoal skewers and naan. Regional pride is fierce and delicious. Eating your way across China is a legitimate itinerary in itself.
+
+The sheer, jaw-loosening scale of the sights. The Terracotta Army — 8,000 individually-faced warriors, still being excavated. The karst pinnacles of Guilin rising out of river mist. Zhangjiajie's sandstone columns that inspired Avatar. The Longji rice terraces. The Mogao Caves' 1,600 years of Buddhist art in the desert. Shanghai's Bund facing a skyline that didn't exist in 1990.

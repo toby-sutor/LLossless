@@ -1,0 +1,3 @@
+The Bells of Carrow Hill
+
+Six bells hang in the tower on Carrow Hill, and no bell has been added or taken away since the tower was raised. All six were cast in 1782 by a founder who marked the tenor alone. A full peal requires eight ringers, so the band cannot attempt one if a single ringer is missing. Once ringing begins, a full peal runs for two hours, and the band works through it without a break. The bells are rung on the first Sunday of every month, and the village keeps the hour by them.

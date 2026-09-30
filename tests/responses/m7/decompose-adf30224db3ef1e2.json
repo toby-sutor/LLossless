@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-09-25T03:30:56+00:00",
+  "key": "adf30224db3ef1e26354a28cdf2b6df8d2e236fc0c14806a75204bd1c15b864a",
+  "request": {
+    "role": "decompose",
+    "model": "Qwen/Qwen3.8-27B-FP8",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract every independently checkable factual assertion from the document below.\n\nThe document is shown one line per line, each prefixed with its line number and\na pipe. The prefix is not part of the text.\n\nRules:\n- One assertion per claim. Split compound sentences.\n- A single line may contain several sentences, and may therefore yield several\n  claims. Do not treat one line as one claim.\n- Each claim must stand alone without needing surrounding context.\n- Resolve pronouns and references to explicit nouns.\n- Copy values, names, numbers, units and time formats exactly as written. Do not\n  normalise, round, expand or abbreviate them. \"approximately 500\" stays\n  \"approximately 500\"; \"07:15 till 19:45\" stays \"07:15 till 19:45\".\n- Skip headings, formatting, boilerplate and statements of opinion.\n- Skip statements about the documents themselves or about how they were\n  combined, such as a note that two sources disagree. Attributed content is not\n  such a statement: \"the guide states that the timeout is 30 seconds\" is a\n  claim about the timeout, and must be extracted.\n- Do not infer, summarise, or combine information.\n- line: the number shown against the line the claim comes from. If the claim\n  spans several lines, give the first.\n- span: the specific sentence the claim comes from, copied exactly, without the\n  number prefix. If one line contains several sentences, each claim takes only\n  its own sentence as span, never the whole line. The span must appear in the\n  document character for character, including any spelling, grammatical or\n  formatting errors and any unusual capitalisation. Do not correct anything.\n\nWorked example - one line, two claims.\n\n  12| The kiln fired for eleven hours and the glaze cracked in three places.\n\nThis line yields two claims:\n\n  claim: \"The kiln fired for eleven hours.\"\n  line: 12\n  span: \"The kiln fired for eleven hours\"\n\n  claim: \"The glaze cracked in three places.\"\n  line: 12\n  span: \"the glaze cracked in three places\"\n\nBoth claims carry line 12. Neither span is the whole line.\n\nWorked example - fact and opinion in one sentence.\n\n  7| The garden was breathtaking, with eleven rose beds along the south wall.\n\n\"The garden was breathtaking\" is an evaluation and is skipped. \"The garden has\neleven rose beds along the south wall.\" is checkable and is extracted, with\nspan \"with eleven rose beds along the south wall\".\n\nDescriptive prose is not automatically opinion. A stated quantity, position,\nduration, time, name, sequence or event is a fact even in a narrative passage,\nand must be extracted. Only judgements of quality, beauty, value or feeling are\nopinion.\n\nReturn JSON matching the provided schema. Nothing else.\n\nDOCUMENT:\n 1 | A Short Guide to Christianity\n 2 | \n 3 | Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher and rabbi crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.\n 4 | \n 5 | Its central beliefs are monotheism, the Trinity (God as Father, Son (Jesus), and the Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.\n 6 | \n 7 | Its sacred text is the Bible, made up of the Old (Hebrew) and New (Greek) Testaments, which Christians regard as the inspired and authoritative Word of God.\n 8 | \n 9 | Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper with his disciples, prayer, and communal worship in a church.\n10 | \n11 | Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundreds or thousands different sects) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "span": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "line",
+              "span"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "claims"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\": \"chatcmpl-8e216d282f8fbe53\", \"object\": \"chat.completion\", \"created\": 1790306993, \"model\": \"Qwen/Qwen3.8-27B-FP8\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"{\\n  \\\"claims\\\": [\\n    {\\n      \\\"line\\\": 3,\\n      \\\"span\\\": \\\"Christianity is the world's largest religion\\\",\\n      \\\"text\\\": \\\"Christianity is the world's largest religion.\\\"\\n    },\\n    {\\n      \\\"line\\\": 3,\\n      \\\"span\\\": \\\"with over two billion adherents\\\",\\n      \\\"text\\\": \\\"Christianity has over two billion adherents.\\\"\\n    },\\n    {\\n      \\\"line\\\": 3,\\n      \\\"span\\\": \\\"it began in the first century\\\",\\n      \\\"text\\\": \\\"Christianity began in the first century.\\\"\\n    },\\n    {\\n      \\\"line\\\": 3,\\n      \\\"span\\\": \\\"with Jesus of Nazareth, a Jewish preacher and rabbi crucified in Jerusalem around AD 30-33\\\",\\n      \\\"text\\\": \\\"Christianity began with Jesus of Nazareth, a Jewish preacher and rabbi crucified in Jerusalem around AD 30-33.\\\"\\n    },\\n    {\\n      \\\"line\\\": 3,\\n      \\\"span\\\": \\\"whose followers proclaimed that he rose from the dead\\\",\\n      \\\"text\\\": \\\"The followers of Jesus of Nazareth proclaimed that he rose from the dead.\\\"\\n    },\\n    {\\n      \\\"line\\\": 5,\\n      \\\"span\\\": \\\"Its central beliefs are monotheism\\\",\\n      \\\"text\\\": \\\"A central belief of Christianity is monotheism.\\\"\\n    },\\n    {\\n      \\\"line\\\": 5,\\n      \\\"span\\\": \\\"the Trinity (God as Father, Son (Jesus), and the Holy Spirit)\\\",\\n      \\\"text\\\": \\\"A central belief of Christianity is the Trinity (God as Father, Son (Jesus), and the Holy Spirit).\\\"\\n    },\\n    {\\n      \\\"line\\\": 5,\\n      \\\"span\\\": \\\"the incarnation and divinity of Jesus\\\",\\n      \\\"text\\\": \\\"A central belief of Christianity is the incarnation and divinity of Jesus.\\\"\\n    },\\n    {\\n      \\\"line\\\": 5,\\n      \\\"span\\\": \\\"salvation by God's grace through faith in Christ's death and resurrection\\\",\\n      \\\"text\\\": \\\"A central belief of Christianity is salvation by God's grace through faith in Christ's death and resurrection.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"Its sacred text is the Bible\\\",\\n      \\\"text\\\": \\\"The sacred text of Christianity is the Bible.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"made up of the Old (Hebrew) and New (Greek) Testaments\\\",\\n      \\\"text\\\": \\\"The Bible is made up of the Old (Hebrew) and New (Greek) Testaments.\\\"\\n    },\\n    {\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"which Christians regard as the inspired and authoritative Word of God\\\",\\n      \\\"text\\\": \\\"Christians regard the Bible as the inspired and authoritative Word of God.\\\"\\n    },\\n    {\\n      \\\"line\\\": 9,\\n      \\\"span\\\": \\\"Core practices include baptism as a rite of initiation\\\",\\n      \\\"text\\\": \\\"A core practice of Christianity is baptism as a rite of initiation.\\\"\\n    },\\n    {\\n      \\\"line\\\": 9,\\n      \\\"span\\\": \\\"the Eucharist (communion) commemorating Jesus' last supper with his disciples\\\",\\n      \\\"text\\\": \\\"A core practice of Christianity is the Eucharist (communion) commemorating Jesus' last supper with his disciples.\\\"\\n    },\\n    {\\n      \\\"line\\\": 9,\\n      \\\"span\\\": \\\"prayer\\\",\\n      \\\"text\\\": \\\"A core practice of Christianity is prayer.\\\"\\n    },\\n    {\\n      \\\"line\\\": 9,\\n      \\\"span\\\": \\\"communal worship in a church\\\",\\n      \\\"text\\\": \\\"A core practice of Christianity is communal worship in a church.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundreds or thousands different sects)\\\",\\n      \\\"text\\\": \\\"Christianity divided into three main branches: Catholicism, Eastern Orthodoxy, and Protestantism.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"Eastern Orthodoxy (split in the East-West Schism of 1054)\\\",\\n      \\\"text\\\": \\\"Eastern Orthodoxy split in the East-West Schism of 1054.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"Protestantism (emerging from the 16th-century Reformation\\\",\\n      \\\"text\\\": \\\"Protestantism emerged from the 16th-century Reformation.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"and itself split into hundreds or thousands different sects)\\\",\\n      \\\"text\\\": \\\"Protestantism is split into hundreds or thousands different sects.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"today it is growing fastest in Africa and Asia\\\",\\n      \\\"text\\\": \\\"Christianity is growing fastest in Africa and Asia today.\\\"\\n    },\\n    {\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"while declining in much of the Western world\\\",\\n      \\\"text\\\": \\\"Christianity is declining in much of the Western world today.\\\"\\n    }\\n  ]\\n}\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 973, \"total_tokens\": 2191, \"completion_tokens\": 1218}}",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "1ce4c8ef780f",
+    "endpoint_id_scheme": 2,
+    "claimcheck_source": "9da1998c0258",
+    "latency_ms": 63329,
+    "attempt": 1,
+    "field_order": "any"
+  }
+}

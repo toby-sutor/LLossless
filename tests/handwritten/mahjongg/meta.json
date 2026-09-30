@@ -1,0 +1,12 @@
+{
+  "pair": "mahjongg",
+  "kind": "merge",
+  "description": "Mah-Jongg rules, in German, from three sources given out of order and carrying Chinese and Japanese characters.",
+  "origin": {
+    "source_a": "mahJongg_1.md",
+    "source_b": "mahJongg_2.md",
+    "source_c": "mahJongg_3.md",
+    "reference": "mahJongg_expected.md"
+  },
+  "note": "The other of this corpus's first two three-source pairs (with treecreeper). The three sources are excerpts of the German Wikipedia article on Mah-Jongg (source_b.md cites de.wikipedia.org/wiki/Mah-Jongg), given out of order across the files and carrying Chinese and Japanese tile-name characters throughout. The operator described it as needing extra translation work and as the hardest merge in the set. It carries no seeded errors and is this corpus's negative control for fact correction, alongside voyager and bip39. Checked: all 179 of reference.md's sentences (src/llossless/segment.py's own unit) appear verbatim, whitespace-normalised, in at least one source -- 179/179, i.e. reference.md reorders the sources' content into a coherent document rather than adding or rewording anything. Unlike treecreeper and sepia, reconcile.reconcile does not read it as a staple (order.stapled=False) despite the full verbatim coverage, because the sections are reordered rather than kept in source order; order.runs is still 3."
+}

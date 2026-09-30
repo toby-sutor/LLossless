@@ -1,0 +1,417 @@
+{
+  "schema_version": 4,
+  "fixture": "restated",
+  "kind": "guard",
+  "held_out": true,
+  "description": "Real model output, not a hand-written merge: the merged.md here is byte for byte what `merge --fidelity low` returned on 2026-09-15 for the two source documents beside it, on a 27B model, and the run it came from exited 0 with no finding of any kind. The two sources state the same facts in two people's wordings; the merge keeps both, paragraph after paragraph, so the document says everything twice. Every probe here is SUPPORTED in both directions and that is right: every source fact really is carried and every merged claim really is grounded, so the verify pass is correct about all of them. What is wrong is a property of the document rather than of any claim in it - check 9's claim-level half extracts 23 claim texts twice each, from two different lines - and `verify`, which is the command graded against this file, does not run check 9 at all. The declaration therefore says what is true of a verify run and records the blind spot rather than pretending to test for it. See tests/fixtures/SCHEMA.md, 'restated is real model output, and the corpus's only one'.",
+  "note": "Registered `guard` because its own probes imply exit 0 and `kind` must agree with them, NOT because a merge that states every fact twice is correct. It is the concatenation defect in its claim-level form, and it is the must-fire probe for the claim-level half of check 9: recorded-claims.json carries the decompose output of the run that produced merged.md, and `reconcile.restatements` finds 23 repeated claim texts in it and none in either source. The hand-written `concatenated` fixture is the other half of the pair and deliberately does not fire it - its two wordings differ too much to collide - so one fixture guards the structural case and this one proves the claim-level case fires on output a model really produced. Sources and merge released for use by the operator on 2026-09-15.",
+  "plants": [],
+  "merged": "merged.md",
+  "prompts": {
+    "source_to_merged": "prompts/verify.md",
+    "merged_to_sources": "prompts/verify_reverse.md"
+  },
+  "claim_count_band": {
+    "source_a.md": [
+      15,
+      45
+    ],
+    "source_b.md": [
+      15,
+      45
+    ],
+    "merged.md": [
+      25,
+      90
+    ]
+  },
+  "probes": [
+    {
+      "probe_id": "a-largest-religion",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 3,
+      "text": "Christianity is the world's largest religion.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "christianity is the world's largest religion"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "largest religion"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "largest religion"
+      ]
+    },
+    {
+      "probe_id": "a-adherents",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 3,
+      "text": "Christianity has over two billion adherents.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "with over two billion adherents"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "two billion"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "two billion adherents"
+      ],
+      "note": "The same fact as b-followers in the other source's numerals. Both are SUPPORTED against merged.md because the merge carries both wordings on consecutive lines, which is the defect this fixture records."
+    },
+    {
+      "probe_id": "a-testament-languages",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 7,
+      "text": "The Bible is made up of the Old (Hebrew) and New (Greek) Testaments.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "old (hebrew) and new (greek) testaments"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "hebrew",
+          "greek"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "Old (Hebrew) and New (Greek) Testaments"
+      ]
+    },
+    {
+      "probe_id": "a-western-world",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 7,
+      "text": "Christianity is declining in much of the Western world.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "declining in much of the western world"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "western world"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "much of the Western world"
+      ]
+    },
+    {
+      "probe_id": "a-schism-year",
+      "direction": "source_to_merged",
+      "document": "source_a.md",
+      "line": 7,
+      "text": "Eastern Orthodoxy split from Catholicism in the East-West Schism of 1054.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "schism of 1054"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "1054"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "1054"
+      ]
+    },
+    {
+      "probe_id": "b-followers",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 3,
+      "text": "Christianity has over 2,000,000,000 followers.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "with over 2,000,000,000 followers"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "2,000,000,000"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "2,000,000,000 followers"
+      ]
+    },
+    {
+      "probe_id": "b-jewish-rabbi",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 3,
+      "text": "Jesus of Nazareth was a Jewish rabbi.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "a jewish rabbi"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "jewish rabbi"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "a Jewish rabbi"
+      ],
+      "note": "source_a.md calls him a Jewish preacher and source_b.md a Jewish rabbi. The merge keeps both descriptions, one line apart, and both probes are SUPPORTED."
+    },
+    {
+      "probe_id": "b-testaments",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 7,
+      "text": "The Bible is made up of the Old and New Testaments.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "old and new testaments"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "old and new testaments"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "Old and New Testaments"
+      ]
+    },
+    {
+      "probe_id": "b-reformation",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 7,
+      "text": "Protestantism emerged from the 16th-century Reformation.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "emerging from the 16th-century reformation"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "16th-century reformation"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "16th-century Reformation"
+      ]
+    },
+    {
+      "probe_id": "b-communal-worship",
+      "direction": "source_to_merged",
+      "document": "source_b.md",
+      "line": 7,
+      "text": "Communal worship in a church is a core practice of Christianity.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "communal worship in a church"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "communal worship"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "communal worship in a church"
+      ]
+    },
+    {
+      "probe_id": "m-adherents",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 3,
+      "text": "Christianity has over two billion adherents.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "with over two billion adherents"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "two billion"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "two billion adherents"
+      ],
+      "expected_evidence_source": [
+        "source_a.md"
+      ]
+    },
+    {
+      "probe_id": "m-followers",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 4,
+      "text": "Christianity has over 2,000,000,000 followers.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "with over 2,000,000,000 followers"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "2,000,000,000"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "2,000,000,000 followers"
+      ],
+      "expected_evidence_source": [
+        "source_b.md"
+      ],
+      "note": "m-adherents one line above states the same fact from the other source. Both are correct, both are SUPPORTED, and the merged document says the number twice."
+    },
+    {
+      "probe_id": "m-trinity-persons",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 6,
+      "text": "The Trinity is God as Father, Son (Jesus), and the Holy Spirit.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "god as father, son (jesus), and the holy spirit"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "son (jesus)"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "Son (Jesus)"
+      ],
+      "expected_evidence_source": [
+        "source_a.md"
+      ]
+    },
+    {
+      "probe_id": "m-testament-languages",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 9,
+      "text": "The Bible is made up of the Old (Hebrew) and New (Greek) Testaments.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "old (hebrew) and new (greek) testaments"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "hebrew",
+          "greek"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "Old (Hebrew) and New (Greek) Testaments"
+      ],
+      "expected_evidence_source": [
+        "source_a.md"
+      ]
+    },
+    {
+      "probe_id": "m-testaments",
+      "direction": "merged_to_sources",
+      "document": "merged.md",
+      "line": 10,
+      "text": "The Bible is made up of the Old and New Testaments.",
+      "must_extract": true,
+      "anchor": {
+        "all_of": [
+          "old and new testaments"
+        ]
+      },
+      "match": {
+        "all_of": [
+          "old and new testaments"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "also_acceptable": [],
+      "expected_finding": "none",
+      "expected_evidence_contains": [
+        "Old and New Testaments"
+      ],
+      "expected_evidence_source": [
+        "source_b.md"
+      ],
+      "note": "The same sentence as m-testament-languages one line above, minus the two languages. Nothing in the merged document says they are the same Bible: it states the composition of the canon twice."
+    }
+  ],
+  "must_not_extract": [],
+  "expected_conflicts": [],
+  "expected_exit_code": {
+    "strict": 0,
+    "lenient": 0
+  }
+}

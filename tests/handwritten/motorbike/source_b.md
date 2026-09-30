@@ -1,0 +1,4 @@
+Quad or Motorbike
+
+A quad has four wheels and stays upright on its own thanks to its wide stance. A motorbike, on the other hand, has two wheels and must be balanced by the rider, who leans the machine into corners, initiated by counter-steering.
+Steering differs mechanically too; the quad turns its front wheels via linkage, like a car. It typically uses A-arm suspension and low-pressure tires for rough terraine. Motorbikes are built for paved roads and high-speed handling, whereas ATVs/quads are built for low-speed torque, traction and terrain. Legally, motorbikes are road vehicles needing registration, insurance and a motorcycle licence plus helmet, while quads are usually classed as off-highway vehicles and often require a car licence if they are registered for public streets. A quad feels more stable at walking pace but is far easier to flip in a fast turn, since you can't lean it to counter the forces, so caution is required.

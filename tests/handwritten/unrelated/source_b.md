@@ -1,0 +1,9 @@
+Case Closed: Chaplin Is the Best Hollywood Ever Produced
+
+Step into the projection booth and let me make the case: Charlie Chaplin didn’t just make movies—he defined what Hollywood could be. Before the word “auteur” existed, Chaplin was the complete filmmaker: writer, director, producer, star, editor, composer, and, with United Artists, his own distributor. He took the most popular mass medium in history and used it as a personal instrument.
+
+City Lights is a miracle—a silent film released in 1931, after sound had conquered the industry, and it still lands every laugh before breaking your heart in one of the greatest final shots ever filmed. Modern Times turns the assembly line into comedy, then into a warning about dehumanization. The Gold Rush gives us the Little Tramp eating his shoe and dancing with dinner rolls—images that now belong to the world’s dream life. The Kid proves slapstick can carry grief. The Great Dictator dared to mock Hitler before America entered the war and ended with a speech that still gives me chills.
+
+Even his “minor” films—*The Circus*, Monsieur Verdoux, *Limelight*—are major. No other Hollywood figure combined global fame, artistic control, emotional range, and moral courage like that. You can name other great directors, but none were also the most recognizable human being on Earth. You can name other great stars, but none wrote and directed their own masterpieces.
+
+Chaplin’s films are the best Hollywood ever produced because they are cinema at its purest: image, movement, rhythm, and feeling. They need no language. They never age. They are funny, then devastating, then hopeful. Start with *City Lights*—if you don’t feel something, check your pulse.

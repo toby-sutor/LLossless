@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-08-08T20:45:16+00:00",
+  "key": "4eb0a18687efc3180dcad75859636a9864089411d61ea77994f7e6a9ebb549e3",
+  "request": {
+    "role": "decompose",
+    "model": "qwen3:8b",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Extract every independently checkable factual assertion from the document below.\n\nThe document is shown one line per line, each prefixed with its line number and\na pipe. The prefix is not part of the text.\n\nRules:\n- One assertion per claim. Split compound sentences.\n- A single line may contain several sentences, and may therefore yield several\n  claims. Do not treat one line as one claim.\n- Each claim must stand alone without needing surrounding context.\n- Resolve pronouns and references to explicit nouns.\n- Copy values, names, numbers, units and time formats exactly as written. Do not\n  normalise, round, expand or abbreviate them. \"approximately 500\" stays\n  \"approximately 500\"; \"07:15 till 19:45\" stays \"07:15 till 19:45\".\n- Skip headings, formatting, boilerplate and statements of opinion.\n- Skip statements about the documents themselves or about how they were\n  combined, such as a note that two sources disagree. Attributed content is not\n  such a statement: \"the guide states that the timeout is 30 seconds\" is a\n  claim about the timeout, and must be extracted.\n- Do not infer, summarise, or combine information.\n- line: the number shown against the line the claim comes from. If the claim\n  spans several lines, give the first.\n- span: the specific sentence the claim comes from, copied exactly, without the\n  number prefix. If one line contains several sentences, each claim takes only\n  its own sentence as span, never the whole line. The span must appear in the\n  document character for character, including any spelling, grammatical or\n  formatting errors and any unusual capitalisation. Do not correct anything.\n\nWorked example - one line, two claims.\n\n  12| The kiln fired for eleven hours and the glaze cracked in three places.\n\nThis line yields two claims:\n\n  claim: \"The kiln fired for eleven hours.\"\n  line: 12\n  span: \"The kiln fired for eleven hours\"\n\n  claim: \"The glaze cracked in three places.\"\n  line: 12\n  span: \"the glaze cracked in three places\"\n\nBoth claims carry line 12. Neither span is the whole line.\n\nWorked example - fact and opinion in one sentence.\n\n  7| The garden was breathtaking, with eleven rose beds along the south wall.\n\n\"The garden was breathtaking\" is an evaluation and is skipped. \"The garden has\neleven rose beds along the south wall.\" is checkable and is extracted, with\nspan \"with eleven rose beds along the south wall\".\n\nDescriptive prose is not automatically opinion. A stated quantity, position,\nduration, time, name, sequence or event is a fact even in a narrative passage,\nand must be extracted. Only judgements of quality, beauty, value or feeling are\nopinion.\n\nReturn JSON matching the provided schema. Nothing else.\n\nDOCUMENT:\n 1 | Vandrell Relay is a fictional HTTP relay. This document is test data.\n 2 | \n 3 | ## Listening and timeouts\n 4 | \n 5 | Unless you override it, the relay binds to port 8443.\n 6 | A connection that has not been established within 30 seconds is abandoned.\n 7 | Once connected, the relay waits up to 120 seconds for a response.\n 8 | \n 9 | ## Capacity\n10 | \n11 | No more than 512 connections may be open at the same time.\n12 | A failed request is attempted again up to 3 times.\n13 | \n14 | ## Transport security\n15 | \n16 | Anything older than TLS 1.2 is rejected.\n17 | \n18 | ## Observability\n19 | \n20 | Every access log line is a single JSON object.\n21 | Liveness is reported at /-/healthy.\n22 | \n23 | ## Defaults\n24 | \n25 | - Listen port: 8443\n26 | - Connect timeout: 30 seconds\n27 | - Read timeout: 120 seconds\n28 | - Maximum concurrent connections: 512\n29 | - Retry attempts per request: 3\n30 | \n31 | ## Requirements\n32 | \n33 | - TLS 1.2 is the oldest protocol version the relay will negotiate.\n34 | - The access log uses JSON Lines, one record per line.\n35 | - Health checks should target /-/healthy.\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "span": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "text",
+              "line",
+              "span"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "claims"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\":\"chatcmpl-5\",\"object\":\"chat.completion\",\"created\":1786221916,\"model\":\"qwen3:8b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"claims\\\": [\\n    {\\n      \\\"text\\\": \\\"Vandrell Relay is a fictional HTTP relay.\\\",\\n      \\\"line\\\": 1,\\n      \\\"span\\\": \\\"Vandrell Relay is a fictional HTTP relay.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"The relay binds to port 8443.\\\",\\n      \\\"line\\\": 5,\\n      \\\"span\\\": \\\"The relay binds to port 8443.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"A connection that has not been established within 30 seconds is abandoned.\\\",\\n      \\\"line\\\": 6,\\n      \\\"span\\\": \\\"A connection that has not been established within 30 seconds is abandoned.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"The relay waits up to 120 seconds for a response.\\\",\\n      \\\"line\\\": 7,\\n      \\\"span\\\": \\\"The relay waits up to 120 seconds for a response.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"No more than 512 connections may be open at the same time.\\\",\\n      \\\"line\\\": 11,\\n      \\\"span\\\": \\\"No more than 512 connections may be open at the same time.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"A failed request is attempted again up to 3 times.\\\",\\n      \\\"line\\\": 12,\\n      \\\"span\\\": \\\"A failed request is attempted again up to 3 times.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Anything older than TLS 1.2 is rejected.\\\",\\n      \\\"line\\\": 16,\\n      \\\"span\\\": \\\"Anything older than TLS 1.2 is rejected.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Every access log line is a single JSON object.\\\",\\n      \\\"line\\\": 20,\\n      \\\"span\\\": \\\"Every access log line is a single JSON object.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Liveness is reported at /-/healthy.\\\",\\n      \\\"line\\\": 21,\\n      \\\"span\\\": \\\"Liveness is reported at /-/healthy.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Listen port: 8443\\\",\\n      \\\"line\\\": 25,\\n      \\\"span\\\": \\\"Listen port: 8443\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Connect timeout: 30 seconds\\\",\\n      \\\"line\\\": 26,\\n      \\\"span\\\": \\\"Connect timeout: 30 seconds\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Read timeout: 120 seconds\\\",\\n      \\\"line\\\": 27,\\n      \\\"span\\\": \\\"Read timeout: 120 seconds\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Maximum concurrent connections: 512\\\",\\n      \\\"line\\\": 28,\\n      \\\"span\\\": \\\"Maximum concurrent connections: 512\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Retry attempts per request: 3\\\",\\n      \\\"line\\\": 29,\\n      \\\"span\\\": \\\"Retry attempts per request: 3\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"TLS 1.2 is the oldest protocol version the relay will negotiate.\\\",\\n      \\\"line\\\": 33,\\n      \\\"span\\\": \\\"TLS 1.2 is the oldest protocol version the relay will negotiate.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"The access log uses JSON Lines, one record per line.\\\",\\n      \\\"line\\\": 34,\\n      \\\"span\\\": \\\"The access log uses JSON Lines, one record per line.\\\"\\n    },\\n    {\\n      \\\"text\\\": \\\"Health checks should target /-/healthy.\\\",\\n      \\\"line\\\": 35,\\n      \\\"span\\\": \\\"Health checks should target /-/healthy.\\\"\\n    }\\n  ]\\n}\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":990,\"completion_tokens\":752,\"total_tokens\":1742}}\n",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "49960de5880e",
+    "claimcheck_source": "008f57215048",
+    "latency_ms": 32365,
+    "attempt": 1
+  }
+}

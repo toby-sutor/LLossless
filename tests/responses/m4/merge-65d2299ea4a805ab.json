@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "recorded_at": "2026-08-08T17:57:37+00:00",
+  "key": "65d2299ea4a805abb07c089fb93726962e2cce65c6b0cb85485863d6c14b6460",
+  "request": {
+    "role": "merge",
+    "model": "qwen3:8b",
+    "tier": "json_schema",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Combine the two source documents below into one merged document that carries\nevery fact from both.\n\nRules:\n- Every fact stated in either source must appear in the merge. A fact that is\n  dropped cannot be recovered later, so this is the failure that matters most.\n- Nothing may appear in the merge that neither source states. Do not add\n  context, do not fill gaps from your own knowledge, do not infer a fact from\n  two others.\n- A fact both sources state is stated once, not twice.\n- Where the two sources give different values for the same attribute, state\n  both values, name the document each one came from, and do not choose between\n  them. Say that the sources disagree. Never pick a winner and never average,\n  reconcile or split the difference.\n- Never attribute a fact to a document that does not state it. Attribute a\n  value only when you are surfacing a disagreement, and then only to the\n  document that value actually came from.\n- Copy values, names, numbers, units, dates and time formats character for\n  character. Do not normalise, round, expand or abbreviate them. \"approximately\n  500\" stays \"approximately 500\"; \"07:15 till 19:45\" stays \"07:15 till 19:45\".\n  Copy any spelling, grammatical or formatting error exactly as it stands; do\n  not correct anything.\n- Order, headings and wording are yours to choose. Reorganise, retitle and\n  rewrite as freely as you like. The merge is not graded on prose, only on\n  whether every fact survived it unchanged.\n\nWorked example - one attribute, two values.\n\nSuppose the two sources were:\n\n  marlbrook_handbook.md\n    The Marlbrook funicular climbs 412 metres.\n    The cars run every 20 minutes.\n\n  marlbrook_field_notes.md\n    The Marlbrook funicular climbs 412 metres.\n    The cars run every 15 minutes.\n    The lower station has a ticket office.\n\nThen the merged document is:\n\n  The Marlbrook funicular climbs 412 metres.\n\n  Unresolved: the interval between cars.\n  marlbrook_handbook.md states that the cars run every 20 minutes.\n  marlbrook_field_notes.md states that the cars run every 15 minutes.\n  The sources disagree and this merge does not choose between them.\n\n  The lower station has a ticket office.\n\nThe climb appears once, because both sources state it and they agree. The\ninterval appears twice, once per document, because they disagree - both values\nare kept, each named to the document it came from, and neither is chosen. The\nticket office is stated by one source only, and is carried over unattributed\nlike any other fact.\n\nThis example is an illustration. Nothing from it belongs in your answer unless\nthe documents below happen to state it.\n\nReturn JSON matching the provided schema. Put the entire merged document in\nmerged_document as a single string. Nothing else.\n\nsource_a.md:\n# Vandrell Relay - Operator Guide\n\nThe relay listens on port 8443.\nThe health check path is /healthz.\nThe read timeout is 30 seconds.\n\n\nsource_b.md:\n# Vandrell Relay - Deployment Notes\n\nThe relay listens on port 8443.\nThe health check path is /healthz.\nThe minimum TLS version is 1.2.\n\n"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "merged_document": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "merged_document"
+      ],
+      "additionalProperties": false
+    },
+    "temperature": 0.0
+  },
+  "response": {
+    "raw": "{\"id\":\"chatcmpl-836\",\"object\":\"chat.completion\",\"created\":1786206274,\"model\":\"qwen3:8b\",\"system_fingerprint\":\"fp_ollama\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\n  \\\"merged_document\\\": \\\"The relay listens on port 8443.\\\\nThe health check path is /healthz.\\\\nThe read timeout is 30 seconds.\\\\nThe minimum TLS version is 1.2.\\\"\\n}\",\"reasoning\":\"Okay, let's tackle this problem. The user wants me to merge two source documents into one, making sure every fact from both is included without adding anything new. Let me start by carefully reading both sources.\\n\\nFirst, source_a.md is the \\\"Vandrell Relay - Operator Guide\\\". It mentions three points: the relay listens on port 8443, the health check path is /healthz, and the read timeout is 30 seconds.\\n\\nSource_b.md is the \\\"Vandrell Relay - Deployment Notes\\\". It also mentions the relay listens on port 8443, the health check path is /healthz, and the minimum TLS version is 1.2.\\n\\nNow, I need to combine these. The first two points (port and health check path) are the same in both sources. Since they agree, I should mention them once. The third point in source_a is the read timeout of 30 seconds, and source_b has the minimum TLS version 1.2. These are different attributes, so they both need to be included. \\n\\nWait, the user's example showed that when two sources have the same attribute but different values, we list both with their sources. But here, the attributes are different. So, the read timeout and TLS version are separate facts. Therefore, I should list both as separate points, each from their respective sources. \\n\\nI need to make sure that all facts are present. Let me check again. Both sources have the port and health check path. So those are merged once. The read timeout is only in source_a, and TLS version is only in source_b. So those are each included once. \\n\\nNo conflicts here, so no need to mark them as unresolved. The user's example had conflicting values, but here the attributes are different. So the merged document should have all three points from source_a and the TLS version from source_b. \\n\\nWait, source_a has three points, source_b has three as well. But the first two are same. So merged document will have the first two once, then the read timeout from source_a, and TLS version from source_b. \\n\\nYes, that's correct. So the final merged document should list each fact once if they agree, and include all unique facts from both sources. No conflicts here, so no need to mention disagreements. \\n\\nNow, structure the merged document. The user didn't specify any particular order, so I can arrange them logically. Maybe group the common ones first, then the unique ones. \\n\\nSo the merged document would have:\\n\\n- The relay listens on port 8443. (both sources)\\n- The health check path is /healthz. (both sources)\\n- The read timeout is 30 seconds. (source_a)\\n- The minimum TLS version is 1.2. (source_b)\\n\\nThat's all. No conflicts, so no need to mention any disagreements. Each fact is present once, and all are included. I need to present this as a JSON with the merged_document string. Make sure to copy the exact text from the sources, including any formatting. Since there's no formatting in the sources, just plain text. \\n\\nDouble-checking that all facts are included. Yes, all four points are covered. No missing facts. No added information. Perfect.\\n\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":1418,\"completion_tokens\":48,\"total_tokens\":1466}}\n",
+    "http_status": 200
+  },
+  "meta": {
+    "endpoint_id": "49960de5880e",
+    "claimcheck_source": "008f57215048",
+    "latency_ms": 31991,
+    "attempt": 1
+  }
+}

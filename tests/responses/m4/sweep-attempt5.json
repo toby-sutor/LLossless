@@ -1,0 +1,227 @@
+{
+  "provenance": {
+    "generated_at": "2026-08-08T20:53:59+00:00",
+    "claimcheck_commit": "008f57215048",
+    "run_mode": "record",
+    "endpoint": {
+      "host": "localhost",
+      "location": "local",
+      "content_left_this_machine": false
+    },
+    "models": {
+      "merge": "qwen3:8b",
+      "decompose": "qwen3:8b",
+      "verify": "qwen3:8b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "f2a441dedc46ebd2f7e1821c747bf1e1d229b3dd0b23fe90a89c7a268ea72a27",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "bc987d3fb394c0bb2208ee08f494da8d54e7410229ccc3e16c3945cf2b7d6e05",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "cc3bbe9d49f5ba8f6c469608281a4df2846b5ff5b7a73242296f44e6027d1536"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": []
+    },
+    "counts": {
+      "calls": 20,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "errors": 0,
+      "prompt_tokens": 24222,
+      "completion_tokens": 7969
+    },
+    "duration_seconds": 807.6
+  },
+  "inconclusive": false,
+  "harness_fault": [],
+  "samples": 3,
+  "grading": "every source_to_merged probe is graded against SUPPORTED alone; expected_verdict, also_acceptable and expected_evidence_contains describe the hand-written merge and are not consulted. No forward probe declares an expected_evidence_source.",
+  "forward": {
+    "probes_declared": 32,
+    "probes_measured": 32,
+    "supported": 32,
+    "paired_denominator": 12,
+    "paired_supported": {
+      "off": 12,
+      "on": 12
+    }
+  },
+  "headline": {
+    "example_leaks": [],
+    "must_not_extract": []
+  },
+  "fixtures": [
+    {
+      "fixture": "attribution_invented",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "attribution_swapped",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "conflict_surfaced",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "contradiction",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "dedup",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "disjoint_sources",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "dropped_claim",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "hallucination",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "numeric_drift",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": []
+    },
+    {
+      "fixture": "ordering_only",
+      "status": "FAIL",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 2,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 8,
+          "forward_measured": 8,
+          "forward_supported": 8,
+          "not_supported": [],
+          "claims": 11,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 11,
+          "merge_completion_tokens": 183,
+          "merged_sha256": "bfd8eb8700885609"
+        }
+      ]
+    },
+    {
+      "fixture": "paraphrase",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "off",
+          "sample": 2,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 8,
+          "forward_measured": 8,
+          "forward_supported": 8,
+          "not_supported": [],
+          "claims": 17,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 17,
+          "merge_completion_tokens": 262,
+          "merged_sha256": "f99d90b7746556a8"
+        },
+        {
+          "condition": "on",
+          "sample": 2,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 8,
+          "forward_measured": 8,
+          "forward_supported": 8,
+          "not_supported": [],
+          "claims": 11,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 11,
+          "merge_completion_tokens": 206,
+          "merged_sha256": "fe23181c5d47b214"
+        }
+      ]
+    },
+    {
+      "fixture": "structure_added",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "off",
+          "sample": 2,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 4,
+          "forward_measured": 4,
+          "forward_supported": 4,
+          "not_supported": [],
+          "claims": 4,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 4,
+          "merge_completion_tokens": 77,
+          "merged_sha256": "9e00ed151fa0492b"
+        },
+        {
+          "condition": "on",
+          "sample": 2,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 4,
+          "forward_measured": 4,
+          "forward_supported": 4,
+          "not_supported": [],
+          "claims": 4,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 4,
+          "merge_completion_tokens": 54,
+          "merged_sha256": "c51c79a74ea8dfc5"
+        }
+      ]
+    }
+  ]
+}

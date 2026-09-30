@@ -25,8 +25,9 @@ already tried 3 times. The two documents disagree on the number of attempts; the
 field crew figure of 2 is the one to work to and the support desk figure of 3 is
 the one to correct.
 
-Do not keep cycling a dock that has failed twice; repeated forcing bends the pin
-and turns a 20 minute workshop job into a replacement.
+Do not keep cycling a dock
+that has failed twice; repeated forcing bends the pin and turns a 20 minute
+workshop job into a replacement.
 
 ## E4 is never a field fix
 
