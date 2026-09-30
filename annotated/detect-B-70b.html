@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Detection: B-70b</title><style>
+:root { --ink:#111; --paper:#fff; --rule:#d6d6d6; --dim:#5a5a5a; }
+* { box-sizing: border-box; }
+body { margin:0; padding:1.5rem; background:var(--paper); color:var(--ink);
+  font:14px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+h1 { font-size:1.3rem; margin:0 0 .25rem; }
+h2 { font-size:1rem; margin:1.6rem 0 .5rem; }
+h3 { font-size:.9rem; margin:1rem 0 .4rem; color:var(--dim); }
+.head { border:1px solid var(--rule); padding:.9rem 1rem; margin-bottom:1.2rem; }
+.head dl { display:grid; grid-template-columns:max-content 1fr; gap:.15rem .8rem; margin:.6rem 0 0; }
+.head dt { color:var(--dim); } .head dd { margin:0; }
+.key { display:flex; flex-wrap:wrap; gap:.5rem; margin:.7rem 0 0; }
+.panes { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media (max-width:900px){ .panes { grid-template-columns:1fr; } }
+.pane { border:1px solid var(--rule); padding:.6rem .8rem; min-width:0; }
+.merge { margin:1.6rem 0 2.4rem; border-top:3px solid var(--ink); padding-top:.8rem; }
+.seg { padding:.35rem .5rem; margin:.2rem 0; border-left:4px solid transparent; }
+.segid { font-size:.72rem; color:var(--dim); display:flex; gap:.5rem; }
+.segtext { white-space:pre-wrap; overflow-wrap:anywhere; }
+code { font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+.tags { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.3rem; }
+.tag { font-size:.72rem; padding:.05rem .4rem; border:1px solid currentColor; }
+.why { color:var(--dim); }
+.dropped   { border-left-color:#b3261e; } .tag.dropped   { color:#b3261e; background:#fdecea; }
+.reworded  { border-left-color:#8a5a00; } .tag.reworded  { color:#8a5a00; background:#fdf3e0; }
+.altered   { border-left-color:#6b3fa0; } .tag.altered   { color:#6b3fa0; background:#f3ecfb; }
+.unsupported   { border-left-color:#00629b; } .tag.unsupported   { color:#00629b; background:#e7f2fa; }
+.contradicted  { border-left-color:#8f0f3f; } .tag.contradicted  { color:#8f0f3f; background:#fdeaf1; }
+.declared  { border-left-color:#9a9a9a; } .tag.declared  { color:#4a4a4a; background:#f2f2f2; }
+.caught    { border-left-color:#1b5e20; } .tag.caught    { color:#1b5e20; background:#e8f4ea; }
+.missed    { border-left-color:#b3261e; } .tag.missed    { color:#b3261e; background:#fdecea; }
+.invented  { border-left-color:#00629b; } .tag.invented  { color:#00629b; background:#e7f2fa; }
+.unmeasured{ border-left-color:#6a6a6a; } .tag.unmeasured{ color:#3a3a3a; background:#eeeeee; }
+.fixture { border:1px solid var(--rule); padding:.5rem .7rem; margin:.45rem 0; }
+.fixture h3 { margin:0 0 .3rem; color:var(--ink); }
+.idxlist a { display:block; padding:.1rem 0; }
+.note { color:var(--dim); font-size:.8rem; }
+.flag { border:1px solid #8a5a00; background:#fdf3e0; padding:.4rem .6rem; margin:.5rem 0; }
+@media print { body { padding:0; } .pane, .head { border-color:#000; }
+  .tag { border-color:#000; color:#000; background:transparent; } }
+</style></head><body><div class="head"><h1>Detection: B-70b</h1><dl><dt>plants detected</dt><dd>6 of 7</dd><dt>fixtures</dt><dd>13</dd><dt>graded from</dt><dd><code>regrade-inventions.json</code>, a record withheld with the paper</dd></dl><div class="key"><span class="tag dropped">&#9632; DROPPED - in a source, not in the merge</span><span class="tag reworded">&#9650; REWORDED - in the merge in altered wording</span><span class="tag altered">&#9670; ALTERED VALUE - an invariant token did not survive unchanged</span><span class="tag unsupported">&#9679; UNSUPPORTED - in the merge, grounded in no source</span><span class="tag contradicted">&#10006; CONTRADICTED - the merge states something different</span><span class="tag declared">&#9675; DECLARED - left out, and the merge said so</span><span class="tag caught">&#10003; CAUGHT - planted, and the arm reported it</span><span class="tag missed">&#9633; MISSED - planted, and the arm did not report it</span><span class="tag invented">&#9678; INVENTED - reported, and no probe accounts for it</span><span class="tag unmeasured">&#8709; UNMEASURED - no reading could be taken on this arm</span></div></div><p class="note"><a href="index.html">back to the index</a></p><div class="fixture caught"><h3><code>attribution_invented</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>attribution_invented</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>attribution_swapped</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>attribution_swapped</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>conflict_surfaced</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>conflict_surfaced</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>contradiction</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>contradiction</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>dedup</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>dedup</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>disjoint_domains</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>disjoint_domains</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>disjoint_sources</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>disjoint_sources</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>dropped_claim</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>dropped_claim</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>hallucination</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>hallucination</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture unmeasured"><h3><code>numeric_drift</code></h3><span class="tags"><span class="tag unmeasured">&#8709; UNMEASURED <code>numeric_drift</code> <span class="why">no reading could be taken</span></span></span></div><div class="fixture caught"><h3><code>ordering_only</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>ordering_only</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>paraphrase</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>paraphrase</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><div class="fixture caught"><h3><code>structure_added</code></h3><span class="tags"><span class="tag caught">&#10003; CAUGHT <code>structure_added</code> <span class="why">the exit status matched the fixture&#x27;s key</span></span></span></div><p class="note"><a href="index.html">back to the index</a></p></body></html>
