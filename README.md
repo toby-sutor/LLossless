@@ -9,8 +9,8 @@ Teams often keep the same knowledge in more than one place: two runbooks for one
 [A real example](#a-real-example) · [What you get](#what-you-get) · [What to expect](#what-to-expect) · [Which model](#which-model-to-use) · [Try it](#try-it-in-two-minutes) · [How it works](#how-it-works) · [Lessons learned](#lessons-learned) · [Documentation](#documentation)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/cf0a9646-d93f-4ca5-bd78-a13dc0bc4459">
-  <img alt="The LLossless web interface after a run: two documents on the left; on the right, findings with conflicts, the checks that ran, and the merged document with download buttons." src="https://github.com/user-attachments/assets/80a19e18-9d3a-4e95-898e-aa8876f4d7ea">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/6d9ce6f1-dddf-4da8-acbc-3ec2d592f0b6">
+  <img alt="The LLossless web interface after a run: two documents on the left; on the right, findings with conflicts, the checks that ran, and the merged document with download buttons." src="https://github.com/user-attachments/assets/c7036387-eb90-4157-bfad-660c041a51fe">
 </picture>
 
 *The web interface after a run with findings. The answers in this screenshot came from a scripted test endpoint (`test-model`), not from a real model.*
