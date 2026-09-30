@@ -1,0 +1,43 @@
+LLossless merge  claude-haiku-4-5-20251001 at lineup haiku-4.5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  122.5s
+✓ merge  122.5s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  131.3s
+✓ decompose source_a.md  131.3s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  118.8s
+✓ decompose source_b.md  118.8s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  73.3s
+✓ verify (forward)  73.4s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  97.9s
+✓ decompose merged.md  98.0s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  122.0s
+✓ verify (reverse)  122.0s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  1 partly dropped: the merge carries some of this claim (see `## Findings`)
+  21 contradicted: the merge states something different (see `## Findings`)
+  1 partly invented: the sources carry some of this claim (see `## Findings`)
+  1 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  3 declared gone, still here: a record says the content departed and the merge carries the segment unchanged (see `## Structure`)
+  8 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

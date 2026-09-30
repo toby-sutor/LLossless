@@ -1,0 +1,40 @@
+claimcheck merge  opus at Claude Code - Opus, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking opus
+✓ merge: opus (claude-opus-5) answered at the prompt tier  278.4s
+✓ merge  278.4s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  9.6s
+✓ decompose source_a.md  9.6s
+• decompose source_b.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  18.3s
+✓ decompose source_b.md  18.3s
+• verify (forward)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  32.2s
+✓ verify (forward)  32.2s
+• decompose merged.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  22.7s
+✓ decompose merged.md  22.7s
+• verify (reverse)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  29.6s
+✓ verify (reverse)  29.6s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d1/voyager-opus-xhigh/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  The model retrieved. 1 of 6 call(s) took the turns a retrieval costs; which citation each retrieval backs is not recorded
+  47 contradicted: the merge states something different (see `## Findings`)
+  2 partly invented: the sources carry some of this claim (see `## Findings`)
+  12 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d1/voyager-opus-xhigh/a1/merged.md
+  the full report went to stdout; exit code 1

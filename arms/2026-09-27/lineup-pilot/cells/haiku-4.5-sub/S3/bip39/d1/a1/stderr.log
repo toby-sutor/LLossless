@@ -1,0 +1,41 @@
+LLossless merge  claude-haiku-4-5-20251001 at lineup haiku-4.5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  113.3s
+✓ merge  113.3s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  79.1s
+✓ decompose source_a.md  79.1s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  125.5s
+✓ decompose source_b.md  125.6s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  28.3s
+✓ verify (forward)  28.3s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  127.4s
+✓ decompose merged.md  127.4s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  50.7s
+✓ verify (reverse)  50.7s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  15 contradicted: the merge states something different (see `## Findings`)
+  1 partly invented: the sources carry some of this claim (see `## Findings`)
+  1 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  1 declared gone, still here: a record says the content departed and the merge carries the segment unchanged (see `## Structure`)
+  3 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

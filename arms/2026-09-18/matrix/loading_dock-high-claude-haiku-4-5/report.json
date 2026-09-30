@@ -1,0 +1,1478 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 16,
+      "source_a.md": 18,
+      "source_b.md": 9
+    },
+    "forward_submitted": 27,
+    "forward_verdicts": 27,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 18,
+        "checked": 18,
+        "accounted": 14,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 9,
+        "checked": 9,
+        "accounted": 9,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 16,
+    "reverse_verdicts": 16,
+    "reverse_partial": 1,
+    "graded": 40,
+    "grounded": 38,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "All deliveries need a dock slot.",
+      "line": 5,
+      "span": "All deliveries need a dock slot.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Book slots through the facilities portal.",
+      "line": 5,
+      "span": "Book slots through the facilities portal.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "A slot is 45 minutes.",
+      "line": 5,
+      "span": "A slot is 45 minutes.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "A vehicle over 7.5 tonnes needs two consecutive slots.",
+      "line": 6,
+      "span": "A vehicle over 7.5 tonnes needs two consecutive slots.",
+      "anchored": false
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "The portal will not let you book them separately.",
+      "line": 7,
+      "span": "the portal will not let you book them separately.",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "Slots open 14 days ahead.",
+      "line": 11,
+      "span": "Slots open 14 days ahead",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "Slots close 4 hours before the slot starts.",
+      "line": 11,
+      "span": "close 4 hours before the slot starts.",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "There is no same-hour booking.",
+      "line": 11,
+      "span": "There is no same-hour booking.",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "The dock booking phone line was retired.",
+      "line": 16,
+      "span": "The dock booking phone line was retired",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "The number no longer connects.",
+      "line": 16,
+      "span": "the number no longer connects.",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "All bookings go through the portal.",
+      "line": 16,
+      "span": "All bookings go through the portal.",
+      "anchored": true
+    },
+    {
+      "id": "A-012",
+      "source": "source_a.md",
+      "text": "Drivers who call the old number hear a recorded message pointing them at the portal.",
+      "line": 17,
+      "span": "Drivers who call the old number hear a recorded message pointing them at the portal.",
+      "anchored": true
+    },
+    {
+      "id": "A-013",
+      "source": "source_a.md",
+      "text": "Drivers report to the gatehouse with the booking reference.",
+      "line": 22,
+      "span": "Drivers report to the gatehouse with the booking reference.",
+      "anchored": true
+    },
+    {
+      "id": "A-014",
+      "source": "source_a.md",
+      "text": "The gatehouse checks the reference against the day sheet.",
+      "line": 22,
+      "span": "The gatehouse checks the reference against the day sheet",
+      "anchored": true
+    },
+    {
+      "id": "A-015",
+      "source": "source_a.md",
+      "text": "The gatehouse directs the vehicle to a bay.",
+      "line": 23,
+      "span": "directs the vehicle to a bay.",
+      "anchored": true
+    },
+    {
+      "id": "A-016",
+      "source": "source_a.md",
+      "text": "A driver without a reference waits in the holding area until a slot is free.",
+      "line": 23,
+      "span": "A driver without a reference waits in the holding area until a slot is free.",
+      "anchored": true
+    },
+    {
+      "id": "A-017",
+      "source": "source_a.md",
+      "text": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "line": 28,
+      "span": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "anchored": true
+    },
+    {
+      "id": "A-018",
+      "source": "source_a.md",
+      "text": "Three overruns in a quarter and the supplier is asked to rebook through their account manager.",
+      "line": 29,
+      "span": "Three overruns in a quarter and the supplier is asked to rebook through their account manager.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "A dock slot is 45 minutes long.",
+      "line": 5,
+      "span": "A slot is 45 minutes long",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Vehicles over 7.5 tonnes need two consecutive slots.",
+      "line": 6,
+      "span": "Vehicles over 7.5 tonnes need two consecutive slots",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Slots open 14 days ahead.",
+      "line": 10,
+      "span": "Slots open 14 days ahead",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Slots close 4 hours before the slot starts.",
+      "line": 10,
+      "span": "close 4 hours before the slot starts",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "The dock booking line is on extension 2140.",
+      "line": 14,
+      "span": "call the dock booking line on extension 2140",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "Phone requests are taken between 08:00 and 16:00 on working days only.",
+      "line": 15,
+      "span": "Phone requests are taken between 08:00 and 16:00 on working days only",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "Drivers report to the gatehouse and give the booking reference.",
+      "line": 20,
+      "span": "Drivers report to the gatehouse and give the booking reference",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "Drivers without a reference wait in the holding area.",
+      "line": 20,
+      "span": "Drivers without a reference wait in the holding area",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "line": 25,
+      "span": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "All deliveries need a dock slot.",
+      "line": 5,
+      "span": "All deliveries need a dock slot.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Slots are booked through the facilities portal.",
+      "line": 5,
+      "span": "Book slots through the facilities portal.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "A slot is 45 minutes.",
+      "line": 5,
+      "span": "A slot is 45 minutes.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "A vehicle over 7.5 tonnes needs two consecutive slots.",
+      "line": 5,
+      "span": "A vehicle over 7.5 tonnes needs two consecutive slots",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The portal will not let you book separate slots for a vehicle over 7.5 tonnes.",
+      "line": 5,
+      "span": "the portal will not let you book them separately",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Slots open 14 days ahead.",
+      "line": 9,
+      "span": "Slots open 14 days ahead",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Slots close 4 hours before the slot starts.",
+      "line": 9,
+      "span": "close 4 hours before the slot starts",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "There is no same-hour booking.",
+      "line": 9,
+      "span": "There is no same-hour booking.",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "The dock booking line is on extension 2140.",
+      "line": 13,
+      "span": "call the dock booking line on extension 2140",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "The dock supervisor will enter the slot for you when the portal is down.",
+      "line": 13,
+      "span": "the dock supervisor will enter the slot for you",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "Phone requests are taken between 08:00 and 16:00 on working days only.",
+      "line": 13,
+      "span": "Phone requests are taken between 08:00 and 16:00 on working days only.",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "Drivers report to the gatehouse with the booking reference.",
+      "line": 17,
+      "span": "Drivers report to the gatehouse with the booking reference.",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "The gatehouse checks the reference against the day sheet and directs the vehicle to a bay.",
+      "line": 17,
+      "span": "The gatehouse checks the reference against the day sheet and directs the vehicle to a bay.",
+      "anchored": true
+    },
+    {
+      "id": "M-014",
+      "source": "merged.md",
+      "text": "A driver without a reference waits in the holding area until a slot is free.",
+      "line": 17,
+      "span": "A driver without a reference waits in the holding area until a slot is free.",
+      "anchored": true
+    },
+    {
+      "id": "M-015",
+      "source": "merged.md",
+      "text": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "line": 21,
+      "span": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "anchored": true
+    },
+    {
+      "id": "M-016",
+      "source": "merged.md",
+      "text": "Three overruns in a quarter results in the supplier being asked to rebook through their account manager.",
+      "line": 21,
+      "span": "Three overruns in a quarter and the supplier is asked to rebook through their account manager.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "All deliveries need a dock slot.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Book slots through the facilities portal.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "A slot is 45 minutes.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "A vehicle over 7.5 tonnes needs two consecutive slots",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "the portal will not let you book them separately.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Slots open 14 days ahead",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Slots close 4 hours before the slot starts.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "There is no same-hour booking.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text mentions the dock booking line is available via phone but does not state it was retired.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text does not state that the dock booking phone number no longer connects.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "CONTRADICTED",
+      "evidence": "If the portal is down, call the dock booking line on extension 2140 and the dock supervisor will enter the slot for you.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that bookings can be made by phone if the portal is down, contradicting the claim that all bookings go through the portal.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-012",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text does not state that drivers hear a recorded message when calling the old number.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-013",
+      "verdict": "SUPPORTED",
+      "evidence": "Drivers report to the gatehouse with the booking reference.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-014",
+      "verdict": "SUPPORTED",
+      "evidence": "The gatehouse checks the reference against the day sheet",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-015",
+      "verdict": "SUPPORTED",
+      "evidence": "directs the vehicle to a bay.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the gatehouse directs the vehicle to a bay.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-016",
+      "verdict": "SUPPORTED",
+      "evidence": "A driver without a reference waits in the holding area until a slot is free.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-017",
+      "verdict": "SUPPORTED",
+      "evidence": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-018",
+      "verdict": "SUPPORTED",
+      "evidence": "Three overruns in a quarter and the supplier is asked to rebook through their account manager.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "A slot is 45 minutes.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states slots are 45 minutes, equivalent to this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "A vehicle over 7.5 tonnes needs two consecutive slots",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Slots open 14 days ahead",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Slots close 4 hours before the slot starts.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "call the dock booking line on extension 2140",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the dock booking line is on extension 2140.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Phone requests are taken between 08:00 and 16:00 on working days only.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Drivers report to the gatehouse with the booking reference.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states drivers report to the gatehouse with the booking reference.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "A driver without a reference waits in the holding area until a slot is free.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states that drivers without a reference wait in the holding area, which supports the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text exactly matches the claim, stating the same condition and consequence for vehicles remaining on the bay after their slots end.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "All deliveries need a dock slot.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state this claim identically or equivalently.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Book slots through the facilities portal.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A states slots are booked through the facilities portal; source B uses 'Request slots through the facilities portal' with the same meaning.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "A slot is 45 minutes.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state this claim identically.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "A vehicle over 7.5 tonnes needs two consecutive slots and the portal will not let you book them separately.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A states this; source B states vehicles over 7.5 tonnes need two consecutive slots, supporting the core claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "the portal will not let you book them separately.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A explicitly states the portal will not let you book separate slots for vehicles over 7.5 tonnes.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Slots open 14 days ahead",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state this claim identically.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "close 4 hours before the slot starts.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state this claim identically.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "There is no same-hour booking.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A explicitly states there is no same-hour booking.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "call the dock booking line on extension 2140",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states the dock booking line is on extension 2140.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "If the portal is down, call the dock booking line on extension 2140 and the dock supervisor will enter the slot for you.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states the dock supervisor will enter the slot when the portal is down.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "Phone requests are taken between 08:00 and 16:00 on working days only.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B explicitly states this claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "Drivers report to the gatehouse with the booking reference.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A states this; source B says 'give the booking reference' with the same meaning.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "The gatehouse checks the reference against the day sheet and directs the vehicle to a bay.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A explicitly states this claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "PARTIAL",
+      "evidence": "A driver without a reference waits in the holding area",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state drivers without a reference wait in the holding area, but neither states they wait 'until a slot is free'.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_invented",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-015",
+      "verdict": "SUPPORTED",
+      "evidence": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state this claim identically.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-016",
+      "verdict": "SUPPORTED",
+      "evidence": "Three overruns in a quarter and the supplier is asked to rebook through their account manager.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A explicitly states this claim; source B does not address the consequences of overruns.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "A-009",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text mentions the dock booking line is available via phone but does not state it was retired.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text does not state that the dock booking phone number no longer connects.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "CONTRADICTED",
+      "evidence": "If the portal is down, call the dock booking line on extension 2140 and the dock supervisor will enter the slot for you.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that bookings can be made by phone if the portal is down, contradicting the claim that all bookings go through the portal.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "PARTIAL",
+      "evidence": "A driver without a reference waits in the holding area",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state drivers without a reference wait in the holding area, but neither states they wait 'until a slot is free'.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_invented",
+      "grounded": true
+    }
+  ],
+  "review_queue": [
+    {
+      "claim_id": "A-012",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text does not state that drivers hear a recorded message when calling the old number.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    }
+  ],
+  "declarations": [
+    {
+      "segment": "a11",
+      "disposition": "subsumed",
+      "grade": "rejected",
+      "detail": "declared 'subsumed', which predicts SUPPORTED; A-009 came back MISSING, A-010 came back MISSING",
+      "claims": [
+        "A-009",
+        "A-010"
+      ],
+      "reason": "Phone line information consolidated with b10's practical booking instruction."
+    },
+    {
+      "segment": "a12",
+      "disposition": "subsumed",
+      "grade": "rejected",
+      "detail": "declared 'subsumed', which predicts SUPPORTED; A-011 came back CONTRADICTED",
+      "claims": [
+        "A-011"
+      ],
+      "reason": "Portal as primary channel reflected in the practical instruction."
+    },
+    {
+      "segment": "a13",
+      "disposition": "dropped",
+      "grade": "confirmed",
+      "detail": "declared 'dropped' and every claim from it came back MISSING",
+      "claims": [
+        "A-012"
+      ],
+      "reason": "Recorded message detail is implementation detail not essential to procedure."
+    },
+    {
+      "segment": "a9",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "A-008"
+      ],
+      "reason": "Carried unchanged; a9's content is distinct from booking window."
+    },
+    {
+      "segment": "b2",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Base document title kept per fidelity rules."
+    },
+    {
+      "segment": "b5",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-001"
+      ],
+      "reason": "a5 states the same fact; 'long' is omitted for concision."
+    },
+    {
+      "segment": "b6",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-002"
+      ],
+      "reason": "a6 includes the critical detail that the portal enforces this constraint."
+    },
+    {
+      "segment": "b9",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "a8 states the same facts; same-hour booking restriction in a9 also applies."
+    },
+    {
+      "segment": "b11",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-006"
+      ],
+      "reason": "Time window combined with b10's phone contact information in single section."
+    },
+    {
+      "segment": "b13",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-007"
+      ],
+      "reason": "'give' and 'with' are equivalent; 'with' better parallels a15's phrasing."
+    },
+    {
+      "segment": "b14",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-008"
+      ],
+      "reason": "Wait behaviour with timing detail from a17 provides complete picture."
+    },
+    {
+      "segment": "b16",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-009"
+      ],
+      "reason": "a19 states the same fact; a20's escalation policy retained in merge."
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 36,
+    "findings": [
+      {
+        "kind": "false_departure",
+        "detail": "'There is no same-hour booking.' is declared 'superseded' but the merge carries it unchanged, and no other source has it to have superseded it; the record describes a departure that did not happen",
+        "segment": "a9",
+        "document": "source_a.md"
+      },
+      {
+        "kind": "undeclared_absence",
+        "detail": "'The dock phone line is closed' is not in the merge and no disposition record explains it (nearest merge segment m9 at 0.37)",
+        "segment": "a10",
+        "document": "source_a.md"
+      },
+      {
+        "kind": "undeclared_absence",
+        "detail": "'Dock Slot Requests' is not in the merge and no disposition record explains it (nearest merge segment m5 at 0.46)",
+        "segment": "b1",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "undeclared_rewording",
+        "detail": "'Every delivery needs a dock slot.' is reworded in the merge and no disposition record explains it (nearest merge segment m3 at 0.80)",
+        "segment": "b3",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "undeclared_rewording",
+        "detail": "'Request slots through the facilities portal.' is reworded in the merge and no disposition record explains it (nearest merge segment m4 at 0.87)",
+        "segment": "b4",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "undeclared_absence",
+        "detail": "'When to request' is not in the merge and no disposition record explains it (nearest merge segment m9 at 0.27)",
+        "segment": "b7",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "undeclared_absence",
+        "detail": "'On the day' is not in the merge and no disposition record explains it (nearest merge segment m2 at 0.33)",
+        "segment": "b12",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "undeclared_absence",
+        "detail": "'Late finishes' is not in the merge and no disposition record explains it (nearest merge segment m4 at 0.33)",
+        "segment": "b15",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "title_not_superseded",
+        "detail": "source title 'Dock Slot Requests' is not the merged title and carries no record; every title not taken needs a superseded record naming what replaced it",
+        "segment": "b1",
+        "document": "source_b.md"
+      }
+    ]
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "section heading for phone contact",
+        "candidates": [
+          {
+            "text": "The dock phone line is closed",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Requesting by phone",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Requesting by phone",
+        "resolved": true,
+        "reason": "source_b's heading is more action-oriented and fits the content."
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 16,
+    "source_claims": 27,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 1,
+    "segments": 36,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aaaaaaaabbbaaaaaa",
+    "runs": 3,
+    "attributed": 17,
+    "interleaved": true,
+    "monotone": true,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 6,
+    "headings_total": 12
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-18-matrix/loading_dock-high-claude-haiku-4-5/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-18T19:58:08+00:00",
+    "claimcheck_commit": "cf3020941b41",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "f72e9feca7d4",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "claude-haiku-4-5-20251001",
+      "decompose": "claude-haiku-4-5-20251001",
+      "verify": "claude-haiku-4-5-20251001"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "anthropic",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 8,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 1,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 19067,
+      "completion_tokens": 6851
+    },
+    "tokens": {
+      "input": 19067,
+      "output": 6851,
+      "total": 25918,
+      "measured_calls": 8,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "19,067 in, 6,851 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "b41080a2d4ed96324eb2aabb4c2715dfbeb4a27d3159289a56ac27390392f0b0",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 5535,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 4689,
+        "completion_tokens": 962
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "fb4da08c9a3c509030bca3740a6280c04d3164b45fb694414c6397cf773578fc",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1303,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1289,
+        "completion_tokens": 687
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "187d17684b726019feba73b44644bc790cf174a310aca7c74c213e10e3749b0f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1189,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1214,
+        "completion_tokens": 383
+      },
+      {
+        "role": "verify",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "439c71b3ad4fe7b66817f765b8db37b8b8617678559dfa1c43e05891318ab1a3",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3049,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2650,
+        "completion_tokens": 1586
+      },
+      {
+        "role": "verify",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "b8d875ffeba26f53ea1d5e56aa2fa2de46b4ed36915540332a898d53ffd21eb3",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3517,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3040,
+        "completion_tokens": 1283
+      },
+      {
+        "role": "verify",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "d2bb2872fa772669f923a9dfa3b2ad84f828198b1d086a8483af33b474cd133f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2625,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2270,
+        "completion_tokens": 167
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "143c14cc0111fc364183e7f7376e96cfdeb4f4f3bc29ba87e3f838defacee70a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1282,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1261,
+        "completion_tokens": 679
+      },
+      {
+        "role": "verify",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "0b6f5c7620dd9a291f2ec01c91f580f8e232c6e3a0ca6c95a7a8ad44a60bd1ca",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3133,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2654,
+        "completion_tokens": 1104
+      }
+    ],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 4
+    },
+    "duration_seconds": 41.9
+  }
+}

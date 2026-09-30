@@ -1,0 +1,761 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "christianity_1.md",
+    "source_b.md": "christianity_2.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose christianity_1.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose christianity_2.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 5,
+      "source_a.md": 5,
+      "source_b.md": 5
+    },
+    "forward_submitted": 10,
+    "forward_verdicts": 10,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 5,
+        "checked": 5,
+        "accounted": 5,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 5,
+        "checked": 5,
+        "accounted": 5,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 5,
+    "reverse_verdicts": 5,
+    "reverse_partial": 0,
+    "graded": 15,
+    "grounded": 14,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.",
+      "line": 3,
+      "span": "Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Its central beliefs are monotheism, the Trinity (God as Father, Son (Jesus), and the Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "line": 5,
+      "span": "Its central beliefs are monotheism, the Trinity (God as Father, Son (Jesus), and the Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Its sacred text is the Bible, made up of the Old (Hebrew) and New (Greek) Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "line": 7,
+      "span": "Its sacred text is the Bible, made up of the Old (Hebrew) and New (Greek) Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper, prayer, and communal worship in a church.",
+      "line": 7,
+      "span": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper, prayer, and communal worship in a church.",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundres or thousands different sects) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.",
+      "line": 7,
+      "span": "Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundres or thousands different sects) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Christianity is the world's largest religion, with over 2,000,000,000 followers, and it began in the first century with Jesus of Nazareth, a Jewish rabbi who was crucified in Jerusalem around AD 30\u201333, whose followers proclaimed that he arose from the dead.",
+      "line": 3,
+      "span": "Christianity is the world's largest religion, with over 2,000,000,000 followers, and it began in the first century with Jesus of Nazareth, a Jewish rabbi who was crucified in Jerusalem around AD 30\u201333, whose followers proclaimed that he arose from the dead.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Its central beliefs are monotheism, the Trinity (God as Father, Son, and Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "line": 5,
+      "span": "Its central beliefs are monotheism, the Trinity (God as Father, Son, and Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Its sacred text is the Bible, made up of the Old and New Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "line": 7,
+      "span": "Its sacred text is the Bible, made up of the Old and New Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper with his diciples, prayer, and communal worship in a church.",
+      "line": 7,
+      "span": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper with his diciples, prayer, and communal worship in a church.",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Over the centuries the faith divided into three main branches \u2014 Catholicism, Eastern Orthodoxy (split in the East\u2013West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation) \u2014 and today it is growing fastest in Africa and Asia while declining in much of the West.",
+      "line": 7,
+      "span": "Over the centuries the faith divided into three main branches \u2014 Catholicism, Eastern Orthodoxy (split in the East\u2013West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation) \u2014 and today it is growing fastest in Africa and Asia while declining in much of the West.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.",
+      "line": 3,
+      "span": "Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Its central beliefs are monotheism, the Trinity (God as Father, Son (Jesus), and the Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "line": 5,
+      "span": "Its central beliefs are monotheism, the Trinity (God as Father, Son (Jesus), and the Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Its sacred text is the Bible, made up of the Old (Hebrew) and New (Greek) Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "line": 7,
+      "span": "Its sacred text is the Bible, made up of the Old (Hebrew) and New (Greek) Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper, prayer, and communal worship in a church.",
+      "line": 9,
+      "span": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper, prayer, and communal worship in a church.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundreds or thousands different sects) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.",
+      "line": 11,
+      "span": "Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundreds or thousands different sects) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Its central beliefs are monotheism, the Trinity (God as Father, Son (Jesus), and the Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Its sacred text is the Bible, made up of the Old (Hebrew) and New (Greek) Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper, prayer, and communal worship in a church.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundreds or thousands different sects) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states 'over two billion adherents' which is equivalent to 'over 2,000,000,000 followers'. The reference text also states 'Jewish preacher' which is equivalent to 'Jewish rabbi'. The reference text also states 'he rose from the dead' which is equivalent to 'he arose from the dead'.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Its central beliefs are monotheism, the Trinity (God as Father, Son (Jesus), and the Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Its sacred text is the Bible, made up of the Old (Hebrew) and New (Greek) Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper, prayer, and communal worship in a church.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Christianity is the world's largest religion, with over two billion adherents, and it began in the first century with Jesus of Nazareth, a Jewish preacher crucified in Jerusalem around AD 30-33, whose followers proclaimed that he rose from the dead.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Its central beliefs are monotheism, the Trinity (God as Father, Son, and Holy Spirit), the incarnation and divinity of Jesus, and salvation by God's grace through faith in Christ's death and resurrection.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is directly stated in source_b.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Its sacred text is the Bible, made up of the Old and New Testaments, which Christians regard as the inspired and authoritative Word of God.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is directly stated in source_b.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Core practices include baptism as a rite of initiation, the Eucharist (communion) commemorating Jesus' last supper with his diciples, prayer, and communal worship in a church.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is directly stated in source_b.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Over the centuries the faith divided into three main branches \u2014 Catholicism, Eastern Orthodoxy (split in the East\u2013West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation) \u2014 and today it is growing fastest in Africa and Asia while declining in much of the West.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is directly stated in source_b.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "a3",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-002"
+      ],
+      "reason": "Date and time combined into one opening"
+    },
+    {
+      "segment": "b3",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-002"
+      ],
+      "reason": "Date and time combined into one opening"
+    },
+    {
+      "segment": "a4",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-003"
+      ],
+      "reason": "Misspelling corrected"
+    },
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "rejected",
+      "detail": "no claim is drawn from a title, and the title check rejected this one: it is not the merged title and its 'superseded' record does not name the title that replaced it",
+      "claims": [],
+      "reason": "Base title was kept"
+    },
+    {
+      "segment": "b4",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-003"
+      ],
+      "reason": "Same fact stated in a4"
+    },
+    {
+      "segment": "b5",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-004"
+      ],
+      "reason": "Same closing stated in a5"
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 12,
+    "findings": [
+      {
+        "kind": "undeclared_rewording",
+        "detail": "'Over the centuries the faith divided into three main branches - Catholicism, Eastern Orthodoxy (split in the East-West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation and itself split into hundres or thousands different sects) - and today it is growing fastest in Africa and Asia while declining in much of the Western world.' is reworded in the merge and no disposition record explains it (nearest merge segment m6 at 1.00)",
+        "segment": "a6",
+        "document": "source_a.md"
+      },
+      {
+        "kind": "undeclared_rewording",
+        "detail": "\"Christianity is the world's largest religion, with over 2,000,000,000 followers, and it began in the first century with Jesus of Nazareth, a Jewish rabbi who was crucified in Jerusalem around AD 30\u201333, whose followers proclaimed that he arose from the dead.\" is reworded in the merge and no disposition record explains it (nearest merge segment m2 at 0.83)",
+        "segment": "b2",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "undeclared_rewording",
+        "detail": "'Over the centuries the faith divided into three main branches \u2014 Catholicism, Eastern Orthodoxy (split in the East\u2013West Schism of 1054), and Protestantism (emerging from the 16th-century Reformation) \u2014 and today it is growing fastest in Africa and Asia while declining in much of the West.' is reworded in the merge and no disposition record explains it (nearest merge segment m6 at 0.88)",
+        "segment": "b6",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "unresolved_replacement",
+        "detail": "segment a3 is declared 'reconciled' with replacement 'The Marlbrook funicular climbs 412 metres and opens on 7 April, with the first cars running at 09:00.', which is not in the merged document",
+        "segment": "a3",
+        "document": ""
+      },
+      {
+        "kind": "unresolved_replacement",
+        "detail": "segment b3 is declared 'reconciled' with replacement 'The Marlbrook funicular climbs 412 metres and opens on 7 April, with the first cars running at 09:00.', which is not in the merged document",
+        "segment": "b3",
+        "document": ""
+      },
+      {
+        "kind": "unresolved_replacement",
+        "detail": "segment a4 is declared 'reworded' with replacement 'There is a ticket office at the lower station.', which is not in the merged document",
+        "segment": "a4",
+        "document": ""
+      },
+      {
+        "kind": "unresolved_replacement",
+        "detail": "segment b1 is declared 'superseded' with replacement 'Marlbrook Funicular', which is not in the merged document",
+        "segment": "b1",
+        "document": ""
+      },
+      {
+        "kind": "unresolved_replacement",
+        "detail": "segment b4 is declared 'superseded' with replacement 'There is a ticket office at the lower station.', which is not in the merged document",
+        "segment": "b4",
+        "document": ""
+      },
+      {
+        "kind": "unresolved_replacement",
+        "detail": "segment b5 is declared 'superseded' with replacement 'Best wishes, the Marlbrook staff', which is not in the merged document",
+        "segment": "b5",
+        "document": ""
+      },
+      {
+        "kind": "verbatim_violation",
+        "detail": "numeric '2,000,000,000' (followers) does not survive into the merge unchanged",
+        "segment": "b2",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "title_not_superseded",
+        "detail": "source title 'Important facts about Christianity' is not the merged title and carries a superseded record replacing it with 'Marlbrook Funicular'; every title not taken needs a superseded record naming what replaced it",
+        "segment": "b1",
+        "document": "source_b.md"
+      }
+    ]
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "document": "source_a.md",
+            "text": "A Short Guide to Christianity"
+          },
+          {
+            "document": "source_b.md",
+            "text": "Important facts about Christianity"
+          }
+        ],
+        "chosen": "A Short Guide to Christianity",
+        "resolved": true,
+        "reason": "It is the base document's title"
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": [
+      {
+        "kind": "prompt_example_leak",
+        "detail": "the reason given for title is \"it is the base document's title\", which is `merge.md`'s worked example word for word; the record argues the illustration's case rather than this merge's",
+        "segment": "title",
+        "document": ""
+      }
+    ]
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 5,
+    "source_claims": 10,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 12,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aaaaaa",
+    "runs": 1,
+    "attributed": 6,
+    "interleaved": false,
+    "monotone": true,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 1,
+    "headings_total": 2
+  },
+  "merged_written_to": "/tmp/cc-phase4-run/work-toby-test-4-high-8b/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-16T23:04:08+00:00",
+    "claimcheck_commit": "605b53189df8",
+    "run_mode": "live",
+    "merge_policy": {
+      "fidelity": "high",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "qwen/qwen3-8b",
+      "decompose": "qwen/qwen3-8b",
+      "verify": "qwen/qwen3-8b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": []
+    },
+    "counts": {
+      "calls": 7,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 1,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 15615,
+      "completion_tokens": 5627
+    },
+    "tokens": {
+      "input": 15615,
+      "output": 5627,
+      "total": 21242,
+      "measured_calls": 7,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "15,615 in, 5,627 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "ead87230235cc380755401fafab00c94a2de6e48444bf29f250ba902d4ce124a",
+        "max_tokens": 13824,
+        "estimated_prompt_tokens": 5631,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3858,
+        "completion_tokens": 1380
+      },
+      {
+        "role": "merge",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "2dc1a8fcae73b673903066ab09385a7b45de2343bb5dc4c81c6ecd5c4bbb9536",
+        "max_tokens": 13824,
+        "estimated_prompt_tokens": 6426,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 4382,
+        "completion_tokens": 709
+      },
+      {
+        "role": "decompose",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "d4871a9d0007e90f13e4ea0f0414d6449cdeea0fdfb16a2b2e008bc7569b791a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1298,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 915,
+        "completion_tokens": 639
+      },
+      {
+        "role": "decompose",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "ee587bf4acbdec54ad112089d25a6c1819be83e3568097c563f60b473d2741f5",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1277,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 913,
+        "completion_tokens": 625
+      },
+      {
+        "role": "verify",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "fbfb87d325bf13e3b77dac698a4b4bbce47cb2f80cd1a40eadfec2c491c8350a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3376,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2367,
+        "completion_tokens": 1143
+      },
+      {
+        "role": "decompose",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "de16f78ccc0dc0a14e2dadf3185f5399a9e14a48f96fb4527645cfb365eb1e17",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1308,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 934,
+        "completion_tokens": 628
+      },
+      {
+        "role": "verify",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "ec2df092a98b93d21e0149286e0be49aebd64d0d9a0cbb1baf70bd53c8ab5e92",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3330,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2246,
+        "completion_tokens": 503
+      }
+    ],
+    "window": {
+      "decompose": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 2,
+      "verify": 2
+    },
+    "duration_seconds": 153.6
+  }
+}

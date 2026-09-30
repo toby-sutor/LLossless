@@ -1,0 +1,13 @@
+LLossless merge  sonnet at Claude Code - Sonnet, window 200,000 (stated), retrieval WebSearch, WebFetch
+llossless: cache off; response dumps for this run go to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/runs/B-sonnet-voyager-d1/a2/tmp/llossless-run-yp7hvpmm
+
+Could not complete. Part of this run did not finish, so the report does not establish that the claims it did check are all there were.
+  Nothing was retrieved. None of 6 call(s) took the turns a retrieval costs, so every source the merge names is a recollection
+  verify (forward) did not finish: verify: sonnet gave every field this response needs, valid, and in the wrong order -- response does not match the schema: $.verdicts[0] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[1] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[2] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[3] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[4] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order. It was not asked again. Field order is a property of how a model serializes JSON, so a second attempt spends another full generation and returns the same order; and the prompt tier did not constrain it either, because declaring an order in a schema does not make an endpoint enforce one. Re-run with --field-order any to accept a complete, valid answer whose keys arrived in another order, or use a model that emits them in the order the schema declares.
+  raw response written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/runs/B-sonnet-voyager-d1/a2/tmp/llossless-run-yp7hvpmm/failures/20260926T161440Z-verify-0001-attempt1.txt
+  1 contradicted: the merge states something different (see `## Findings`)
+  4 partly invented: the sources carry some of this claim (see `## Findings`)
+  4 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/runs/B-sonnet-voyager-d1/a2/merged.md
+  the full report went to stdout; exit code 2

@@ -1,0 +1,746 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "merged.md",
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 5,
+      "source_a.md": 3,
+      "source_b.md": 3
+    },
+    "forward_submitted": 6,
+    "forward_verdicts": 6,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 5,
+    "reverse_verdicts": 5,
+    "reverse_partial": 0,
+    "graded": 11,
+    "grounded": 11,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 4,
+      "span": "The read timeout is 30 seconds",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The minimum TLS version is 1.2.",
+      "line": 4,
+      "span": "The minimum TLS version is 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The maximum concurrent connections is 512.",
+      "line": 5,
+      "span": "The maximum concurrent connections is 512.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 4,
+      "span": "The read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The minimum TLS version is 1.2.",
+      "line": 6,
+      "span": "the minimum TLS version is 1.2",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The maximum concurrent connections is 512.",
+      "line": 7,
+      "span": "The maximum concurrent connections is 512.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "According to the Operator Guide, the minimum TLS version is 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states this claim via attribution to the Operator Guide.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The maximum concurrent connections is 512.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "source_a.md",
+      "rationale": "source_a.md states this claim directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "source_a.md states this claim directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "source_a.md",
+      "rationale": "source_a.md states this claim directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum TLS version is 1.2.",
+      "evidence_source": "source_b.md",
+      "rationale": "source_b.md states this claim directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The maximum concurrent connections is 512.",
+      "evidence_source": "source_b.md",
+      "rationale": "source_b.md states this claim directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "web_search": 0,
+    "web_fetch": 0,
+    "state": "not-searched",
+    "measured_calls": 5,
+    "unmeasured_calls": 0,
+    "tool_use": {
+      "state": "no-tool-use",
+      "retrieval": "not-retrieved",
+      "turns": 5,
+      "calls_with_tool_use": 0,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "retrieval_judged_on": "all",
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": "",
+    "inconclusive_not_sourced": false
+  },
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "decisions": {
+    "ran": false,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": []
+  },
+  "title": {
+    "policy": "",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": true,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": [
+      {
+        "kind": "misattributed",
+        "detail": "the merge credits 'the minimum TLS version is 1.2' to the Operator Guide (source_a.md), which does not state it; source_b.md does",
+        "segment": "m5",
+        "document": "source_a.md",
+        "source_text": "The minimum TLS version is 1.2.",
+        "merge_text": "According to the Operator Guide, the minimum TLS version is 1.2.",
+        "difference": ""
+      }
+    ]
+  },
+  "number_format": {
+    "ran": true,
+    "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+    "faults": [
+      "reading_changed"
+    ],
+    "findings": [],
+    "documents": [
+      {
+        "document": "source_a.md",
+        "convention": "decimal point",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 6,
+          "de": 0
+        }
+      },
+      {
+        "document": "source_b.md",
+        "convention": "decimal point",
+        "decided_by": "votes",
+        "votes": {
+          "decimal_point": [
+            "1.2"
+          ],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 6,
+          "de": 0
+        }
+      },
+      {
+        "document": "merged.md",
+        "convention": "decimal point",
+        "decided_by": "votes",
+        "votes": {
+          "decimal_point": [
+            "1.2"
+          ],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 12,
+          "de": 0
+        }
+      }
+    ]
+  },
+  "restated_claims": {
+    "ran": false,
+    "claims": 5,
+    "source_claims": 6,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.03,
+    "ratio": null,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-27T20:07:31+00:00",
+    "claimcheck_commit": "73b61563c13c",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "45fff742d0ed",
+      "location": "command",
+      "content_left_this_machine": true,
+      "route": "lineup haiku-4.5-sub"
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "claude-haiku-4-5-20251001",
+      "verify": "claude-haiku-4-5-20251001"
+    },
+    "models_answered": {
+      "decompose": {
+        "models": [
+          "claude-haiku-4-5-20251001"
+        ],
+        "output": "claude-haiku-4-5-20251001"
+      },
+      "verify": {
+        "models": [
+          "claude-haiku-4-5-20251001"
+        ],
+        "output": "claude-haiku-4-5-20251001"
+      }
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify.md": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify_reverse.md": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "subscription",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ],
+      "effort_single_level": {
+        "decompose": "one level (extended thinking on/off; default kept)",
+        "verify": "one level (extended thinking on/off; default kept)"
+      }
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0
+    },
+    "tokens": {
+      "measured_calls": 0,
+      "unmeasured_calls": 5
+    },
+    "tokens_described": "unknown (5 call(s) reported no usage)",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "e2ea239f2d0c6289cbcb301dcc1cebf5839c2cde1906633be3a9ac7f531f67bf",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 949,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 5835,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 5835,
+        "failed_ms": 0,
+        "cli_duration_ms": 3865,
+        "cli_duration_api_ms": 3798,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "572b153506983a9c489833d4a5349aae007d87ffb3af750d939d0d2dad76348c",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 953,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 6444,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 6444,
+        "failed_ms": 0,
+        "cli_duration_ms": 4177,
+        "cli_duration_api_ms": 4114,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+        "request_sha256": "9049cce6feb2987e9edf7121a9c75d43cf56946bfc2609186900ad0d71d095f6",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2329,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 17545,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 17545,
+        "failed_ms": 0,
+        "cli_duration_ms": 15985,
+        "cli_duration_api_ms": 15887,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "de727f9e0e095cc32385acd45101a7dad23021f5d4657440bb409d4ef5ab3325",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 990,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 7639,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 7639,
+        "failed_ms": 0,
+        "cli_duration_ms": 6182,
+        "cli_duration_api_ms": 6122,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d",
+        "request_sha256": "5ad6c0e2963e2a14dffe891d304240ee5b7eaa83469c08563b1ab75fcb92079f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2350,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 9514,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 9514,
+        "failed_ms": 0,
+        "cli_duration_ms": 5453,
+        "cli_duration_api_ms": 5393,
+        "outcome": "answer"
+      }
+    ],
+    "cost": {
+      "state": "unmeasured",
+      "usd": null,
+      "usd_exact": null,
+      "priced_calls": 0,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 5
+    },
+    "answering_seconds": {
+      "total": 46.977,
+      "by_role": {
+        "decompose": 19.918,
+        "verify": 27.059
+      },
+      "cli": {
+        "duration": {
+          "total": 35.662,
+          "by_role": {
+            "decompose": 14.224,
+            "verify": 21.438
+          }
+        },
+        "duration_api": {
+          "total": 35.314,
+          "by_role": {
+            "decompose": 14.034,
+            "verify": 21.28
+          }
+        }
+      }
+    },
+    "answering_cost": {
+      "state": "unmeasured",
+      "usd": null,
+      "usd_exact": null,
+      "priced_calls": 0,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 5
+    },
+    "excluded": {
+      "calls": {
+        "retries": 0
+      },
+      "seconds": {
+        "waited": 0.0,
+        "failed": 0.0,
+        "discarded": 0.0,
+        "total": 0.0
+      },
+      "cost": {
+        "state": "none",
+        "usd": null,
+        "usd_exact": null,
+        "priced_calls": 0,
+        "unpriced_calls": 0,
+        "unmeasured_calls": 0
+      }
+    },
+    "discarded_calls": [],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "verify": 2
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "no-tool-use",
+        "retrieval": "not-retrieved",
+        "turns": 5,
+        "calls_with_tool_use": 0,
+        "measured_calls": 5,
+        "unmeasured_calls": 0
+      },
+      "described": "no tool use (5 call(s), 5 turn(s) in total)"
+    },
+    "isolation": {
+      "decompose": {
+        "safe_mode": true,
+        "tools": [],
+        "env_dropped": [],
+        "timeout": 1800.0
+      },
+      "verify": {
+        "safe_mode": true,
+        "tools": [],
+        "env_dropped": [],
+        "timeout": 1800.0
+      }
+    },
+    "duration_seconds": 47.0
+  }
+}

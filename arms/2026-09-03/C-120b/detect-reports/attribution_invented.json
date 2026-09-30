@@ -1,0 +1,447 @@
+{
+  "command": "verify",
+  "exit_code": 0,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_invented/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_invented/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_invented/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_invented/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_invented/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_invented/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 5,
+      "source_a.md": 3,
+      "source_b.md": 3
+    },
+    "forward_submitted": 6,
+    "forward_verdicts": 6,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 5,
+    "reverse_verdicts": 5,
+    "reverse_partial": 0,
+    "graded": 11,
+    "grounded": 11,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 4,
+      "span": "The read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The minimum TLS version is 1.2.",
+      "line": 4,
+      "span": "The minimum TLS version is 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The maximum concurrent connections is 512.",
+      "line": 5,
+      "span": "The maximum concurrent connections is 512.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 4,
+      "span": "The read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "the minimum TLS version is 1.2.",
+      "line": 6,
+      "span": "the minimum TLS version is 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The maximum concurrent connections is 512.",
+      "line": 7,
+      "span": "The maximum concurrent connections is 512.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "According to the Operator Guide, the minimum TLS version is 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text attributes the minimum TLS version as 1.2.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The maximum concurrent connections is 512.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "source_a.md",
+      "rationale": "The exact sentence is present in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "The sentence matches verbatim the statement in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is identical to the line in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum TLS version is 1.2.",
+      "evidence_source": "source_b.md",
+      "rationale": "Despite capitalization difference, the wording and meaning are the same as in source_b.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The maximum concurrent connections is 512.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim exactly matches the sentence found in source_b.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T12:13:21+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "gpt-oss:120b",
+      "verify": "gpt-oss:120b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 7830,
+      "completion_tokens": 1193
+    },
+    "tokens": {
+      "input": 7830,
+      "output": 1193,
+      "total": 9023,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "7,830 in, 1,193 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "c0729962c3ce6ac2595695765e9175986150b3d61d158e013ede89c3a83aa26c",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1040,
+        "completion_tokens": 125
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "810c872d8d91356e7988db30c005c2c0d9fc8bc0ce0c987d8a3af26588b0e58b",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1064,
+        "completion_tokens": 127
+      },
+      {
+        "role": "verify",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "06b364877a8eafb62e11bf8a7d3b7bc2ae3b85c202c5003f14a111bce88b47ed",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1931,
+        "completion_tokens": 394
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "1a55aba85828df2f59346f4173690b4d9752710ee532a1a31f7c94071941a976",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1748,
+        "completion_tokens": 203
+      },
+      {
+        "role": "verify",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "a859bb723cec8d4ed38f5b78ebea6beae6c89647d7cff25c6f4a12102afd3966",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2047,
+        "completion_tokens": 344
+      }
+    ],
+    "window": {},
+    "duration_seconds": 79.2
+  }
+}

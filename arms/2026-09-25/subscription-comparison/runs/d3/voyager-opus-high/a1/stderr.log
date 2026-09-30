@@ -1,0 +1,44 @@
+claimcheck merge  opus at Claude Code - Opus, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking opus
+✓ merge: opus (claude-opus-5) answered at the prompt tier  220.5s
+✓ merge  220.5s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  11.5s
+✓ decompose source_a.md  11.5s
+• decompose source_b.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  17.2s
+✓ decompose source_b.md  17.2s
+• verify (forward)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  34.7s
+claimcheck: cache off; response dumps for this run go to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-opus-high/a1/tmp/claimcheck-run-y3w1dt1j
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  30.4s
+✓ verify (forward)  65.0s
+• decompose merged.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  22.2s
+✓ decompose merged.md  22.2s
+• verify (reverse)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  27.2s
+✓ verify (reverse)  27.2s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-opus-high/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  The model retrieved. 1 of 7 call(s) took the turns a retrieval costs; which citation each retrieval backs is not recorded
+  1 dropped: in a source, not in the merge (see `## Findings`)
+  47 contradicted: the merge states something different (see `## Findings`)
+  13 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  1 prompt example returned: the merge carries a word from `merge.md`'s worked example and from neither source (see `## Structure`)
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-opus-high/a1/merged.md
+  the full report went to stdout; exit code 1

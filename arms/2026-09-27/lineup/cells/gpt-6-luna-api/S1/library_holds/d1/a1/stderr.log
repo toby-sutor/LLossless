@@ -1,0 +1,40 @@
+LLossless merge  gpt-6-luna at https://api.openai.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking gpt-6-luna
+✓ merge: gpt-6-luna answered at the prompt tier  53.1s
+✓ merge  53.2s
+• reconcile
+✓ reconcile  0.1s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking gpt-6-luna
+✓ decompose: gpt-6-luna answered at the prompt tier  11.8s
+✓ decompose source_a.md  11.8s
+• decompose source_b.md
+• decompose: asking gpt-6-luna
+✓ decompose: gpt-6-luna answered at the prompt tier  12.0s
+✓ decompose source_b.md  12.0s
+• verify (forward)
+• verify: asking gpt-6-luna
+✓ verify: gpt-6-luna answered at the prompt tier  16.4s
+• verify: asking gpt-6-luna
+✓ verify: gpt-6-luna answered at the prompt tier  2.3s
+✓ verify (forward)  18.7s
+• decompose merged.md
+• decompose: asking gpt-6-luna
+✓ decompose: gpt-6-luna answered at the prompt tier  7.6s
+✓ decompose merged.md  7.6s
+• verify (reverse)
+• verify: asking gpt-6-luna
+✓ verify: gpt-6-luna answered at the prompt tier  21.3s
+✓ verify (reverse)  21.3s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  6 partly dropped: the merge carries some of this claim (see `## Findings`)
+  1 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

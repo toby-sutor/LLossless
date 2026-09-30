@@ -1,0 +1,724 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dropped_claim/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dropped_claim/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dropped_claim/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dropped_claim/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dropped_claim/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dropped_claim/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 10,
+      "source_a.md": 6,
+      "source_b.md": 7
+    },
+    "forward_submitted": 13,
+    "forward_verdicts": 13,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 6,
+        "checked": 6,
+        "accounted": 6,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 7,
+        "checked": 7,
+        "accounted": 6,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 10,
+    "reverse_verdicts": 10,
+    "reverse_partial": 0,
+    "graded": 22,
+    "grounded": 22,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 8,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The default read timeout is 120 seconds.",
+      "line": 9,
+      "span": "The default read timeout is 120 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The relay accepts at most 512 concurrent connections.",
+      "line": 13,
+      "span": "The relay accepts at most 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 14,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "The minimum accepted TLS version is TLS 1.2.",
+      "line": 18,
+      "span": "The minimum accepted TLS version is TLS 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The relay accepts at most 512 concurrent connections.",
+      "line": 8,
+      "span": "The relay accepts at most 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "One worker process is started per CPU core.",
+      "line": 9,
+      "span": "One worker process is started per CPU core.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Access logs are written in JSON Lines format.",
+      "line": 13,
+      "span": "Access logs are written in JSON Lines format.",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Log files are rotated when they reach 100 megabytes.",
+      "line": 14,
+      "span": "Log files are rotated when they reach 100 megabytes.",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "The health check endpoint is /-/healthy.",
+      "line": 18,
+      "span": "The health check endpoint is /-/healthy.",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "line": 19,
+      "span": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 8,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The default read timeout is 120 seconds.",
+      "line": 9,
+      "span": "The default read timeout is 120 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The relay accepts at most 512 concurrent connections.",
+      "line": 13,
+      "span": "The relay accepts at most 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 14,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "One worker process is started per CPU core.",
+      "line": 15,
+      "span": "One worker process is started per CPU core.",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "The minimum accepted TLS version is TLS 1.2.",
+      "line": 19,
+      "span": "The minimum accepted TLS version is TLS 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "Log files are rotated when they reach 100 megabytes.",
+      "line": 23,
+      "span": "Log files are rotated when they reach 100 megabytes.",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "The health check endpoint is /-/healthy.",
+      "line": 24,
+      "span": "The health check endpoint is /-/healthy.",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "line": 25,
+      "span": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443 by default.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the default connect timeout is 30 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The default read timeout is 120 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the default read timeout is 120 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay accepts at most 512 concurrent connections.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that each request is retried at most 3 times.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum accepted TLS version is TLS 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the minimum accepted TLS version is TLS 1.2.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443 by default.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay accepts at most 512 concurrent connections.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "One worker process is started per CPU core.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that one worker process is started per CPU core.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text does not mention the format of access logs.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Log files are rotated when they reach 100 megabytes.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that log files are rotated when they reach 100 megabytes.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check endpoint is /-/healthy.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the health check endpoint is /-/healthy.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that a relay that fails 3 consecutive health checks is removed from rotation.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source_a.md and source_b.md state that the relay listens on port 8443 by default, so the claim is supported by at least one source document. The evidence is copied verbatim from source_a.md, which is one of the sources that state this claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_a.md, which clearly states the claim. The claim is present in a",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is supported by source_a.md, which states the default connect timeout is 30 seconds. The evidence is copied verbatim from source_a.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_a.md, which clearly states the claim. The claim is present in a single source document, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The default read timeout is 120 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is supported by source_a.md, which states the default read timeout is 120 seconds. The evidence is copied verbatim from source_a.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_a.md, which clearly states the claim. The claim is present in a single source document, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is supported by both source_a.md and source_b.md, which both state that the relay accepts at most 512 concurrent connections. The evidence is copied verbatim from source_a.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_a.md, which clearly states the claim. The claim is present in both source documents, so it",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is supported by source_a.md, which states that each request is retried at most 3 times. The evidence is copied verbatim from source_a.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_a.md, which clearly states the claim. The claim is present in a single source document, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "One worker process is started per CPU core.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is supported by source_b.md, which states that one worker process is started per CPU core. The evidence is copied verbatim from source_b.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_b.md, which clearly states the claim. The claim is present in a single source document, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum accepted TLS version is TLS 1.2.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is supported by source_a.md, which states that the minimum accepted TLS version is TLS 1.2. The evidence is copied verbatim from source_a.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_a.md, which clearly states the claim. The claim is present in a single source document, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Log files are rotated when they reach 100 megabytes.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is supported by source_b.md, which states that log files are rotated when they reach 100 megabytes. The evidence is copied verbatim from source_b.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_b.md, which clearly states the claim. The claim is present in a single source document, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check endpoint is /-/healthy.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is supported by source_b.md, which states that the health check endpoint is /-/healthy. The evidence is copied verbatim from source_b.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_b.md, which clearly states the claim. The claim is present in a single source document, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is supported by source_b.md, which states that a relay that fails 3 consecutive health checks is removed from rotation. The evidence is copied verbatim from source_b.md, which clearly states the claim. The wording matches exactly, so the claim is SUPPORTED. The evidence is taken from source_b.md, which clearly states the claim. The claim is present in a single source document, so it is",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "B-004",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference text does not mention the format of access logs.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    }
+  ],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T11:48:28+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "deepseek-r1:70b",
+      "verify": "deepseek-r1:70b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 1,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 7411,
+      "completion_tokens": 7586
+    },
+    "tokens": {
+      "input": 7411,
+      "output": 7586,
+      "total": 14997,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "7,411 in, 7,586 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "9bb5f051ef67dfea9c635d75d7e33db4814b5ac15583a9f6b290fe266199d702",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 760,
+        "completion_tokens": 581
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "8c389e8f1fee2b89719a2f788a6b48afc4b41f514899a551a2ac0bc8f0c3807a",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 774,
+        "completion_tokens": 631
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "c9600f4ffbc32320a59e0b2874e18b89cf0b1b200b2b7f4ea336bd52d921f8cd",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1615,
+        "completion_tokens": 2335
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "465bc5b746a2e169f7e45274ac0abe6dde974c4341a46c19d043468973e9804b",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1888,
+        "completion_tokens": 1307
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "fefcc2a10ba843ddb06d83de3bf710eaf3447e9a664eeccfd5a37a43a36d337d",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 825,
+        "completion_tokens": 830
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "f0d6ec06ef4b22b368d38945d60ac9723c40fae70070c97a1f7d322f35241bc7",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1549,
+        "completion_tokens": 1902
+      }
+    ],
+    "window": {},
+    "duration_seconds": 395.6
+  }
+}

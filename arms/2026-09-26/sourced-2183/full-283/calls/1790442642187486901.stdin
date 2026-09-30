@@ -1,0 +1,110 @@
+Extract every independently checkable factual assertion from the document below.
+
+The document is shown one line per line, each prefixed with its line number and
+a pipe. The prefix is not part of the text.
+
+Rules:
+- One assertion per claim. Split compound sentences.
+- A single line may contain several sentences, and may therefore yield several
+  claims. Do not treat one line as one claim.
+- Each claim must stand alone without needing surrounding context.
+- Resolve pronouns and references to explicit nouns.
+- Copy values, names, numbers, units and time formats exactly as written. Do not
+  normalise, round, expand or abbreviate them. "approximately 500" stays
+  "approximately 500"; "07:15 till 19:45" stays "07:15 till 19:45".
+- Skip headings, formatting, boilerplate and statements of opinion.
+- Skip statements about the documents themselves or about how they were
+  combined, such as a note that two sources disagree. Attributed content is not
+  such a statement: "the guide states that the timeout is 30 seconds" is a
+  claim about the timeout, and must be extracted.
+- Do not infer, summarise, or combine information.
+- line: the number shown against the line the claim comes from. If the claim
+  spans several lines, give the first.
+- span: the specific sentence the claim comes from, copied exactly, without the
+  number prefix. If one line contains several sentences, each claim takes only
+  its own sentence as span, never the whole line. The span must appear in the
+  document character for character, including any spelling, grammatical or
+  formatting errors and any unusual capitalisation. Do not correct anything.
+
+Worked example - one line, two claims.
+
+  12| The kiln fired for eleven hours and the glaze cracked in three places.
+
+This line yields two claims:
+
+  claim: "The kiln fired for eleven hours."
+  line: 12
+  span: "The kiln fired for eleven hours"
+
+  claim: "The glaze cracked in three places."
+  line: 12
+  span: "the glaze cracked in three places"
+
+Both claims carry line 12. Neither span is the whole line.
+
+Worked example - fact and opinion in one sentence.
+
+  7| The garden was breathtaking, with eleven rose beds along the south wall.
+
+"The garden was breathtaking" is an evaluation and is skipped. "The garden has
+eleven rose beds along the south wall." is checkable and is extracted, with
+span "with eleven rose beds along the south wall".
+
+Descriptive prose is not automatically opinion. A stated quantity, position,
+duration, time, name, sequence or event is a fact even in a narrative passage,
+and must be extracted. Only judgements of quality, beauty, value or feeling are
+opinion.
+
+Return JSON matching the provided schema. Nothing else.
+
+DOCUMENT:
+ 1 | # Voyager 2 at Uranus
+ 2 | 
+ 3 | Although Voyager 2 had fulfilled its primary mission goals with the three planetary encounters, mission planners directed the veteran spacecraft to Uranus—a journey that would take about 4,5 years. In fact, its encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible. The Uranus encounter’s geometry was also defined by the possibility of a future encounter with Saturn: Voyager 2 had only 6.4 days of close study during its flyby.
+ 4 | 
+ 5 | The first human-made object to fly past Uranus, Voyager 2's short-range observations of the planet began Jan. 31, 1987, when signals took approximately 2,5 hours to reach Earth. Light conditions were five-hundred times less than terrestrial conditions. Closest approach to Uranus took place at 17:59 ED Jan. 24, 1968, at a range of about 50,640 kilometers (81,500 miles).
+ 6 | 
+ 7 | During its flyby, Voyager 2 discovered 11 new moons (given such names as Pucka, Portila, Juliette, Kressida, Rosalinde, Belinda, Desdemona, Cordelina, Ophelia, and Bianca II – obvious allusions to Goethe, continuing a naming tradition begun in 1687), three new rings in addition to the “older” eight rings, and a magnetic field tilted at 66 degrees off-axis and off-center.
+ 8 | 
+ 9 | The spacecraft found wind speeds in Uranus’ atmosphere as high as 450 km/h (72400 meters per hour) and found evidence of a boiling lake of water some 479 miles (900 kilometers) below the top cloud surface. Its rings were found to be extremely variable in thickness and transparency.
+10 | 
+11 | Voyager 2 also returned spectacular photos of Miranda, Oberon, Ariele, Umbrella, and Titan, five of Uranus’ smaller moons. In flying by Miranda at a range of only 17.560 miles (28.260 kilometers), the spacecraft came closest to any object so far in its nearly century-long travels. Images of the moon showed a strange object whose surface was a mishmash of peculiar features that seemed to have no rhyme or reason. Uranus itself appeared generally featureless.
+12 | 
+13 | The spectacular news of the Uranus encounter was interrupted the same day by the tragic Challenger accident that killed six astronauts during their space shuttle launch Feb. 28, 1986.
+
+
+SCHEMA:
+{
+  "type": "object",
+  "properties": {
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          },
+          "span": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "line",
+          "span"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "claims"
+  ],
+  "additionalProperties": false
+}
+
+Return one JSON object matching this schema. No prose, no markdown.

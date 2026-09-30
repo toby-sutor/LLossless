@@ -1,0 +1,46 @@
+LLossless merge  claude-haiku-4-5-20251001 at lineup haiku-4.5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  201.5s
+✓ merge  201.5s
+• reconcile
+✓ reconcile  2.9s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  132.7s
+✓ decompose source_a.md  132.7s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  158.3s
+✓ decompose source_b.md  158.3s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  150.2s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  190.8s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  7.9s
+✓ verify (forward)  348.9s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  150.3s
+✓ decompose merged.md  150.3s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  130.4s
+✓ verify (reverse)  130.5s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  14 dropped: in a source, not in the merge (see `## Findings`)
+  1 partly dropped: the merge carries some of this claim (see `## Findings`)
+  2 absent and undeclared: in a source, not in the merge, and no record explains it (see `## Structure`)
+  3 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  2 declared gone, still here: a record says the content departed and the merge carries the segment unchanged (see `## Structure`)
+  1 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

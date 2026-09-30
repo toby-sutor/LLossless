@@ -1,0 +1,1716 @@
+{
+  "command": "merge",
+  "exit_code": 3,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "title",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 17,
+      "source_a.md": 18,
+      "source_b.md": 10
+    },
+    "forward_submitted": 28,
+    "forward_verdicts": 28,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 18,
+        "checked": 18,
+        "accounted": 18,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 10,
+        "checked": 10,
+        "accounted": 10,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 17,
+    "reverse_verdicts": 17,
+    "reverse_partial": 0,
+    "graded": 45,
+    "grounded": 45,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Each freezer alarms when the internal temperature rises above its set point for more than 10 minutes.",
+      "line": 5,
+      "span": "Each freezer alarms when the internal temperature rises above its set point for more than 10 minutes",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The alarm sounds locally.",
+      "line": 6,
+      "span": "The alarm sounds locally",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The alarm sends a message to the night phone.",
+      "line": 6,
+      "span": "sends a message to the night phone",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The first response is to go to the freezer.",
+      "line": 11,
+      "span": "Go to the freezer",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "The first response is to read the display.",
+      "line": 11,
+      "span": "read the display",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "The reading and the time should be written in the freezer log before touching anything else.",
+      "line": 11,
+      "span": "Write the reading and the time in the freezer log before touching anything else",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "The reading at the moment of arrival is the one the lab needs.",
+      "line": 12,
+      "span": "The reading at the moment of arrival is the one the lab needs",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "The reading at the moment of arrival cannot be recovered later.",
+      "line": 13,
+      "span": "it cannot be recovered later",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "The response to an ajar freezer door is to close the door.",
+      "line": 17,
+      "span": "Close the door",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "The response to an ajar freezer door is to wait 20 minutes.",
+      "line": 17,
+      "span": "wait 20 minutes",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "If the temperature falls back below the set point, it is logged as a door event.",
+      "line": 17,
+      "span": "If the temperature falls back below the set point, log it as a door event",
+      "anchored": true
+    },
+    {
+      "id": "A-012",
+      "source": "source_a.md",
+      "text": "If the temperature falls back below the set point, no further action is needed.",
+      "line": 18,
+      "span": "no further action is needed",
+      "anchored": true
+    },
+    {
+      "id": "A-013",
+      "source": "source_a.md",
+      "text": "The on-call technician should be called if the temperature keeps rising.",
+      "line": 22,
+      "span": "Call the on-call technician",
+      "anchored": true
+    },
+    {
+      "id": "A-014",
+      "source": "source_a.md",
+      "text": "The door should not be opened while waiting for the on-call technician.",
+      "line": 22,
+      "span": "While waiting, do not open the door",
+      "anchored": true
+    },
+    {
+      "id": "A-015",
+      "source": "source_a.md",
+      "text": "Opening a door on a failing freezer to check the contents is the most common cause of loss in this building.",
+      "line": 22,
+      "span": "Opening a door on a failing freezer to check the contents is the most common cause of loss in this building",
+      "anchored": true
+    },
+    {
+      "id": "A-016",
+      "source": "source_a.md",
+      "text": "Contents are moved only on the technician's instruction.",
+      "line": 28,
+      "span": "Contents are moved only on the technician's instruction",
+      "anchored": true
+    },
+    {
+      "id": "A-017",
+      "source": "source_a.md",
+      "text": "Contents are moved only into a freezer that already has space at the same set point.",
+      "line": 28,
+      "span": "only into a freezer that already has space at the same set point",
+      "anchored": true
+    },
+    {
+      "id": "A-018",
+      "source": "source_a.md",
+      "text": "A single study's samples should never be split across two freezers.",
+      "line": 29,
+      "span": "Never split a single study's samples across two freezers",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The alarm panel names the unit that triggered it.",
+      "line": 5,
+      "span": "The alarm panel names the unit and shows the temperature that triggered it",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The alarm panel shows the temperature that triggered it.",
+      "line": 5,
+      "span": "The alarm panel names the unit and shows the temperature that triggered it",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "There are three units on this floor.",
+      "line": 6,
+      "span": "there are three units on this floor",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Two of the three units alarm at the same set point.",
+      "line": 6,
+      "span": "two of them alarm at the\nsame set point",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Ice on the seal holds the door open by a few millimetres.",
+      "line": 11,
+      "span": "Ice on the seal holds the door open by a few\nmillimetres",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "Ice on the seal is the usual cause of a slow rise.",
+      "line": 12,
+      "span": "is the usual cause of a slow rise",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "The on-call technician must be called if the temperature is still rising 20 minutes after arrival.",
+      "line": 16,
+      "span": "Call the on-call technician if the temperature is still rising 20 minutes after\nyou arrive",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "Every alarm gets a line in the freezer log whether or not anything was wrong.",
+      "line": 22,
+      "span": "Every alarm gets a line in the freezer log whether or not anything was wrong",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "An alarm with no line in the log is indistinguishable from an alarm nobody attended.",
+      "line": 22,
+      "span": "An\nalarm with no line in the log is indistinguishable from an alarm nobody attended",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "The night phone is carried by the weekend duty officer from 18:00 on Friday until 08:00 on Monday.",
+      "line": 27,
+      "span": "The night phone is carried by the weekend duty officer from 18:00 on Friday\nuntil 08:00 on Monday",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Each freezer alarms when the internal temperature rises above its set point for more than 10 minutes.",
+      "line": 5,
+      "span": "Each freezer alarms when the internal temperature rises above its set point for more than 10 minutes",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The alarm sounds locally.",
+      "line": 5,
+      "span": "The alarm sounds locally",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The alarm sends a message to the night phone.",
+      "line": 5,
+      "span": "sends a message to the night phone",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The alarm panel names the unit.",
+      "line": 5,
+      "span": "The alarm panel names the unit",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The alarm panel shows the temperature that triggered it.",
+      "line": 5,
+      "span": "shows the temperature that triggered it",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "There are three units on this floor.",
+      "line": 5,
+      "span": "there are three units on this floor",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Two of the three units alarm at the same set point.",
+      "line": 5,
+      "span": "two of them alarm at the same set point",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "The reading at the moment of arrival is the one the lab needs.",
+      "line": 9,
+      "span": "The reading at the moment of arrival is the one the lab needs",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "The reading at the moment of arrival cannot be recovered later.",
+      "line": 9,
+      "span": "it cannot be recovered later",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "Every alarm gets a line in the freezer log whether or not anything was wrong.",
+      "line": 9,
+      "span": "Every alarm gets a line in the freezer log whether or not anything was wrong",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "An alarm with no line in the log is indistinguishable from an alarm nobody attended.",
+      "line": 9,
+      "span": "an alarm with no line in the log is indistinguishable from an alarm nobody attended",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "Ice on the seal holds the door open by a few millimetres.",
+      "line": 13,
+      "span": "ice on the seal holds the door open by a few millimetres",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "Ice on the seal is the usual cause of a slow rise.",
+      "line": 13,
+      "span": "is the usual cause of a slow rise",
+      "anchored": true
+    },
+    {
+      "id": "M-014",
+      "source": "merged.md",
+      "text": "Opening a door on a failing freezer to check the contents is the most common cause of loss in this building.",
+      "line": 17,
+      "span": "Opening a door on a failing freezer to check the contents is the most common cause of loss in this building",
+      "anchored": true
+    },
+    {
+      "id": "M-015",
+      "source": "merged.md",
+      "text": "Contents are moved only on the technician's instruction.",
+      "line": 21,
+      "span": "Contents are moved only on the technician's instruction",
+      "anchored": true
+    },
+    {
+      "id": "M-016",
+      "source": "merged.md",
+      "text": "Contents are moved only into a freezer that already has space at the same set point.",
+      "line": 21,
+      "span": "only into a freezer that already has space at the same set point",
+      "anchored": true
+    },
+    {
+      "id": "M-017",
+      "source": "merged.md",
+      "text": "The night phone is carried by the weekend duty officer from 18:00 on Friday until 08:00 on Monday.",
+      "line": 25,
+      "span": "The night phone is carried by the weekend duty officer from 18:00 on Friday until 08:00 on Monday",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Each freezer alarms when the internal temperature rises above its set point for more than 10 minutes.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated in the text.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm sounds locally and sends a message to the night phone.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm sounds locally and sends a message to the night phone.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Go to the freezer and read the display.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Go to the freezer and read the display.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Write the reading and the time in the freezer log before touching anything else.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "The reading at the moment of arrival is the one the lab needs",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "and it cannot be recovered later",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Close the door and wait 20 minutes.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Close the door and wait 20 minutes.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "SUPPORTED",
+      "evidence": "If the temperature falls back below the set point, log it as a door event and no further action is needed.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-012",
+      "verdict": "SUPPORTED",
+      "evidence": "If the temperature falls back below the set point, log it as a door event and no further action is needed.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-013",
+      "verdict": "SUPPORTED",
+      "evidence": "Call the on-call technician if the temperature is still rising 20 minutes after you arrive",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-014",
+      "verdict": "SUPPORTED",
+      "evidence": "While waiting, do not open the door.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-015",
+      "verdict": "SUPPORTED",
+      "evidence": "Opening a door on a failing freezer to check the contents is the most common cause of loss in this building.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-016",
+      "verdict": "SUPPORTED",
+      "evidence": "Contents are moved only on the technician's instruction and only into a freezer that already has space at the same set point.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-017",
+      "verdict": "SUPPORTED",
+      "evidence": "Contents are moved only on the technician's instruction and only into a freezer that already has space at the same set point.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-018",
+      "verdict": "SUPPORTED",
+      "evidence": "Never split a single study's samples across two freezers.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm panel names the unit and shows the temperature that triggered it",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm panel names the unit and shows the temperature that triggered it",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "there are three units on this floor",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "two of them alarm at the same set point",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "ice on the seal holds the door open by a few millimetres",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "and is the usual cause of a slow rise",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Call the on-call technician if the temperature is still rising 20 minutes after you arrive",
+      "evidence_source": "merged.md",
+      "rationale": "Imperative phrasing matches the requirement to call the technician.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Every alarm gets a line in the freezer log whether or not anything was wrong",
+      "evidence_source": "merged.md",
+      "rationale": "This exact statement appears verbatim in the reference text.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "an alarm with no line in the log is indistinguishable from an alarm nobody attended",
+      "evidence_source": "merged.md",
+      "rationale": "This exact statement appears verbatim in the reference text.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-010",
+      "verdict": "SUPPORTED",
+      "evidence": "The night phone is carried by the weekend duty officer from 18:00 on Friday until 08:00 on Monday.",
+      "evidence_source": "merged.md",
+      "rationale": "This exact statement appears verbatim in the reference text.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Each freezer alarms when the internal temperature rises above its set point for\nmore than 10 minutes.",
+      "evidence_source": "source_a.md",
+      "rationale": "This is stated verbatim in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm sounds locally and sends a message to the night\nphone.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states the alarm sounds locally.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm sounds locally and sends a message to the night\nphone.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states the alarm sends a message to the night phone.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm panel names the unit and shows the temperature that triggered it.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states the panel names the unit.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The alarm panel names the unit and shows the temperature that triggered it.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states the panel shows the triggering temperature.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "there are three units on this floor and two of them alarm at the\nsame set point.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states there are three units on this floor.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "there are three units on this floor and two of them alarm at the\nsame set point.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states two of the three units alarm at the same set point.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "The reading at the moment of arrival\nis the one the lab needs and it cannot be recovered later.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states this exact fact.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "The reading at the moment of arrival\nis the one the lab needs and it cannot be recovered later.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states the reading cannot be recovered later.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Every alarm gets a line in the freezer log whether or not anything was wrong.",
+      "evidence_source": "source_b.md",
+      "rationale": "Stated verbatim in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "An\nalarm with no line in the log is indistinguishable from an alarm nobody attended.",
+      "evidence_source": "source_b.md",
+      "rationale": "Stated verbatim in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "Ice on the seal holds the door open by a few\nmillimetres and is the usual cause of a slow rise.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states this exact fact.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "Ice on the seal holds the door open by a few\nmillimetres and is the usual cause of a slow rise.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states ice on the seal is the usual cause of a slow rise.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "SUPPORTED",
+      "evidence": "Opening a\ndoor on a failing freezer to check the contents is the most common cause of loss\nin this building.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated verbatim in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-015",
+      "verdict": "SUPPORTED",
+      "evidence": "Contents are moved only on the technician's instruction and only into a freezer\nthat already has space at the same set point.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states contents are moved only on technician's instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-016",
+      "verdict": "SUPPORTED",
+      "evidence": "Contents are moved only on the technician's instruction and only into a freezer\nthat already has space at the same set point.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states contents are moved only into a freezer with space at same set point.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-017",
+      "verdict": "SUPPORTED",
+      "evidence": "The night phone is carried by the weekend duty officer from 18:00 on Friday\nuntil 08:00 on Monday.",
+      "evidence_source": "source_b.md",
+      "rationale": "Stated verbatim in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Freezer Alarm Response - Night Shift' and says so",
+      "claims": [],
+      "reason": "Base title kept; this title not used.",
+      "replacement": "# Freezer Alarm Response - Night Shift"
+    },
+    {
+      "segment": "b2",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Base heading chosen for the consolidated section.",
+      "replacement": "## What triggers an alarm"
+    },
+    {
+      "segment": "b3",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001",
+        "B-002"
+      ],
+      "reason": "Panel-reading fact merged into trigger section.",
+      "replacement": "The alarm panel names the unit and shows the temperature that triggered it; note the unit name, as there are three units on this floor and two of them alarm at the same set point."
+    },
+    {
+      "segment": "b4",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-003",
+        "B-004"
+      ],
+      "reason": "Unit-identification detail merged into trigger section.",
+      "replacement": "The alarm panel names the unit and shows the temperature that triggered it; note the unit name, as there are three units on this floor and two of them alarm at the same set point."
+    },
+    {
+      "segment": "b11",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Recording heading dropped; content folded into first response.",
+      "replacement": "## First response"
+    },
+    {
+      "segment": "b12",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-008"
+      ],
+      "reason": "Logging rule merged into first response section.",
+      "replacement": "Every alarm gets a line in the freezer log whether or not anything was wrong; an alarm with no line in the log is indistinguishable from an alarm nobody attended."
+    },
+    {
+      "segment": "b13",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-009"
+      ],
+      "reason": "Combined with b12 into one logging statement.",
+      "replacement": "Every alarm gets a line in the freezer log whether or not anything was wrong; an alarm with no line in the log is indistinguishable from an alarm nobody attended."
+    },
+    {
+      "segment": "b5",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Seal-check heading consolidated into door-ajar heading.",
+      "replacement": "## If the door is ajar"
+    },
+    {
+      "segment": "b6",
+      "disposition": "subsumed",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+      "claims": [],
+      "reason": "Seal-check step merged into door-ajar section.",
+      "replacement": "Run a finger along the seal: ice on the seal holds the door open by a few millimetres and is the usual cause of a slow rise."
+    },
+    {
+      "segment": "b7",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-005",
+        "B-006"
+      ],
+      "reason": "Combined with b6 into one sentence.",
+      "replacement": "Run a finger along the seal: ice on the seal holds the door open by a few millimetres and is the usual cause of a slow rise."
+    },
+    {
+      "segment": "b8",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Escalation heading consolidated into base heading.",
+      "replacement": "## If the temperature keeps rising"
+    },
+    {
+      "segment": "a13",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-013"
+      ],
+      "reason": "General call instruction folded into precise version.",
+      "replacement": "Call the on-call technician if the temperature is still rising 20 minutes after you arrive, giving the unit name, the reading you took on arrival and the reading now."
+    },
+    {
+      "segment": "b9",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-007"
+      ],
+      "reason": "Threshold detail merged with reporting requirements.",
+      "replacement": "Call the on-call technician if the temperature is still rising 20 minutes after you arrive, giving the unit name, the reading you took on arrival and the reading now."
+    },
+    {
+      "segment": "b10",
+      "disposition": "subsumed",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+      "claims": [],
+      "reason": "Reporting details merged into the call instruction.",
+      "replacement": "Call the on-call technician if the temperature is still rising 20 minutes after you arrive, giving the unit name, the reading you took on arrival and the reading now."
+    }
+  ],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "state": "unmeasured",
+    "measured_calls": 0,
+    "unmeasured_calls": 7,
+    "tool_use": {
+      "state": "unmeasured",
+      "retrieval": "unmeasured",
+      "turns": 0,
+      "calls_with_tool_use": 0,
+      "measured_calls": 0,
+      "unmeasured_calls": 7
+    },
+    "retrieval_judged_on": "merge",
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": "",
+    "inconclusive_not_sourced": false
+  },
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 33,
+    "findings": [
+      {
+        "kind": "false_departure",
+        "detail": "'Ice on the seal holds the door open by a few millimetres and is the usual cause of a slow rise.' is declared 'subsumed' but the merge carries it unchanged, and no other source has it to have superseded it; the record describes a departure that did not happen",
+        "segment": "b7",
+        "document": "source_b.md",
+        "source_text": "Ice on the seal holds the door open by a few millimetres and is the usual cause of a slow rise.",
+        "merge_text": "Run a finger along the seal: ice on the seal holds the door open by a few millimetres and is the usual cause of a slow rise.",
+        "difference": "[-Ice-] {+Run a finger along the seal: ice+} on the seal holds the door open by a few millimetres and is the usual cause of a slow rise."
+      },
+      {
+        "kind": "false_departure",
+        "detail": "'An alarm with no line in the log is indistinguishable from an alarm nobody attended.' is declared 'subsumed' but the merge carries it unchanged, and no other source has it to have superseded it; the record describes a departure that did not happen",
+        "segment": "b13",
+        "document": "source_b.md",
+        "source_text": "An alarm with no line in the log is indistinguishable from an alarm nobody attended.",
+        "merge_text": "Every alarm gets a line in the freezer log whether or not anything was wrong; an alarm with no line in the log is indistinguishable from an alarm nobody attended.",
+        "difference": ""
+      }
+    ]
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "text": "# Freezer Alarm Response - Night Shift",
+            "document": "source_a.md"
+          },
+          {
+            "text": "# Cold Storage Alarm Checklist",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "# Freezer Alarm Response - Night Shift",
+        "resolved": true,
+        "reason": "Base title, names the subject fully."
+      },
+      {
+        "slot": "heading: trigger section",
+        "candidates": [
+          {
+            "text": "## What triggers an alarm",
+            "document": "source_a.md"
+          },
+          {
+            "text": "## Reading the alarm",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "## What triggers an alarm",
+        "resolved": true,
+        "reason": "Base heading covers both the trigger condition and panel reading."
+      },
+      {
+        "slot": "heading: first response / recording",
+        "candidates": [
+          {
+            "text": "## First response",
+            "document": "source_a.md"
+          },
+          {
+            "text": "## Recording",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "## First response",
+        "resolved": true,
+        "reason": "Logging requirement folds into the arrival response steps."
+      },
+      {
+        "slot": "heading: door ajar / seal check",
+        "candidates": [
+          {
+            "text": "## If the door is ajar",
+            "document": "source_a.md"
+          },
+          {
+            "text": "## Check the door seal",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "## If the door is ajar",
+        "resolved": true,
+        "reason": "Base heading covers both the seal check and the door-ajar outcome."
+      },
+      {
+        "slot": "heading: escalation",
+        "candidates": [
+          {
+            "text": "## If the temperature keeps rising",
+            "document": "source_a.md"
+          },
+          {
+            "text": "## Escalating",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "## If the temperature keeps rising",
+        "resolved": true,
+        "reason": "Base heading already frames the escalation instructions."
+      }
+    ]
+  },
+  "title": {
+    "policy": "synthesise",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": true,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": []
+  },
+  "number_format": {
+    "ran": true,
+    "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+    "faults": [
+      "reading_changed"
+    ],
+    "findings": [],
+    "documents": [
+      {
+        "document": "source_a.md",
+        "convention": "decimal point",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 54,
+          "de": 0
+        }
+      },
+      {
+        "document": "source_b.md",
+        "convention": "decimal point",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 47,
+          "de": 0
+        }
+      },
+      {
+        "document": "merged.md",
+        "convention": "decimal point",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 98,
+          "de": 0
+        }
+      }
+    ]
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 17,
+    "source_claims": 28,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 33,
+    "budget": 0.03,
+    "ratio": 0.0,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aaaabaaaababaaabaaaaabb",
+    "runs": 10,
+    "attributed": 23,
+    "interleaved": true,
+    "monotone": false,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 7,
+    "headings_total": 12
+  },
+  "merged_written_to": "merged.md",
+  "provenance": {
+    "generated_at": "2026-09-27T15:52:30+00:00",
+    "claimcheck_commit": "73b61563c13c",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "ec0c9ecb43e3",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "claude-sonnet-5",
+      "decompose": "claude-sonnet-5",
+      "verify": "claude-sonnet-5"
+    },
+    "models_answered": {
+      "merge": {
+        "models": [
+          "claude-sonnet-5"
+        ],
+        "output": "claude-sonnet-5"
+      },
+      "decompose": {
+        "models": [
+          "claude-sonnet-5"
+        ],
+        "output": "claude-sonnet-5"
+      },
+      "verify": {
+        "models": [
+          "claude-sonnet-5"
+        ],
+        "output": "claude-sonnet-5"
+      }
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/merge.md": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify.md": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify_reverse.md": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "anthropic",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 7,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 22596,
+      "completion_tokens": 40217
+    },
+    "tokens": {
+      "input": 22596,
+      "output": 40217,
+      "total": 62813,
+      "measured_calls": 7,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "22,596 in, 40,217 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+        "request_sha256": "10d3f99efec8663b8b2c82ae40cc451a60d6f36c5e1c721fe6a72760ebaf6d12",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 6866,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "claude-sonnet-5",
+        "latency_ms": 124407,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 124407,
+        "failed_ms": 0,
+        "ttfb_ms": 1420,
+        "prompt_tokens": 7235,
+        "completion_tokens": 13685,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "bb61043ad2e7f9c70a57b170c24e15da2cad383957c6ead230cd1b83268c871f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1300,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "claude-sonnet-5",
+        "latency_ms": 151150,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 151150,
+        "failed_ms": 0,
+        "ttfb_ms": 1247,
+        "prompt_tokens": 1576,
+        "completion_tokens": 16957,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "20186bb78532644491aca5bfbd1bfc68b9c502ae8766a2585375c98044d084d8",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1231,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "claude-sonnet-5",
+        "latency_ms": 10670,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 10670,
+        "failed_ms": 0,
+        "ttfb_ms": 1388,
+        "prompt_tokens": 1544,
+        "completion_tokens": 1262,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+        "request_sha256": "df88c5d0f2c3f2c13d0378b026004a81c50f114c3adda51622a37b06c5c1a4af",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3358,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "claude-sonnet-5",
+        "latency_ms": 17368,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 17368,
+        "failed_ms": 0,
+        "ttfb_ms": 1395,
+        "prompt_tokens": 3694,
+        "completion_tokens": 2628,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+        "request_sha256": "181efba4870e456fb37e814e9057b920e62551f0a21a6222f826d0bb97841e36",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2851,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "claude-sonnet-5",
+        "latency_ms": 3166,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 3166,
+        "failed_ms": 0,
+        "ttfb_ms": 1158,
+        "prompt_tokens": 3206,
+        "completion_tokens": 299,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "322337f7e37fc7155c679ee22194900e90d435bef0e11a0b4935520ca871068e",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1533,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "claude-sonnet-5",
+        "latency_ms": 23940,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 23940,
+        "failed_ms": 0,
+        "ttfb_ms": 1518,
+        "prompt_tokens": 1792,
+        "completion_tokens": 3156,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d",
+        "request_sha256": "ae1c07d8d13718ae5c348ef004e5fec705e82d770fc0ff250659e5dd32299a10",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3233,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "claude-sonnet-5",
+        "latency_ms": 15550,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 15550,
+        "failed_ms": 0,
+        "ttfb_ms": 1624,
+        "prompt_tokens": 3549,
+        "completion_tokens": 2230,
+        "outcome": "answer"
+      }
+    ],
+    "cost": {
+      "state": "priced",
+      "usd": 0.4474,
+      "usd_exact": 0.447362,
+      "priced_calls": 7,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 0,
+      "rates_read_on": "2026-08-31"
+    },
+    "answering_seconds": {
+      "total": 346.251,
+      "by_role": {
+        "decompose": 185.76,
+        "merge": 124.407,
+        "verify": 36.084
+      }
+    },
+    "answering_cost": {
+      "state": "priced",
+      "usd": 0.4474,
+      "usd_exact": 0.447362,
+      "priced_calls": 7,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 0,
+      "rates_read_on": "2026-08-31"
+    },
+    "excluded": {
+      "calls": {
+        "retries": 0
+      },
+      "seconds": {
+        "waited": 0.0,
+        "failed": 0.0,
+        "discarded": 0.0,
+        "total": 0.0
+      },
+      "cost": {
+        "state": "none",
+        "usd": null,
+        "usd_exact": null,
+        "priced_calls": 0,
+        "unpriced_calls": 0,
+        "unmeasured_calls": 0
+      }
+    },
+    "discarded_calls": [],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 3
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "unmeasured",
+        "retrieval": "unmeasured",
+        "turns": 0,
+        "calls_with_tool_use": 0,
+        "measured_calls": 0,
+        "unmeasured_calls": 7
+      },
+      "described": "unmeasured (7 call(s) reported no turn count)"
+    },
+    "duration_seconds": 346.6
+  }
+}

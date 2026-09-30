@@ -1,0 +1,501 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 4,
+      "source_a.md": 5,
+      "source_b.md": 4
+    },
+    "forward_submitted": 9,
+    "forward_verdicts": 9,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 5,
+        "checked": 5,
+        "accounted": 4,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 4,
+        "checked": 4,
+        "accounted": 4,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 4,
+    "reverse_verdicts": 4,
+    "reverse_partial": 0,
+    "graded": 13,
+    "grounded": 13,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Vandrell Relay is a fictional HTTP relay.",
+      "line": 3,
+      "span": "Vandrell Relay is a fictional HTTP relay.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The relay handles approximately 500 concurrent connections.",
+      "line": 7,
+      "span": "The relay handles approximately 500 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 8,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 12,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 13,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The connection limit is 512 concurrent connections.",
+      "line": 7,
+      "span": "The connection limit is 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 8,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 12,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 13,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The connection limit is 512 concurrent connections.",
+      "line": 7,
+      "span": "The connection limit is 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 8,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 12,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 13,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Vandrell Relay is a fictional HTTP relay.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that Vandrell Relay is a fictional HTTP relay.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "CONTRADICTED",
+      "evidence": "The connection limit is 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text specifies a limit of 512 concurrent connections, which contradicts the claim of approximately 500.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that each request is retried at most 3 times.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the relay listens on port 8443 by default.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the default connect timeout is 30 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The connection limit is 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states the connection limit is 512 concurrent connections.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that each request is retried at most 3 times.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the relay listens on port 8443 by default.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the default connect timeout is 30 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The connection limit is 512 concurrent connections.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B explicitly states that the connection limit is 512 concurrent connections.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state that each request is retried at most 3 times.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state that the relay listens on port 8443 by default.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both sources state that the default connect timeout is 30 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "A-002",
+      "verdict": "CONTRADICTED",
+      "evidence": "The connection limit is 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text specifies a limit of 512 concurrent connections, which contradicts the claim of approximately 500.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T10:53:33+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "qwen3.8:27b",
+      "verify": "qwen3.8:27b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "merge"
+      ]
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 5468,
+      "completion_tokens": 1774
+    },
+    "tokens": {
+      "input": 5468,
+      "output": 1774,
+      "total": 7242,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "5,468 in, 1,774 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "7cd5141eb0ccacf9d6bbe73536e0085950ce876cb0fd3a080a738782371869ab",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 791,
+        "completion_tokens": 255
+      },
+      {
+        "role": "decompose",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "e4093675c726e8fdb4d14364e75eb32b097929c7bad6b32ca84de4cb916a0b99",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 791,
+        "completion_tokens": 209
+      },
+      {
+        "role": "verify",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "bb0e24f079ba63a75f18d771676497fe24dbf96409d82586fa0c466b502a581e",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1610,
+        "completion_tokens": 759
+      },
+      {
+        "role": "decompose",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "bad70c7d5d31f669a1b3b16799d696d4219da79453b2d8e349d2c2bd45cbe2b4",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 791,
+        "completion_tokens": 209
+      },
+      {
+        "role": "verify",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "64e910517b96e8cac6d9399c5d3c5b6abffd437cc6fd0e333af23e640d46841b",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1485,
+        "completion_tokens": 342
+      }
+    ],
+    "window": {},
+    "duration_seconds": 39.5
+  }
+}

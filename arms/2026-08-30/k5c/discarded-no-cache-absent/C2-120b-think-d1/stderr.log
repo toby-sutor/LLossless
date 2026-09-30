@@ -1,0 +1,40 @@
+claimcheck merge  gpt-oss:120b at endpoint 29d412c5e668
+• reading 2 document(s)
+• loading prompts
+• merge
+✓ merge  25.3s
+• reconcile
+✓ reconcile  0.9s
+• decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_a.md
+• decompose: asking gpt-oss:120b
+✓ decompose: gpt-oss:120b answered at the json_schema tier  79.8s
+✓ decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_a.md  79.9s
+• decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_b.md
+• decompose: asking gpt-oss:120b
+✓ decompose: gpt-oss:120b answered at the json_schema tier  54.4s
+✓ decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_b.md  54.5s
+• verify (forward)
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  54.9s
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  42.6s
+✓ verify (forward)  97.5s
+• decompose merged.md
+• decompose: asking gpt-oss:120b
+✓ decompose: gpt-oss:120b answered at the json_schema tier  103.3s
+✓ decompose merged.md  103.4s
+• verify (reverse)
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  42.0s
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  56.6s
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  18.7s
+✓ verify (reverse)  117.4s
+✓ merged document written to /tmp/claude-1000/-home-toby-Documents-Dev-vibe-coding-claimcheck/4efb5d2e-5268-4025-a88e-53ca7092cde3/scratchpad/pod/k5c/C2-120b-think-d1/merged.md
+
+Finished, with problems. The report lists what was found.
+  1 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  1 over budget: declared loss past the ceiling (see `## Structure`)
+  merged document written to /tmp/claude-1000/-home-toby-Documents-Dev-vibe-coding-claimcheck/4efb5d2e-5268-4025-a88e-53ca7092cde3/scratchpad/pod/k5c/C2-120b-think-d1/merged.md
+  the full report went to stdout; exit code 1

@@ -1,0 +1,863 @@
+{
+ "command": "merge",
+ "exit_code": 0,
+ "documents": {
+  "source_a.md": "source_a.md",
+  "source_b.md": "source_b.md"
+ },
+ "steps": [
+  {
+   "name": "merge",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "reconcile",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "title",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_a.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_b.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (forward)",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose merged.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (reverse)",
+   "state": "ok",
+   "detail": ""
+  }
+ ],
+ "coverage": {
+  "extracted": {
+   "merged.md": 8,
+   "source_a.md": 3,
+   "source_b.md": 4
+  },
+  "forward_submitted": 7,
+  "forward_verdicts": 7,
+  "forward_partial": 0,
+  "forward_by_source": {
+   "source_a.md": {
+    "extracted": 3,
+    "checked": 3,
+    "accounted": 3,
+    "partial": 0
+   },
+   "source_b.md": {
+    "extracted": 4,
+    "checked": 4,
+    "accounted": 4,
+    "partial": 0
+   }
+  },
+  "reverse_submitted": 8,
+  "reverse_verdicts": 8,
+  "reverse_partial": 0,
+  "graded": 15,
+  "grounded": 15,
+  "errored": 0,
+  "ungraded": 0
+ },
+ "claims": [
+  {
+   "id": "A-001",
+   "source": "source_a.md",
+   "text": "Badges in the return tray are re-used the same day.",
+   "line": 14,
+   "span": "Badges in the return tray are re-used the same day.",
+   "anchored": true
+  },
+  {
+   "id": "A-002",
+   "source": "source_a.md",
+   "text": "Badges that have been missing for 7 days are deactivated.",
+   "line": 19,
+   "span": "Badges that have been missing for 7 days are deactivated.",
+   "anchored": true
+  },
+  {
+   "id": "A-003",
+   "source": "source_a.md",
+   "text": "A week badge is valid for 7 days from the date printed on it.",
+   "line": 25,
+   "span": "A week badge is valid for 7 days from the date printed on it.",
+   "anchored": true
+  },
+  {
+   "id": "B-001",
+   "source": "source_b.md",
+   "text": "Print a badge from the front desk terminal.",
+   "line": 6,
+   "span": "Print a badge from the front desk terminal",
+   "anchored": true
+  },
+  {
+   "id": "B-002",
+   "source": "source_b.md",
+   "text": "Badges in the return tray are re-used the same day.",
+   "line": 14,
+   "span": "Badges in the return tray are re-used the same day.",
+   "anchored": true
+  },
+  {
+   "id": "B-003",
+   "source": "source_b.md",
+   "text": "Mark the visitor's line on the expected-visitor list with an N.",
+   "line": 18,
+   "span": "Mark the visitor's line on the expected-visitor list with an N",
+   "anchored": true
+  },
+  {
+   "id": "B-004",
+   "source": "source_b.md",
+   "text": "Badges that have been missing for 7 days are deactivated.",
+   "line": 19,
+   "span": "Badges that have been missing for 7 days are deactivated.",
+   "anchored": true
+  },
+  {
+   "id": "M-001",
+   "source": "merged.md",
+   "text": "Print a badge from the front desk terminal.",
+   "line": 5,
+   "span": "Print a badge from the front desk terminal.",
+   "anchored": true
+  },
+  {
+   "id": "M-002",
+   "source": "merged.md",
+   "text": "Write the host's name on the badge in the space provided.",
+   "line": 5,
+   "span": "Write the host's name on the badge in the space provided.",
+   "anchored": true
+  },
+  {
+   "id": "M-003",
+   "source": "merged.md",
+   "text": "Badges in the return tray are re-used the same day.",
+   "line": 9,
+   "span": "Badges in the return tray are re-used the same day.",
+   "anchored": true
+  },
+  {
+   "id": "M-004",
+   "source": "merged.md",
+   "text": "Badges that have been missing for 7 days are deactivated.",
+   "line": 13,
+   "span": "Badges that have been missing for 7 days are deactivated.",
+   "anchored": true
+  },
+  {
+   "id": "M-005",
+   "source": "merged.md",
+   "text": "Contractors on a job lasting more than one day are issued a week badge instead of a day badge.",
+   "line": 17,
+   "span": "Contractors on a job lasting more than one day are issued a week badge instead of a day badge.",
+   "anchored": true
+  },
+  {
+   "id": "M-006",
+   "source": "merged.md",
+   "text": "A week badge is valid for 7 days from the date printed on it.",
+   "line": 17,
+   "span": "A week badge is valid for 7 days from the date printed on it.",
+   "anchored": true
+  },
+  {
+   "id": "M-007",
+   "source": "merged.md",
+   "text": "Contractors sign the contractor register in addition to the visitor list.",
+   "line": 17,
+   "span": "Contractors sign the contractor register in addition to the visitor list.",
+   "anchored": true
+  },
+  {
+   "id": "M-008",
+   "source": "merged.md",
+   "text": "A badge handed in after it was reported missing goes to the security office rather than back into the return tray.",
+   "line": 21,
+   "span": "A badge handed in after it was reported missing goes to the security office rather than back into the return tray.",
+   "anchored": true
+  }
+ ],
+ "verdicts": [
+  {
+   "claim_id": "A-001",
+   "verdict": "SUPPORTED",
+   "evidence": "Badges in the return tray are re-used the same day.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states that badges in the return tray are re-used the same day.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-002",
+   "verdict": "SUPPORTED",
+   "evidence": "Badges that have been missing for 7 days are deactivated.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states that badges missing for 7 days are deactivated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-003",
+   "verdict": "SUPPORTED",
+   "evidence": "A week badge is valid for 7 days from the date printed on it.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states the exact validity period and condition for week badges.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-001",
+   "verdict": "SUPPORTED",
+   "evidence": "Print a badge from the front desk terminal.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly instructs printing a badge from the front desk terminal.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-002",
+   "verdict": "SUPPORTED",
+   "evidence": "Badges in the return tray are re-used the same day.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states that badges in the return tray are re-used the same day.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-003",
+   "verdict": "SUPPORTED",
+   "evidence": "Mark the visitor's line on the expected-visitor list with an N.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states to mark the visitor's line on the expected-visitor list with an N.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-004",
+   "verdict": "SUPPORTED",
+   "evidence": "Badges that have been missing for 7 days are deactivated.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states that badges missing for 7 days are deactivated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-001",
+   "verdict": "SUPPORTED",
+   "evidence": "Print a badge from the front desk terminal.",
+   "evidence_source": "source_a.md",
+   "rationale": "The source document explicitly states to print a badge from the front desk terminal.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-002",
+   "verdict": "SUPPORTED",
+   "evidence": "Write the host's name on the badge in the space provided.",
+   "evidence_source": "source_a.md",
+   "rationale": "The source document matches the claim word for word regarding writing the host's name.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-003",
+   "verdict": "SUPPORTED",
+   "evidence": "Badges in the return tray are re-used the same day.",
+   "evidence_source": "source_a.md",
+   "rationale": "The source text states that badges in the return tray are re-used the same day.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-004",
+   "verdict": "SUPPORTED",
+   "evidence": "Badges that have been missing for 7 days are deactivated.",
+   "evidence_source": "source_a.md",
+   "rationale": "The claim is directly supported by the text indicating missing badges are deactivated after 7 days.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-005",
+   "verdict": "SUPPORTED",
+   "evidence": "Contractors on a job lasting more than one day are issued a week badge instead of a day badge.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A explicitly states contractors on jobs lasting over a day receive a week badge instead.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-006",
+   "verdict": "SUPPORTED",
+   "evidence": "A week badge is valid for 7 days from the date printed on it.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A explicitly confirms the validity period and starting point for a week badge.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-007",
+   "verdict": "SUPPORTED",
+   "evidence": "Contractors sign the contractor register in addition to the visitor list.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states that contractors sign the contractor register in addition to the visitor list.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-008",
+   "verdict": "SUPPORTED",
+   "evidence": "A badge handed in after it was reported missing goes to the security office rather than back into the return tray.",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B includes this exact rule regarding badges handed in after being reported missing.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  }
+ ],
+ "findings": [],
+ "review_queue": [],
+ "declarations": [
+  {
+   "segment": "b1",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Badge Access - Front Desk Procedure' and says so",
+   "claims": [],
+   "reason": "Base title kept.",
+   "replacement": "# Badge Access - Front Desk Procedure"
+  },
+  {
+   "segment": "b2",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical section heading.",
+   "replacement": "## Issuing a visitor badge"
+  },
+  {
+   "segment": "b3",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical text.",
+   "replacement": "Ask the visitor for photo identification and check the name against the day's expected-visitor list."
+  },
+  {
+   "segment": "b4",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-001"
+   ],
+   "reason": "Identical text.",
+   "replacement": "Print a badge from the front desk terminal."
+  },
+  {
+   "segment": "b5",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical text.",
+   "replacement": "Write the host's name on the badge in the space provided."
+  },
+  {
+   "segment": "b6",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical text.",
+   "replacement": "Hand the badge over and ask the visitor to wear it above the waist and in view for the whole visit."
+  },
+  {
+   "segment": "b7",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical section heading.",
+   "replacement": "## Returning a badge"
+  },
+  {
+   "segment": "b8",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical text.",
+   "replacement": "Visitors return badges at the front desk on their way out."
+  },
+  {
+   "segment": "b9",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical text.",
+   "replacement": "Wipe the badge with the cleaning cloth kept in the top drawer and put it back in the return tray."
+  },
+  {
+   "segment": "b10",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-002"
+   ],
+   "reason": "Identical text.",
+   "replacement": "Badges in the return tray are re-used the same day."
+  },
+  {
+   "segment": "b11",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+   "claims": [],
+   "reason": "Identical section heading.",
+   "replacement": "## If a badge is not returned"
+  },
+  {
+   "segment": "b12",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-003"
+   ],
+   "reason": "Identical text.",
+   "replacement": "Mark the visitor's line on the expected-visitor list with an N. At the end of the day, send the list of unreturned badges to the security office."
+  },
+  {
+   "segment": "b13",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-004"
+   ],
+   "reason": "Identical text.",
+   "replacement": "Badges that have been missing for 7 days are deactivated."
+  }
+ ],
+ "additions": [],
+ "mismatch": "",
+ "additions_cover": [],
+ "sourcing": {
+  "resolved": false,
+  "fetched": false,
+  "state": "unmeasured",
+  "measured_calls": 0,
+  "unmeasured_calls": 6,
+  "tool_use": {
+   "state": "unmeasured",
+   "retrieval": "unmeasured",
+   "turns": 0,
+   "calls_with_tool_use": 0,
+   "measured_calls": 0,
+   "unmeasured_calls": 6
+  },
+  "retrieval_permitted": [],
+  "recall_only": false,
+  "retrieval": ""
+ },
+ "structural": {
+  "ran": true,
+  "checks": 9,
+  "segments": 33,
+  "findings": []
+ },
+ "decisions": {
+  "ran": true,
+  "authored_by": "the merge",
+  "graded": false,
+  "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+  "records": [
+   {
+    "slot": "title",
+    "candidates": [
+     {
+      "text": "# Badge Access - Front Desk Procedure",
+      "document": "source_a.md"
+     },
+     {
+      "text": "# Visitor Badge Handling",
+      "document": "source_b.md"
+     }
+    ],
+    "chosen": "# Badge Access - Front Desk Procedure",
+    "resolved": true,
+    "reason": "Base document title chosen as standard practice."
+   }
+  ]
+ },
+ "title": {
+  "policy": "synthesise",
+  "sources_with_a_title": 2,
+  "has_referent": true,
+  "note": ""
+ },
+ "structure": {
+  "breaks_added_by_the_merge": 0,
+  "between": [],
+  "graded": false,
+  "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+ },
+ "prompt_leaks": {
+  "ran": true,
+  "markers": [
+   "marlbrook",
+   "funicular"
+  ],
+  "reason_clauses": 17,
+  "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+  "findings": []
+ },
+ "attributions": {
+  "ran": true,
+  "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+  "findings": []
+ },
+ "number_format": {
+  "ran": true,
+  "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+  "faults": [
+   "reading_changed"
+  ],
+  "findings": [],
+  "documents": [
+   {
+    "document": "source_a.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 64,
+     "de": 0
+    }
+   },
+   {
+    "document": "source_b.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 59,
+     "de": 0
+    }
+   },
+   {
+    "document": "merged.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 72,
+     "de": 0
+    }
+   }
+  ]
+ },
+ "restated_claims": {
+  "ran": true,
+  "claims": 8,
+  "source_claims": 7,
+  "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+  "counts_are_evidence_not_the_test": true,
+  "findings": []
+ },
+ "declared_loss": {
+  "drops": 0,
+  "segments": 33,
+  "budget": 0.03,
+  "ratio": 0.0,
+  "check_disabled": false,
+  "over_budget": false
+ },
+ "unusable": [],
+ "truncations": [],
+ "order": {
+  "sequence": "aaaaabbb",
+  "runs": 2,
+  "attributed": 8,
+  "interleaved": false,
+  "monotone": true,
+  "conclusive": true,
+  "blocked": true,
+  "stapled": true,
+  "headings_present": 9,
+  "headings_total": 10
+ },
+ "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/cells/badge_access-high-gemini-3.5-flash-lite-d1/merged.md",
+ "provenance": {
+  "generated_at": "2026-09-25T18:43:40+00:00",
+  "claimcheck_commit": "0771aa6f830d",
+  "run_mode": "live",
+  "endpoint": {
+   "id": "37a58c167b3b",
+   "location": "hosted",
+   "content_left_this_machine": true
+  },
+  "merge_policy": {
+   "fidelity": "high",
+   "verify_depth": "full",
+   "title_policy": "synthesise",
+   "base": "source_a.md",
+   "base_chosen": "explicit"
+  },
+  "models": {
+   "merge": "gemini-3.5-flash-lite",
+   "decompose": "gemini-3.5-flash-lite",
+   "verify": "gemini-3.5-flash-lite"
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "pinned",
+   "field_order": "schema"
+  },
+  "prompts": {
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/merge.md": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/verify.md": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/verify_reverse.md": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472"
+  },
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "google",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ]
+  },
+  "counts": {
+   "calls": 6,
+   "cache_hits": 0,
+   "replayed": 0,
+   "schema_repairs": 0,
+   "model_loads": 0,
+   "errors": 0,
+   "salvaged": 0,
+   "prompt_tokens": 13749,
+   "completion_tokens": 2946
+  },
+  "tokens": {
+   "input": 13749,
+   "output": 2946,
+   "total": 16695,
+   "measured_calls": 6,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "13,749 in, 2,946 out",
+  "ledger": [
+   {
+    "role": "merge",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+    "request_sha256": "8ff9a202f1d881010e58d2c44d553487e75c392c00a9708b2bbb0ebb0b076d6c",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 6929,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 12148,
+    "prompt_tokens": 5499,
+    "completion_tokens": 1093
+   },
+   {
+    "role": "decompose",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "5605942fc12fefc7ccd52890f8c3e498d1cb9aadd818be2a390ad92c907ef733",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 1303,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 19804,
+    "prompt_tokens": 1173,
+    "completion_tokens": 111
+   },
+   {
+    "role": "decompose",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "1c342ba4d76c8c180f1e1a6509d5a64b7acbeaf0321798fa28f46dfaea64eb13",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 1282,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 16632,
+    "prompt_tokens": 1157,
+    "completion_tokens": 141
+   },
+   {
+    "role": "verify",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+    "request_sha256": "6414b29b33877a53cbfea48ab90a96b8796c8e384b347d3615901eb5f5bc4de3",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2735,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 16836,
+    "prompt_tokens": 2266,
+    "completion_tokens": 468
+   },
+   {
+    "role": "decompose",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "314e9ff0b700ca9e99f2eaeeab39ea19833708439a78e260ce9b4d5cf3069bd4",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 1361,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 16188,
+    "prompt_tokens": 1192,
+    "completion_tokens": 342
+   },
+   {
+    "role": "verify",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472",
+    "request_sha256": "b37f3f18c7316c2c062ced615d34f87df55a29c004400672605e2f5d1be82b5d",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 3092,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 6832,
+    "prompt_tokens": 2462,
+    "completion_tokens": 791
+   }
+  ],
+  "cost": {
+   "state": "priced",
+   "usd": 0.0115,
+   "priced_calls": 6,
+   "unpriced_calls": 0,
+   "unmeasured_calls": 0,
+   "rates_read_on": "2026-08-31"
+  },
+  "window": {
+   "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 2
+  },
+  "retrieval": {
+   "permitted": [],
+   "tool_use": {
+    "state": "unmeasured",
+    "retrieval": "unmeasured",
+    "turns": 0,
+    "calls_with_tool_use": 0,
+    "measured_calls": 0,
+    "unmeasured_calls": 6
+   },
+   "described": "unmeasured (6 call(s) reported no turn count)"
+  },
+  "duration_seconds": 163.5
+ }
+}

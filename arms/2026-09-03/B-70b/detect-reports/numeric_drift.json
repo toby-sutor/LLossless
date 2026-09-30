@@ -1,0 +1,468 @@
+{
+  "command": "verify",
+  "exit_code": 0,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/numeric_drift/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 4,
+      "source_a.md": 4,
+      "source_b.md": 4
+    },
+    "forward_submitted": 8,
+    "forward_verdicts": 8,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 4,
+        "checked": 4,
+        "accounted": 4,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 4,
+        "checked": 4,
+        "accounted": 4,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 4,
+    "reverse_verdicts": 4,
+    "reverse_partial": 0,
+    "graded": 12,
+    "grounded": 12,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay handles approximately 500 concurrent connections.",
+      "line": 7,
+      "span": "The relay handles approximately 500 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 8,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 12,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 13,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The connection limit is 512 concurrent connections.",
+      "line": 7,
+      "span": "The connection limit is 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 8,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 12,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 13,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The connection limit is 512 concurrent connections.",
+      "line": 7,
+      "span": "The connection limit is 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 8,
+      "span": "Each request is retried at most 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 12,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 13,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The connection limit is 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the connection limit is 512, which supports the claim of approximately 500 concurrent connections as a close approximation. The claim is SUPPORTED because the reference text provides a specific number close to the claim's approximation, and there's no contradiction. The evidence is the exact sentence from the reference text that mentions the connection limit. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that each request is retried at most 3 times, which directly supports the claim. The evidence is the exact sentence from the reference text. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443 by default, which directly supports the claim. The evidence is the exact sentence from the reference text. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the default connect timeout is 30 seconds, which directly supports the claim. The evidence is the exact sentence from the reference text. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The connection limit is 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the connection limit is 512 concurrent connections, which directly supports the claim. The evidence is the exact sentence from the reference text. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that each request is retried at most 3 times, which directly supports the claim. The evidence is the exact sentence from the reference text. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443 by default, which directly supports the claim. The evidence is the exact sentence from the reference text. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the default connect timeout is 30 seconds, which directly supports the claim. The evidence is the exact sentence from the reference text. The claim is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The connection limit is 512 concurrent connections.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b.md explicitly states the connection limit as 512 concurrent connections, matching the claim exactly. Source_a.md mentions 500, but the claim is only about 512, which is supported by source_b.md alone. No contradiction is found, so the claim is SUPPORTED. The evidence is the exact span from source_b.md, preserving the wording and numbers as given. The rationale explains that the claim is\u6b63\u786e",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source_a.md and source_b.md state that each request is retried at most 3 times, so the claim is SUPPORTED. The evidence is taken from source_a.md, but both sources agree, making the claim valid. The rationale confirms that both sources support the claim without any contradiction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source_a.md and source_b.md mention that the relay listens on port 8443 by default, so the claim is SUPPORTED. The evidence is taken from source_a.md, but both sources concur, ensuring the claim's validity. The rationale highlights the agreement between the sources.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source_a.md and source_b.md state that the default connect timeout is 30 seconds, so the claim is SUPPORTED. The evidence is taken from source_a.md, but both sources confirm the same information, making the claim accurate. The rationale explains that both sources support the claim without any discrepancies.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T11:55:12+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "deepseek-r1:70b",
+      "verify": "deepseek-r1:70b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 5031,
+      "completion_tokens": 3266
+    },
+    "tokens": {
+      "input": 5031,
+      "output": 3266,
+      "total": 8297,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "5,031 in, 3,266 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "e4cb45f07e36b4e82f30b4da59fefff1e9d85e4ab4baa0913d1da8e373bfa11e",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 723,
+        "completion_tokens": 433
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "f2355eeaabb6b3d4e7721c04d49eea98f04b9b8595a9fa9089f6c8f7114cb91d",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 723,
+        "completion_tokens": 433
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "65c9081c6f26b594f8f53db0b9163acb4e6435707a67f126da8a5e3c423d311d",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1465,
+        "completion_tokens": 1146
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "8e341e4f5d4a31681d3a6275ce61e6db9e788daa89f571e8d802984b7e6b221f",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 723,
+        "completion_tokens": 449
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "3b3692b54ec2117153d598d01f3b0ea5a45aa41e636c5aee7d39c19f6f76e6b5",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1397,
+        "completion_tokens": 805
+      }
+    ],
+    "window": {},
+    "duration_seconds": 176.0
+  }
+}

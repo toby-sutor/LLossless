@@ -1,0 +1,720 @@
+{
+  "command": "verify",
+  "exit_code": 0,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/paraphrase/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/paraphrase/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/paraphrase/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/paraphrase/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/paraphrase/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/paraphrase/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 8,
+      "source_a.md": 8,
+      "source_b.md": 8
+    },
+    "forward_submitted": 16,
+    "forward_verdicts": 16,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 8,
+        "checked": 8,
+        "accounted": 8,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 8,
+        "checked": 8,
+        "accounted": 8,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 8,
+    "reverse_verdicts": 8,
+    "reverse_partial": 0,
+    "graded": 24,
+    "grounded": 24,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Unless you override it, the relay binds to port 8443.",
+      "line": 7,
+      "span": "Unless you override it, the relay binds to port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "A connection that has not been established within 30 seconds is abandoned.",
+      "line": 8,
+      "span": "A connection that has not been established within 30 seconds is abandoned.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Once connected, the relay waits up to 120 seconds for a response.",
+      "line": 9,
+      "span": "Once connected, the relay waits up to 120 seconds for a response.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "No more than 512 connections may be open at the same time.",
+      "line": 13,
+      "span": "No more than 512 connections may be open at the same time.",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "A failed request is attempted again up to 3 times.",
+      "line": 14,
+      "span": "A failed request is attempted again up to 3 times.",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "Anything older than TLS 1.2 is rejected.",
+      "line": 18,
+      "span": "Anything older than TLS 1.2 is rejected.",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "Every access log line is a single JSON object.",
+      "line": 22,
+      "span": "Every access log line is a single JSON object.",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "Liveness is reported at /-/healthy.",
+      "line": 23,
+      "span": "Liveness is reported at /-/healthy.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Listen port: 8443",
+      "line": 7,
+      "span": "Listen port: 8443",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Connect timeout: 30 seconds",
+      "line": 8,
+      "span": "Connect timeout: 30 seconds",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Read timeout: 120 seconds",
+      "line": 9,
+      "span": "Read timeout: 120 seconds",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Maximum concurrent connections: 512",
+      "line": 10,
+      "span": "Maximum concurrent connections: 512",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Retry attempts per request: 3",
+      "line": 11,
+      "span": "Retry attempts per request: 3",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "TLS 1.2 is the oldest protocol version the relay will negotiate.",
+      "line": 15,
+      "span": "TLS 1.2 is the oldest protocol version the relay will negotiate.",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "The access log uses JSON Lines, one record per line.",
+      "line": 16,
+      "span": "The access log uses JSON Lines, one record per line.",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "Health checks should target /-/healthy.",
+      "line": 17,
+      "span": "Health checks should target /-/healthy.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay's default listen port is 8443.",
+      "line": 7,
+      "span": "The relay's default listen port is 8443.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Connections that do not complete a handshake inside 30 seconds are dropped.",
+      "line": 8,
+      "span": "Connections that do not complete a handshake inside 30 seconds are dropped.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The relay allows a response 120 seconds to arrive before it times out.",
+      "line": 9,
+      "span": "The relay allows a response 120 seconds to arrive before it times out.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "At most 512 connections may be held open concurrently.",
+      "line": 13,
+      "span": "At most 512 connections may be held open concurrently.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The relay makes up to 3 further attempts after a request fails.",
+      "line": 14,
+      "span": "The relay makes up to 3 further attempts after a request fails.",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "The relay will not negotiate any protocol version below TLS 1.2.",
+      "line": 18,
+      "span": "The relay will not negotiate any protocol version below TLS 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Access log records are emitted one JSON object per line.",
+      "line": 19,
+      "span": "Access log records are emitted one JSON object per line.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "The endpoint /-/healthy answers health checks.",
+      "line": 20,
+      "span": "The endpoint /-/healthy answers health checks.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay's default listen port is 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the default listen port is 8443, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is SUPPORTED based on the evidence. The",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Connections that do not complete a handshake inside 30 seconds are dropped.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that connections not completing a handshake within 30 seconds are dropped, which aligns with the claim. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay allows a response 120 seconds to arrive before it times out.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the relay waits up to 120 seconds for a response, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is SUPPORTED based on",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "At most 512 connections may be held open concurrently.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that at most 512 connections may be held open concurrently, which matches the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay makes up to 3 further attempts after a request fails.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the relay makes up to 3 further attempts after a request fails, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay will not negotiate any protocol version below TLS 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the relay will not negotiate any protocol version below TLS 1.2, which matches the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Access log records are emitted one JSON object per line.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that access log records are emitted one JSON object per line, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "The endpoint /-/healthy answers health checks.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the endpoint /-/healthy answers health checks, which matches the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay's default listen port is 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the default listen port is 8443, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Connections that do not complete a handshake inside 30 seconds are dropped.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that connections not completing a handshake within 30 seconds are dropped, which aligns with the claim. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay allows a response 120 seconds to arrive before it times out.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the relay waits up to 120 seconds for a response, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is SUPPORTED based on",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "At most 512 connections may be held open concurrently.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that at most 512 connections may be held open concurrently, which matches the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay makes up to 3 further attempts after a request fails.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the relay makes up to 3 further attempts after a request fails, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay will not negotiate any protocol version below TLS 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the relay will not negotiate any protocol version below TLS 1.2, which matches the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Access log records are emitted one JSON object per line.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that access log records are emitted one JSON object per line, matching the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "The endpoint /-/healthy answers health checks.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the endpoint /-/healthy answers health checks, which matches the claim exactly. SUPPORTED as the information is directly provided without contradiction or partial support issues. The claim is fully supported by the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains why the verdict is",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "the relay binds to port 8443",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source_a.md and source_b.md state the default listen port is 8443, so the claim is supported by both sources, thus SUPPORTED is correct here. The evidence is taken from source_a.md as it explicitly states the port number in the same wording as the claim, making it a direct match without any need for interpretation or inference. The other source, source_b.md, also confirms this with the same\u4fe1\u606f",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "A connection that has not been established within 30 seconds is abandoned.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md explicitly states that connections not established within 30 seconds are abandoned, which directly supports the claim. Source_b.md also mentions a connect timeout of 30 seconds, further confirming the claim. Therefore, the claim is SUPPORTED as both sources provide consistent information.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Once connected, the relay waits up to 120 seconds for a response.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md clearly states the relay waits up to 120 seconds for a response, which directly supports the claim. Source_b.md also lists a read timeout of 120 seconds, reinforcing the claim. Thus, the claim is SUPPORTED by both sources.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "No more than 512 connections may be open at the same time.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md explicitly states the maximum concurrent connections as 512, and source_b.md also lists the same number under maximum concurrent connections. Both sources confirm the claim, making it SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "A failed request is attempted again up to 3 times.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md mentions up to 3 retries for failed requests, and source_b.md lists retry attempts per request as 3. Both sources support the claim, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Anything older than TLS 1.2 is rejected.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md states that anything older than TLS 1.2 is rejected, and source_b.md confirms TLS 1.2 as the oldest supported version. Both sources support the claim, making it SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Every access log line is a single JSON object.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md states each access log line is a single JSON object, and source_b.md mentions JSON Lines with one record per line. Both sources confirm the claim, so it is SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Liveness is reported at /-/healthy.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md states liveness is reported at /-/healthy, and source_b.md advises health checks to target the same endpoint. Both sources support the claim, making it SUPPORTED.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T12:07:18+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "deepseek-r1:70b",
+      "verify": "deepseek-r1:70b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 5631,
+      "completion_tokens": 6147
+    },
+    "tokens": {
+      "input": 5631,
+      "output": 6147,
+      "total": 11778,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "5,631 in, 6,147 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "e3f80cbff1ab635b1da28c49e97477bdacb6e1ec3fb5e94184366af18df1aa26",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 816,
+        "completion_tokens": 709
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "e13292ead3e96db82672dc5e9a34fba9fce5b2791b4bccaa020c901670170cb0",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 770,
+        "completion_tokens": 649
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "4d054c2bdd725fafac0a3214e4e63b1a4d7d72b35e65a98fb36287a13c8e643d",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1656,
+        "completion_tokens": 2614
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "c957f6f5e12da9d21a26d82f7fd63f3849f137e76d95bc3994ae4c8f8f7d2a9b",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 808,
+        "completion_tokens": 748
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "4d54466cebcdb7533e079c34444d7adc829106d9cdb5f6d472db0ab6a14071ef",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1581,
+        "completion_tokens": 1427
+      }
+    ],
+    "window": {},
+    "duration_seconds": 322.5
+  }
+}

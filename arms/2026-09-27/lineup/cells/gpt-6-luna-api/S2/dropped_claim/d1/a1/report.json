@@ -1,0 +1,1039 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "merged.md",
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 11,
+      "source_a.md": 7,
+      "source_b.md": 8
+    },
+    "forward_submitted": 15,
+    "forward_verdicts": 15,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 7,
+        "checked": 7,
+        "accounted": 7,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 8,
+        "checked": 8,
+        "accounted": 7,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 11,
+    "reverse_verdicts": 11,
+    "reverse_partial": 0,
+    "graded": 25,
+    "grounded": 25,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Vandrell Relay is a fictional HTTP relay.",
+      "line": 3,
+      "span": "Vandrell Relay is a fictional HTTP relay",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Vandrell Relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The default connect timeout for Vandrell Relay is 30 seconds.",
+      "line": 8,
+      "span": "The default connect timeout is 30 seconds",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The default read timeout for Vandrell Relay is 120 seconds.",
+      "line": 9,
+      "span": "The default read timeout is 120 seconds",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Vandrell Relay accepts at most 512 concurrent connections.",
+      "line": 13,
+      "span": "The relay accepts at most 512 concurrent connections",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "Each request to Vandrell Relay is retried at most 3 times.",
+      "line": 14,
+      "span": "Each request is retried at most 3 times",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "The minimum accepted TLS version for Vandrell Relay is TLS 1.2.",
+      "line": 18,
+      "span": "The minimum accepted TLS version is TLS 1.2",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Vandrell Relay is a fictional HTTP relay.",
+      "line": 3,
+      "span": "Vandrell Relay is a fictional HTTP relay",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The relay accepts at most 512 concurrent connections.",
+      "line": 8,
+      "span": "The relay accepts at most 512 concurrent connections",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "One worker process is started per CPU core.",
+      "line": 9,
+      "span": "One worker process is started per CPU core",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Access logs are written in JSON Lines format.",
+      "line": 13,
+      "span": "Access logs are written in JSON Lines format",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "Log files are rotated when they reach 100 megabytes.",
+      "line": 14,
+      "span": "Log files are rotated when they reach 100 megabytes",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "The health check endpoint is /-/healthy.",
+      "line": 18,
+      "span": "The health check endpoint is /-/healthy",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "line": 19,
+      "span": "A relay that fails 3 consecutive health checks is removed from rotation",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Vandrell Relay is a fictional HTTP relay.",
+      "line": 3,
+      "span": "Vandrell Relay is a fictional HTTP relay",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 8,
+      "span": "The default connect timeout is 30 seconds",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The default read timeout is 120 seconds.",
+      "line": 9,
+      "span": "The default read timeout is 120 seconds",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The relay accepts at most 512 concurrent connections.",
+      "line": 13,
+      "span": "The relay accepts at most 512 concurrent connections",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Each request is retried at most 3 times.",
+      "line": 14,
+      "span": "Each request is retried at most 3 times",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "One worker process is started per CPU core.",
+      "line": 15,
+      "span": "One worker process is started per CPU core",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "The minimum accepted TLS version is TLS 1.2.",
+      "line": 19,
+      "span": "The minimum accepted TLS version is TLS 1.2",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "Log files are rotated when they reach 100 megabytes.",
+      "line": 23,
+      "span": "Log files are rotated when they reach 100 megabytes",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "The health check endpoint is /-/healthy.",
+      "line": 24,
+      "span": "The health check endpoint is /-/healthy",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "line": 25,
+      "span": "A relay that fails 3 consecutive health checks is removed from rotation",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Vandrell Relay is a fictional HTTP relay.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly describes Vandrell Relay as a fictional HTTP relay.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states the relay's default listening port is 8443.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference gives the default connect timeout as 30 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The default read timeout is 120 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference gives the default read timeout as 120 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states the relay accepts at most 512 concurrent connections.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states each request is retried at most 3 times.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum accepted TLS version is TLS 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly gives TLS 1.2 as the minimum accepted version.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Vandrell Relay is a fictional HTTP relay.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly describes Vandrell Relay as a fictional HTTP relay.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states the relay's default listening port is 8443.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states the relay accepts at most 512 concurrent connections.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "One worker process is started per CPU core.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly states one worker process is started per CPU core.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference does not state that access logs are written in JSON Lines format.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Log files are rotated when they reach 100 megabytes.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states log files are rotated at 100 megabytes.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check endpoint is /-/healthy.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly names /-/healthy as the health check endpoint.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states that a relay failing 3 consecutive health checks is removed from rotation.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Vandrell Relay is a fictional HTTP relay.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly describes Vandrell Relay as a fictional HTTP relay.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states that the relay listens on port 8443 by default.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source gives the default connect timeout as 30 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The default read timeout is 120 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source gives the default read timeout as 120 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states the relay accepts at most 512 concurrent connections.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Each request is retried at most 3 times.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states that each request is retried at most 3 times.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "One worker process is started per CPU core.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source explicitly states that one worker process is started per CPU core.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum accepted TLS version is TLS 1.2.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source identifies TLS 1.2 as the minimum accepted TLS version.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Log files are rotated when they reach 100 megabytes.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source states that log files are rotated when they reach 100 megabytes.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check endpoint is /-/healthy.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source gives /-/healthy as the health check endpoint.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "A relay that fails 3 consecutive health checks is removed from rotation.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source explicitly states that a relay failing 3 consecutive health checks is removed from rotation.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "B-005",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "The reference does not state that access logs are written in JSON Lines format.",
+      "direction": "source_to_merged",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "dropped",
+      "grounded": false
+    }
+  ],
+  "review_queue": [],
+  "declarations": [],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "state": "unmeasured",
+    "measured_calls": 0,
+    "unmeasured_calls": 6,
+    "tool_use": {
+      "state": "unmeasured",
+      "retrieval": "unmeasured",
+      "turns": 0,
+      "calls_with_tool_use": 0,
+      "measured_calls": 0,
+      "unmeasured_calls": 6
+    },
+    "retrieval_judged_on": "all",
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": "",
+    "inconclusive_not_sourced": false
+  },
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "decisions": {
+    "ran": false,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": []
+  },
+  "title": {
+    "policy": "",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": true,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": []
+  },
+  "number_format": {
+    "ran": true,
+    "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+    "faults": [
+      "reading_changed"
+    ],
+    "findings": [],
+    "documents": [
+      {
+        "document": "source_a.md",
+        "convention": "decimal point",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 14,
+          "de": 0
+        }
+      },
+      {
+        "document": "source_b.md",
+        "convention": "decimal point",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 16,
+          "de": 0
+        }
+      },
+      {
+        "document": "merged.md",
+        "convention": "decimal point",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "en",
+        "stop_words": {
+          "en": 23,
+          "de": 0
+        }
+      }
+    ]
+  },
+  "restated_claims": {
+    "ran": false,
+    "claims": 11,
+    "source_claims": 15,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.03,
+    "ratio": null,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-27T16:43:57+00:00",
+    "claimcheck_commit": "73b61563c13c",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "bf7d5842201d",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "gpt-6-luna",
+      "verify": "gpt-6-luna"
+    },
+    "models_answered": {
+      "decompose": {
+        "models": [
+          "gpt-6-luna"
+        ],
+        "output": "gpt-6-luna"
+      },
+      "verify": {
+        "models": [
+          "gpt-6-luna"
+        ],
+        "output": "gpt-6-luna"
+      }
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify.md": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify_reverse.md": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": 0,
+      "profile": "openai-reasoning",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 1,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 9356,
+      "completion_tokens": 4719
+    },
+    "tokens": {
+      "input": 9356,
+      "output": 4719,
+      "cached": 0,
+      "thought": 1529,
+      "total": 14075,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "9,356 in, 4,719 out, 0 cached, 1,529 reasoning",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "gpt-6-luna",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "0cc052475f65995d0f7f16e26bf97f137628f020983cd281819ba7394965bdea",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1066,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-luna",
+        "latency_ms": 5455,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 5455,
+        "failed_ms": 0,
+        "ttfb_ms": 4077,
+        "prompt_tokens": 908,
+        "completion_tokens": 545,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-6-luna",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "4fd57454a8da4850ca12fe68590032b684cd10bc72caf86a4af1acc76460a536",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1096,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-luna",
+        "latency_ms": 7014,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 7014,
+        "failed_ms": 0,
+        "ttfb_ms": 5828,
+        "prompt_tokens": 922,
+        "completion_tokens": 754,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "gpt-6-luna",
+        "prompt_sha256": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+        "request_sha256": "1c21a17d4023edb36d996bc6c9deb4504d946b36f518ee0f279c9fa5c87c0691",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2682,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-luna",
+        "latency_ms": 6381,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 6381,
+        "failed_ms": 0,
+        "ttfb_ms": 3104,
+        "prompt_tokens": 2106,
+        "completion_tokens": 961,
+        "cached_tokens": 0,
+        "outcome": "repair"
+      },
+      {
+        "role": "verify",
+        "model": "gpt-6-luna",
+        "prompt_sha256": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+        "request_sha256": "09268a20fcbfc13f73c4f5e04fbd02085460d0bb5544ce9eb66af194d59e81a4",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3077,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-luna",
+        "latency_ms": 8487,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 8487,
+        "failed_ms": 0,
+        "ttfb_ms": 2548,
+        "prompt_tokens": 2389,
+        "completion_tokens": 1168,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-6-luna",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "7a76275017b170befe95572b4029dbf52113ad58edf7cb3e639357b4ea8e752d",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1159,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-luna",
+        "latency_ms": 5220,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 5220,
+        "failed_ms": 0,
+        "ttfb_ms": 3674,
+        "prompt_tokens": 973,
+        "completion_tokens": 610,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "gpt-6-luna",
+        "prompt_sha256": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d",
+        "request_sha256": "14463284ff1c31acf3e0d3558c7220d01a7479a0ba1fc71ec1618c29180a820a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2691,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-luna",
+        "latency_ms": 4403,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 4403,
+        "failed_ms": 0,
+        "ttfb_ms": 1716,
+        "prompt_tokens": 2058,
+        "completion_tokens": 681,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      }
+    ],
+    "cost": {
+      "state": "priced",
+      "usd": 0.0033,
+      "usd_exact": 0.0032951,
+      "priced_calls": 6,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 0,
+      "rates_read_on": "2026-09-25"
+    },
+    "answering_seconds": {
+      "total": 36.96,
+      "by_role": {
+        "decompose": 17.689,
+        "verify": 19.271
+      }
+    },
+    "answering_cost": {
+      "state": "priced",
+      "usd": 0.0033,
+      "usd_exact": 0.0032951,
+      "priced_calls": 6,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 0,
+      "rates_read_on": "2026-09-25"
+    },
+    "excluded": {
+      "calls": {
+        "retries": 0
+      },
+      "seconds": {
+        "waited": 0.0,
+        "failed": 0.0,
+        "discarded": 0.0,
+        "total": 0.0
+      },
+      "cost": {
+        "state": "none",
+        "usd": null,
+        "usd_exact": null,
+        "priced_calls": 0,
+        "unpriced_calls": 0,
+        "unmeasured_calls": 0
+      }
+    },
+    "discarded_calls": [],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "verify": 3
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "unmeasured",
+        "retrieval": "unmeasured",
+        "turns": 0,
+        "calls_with_tool_use": 0,
+        "measured_calls": 0,
+        "unmeasured_calls": 6
+      },
+      "described": "unmeasured (6 call(s) reported no turn count)"
+    },
+    "duration_seconds": 37.1
+  }
+}

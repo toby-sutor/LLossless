@@ -1,0 +1,39 @@
+LLossless merge  claude-sonnet-5 at lineup sonnet-5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-sonnet-5
+✓ merge: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  135.5s
+✓ merge  135.6s
+• reconcile
+✓ reconcile  2.8s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  16.1s
+✓ decompose source_a.md  16.2s
+• decompose source_b.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  16.2s
+✓ decompose source_b.md  16.2s
+• verify (forward)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  50.0s
+✓ verify (forward)  50.0s
+• decompose merged.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  14.2s
+✓ decompose merged.md  14.2s
+• verify (reverse)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  31.4s
+✓ verify (reverse)  31.5s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  1 contradicted: the merge states something different (see `## Findings`)
+  4 absent and undeclared: in a source, not in the merge, and no record explains it (see `## Structure`)
+  3 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

@@ -1,0 +1,789 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "chickens_1.md",
+    "source_b.md": "chickens_2.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose chickens_1.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose chickens_2.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 9,
+      "source_a.md": 6,
+      "source_b.md": 5
+    },
+    "forward_submitted": 11,
+    "forward_verdicts": 11,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 6,
+        "checked": 6,
+        "accounted": 6,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 5,
+        "checked": 5,
+        "accounted": 5,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 9,
+    "reverse_verdicts": 9,
+    "reverse_partial": 0,
+    "graded": 20,
+    "grounded": 14,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Keep at least 3 birds, as chickens are social animals and get easily stressed when alone.",
+      "line": 2,
+      "span": "Keep at least 3 birds, as chickens are social animals and get easily stressed when alone.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Provide roughly 4 sq ft per chicken inside the coop plus around 10 sq ft each in the bigger run.",
+      "line": 2,
+      "span": "Provide roughly 4 sq ft per chicken inside the coop plus around 10 sq ft each in the bigger run.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Predator-proofing is the most imoprtant aspect for safety: use robust chicken wire, bury the fence in to the ground around the perimeter against foxes, and use an automatic door that closes at dusk.",
+      "line": 4,
+      "span": "Predator-proofing is the most imoprtant aspect for safety: use robust chicken wire, bury the fence in to the ground around the perimeter against foxes, and use an automatic door that closes at dusk.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "Provide the chickens with designated chicken feed that contains important vitamins and minerals. Provide clean water available 24/7. Clean the waterers often and thouroughly to stop algae and mould.",
+      "line": 6,
+      "span": "Provide the chickens with designated chicken feed that contains important vitamins and minerals. Provide clean water available 24/7. Clean the waterers often and thouroughly to stop algae and mould.",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Add some absorbent bedding like pine shavings (around 4-6 inches), and replace it weekly, top it up as needed. Offer 1 nesting box per 3/4 hens and 8-12 inches of roosting bar per bird will help them feel safe and comfy.",
+      "line": 8,
+      "span": "Add some absorbent bedding like pine shavings (around 4-6 inches), and replace it weekly, top it up as needed. Offer 1 nesting box per 3/4 hens and 8-12 inches of roosting bar per bird will help them feel safe and comfy.",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "Finally, it is important to check the flock daily so you understand what \"normal\" behavior looks like for each hen, quarantine any new birds for 7-10 days before introduction to avoid spread of illness and parasites, and compost manure before it goes anywhere near the vegetable beds.",
+      "line": 10,
+      "span": "Finally, it is important to check the flock daily so you understand what \"normal\" behavior looks like for each hen, quarantine any new birds for 7-10 days before introduction to avoid spread of illness and parasites, and compost manure before it goes anywhere near the vegetable beds.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Keep at least three hens, since chickens are social and stressed when alone, and allow roughly 4 sq ft per bird inside the coop plus 10 sq ft each in the run.",
+      "line": 2,
+      "span": "Keep at least three hens, since chickens are social and stressed when alone, and allow roughly 4 sq ft per bird inside the coop plus 10 sq ft each in the run.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Predator-proofing is the single biggest failure point: use \u00bc\" galvanised hardware cloth rather than chicken wire, bury a 12-inch apron around the perimeter against diggers, and fit two-step latches or an automatic door that closes at dusk.",
+      "line": 4,
+      "span": "Predator-proofing is the single biggest failure point: use \u00bc\" galvanised hardware cloth rather than chicken wire, bury a 12-inch apron around the perimeter against diggers, and fit two-step latches or an automatic door that closes at dusk.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Feed a complete layer ration supplemented by whatever they forage, and keep clean water available at all times, emptying and scrubbing the waterers often enough to stop algae and mould.",
+      "line": 6,
+      "span": "Feed a complete layer ration supplemented by whatever they forage, and keep clean water available at all times, emptying and scrubbing the waterers often enough to stop algae and mould.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Provide 4-6 inches of absorbent bedding (pine shavings or similar), stir it weekly, top it up as needed, and strip it out every 6-12 months; one nesting box per three to four hens and 8-12 inches of roosting bar per bird will keep things orderly.",
+      "line": 8,
+      "span": "Provide 4-6 inches of absorbent bedding (pine shavings or similar), stir it weekly, top it up as needed, and strip it out every 6-12 months; one nesting box per three to four hens and 8-12 inches of roosting bar per bird will keep things orderly.",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Finally, check the flock daily so you learn what \"normal\" looks like for each hen, quarantine any new birds for 7-10 days before introduction, and compost manure before it goes anywhere near the vegetable beds.",
+      "line": 10,
+      "span": "Finally, check the flock daily so you learn what \"normal\" looks like for each hen, quarantine any new birds for 7-10 days before introduction, and compost manure before it goes anywhere near the vegetable beds.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Keep at least 3 birds, as chickens are social animals and get easily stressed when alone.",
+      "line": 3,
+      "span": "Keep at least 3 birds, as chickens are social animals and get easily stressed when alone.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Provide roughly 4 sq ft per chicken inside the coop plus around 10 sq ft each in the bigger run.",
+      "line": 5,
+      "span": "Provide roughly 4 sq ft per chicken inside the coop plus around 10 sq ft each in the bigger run.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Predator-proofing is the most imoprtant aspect for safety: use robust chicken wire, bury the fence in to the ground around the perimeter against foxes, and use an automatic door that closes at dusk.",
+      "line": 7,
+      "span": "Predator-proofing is the most imoprtant aspect for safety: use robust chicken wire, bury the fence in to the ground around the perimeter against foxes, and use an automatic door that closes at dusk.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Provide the chickens with designated chicken feed that contains important vitamins and minerals.",
+      "line": 9,
+      "span": "Provide the chickens with designated chicken feed that contains important vitamins and minerals.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Provide clean water available 24/7.",
+      "line": 11,
+      "span": "Provide clean water available 24/7.",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Clean the waterers often and thouroughly to stop algae and mould.",
+      "line": 13,
+      "span": "Clean the waterers often and thouroughly to stop algae and mould.",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Add some absorbent bedding like pine shavings (around 4-6 inches), and replace it weekly, top it up as needed.",
+      "line": 15,
+      "span": "Add some absorbent bedding like pine shavings (around 4-6 inches), and replace it weekly, top it up as needed.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "Offer 1 nesting box per 3/4 hens and 8-12 inches of roosting bar per bird will help them feel safe and comfy.",
+      "line": 17,
+      "span": "Offer 1 nesting box per 3/4 hens and 8-12 inches of roosting bar per bird will help them feel safe and comfy.",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "Finally, it is important to check the flock daily so you understand what \"normal\" behavior looks like for each hen, quarantine any new birds for 7-10 days before introduction to avoid spread of illness and parasites, and compost manure before it goes anywhere near the vegetable beds.",
+      "line": 19,
+      "span": "Finally, it is important to check the flock daily so you understand what \"normal\" behavior looks like for each hen, quarantine any new birds for 7-10 days before introduction to avoid spread of illness and parasites, and compost manure before it goes anywhere near the vegetable beds.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Keep at least 3 birds, as chickens are social animals and get easily stressed when alone.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Provide roughly 4 sq ft per chicken inside the coop plus around 10 sq ft each in the bigger run.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Predator-proofing is the most imoprtant aspect for safety: use robust chicken wire, bury the fence in to the ground around the perimeter against foxes, and use an automatic door that closes at dusk.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Provide the chickens with designated chicken feed that contains important vitamins and minerals. Provide clean water available 24/7. Clean the waterers often and thouroroughly to stop algae and mould.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Add some absorbent bedding like pine shavings (around 4-6 inches), and replace it weekly, top it up as needed. Offer 1 nesting box per 3/4 hens and 8-12 inches of roosting bar per bird will help them feel safe and comfy.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Finally, it is important to check the flock daily so you understand what \"normal\" behavior looks like for each hen, quarantine any new birds for 7-10 days before introduction to avoid spread of illness and parasites, and compost manure before it goes anywhere near the vegetable beds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Keep at least three hens, since chickens are social and stressed when alone, and allow roughly 4 sq ft per bird inside the coop plus 10 sq ft each in the run.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim in different words with the same meaning.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Predator-proofing is the single biggest failure point: use \u00bc\" galvanised hardware cloth rather than chicken wire, bury a 12-inch apron around the perimeter against diggers, and fit two-step latches or an automatic door that closes at dusk.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim in different words with the same meaning.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Feed a complete layer ration supplemented by whatever they forage, and keep clean water available at all times, emptying and scrubbing the waterers often enough to stop algae and mould.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim in different words with the same meaning.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Provide 4-6 inches of absorbent bedding (pine shavings or similar), stir it weekly, top it up as needed, and strip it out every 6-12 months; one nesting box per three to four hens and 8-12 inches of roosting bar per bird will keep things orderly.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim in different words with the same meaning.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Finally, check the flock daily so you learn what \"normal\" looks like for each hen, quarantine any new birds for 7-10 days before introduction, and compost manure before it goes anywhere near the vegetable beds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states the claim in different words with the same meaning.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Keep at least 3 birds, as chickens are social animals and get easily stressed when alone.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Provide roughly 4 sq ft per chicken inside the coop plus around 10 sq ft each in the bigger run.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Predator-proofing is the most imoprtant aspect for safety: use robust chicken wire, bury the fence in to the ground around the perimeter against foxes, and use an automatic door that closes at dusk.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Provide the chickens with designated chicken feed that contains important vitamins and minerals.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Provide clean water available 24/7.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Clean the waterers often and thouroughly to stop algae and mould.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Add some absorbent bedding like pine shavings (around 4-6 inches), and replace it weekly, top it up as needed.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Offer 1 nesting box per 3/4 hens and 8-12 inches of roosting bar per bird will help them feel safe and comfy.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Finally, it is important to check the flock daily so you understand what \"normal\" behavior looks like for each hen, quarantine any new birds for 7-10 days before introduction to avoid spread of illness and parasites, and compost manure before it goes anywhere near the vegetable beds.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is directly stated in source_a.md.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "a3",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-003"
+      ],
+      "reason": "imoprtant is misspelled"
+    },
+    {
+      "segment": "b1",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001"
+      ],
+      "reason": "The same fact is stated in a2"
+    },
+    {
+      "segment": "a6",
+      "disposition": "reworded",
+      "grade": "rejected",
+      "detail": "declared 'reworded', and its text is in the merge",
+      "claims": [],
+      "reason": "thouroughly is misspelled"
+    },
+    {
+      "segment": "b4",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-004"
+      ],
+      "reason": "the same fact is stated in a7"
+    },
+    {
+      "segment": "b5",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-005"
+      ],
+      "reason": "The same fact is stated in a9"
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 14,
+    "findings": [
+      {
+        "kind": "undeclared_absence",
+        "detail": "'Predator-proofing is the single biggest failure point: use \u00bc\" galvanised hardware cloth rather than chicken wire, bury a 12-inch apron around the perimeter against diggers, and fit two-step latches or an automatic door that closes at dusk.' is not in the merge and no disposition record explains it (nearest merge segment m4 at 0.67)",
+        "segment": "b2",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "undeclared_absence",
+        "detail": "'Feed a complete layer ration supplemented by whatever they forage, and keep clean water available at all times, emptying and scrubbing the waterers often enough to stop algae and mould.' is not in the merge and no disposition record explains it (nearest merge segment m7 at 0.44)",
+        "segment": "b3",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "verbatim_violation",
+        "detail": "numeric '6-12' (months) does not survive into the merge unchanged",
+        "segment": "b4",
+        "document": "source_b.md"
+      }
+    ]
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "document": "source_a.md",
+            "text": "How to take care of backyard chickens"
+          },
+          {
+            "document": "source_b.md",
+            "text": "Basic Care of a Backyard Laying Flock"
+          }
+        ],
+        "chosen": "",
+        "resolved": false,
+        "reason": "The base document's title was kept"
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": "no source document has a title segment, so the title policy has nothing to name. A first line that runs straight into the body is not read as a title; this is a property of the input"
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 9,
+    "source_claims": 11,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 14,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aaaaaaaaa",
+    "runs": 1,
+    "attributed": 9,
+    "interleaved": false,
+    "monotone": true,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 0,
+    "headings_total": 0
+  },
+  "merged_written_to": "/tmp/cc-phase4-run/work-toby-test-2-low-8b/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-16T22:56:55+00:00",
+    "claimcheck_commit": "605b53189df8",
+    "run_mode": "live",
+    "merge_policy": {
+      "fidelity": "low",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "qwen/qwen3-8b",
+      "decompose": "qwen/qwen3-8b",
+      "verify": "qwen/qwen3-8b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "1b36d99e8c3e00d8df4c2fd656d96d78af8de7fc1d36615c6224f6d565106452",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "e12d7f86bfd3fc67e689f480d9fd135e5bb36351e5d7e66242578ed31377ee08",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f5a949169d2030780688e20dc435031e03c9ba88fed9b22aa140e3ec54b7a4ee"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": []
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 10401,
+      "completion_tokens": 4569
+    },
+    "tokens": {
+      "input": 10401,
+      "output": 4569,
+      "total": 14970,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "10,401 in, 4,569 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "1b36d99e8c3e00d8df4c2fd656d96d78af8de7fc1d36615c6224f6d565106452",
+        "request_sha256": "a8db59a3ba793813268893c64d54c853d7d1b75408df7e1b87b645eb63010fba",
+        "max_tokens": 13824,
+        "estimated_prompt_tokens": 4952,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3431,
+        "completion_tokens": 714
+      },
+      {
+        "role": "decompose",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "7bb1e46b2e79e8a5f033daa11c652e719cd873f30432bb4aef0690fd32bd1729",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1292,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 928,
+        "completion_tokens": 643
+      },
+      {
+        "role": "decompose",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "4731329dc17a0e81d0f9f539ca208b0b070bbdf3240e6b20eb5dafaaa77564bf",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1276,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 928,
+        "completion_tokens": 614
+      },
+      {
+        "role": "verify",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "e12d7f86bfd3fc67e689f480d9fd135e5bb36351e5d7e66242578ed31377ee08",
+        "request_sha256": "d8606b9fb6eaed0bccac8edaa3b6c3cedb763ad6ff73a1fb1f84ab6cdd03a524",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2987,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2136,
+        "completion_tokens": 1160
+      },
+      {
+        "role": "decompose",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "4b15312db83ae857f24483ec0f3bdd05298339ed7de209f83897b18780ff008f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1309,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 960,
+        "completion_tokens": 716
+      },
+      {
+        "role": "verify",
+        "model": "qwen/qwen3-8b",
+        "prompt_sha256": "f5a949169d2030780688e20dc435031e03c9ba88fed9b22aa140e3ec54b7a4ee",
+        "request_sha256": "2151f3a4108fe0f24abbe46836a3d52668bd08b189d9ad55a85dcde03ebfa3e2",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2934,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2018,
+        "completion_tokens": 722
+      }
+    ],
+    "window": {
+      "decompose": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 2
+    },
+    "duration_seconds": 285.6
+  }
+}

@@ -1,0 +1,836 @@
+{
+  "command": "verify",
+  "exit_code": 0,
+  "documents": {
+    "merged.md": "merged.md",
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 8,
+      "source_a.md": 5,
+      "source_b.md": 5
+    },
+    "forward_submitted": 10,
+    "forward_verdicts": 10,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 5,
+        "checked": 5,
+        "accounted": 5,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 5,
+        "checked": 5,
+        "accounted": 5,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 8,
+    "reverse_verdicts": 8,
+    "reverse_partial": 0,
+    "graded": 18,
+    "grounded": 18,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Vandrell Relay is a fictional HTTP relay.",
+      "line": 3,
+      "span": "Vandrell Relay is a fictional HTTP relay.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Vandrell Relay's listen port is 8443.",
+      "line": 7,
+      "span": "Listen port: 8443",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Vandrell Relay's connect timeout is 30 seconds.",
+      "line": 8,
+      "span": "Connect timeout: 30 seconds",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "Vandrell Relay's maximum concurrent connections is 512.",
+      "line": 12,
+      "span": "Maximum concurrent connections: 512",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Vandrell Relay's retry attempts is 3.",
+      "line": 13,
+      "span": "Retry attempts: 3",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Vandrell Relay is a fictional HTTP relay.",
+      "line": 3,
+      "span": "Vandrell Relay is a fictional HTTP relay.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Vandrell Relay's connect timeout is 30 seconds.",
+      "line": 7,
+      "span": "Connect timeout: 30 seconds",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Vandrell Relay's read timeout is 120 seconds.",
+      "line": 8,
+      "span": "Read timeout: 120 seconds",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Vandrell Relay's access log format is JSON Lines.",
+      "line": 12,
+      "span": "Access log format: JSON Lines",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Vandrell Relay's health check path is /-/healthy.",
+      "line": 13,
+      "span": "Health check path: /-/healthy",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Vandrell Relay is a fictional HTTP relay.",
+      "line": 3,
+      "span": "Vandrell Relay is a fictional HTTP relay.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Vandrell Relay's listen port is 8443.",
+      "line": 7,
+      "span": "Listen port: 8443",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Vandrell Relay's connect timeout is 30 seconds.",
+      "line": 8,
+      "span": "Connect timeout: 30 seconds",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Vandrell Relay's read timeout is 120 seconds.",
+      "line": 9,
+      "span": "Read timeout: 120 seconds",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Vandrell Relay's maximum concurrent connections is 512.",
+      "line": 13,
+      "span": "Maximum concurrent connections: 512",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Vandrell Relay's retry attempts is 3.",
+      "line": 14,
+      "span": "Retry attempts: 3",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Vandrell Relay's access log format is JSON Lines.",
+      "line": 18,
+      "span": "Access log format: JSON Lines",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "Vandrell Relay's health check path is /-/healthy.",
+      "line": 19,
+      "span": "Health check path: /-/healthy",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Vandrell Relay is a fictional HTTP relay.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states the claim directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "- Listen port: 8443",
+      "evidence_source": "merged.md",
+      "rationale": "The listed listen port is 8443.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "- Connect timeout: 30 seconds",
+      "evidence_source": "merged.md",
+      "rationale": "The listed connect timeout is 30 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "- Maximum concurrent connections: 512",
+      "evidence_source": "merged.md",
+      "rationale": "The listed maximum concurrent connections is 512.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "- Retry attempts: 3",
+      "evidence_source": "merged.md",
+      "rationale": "The listed number of retry attempts is 3.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Vandrell Relay is a fictional HTTP relay.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states the claim directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "- Connect timeout: 30 seconds",
+      "evidence_source": "merged.md",
+      "rationale": "The listed connect timeout is 30 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "- Read timeout: 120 seconds",
+      "evidence_source": "merged.md",
+      "rationale": "The listed read timeout is 120 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "- Access log format: JSON Lines",
+      "evidence_source": "merged.md",
+      "rationale": "The listed access log format is JSON Lines.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "- Health check path: /-/healthy",
+      "evidence_source": "merged.md",
+      "rationale": "The listed health check path is /-/healthy.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Vandrell Relay is a fictional HTTP relay.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "- Listen port: 8443",
+      "evidence_source": "source_a.md",
+      "rationale": "The source gives 8443 as the listen port.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "- Connect timeout: 30 seconds",
+      "evidence_source": "source_a.md",
+      "rationale": "The source gives a connect timeout of 30 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "- Read timeout: 120 seconds",
+      "evidence_source": "source_b.md",
+      "rationale": "The source gives a read timeout of 120 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "- Maximum concurrent connections: 512",
+      "evidence_source": "source_a.md",
+      "rationale": "The source gives 512 as the maximum concurrent connections.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "- Retry attempts: 3",
+      "evidence_source": "source_a.md",
+      "rationale": "The source gives 3 retry attempts.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "- Access log format: JSON Lines",
+      "evidence_source": "source_b.md",
+      "rationale": "The source gives JSON Lines as the access log format.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "- Health check path: /-/healthy",
+      "evidence_source": "source_b.md",
+      "rationale": "The source gives /-/healthy as the health check path.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "state": "unmeasured",
+    "measured_calls": 0,
+    "unmeasured_calls": 5,
+    "tool_use": {
+      "state": "unmeasured",
+      "retrieval": "unmeasured",
+      "turns": 0,
+      "calls_with_tool_use": 0,
+      "measured_calls": 0,
+      "unmeasured_calls": 5
+    },
+    "retrieval_judged_on": "all",
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": "",
+    "inconclusive_not_sourced": false
+  },
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "decisions": {
+    "ran": false,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": []
+  },
+  "title": {
+    "policy": "",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": true,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": []
+  },
+  "number_format": {
+    "ran": true,
+    "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+    "faults": [
+      "reading_changed"
+    ],
+    "findings": [],
+    "documents": [
+      {
+        "document": "source_a.md",
+        "convention": "",
+        "decided_by": "none",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "",
+        "stop_words": {
+          "en": 3,
+          "de": 0
+        }
+      },
+      {
+        "document": "source_b.md",
+        "convention": "",
+        "decided_by": "none",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "",
+        "stop_words": {
+          "en": 3,
+          "de": 0
+        }
+      },
+      {
+        "document": "merged.md",
+        "convention": "",
+        "decided_by": "none",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "",
+        "stop_words": {
+          "en": 3,
+          "de": 0
+        }
+      }
+    ]
+  },
+  "restated_claims": {
+    "ran": false,
+    "claims": 8,
+    "source_claims": 10,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.03,
+    "ratio": null,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-27T16:57:16+00:00",
+    "claimcheck_commit": "73b61563c13c",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "bf7d5842201d",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "gpt-6-sol",
+      "verify": "gpt-6-sol"
+    },
+    "models_answered": {
+      "decompose": {
+        "models": [
+          "gpt-6-sol"
+        ],
+        "output": "gpt-6-sol"
+      },
+      "verify": {
+        "models": [
+          "gpt-6-sol"
+        ],
+        "output": "gpt-6-sol"
+      }
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify.md": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/verify_reverse.md": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": 0,
+      "profile": "openai-reasoning",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 6528,
+      "completion_tokens": 2118
+    },
+    "tokens": {
+      "input": 6528,
+      "output": 2118,
+      "cached": 0,
+      "thought": 277,
+      "total": 8646,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "6,528 in, 2,118 out, 0 cached, 277 reasoning",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "gpt-6-sol",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "323c4e6d44c4a7a1cf8791a92ffea25cc93480da4fbeeed0956c5b526101825a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 998,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-sol",
+        "latency_ms": 4270,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 4269,
+        "failed_ms": 0,
+        "ttfb_ms": 2935,
+        "prompt_tokens": 861,
+        "completion_tokens": 243,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-6-sol",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "bcad25adca3b42b2d591557a1bba303889295f15b76ecac88c1618be7ce54a03",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1003,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-sol",
+        "latency_ms": 4493,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 4493,
+        "failed_ms": 0,
+        "ttfb_ms": 2548,
+        "prompt_tokens": 863,
+        "completion_tokens": 316,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "gpt-6-sol",
+        "prompt_sha256": "af6354d0b620b5b4108704173196d61c9147a302f67b1c464856ee23068a7426",
+        "request_sha256": "17131532e08ca8e5def5bd9b442538921a5c9b245a3e3afec8b2402d6cd7b073",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2453,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-sol",
+        "latency_ms": 6849,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 6849,
+        "failed_ms": 0,
+        "ttfb_ms": 1218,
+        "prompt_tokens": 1964,
+        "completion_tokens": 618,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-6-sol",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "c7906f73b252e03c662f385df10914dce20ae4c2f10d334cf5bcbf9ac2b3d6b4",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1043,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-sol",
+        "latency_ms": 5724,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 5724,
+        "failed_ms": 0,
+        "ttfb_ms": 2650,
+        "prompt_tokens": 903,
+        "completion_tokens": 427,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      },
+      {
+        "role": "verify",
+        "model": "gpt-6-sol",
+        "prompt_sha256": "c24eb04c537573bfad3c91ce13aacb7e3b94059c92263a7fc37b2ebaf8e33a2d",
+        "request_sha256": "59ae98f11cb4a82f794f44a43a12ef64fe063af60796b371e425dc311ece047a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2491,
+        "tier": "prompt",
+        "source": "live",
+        "served_model": "gpt-6-sol",
+        "latency_ms": 4962,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 4962,
+        "failed_ms": 0,
+        "ttfb_ms": 923,
+        "prompt_tokens": 1937,
+        "completion_tokens": 514,
+        "cached_tokens": 0,
+        "outcome": "answer"
+      }
+    ],
+    "cost": {
+      "state": "priced",
+      "usd": 0.0342,
+      "usd_exact": 0.034236,
+      "priced_calls": 5,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 0,
+      "rates_read_on": "2026-09-25"
+    },
+    "answering_seconds": {
+      "total": 26.297,
+      "by_role": {
+        "decompose": 14.486,
+        "verify": 11.811
+      }
+    },
+    "answering_cost": {
+      "state": "priced",
+      "usd": 0.0342,
+      "usd_exact": 0.034236,
+      "priced_calls": 5,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 0,
+      "rates_read_on": "2026-09-25"
+    },
+    "excluded": {
+      "calls": {
+        "retries": 0
+      },
+      "seconds": {
+        "waited": 0.0,
+        "failed": 0.0,
+        "discarded": 0.0,
+        "total": 0.0
+      },
+      "cost": {
+        "state": "none",
+        "usd": null,
+        "usd_exact": null,
+        "priced_calls": 0,
+        "unpriced_calls": 0,
+        "unmeasured_calls": 0
+      }
+    },
+    "discarded_calls": [],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "verify": 2
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "unmeasured",
+        "retrieval": "unmeasured",
+        "turns": 0,
+        "calls_with_tool_use": 0,
+        "measured_calls": 0,
+        "unmeasured_calls": 5
+      },
+      "described": "unmeasured (5 call(s) reported no turn count)"
+    },
+    "duration_seconds": 26.5
+  }
+}

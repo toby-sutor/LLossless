@@ -1,0 +1,451 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_swapped/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_swapped/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_swapped/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_swapped/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_swapped/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/attribution_swapped/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 4,
+      "source_a.md": 3,
+      "source_b.md": 3
+    },
+    "forward_submitted": 6,
+    "forward_verdicts": 6,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 4,
+    "reverse_verdicts": 4,
+    "reverse_partial": 0,
+    "graded": 10,
+    "grounded": 10,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 4,
+      "span": "The read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The read timeout is 60 seconds.",
+      "line": 4,
+      "span": "The read timeout is 60 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The health check path is /healthz.",
+      "line": 4,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "According to the Deployment Notes, the read timeout is 30 seconds.",
+      "line": 7,
+      "span": "According to the Deployment Notes, the read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "According to the Operator Guide, the read timeout is 60 seconds.",
+      "line": 8,
+      "span": "According to the Operator Guide, the read timeout is 60 seconds.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "According to the Deployment Notes, the read timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text attributes a read timeout of 30 seconds to the Deployment Notes, which supports the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the health check path is /healthz.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "According to the Operator Guide, the read timeout is 60 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text attributes a read timeout of 60 seconds to the Operator Guide, which supports the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the health check path is /healthz.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source documents explicitly state that the relay listens on port 8443.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source documents explicitly state that the health check path is /healthz.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 60 seconds.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B (Deployment Notes) states the read timeout is 60 seconds, which contradicts the claim that it is 30 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A (Operator Guide) states the read timeout is 30 seconds, which contradicts the claim that it is 60 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "M-003",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 60 seconds.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B (Deployment Notes) states the read timeout is 60 seconds, which contradicts the claim that it is 30 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A (Operator Guide) states the read timeout is 30 seconds, which contradicts the claim that it is 60 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T10:41:43+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "qwen3.8:27b",
+      "verify": "qwen3.8:27b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "merge"
+      ]
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 5142,
+      "completion_tokens": 1401
+    },
+    "tokens": {
+      "input": 5142,
+      "output": 1401,
+      "total": 6543,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "5,142 in, 1,401 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "bfb9a3e802b7a400d1c32ff89518c0200c36bb84b5f09e673779bb14d6df332b",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 719,
+        "completion_tokens": 149
+      },
+      {
+        "role": "decompose",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "58b5806ca2862762324ad0a97d3a08e2681e454cffb8ca75866169c5ad35e8f4",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 719,
+        "completion_tokens": 149
+      },
+      {
+        "role": "verify",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "b998f9ba63d3ce0d9bca3c970dc8fd31aa774d884b99e2a8136a1379cda01af9",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1538,
+        "completion_tokens": 517
+      },
+      {
+        "role": "decompose",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "3b81df958e87d250b1a549dd90189bbdb5fe8fb9ad54524f73eee82a870e5bb7",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 756,
+        "completion_tokens": 217
+      },
+      {
+        "role": "verify",
+        "model": "qwen3.8:27b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "7792f4086bb320cc67b803420e9f824faffd54b39586787b972956c51fd82abe",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1410,
+        "completion_tokens": 369
+      }
+    ],
+    "window": {},
+    "duration_seconds": 33.0
+  }
+}

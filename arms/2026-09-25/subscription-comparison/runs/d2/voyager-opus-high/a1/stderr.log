@@ -1,0 +1,43 @@
+claimcheck merge  opus at Claude Code - Opus, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking opus
+✓ merge: opus (claude-opus-5) answered at the prompt tier  244.6s
+✓ merge  244.6s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  12.9s
+✓ decompose source_a.md  12.9s
+• decompose source_b.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  17.8s
+✓ decompose source_b.md  17.8s
+• verify (forward)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  33.1s
+claimcheck: cache off; response dumps for this run go to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d2/voyager-opus-high/a1/tmp/claimcheck-run-2coa8mhb
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  25.7s
+✓ verify (forward)  58.8s
+• decompose merged.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  23.8s
+✓ decompose merged.md  23.8s
+• verify (reverse)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  28.4s
+✓ verify (reverse)  28.4s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d2/voyager-opus-high/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  The model retrieved. 1 of 7 call(s) took the turns a retrieval costs; which citation each retrieval backs is not recorded
+  1 dropped: in a source, not in the merge (see `## Findings`)
+  45 contradicted: the merge states something different (see `## Findings`)
+  12 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d2/voyager-opus-high/a1/merged.md
+  the full report went to stdout; exit code 1

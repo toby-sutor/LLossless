@@ -1,0 +1,428 @@
+[
+ {
+  "arm": "A1-27b-default",
+  "model": "qwen3.8:27b",
+  "size_b": 27,
+  "thinking_requested": [
+   "merge"
+  ],
+  "reasoned_anyway": null,
+  "field_order": "schema",
+  "tier": "json_schema",
+  "exit_code": 0,
+  "merged_bytes": 5673,
+  "structural": {
+   "ran": true,
+   "checks": 9,
+   "segments": 63,
+   "findings": 0,
+   "by_kind": {},
+   "segments_hit": []
+  },
+  "declared_loss": {
+   "drops": 0,
+   "segments": 63,
+   "budget": 0.05,
+   "over_budget": false
+  },
+  "findings": 0,
+  "findings_grounded": 0,
+  "findings_ungrounded": 0,
+  "findings_by_kind": {},
+  "verdicts": {
+   "SUPPORTED": 129
+  },
+  "extracted": {
+   "merged.md": 61,
+   "source_a.md": 34,
+   "source_b.md": 34
+  },
+  "graded": 129,
+  "grounded": 129,
+  "errored": 0,
+  "review_queue": 0,
+  "census": {
+   "merged.md": {
+    "claims": 61,
+    "span_bytes_per_claim": 123.6,
+    "union_coverage": 0.7864,
+    "anchored": 1.0
+   },
+   "source_a.md": {
+    "claims": 34,
+    "span_bytes_per_claim": 132.9,
+    "union_coverage": 0.6982,
+    "anchored": 1.0
+   },
+   "source_b.md": {
+    "claims": 34,
+    "span_bytes_per_claim": 48.9,
+    "union_coverage": 0.7301,
+    "anchored": 1.0
+   }
+  },
+  "calls": 10,
+  "schema_repairs": 0,
+  "completion_tokens": 22048,
+  "seconds": 449.4,
+  "digest": {
+   "sha256": "22130167c4c20e20c7b71454612966ca8e8171e9b3cc8ab6ce8aa6cbfec79643",
+   "seen_at": [
+    "after",
+    "before"
+   ]
+  },
+  "tokens": {
+   "input": 36173,
+   "output": 22048,
+   "total": 58221,
+   "measured_calls": 10,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "36,173 in, 22,048 out",
+  "draws": {
+   "k": 3,
+   "graded": 3,
+   "identical_to_shown": 3
+  }
+ },
+ {
+  "arm": "A2-27b-think",
+  "model": "qwen3.8:27b",
+  "size_b": 27,
+  "thinking_requested": [
+   "decompose",
+   "merge",
+   "verify"
+  ],
+  "reasoned_anyway": null,
+  "field_order": "schema",
+  "tier": "json_schema",
+  "exit_code": 1,
+  "merged_bytes": 5673,
+  "structural": {
+   "ran": true,
+   "checks": 9,
+   "segments": 63,
+   "findings": 0,
+   "by_kind": {},
+   "segments_hit": []
+  },
+  "declared_loss": {
+   "drops": 0,
+   "segments": 63,
+   "budget": 0.05,
+   "over_budget": false
+  },
+  "findings": 2,
+  "findings_grounded": 1,
+  "findings_ungrounded": 1,
+  "findings_by_kind": {
+   "PARTIAL": 2
+  },
+  "verdicts": {
+   "SUPPORTED": 120,
+   "PARTIAL": 2
+  },
+  "extracted": {
+   "merged.md": 58,
+   "source_a.md": 41,
+   "source_b.md": 23
+  },
+  "graded": 122,
+  "grounded": 121,
+  "errored": 0,
+  "review_queue": 0,
+  "census": {
+   "merged.md": {
+    "claims": 58,
+    "span_bytes_per_claim": 50.8,
+    "union_coverage": 0.5193,
+    "anchored": 1.0
+   },
+   "source_a.md": {
+    "claims": 41,
+    "span_bytes_per_claim": 212.3,
+    "union_coverage": 0.7232,
+    "anchored": 1.0
+   },
+   "source_b.md": {
+    "claims": 23,
+    "span_bytes_per_claim": 86.1,
+    "union_coverage": 0.4778,
+    "anchored": 1.0
+   }
+  },
+  "calls": 10,
+  "schema_repairs": 0,
+  "completion_tokens": 22095,
+  "seconds": 959.2,
+  "digest": {
+   "sha256": "22130167c4c20e20c7b71454612966ca8e8171e9b3cc8ab6ce8aa6cbfec79643",
+   "seen_at": [
+    "after",
+    "before"
+   ]
+  },
+  "tokens": {
+   "input": 74140,
+   "output": 22095,
+   "total": 96235,
+   "measured_calls": 10,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "74,140 in, 22,095 out",
+  "draws": {
+   "k": 3,
+   "graded": 3,
+   "identical_to_shown": 3
+  }
+ },
+ {
+  "arm": "B1-70b-default",
+  "model": "deepseek-r1:70b",
+  "size_b": 70,
+  "thinking_requested": [
+   "merge"
+  ],
+  "reasoned_anyway": [
+   "decompose",
+   "verify"
+  ],
+  "field_order": "any",
+  "tier": "json_schema",
+  "exit_code": 1,
+  "merged_bytes": 4234,
+  "structural": {
+   "ran": true,
+   "checks": 9,
+   "segments": 63,
+   "findings": 29,
+   "by_kind": {
+    "undeclared_absence": 24,
+    "verbatim_violation": 5
+   },
+   "segments_hit": [
+    "a7",
+    "a8",
+    "b10",
+    "b11",
+    "b13",
+    "b14",
+    "b15",
+    "b16",
+    "b17",
+    "b18",
+    "b19",
+    "b2",
+    "b20",
+    "b21",
+    "b22",
+    "b23",
+    "b24",
+    "b26",
+    "b28",
+    "b3",
+    "b4",
+    "b5",
+    "b7",
+    "b8",
+    "b9"
+   ]
+  },
+  "declared_loss": {
+   "drops": 0,
+   "segments": 63,
+   "budget": 0.05,
+   "over_budget": false
+  },
+  "findings": 8,
+  "findings_grounded": 1,
+  "findings_ungrounded": 7,
+  "findings_by_kind": {
+   "CONTRADICTED": 1,
+   "MISSING": 7
+  },
+  "verdicts": {
+   "SUPPORTED": 64,
+   "MISSING": 7,
+   "CONTRADICTED": 1
+  },
+  "extracted": {
+   "merged.md": 29,
+   "source_a.md": 24,
+   "source_b.md": 19
+  },
+  "graded": 65,
+  "grounded": 58,
+  "errored": 0,
+  "review_queue": 0,
+  "census": {
+   "merged.md": {
+    "claims": 29,
+    "span_bytes_per_claim": 119.1,
+    "union_coverage": 0.8158,
+    "anchored": 1.0
+   },
+   "source_a.md": {
+    "claims": 24,
+    "span_bytes_per_claim": 111.2,
+    "union_coverage": 0.6716,
+    "anchored": 0.9583
+   },
+   "source_b.md": {
+    "claims": 19,
+    "span_bytes_per_claim": 83.5,
+    "union_coverage": 0.7347,
+    "anchored": 1.0
+   }
+  },
+  "calls": 11,
+  "schema_repairs": 3,
+  "completion_tokens": 25558,
+  "seconds": 1408.9,
+  "digest": {
+   "sha256": "d37b54d01a76512a5adbaa9da4ee1c00833bf2dfefb0d4cc54351ba529e0f4da",
+   "seen_at": [
+    "after",
+    "before"
+   ]
+  },
+  "tokens": {
+   "input": 29716,
+   "output": 25558,
+   "total": 55274,
+   "measured_calls": 11,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "29,716 in, 25,558 out",
+  "draws": {
+   "k": 3,
+   "graded": 3,
+   "identical_to_shown": 3
+  }
+ },
+ {
+  "arm": "B2-70b-think",
+  "model": "deepseek-r1:70b",
+  "size_b": 70,
+  "thinking_requested": [
+   "decompose",
+   "merge",
+   "verify"
+  ],
+  "reasoned_anyway": null,
+  "field_order": "any",
+  "tier": "json_schema",
+  "exit_code": 1,
+  "merged_bytes": 4234,
+  "structural": {
+   "ran": true,
+   "checks": 9,
+   "segments": 63,
+   "findings": 29,
+   "by_kind": {
+    "undeclared_absence": 24,
+    "verbatim_violation": 5
+   },
+   "segments_hit": [
+    "a7",
+    "a8",
+    "b10",
+    "b11",
+    "b13",
+    "b14",
+    "b15",
+    "b16",
+    "b17",
+    "b18",
+    "b19",
+    "b2",
+    "b20",
+    "b21",
+    "b22",
+    "b23",
+    "b24",
+    "b26",
+    "b28",
+    "b3",
+    "b4",
+    "b5",
+    "b7",
+    "b8",
+    "b9"
+   ]
+  },
+  "declared_loss": {
+   "drops": 0,
+   "segments": 63,
+   "budget": 0.05,
+   "over_budget": false
+  },
+  "findings": 8,
+  "findings_grounded": 1,
+  "findings_ungrounded": 7,
+  "findings_by_kind": {
+   "CONTRADICTED": 1,
+   "MISSING": 7
+  },
+  "verdicts": {
+   "SUPPORTED": 64,
+   "MISSING": 7,
+   "CONTRADICTED": 1
+  },
+  "extracted": {
+   "merged.md": 29,
+   "source_a.md": 24,
+   "source_b.md": 19
+  },
+  "graded": 65,
+  "grounded": 58,
+  "errored": 0,
+  "review_queue": 0,
+  "census": {
+   "merged.md": {
+    "claims": 29,
+    "span_bytes_per_claim": 119.1,
+    "union_coverage": 0.8158,
+    "anchored": 1.0
+   },
+   "source_a.md": {
+    "claims": 24,
+    "span_bytes_per_claim": 111.2,
+    "union_coverage": 0.6716,
+    "anchored": 0.9583
+   },
+   "source_b.md": {
+    "claims": 19,
+    "span_bytes_per_claim": 83.5,
+    "union_coverage": 0.7347,
+    "anchored": 1.0
+   }
+  },
+  "calls": 11,
+  "schema_repairs": 3,
+  "completion_tokens": 25558,
+  "seconds": 1417.5,
+  "digest": {
+   "sha256": "d37b54d01a76512a5adbaa9da4ee1c00833bf2dfefb0d4cc54351ba529e0f4da",
+   "seen_at": [
+    "after",
+    "before"
+   ]
+  },
+  "tokens": {
+   "input": 29716,
+   "output": 25558,
+   "total": 55274,
+   "measured_calls": 11,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "29,716 in, 25,558 out",
+  "draws": {
+   "k": 3,
+   "graded": 3,
+   "identical_to_shown": 3
+  }
+ }
+]

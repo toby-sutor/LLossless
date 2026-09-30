@@ -1,0 +1,52 @@
+LLossless merge  gpt-6-sol at https://api.openai.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking gpt-6-sol
+✓ merge: gpt-6-sol answered at the prompt tier  78.6s
+✓ merge  78.8s
+• reconcile
+✓ reconcile  2.8s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking gpt-6-sol
+✓ decompose: gpt-6-sol answered at the prompt tier  32.1s
+✓ decompose source_a.md  32.1s
+• decompose source_b.md
+• decompose: asking gpt-6-sol
+✓ decompose: gpt-6-sol answered at the prompt tier  32.1s
+✓ decompose source_b.md  32.1s
+• verify (forward)
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  16.0s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  17.7s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  19.4s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  19.4s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  12.7s
+✓ verify (forward)  85.4s
+• decompose merged.md
+• decompose: asking gpt-6-sol
+✓ decompose: gpt-6-sol answered at the prompt tier  41.2s
+✓ decompose merged.md  41.2s
+• verify (reverse)
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  23.2s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  19.1s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  23.5s
+✓ verify (reverse)  65.9s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  2 partly dropped: the merge carries some of this claim (see `## Findings`)
+  7 contradicted: the merge states something different (see `## Findings`)
+  1 unresolved replacement: a record points at text the merge does not contain (see `## Structure`)
+  1 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

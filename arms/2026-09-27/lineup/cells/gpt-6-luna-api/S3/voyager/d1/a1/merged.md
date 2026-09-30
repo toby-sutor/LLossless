@@ -1,0 +1,11 @@
+# Voyager 2 at Uranus
+
+After completing its primary mission goals with the Jupiter and Saturn encounters, Voyager 2 continued to Uranus, a journey that took about 4,5 years. In fact, its encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible. The Uranus encounter’s geometry also allowed for a possible onward encounter with Neptune. Voyager 1 had only 6.4 days of close study during its flyby.
+
+Voyager 2, the first human-made object to fly past Uranus, began close-range observations on Jan. 24, 1986; signals took approximately 2,5 hours to reach Earth. Light conditions were five-hundred times less than terrestrial conditions. Closest approach took place at 17:59 UTC on Jan. 24, 1986, at a range of about 81,500 kilometers (50,640 miles).
+
+During its flyby, Voyager 2 discovered 10 new moons and two new rings, bringing the known ring total to 11, and measured a magnetic field tilted at 59 degrees off-axis and off-center. The moons’ names follow the established literary naming tradition for Uranian moons, drawing on Shakespeare and Alexander Pope; the names include Puck, Portia, Juliet, Cressida, Rosalind, Belinda, Desdemona, Cordelia, Ophelia, and Bianca. The spacecraft measured wind speeds in Uranus’ atmosphere as high as 450 km/h (450,000 meters per hour). It found no boiling lake of water beneath the cloud tops. Its rings were found to be extremely variable in thickness and transparency.
+
+Voyager 2 also returned spectacular photos of Miranda, Oberon, Ariel, Umbriel, and Titania, five of Uranus’ smaller moons. It passed within about 18,000 miles (29,000 kilometers) of Miranda, its closest approach to any object during its nearly nine-year journey. Images of the moon showed a strange object whose surface was a mishmash of peculiar features that seemed to have no rhyme or reason. Uranus itself appeared generally featureless.
+
+The Uranus encounter’s news was soon overshadowed by the Challenger disaster, which killed seven astronauts when the space shuttle broke apart during launch on Jan. 28, 1986.

@@ -1,0 +1,676 @@
+{
+ "command": "merge",
+ "exit_code": 0,
+ "documents": {
+  "source_a.md": "source_a.md",
+  "source_b.md": "source_b.md"
+ },
+ "steps": [
+  {
+   "name": "merge",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "reconcile",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "title",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_a.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_b.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (forward)",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose merged.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (reverse)",
+   "state": "ok",
+   "detail": ""
+  }
+ ],
+ "coverage": {
+  "extracted": {
+   "merged.md": 4,
+   "source_a.md": 3,
+   "source_b.md": 3
+  },
+  "forward_submitted": 6,
+  "forward_verdicts": 6,
+  "forward_partial": 0,
+  "forward_by_source": {
+   "source_a.md": {
+    "extracted": 3,
+    "checked": 3,
+    "accounted": 3,
+    "partial": 0
+   },
+   "source_b.md": {
+    "extracted": 3,
+    "checked": 3,
+    "accounted": 3,
+    "partial": 0
+   }
+  },
+  "reverse_submitted": 4,
+  "reverse_verdicts": 4,
+  "reverse_partial": 0,
+  "graded": 10,
+  "grounded": 10,
+  "errored": 0,
+  "ungraded": 0
+ },
+ "claims": [
+  {
+   "id": "A-001",
+   "source": "source_a.md",
+   "text": "The relay listens on port 8443.",
+   "line": 3,
+   "span": "The relay listens on port 8443.",
+   "anchored": true
+  },
+  {
+   "id": "A-002",
+   "source": "source_a.md",
+   "text": "The health check path is /healthz.",
+   "line": 4,
+   "span": "The health check path is /healthz.",
+   "anchored": true
+  },
+  {
+   "id": "A-003",
+   "source": "source_a.md",
+   "text": "The read timeout is 30 seconds.",
+   "line": 5,
+   "span": "The read timeout is 30 seconds.",
+   "anchored": true
+  },
+  {
+   "id": "B-001",
+   "source": "source_b.md",
+   "text": "The Vandrell relay listens on port 8443.",
+   "line": 3,
+   "span": "The relay listens on port 8443.",
+   "anchored": true
+  },
+  {
+   "id": "B-002",
+   "source": "source_b.md",
+   "text": "The Vandrell relay health check path is /healthz.",
+   "line": 4,
+   "span": "The health check path is /healthz.",
+   "anchored": true
+  },
+  {
+   "id": "B-003",
+   "source": "source_b.md",
+   "text": "The Vandrell relay minimum TLS version is 1.2.",
+   "line": 5,
+   "span": "The minimum TLS version is 1.2.",
+   "anchored": true
+  },
+  {
+   "id": "M-001",
+   "source": "merged.md",
+   "text": "The Vandrell relay listens on port 8443.",
+   "line": 3,
+   "span": "The relay listens on port 8443.",
+   "anchored": true
+  },
+  {
+   "id": "M-002",
+   "source": "merged.md",
+   "text": "The Vandrell relay's health check path is /healthz.",
+   "line": 3,
+   "span": "The health check path is /healthz.",
+   "anchored": true
+  },
+  {
+   "id": "M-003",
+   "source": "merged.md",
+   "text": "The Vandrell relay's read timeout is 30 seconds.",
+   "line": 3,
+   "span": "The read timeout is 30 seconds.",
+   "anchored": true
+  },
+  {
+   "id": "M-004",
+   "source": "merged.md",
+   "text": "The Vandrell relay's minimum TLS version is 1.2.",
+   "line": 3,
+   "span": "The minimum TLS version is 1.2.",
+   "anchored": true
+  }
+ ],
+ "verdicts": [
+  {
+   "claim_id": "A-001",
+   "verdict": "SUPPORTED",
+   "evidence": "The relay listens on port 8443.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference states the relay's listening port.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-002",
+   "verdict": "SUPPORTED",
+   "evidence": "The health check path is /healthz.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference states the health check path.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-003",
+   "verdict": "SUPPORTED",
+   "evidence": "The read timeout is 30 seconds.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference states the read timeout.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-001",
+   "verdict": "SUPPORTED",
+   "evidence": "The relay listens on port 8443.",
+   "evidence_source": "merged.md",
+   "rationale": "The guide identifies the relay as Vandrell's, and states its listening port.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-002",
+   "verdict": "SUPPORTED",
+   "evidence": "The health check path is /healthz.",
+   "evidence_source": "merged.md",
+   "rationale": "The guide identifies the relay as Vandrell's, and states its health check path.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-003",
+   "verdict": "SUPPORTED",
+   "evidence": "The minimum TLS version is 1.2.",
+   "evidence_source": "merged.md",
+   "rationale": "The guide identifies the relay as Vandrell's, and states its minimum TLS version.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-001",
+   "verdict": "SUPPORTED",
+   "evidence": "The relay listens on port 8443.",
+   "evidence_source": "source_a.md",
+   "rationale": "The operator guide identifies the relay as the Vandrell Relay and states its listening port.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-002",
+   "verdict": "SUPPORTED",
+   "evidence": "The health check path is /healthz.",
+   "evidence_source": "source_a.md",
+   "rationale": "The operator guide states the relay's health check path.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-003",
+   "verdict": "SUPPORTED",
+   "evidence": "The read timeout is 30 seconds.",
+   "evidence_source": "source_a.md",
+   "rationale": "The operator guide states the relay's read timeout.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-004",
+   "verdict": "SUPPORTED",
+   "evidence": "The minimum TLS version is 1.2.",
+   "evidence_source": "source_b.md",
+   "rationale": "The deployment notes state the relay's minimum TLS version.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  }
+ ],
+ "findings": [],
+ "review_queue": [],
+ "declarations": [
+  {
+   "segment": "b1",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Vandrell Relay - Operator Guide' and says so",
+   "claims": [],
+   "reason": "The base title was chosen.",
+   "replacement": "# Vandrell Relay - Operator Guide"
+  },
+  {
+   "segment": "b2",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-001"
+   ],
+   "reason": "The listening port is already stated.",
+   "replacement": "The relay listens on port 8443."
+  },
+  {
+   "segment": "b3",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-002"
+   ],
+   "reason": "The health check path is already stated.",
+   "replacement": "The health check path is /healthz."
+  }
+ ],
+ "additions": [],
+ "mismatch": "",
+ "additions_cover": [],
+ "sourcing": {
+  "resolved": false,
+  "fetched": false,
+  "state": "unmeasured",
+  "measured_calls": 0,
+  "unmeasured_calls": 6,
+  "tool_use": {
+   "state": "unmeasured",
+   "retrieval": "unmeasured",
+   "turns": 0,
+   "calls_with_tool_use": 0,
+   "measured_calls": 0,
+   "unmeasured_calls": 6
+  },
+  "retrieval_permitted": [],
+  "recall_only": false,
+  "retrieval": ""
+ },
+ "structural": {
+  "ran": true,
+  "checks": 9,
+  "segments": 8,
+  "findings": []
+ },
+ "decisions": {
+  "ran": true,
+  "authored_by": "the merge",
+  "graded": false,
+  "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+  "records": [
+   {
+    "slot": "title",
+    "candidates": [
+     {
+      "text": "# Vandrell Relay - Operator Guide",
+      "document": "source_a.md"
+     },
+     {
+      "text": "# Vandrell Relay - Deployment Notes",
+      "document": "source_b.md"
+     }
+    ],
+    "chosen": "# Vandrell Relay - Operator Guide",
+    "resolved": true,
+    "reason": "The base document supplies the title."
+   }
+  ]
+ },
+ "title": {
+  "policy": "synthesise",
+  "sources_with_a_title": 2,
+  "has_referent": true,
+  "note": ""
+ },
+ "structure": {
+  "breaks_added_by_the_merge": 0,
+  "between": [],
+  "graded": false,
+  "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+ },
+ "prompt_leaks": {
+  "ran": true,
+  "markers": [
+   "marlbrook",
+   "funicular"
+  ],
+  "reason_clauses": 17,
+  "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+  "findings": []
+ },
+ "attributions": {
+  "ran": true,
+  "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+  "findings": []
+ },
+ "number_format": {
+  "ran": true,
+  "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+  "faults": [
+   "reading_changed"
+  ],
+  "findings": [],
+  "documents": [
+   {
+    "document": "source_a.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 6,
+     "de": 0
+    }
+   },
+   {
+    "document": "source_b.md",
+    "convention": "decimal point",
+    "decided_by": "votes",
+    "votes": {
+     "decimal_point": [
+      "1.2"
+     ],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 6,
+     "de": 0
+    }
+   },
+   {
+    "document": "merged.md",
+    "convention": "decimal point",
+    "decided_by": "votes",
+    "votes": {
+     "decimal_point": [
+      "1.2"
+     ],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 8,
+     "de": 0
+    }
+   }
+  ]
+ },
+ "restated_claims": {
+  "ran": true,
+  "claims": 4,
+  "source_claims": 6,
+  "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+  "counts_are_evidence_not_the_test": true,
+  "findings": []
+ },
+ "declared_loss": {
+  "drops": 0,
+  "segments": 8,
+  "budget": 0.03,
+  "ratio": 0.0,
+  "check_disabled": false,
+  "over_budget": false
+ },
+ "unusable": [],
+ "truncations": [],
+ "order": {
+  "sequence": "aab",
+  "runs": 2,
+  "attributed": 3,
+  "interleaved": false,
+  "monotone": true,
+  "conclusive": true,
+  "blocked": false,
+  "stapled": false,
+  "headings_present": 1,
+  "headings_total": 2
+ },
+ "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-vendor/cells/probe-dedup-gpt-6-sol/merged.md",
+ "provenance": {
+  "generated_at": "2026-09-25T13:13:29+00:00",
+  "claimcheck_commit": "ff8ff77770c7",
+  "run_mode": "live",
+  "endpoint": {
+   "id": "7388db16debd",
+   "location": "hosted",
+   "content_left_this_machine": true
+  },
+  "merge_policy": {
+   "fidelity": "high",
+   "verify_depth": "full",
+   "title_policy": "synthesise",
+   "base": "source_a.md",
+   "base_chosen": "explicit"
+  },
+  "models": {
+   "merge": "gpt-6-sol",
+   "decompose": "gpt-6-sol",
+   "verify": "gpt-6-sol"
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "pinned",
+   "field_order": "schema"
+  },
+  "prompts": {
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-vendor/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-vendor/tree/prompts/merge.md": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-vendor/tree/prompts/verify.md": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-vendor/tree/prompts/verify_reverse.md": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472"
+  },
+  "decoding": {
+   "temperature": "not sent",
+   "seed": 0,
+   "profile": "openai-reasoning",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ]
+  },
+  "counts": {
+   "calls": 6,
+   "cache_hits": 0,
+   "replayed": 0,
+   "schema_repairs": 0,
+   "model_loads": 0,
+   "errors": 0,
+   "salvaged": 0,
+   "prompt_tokens": 10808,
+   "completion_tokens": 1423
+  },
+  "tokens": {
+   "input": 10808,
+   "output": 1423,
+   "cached": 0,
+   "thought": 108,
+   "total": 12231,
+   "measured_calls": 6,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "10,808 in, 1,423 out, 0 cached, 108 reasoning",
+  "ledger": [
+   {
+    "role": "merge",
+    "model": "gpt-6-sol",
+    "prompt_sha256": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+    "request_sha256": "f985c18f24647cb52c95b7210d9c80bbbc6e49410608ec1f59dd586417b4a32b",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 6256,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 8258,
+    "prompt_tokens": 4692,
+    "completion_tokens": 422,
+    "cached_tokens": 0
+   },
+   {
+    "role": "decompose",
+    "model": "gpt-6-sol",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "d3f10a85ec0ac6c6c66e904fbc2dfb901b3871930dd1ae6b2c55f6fba120d3d2",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 949,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 3157,
+    "prompt_tokens": 807,
+    "completion_tokens": 87,
+    "cached_tokens": 0
+   },
+   {
+    "role": "decompose",
+    "model": "gpt-6-sol",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "d2181d2716e8d9d2a45f2fe9068354df063c52fd1d97d5358e59492eaba1313a",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 950,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 3267,
+    "prompt_tokens": 809,
+    "completion_tokens": 99,
+    "cached_tokens": 0
+   },
+   {
+    "role": "verify",
+    "model": "gpt-6-sol",
+    "prompt_sha256": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+    "request_sha256": "cc42bc7d1dff124c2a06143d5923e48b627e1d21777712842606867d78cacfe7",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2309,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 7769,
+    "prompt_tokens": 1857,
+    "completion_tokens": 406,
+    "cached_tokens": 0
+   },
+   {
+    "role": "decompose",
+    "model": "gpt-6-sol",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "d43289622f9f1bb518c991c3381404495b800ec27efc5973700784cfc91e3ccb",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 957,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 2678,
+    "prompt_tokens": 813,
+    "completion_tokens": 130,
+    "cached_tokens": 0
+   },
+   {
+    "role": "verify",
+    "model": "gpt-6-sol",
+    "prompt_sha256": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472",
+    "request_sha256": "ec5f28f57bcd117ce978a349dfa91356c49b4cad88158e84f85f17cb0991bccd",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2348,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 5083,
+    "prompt_tokens": 1830,
+    "completion_tokens": 279,
+    "cached_tokens": 0
+   }
+  ],
+  "cost": {
+   "state": "priced",
+   "usd": 0.0358,
+   "priced_calls": 6,
+   "unpriced_calls": 0,
+   "unmeasured_calls": 0,
+   "rates_read_on": "2026-08-31"
+  },
+  "window": {
+   "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 2
+  },
+  "retrieval": {
+   "permitted": [],
+   "tool_use": {
+    "state": "unmeasured",
+    "retrieval": "unmeasured",
+    "turns": 0,
+    "calls_with_tool_use": 0,
+    "measured_calls": 0,
+    "unmeasured_calls": 6
+   },
+   "described": "unmeasured (6 call(s) reported no turn count)"
+  },
+  "duration_seconds": 30.3
+ }
+}

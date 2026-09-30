@@ -1,0 +1,11 @@
+# Voyager 2 at Uranus
+
+Although Voyager 2 had fulfilled its primary mission goals with three planetary encounters, mission planners directed the veteran spacecraft to Uranus—a journey that would take about 4.5 years. In fact, its encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible. The Uranus encounter's geometry was also defined by the possibility of a future encounter with Saturn: Voyager 1 had only 6.4 days of close study during its flyby.
+
+The first human-made object to fly past Uranus, Voyager 2's short-range observations of the planet began on January 24, 1986, when signals took approximately 2.5 hours to reach Earth. Light conditions were 500 times less than terrestrial conditions. Closest approach to Uranus occurred at 17:59 UTC on January 24, 1986, at a range of about 50,640 kilometers (81,500 miles).
+
+During its flyby, Voyager 2 discovered 11 new moons—Cordelia, Ophelia, Bianca, Cressida, Desdemona, Juliet, Portia, Rosalind, Cupid, Mab, and Margaret—along with three new rings in addition to the eight known rings, and a magnetic field tilted at 66 degrees off-axis and off-center. The spacecraft found wind speeds in Uranus's atmosphere as high as 450 km/h (125 m/s) and evidence of a water layer approximately 900 kilometers below the top cloud surface.
+
+The rings were found to be extremely variable in thickness and transparency. Voyager 2 also returned spectacular photographs of five major moons—Miranda, Oberon, Ariel, Umbriel, and Titania. In flying by Miranda at a range of only 28,260 kilometers (17,560 miles), the spacecraft came closer to any Uranian object than at any other point in its mission. Images of Miranda revealed a strange surface marked by a mishmash of peculiar features that seemed to have no rhyme or reason. Uranus itself appeared generally featureless.
+
+The spectacular news of the Uranus encounter was interrupted the same day by the tragic Challenger accident, which killed six astronauts during their space shuttle launch on February 28, 1986.

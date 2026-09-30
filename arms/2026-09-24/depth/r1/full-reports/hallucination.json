@@ -1,0 +1,653 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/tests/fixtures/hallucination/merged.md",
+    "source_a.md": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/tests/fixtures/hallucination/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/tests/fixtures/hallucination/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 8,
+      "source_a.md": 4,
+      "source_b.md": 4
+    },
+    "forward_submitted": 8,
+    "forward_verdicts": 8,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 4,
+        "checked": 4,
+        "accounted": 4,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 4,
+        "checked": 4,
+        "accounted": 4,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 8,
+    "reverse_verdicts": 8,
+    "reverse_partial": 0,
+    "graded": 15,
+    "grounded": 15,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 8,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The minimum accepted TLS version is TLS 1.2.",
+      "line": 12,
+      "span": "The minimum accepted TLS version is TLS 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "Client certificate verification is disabled by default.",
+      "line": 13,
+      "span": "Client certificate verification is disabled by default.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The relay accepts at most 512 concurrent connections.",
+      "line": 8,
+      "span": "The relay accepts at most 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Access logs are written in JSON Lines format.",
+      "line": 12,
+      "span": "Access logs are written in JSON Lines format.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "The health check endpoint is /-/healthy.",
+      "line": 13,
+      "span": "The health check endpoint is /-/healthy.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443 by default.",
+      "line": 7,
+      "span": "The relay listens on port 8443 by default.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The default connect timeout is 30 seconds.",
+      "line": 8,
+      "span": "The default connect timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The relay accepts at most 512 concurrent connections.",
+      "line": 9,
+      "span": "The relay accepts at most 512 concurrent connections.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Upstream traffic can be forwarded through a SOCKS5 proxy.",
+      "line": 10,
+      "span": "Upstream traffic can be forwarded through a SOCKS5 proxy.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The minimum accepted TLS version is TLS 1.2.",
+      "line": 14,
+      "span": "The minimum accepted TLS version is TLS 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Client certificate verification is disabled by default.",
+      "line": 15,
+      "span": "Client certificate verification is disabled by default.",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Access logs are written in JSON Lines format.",
+      "line": 19,
+      "span": "Access logs are written in JSON Lines format.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "The health check endpoint is /-/healthy.",
+      "line": 20,
+      "span": "The health check endpoint is /-/healthy.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443 by default.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the default connect timeout is 30 seconds.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum accepted TLS version is TLS 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the minimum accepted TLS version is TLS 1.2.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Client certificate verification is disabled by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that client certificate verification is disabled by default.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443 by default.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay accepts at most 512 concurrent connections.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Access logs are written in JSON Lines format.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that access logs are written in JSON Lines format.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check endpoint is /-/healthy.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the health check endpoint is /-/healthy.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443 by default.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is explicitly stated in source_a.md under the Networking section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The default connect timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is explicitly stated in source_a.md under the Networking section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay accepts at most 512 concurrent connections.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is explicitly stated in source_b.md under the Networking section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "Neither source document mentions SOCKS5 proxies or upstream traffic forwarding.",
+      "direction": "merged_to_sources",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "hallucinated",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum accepted TLS version is TLS 1.2.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is explicitly stated in source_a.md under the Security section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Client certificate verification is disabled by default.",
+      "evidence_source": "source_a.md",
+      "rationale": "The claim is explicitly stated in source_a.md under the Security section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Access logs are written in JSON Lines format.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is explicitly stated in source_b.md under the Operations section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check endpoint is /-/healthy.",
+      "evidence_source": "source_b.md",
+      "rationale": "The claim is explicitly stated in source_b.md under the Operations section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "M-004",
+      "verdict": "MISSING",
+      "evidence": "",
+      "evidence_source": "",
+      "rationale": "Neither source document mentions SOCKS5 proxies or upstream traffic forwarding.",
+      "direction": "merged_to_sources",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "hallucinated",
+      "grounded": false
+    }
+  ],
+  "review_queue": [],
+  "declarations": [],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "state": "unmeasured",
+    "measured_calls": 0,
+    "unmeasured_calls": 5,
+    "tool_use": {
+      "state": "unmeasured",
+      "retrieval": "unmeasured",
+      "turns": 0,
+      "calls_with_tool_use": 0,
+      "measured_calls": 0,
+      "unmeasured_calls": 5
+    },
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": ""
+  },
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "decisions": {
+    "ran": false,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": []
+  },
+  "title": {
+    "policy": "",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": true,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": false,
+    "claims": 8,
+    "source_claims": 8,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.03,
+    "ratio": null,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-24T12:34:03+00:00",
+    "claimcheck_commit": "2a01e9b2f242",
+    "run_mode": "live",
+    "merge_policy": {
+      "fidelity": "high",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "Qwen/Qwen3.8-27B-FP8",
+      "verify": "Qwen/Qwen3.8-27B-FP8"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/prompts/verify_reverse.md": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": []
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 6099,
+      "completion_tokens": 2134
+    },
+    "tokens": {
+      "input": 6099,
+      "output": 2134,
+      "total": 8233,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "6,099 in, 2,134 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "73ae307fb879f7793f87bb7d4563fae45b870868a323cfcf5d7015f984bab064",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1027,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 11132,
+        "prompt_tokens": 789,
+        "completion_tokens": 205
+      },
+      {
+        "role": "decompose",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "234848308405283009028bea9e79a81fdff2d493273cc4a489bb4463512f47c2",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1027,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 11077,
+        "prompt_tokens": 789,
+        "completion_tokens": 205
+      },
+      {
+        "role": "verify",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "90ae361430f70a341e9be5359333aaa04e3201b02ddcf521dfdc793e47eef8ca",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2550,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 36914,
+        "prompt_tokens": 1866,
+        "completion_tokens": 691
+      },
+      {
+        "role": "decompose",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "134e8e409805713ee1054147b94f5f785e9e60434d6712f293a38462e985cb66",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1113,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 21016,
+        "prompt_tokens": 862,
+        "completion_tokens": 398
+      },
+      {
+        "role": "verify",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472",
+        "request_sha256": "7032e70ca9d956c78074092a6652e43522b2de5a8b59bf392b09fce6846fcfe3",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2547,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 33444,
+        "prompt_tokens": 1793,
+        "completion_tokens": 635
+      }
+    ],
+    "cost": {
+      "state": "unpriced",
+      "usd": null,
+      "priced_calls": 0,
+      "unpriced_calls": 5,
+      "unmeasured_calls": 0,
+      "unpriced_models": [
+        "Qwen/Qwen3.8-27B-FP8"
+      ]
+    },
+    "window": {
+      "decompose": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "verify": 2
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "unmeasured",
+        "retrieval": "unmeasured",
+        "turns": 0,
+        "calls_with_tool_use": 0,
+        "measured_calls": 0,
+        "unmeasured_calls": 5
+      },
+      "described": "unmeasured (5 call(s) reported no turn count)"
+    },
+    "duration_seconds": 113.7
+  }
+}

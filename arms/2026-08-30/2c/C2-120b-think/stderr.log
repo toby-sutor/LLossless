@@ -1,0 +1,43 @@
+claimcheck merge  gpt-oss:120b at <redacted>
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking gpt-oss:120b
+✓ merge: gpt-oss:120b answered at the json_schema tier  39.1s
+✓ merge  81.0s
+• reconcile
+✓ reconcile  0.9s
+• decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_a.md
+• decompose: asking gpt-oss:120b
+✓ decompose: gpt-oss:120b answered at the json_schema tier  56.2s
+✓ decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_a.md  56.2s
+• decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_b.md
+• decompose: asking gpt-oss:120b
+✓ decompose: gpt-oss:120b answered at the json_schema tier  53.8s
+✓ decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_b.md  53.8s
+• verify (forward)
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  47.0s
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  41.9s
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  8.8s
+✓ verify (forward)  97.8s
+• decompose merged.md
+• decompose: asking gpt-oss:120b
+✓ decompose: gpt-oss:120b answered at the json_schema tier  84.6s
+✓ decompose merged.md  84.6s
+• verify (reverse)
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  47.3s
+• verify: asking gpt-oss:120b
+✓ verify: gpt-oss:120b answered at the json_schema tier  49.1s
+✓ verify (reverse)  96.4s
+✓ merged document written to /tmp/claude-1000/-home-toby-Documents-Dev-vibe-coding-claimcheck/4efb5d2e-5268-4025-a88e-53ca7092cde3/scratchpad/pod/2c/C2-120b-think/merged.md
+
+Finished, with problems. The report lists what was found.
+  1 invented: in the merge, in neither source (see `## Findings`)
+  3 absent and undeclared: in a source, not in the merge, and no record explains it (see `## Structure`)
+  1 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to /tmp/claude-1000/-home-toby-Documents-Dev-vibe-coding-claimcheck/4efb5d2e-5268-4025-a88e-53ca7092cde3/scratchpad/pod/2c/C2-120b-think/merged.md
+  the full report went to stdout; exit code 1

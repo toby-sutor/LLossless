@@ -1,0 +1,281 @@
+## Verdict
+
+**20 finding(s).** In the claims: 4 dropped, 4 partially dropped, 11 contradicted. In the structure: 1 undeclared absence.
+
+## Coverage
+
+| | |
+|---|---|
+| Claims extracted from `merged.md` | 26 |
+| Claims extracted from `curry_1.md` | 22 |
+| Claims extracted from `curry_2.md` | 26 |
+| Forward — source claims accounted for in the merge | **29/48** |
+| Forward — carried only in part | 4 |
+| Forward — `curry_1.md` claims accounted for | **22/22** |
+| Forward — `curry_2.md` claims accounted for | **7/26** (4 in part) |
+| Reverse — merge claims found in a source | **26/26** |
+| Reverse — supported only in part | 0 |
+| Evidence grounded | **70/70** |
+| Units of work errored | 0 |
+| Claims submitted but not graded | 0 |
+
+## Findings
+
+### Dropped — in a source, not in the merge
+
+- **B-006** (`curry_2.md:10`) — The recipe requires 1 cup broccoli florets.
+  - rationale: The reference text lists broccoli as part of '2 cups mixed vegetables' but does not specify a separate quantity of 1 cup of broccoli florets.
+- **B-008** (`curry_2.md:12`) — The recipe requires 1 cup zucchini, sliced.
+  - rationale: The reference text does not mention zucchini in the ingredients list.
+- **B-011** (`curry_2.md:15`) — The recipe requires 4–6 kaffir lime leaves, lightly crushed.
+  - rationale: The reference text does not mention kaffir lime leaves in the ingredients or method.
+- **B-026** (`curry_2.md:34`) — Baby corn, sugar snap peas, and mushrooms can be swapped in as seasonal vegetables.
+  - rationale: The reference text lists specific vegetables but does not suggest swapping in baby corn, sugar snap peas, or mushrooms as seasonal alternatives.
+
+### Partly dropped — the merge carries some of this claim
+
+- **B-015** (`curry_2.md:22`) — The tofu should be pressed to remove excess water, cut into cubes, and pan-fried in a little oil until golden on all sides.
+  - evidence: '200 g firm tofu, cubed (optional)' in `merged.md` (grounded)
+  - rationale: The reference text lists tofu as 'cubed (optional)' but does not mention pressing it or pan-frying it until golden.
+- **B-016** (`curry_2.md:24`) — Oil should be heated in a wok or large pan over medium heat.
+  - evidence: 'Spoon the thick cream from the top of the coconut milk into a hot wok with the oil.' in `merged.md` (grounded)
+  - rationale: The reference text mentions a 'hot wok' but does not specify heating the oil over medium heat or using a large pan.
+- **B-022** (`curry_2.md:30`) — The tofu, lime juice, and Thai basil should be added.
+  - evidence: 'then the softer ones (pepper, mushrooms) and the tofu.' in `merged.md` (grounded)
+  - rationale: The reference text adds tofu with the softer vegetables, but lime juice and Thai basil are added later in steps 5 and 6.
+- **B-024** (`curry_2.md:32`) — The curry should be served over steamed jasmine rice with extra basil and a wedge of lime.
+  - evidence: 'Serve over jasmine rice.' in `merged.md` (grounded)
+  - rationale: The reference text states to serve over jasmine rice but does not mention extra basil or a wedge of lime.
+
+### Contradicted — the merge states something different
+
+- **B-003** -- the two documents disagree
+  - `curry_2.md:7` says: The recipe requires 400g extra-firm tofu, cubed.
+  - `merged.md` says: '200 g firm tofu, cubed (optional)' (grounded)
+  - why this was read as a contradiction: The reference text specifies 200 g firm tofu, while the claim states 400 g extra-firm tofu, which is a different value and type.
+- **B-005** -- the two documents disagree
+  - `curry_2.md:9` says: The recipe requires 2–4 tbsp green curry paste.
+  - `merged.md` says: '2-3 tbsp green curry paste' (grounded)
+  - why this was read as a contradiction: The reference text specifies '2-3 tbsp green curry paste', which contradicts the claim's range of 2–4 tbsp.
+- **B-007** -- the two documents disagree
+  - `curry_2.md:11` says: The recipe requires 1 red bell pepper, sliced.
+  - `merged.md` says: '2 cups mixed vegetables: bell pepper' (grounded)
+  - why this was read as a contradiction: The reference text lists bell pepper as part of '2 cups mixed vegetables' without specifying a count of 1 or that it is red, contradicting the specific claim.
+- **B-009** -- the two documents disagree
+  - `curry_2.md:13` says: The recipe requires 1 tbsp soy sauce.
+  - `merged.md` says: '1-2 tbsp soy sauce' (grounded)
+  - why this was read as a contradiction: The reference text specifies '1-2 tbsp soy sauce', which contradicts the specific claim of 1 tbsp.
+- **B-010** -- the two documents disagree
+  - `curry_2.md:14` says: The recipe requires 1 tbsp brown sugar.
+  - `merged.md` says: '1 tsp palm or brown sugar' (grounded)
+  - why this was read as a contradiction: The reference text specifies '1 tsp palm or brown sugar', which contradicts the claim's unit of 1 tbsp.
+- **B-014** -- the two documents disagree
+  - `curry_2.md:18` says: The recipe requires 1 tbsp vegetable oil.
+  - `merged.md` says: '1 tbsp coconut oil' (grounded)
+  - why this was read as a contradiction: The reference text specifies '1 tbsp coconut oil', which contradicts the claim of vegetable oil.
+- **B-017** -- the two documents disagree
+  - `curry_2.md:24` says: The curry paste should be added and stirred for 1–2 minutes until fragrant.
+  - `merged.md` says: 'Add the curry paste and fry 1 minute until fragrant.' (grounded)
+  - why this was read as a contradiction: The reference text specifies frying for '1 minute', which contradicts the claim's range of 1–2 minutes.
+- **B-018** -- the two documents disagree
+  - `curry_2.md:26` says: Half the coconut milk should be poured in and stirred until the paste is fully dissolved.
+  - `merged.md` says: 'Add onion and the remaining coconut milk.' (grounded)
+  - why this was read as a contradiction: The reference text states to add the 'remaining coconut milk' after the paste, not half of it, and does not mention stirring until fully dissolved.
+- **B-019** -- the two documents disagree
+  - `curry_2.md:26` says: The rest of the coconut milk, soy sauce, brown sugar, and lime leaves should be added after the paste is fully dissolved.
+  - `merged.md` says: 'Add onion and the remaining coconut milk.' (grounded)
+  - why this was read as a contradiction: The reference text adds the remaining coconut milk with the onion, not after the paste is dissolved, and does not mention adding soy sauce, sugar, or lime leaves at this stage.
+- **B-020** -- the two documents disagree
+  - `curry_2.md:28` says: The mixture should be brought to a gentle simmer, and the broccoli, bell pepper, and zucchini should be added.
+  - `merged.md` says: 'Add the harder vegetables first (beans, broccoli, eggplant), simmer 5 min, then the softer ones (pepper, mushrooms) and the tofu.' (grounded)
+  - why this was read as a contradiction: The reference text adds broccoli and pepper at different times (harder first, then softer), not simultaneously, and does not mention zucchini.
+- **B-021** -- the two documents disagree
+  - `curry_2.md:28` says: The vegetables should be cooked for 4–5 minutes until tender but still crisp.
+  - `merged.md` says: 'simmer 5 min, then the softer ones (pepper, mushrooms) and the tofu. Simmer another 5 min.' (grounded)
+  - why this was read as a contradiction: The reference text specifies simmering for 5 minutes then another 5 minutes, which contradicts the claim's 4–5 minutes total.
+
+## Length capped
+
+None.
+
+## Not graded
+
+None. Every claim submitted came back with a usable verdict.
+
+## Inventory
+
+Every claim that was extracted, and what became of it. The sections above list only the exceptions; this lists all of them, so a claim that is not here was never checked.
+
+### `curry_1.md` -- 22 claim(s): 0 dropped, 0 contradicted, 0 carried in part, 22 carried
+
+| # | Claim | Line | Status | Note |
+|---|---|---|---|---|
+| 1 | The recipe serves 4. | 3 | carried | 'Serves 4' in `merged.md` -- The reference text explicitly states 'Serves 4' in the header. |
+| 2 | The recipe takes ~30 min. | 3 | carried | '~30 min' in `merged.md` -- The reference text explicitly states '~30 min' in the header. |
+| 3 | The recipe requires 1 tbsp coconut oil. | 7 | carried | '1 tbsp coconut oil' in `merged.md` -- The ingredients list includes '1 tbsp coconut oil'. |
+| 4 | The recipe requires 2-3 tbsp green curry paste. | 8 | carried | '2-3 tbsp green curry paste' in `merged.md` -- The ingredients list includes '2-3 tbsp green curry paste'. |
+| 5 | Many green curry pastes contain shrimp paste. | 8 | carried | 'many contain shrimp paste' in `merged.md` -- The text notes in parentheses that 'many contain shrimp paste' regarding green curry paste. |
+| 6 | The recipe requires 1 can (400 ml) full-fat coconut milk. | 9 | carried | '1 can (400 ml) full-fat coconut milk' in `merged.md` -- The ingredients list includes '1 can (400 ml) full-fat coconut milk'. |
+| 7 | The recipe requires 1 onion, sliced. | 10 | carried | '1 onion, sliced' in `merged.md` -- The ingredients list includes '1 onion, sliced'. |
+| 8 | The recipe requires 2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant. | 11 | carried | '2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant' in `merged.md` -- The ingredients list matches the claim exactly. |
+| 9 | The recipe requires 200 g firm tofu, cubed (optional). | 12 | carried | '200 g firm tofu, cubed (optional)' in `merged.md` -- The ingredients list includes '200 g firm tofu, cubed (optional)'. |
+| 10 | The recipe requires 1 tsp palm or brown sugar. | 13 | carried | '1 tsp palm or brown sugar' in `merged.md` -- The ingredients list includes '1 tsp palm or brown sugar'. |
+| 11 | The recipe requires 1-2 tbsp soy sauce or 1 tsp salt. | 14 | carried | '1-2 tbsp soy sauce or 1 tsp salt' in `merged.md` -- The ingredients list includes '1-2 tbsp soy sauce or 1 tsp salt'. |
+| 12 | The recipe requires Juice of ½ lime. | 15 | carried | 'Juice of ½ lime' in `merged.md` -- The ingredients list includes 'Juice of ½ lime'. |
+| 13 | The recipe requires Handful Thai basil (or regular basil). | 16 | carried | 'Handful Thai basil (or regular basil)' in `merged.md` -- The ingredients list includes 'Handful Thai basil (or regular basil)'. |
+| 14 | The recipe requires Jasmine rice, to serve. | 17 | carried | 'Jasmine rice, to serve' in `merged.md` -- The ingredients list includes 'Jasmine rice, to serve'. |
+| 15 | The thick cream from the top of the coconut milk is cooked until it bubbles and the oil separates, ~2 min. | 21 | carried | 'Cook until it bubbles and the oil separates, ~2 min.' in `merged.md` -- Step 1 states to cook the cream and oil until it bubbles and separates for ~2 min. |
+| 16 | The curry paste is fried for 1 minute until fragrant. | 22 | carried | 'Add the curry paste and fry 1 minute until fragrant.' in `merged.md` -- Step 2 states to fry the curry paste for 1 minute until fragrant. |
+| 17 | The harder vegetables (beans, broccoli, eggplant) are added first and simmered for 5 min. | 24 | carried | 'Add the harder vegetables first (beans, broccoli, eggplant), simmer 5 min' in `merged.md` -- Step 4 states to add harder vegetables first and simmer for 5 min. |
+| 18 | The softer vegetables (pepper, mushrooms) and the tofu are added after the harder vegetables. | 24 | carried | 'then the softer ones (pepper, mushrooms) and the tofu' in `merged.md` -- Step 4 states to add softer vegetables and tofu after the harder ones. |
+| 19 | The mixture is simmered for another 5 min after adding the softer vegetables and tofu. | 24 | carried | 'Simmer another 5 min.' in `merged.md` -- Step 4 states to simmer another 5 min after adding the softer vegetables and tofu. |
+| 20 | The dish is seasoned with sugar, soy sauce and lime juice. | 25 | carried | 'Season with sugar, soy sauce and lime juice.' in `merged.md` -- Step 5 states to season with sugar, soy sauce, and lime juice. |
+| 21 | The basil is stirred in off the heat. | 26 | carried | 'Stir in the basil off the heat.' in `merged.md` -- Step 6 states to stir in the basil off the heat. |
+| 22 | The dish is served over jasmine rice. | 26 | carried | 'Serve over jasmine rice.' in `merged.md` -- Step 6 states to serve over jasmine rice. |
+
+### `curry_2.md` -- 26 claim(s): 4 dropped, 11 contradicted, 4 carried in part, 7 carried
+
+| # | Claim | Line | Status | Note |
+|---|---|---|---|---|
+| 6 | The recipe requires 1 cup broccoli florets. | 10 | dropped | The reference text lists broccoli as part of '2 cups mixed vegetables' but does not specify a separate quantity of 1 cup of broccoli florets. |
+| 8 | The recipe requires 1 cup zucchini, sliced. | 12 | dropped | The reference text does not mention zucchini in the ingredients list. |
+| 11 | The recipe requires 4–6 kaffir lime leaves, lightly crushed. | 15 | dropped | The reference text does not mention kaffir lime leaves in the ingredients or method. |
+| 26 | Baby corn, sugar snap peas, and mushrooms can be swapped in as seasonal vegetables. | 34 | dropped | The reference text lists specific vegetables but does not suggest swapping in baby corn, sugar snap peas, or mushrooms as seasonal alternatives. |
+| 3 | The recipe requires 400g extra-firm tofu, cubed. | 7 | contradicted | '200 g firm tofu, cubed (optional)' in `merged.md` -- The reference text specifies 200 g firm tofu, while the claim states 400 g extra-firm tofu, which is a different value and type. |
+| 5 | The recipe requires 2–4 tbsp green curry paste. | 9 | contradicted | '2-3 tbsp green curry paste' in `merged.md` -- The reference text specifies '2-3 tbsp green curry paste', which contradicts the claim's range of 2–4 tbsp. |
+| 7 | The recipe requires 1 red bell pepper, sliced. | 11 | contradicted | '2 cups mixed vegetables: bell pepper' in `merged.md` -- The reference text lists bell pepper as part of '2 cups mixed vegetables' without specifying a count of 1 or that it is red, contradicting the specific claim. |
+| 9 | The recipe requires 1 tbsp soy sauce. | 13 | contradicted | '1-2 tbsp soy sauce' in `merged.md` -- The reference text specifies '1-2 tbsp soy sauce', which contradicts the specific claim of 1 tbsp. |
+| 10 | The recipe requires 1 tbsp brown sugar. | 14 | contradicted | '1 tsp palm or brown sugar' in `merged.md` -- The reference text specifies '1 tsp palm or brown sugar', which contradicts the claim's unit of 1 tbsp. |
+| 14 | The recipe requires 1 tbsp vegetable oil. | 18 | contradicted | '1 tbsp coconut oil' in `merged.md` -- The reference text specifies '1 tbsp coconut oil', which contradicts the claim of vegetable oil. |
+| 17 | The curry paste should be added and stirred for 1–2 minutes until fragrant. | 24 | contradicted | 'Add the curry paste and fry 1 minute until fragrant.' in `merged.md` -- The reference text specifies frying for '1 minute', which contradicts the claim's range of 1–2 minutes. |
+| 18 | Half the coconut milk should be poured in and stirred until the paste is fully dissolved. | 26 | contradicted | 'Add onion and the remaining coconut milk.' in `merged.md` -- The reference text states to add the 'remaining coconut milk' after the paste, not half of it, and does not mention stirring until fully dissolved. |
+| 19 | The rest of the coconut milk, soy sauce, brown sugar, and lime leaves should be added after the paste is fully dissolved. | 26 | contradicted | 'Add onion and the remaining coconut milk.' in `merged.md` -- The reference text adds the remaining coconut milk with the onion, not after the paste is dissolved, and does not mention adding soy sauce, sugar, or lime leaves at this stage. |
+| 20 | The mixture should be brought to a gentle simmer, and the broccoli, bell pepper, and zucchini should be added. | 28 | contradicted | 'Add the harder vegetables first (beans, broccoli, eggplant), simmer 5 min, then the softer ones (pepper, mushrooms) and the tofu.' in `merged.md` -- The reference text adds broccoli and pepper at different times (harder first, then softer), not simultaneously, and does not mention zucchini. |
+| 21 | The vegetables should be cooked for 4–5 minutes until tender but still crisp. | 28 | contradicted | 'simmer 5 min, then the softer ones (pepper, mushrooms) and the tofu. Simmer another 5 min.' in `merged.md` -- The reference text specifies simmering for 5 minutes then another 5 minutes, which contradicts the claim's 4–5 minutes total. |
+| 15 | The tofu should be pressed to remove excess water, cut into cubes, and pan-fried in a little oil until golden on all sides. | 22 | carried in part | '200 g firm tofu, cubed (optional)' in `merged.md` -- The reference text lists tofu as 'cubed (optional)' but does not mention pressing it or pan-frying it until golden. |
+| 16 | Oil should be heated in a wok or large pan over medium heat. | 24 | carried in part | 'Spoon the thick cream from the top of the coconut milk into a hot wok with the oil.' in `merged.md` -- The reference text mentions a 'hot wok' but does not specify heating the oil over medium heat or using a large pan. |
+| 22 | The tofu, lime juice, and Thai basil should be added. | 30 | carried in part | 'then the softer ones (pepper, mushrooms) and the tofu.' in `merged.md` -- The reference text adds tofu with the softer vegetables, but lime juice and Thai basil are added later in steps 5 and 6. |
+| 24 | The curry should be served over steamed jasmine rice with extra basil and a wedge of lime. | 32 | carried in part | 'Serve over jasmine rice.' in `merged.md` -- The reference text states to serve over jasmine rice but does not mention extra basil or a wedge of lime. |
+| 1 | The recipe serves 4. | 3 | carried | 'Serves 4' in `merged.md` -- The reference text explicitly states 'Serves 4' in the header. |
+| 2 | The recipe time is ~30 minutes. | 3 | carried | '~30 min' in `merged.md` -- The reference text explicitly states '~30 min' in the header. |
+| 4 | The recipe requires 1 can (400ml) full-fat coconut milk. | 8 | carried | '1 can (400 ml) full-fat coconut milk' in `merged.md` -- The reference text explicitly lists '1 can (400 ml) full-fat coconut milk' in the ingredients. |
+| 12 | The recipe requires a handful of Thai basil leaves. | 16 | carried | 'Handful Thai basil' in `merged.md` -- The reference text lists 'Handful Thai basil', which supports the claim of a handful of Thai basil leaves. |
+| 13 | The recipe requires the juice of half a lime. | 17 | carried | 'Juice of ½ lime' in `merged.md` -- The reference text lists 'Juice of ½ lime', which is equivalent to the juice of half a lime. |
+| 23 | The mixture should be stirred, tasted, and seasoned with salt or more soy sauce. | 30 | carried | 'Season with sugar, soy sauce and lime juice. Taste and adjust - it should be salty, slightly sweet, and sour.' in `merged.md` -- The reference text instructs to season with sugar, soy sauce, and lime juice, and taste/adjust, which supports the claim of stirring, tasting, and seasoning. |
+| 25 | A splash of vegetable stock can be used for a richer curry. | 34 | carried | 'Add a splash of water or veg stock if it gets too thick.' in `merged.md` -- The reference text suggests adding veg stock if the curry gets too thick, which supports the claim that it can be used. |
+
+### `merged.md` -- 26 claim(s): 0 invented, 0 contradicted, 0 supported in part, 26 supported
+
+| # | Claim | Status | Found in | Note |
+|---|---|---|---|---|
+| 1 | The recipe serves 4. | supported | `curry_1.md` | 'Serves 4' in `curry_1.md` -- Source A explicitly states the recipe serves 4. |
+| 2 | The recipe takes ~30 min. | supported | `curry_1.md` | '~30 min' in `curry_1.md` -- Source A explicitly states the time is ~30 min. |
+| 3 | The recipe requires 1 tbsp coconut oil. | supported | `curry_1.md` | '1 tbsp coconut oil' in `curry_1.md` -- Source A lists 1 tbsp coconut oil as an ingredient. |
+| 4 | The recipe requires 2-3 tbsp green curry paste. | supported | `curry_1.md` | '2-3 tbsp green curry paste' in `curry_1.md` -- Source A lists 2-3 tbsp green curry paste as an ingredient. |
+| 5 | Many green curry pastes contain shrimp paste. | supported | `curry_1.md` | 'many contain shrimp paste' in `curry_1.md` -- Source A notes in the ingredient list that many green curry pastes contain shrimp paste. |
+| 6 | The recipe requires 1 can (400 ml) full-fat coconut milk. | supported | `curry_1.md` | '1 can (400 ml) full-fat coconut milk' in `curry_1.md` -- Source A lists 1 can (400 ml) full-fat coconut milk as an ingredient. |
+| 7 | The recipe requires 1 onion, sliced. | supported | `curry_1.md` | '1 onion, sliced' in `curry_1.md` -- Source A lists 1 onion, sliced as an ingredient. |
+| 8 | The recipe requires 2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant. | supported | `curry_1.md` | '2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant' in `curry_1.md` -- Source A lists this specific quantity and combination of vegetables. |
+| 9 | The recipe requires 200 g firm tofu, cubed (optional). | supported | `curry_1.md` | '200 g firm tofu, cubed (optional)' in `curry_1.md` -- Source A lists 200 g firm tofu, cubed (optional) as an ingredient. |
+| 10 | The recipe requires 1 tsp palm or brown sugar. | supported | `curry_1.md` | '1 tsp palm or brown sugar' in `curry_1.md` -- Source A lists 1 tsp palm or brown sugar as an ingredient. |
+| 11 | The recipe requires 1-2 tbsp soy sauce or 1 tsp salt. | supported | `curry_1.md` | '1-2 tbsp soy sauce or 1 tsp salt' in `curry_1.md` -- Source A lists 1-2 tbsp soy sauce or 1 tsp salt as an ingredient. |
+| 12 | The recipe requires Juice of ½ lime. | supported | `curry_1.md` | 'Juice of ½ lime' in `curry_1.md` -- Source A lists Juice of ½ lime as an ingredient. |
+| 13 | The recipe requires Handful Thai basil (or regular basil). | supported | `curry_1.md` | 'Handful Thai basil (or regular basil)' in `curry_1.md` -- Source A lists Handful Thai basil (or regular basil) as an ingredient. |
+| 14 | The recipe requires Jasmine rice, to serve. | supported | `curry_1.md` | 'Jasmine rice, to serve' in `curry_1.md` -- Source A lists Jasmine rice, to serve as an ingredient. |
+| 15 | The method involves spooning the thick cream from the top of the coconut milk into a hot wok with the oil. | supported | `curry_1.md` | 'Spoon the thick cream from the top of the coconut milk into a hot wok with the oil.' in `curry_1.md` -- Source A step 1 describes this exact action. |
+| 16 | The mixture is cooked until it bubbles and the oil separates, ~2 min. | supported | `curry_1.md` | 'Cook until it bubbles and the oil separates, ~2 min.' in `curry_1.md` -- Source A step 1 describes this exact cooking state and time. |
+| 17 | The curry paste is added and fried 1 minute until fragrant. | supported | `curry_1.md` | 'Add the curry paste and fry 1 minute until fragrant.' in `curry_1.md` -- Source A step 2 describes this exact action and time. |
+| 18 | The onion and the remaining coconut milk are added. | supported | `curry_1.md` | 'Add onion and the remaining coconut milk.' in `curry_1.md` -- Source A step 3 describes adding these ingredients. |
+| 19 | The mixture is brought to a gentle simmer and not boiled hard. | supported | `curry_1.md` | "Bring to a gentle simmer - don't boil hard." in `curry_1.md` -- Source A step 3 describes this cooking instruction. |
+| 20 | The harder vegetables (beans, broccoli, eggplant) are added first and simmered for 5 min, then the softer ones (pepper, mushrooms) and the tofu are added. | supported | `curry_1.md` | 'Add the harder vegetables first (beans, broccoli, eggplant), simmer 5 min, then the softer ones (pepper, mushrooms) and the tofu.' in `curry_1.md` -- Source A step 4 describes this sequence of adding vegetables and tofu. |
+| 21 | The mixture is simmered another 5 min. | supported | `curry_1.md` | 'Simmer another 5 min.' in `curry_1.md` -- Source A step 4 instructs to simmer another 5 min. |
+| 22 | The mixture is seasoned with sugar, soy sauce and lime juice. | supported | `curry_1.md` | 'Season with sugar, soy sauce and lime juice.' in `curry_1.md` -- Source A step 5 describes seasoning with these ingredients. |
+| 23 | The mixture should be salty, slightly sweet, and sour. | supported | `curry_1.md` | 'it should be salty, slightly sweet, and sour.' in `curry_1.md` -- Source A step 5 describes the desired flavor profile. |
+| 24 | The basil is stirred in off the heat. | supported | `curry_1.md` | 'Stir in the basil off the heat.' in `curry_1.md` -- Source A step 6 describes stirring in basil off the heat. |
+| 25 | The dish is served over jasmine rice. | supported | `curry_1.md` | 'Serve over jasmine rice.' in `curry_1.md` -- Source A step 6 instructs to serve over jasmine rice. |
+| 26 | A splash of water or veg stock should be added if the mixture gets too thick. | supported | `curry_1.md` | 'Tip: Add a splash of water or veg stock if it gets too thick.' in `curry_1.md` -- Source A explicitly states in the tip section to add a splash of water or veg stock if the mixture gets too thick, which directly supports the claim. |
+
+## Structure
+
+**9** mechanical check(s) over **60** source segment(s) and what the merge declared about them. No model was asked anything: every check here is a set difference, a string containment or a division.
+Separately, and not one of those 9: the merged text was searched for `merge.md`'s worked-example words (`marlbrook`, `funicular`), which belong to no source document.
+Separately again: the **26** claim(s) extracted from the merged document were checked for one claim appearing on two different lines, which is a merge that kept both sources' wordings of one fact. The sources yielded **48**. The two counts are reported, not compared: claim extraction is a sample, so a merge count above a source count is evidence and never the finding.
+
+Ordering: 1 run(s) over 26 attributed segment(s) — not conclusive on this evidence base. 2 of 2 source heading(s) survive. This is a measurement, not a finding: whether this shape is right depends on whether the sources had anything to interleave, which this tool does not measure.
+
+### Absent and undeclared — in a source, not in the merge, and no record explains it
+
+- `b16` (`curry_2.md`) — 'Instructions' is not in the merge and no disposition record explains it (nearest merge segment m7 at 0.37)
+
+## Review queue
+
+None. Every claim the forward pass found missing is a finding above, and no declared drop accounts for one.
+
+## Declarations
+
+The merge declared **31** departure(s) from its sources. Checking them confirms 21, rejects 4, and leaves 6 unchecked — a declaration is unchecked when no claim was drawn from the segment it names *and* the reconciler's location of that text settles nothing about what was declared, and that is not agreement.
+
+| Segment | Declared | The merge's reason | Confirmed? | On what evidence |
+|---|---|---|---|---|
+| `b1` | superseded | Base title retained; this title not used. | **confirmed** | no claim is drawn from a title, and the title check passed this one: it is superseded by 'Vegetarian Thai Curry Receipt' and says so (no claim traced to it) |
+| `b2` | superseded | Base document's serving/time format retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-001`, `B-002`) |
+| `b4` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-003`) |
+| `b5` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-004`) |
+| `b6` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-005`) |
+| `b7` | superseded | Base document's ingredient list retained. | **rejected** | declared 'superseded', which predicts SUPPORTED or CONTRADICTED or PARTIAL; B-006 came back MISSING (`B-006`) |
+| `b8` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-007`) |
+| `b9` | superseded | Base document's ingredient list retained. | **rejected** | declared 'superseded', which predicts SUPPORTED or CONTRADICTED or PARTIAL; B-008 came back MISSING (`B-008`) |
+| `b10` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-009`) |
+| `b11` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-010`) |
+| `b12` | superseded | Base document's ingredient list retained. | **rejected** | declared 'superseded', which predicts SUPPORTED or CONTRADICTED or PARTIAL; B-011 came back MISSING (`B-011`) |
+| `b13` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-012`) |
+| `b14` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-013`) |
+| `b15` | superseded | Base document's ingredient list retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-014`) |
+| `b17` | superseded | Base document's method retained. | **unchecked** | no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it (no claim traced to it) |
+| `b18` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-015`) |
+| `b19` | superseded | Base document's method retained. | **unchecked** | no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it (no claim traced to it) |
+| `b20` | superseded | Base document's method retained. | **unchecked** | no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it (no claim traced to it) |
+| `b21` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-016`) |
+| `b22` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-017`) |
+| `b23` | superseded | Base document's method retained. | **unchecked** | no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it (no claim traced to it) |
+| `b24` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-018`, `B-019`) |
+| `b25` | superseded | Base document's method retained. | **unchecked** | no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it (no claim traced to it) |
+| `b26` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-020`) |
+| `b27` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-021`) |
+| `b28` | superseded | Base document's method retained. | **unchecked** | no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it (no claim traced to it) |
+| `b29` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-022`) |
+| `b30` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-023`) |
+| `b31` | superseded | Base document's method retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-024`) |
+| `b32` | superseded | Base document's tip retained. | **confirmed** | declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL (`B-025`) |
+| `b33` | superseded | Base document's tip retained. | **rejected** | declared 'superseded', which predicts SUPPORTED or CONTRADICTED or PARTIAL; B-026 came back MISSING (`B-026`) |
+
+## Provenance
+
+| | |
+|---|---|
+| Run mode | live |
+| Endpoint | 58ec36f18620 (hosted) |
+| Fidelity | low |
+| Title policy | keep-base |
+| Base document | `source_a.md` (explicit) |
+| Model (merge) | Qwen/Qwen3.8-27B-FP8 |
+| Model (decompose) | Qwen/Qwen3.8-27B-FP8 |
+| Model (verify) | Qwen/Qwen3.8-27B-FP8 |
+| Structured output | json_schema (probed), field order any |
+| Decoding | temperature 0.0, seed 0, thinking off |
+| Context window | 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it (decompose, merge, verify) |
+| claimcheck commit | 605b53189df8 |
+| Calls | 9 live, 0 cached, 0 replayed |
+| Tokens | 19,026 in, 14,980 out |
+| Schema repairs | 1 |
+| Errors | 0 |
+| Duration | 677.6s |
+| Generated | 2026-09-16T22:38:02+00:00 |
+| Prompt | `prompts/decompose.md` `b4ec1e0c7ead` |
+| Prompt | `prompts/merge.md` `1b36d99e8c3e` |
+| Prompt | `prompts/verify.md` `e12d7f86bfd3` |
+| Prompt | `prompts/verify_reverse.md` `f5a949169d20` |
+
+> **Document content left this machine.** It was sent to the endpoint in `CLAIMCHECK_BASE_URL` (id `58ec36f18620`), which is not a local address. Run against a local endpoint if that is not acceptable for the documents involved.
+
+> **The context window was stated, not measured, for decompose, merge, verify.** 32768 tokens, declared by --window / claimcheck_window; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it. The rendered prompt was checked against that figure before each call, so a prompt too large for it was refused rather than sent -- but nothing here confirmed the figure itself, and if the endpoint serves less than was declared, an overrun is trimmed from the front and answered exactly as it would be with no guard at all. This is what a vendor endpoint with no /api/ps route can be given; it is weaker than what a local endpoint is measured against.

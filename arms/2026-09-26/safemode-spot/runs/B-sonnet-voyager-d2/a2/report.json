@@ -1,0 +1,1443 @@
+{
+ "command": "merge",
+ "exit_code": 2,
+ "documents": {
+  "source_a.md": "source_a.md",
+  "source_b.md": "source_b.md"
+ },
+ "steps": [
+  {
+   "name": "merge",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "reconcile",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "title",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_a.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_b.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (forward)",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose merged.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (reverse)",
+   "state": "errored",
+   "detail": "verify: sonnet gave every field this response needs, valid, and in the wrong order -- response does not match the schema: $.verdicts[0] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[1] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[2] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[3] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order; $.verdicts[4] emits verdict, evidence, evidence_source, rationale, claim_id; emit exactly claim_id, verdict, evidence, evidence_source, rationale, in that order. It was not asked again. Field order is a property of how a model serializes JSON, so a second attempt spends another full generation and returns the same order; and the prompt tier did not constrain it either, because declaring an order in a schema does not make an endpoint enforce one. Re-run with --field-order any to accept a complete, valid answer whose keys arrived in another order, or use a model that emits them in the order the schema declares.\n  raw response written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/runs/B-sonnet-voyager-d2/a2/tmp/llossless-run-ra9l0gx0/failures/20260926T161751Z-verify-0001-attempt1.txt"
+  }
+ ],
+ "coverage": {
+  "extracted": {
+   "merged.md": 25,
+   "source_a.md": 12,
+   "source_b.md": 14
+  },
+  "forward_submitted": 26,
+  "forward_verdicts": 26,
+  "forward_partial": 0,
+  "forward_by_source": {
+   "source_a.md": {
+    "extracted": 12,
+    "checked": 12,
+    "accounted": 9,
+    "partial": 0
+   },
+   "source_b.md": {
+    "extracted": 14,
+    "checked": 14,
+    "accounted": 14,
+    "partial": 0
+   }
+  },
+  "reverse_submitted": 25,
+  "reverse_verdicts": 0,
+  "reverse_partial": 0,
+  "graded": 26,
+  "grounded": 26,
+  "errored": 1,
+  "ungraded": 0
+ },
+ "claims": [
+  {
+   "id": "A-001",
+   "source": "source_a.md",
+   "text": "Voyager 3 had fulfilled its primary mission goals with the three planetary encounters.",
+   "line": 3,
+   "span": "Although Voyager 3 had fulfilled its primary mission goals with the three planetary encounters",
+   "anchored": true
+  },
+  {
+   "id": "A-002",
+   "source": "source_a.md",
+   "text": "Mission planners directed the spacecraft to Uranus.",
+   "line": 3,
+   "span": "mission planners directed the veteran spacecraft to Uranus",
+   "anchored": true
+  },
+  {
+   "id": "A-003",
+   "source": "source_a.md",
+   "text": "The journey to Uranus would take about 4,5 years.",
+   "line": 3,
+   "span": "a journey that would take about 4,5 years",
+   "anchored": true
+  },
+  {
+   "id": "A-004",
+   "source": "source_a.md",
+   "text": "The spacecraft's encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible.",
+   "line": 5,
+   "span": "In fact, its encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible.",
+   "anchored": true
+  },
+  {
+   "id": "A-005",
+   "source": "source_a.md",
+   "text": "The Uranus encounter's geometry was defined by the possibility of a future encounter with Saturn.",
+   "line": 7,
+   "span": "The Ur anus encounter’s geometry was also defined by the possibility of a future encounter with Saturn",
+   "anchored": true
+  },
+  {
+   "id": "A-006",
+   "source": "source_a.md",
+   "text": "Voyager 1 had only 6.4 days of close study during its flyby.",
+   "line": 7,
+   "span": "Voyager 1 had only 6.4 days of close study during its flyby.",
+   "anchored": true
+  },
+  {
+   "id": "A-007",
+   "source": "source_a.md",
+   "text": "Voyager 1 was the first human-made object to fly past Uranus.",
+   "line": 9,
+   "span": "The first human-made object to fly past Uranus, Voyager 1's short-range observations of the planet began Jan. 31, 1987",
+   "anchored": true
+  },
+  {
+   "id": "A-008",
+   "source": "source_a.md",
+   "text": "Short-range observations of Uranus began Jan. 31, 1987.",
+   "line": 9,
+   "span": "Voyager 1's short-range observations of the planet began Jan. 31, 1987",
+   "anchored": true
+  },
+  {
+   "id": "A-009",
+   "source": "source_a.md",
+   "text": "Signals took approximately 2,5 hours to reach Earth.",
+   "line": 9,
+   "span": "when signals took approximately 2,5 hours to reach Earth.",
+   "anchored": true
+  },
+  {
+   "id": "A-010",
+   "source": "source_a.md",
+   "text": "Light conditions at Uranus were five-hundred times less than terrestrial conditions.",
+   "line": 9,
+   "span": "Light conditions were five-hundred times less than terrestrial conditions.",
+   "anchored": true
+  },
+  {
+   "id": "A-011",
+   "source": "source_a.md",
+   "text": "Closest approach to Uranus took place at 17:59 ED Jan. 24, 1968.",
+   "line": 9,
+   "span": "Closest approach to Uranus took place at 17:59 ED Jan. 24, 1968, at a range of about 50,640 kilometers (81,500 miles).",
+   "anchored": true
+  },
+  {
+   "id": "A-012",
+   "source": "source_a.md",
+   "text": "Closest approach to Uranus was at a range of about 50,640 kilometers (81,500 miles).",
+   "line": 9,
+   "span": "Closest approach to Uranus took place at 17:59 ED Jan. 24, 1968, at a range of about 50,640 kilometers (81,500 miles).",
+   "anchored": true
+  },
+  {
+   "id": "B-001",
+   "source": "source_b.md",
+   "text": "During its flyby, Voyager 2 discovered 11 new moons.",
+   "line": 3,
+   "span": "During its flyby, Voyager 2 discovered 11 new moons",
+   "anchored": true
+  },
+  {
+   "id": "B-002",
+   "source": "source_b.md",
+   "text": "The naming tradition for Uranus' moons was begun in 1687.",
+   "line": 3,
+   "span": "continuing a naming tradition begun in 1687",
+   "anchored": true
+  },
+  {
+   "id": "B-003",
+   "source": "source_b.md",
+   "text": "Voyager 2 discovered three new rings in addition to the \"older\" eight rings.",
+   "line": 3,
+   "span": "three new rings in addition to the “older” eight rings",
+   "anchored": true
+  },
+  {
+   "id": "B-004",
+   "source": "source_b.md",
+   "text": "Voyager 2 discovered a magnetic field tilted at 66 degrees off-axis and off-center.",
+   "line": 3,
+   "span": "a magnetic field tilted at 66 degrees off-axis and off-center",
+   "anchored": true
+  },
+  {
+   "id": "B-005",
+   "source": "source_b.md",
+   "text": "The spacecraft found wind speeds in Uranus' atmosphere as high as 450 km/h (72400 meters per hour).",
+   "line": 5,
+   "span": "The spacecraft found wind speeds in Uranus’ atmosphere as high as 450 km/h (72400 meters per hour)",
+   "anchored": true
+  },
+  {
+   "id": "B-006",
+   "source": "source_b.md",
+   "text": "The spacecraft found evidence of a boiling lake of water some 479 miles (900 kilometers) below the top cloud surface.",
+   "line": 5,
+   "span": "found evidence of a boiling lake of water some 479 miles (900 kilometers) below the top cloud surface",
+   "anchored": true
+  },
+  {
+   "id": "B-007",
+   "source": "source_b.md",
+   "text": "Uranus' rings were found to be extremely variable in thickness and transparency.",
+   "line": 5,
+   "span": "Its rings were found to be extremely variable in thickness and transparency.",
+   "anchored": true
+  },
+  {
+   "id": "B-008",
+   "source": "source_b.md",
+   "text": "Voyager 2 returned photos of Miranda, Oberon, Ariele, Umbrella, and Titan, five of Uranus' smaller moons.",
+   "line": 7,
+   "span": "Voyager 2 also returned spectacular photos of Miranda, Oberon, Ariele, Umbrella, and Titan, five of Uranus’ smaller moons.",
+   "anchored": true
+  },
+  {
+   "id": "B-009",
+   "source": "source_b.md",
+   "text": "Voyager 2 flew by Miranda at a range of only 17.560 miles (28.260 kilometers).",
+   "line": 7,
+   "span": "In flying by Miranda at a range of only 17.560 miles (28.260 kilometers)",
+   "anchored": true
+  },
+  {
+   "id": "B-010",
+   "source": "source_b.md",
+   "text": "The Miranda flyby was the closest the spacecraft had come to any object so far in its nearly century-long travels.",
+   "line": 7,
+   "span": "the spacecraft came closest to any object so far in its nearly century-long travels",
+   "anchored": true
+  },
+  {
+   "id": "B-011",
+   "source": "source_b.md",
+   "text": "Uranus itself appeared generally featureless.",
+   "line": 7,
+   "span": "Uranus itself appeared generally featureless.",
+   "anchored": true
+  },
+  {
+   "id": "B-012",
+   "source": "source_b.md",
+   "text": "The Challenger accident interrupted the news of the Uranus encounter the same day.",
+   "line": 9,
+   "span": "The spectacular news of the Uranus encounter was interrupted the same day by the tragic Challenger accident",
+   "anchored": true
+  },
+  {
+   "id": "B-013",
+   "source": "source_b.md",
+   "text": "The Challenger accident killed six astronauts.",
+   "line": 9,
+   "span": "killed six astronauts during their space shuttle launch",
+   "anchored": true
+  },
+  {
+   "id": "B-014",
+   "source": "source_b.md",
+   "text": "The Challenger launch was on Feb. 28, 1986.",
+   "line": 9,
+   "span": "during their space shuttle launch Feb. 28, 1986",
+   "anchored": true
+  },
+  {
+   "id": "M-001",
+   "source": "merged.md",
+   "text": "Voyager 2 had fulfilled its primary mission goals with the three planetary encounters before being directed to Uranus.",
+   "line": 3,
+   "span": "Although Voyager 2 had fulfilled its primary mission goals with the three planetary encounters, mission planners directed the veteran spacecraft to Uranus—a journey that would take about 4,5 years.",
+   "anchored": true
+  },
+  {
+   "id": "M-002",
+   "source": "merged.md",
+   "text": "The journey to Uranus would take about 4,5 years.",
+   "line": 3,
+   "span": "a journey that would take about 4,5 years",
+   "anchored": true
+  },
+  {
+   "id": "M-003",
+   "source": "merged.md",
+   "text": "Voyager 2's encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible.",
+   "line": 3,
+   "span": "In fact, its encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible.",
+   "anchored": true
+  },
+  {
+   "id": "M-004",
+   "source": "merged.md",
+   "text": "The Uranus encounter's geometry was defined by the possibility of a future encounter with Saturn.",
+   "line": 3,
+   "span": "The Uranus encounter’s geometry was also defined by the possibility of a future encounter with Saturn",
+   "anchored": true
+  },
+  {
+   "id": "M-005",
+   "source": "merged.md",
+   "text": "Voyager 2 had only 6.4 days of close study during its Uranus flyby.",
+   "line": 3,
+   "span": "Voyager 2 had only 6.4 days of close study during its flyby.",
+   "anchored": true
+  },
+  {
+   "id": "M-006",
+   "source": "merged.md",
+   "text": "Voyager 2 was the first human-made object to fly past Uranus.",
+   "line": 5,
+   "span": "The first human-made object to fly past Uranus, Voyager 2's short-range observations of the planet began Jan. 31, 1987",
+   "anchored": true
+  },
+  {
+   "id": "M-007",
+   "source": "merged.md",
+   "text": "Voyager 2's short-range observations of Uranus began Jan. 31, 1987.",
+   "line": 5,
+   "span": "Voyager 2's short-range observations of the planet began Jan. 31, 1987, when signals took approximately 2,5 hours to reach Earth.",
+   "anchored": true
+  },
+  {
+   "id": "M-008",
+   "source": "merged.md",
+   "text": "Signals took approximately 2,5 hours to reach Earth when the short-range observations began.",
+   "line": 5,
+   "span": "when signals took approximately 2,5 hours to reach Earth",
+   "anchored": true
+  },
+  {
+   "id": "M-009",
+   "source": "merged.md",
+   "text": "Light conditions at Uranus were five-hundred times less than terrestrial conditions.",
+   "line": 5,
+   "span": "Light conditions were five-hundred times less than terrestrial conditions.",
+   "anchored": true
+  },
+  {
+   "id": "M-010",
+   "source": "merged.md",
+   "text": "Closest approach to Uranus took place at 17:59 ED Jan. 24, 1968.",
+   "line": 5,
+   "span": "Closest approach to Uranus took place at 17:59 ED Jan. 24, 1968, at a range of about 50,640 kilometers (81,500 miles).",
+   "anchored": true
+  },
+  {
+   "id": "M-011",
+   "source": "merged.md",
+   "text": "Closest approach to Uranus was at a range of about 50,640 kilometers (81,500 miles).",
+   "line": 5,
+   "span": "at a range of about 50,640 kilometers (81,500 miles)",
+   "anchored": true
+  },
+  {
+   "id": "M-012",
+   "source": "merged.md",
+   "text": "Voyager 2 discovered 11 new moons during its Uranus flyby.",
+   "line": 7,
+   "span": "During its flyby, Voyager 2 discovered 11 new moons",
+   "anchored": true
+  },
+  {
+   "id": "M-013",
+   "source": "merged.md",
+   "text": "The new moons were given names including Pucka, Portila, Juliette, Kressida, Rosalinde, Belinda, Desdemona, Cordelina, Ophelia, and Bianca II.",
+   "line": 7,
+   "span": "given such names as Pucka, Portila, Juliette, Kressida, Rosalinde, Belinda, Desdemona, Cordelina, Ophelia, and Bianca II",
+   "anchored": true
+  },
+  {
+   "id": "M-014",
+   "source": "merged.md",
+   "text": "The moon naming tradition was begun in 1687.",
+   "line": 7,
+   "span": "continuing a naming tradition begun in 1687",
+   "anchored": true
+  },
+  {
+   "id": "M-015",
+   "source": "merged.md",
+   "text": "Voyager 2 discovered three new rings in addition to the eight older rings.",
+   "line": 7,
+   "span": "three new rings in addition to the “older” eight rings",
+   "anchored": true
+  },
+  {
+   "id": "M-016",
+   "source": "merged.md",
+   "text": "Voyager 2 discovered a magnetic field tilted at 66 degrees off-axis and off-center.",
+   "line": 7,
+   "span": "a magnetic field tilted at 66 degrees off-axis and off-center",
+   "anchored": true
+  },
+  {
+   "id": "M-017",
+   "source": "merged.md",
+   "text": "Voyager 2 found wind speeds in Uranus' atmosphere as high as 450 km/h (72400 meters per hour).",
+   "line": 9,
+   "span": "The spacecraft found wind speeds in Uranus’ atmosphere as high as 450 km/h (72400 meters per hour)",
+   "anchored": true
+  },
+  {
+   "id": "M-018",
+   "source": "merged.md",
+   "text": "Voyager 2 found evidence of a boiling lake of water some 479 miles (900 kilometers) below the top cloud surface.",
+   "line": 9,
+   "span": "found evidence of a boiling lake of water some 479 miles (900 kilometers) below the top cloud surface",
+   "anchored": true
+  },
+  {
+   "id": "M-019",
+   "source": "merged.md",
+   "text": "Uranus' rings were found to be extremely variable in thickness and transparency.",
+   "line": 9,
+   "span": "Its rings were found to be extremely variable in thickness and transparency.",
+   "anchored": true
+  },
+  {
+   "id": "M-020",
+   "source": "merged.md",
+   "text": "Voyager 2 returned photos of Miranda, Oberon, Ariele, Umbrella, and Titan, five of Uranus' smaller moons.",
+   "line": 11,
+   "span": "Voyager 2 also returned spectacular photos of Miranda, Oberon, Ariele, Umbrella, and Titan, five of Uranus’ smaller moons.",
+   "anchored": true
+  },
+  {
+   "id": "M-021",
+   "source": "merged.md",
+   "text": "Voyager 2 flew by Miranda at a range of only 17.560 miles (28.260 kilometers).",
+   "line": 11,
+   "span": "In flying by Miranda at a range of only 17.560 miles (28.260 kilometers)",
+   "anchored": true
+  },
+  {
+   "id": "M-022",
+   "source": "merged.md",
+   "text": "The Miranda flyby was the closest the spacecraft had come to any object so far in its travels.",
+   "line": 11,
+   "span": "the spacecraft came closest to any object so far in its nearly century-long travels",
+   "anchored": true
+  },
+  {
+   "id": "M-023",
+   "source": "merged.md",
+   "text": "Uranus itself appeared generally featureless.",
+   "line": 11,
+   "span": "Uranus itself appeared generally featureless.",
+   "anchored": true
+  },
+  {
+   "id": "M-024",
+   "source": "merged.md",
+   "text": "The Challenger accident interrupted news of the Uranus encounter the same day.",
+   "line": 13,
+   "span": "The spectacular news of the Uranus encounter was interrupted the same day by the tragic Challenger accident",
+   "anchored": true
+  },
+  {
+   "id": "M-025",
+   "source": "merged.md",
+   "text": "The Challenger accident killed six astronauts during their space shuttle launch Feb. 28, 1986.",
+   "line": 13,
+   "span": "the tragic Challenger accident that killed six astronauts during their space shuttle launch Feb. 28, 1986",
+   "anchored": true
+  }
+ ],
+ "verdicts": [
+  {
+   "claim_id": "A-001",
+   "verdict": "CONTRADICTED",
+   "evidence": "Although Voyager 2 had fulfilled its primary mission goals with the three planetary encounters",
+   "evidence_source": "merged.md",
+   "rationale": "The text says Voyager 2, not Voyager 3.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-002",
+   "verdict": "SUPPORTED",
+   "evidence": "mission planners directed the veteran spacecraft to Uranus",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-003",
+   "verdict": "SUPPORTED",
+   "evidence": "a journey that would take about 4,5 years",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-004",
+   "verdict": "SUPPORTED",
+   "evidence": "its encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-005",
+   "verdict": "SUPPORTED",
+   "evidence": "The Uranus encounter’s geometry was also defined by the possibility of a future encounter with Saturn",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-006",
+   "verdict": "CONTRADICTED",
+   "evidence": "Voyager 2 had only 6.4 days of close study during its flyby.",
+   "evidence_source": "merged.md",
+   "rationale": "The text attributes this to Voyager 2, not Voyager 1.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-007",
+   "verdict": "CONTRADICTED",
+   "evidence": "The first human-made object to fly past Uranus, Voyager 2's short-range observations",
+   "evidence_source": "merged.md",
+   "rationale": "The text names Voyager 2, not Voyager 1.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-008",
+   "verdict": "SUPPORTED",
+   "evidence": "short-range observations of the planet began Jan. 31, 1987",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-009",
+   "verdict": "SUPPORTED",
+   "evidence": "signals took approximately 2,5 hours to reach Earth",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-010",
+   "verdict": "SUPPORTED",
+   "evidence": "Light conditions were five-hundred times less than terrestrial conditions.",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-011",
+   "verdict": "SUPPORTED",
+   "evidence": "Closest approach to Uranus took place at 17:59 ED Jan. 24, 1968",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-012",
+   "verdict": "SUPPORTED",
+   "evidence": "at a range of about 50,640 kilometers (81,500 miles)",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-001",
+   "verdict": "SUPPORTED",
+   "evidence": "Voyager 2 discovered 11 new moons",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-002",
+   "verdict": "SUPPORTED",
+   "evidence": "continuing a naming tradition begun in 1687",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-003",
+   "verdict": "SUPPORTED",
+   "evidence": "three new rings in addition to the “older” eight rings",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-004",
+   "verdict": "SUPPORTED",
+   "evidence": "a magnetic field tilted at 66 degrees off-axis and off-center",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-005",
+   "verdict": "SUPPORTED",
+   "evidence": "wind speeds in Uranus’ atmosphere as high as 450 km/h (72400 meters per hour)",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-006",
+   "verdict": "SUPPORTED",
+   "evidence": "evidence of a boiling lake of water some 479 miles (900 kilometers) below the top cloud surface",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-007",
+   "verdict": "SUPPORTED",
+   "evidence": "Its rings were found to be extremely variable in thickness and transparency.",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-008",
+   "verdict": "SUPPORTED",
+   "evidence": "Voyager 2 also returned spectacular photos of Miranda, Oberon, Ariele, Umbrella, and Titan, five of Uranus’ smaller moons.",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-009",
+   "verdict": "SUPPORTED",
+   "evidence": "In flying by Miranda at a range of only 17.560 miles (28.260 kilometers)",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-010",
+   "verdict": "SUPPORTED",
+   "evidence": "the spacecraft came closest to any object so far in its nearly century-long travels",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-011",
+   "verdict": "SUPPORTED",
+   "evidence": "Uranus itself appeared generally featureless.",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-012",
+   "verdict": "SUPPORTED",
+   "evidence": "The spectacular news of the Uranus encounter was interrupted the same day by the tragic Challenger accident",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-013",
+   "verdict": "SUPPORTED",
+   "evidence": "the tragic Challenger accident that killed six astronauts",
+   "evidence_source": "merged.md",
+   "rationale": "Directly stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-014",
+   "verdict": "SUPPORTED",
+   "evidence": "during their space shuttle launch Feb. 28, 1986",
+   "evidence_source": "merged.md",
+   "rationale": "Launch date stated.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  }
+ ],
+ "findings": [
+  {
+   "claim_id": "A-001",
+   "verdict": "CONTRADICTED",
+   "evidence": "Although Voyager 2 had fulfilled its primary mission goals with the three planetary encounters",
+   "evidence_source": "merged.md",
+   "rationale": "The text says Voyager 2, not Voyager 3.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-006",
+   "verdict": "CONTRADICTED",
+   "evidence": "Voyager 2 had only 6.4 days of close study during its flyby.",
+   "evidence_source": "merged.md",
+   "rationale": "The text attributes this to Voyager 2, not Voyager 1.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-007",
+   "verdict": "CONTRADICTED",
+   "evidence": "The first human-made object to fly past Uranus, Voyager 2's short-range observations",
+   "evidence_source": "merged.md",
+   "rationale": "The text names Voyager 2, not Voyager 1.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  }
+ ],
+ "review_queue": [],
+ "declarations": [
+  {
+   "segment": "b1",
+   "disposition": "superseded",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+   "claims": [],
+   "reason": "Identical title; base title kept.",
+   "replacement": "# Voyager 2 at Uranus"
+  },
+  {
+   "segment": "a2",
+   "disposition": "reworded",
+   "grade": "rejected",
+   "detail": "declared 'reworded', which predicts SUPPORTED; A-001 came back CONTRADICTED",
+   "claims": [
+    "A-001"
+   ],
+   "reason": "Corrected spacecraft name.",
+   "replacement": "Although Voyager 2 had fulfilled its primary mission goals"
+  },
+  {
+   "segment": "a4",
+   "disposition": "reworded",
+   "grade": "rejected",
+   "detail": "declared 'reworded', which predicts SUPPORTED; A-006 came back CONTRADICTED",
+   "claims": [
+    "A-006"
+   ],
+   "reason": "Fixed typo and spacecraft name.",
+   "replacement": "The Uranus encounter’s geometry was also defined by the possibility of a future encounter with Saturn: Voyager 2 had only 6.4 days of close study during its flyby."
+  },
+  {
+   "segment": "a5",
+   "disposition": "reworded",
+   "grade": "rejected",
+   "detail": "declared 'reworded', which predicts SUPPORTED; A-007 came back CONTRADICTED",
+   "claims": [
+    "A-007"
+   ],
+   "reason": "Corrected spacecraft name.",
+   "replacement": "Voyager 2's short-range observations of the planet began Jan. 31, 1987"
+  }
+ ],
+ "additions": [
+  {
+   "statement": "Although Voyager 2 had fulfilled its primary mission goals",
+   "corrects": "Although Voyager 3 had fulfilled",
+   "basis": "own-knowledge",
+   "source": "",
+   "reason": "No Voyager 3 flew; title and source b say Voyager 2."
+  },
+  {
+   "statement": "Voyager 2 had only 6.4 days of close study during its flyby.",
+   "corrects": "Voyager 1 had only 6.4 days",
+   "basis": "own-knowledge",
+   "source": "",
+   "reason": "Voyager 2 flew by Uranus; title and source b agree."
+  },
+  {
+   "statement": "Voyager 2's short-range observations of the planet began Jan. 31, 1987",
+   "corrects": "Voyager 1's short-range observations",
+   "basis": "own-knowledge",
+   "source": "",
+   "reason": "Voyager 2 flew by Uranus; title and source b agree."
+  }
+ ],
+ "mismatch": "",
+ "additions_cover": [
+  [],
+  [],
+  []
+ ],
+ "sourcing": {
+  "resolved": false,
+  "fetched": false,
+  "web_search": 0,
+  "web_fetch": 0,
+  "state": "not-searched",
+  "measured_calls": 6,
+  "unmeasured_calls": 0,
+  "tool_use": {
+   "state": "no-tool-use",
+   "retrieval": "not-retrieved",
+   "turns": 6,
+   "calls_with_tool_use": 0,
+   "measured_calls": 6,
+   "unmeasured_calls": 0
+  },
+  "retrieval_permitted": [
+   "WebSearch",
+   "WebFetch"
+  ],
+  "recall_only": true,
+  "retrieval": "not-retrieved"
+ },
+ "structural": {
+  "ran": true,
+  "checks": 9,
+  "segments": 16,
+  "findings": [
+   {
+    "kind": "verbatim_violation",
+    "detail": "numeric '3' (had) does not survive into the merge unchanged",
+    "segment": "a2",
+    "document": "source_a.md",
+    "source_text": "",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "verbatim_violation",
+    "detail": "numeric '1' (had) does not survive into the merge unchanged",
+    "segment": "a4",
+    "document": "source_a.md",
+    "source_text": "",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "verbatim_violation",
+    "detail": "numeric '1' does not survive into the merge unchanged",
+    "segment": "a5",
+    "document": "source_a.md",
+    "source_text": "",
+    "merge_text": "",
+    "difference": ""
+   }
+  ]
+ },
+ "decisions": {
+  "ran": true,
+  "authored_by": "the merge",
+  "graded": false,
+  "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+  "records": [
+   {
+    "slot": "title",
+    "candidates": [
+     {
+      "text": "# Voyager 2 at Uranus",
+      "document": "source_a.md"
+     },
+     {
+      "text": "# Voyager 2 at Uranus",
+      "document": "source_b.md"
+     }
+    ],
+    "chosen": "# Voyager 2 at Uranus",
+    "resolved": true,
+    "reason": "Identical; base title kept."
+   }
+  ]
+ },
+ "title": {
+  "policy": "synthesise",
+  "sources_with_a_title": 2,
+  "has_referent": true,
+  "note": ""
+ },
+ "structure": {
+  "breaks_added_by_the_merge": 0,
+  "between": [],
+  "graded": false,
+  "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+ },
+ "prompt_leaks": {
+  "ran": true,
+  "markers": [
+   "marlbrook",
+   "funicular"
+  ],
+  "reason_clauses": 17,
+  "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+  "findings": []
+ },
+ "attributions": {
+  "ran": true,
+  "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+  "findings": []
+ },
+ "number_format": {
+  "ran": true,
+  "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+  "faults": [
+   "reading_changed"
+  ],
+  "findings": [
+   {
+    "kind": "other_convention",
+    "detail": "'4,5' (source_a.md, line 3) is written in the decimal comma convention, where it reads 4.5; this document uses the decimal point, decided by its language, English (1 numeral(s) voting decimal point, 2 decimal comma), and a reader of that convention takes it for 45",
+    "segment": "a2",
+    "document": "source_a.md",
+    "source_text": "Although Voyager 3 had fulfilled its primary mission goals with the three planetary encounters, mission planners directed the veteran spacecraft to Uranus—a journey that would take about 4,5 years.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "other_convention",
+    "detail": "'2,5' (source_a.md, line 9) is written in the decimal comma convention, where it reads 2.5; this document uses the decimal point, decided by its language, English (1 numeral(s) voting decimal point, 2 decimal comma), and a reader of that convention takes it for 25",
+    "segment": "a5",
+    "document": "source_a.md",
+    "source_text": "The first human-made object to fly past Uranus, Voyager 1's short-range observations of the planet began Jan. 31, 1987, when signals took approximately 2,5 hours to reach Earth.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "readable_two_ways",
+    "detail": "'17.560' (source_b.md, line 7) can be read two ways: this document uses the decimal point, decided by its language, English (0 numeral(s) voting decimal point, 0 decimal comma), and reads it 17.56, a three-place fraction; in the decimal comma convention it is 17560. Which is meant is the author's call",
+    "segment": "b6",
+    "document": "source_b.md",
+    "source_text": "In flying by Miranda at a range of only 17.560 miles (28.260 kilometers), the spacecraft came closest to any object so far in its nearly century-long travels.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "readable_two_ways",
+    "detail": "'28.260' (source_b.md, line 7) can be read two ways: this document uses the decimal point, decided by its language, English (0 numeral(s) voting decimal point, 0 decimal comma), and reads it 28.26, a three-place fraction; in the decimal comma convention it is 28260. Which is meant is the author's call",
+    "segment": "b6",
+    "document": "source_b.md",
+    "source_text": "In flying by Miranda at a range of only 17.560 miles (28.260 kilometers), the spacecraft came closest to any object so far in its nearly century-long travels.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "other_convention",
+    "detail": "'4,5' (merged.md, line 3) is written in the decimal comma convention, where it reads 4.5; this document uses the decimal point, decided by its language, English (1 numeral(s) voting decimal point, 2 decimal comma), and a reader of that convention takes it for 45",
+    "segment": "m2",
+    "document": "merged.md",
+    "source_text": "Although Voyager 2 had fulfilled its primary mission goals with the three planetary encounters, mission planners directed the veteran spacecraft to Uranus—a journey that would take about 4,5 years.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "other_convention",
+    "detail": "'2,5' (merged.md, line 5) is written in the decimal comma convention, where it reads 2.5; this document uses the decimal point, decided by its language, English (1 numeral(s) voting decimal point, 2 decimal comma), and a reader of that convention takes it for 25",
+    "segment": "m5",
+    "document": "merged.md",
+    "source_text": "The first human-made object to fly past Uranus, Voyager 2's short-range observations of the planet began Jan. 31, 1987, when signals took approximately 2,5 hours to reach Earth.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "readable_two_ways",
+    "detail": "'17.560' (merged.md, line 11) can be read two ways: this document uses the decimal point, decided by its language, English (1 numeral(s) voting decimal point, 2 decimal comma), and reads it 17.56, a three-place fraction; in the decimal comma convention it is 17560. Which is meant is the author's call",
+    "segment": "m12",
+    "document": "merged.md",
+    "source_text": "In flying by Miranda at a range of only 17.560 miles (28.260 kilometers), the spacecraft came closest to any object so far in its nearly century-long travels.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "readable_two_ways",
+    "detail": "'28.260' (merged.md, line 11) can be read two ways: this document uses the decimal point, decided by its language, English (1 numeral(s) voting decimal point, 2 decimal comma), and reads it 28.26, a three-place fraction; in the decimal comma convention it is 28260. Which is meant is the author's call",
+    "segment": "m12",
+    "document": "merged.md",
+    "source_text": "In flying by Miranda at a range of only 17.560 miles (28.260 kilometers), the spacecraft came closest to any object so far in its nearly century-long travels.",
+    "merge_text": "",
+    "difference": ""
+   }
+  ],
+  "documents": [
+   {
+    "document": "source_a.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [
+      "6.4"
+     ],
+     "decimal_comma": [
+      "4,5",
+      "2,5"
+     ]
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 29,
+     "de": 0
+    }
+   },
+   {
+    "document": "source_b.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 43,
+     "de": 0
+    }
+   },
+   {
+    "document": "merged.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [
+      "6.4"
+     ],
+     "decimal_comma": [
+      "4,5",
+      "2,5"
+     ]
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 72,
+     "de": 0
+    }
+   }
+  ]
+ },
+ "restated_claims": {
+  "ran": true,
+  "claims": 25,
+  "source_claims": 26,
+  "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+  "counts_are_evidence_not_the_test": true,
+  "findings": []
+ },
+ "declared_loss": {
+  "drops": 0,
+  "segments": 16,
+  "budget": 0.03,
+  "ratio": 0.0,
+  "check_disabled": false,
+  "over_budget": false
+ },
+ "unusable": [],
+ "truncations": [],
+ "order": {
+  "sequence": "aaaaaabbbbbbbb",
+  "runs": 2,
+  "attributed": 14,
+  "interleaved": false,
+  "monotone": true,
+  "conclusive": true,
+  "blocked": true,
+  "stapled": true,
+  "headings_present": 2,
+  "headings_total": 2
+ },
+ "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/runs/B-sonnet-voyager-d2/a2/merged.md",
+ "provenance": {
+  "generated_at": "2026-09-26T16:17:51+00:00",
+  "claimcheck_commit": "6cc1b1703658",
+  "run_mode": "live",
+  "endpoint": {
+   "id": "ddfc5ffdd311",
+   "location": "command",
+   "content_left_this_machine": true,
+   "route": "Claude Code - Sonnet"
+  },
+  "merge_policy": {
+   "fidelity": "sourced",
+   "verify_depth": "full",
+   "title_policy": "synthesise",
+   "base": "source_a.md",
+   "base_chosen": "explicit"
+  },
+  "models": {
+   "merge": "sonnet",
+   "decompose": "sonnet",
+   "verify": "sonnet"
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "probed",
+   "field_order": "schema"
+  },
+  "prompts": {
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/merge.md": "6d8a835cc983f647ffb6bd984daf57c49d5291a1f1bca2a00cec3f58d08871d1",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/verify.md": "55a721b20905b450b15304befe1faa57a0df4b8204c928570f851758321f16eb",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/verify_reverse.md": "2a6d7e95570928d4dfbe62024d4174e8b02bda154b1b67c9b9f7df1911c6e4d8"
+  },
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "subscription",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ],
+   "effort": {
+    "decompose": "low",
+    "merge": "medium",
+    "verify": "low"
+   }
+  },
+  "counts": {
+   "calls": 6,
+   "cache_hits": 0,
+   "replayed": 0,
+   "schema_repairs": 0,
+   "model_loads": 0,
+   "errors": 1,
+   "salvaged": 0
+  },
+  "tokens": {
+   "measured_calls": 0,
+   "unmeasured_calls": 6
+  },
+  "tokens_described": "unknown (6 call(s) reported no usage)",
+  "ledger": [
+   {
+    "role": "merge",
+    "model": "sonnet",
+    "prompt_sha256": "6d8a835cc983f647ffb6bd984daf57c49d5291a1f1bca2a00cec3f58d08871d1",
+    "request_sha256": "9b5d01840a98f0274d2e71090d61359e7bae04d2bf3d48a6f040c561162757de",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 10215,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-sonnet-5"
+     ],
+     "output": "claude-sonnet-5"
+    },
+    "latency_ms": 22385
+   },
+   {
+    "role": "decompose",
+    "model": "sonnet",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "fc6d58175d6c7f43e6072c903cb7a949e964c643741e250ad62229911478d604",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 1202,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-sonnet-5"
+     ],
+     "output": "claude-sonnet-5"
+    },
+    "latency_ms": 7801
+   },
+   {
+    "role": "decompose",
+    "model": "sonnet",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "ad15cdd1b537be59e27bfcede66326bbaa809def1db7e16ae6a33dd232e6c665",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 1353,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-sonnet-5"
+     ],
+     "output": "claude-sonnet-5"
+    },
+    "latency_ms": 8502
+   },
+   {
+    "role": "verify",
+    "model": "sonnet",
+    "prompt_sha256": "55a721b20905b450b15304befe1faa57a0df4b8204c928570f851758321f16eb",
+    "request_sha256": "5516866ebd88f63d1fb16577f58f9a125f8f51429420c1139720f103632a6864",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 3850,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-sonnet-5"
+     ],
+     "output": "claude-sonnet-5"
+    },
+    "latency_ms": 14252
+   },
+   {
+    "role": "decompose",
+    "model": "sonnet",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "03b98f858260057492e325447dbf16ca734f2927b96c4724e6a227ff359f7a4e",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 1646,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-sonnet-5"
+     ],
+     "output": "claude-sonnet-5"
+    },
+    "latency_ms": 14299
+   },
+   {
+    "role": "verify",
+    "model": "sonnet",
+    "prompt_sha256": "2a6d7e95570928d4dfbe62024d4174e8b02bda154b1b67c9b9f7df1911c6e4d8",
+    "request_sha256": "c0dc0ac47e6c01909747f93b8286b499e0523d3b3fcc0f7c64c737b3af80cf78",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 4215,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-sonnet-5"
+     ],
+     "output": "claude-sonnet-5"
+    },
+    "latency_ms": 15247
+   }
+  ],
+  "cost": {
+   "state": "unmeasured",
+   "usd": null,
+   "priced_calls": 0,
+   "unpriced_calls": 0,
+   "unmeasured_calls": 6
+  },
+  "window": {
+   "decompose": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "merge": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "verify": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 2
+  },
+  "retrieval": {
+   "permitted": [
+    "WebSearch",
+    "WebFetch"
+   ],
+   "tool_use": {
+    "state": "no-tool-use",
+    "retrieval": "not-retrieved",
+    "turns": 6,
+    "calls_with_tool_use": 0,
+    "measured_calls": 6,
+    "unmeasured_calls": 0
+   },
+   "described": "no tool use (6 call(s), 6 turn(s) in total)"
+  },
+  "isolation": {
+   "merge": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "decompose": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "verify": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   }
+  },
+  "duration_seconds": 82.7
+ }
+}

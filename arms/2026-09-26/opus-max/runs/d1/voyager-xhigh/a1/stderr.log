@@ -1,0 +1,40 @@
+LLossless merge  claude-opus-5-5 at Claude Code - Opus, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-opus-5-5
+✓ merge: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  157.4s
+✓ merge  157.4s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  10.0s
+✓ decompose source_a.md  10.0s
+• decompose source_b.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  17.9s
+✓ decompose source_b.md  17.9s
+• verify (forward)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  25.7s
+✓ verify (forward)  25.7s
+• decompose merged.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  21.0s
+✓ decompose merged.md  21.0s
+• verify (reverse)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  23.4s
+✓ verify (reverse)  23.5s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-opus-max/runs/d1/voyager-xhigh/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  The model retrieved. 1 of 6 call(s) took the turns a retrieval costs; which citation each retrieval backs is not recorded
+  48 contradicted: the merge states something different (see `## Findings`)
+  13 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-opus-max/runs/d1/voyager-xhigh/a1/merged.md
+  the full report went to stdout; exit code 1

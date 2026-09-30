@@ -1,0 +1,48 @@
+claimcheck merge  deepseek-r1:70b at <redacted>
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking deepseek-r1:70b
+✓ merge: deepseek-r1:70b answered at the json_schema tier  93.9s
+✓ merge  249.1s
+• reconcile
+✓ reconcile  0.9s
+• decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_a.md
+• decompose: asking deepseek-r1:70b
+✓ decompose: deepseek-r1:70b answered at the json_schema tier  116.0s
+✓ decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_a.md  116.1s
+• decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_b.md
+• decompose: asking deepseek-r1:70b
+✓ decompose: deepseek-r1:70b answered at the json_schema tier  73.5s
+✓ decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/pairs/index_429/source_b.md  73.5s
+• verify (forward)
+• verify: asking deepseek-r1:70b
+✓ verify: deepseek-r1:70b answered at the json_schema tier  147.7s
+• verify: asking deepseek-r1:70b
+✓ verify: deepseek-r1:70b answered at the json_schema tier  130.7s
+• verify: asking deepseek-r1:70b
+✓ verify: deepseek-r1:70b answered at the json_schema tier  103.2s
+• verify: asking deepseek-r1:70b
+✓ verify: deepseek-r1:70b answered at the json_schema tier  97.5s
+✓ verify (forward)  479.0s
+• decompose merged.md
+• decompose: asking deepseek-r1:70b
+✓ decompose: deepseek-r1:70b answered at the json_schema tier  137.6s
+✓ decompose merged.md  137.6s
+• verify (reverse)
+• verify: asking deepseek-r1:70b
+✓ verify: deepseek-r1:70b answered at the json_schema tier  204.6s
+• verify: asking deepseek-r1:70b
+✓ verify: deepseek-r1:70b answered at the json_schema tier  141.8s
+• verify: asking deepseek-r1:70b
+✓ verify: deepseek-r1:70b answered at the json_schema tier  45.8s
+✓ verify (reverse)  392.2s
+✓ merged document written to /tmp/claude-1000/-home-toby-Documents-Dev-vibe-coding-claimcheck/4efb5d2e-5268-4025-a88e-53ca7092cde3/scratchpad/pod/k3/B2-70b-think-d3/merged.md
+
+Finished, with problems. The report lists what was found.
+  7 dropped: in a source, not in the merge (see `## Findings`)
+  1 contradicted: the merge states something different (see `## Findings`)
+  24 absent and undeclared: in a source, not in the merge, and no record explains it (see `## Structure`)
+  5 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to /tmp/claude-1000/-home-toby-Documents-Dev-vibe-coding-claimcheck/4efb5d2e-5268-4025-a88e-53ca7092cde3/scratchpad/pod/k3/B2-70b-think-d3/merged.md
+  the full report went to stdout; exit code 1

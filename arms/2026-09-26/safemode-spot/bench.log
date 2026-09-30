@@ -1,0 +1,40 @@
+code: clone (<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/src/llossless/__init__.py)
+provenance: clone HEAD 6cc1b170, clean
+route sonnet: <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/bin/claude --print --output-format json --model sonnet --safe-mode --tools ''
+route haiku: <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/bin/claude --print --output-format json --model haiku --safe-mode --tools ''
+probe sonnet: exit=0 ids=['claude-sonnet-5'] cost=0.0057
+probe haiku: exit=0 ids=['claude-haiku-4-5-20251001'] cost=0.0038
+  [A-sonnet-rate_limits a1] start 2026-09-26T15:29:26+00:00
+  [A-sonnet-rate_limits a1] exit=1 157.3s report=True ids=['claude-sonnet-5'] cost_usd=0.3606 out_tok=22679
+  spent so far $0.37
+  [A-sonnet-trace_names a1] start 2026-09-26T15:32:03+00:00
+  [A-sonnet-trace_names a1] exit=1 77.5s report=True ids=['claude-sonnet-5'] cost_usd=0.1881 out_tok=9472
+  spent so far $0.56
+  [A-sonnet-badge_access a1] start 2026-09-26T15:33:20+00:00
+  [A-sonnet-badge_access a1] exit=1 61.0s report=True ids=['claude-sonnet-5'] cost_usd=0.1704 out_tok=7991
+  spent so far $0.73
+  [A-haiku-rate_limits a1] start 2026-09-26T15:34:22+00:00
+  [A-haiku-rate_limits a1] exit=1 1200.9s report=True ids=['claude-haiku-4-5-20251001'] cost_usd=0.8388 out_tok=140296
+  spent so far $1.57
+  [A-haiku-trace_names a1] start 2026-09-26T15:54:22+00:00
+  [A-haiku-trace_names a1] exit=1 610.1s report=True ids=['claude-haiku-4-5-20251001'] cost_usd=0.4746 out_tok=77798
+  spent so far $2.04
+  [A-haiku-badge_access a1] start 2026-09-26T16:04:33+00:00
+  [A-haiku-badge_access a1] exit=0 468.0s report=True ids=['claude-haiku-4-5-20251001'] cost_usd=0.362 out_tok=58018
+  spent so far $2.40
+  [B-sonnet-voyager-d1 a1] start 2026-09-26T16:12:21+00:00
+  [B-sonnet-voyager-d1 a1] exit=2 80.1s report=True ids=['claude-sonnet-5'] cost_usd=0.2281 out_tok=10865
+  spent so far $2.63
+  [B-sonnet-voyager-d1 a2] start 2026-09-26T16:13:41+00:00
+  [B-sonnet-voyager-d1 a2] exit=2 90.1s report=True ids=['claude-sonnet-5'] cost_usd=0.2276 out_tok=11189
+  spent so far $2.86
+  [B-sonnet-voyager-d2 a1] start 2026-09-26T16:15:11+00:00
+  [B-sonnet-voyager-d2 a1] exit=2 76.8s report=True ids=['claude-sonnet-5'] cost_usd=0.2122 out_tok=9660
+  spent so far $3.07
+  [B-sonnet-voyager-d2 a2] start 2026-09-26T16:16:28+00:00
+  [B-sonnet-voyager-d2 a2] exit=2 82.9s report=True ids=['claude-sonnet-5'] cost_usd=0.2256 out_tok=10979
+  spent so far $3.30
+
+SPOT CHECK COMPLETE: 10 attempts, 6 succeeded, 2905s wall, cost_usd 3.29
+runner exit=0
+BENCHMARK DONE

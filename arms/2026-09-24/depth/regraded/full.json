@@ -1,0 +1,2968 @@
+{
+  "summary": {
+    "label": "full-r1 (regraded)",
+    "passthrough": [
+      "--model",
+      "Qwen/Qwen3.8-27B-FP8",
+      "--structured",
+      "json_schema",
+      "--field-order",
+      "any",
+      "--profile",
+      "openai-compatible",
+      "--window",
+      "32768",
+      "--no-cache",
+      "--timeout",
+      "900"
+    ],
+    "fixtures": 13,
+    "exit_code_matched": [
+      "attribution_invented",
+      "attribution_swapped",
+      "conflict_surfaced",
+      "contradiction",
+      "dedup",
+      "disjoint_domains",
+      "disjoint_sources",
+      "dropped_claim",
+      "hallucination",
+      "numeric_drift",
+      "ordering_only",
+      "paraphrase",
+      "structure_added"
+    ],
+    "exit_code_unmeasured": [],
+    "exit_code_missed": [],
+    "exit_code_errored": [],
+    "fixtures_measured": 13,
+    "plants_total": 7,
+    "plants_unmeasured": 0,
+    "plants_errored": 0,
+    "plants_detected": 7,
+    "invented_total": 0,
+    "second_reports_total": 2,
+    "invented_on_unmeasured": 0,
+    "guard_probes_total": 118,
+    "guard_confirmed_total": 116,
+    "guard_wrong_total": 0,
+    "guard_unclaimed_total": 2,
+    "disqualified": [],
+    "regraded_from": "arms/2026-09-24/depth/r1/full-reports",
+    "as_run": {
+      "plants_detected": 7,
+      "invented_total": 2,
+      "guard_wrong_total": 0,
+      "disqualified": [
+        "attribution_swapped: 2 invented finding(s) beside the seeded defect"
+      ]
+    }
+  },
+  "records": [
+    {
+      "fixture": "attribution_invented",
+      "kind": "defect",
+      "wall_seconds": 79.6,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/attribution_invented.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 statement(s) credited to a source that does not state it (see `## Attributions`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "m-tls-attributed",
+          "expected_finding": "hallucinated",
+          "anchor": {
+            "all_of": [
+              "According to the Operator Guide"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": null,
+          "finding": "misattributed",
+          "direction": null,
+          "evidence": "According to the Operator Guide, the minimum TLS version is 1.2.",
+          "rationale": "the merge credits 'the minimum TLS version is 1.2' to the Operator Guide (source_a.md), which does not state it; source_b.md does",
+          "matched_findings": [
+            {
+              "claim_id": null,
+              "finding": "misattributed",
+              "direction": null,
+              "evidence": "According to the Operator Guide, the minimum TLS version is 1.2.",
+              "rationale": "the merge credits 'the minimum TLS version is 1.2' to the Operator Guide (source_a.md), which does not state it; source_b.md does"
+            }
+          ]
+        }
+      ],
+      "detected": [
+        "m-tls-attributed"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 1,
+      "guard_probes": [
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port 8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443."
+        },
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The reference text explicitly states that the read timeout is 30 seconds."
+        },
+        {
+          "probe_id": "a-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "/healthz"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check path is /healthz.",
+          "rationale": "The reference text explicitly states that the health check path is /healthz."
+        },
+        {
+          "probe_id": "b-tls-min",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum TLS version is 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "According to the Operator Guide, the minimum TLS version is 1.2.",
+          "rationale": "The reference text states that the minimum TLS version is 1.2, attributed to the Operator Guide."
+        },
+        {
+          "probe_id": "b-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "512"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The maximum concurrent connections is 512.",
+          "rationale": "The reference text explicitly states that the maximum concurrent connections is 512."
+        },
+        {
+          "probe_id": "m-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The claim is explicitly stated in source_a.md."
+        }
+      ],
+      "guard_confirmed": [
+        "a-listen-port",
+        "a-read-timeout",
+        "a-health-path",
+        "b-tls-min",
+        "b-max-connections",
+        "m-read-timeout"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 5,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 11,
+        "anchored": 11,
+        "graded": 11,
+        "grounded": 11,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 5,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1465,
+        "model_loads": 0,
+        "duration_seconds": 79.4,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "attribution_swapped",
+      "kind": "defect",
+      "wall_seconds": 78.0,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/attribution_swapped.json",
+      "stderr_tail": [
+        "  2 contradicted: the merge states something different (see `## Findings`)",
+        "  2 statement(s) credited to a source that does not state it (see `## Attributions`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 2,
+      "probes": [
+        {
+          "probe_id": "m-notes-timeout-attribution",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "According to the Deployment Notes",
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-003",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "The read timeout is 60 seconds.",
+          "rationale": "Source B (Deployment Notes) states the read timeout is 60 seconds, which contradicts the claim that it is 30 seconds.",
+          "matched_findings": [
+            {
+              "claim_id": "M-003",
+              "finding": "contradicted",
+              "direction": "merged_to_sources",
+              "evidence": "The read timeout is 60 seconds.",
+              "rationale": "Source B (Deployment Notes) states the read timeout is 60 seconds, which contradicts the claim that it is 30 seconds."
+            },
+            {
+              "claim_id": null,
+              "finding": "misattributed",
+              "direction": null,
+              "evidence": "According to the Deployment Notes, the read timeout is 30 seconds.",
+              "rationale": "the merge credits 'the read timeout is 30 seconds' to the Deployment Notes (source_b.md), which does not state it; source_a.md does"
+            }
+          ]
+        },
+        {
+          "probe_id": "m-guide-timeout-attribution",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "According to the Operator Guide",
+              "read timeout is 60 seconds"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-004",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "Source A (Operator Guide) states the read timeout is 30 seconds, which contradicts the claim that it is 60 seconds.",
+          "matched_findings": [
+            {
+              "claim_id": "M-004",
+              "finding": "contradicted",
+              "direction": "merged_to_sources",
+              "evidence": "The read timeout is 30 seconds.",
+              "rationale": "Source A (Operator Guide) states the read timeout is 30 seconds, which contradicts the claim that it is 60 seconds."
+            },
+            {
+              "claim_id": null,
+              "finding": "misattributed",
+              "direction": null,
+              "evidence": "According to the Operator Guide, the read timeout is 60 seconds.",
+              "rationale": "the merge credits 'the read timeout is 60 seconds' to the Operator Guide (source_a.md), which does not state it; source_b.md does"
+            }
+          ]
+        }
+      ],
+      "detected": [
+        "m-notes-timeout-attribution",
+        "m-guide-timeout-attribution"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [
+        {
+          "claim_id": null,
+          "finding": "misattributed",
+          "direction": null,
+          "evidence": "According to the Deployment Notes, the read timeout is 30 seconds.",
+          "rationale": "the merge credits 'the read timeout is 30 seconds' to the Deployment Notes (source_b.md), which does not state it; source_a.md does"
+        },
+        {
+          "claim_id": null,
+          "finding": "misattributed",
+          "direction": null,
+          "evidence": "According to the Operator Guide, the read timeout is 60 seconds.",
+          "rationale": "the merge credits 'the read timeout is 60 seconds' to the Operator Guide (source_a.md), which does not state it; source_b.md does"
+        }
+      ],
+      "findings_total": 4,
+      "guard_probes": [
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "According to the Deployment Notes, the read timeout is 30 seconds.",
+          "rationale": "The reference text attributes a read timeout of 30 seconds to the Deployment Notes, which supports the claim."
+        },
+        {
+          "probe_id": "b-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 60 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "According to the Operator Guide, the read timeout is 60 seconds.",
+          "rationale": "The reference text attributes a read timeout of 60 seconds to the Operator Guide, which supports the claim."
+        }
+      ],
+      "guard_confirmed": [
+        "a-read-timeout",
+        "b-read-timeout"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 10,
+        "anchored": 10,
+        "graded": 10,
+        "grounded": 10,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1419,
+        "model_loads": 0,
+        "duration_seconds": 77.8,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "conflict_surfaced",
+      "kind": "guard",
+      "wall_seconds": 146.7,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/conflict_surfaced.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 0,
+      "guard_probes": [
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "According to the Operator Guide, the default connect timeout is 30 seconds.",
+          "rationale": "The reference text attributes the value of 30 seconds to the Operator Guide, which supports the claim as an attributed value."
+        },
+        {
+          "probe_id": "b-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "60 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "According to the Deployment Notes, the default connect timeout is 60 seconds.",
+          "rationale": "The reference text attributes the value of 60 seconds to the Deployment Notes, which supports the claim as an attributed value."
+        },
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443 by default.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443 by default."
+        },
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout",
+              "120 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default read timeout is 120 seconds.",
+          "rationale": "The reference text explicitly states that the default read timeout is 120 seconds."
+        },
+        {
+          "probe_id": "a-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "512 concurrent connections"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay accepts at most 512 concurrent connections.",
+          "rationale": "The reference text explicitly states that the relay accepts at most 512 concurrent connections."
+        },
+        {
+          "probe_id": "a-tls-version",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum accepted TLS version",
+              "TLS 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum accepted TLS version is TLS 1.2.",
+          "rationale": "The reference text explicitly states that the minimum accepted TLS version is TLS 1.2."
+        },
+        {
+          "probe_id": "b-log-format",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "access logs",
+              "JSON Lines"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Access logs are written in JSON Lines format.",
+          "rationale": "The reference text explicitly states that access logs are written in JSON Lines format."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "health check endpoint",
+              "/-/healthy"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check endpoint is /-/healthy.",
+          "rationale": "The reference text explicitly states that the health check endpoint is /-/healthy."
+        },
+        {
+          "probe_id": "merged-attributed-timeout-a",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "According to the Operator Guide",
+              "30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default connect timeout is 30 seconds.",
+          "rationale": "Source_a.md, titled 'Vandrell Relay \u2014 Operator Guide', states that the default connect timeout is 30 seconds."
+        },
+        {
+          "probe_id": "merged-attributed-timeout-b",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "According to the Deployment Notes",
+              "60 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default connect timeout is 60 seconds.",
+          "rationale": "Source_b.md, titled 'Vandrell Relay \u2014 Deployment Notes', states that the default connect timeout is 60 seconds."
+        },
+        {
+          "probe_id": "merged-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "512 concurrent connections"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay accepts at most 512 concurrent connections.",
+          "rationale": "The claim is explicitly stated in source_a.md under the Limits section."
+        }
+      ],
+      "guard_confirmed": [
+        "a-connect-timeout",
+        "b-connect-timeout",
+        "a-listen-port",
+        "a-read-timeout",
+        "a-max-connections",
+        "a-tls-version",
+        "b-log-format",
+        "b-health-path",
+        "merged-attributed-timeout-a",
+        "merged-attributed-timeout-b",
+        "merged-max-connections"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 9,
+          "source_a.md": 6,
+          "source_b.md": 5
+        },
+        "claims_total": 20,
+        "anchored": 20,
+        "graded": 20,
+        "grounded": 20,
+        "forward_verdicts": 11,
+        "reverse_verdicts": 9,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2766,
+        "model_loads": 0,
+        "duration_seconds": 146.5,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "contradiction",
+      "kind": "defect",
+      "wall_seconds": 137.9,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/contradiction.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "A-002",
+          "finding": "contradicted",
+          "direction": "source_to_merged",
+          "evidence": "The default connect timeout is 60 seconds.",
+          "rationale": "The reference text states the default connect timeout is 60 seconds, which contradicts the claim of 30 seconds.",
+          "matched_findings": [
+            {
+              "claim_id": "A-002",
+              "finding": "contradicted",
+              "direction": "source_to_merged",
+              "evidence": "The default connect timeout is 60 seconds.",
+              "rationale": "The reference text states the default connect timeout is 60 seconds, which contradicts the claim of 30 seconds."
+            }
+          ]
+        }
+      ],
+      "detected": [
+        "a-connect-timeout"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 1,
+      "guard_probes": [
+        {
+          "probe_id": "b-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "60 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default connect timeout is 60 seconds.",
+          "rationale": "The reference text explicitly states that the default connect timeout is 60 seconds."
+        },
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443 by default.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443 by default."
+        },
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout",
+              "120 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default read timeout is 120 seconds.",
+          "rationale": "The reference text explicitly states that the default read timeout is 120 seconds."
+        },
+        {
+          "probe_id": "a-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "512 concurrent connections"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay accepts at most 512 concurrent connections.",
+          "rationale": "The reference text explicitly states that the relay accepts at most 512 concurrent connections."
+        },
+        {
+          "probe_id": "a-tls-version",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum accepted TLS version",
+              "TLS 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum accepted TLS version is TLS 1.2.",
+          "rationale": "The reference text explicitly states that the minimum accepted TLS version is TLS 1.2."
+        },
+        {
+          "probe_id": "b-log-format",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "access logs",
+              "JSON Lines"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Access logs are written in JSON Lines format.",
+          "rationale": "The reference text explicitly states that access logs are written in JSON Lines format."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "health check endpoint",
+              "/-/healthy"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check endpoint is /-/healthy.",
+          "rationale": "The reference text explicitly states that the health check endpoint is /-/healthy."
+        }
+      ],
+      "guard_confirmed": [
+        "b-connect-timeout",
+        "a-listen-port",
+        "a-read-timeout",
+        "a-max-connections",
+        "a-tls-version",
+        "b-log-format",
+        "b-health-path"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 8,
+          "source_a.md": 6,
+          "source_b.md": 5
+        },
+        "claims_total": 19,
+        "anchored": 19,
+        "graded": 19,
+        "grounded": 19,
+        "forward_verdicts": 11,
+        "reverse_verdicts": 8,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2595,
+        "model_loads": 0,
+        "duration_seconds": 137.7,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "dedup",
+      "kind": "guard",
+      "wall_seconds": 71.6,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/dedup.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 0,
+      "guard_probes": [
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port 8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443."
+        },
+        {
+          "probe_id": "a-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "/healthz"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check path is /healthz.",
+          "rationale": "The reference text explicitly states that the health check path is /healthz."
+        },
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The reference text explicitly states that the read timeout is 30 seconds."
+        },
+        {
+          "probe_id": "b-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port 8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "/healthz"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check path is /healthz.",
+          "rationale": "The reference text explicitly states that the health check path is /healthz."
+        },
+        {
+          "probe_id": "b-tls-min",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum TLS version is 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum TLS version is 1.2.",
+          "rationale": "The reference text explicitly states that the minimum TLS version is 1.2."
+        },
+        {
+          "probe_id": "m-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port 8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443.",
+          "rationale": "The claim is explicitly stated in source_a.md."
+        },
+        {
+          "probe_id": "m-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "/healthz"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check path is /healthz.",
+          "rationale": "The claim is explicitly stated in source_a.md."
+        },
+        {
+          "probe_id": "m-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The claim is explicitly stated in source_a.md."
+        },
+        {
+          "probe_id": "m-tls-min",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum TLS version is 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum TLS version is 1.2.",
+          "rationale": "The claim is explicitly stated in source_b.md."
+        }
+      ],
+      "guard_confirmed": [
+        "a-listen-port",
+        "a-health-path",
+        "a-read-timeout",
+        "b-listen-port",
+        "b-health-path",
+        "b-tls-min",
+        "m-listen-port",
+        "m-health-path",
+        "m-read-timeout",
+        "m-tls-min"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 10,
+        "anchored": 10,
+        "graded": 10,
+        "grounded": 10,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1302,
+        "model_loads": 0,
+        "duration_seconds": 71.4,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "disjoint_domains",
+      "kind": "guard",
+      "wall_seconds": 743.8,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/disjoint_domains.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 0,
+      "guard_probes": [
+        {
+          "probe_id": "a-round-hours",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "7 am",
+              "8 am"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The duty officer walks the north corridor every weekday from 7 am till 8 am",
+          "rationale": "The reference text confirms the duty officer walks the north corridor every weekday from 7 am till 8 am."
+        },
+        {
+          "probe_id": "a-second-round-verbatim",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "13:05",
+              "16:20"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "A second round covers the workshop and the paint store from 13:05 till 16:20 hours on Wednesdays only",
+          "rationale": "The reference text explicitly describes the second round covering the workshop and paint store on Wednesdays from 13:05 to 16:20."
+        },
+        {
+          "probe_id": "a-frost-latch",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "frost",
+              "November"
+            ]
+          },
+          "verdict": "unclaimed",
+          "claim_id": null,
+          "model_verdict": null
+        },
+        {
+          "probe_id": "a-responsibility",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "responsibility of the site"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-011",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the doors are the responsibility of the site",
+          "rationale": "The reference text states that the doors are the responsibility of the site."
+        },
+        {
+          "probe_id": "a-contractor-dates",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "March 1st",
+              "March 31st"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-013",
+          "model_verdict": "SUPPORTED",
+          "evidence": "attends every March 1st to March 31st",
+          "rationale": "The reference text states the contractor attends every March 1st to March 31st."
+        },
+        {
+          "probe_id": "a-tie-officer",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "one officer clears both"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-022",
+          "model_verdict": "SUPPORTED",
+          "evidence": "one officer clears both at the end of the week",
+          "rationale": "The reference text states that one officer clears both at the end of the week."
+        },
+        {
+          "probe_id": "b-closed-summer",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "does not meet",
+              "July",
+              "September"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The club does not meet between mid July and early September",
+          "rationale": "The reference text states the club does not meet between mid July and early September."
+        },
+        {
+          "probe_id": "b-boards-left-up",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "boards set up"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-007",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the members have learned to leave the boards set up rather than pack them away",
+          "rationale": "The text states that members have learned to leave the boards set up rather than pack them away."
+        },
+        {
+          "probe_id": "b-ladder-not-rating",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "simple ladder"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-008",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the club runs a simple ladder",
+          "rationale": "The text explicitly states that the club runs a simple ladder."
+        },
+        {
+          "probe_id": "b-ladder-moves",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "up one place",
+              "down one place"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-010",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Members who win a game move up one place",
+          "rationale": "The text explicitly states that members who win a game move up one place."
+        },
+        {
+          "probe_id": "b-spare-clocks",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "spare clocks"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-028",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the county side gave the club enough spare clocks",
+          "rationale": "The text states the county side gave the club spare clocks."
+        },
+        {
+          "probe_id": "b-extra-table",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "extra table",
+              "Tuesday"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-033",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the club grew to thirty members",
+          "rationale": "The reference text explicitly states that the club grew to thirty members."
+        },
+        {
+          "probe_id": "m-round-hours-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "7 am",
+              "8 am"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The duty officer walks the north corridor every weekday from 7 am till 8 am",
+          "rationale": "The source explicitly describes the duty officer's schedule for the north corridor as every weekday from 7 am till 8 am."
+        },
+        {
+          "probe_id": "m-club-season-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "does not meet",
+              "July",
+              "September"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-025",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The club does not meet between mid July and early September",
+          "rationale": "The source explicitly states that the club does not meet between mid July and early September."
+        },
+        {
+          "probe_id": "m-contractor-dates-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "March 1st",
+              "March 31st"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-013",
+          "model_verdict": "SUPPORTED",
+          "evidence": "attends every March 1st to March 31st",
+          "rationale": "The source states that the outside contractor attends every March 1st to March 31st."
+        },
+        {
+          "probe_id": "m-ladder-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "simple ladder"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-030",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the club runs a simple ladder that anyone may join at any point.",
+          "rationale": "The source explicitly states the club runs a simple ladder open to anyone at any point."
+        }
+      ],
+      "guard_confirmed": [
+        "a-round-hours",
+        "a-second-round-verbatim",
+        "a-responsibility",
+        "a-contractor-dates",
+        "a-tie-officer",
+        "b-closed-summer",
+        "b-boards-left-up",
+        "b-ladder-not-rating",
+        "b-ladder-moves",
+        "b-spare-clocks",
+        "b-extra-table",
+        "m-round-hours-reverse",
+        "m-club-season-reverse",
+        "m-contractor-dates-reverse",
+        "m-ladder-reverse"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [
+        "a-frost-latch"
+      ],
+      "harvest": {
+        "extracted": {
+          "merged.md": 47,
+          "source_a.md": 22,
+          "source_b.md": 34
+        },
+        "claims_total": 103,
+        "anchored": 103,
+        "graded": 103,
+        "grounded": 103,
+        "forward_verdicts": 56,
+        "reverse_verdicts": 47,
+        "errored": 0,
+        "calls": 8,
+        "schema_repairs": 0,
+        "completion_tokens": 14427,
+        "model_loads": 0,
+        "duration_seconds": 743.6,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "disjoint_sources",
+      "kind": "guard",
+      "wall_seconds": 734.9,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/disjoint_sources.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 0,
+      "guard_probes": [
+        {
+          "probe_id": "a-visit-hours",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "8 am",
+              "9 am"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "She visited the rosegarden every morning from 8 am till 9 am",
+          "rationale": "The reference text explicitly states that the princess visited the rosegarden every morning from 8 am till 9 am."
+        },
+        {
+          "probe_id": "a-work-hours-verbatim",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "02:00",
+              "15:30"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "From 02:00 till 15:30 o'clock, she worked in the rosegarden",
+          "rationale": "The text confirms she worked in the rosegarden from 02:00 till 15:30 o'clock."
+        },
+        {
+          "probe_id": "a-winter-dormant",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "winter",
+              "rosegarden"
+            ]
+          },
+          "verdict": "unclaimed",
+          "claim_id": null,
+          "model_verdict": null
+        },
+        {
+          "probe_id": "a-ownership",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "private property",
+              "royal family"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the rose garden was the private property of the royal family",
+          "rationale": "The text explicitly states the rose garden was the private property of the royal family."
+        },
+        {
+          "probe_id": "a-public-dates",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "March 1st",
+              "March 31st"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the rose garden was the private property of the royal family",
+          "rationale": "The text explicitly states the rose garden was the private property of the royal family."
+        },
+        {
+          "probe_id": "a-postcard-tie",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "same carriage"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-013",
+          "model_verdict": "SUPPORTED",
+          "evidence": "In many cases, it was a tie",
+          "rationale": "The text states that in many cases, the bet resulted in a tie."
+        },
+        {
+          "probe_id": "b-not-traversable",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "not traversable",
+              "October",
+              "April"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The forest was not traversable between October and April",
+          "rationale": "The text states the forest was not traversable between October and April."
+        },
+        {
+          "probe_id": "b-lady-year-round",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "entire year",
+              "forest"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The old lady nevertheless lived the entire year in the forest",
+          "rationale": "The text states the old lady lived in the forest the entire year."
+        },
+        {
+          "probe_id": "b-herbs-not-magic",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "wild herbs"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-009",
+          "model_verdict": "SUPPORTED",
+          "evidence": "she collected wild herbs",
+          "rationale": "The text states she collected wild herbs instead of harvesting skulls and bones."
+        },
+        {
+          "probe_id": "b-herbs-to-cities",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "travelers",
+              "cities"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-010",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Those wild herbs were tried and sold to wandering travelers",
+          "rationale": "The text states the wild herbs were tried and sold to wandering travelers."
+        },
+        {
+          "probe_id": "b-medicine-village",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "medicine",
+              "entire village"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-025",
+          "model_verdict": "SUPPORTED",
+          "evidence": "she gave him enough medicine",
+          "rationale": "The text states that the old lady gave the young man medicine."
+        },
+        {
+          "probe_id": "b-cheese-autumn",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "cheese",
+              "autumn"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-032",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Eventually, everyone got healthy again",
+          "rationale": "The text states that everyone in the village got healthy again."
+        },
+        {
+          "probe_id": "m-visit-hours-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "8 am",
+              "9 am"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "She visited the rosegarden every morning from 8 am till 9 am",
+          "rationale": "The source explicitly states the princess visited the rosegarden every morning from 8 am till 9 am."
+        },
+        {
+          "probe_id": "m-forest-season-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "not traversable",
+              "October",
+              "April"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-019",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The forest was not traversable between October and April",
+          "rationale": "The source states the forest was not traversable between October and April."
+        },
+        {
+          "probe_id": "m-public-dates-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "March 1st",
+              "March 31st"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-008",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the rose garden was the private property of the royal family",
+          "rationale": "The source explicitly states the rose garden was the private property of the royal family."
+        },
+        {
+          "probe_id": "m-herbs-reverse",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "wild herbs"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-026",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Instead of harvesting skulls and bones, she collected wild herbs.",
+          "rationale": "The source explicitly states that the old lady collected wild herbs."
+        }
+      ],
+      "guard_confirmed": [
+        "a-visit-hours",
+        "a-work-hours-verbatim",
+        "a-ownership",
+        "a-public-dates",
+        "a-postcard-tie",
+        "b-not-traversable",
+        "b-lady-year-round",
+        "b-herbs-not-magic",
+        "b-herbs-to-cities",
+        "b-medicine-village",
+        "b-cheese-autumn",
+        "m-visit-hours-reverse",
+        "m-forest-season-reverse",
+        "m-public-dates-reverse",
+        "m-herbs-reverse"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [
+        "a-winter-dormant"
+      ],
+      "harvest": {
+        "extracted": {
+          "merged.md": 47,
+          "source_a.md": 14,
+          "source_b.md": 33
+        },
+        "claims_total": 94,
+        "anchored": 94,
+        "graded": 94,
+        "grounded": 93,
+        "forward_verdicts": 47,
+        "reverse_verdicts": 47,
+        "errored": 0,
+        "calls": 7,
+        "schema_repairs": 0,
+        "completion_tokens": 14309,
+        "model_loads": 0,
+        "duration_seconds": 734.7,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "dropped_claim",
+      "kind": "defect",
+      "wall_seconds": 217.3,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/dropped_claim.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 dropped: in a source, not in the merge (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "b-log-format",
+          "expected_finding": "dropped",
+          "anchor": {
+            "all_of": [
+              "access logs",
+              "JSON Lines"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "B-004",
+          "finding": "dropped",
+          "direction": "source_to_merged",
+          "evidence": "",
+          "rationale": "The reference text mentions log rotation but does not specify the format of the access logs.",
+          "matched_findings": [
+            {
+              "claim_id": "B-004",
+              "finding": "dropped",
+              "direction": "source_to_merged",
+              "evidence": "",
+              "rationale": "The reference text mentions log rotation but does not specify the format of the access logs."
+            }
+          ]
+        }
+      ],
+      "detected": [
+        "b-log-format"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 1,
+      "guard_probes": [
+        {
+          "probe_id": "b-log-rotation",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "rotated",
+              "100 megabytes"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Log files are rotated when they reach 100 megabytes.",
+          "rationale": "The reference text explicitly states that log files are rotated when they reach 100 megabytes."
+        },
+        {
+          "probe_id": "b-worker-per-core",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "one worker process",
+              "per CPU core"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "One worker process is started per CPU core.",
+          "rationale": "The reference text explicitly states that one worker process is started per CPU core."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "health check endpoint",
+              "/-/healthy"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check endpoint is /-/healthy.",
+          "rationale": "The reference text explicitly states that the health check endpoint is /-/healthy."
+        },
+        {
+          "probe_id": "b-health-failures",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "3 consecutive health checks",
+              "removed from rotation"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-007",
+          "model_verdict": "SUPPORTED",
+          "evidence": "A relay that fails 3 consecutive health checks is removed from rotation.",
+          "rationale": "The reference text explicitly states that a relay failing 3 consecutive health checks is removed from rotation."
+        },
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443 by default.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443 by default."
+        },
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default connect timeout is 30 seconds.",
+          "rationale": "The reference text explicitly states that the default connect timeout is 30 seconds."
+        },
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout",
+              "120 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default read timeout is 120 seconds.",
+          "rationale": "The reference text explicitly states that the default read timeout is 120 seconds."
+        },
+        {
+          "probe_id": "a-retry-limit",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "retried at most 3 times"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Each request is retried at most 3 times.",
+          "rationale": "The reference text explicitly states that each request is retried at most 3 times."
+        },
+        {
+          "probe_id": "a-tls-version",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum accepted TLS version",
+              "TLS 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum accepted TLS version is TLS 1.2.",
+          "rationale": "The reference text explicitly states that the minimum accepted TLS version is TLS 1.2."
+        }
+      ],
+      "guard_confirmed": [
+        "b-log-rotation",
+        "b-worker-per-core",
+        "b-health-path",
+        "b-health-failures",
+        "a-listen-port",
+        "a-connect-timeout",
+        "a-read-timeout",
+        "a-retry-limit",
+        "a-tls-version"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 10,
+          "source_a.md": 6,
+          "source_b.md": 7
+        },
+        "claims_total": 23,
+        "anchored": 23,
+        "graded": 22,
+        "grounded": 22,
+        "forward_verdicts": 13,
+        "reverse_verdicts": 10,
+        "errored": 0,
+        "calls": 6,
+        "schema_repairs": 1,
+        "completion_tokens": 4166,
+        "model_loads": 0,
+        "duration_seconds": 217.1,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "hallucination",
+      "kind": "defect",
+      "wall_seconds": 113.9,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/hallucination.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 invented: in the merge, in neither source (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "merged-socks5",
+          "expected_finding": "hallucinated",
+          "anchor": {
+            "all_of": [
+              "SOCKS5"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-004",
+          "finding": "hallucinated",
+          "direction": "merged_to_sources",
+          "evidence": "",
+          "rationale": "Neither source document mentions SOCKS5 proxies or upstream traffic forwarding.",
+          "matched_findings": [
+            {
+              "claim_id": "M-004",
+              "finding": "hallucinated",
+              "direction": "merged_to_sources",
+              "evidence": "",
+              "rationale": "Neither source document mentions SOCKS5 proxies or upstream traffic forwarding."
+            }
+          ]
+        }
+      ],
+      "detected": [
+        "merged-socks5"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 1,
+      "guard_probes": [
+        {
+          "probe_id": "merged-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default connect timeout is 30 seconds.",
+          "rationale": "The claim is explicitly stated in source_a.md under the Networking section."
+        },
+        {
+          "probe_id": "merged-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "512 concurrent connections"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay accepts at most 512 concurrent connections.",
+          "rationale": "The claim is explicitly stated in source_b.md under the Networking section."
+        },
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443 by default.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443 by default."
+        },
+        {
+          "probe_id": "a-tls-version",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum accepted TLS version",
+              "TLS 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum accepted TLS version is TLS 1.2.",
+          "rationale": "The reference text explicitly states that the minimum accepted TLS version is TLS 1.2."
+        },
+        {
+          "probe_id": "a-client-cert",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "client certificate verification",
+              "disabled by default"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Client certificate verification is disabled by default.",
+          "rationale": "The reference text explicitly states that client certificate verification is disabled by default."
+        },
+        {
+          "probe_id": "b-log-format",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "access logs",
+              "JSON Lines"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Access logs are written in JSON Lines format.",
+          "rationale": "The reference text explicitly states that access logs are written in JSON Lines format."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "health check endpoint",
+              "/-/healthy"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check endpoint is /-/healthy.",
+          "rationale": "The reference text explicitly states that the health check endpoint is /-/healthy."
+        }
+      ],
+      "guard_confirmed": [
+        "merged-connect-timeout",
+        "merged-max-connections",
+        "a-listen-port",
+        "a-tls-version",
+        "a-client-cert",
+        "b-log-format",
+        "b-health-path"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 8,
+          "source_a.md": 4,
+          "source_b.md": 4
+        },
+        "claims_total": 16,
+        "anchored": 16,
+        "graded": 15,
+        "grounded": 15,
+        "forward_verdicts": 8,
+        "reverse_verdicts": 8,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2134,
+        "model_loads": 0,
+        "duration_seconds": 113.7,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "numeric_drift",
+      "kind": "defect",
+      "wall_seconds": 94.1,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/numeric_drift.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "a-max-connections",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "approximately 500",
+              "concurrent connections"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "A-001",
+          "finding": "contradicted",
+          "direction": "source_to_merged",
+          "evidence": "The connection limit is 512 concurrent connections.",
+          "rationale": "The reference text states the limit is 512, which contradicts the claim of approximately 500.",
+          "matched_findings": [
+            {
+              "claim_id": "A-001",
+              "finding": "contradicted",
+              "direction": "source_to_merged",
+              "evidence": "The connection limit is 512 concurrent connections.",
+              "rationale": "The reference text states the limit is 512, which contradicts the claim of approximately 500."
+            }
+          ]
+        }
+      ],
+      "detected": [
+        "a-max-connections"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 1,
+      "guard_probes": [
+        {
+          "probe_id": "b-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connection limit",
+              "512"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The connection limit is 512 concurrent connections.",
+          "rationale": "The reference text states the connection limit is 512 concurrent connections, which supports the claim for Vandrell Relay."
+        },
+        {
+          "probe_id": "a-retry-limit",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "retried at most 3 times"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Each request is retried at most 3 times.",
+          "rationale": "The reference text explicitly states that each request is retried at most 3 times."
+        },
+        {
+          "probe_id": "b-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443 by default.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443 by default."
+        },
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default connect timeout is 30 seconds.",
+          "rationale": "The reference text explicitly states that the default connect timeout is 30 seconds."
+        }
+      ],
+      "guard_confirmed": [
+        "b-max-connections",
+        "a-retry-limit",
+        "b-listen-port",
+        "a-connect-timeout"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 4,
+          "source_b.md": 4
+        },
+        "claims_total": 12,
+        "anchored": 12,
+        "graded": 12,
+        "grounded": 12,
+        "forward_verdicts": 8,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1757,
+        "model_loads": 0,
+        "duration_seconds": 93.9,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "ordering_only",
+      "kind": "guard",
+      "wall_seconds": 250.1,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/ordering_only.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 0,
+      "guard_probes": [
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443 by default.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443 by default."
+        },
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default connect timeout is 30 seconds.",
+          "rationale": "The reference text explicitly states that the default connect timeout is 30 seconds."
+        },
+        {
+          "probe_id": "a-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "512 concurrent connections"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay accepts at most 512 concurrent connections.",
+          "rationale": "The reference text explicitly states that the relay accepts at most 512 concurrent connections."
+        },
+        {
+          "probe_id": "a-tls-version",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum accepted TLS version",
+              "TLS 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-009",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum accepted TLS version is TLS 1.2.",
+          "rationale": "The reference text explicitly states that the minimum accepted TLS version is TLS 1.2."
+        },
+        {
+          "probe_id": "b-log-format",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "access logs",
+              "JSON Lines"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-011",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Access logs are written in JSON Lines format.",
+          "rationale": "The reference text explicitly states that access logs are written in JSON Lines format."
+        },
+        {
+          "probe_id": "b-retry-limit",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "retried at most 3 times"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Each request is retried at most 3 times.",
+          "rationale": "The reference text explicitly states that each request is retried at most 3 times."
+        },
+        {
+          "probe_id": "b-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout",
+              "120 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The default read timeout is 120 seconds.",
+          "rationale": "The reference text explicitly states that the default read timeout is 120 seconds."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "health check endpoint",
+              "/-/healthy"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check endpoint is /-/healthy.",
+          "rationale": "The reference text explicitly states that the health check endpoint is /-/healthy."
+        },
+        {
+          "probe_id": "merged-backoff",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "250 milliseconds",
+              "doubles"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Retry backoff starts at 250 milliseconds",
+          "rationale": "The claim is supported by the statement in source_a.md that retry backoff starts at 250 milliseconds."
+        },
+        {
+          "probe_id": "merged-client-cert",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "client certificate verification",
+              "disabled by default"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-012",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Client certificate verification is disabled by default.",
+          "rationale": "The claim is stated verbatim in source_a.md under the Security section."
+        },
+        {
+          "probe_id": "merged-log-rotation",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "rotated",
+              "100 megabytes"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Log files are rotated when they reach 100 megabytes.",
+          "rationale": "The claim is stated verbatim in source_a.md under the Logging section."
+        }
+      ],
+      "guard_confirmed": [
+        "a-listen-port",
+        "a-connect-timeout",
+        "a-max-connections",
+        "a-tls-version",
+        "b-log-format",
+        "b-retry-limit",
+        "b-read-timeout",
+        "b-health-path",
+        "merged-backoff",
+        "merged-client-cert",
+        "merged-log-rotation"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 12,
+          "source_a.md": 12,
+          "source_b.md": 12
+        },
+        "claims_total": 36,
+        "anchored": 36,
+        "graded": 36,
+        "grounded": 36,
+        "forward_verdicts": 24,
+        "reverse_verdicts": 12,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 4837,
+        "model_loads": 0,
+        "duration_seconds": 249.9,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "paraphrase",
+      "kind": "guard",
+      "wall_seconds": 189.6,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/paraphrase.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 0,
+      "guard_probes": [
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "binds to port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay's default listen port is 8443.",
+          "rationale": "The reference text states the default listen port is 8443, which supports the claim that it binds to this port unless overridden."
+        },
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "30 seconds",
+              "abandoned"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Connections that do not complete a handshake inside 30 seconds are dropped.",
+          "rationale": "The text states connections not completing a handshake in 30 seconds are dropped, which is synonymous with being abandoned."
+        },
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "waits up to 120 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay allows a response 120 seconds to arrive before it times out.",
+          "rationale": "The text states the relay allows a response 120 seconds to arrive before timing out, supporting the claim about waiting up to 120 seconds."
+        },
+        {
+          "probe_id": "a-max-connections",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "512 connections",
+              "same time"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "At most 512 connections may be held open concurrently.",
+          "rationale": "The text states at most 512 connections may be held open concurrently, which matches the claim about maximum open connections."
+        },
+        {
+          "probe_id": "a-tls-version",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "older than TLS 1.2",
+              "rejected"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay will not negotiate any protocol version below TLS 1.2.",
+          "rationale": "The text states the relay will not negotiate versions below TLS 1.2, which means anything older is rejected."
+        },
+        {
+          "probe_id": "b-retry-limit",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "Retry attempts per request",
+              "3"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-005",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay makes up to 3 further attempts after a request fails.",
+          "rationale": "The text states the relay makes up to 3 further attempts, which corresponds to 3 retry attempts."
+        },
+        {
+          "probe_id": "b-log-format",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "JSON Lines",
+              "one record per line"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-007",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Access log records are emitted one JSON object per line.",
+          "rationale": "The text describes the log format as one JSON object per line, which is the definition of JSON Lines."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "health checks",
+              "/-/healthy"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-009",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The endpoint /-/healthy answers health checks.",
+          "rationale": "The text states the endpoint /-/healthy answers health checks, implying it is the target for such checks."
+        },
+        {
+          "probe_id": "merged-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "default listen port",
+              "8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the relay binds to port 8443",
+          "rationale": "Source A states the relay binds to port 8443 by default, which supports the claim about the default listen port."
+        },
+        {
+          "probe_id": "merged-tls-version",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "will not negotiate",
+              "TLS 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-006",
+          "model_verdict": "SUPPORTED",
+          "evidence": "Anything older than TLS 1.2 is rejected",
+          "rationale": "Source A states that anything older than TLS 1.2 is rejected, which means the relay will not negotiate versions below TLS 1.2."
+        },
+        {
+          "probe_id": "merged-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "120 seconds",
+              "times out"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "the relay waits up to 120 seconds for a response",
+          "rationale": "Source A states the relay waits up to 120 seconds for a response, supporting the claim about the timeout duration."
+        }
+      ],
+      "guard_confirmed": [
+        "a-listen-port",
+        "a-connect-timeout",
+        "a-read-timeout",
+        "a-max-connections",
+        "a-tls-version",
+        "b-retry-limit",
+        "b-log-format",
+        "b-health-path",
+        "merged-listen-port",
+        "merged-tls-version",
+        "merged-read-timeout"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 8,
+          "source_a.md": 8,
+          "source_b.md": 9
+        },
+        "claims_total": 25,
+        "anchored": 25,
+        "graded": 25,
+        "grounded": 25,
+        "forward_verdicts": 17,
+        "reverse_verdicts": 8,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 3661,
+        "model_loads": 0,
+        "duration_seconds": 189.4,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    },
+    {
+      "fixture": "structure_added",
+      "kind": "guard",
+      "wall_seconds": 66.7,
+      "report_written": true,
+      "report_ref": "arms/2026-09-24/depth/r1/full-reports/structure_added.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "second_reports": [],
+      "findings_total": 0,
+      "guard_probes": [
+        {
+          "probe_id": "a-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port 8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443.",
+          "rationale": "The reference text explicitly states that the relay listens on port 8443 in the Network section."
+        },
+        {
+          "probe_id": "a-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "A-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The reference text explicitly states that the read timeout is 30 seconds in the Timeouts section."
+        },
+        {
+          "probe_id": "b-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "/healthz"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check path is /healthz.",
+          "rationale": "The reference text explicitly states that the health check path is /healthz in the Health section."
+        },
+        {
+          "probe_id": "b-tls-min",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum TLS version is 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "B-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum TLS version is 1.2.",
+          "rationale": "The reference text explicitly states that the minimum TLS version is 1.2 in the Transport Security section."
+        },
+        {
+          "probe_id": "m-listen-port",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "listens on port 8443"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-001",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The relay listens on port 8443.",
+          "rationale": "The claim is explicitly stated in source_a.md."
+        },
+        {
+          "probe_id": "m-read-timeout",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-002",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The claim is explicitly stated in source_a.md."
+        },
+        {
+          "probe_id": "m-health-path",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "/healthz"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-003",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The health check path is /healthz.",
+          "rationale": "The claim is explicitly stated in source_b.md."
+        },
+        {
+          "probe_id": "m-tls-min",
+          "expected_verdict": "SUPPORTED",
+          "anchor": {
+            "all_of": [
+              "minimum TLS version is 1.2"
+            ]
+          },
+          "verdict": "confirmed",
+          "claim_id": "M-004",
+          "model_verdict": "SUPPORTED",
+          "evidence": "The minimum TLS version is 1.2.",
+          "rationale": "The claim is explicitly stated in source_b.md."
+        }
+      ],
+      "guard_confirmed": [
+        "a-listen-port",
+        "a-read-timeout",
+        "b-health-path",
+        "b-tls-min",
+        "m-listen-port",
+        "m-read-timeout",
+        "m-health-path",
+        "m-tls-min"
+      ],
+      "guard_wrong": [],
+      "guard_unclaimed": [],
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 2,
+          "source_b.md": 3
+        },
+        "claims_total": 9,
+        "anchored": 9,
+        "graded": 9,
+        "grounded": 9,
+        "forward_verdicts": 5,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1221,
+        "model_loads": 0,
+        "duration_seconds": 66.5,
+        "models": {
+          "decompose": "Qwen/Qwen3.8-27B-FP8",
+          "verify": "Qwen/Qwen3.8-27B-FP8"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "any"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": []
+        },
+        "endpoint": null
+      },
+      "exit_code_from": "run record"
+    }
+  ]
+}

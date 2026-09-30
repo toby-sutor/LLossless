@@ -1,0 +1,1197 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "chris_birthday_1.md",
+    "source_b.md": "chris_birthday_2.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose chris_birthday_1.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose chris_birthday_2.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 13,
+      "source_a.md": 8,
+      "source_b.md": 8
+    },
+    "forward_submitted": 16,
+    "forward_verdicts": 16,
+    "forward_partial": 2,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 8,
+        "checked": 8,
+        "accounted": 8,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 8,
+        "checked": 8,
+        "accounted": 4,
+        "partial": 2
+      }
+    },
+    "reverse_submitted": 13,
+    "reverse_verdicts": 13,
+    "reverse_partial": 0,
+    "graded": 26,
+    "grounded": 26,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Susanne and Mike want to invite the recipients to the birthday of their son Chris.",
+      "line": 3,
+      "span": "Today, we want to invite you to the birthday of our son Chris",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The celebration will take place on 7th August.",
+      "line": 5,
+      "span": "We will be celebrating on 7th August at our home in Lackers Street",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The celebration will take place at Susanne and Mike's home in Lackers Street.",
+      "line": 5,
+      "span": "We will be celebrating on 7th August at our home in Lackers Street",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "There will be plenty of snacks.",
+      "line": 7,
+      "span": "There will be plenty of snacks and food",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "There will be plenty of food.",
+      "line": 7,
+      "span": "There will be plenty of snacks and food",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "Chris has stated that the wants a dinosaur park.",
+      "line": 9,
+      "span": "Chris has stated that the wants a dinosaur park",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "The celebration will wrap things about around dinner time.",
+      "line": 11,
+      "span": "We will wrap things about around dinner time",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "Susanne and Mike are Chris' parents.",
+      "line": 15,
+      "span": "Chris' parents",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Christians 5th birthday will take place.",
+      "line": 3,
+      "span": "You are hereby formally invited to Christians 5th birthday",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The birthday party will be next Friday around noon.",
+      "line": 5,
+      "span": "The birthday party will be next Friday around noon",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The birthday party will be at the home in Lackers Street 5.",
+      "line": 5,
+      "span": "at our home in Lackers Street 5",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "The birthday party will end around 7 pm.",
+      "line": 5,
+      "span": "it will end around 7 pm",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Christ recently started to collect dinosaurs for his personal dinosaur park.",
+      "line": 7,
+      "span": "Christ recently started to collect dinosaurs for his personal dinosaur park",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "Carl's toy store is around the corner.",
+      "line": 7,
+      "span": "Carl's toy store around the corner",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "Birthday cake is available for anyone.",
+      "line": 9,
+      "span": "we have plenty of birthday cake and salty snacks available for anyone",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "Salty snacks are available for anyone.",
+      "line": 9,
+      "span": "we have plenty of birthday cake and salty snacks available for anyone",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Chris is 5 years old.",
+      "line": 3,
+      "span": "our son Chris's 5th birthday",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Chris's birthday will be celebrated on 7th August, next Friday.",
+      "line": 5,
+      "span": "We celebrate on 7th August, next Friday",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Chris's birthday celebration will take place around noon.",
+      "line": 5,
+      "span": "around noon",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Chris's birthday celebration will take place at Susanne and Mike's home in Lackers Street 5.",
+      "line": 5,
+      "span": "at our home in Lackers Street 5",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Chris's birthday celebration will wrap up around dinner time, around 7 pm.",
+      "line": 5,
+      "span": "and wrap up around dinner time, around 7 pm",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Snacks will be available at Chris's birthday celebration.",
+      "line": 7,
+      "span": "There will be plenty of snacks",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Food will be available at Chris's birthday celebration.",
+      "line": 7,
+      "span": "and food",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "Birthday cake will be available at Chris's birthday celebration.",
+      "line": 7,
+      "span": "including birthday cake",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "Salty snacks will be available at Chris's birthday celebration.",
+      "line": 7,
+      "span": "and salty snacks",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "Chris wants a dinosaur park.",
+      "line": 9,
+      "span": "Chris says he wants a dinosaur park",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "Chris recently started collecting dinosaurs for Chris's personal dinosaur park.",
+      "line": 9,
+      "span": "and recently started collecting dinosaurs for his personal dinosaur park",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "Carl's toy store is around the corner.",
+      "line": 9,
+      "span": "at Carl's toy store around the corner",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "Susanne and Mike are Chris' parents.",
+      "line": 13,
+      "span": "Chris' parents",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "You are invited to our son Chris's 5th birthday.\n\nWe celebrate on 7th August, next Friday, around noon at our home in Lackers Street 5, and wrap up around dinner time, around 7 pm.\n\nThere will be plenty of snacks and food, including birthday cake and salty snacks, so there is no need to bring anything with you. Just bring yourself and some joy.\n\nChris says he wants a dinosaur park and recently started collecting dinosaurs for his personal dinosaur park. If you would like to give him something special, please choose your favorite dinosaur at Carl's toy store around the corner.\n\nBest wishes,\nSusanne and Mike\nChris' parents",
+      "evidence_source": "merged.md",
+      "rationale": "The signed invitation invites recipients to the fifth birthday of Susanne and Mike's son, Chris.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "We celebrate on 7th August",
+      "evidence_source": "merged.md",
+      "rationale": "The celebration date is explicitly stated as 7th August.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "at our home in Lackers Street 5",
+      "evidence_source": "merged.md",
+      "rationale": "The invitation states that the event is at the senders' home in Lackers Street 5.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "There will be plenty of snacks",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly promises plenty of snacks.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "There will be plenty of snacks and food",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly promises plenty of food.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Chris says he wants a dinosaur park",
+      "evidence_source": "merged.md",
+      "rationale": "Chris is explicitly reported as saying that he wants a dinosaur park.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "wrap up around dinner time",
+      "evidence_source": "merged.md",
+      "rationale": "The event is stated to wrap up around dinner time.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Susanne and Mike\nChris' parents",
+      "evidence_source": "merged.md",
+      "rationale": "The signature identifies Susanne and Mike as Chris' parents.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "CONTRADICTED",
+      "evidence": "You are invited to our son Chris's 5th birthday.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference identifies the birthday child as Chris, not Christians.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "next Friday, around noon",
+      "evidence_source": "merged.md",
+      "rationale": "The celebration is explicitly scheduled for next Friday around noon.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "at our home in Lackers Street 5",
+      "evidence_source": "merged.md",
+      "rationale": "The party location is explicitly given as the home in Lackers Street 5.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "wrap up around dinner time, around 7 pm",
+      "evidence_source": "merged.md",
+      "rationale": "The invitation says the event will wrap up around 7 pm.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "CONTRADICTED",
+      "evidence": "Chris says he wants a dinosaur park and recently started collecting dinosaurs for his personal dinosaur park.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference says Chris, rather than Christ, recently started collecting dinosaurs.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Carl's toy store around the corner",
+      "evidence_source": "merged.md",
+      "rationale": "Carl's toy store is explicitly described as being around the corner.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "PARTIAL",
+      "evidence": "There will be plenty of snacks and food, including birthday cake and salty snacks",
+      "evidence_source": "merged.md",
+      "rationale": "Birthday cake is stated to be provided, but the text does not explicitly say it is available for anyone without qualification.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_dropped",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "PARTIAL",
+      "evidence": "There will be plenty of snacks and food, including birthday cake and salty snacks",
+      "evidence_source": "merged.md",
+      "rationale": "Salty snacks are stated to be provided, but the text does not explicitly say they are available for anyone without qualification.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_dropped",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "You are hereby formally invited to Christians 5th birthday.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states that Chris/Christian is having a 5th birthday.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "DERIVED",
+      "evidence": "We will be celebrating on 7th August at our home in Lackers Street.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A gives the date, while source B describes the same birthday party as occurring next Friday.",
+      "direction": "merged_to_sources",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The birthday party will be next Friday around noon at our home in Lackers Street 5 and it will end around 7 pm.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states that the birthday party will be around noon.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "DERIVED",
+      "evidence": "The birthday party will be next Friday around noon at our home in Lackers Street 5 and it will end around 7 pm.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B gives the home address, while source A identifies Susanne and Mike as Chris' parents and the invitation hosts.",
+      "direction": "merged_to_sources",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "DERIVED",
+      "evidence": "We will wrap things about around dinner time.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A gives the dinner-time ending, while source B gives the same party's ending as around 7 pm.",
+      "direction": "merged_to_sources",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "There will be plenty of snacks and food.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A explicitly says there will be plenty of snacks.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "There will be plenty of snacks and food.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A explicitly says there will be plenty of food.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "You do not need to bring any snacks as we have plenty of birthday cake and salty snacks available for anyone.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B explicitly says birthday cake will be available.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "You do not need to bring any snacks as we have plenty of birthday cake and salty snacks available for anyone.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B explicitly says salty snacks will be available.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Chris has stated that the wants a dinosaur park.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A states that Chris wants a dinosaur park.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "Christ recently started to collect dinosaurs for his personal dinosaur park.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states that Chris/Christ recently started collecting dinosaurs for his personal dinosaur park.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "please pick your favorite from Carl's toy store around the corner.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B describes Carl's toy store as around the corner.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "Susanne and Mike\nChris' parents",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A's signature identifies Susanne and Mike as Chris' parents.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "B-001",
+      "verdict": "CONTRADICTED",
+      "evidence": "You are invited to our son Chris's 5th birthday.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference identifies the birthday child as Chris, not Christians.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "CONTRADICTED",
+      "evidence": "Chris says he wants a dinosaur park and recently started collecting dinosaurs for his personal dinosaur park.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference says Chris, rather than Christ, recently started collecting dinosaurs.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "PARTIAL",
+      "evidence": "There will be plenty of snacks and food, including birthday cake and salty snacks",
+      "evidence_source": "merged.md",
+      "rationale": "Birthday cake is stated to be provided, but the text does not explicitly say it is available for anyone without qualification.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_dropped",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "PARTIAL",
+      "evidence": "There will be plenty of snacks and food, including birthday cake and salty snacks",
+      "evidence_source": "merged.md",
+      "rationale": "Salty snacks are stated to be provided, but the text does not explicitly say they are available for anyone without qualification.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_dropped",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "a2",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-001"
+      ],
+      "reason": "The invitation and age are combined in the invitation slot."
+    },
+    {
+      "segment": "a3",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-002",
+        "A-003"
+      ],
+      "reason": "The date, time, location, and ending details are combined."
+    },
+    {
+      "segment": "a4",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-004",
+        "A-005"
+      ],
+      "reason": "The food provisions and no-bring request are combined."
+    },
+    {
+      "segment": "a5",
+      "disposition": "reconciled",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'reconciled' is what happened to it",
+      "claims": [],
+      "reason": "The food provisions and no-bring request are combined."
+    },
+    {
+      "segment": "a7",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-006"
+      ],
+      "reason": "The dinosaur-park wish and collection details are combined."
+    },
+    {
+      "segment": "a8",
+      "disposition": "reconciled",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'reconciled' is what happened to it",
+      "claims": [],
+      "reason": "The dinosaur gift request and store detail are combined."
+    },
+    {
+      "segment": "a9",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-007"
+      ],
+      "reason": "The ending details are combined in the schedule slot."
+    },
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "The base document's greeting is retained."
+    },
+    {
+      "segment": "b2",
+      "disposition": "reconciled",
+      "grade": "rejected",
+      "detail": "declared 'reconciled', which predicts SUPPORTED; B-001 came back CONTRADICTED",
+      "claims": [
+        "B-001"
+      ],
+      "reason": "The invitation and age are combined in the invitation slot."
+    },
+    {
+      "segment": "b3",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-002",
+        "B-003",
+        "B-004"
+      ],
+      "reason": "The date, time, location, and ending details are combined."
+    },
+    {
+      "segment": "b4",
+      "disposition": "reconciled",
+      "grade": "rejected",
+      "detail": "declared 'reconciled', which predicts SUPPORTED; B-005 came back CONTRADICTED",
+      "claims": [
+        "B-005"
+      ],
+      "reason": "The dinosaur-park wish and collection details are combined."
+    },
+    {
+      "segment": "b5",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-006"
+      ],
+      "reason": "The dinosaur gift request and store detail are combined."
+    },
+    {
+      "segment": "b6",
+      "disposition": "reconciled",
+      "grade": "rejected",
+      "detail": "declared 'reconciled', which predicts SUPPORTED; B-007 came back PARTIAL, B-008 came back PARTIAL",
+      "claims": [
+        "B-007",
+        "B-008"
+      ],
+      "reason": "The food provisions and no-bring request are combined."
+    },
+    {
+      "segment": "b7",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "The base document's attendance reminder wording is retained."
+    },
+    {
+      "segment": "b8",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "The base document's closing valediction is retained."
+    },
+    {
+      "segment": "b9",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "The base document's signature is retained."
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 20,
+    "findings": []
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "greeting",
+        "candidates": [
+          {
+            "text": "Good day to you friends!",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Dear friends and family,",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Good day to you friends!",
+        "resolved": true,
+        "reason": "The base document's greeting is retained."
+      },
+      {
+        "slot": "guest of honor name",
+        "candidates": [
+          {
+            "text": "Chris",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Christians",
+            "document": "source_b.md"
+          },
+          {
+            "text": "Christ",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Chris",
+        "resolved": true,
+        "reason": "The base document consistently identifies the son as Chris."
+      },
+      {
+        "slot": "attendance reminder wording",
+        "candidates": [
+          {
+            "text": "Just bring yourself and some joy.",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Just bring your most cheerful self.",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Just bring yourself and some joy.",
+        "resolved": true,
+        "reason": "The base document's wording is retained."
+      },
+      {
+        "slot": "closing valediction",
+        "candidates": [
+          {
+            "text": "Best wishes,",
+            "document": "source_a.md"
+          },
+          {
+            "text": "With best regards,",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Best wishes,",
+        "resolved": true,
+        "reason": "The base document's closing valediction is retained."
+      },
+      {
+        "slot": "signature",
+        "candidates": [
+          {
+            "text": "Susanne and Mike\nChris' parents",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Christians parents Susanne and Michael",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Susanne and Mike\nChris' parents",
+        "resolved": true,
+        "reason": "The base document's signature is retained."
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": "no source document has a title segment, so the title policy has nothing to name. A first line that runs straight into the body is not read as a title; this is a property of the input"
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 13,
+    "source_claims": 16,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 20,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "abbabbaa",
+    "runs": 5,
+    "attributed": 8,
+    "interleaved": true,
+    "monotone": true,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 0,
+    "headings_total": 0
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-18-gaps/toby-test-1-high-gpt-5.6-terra/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-17T23:51:13+00:00",
+    "claimcheck_commit": "b91e377f8fb9",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "deda3dc02a1d",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "gpt-5.6-terra",
+      "decompose": "gpt-5.6-terra",
+      "verify": "gpt-5.6-terra"
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": 0,
+      "profile": "openai-reasoning",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 11072,
+      "completion_tokens": 9522
+    },
+    "tokens": {
+      "input": 11072,
+      "output": 9522,
+      "cached": 0,
+      "thought": 5653,
+      "total": 20594,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "11,072 in, 9,522 out, 0 cached, 5,653 reasoning",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "53c9f2071a148f87fd73e717f3bcb7fd265ebd1f1f344907ad4aff6837a112db",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 5272,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 4007,
+        "completion_tokens": 3933
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "8ec86d633997aacf1b7885fe782a9a89c12bb2624e118248006c2d709d77c38b",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1111,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 932,
+        "completion_tokens": 768
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "ee5cb6f50d1e4f2006dca7e2080fe4baa6f0c41fb23e8fd779a70624a7723703",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1117,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 919,
+        "completion_tokens": 757
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "bebd72aa2831eff97a06dbb92acfc368d2fff3d19432f6b5b33b97a0eed13c2a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2749,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 2134,
+        "completion_tokens": 1483
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "493c7c82fab5344f66362d5d3dac4bf5f024fcd911f418eb262178e6409e31a4",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1138,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 944,
+        "completion_tokens": 874
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "cc3322db295c0c5448b4fa0abada5c85e652b533e12a80cee27990a78779333f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2842,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 2136,
+        "completion_tokens": 1707
+      }
+    ],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 2
+    },
+    "duration_seconds": 117.9
+  }
+}

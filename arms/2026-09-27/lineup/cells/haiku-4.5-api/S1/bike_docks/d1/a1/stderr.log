@@ -1,0 +1,57 @@
+LLossless merge  claude-haiku-4-5-20251001 at https://api.anthropic.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 answered at the prompt tier  13.1s
+✓ merge  13.2s
+• reconcile
+✓ reconcile  0.1s
+• title
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  2.2s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  0.9s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  1.2s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  2.6s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  1.2s
+✗ title: verify: model did not return a usable response after 5 attempts: response does not match the schema: no verdict for claim title; return exactly one verdict for every claim id you were given
+  raw response written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/cells/haiku-4.5-api/S1/bike_docks/d1/a1/cache/failures/20260927T154132Z-verify-0005-attempt5.txt
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 answered at the prompt tier  6.5s
+✓ decompose source_a.md  6.5s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 answered at the prompt tier  4.0s
+✓ decompose source_b.md  4.0s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  11.5s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  13.8s
+✓ verify (forward)  25.3s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 answered at the prompt tier  6.6s
+✓ decompose merged.md  6.6s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  11.0s
+✓ verify (reverse)  11.0s
+✓ merged document written to merged.md
+
+Could not complete. Part of this run did not finish, so the report does not establish that the claims it did check are all there were.
+  title did not finish: verify: model did not return a usable response after 5 attempts: response does not match the schema: no verdict for claim title; return exactly one verdict for every claim id you were given
+  raw response written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/cells/haiku-4.5-api/S1/bike_docks/d1/a1/cache/failures/20260927T154132Z-verify-0005-attempt5.txt
+  2 contradicted: the merge states something different (see `## Findings`)
+  1 invented: in the merge, in neither source (see `## Findings`)
+  1 absent and undeclared: in a source, not in the merge, and no record explains it (see `## Structure`)
+  1 over budget: declared loss past the ceiling (see `## Structure`)
+  1 title dropped in silence: a source title is gone and no record names what replaced it (see `## Structure`)
+  4 claim(s) the merge declared dropped are listed under `## Review queue`
+  merged document written to merged.md
+  the full report went to stdout; exit code 2

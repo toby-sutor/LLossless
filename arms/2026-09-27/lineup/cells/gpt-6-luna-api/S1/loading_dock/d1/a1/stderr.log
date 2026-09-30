@@ -1,0 +1,40 @@
+LLossless merge  gpt-6-luna at https://api.openai.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking gpt-6-luna
+✓ merge: gpt-6-luna answered at the prompt tier  39.2s
+✓ merge  39.3s
+• reconcile
+✓ reconcile  0.1s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking gpt-6-luna
+✓ decompose: gpt-6-luna answered at the prompt tier  16.0s
+✓ decompose source_a.md  16.0s
+• decompose source_b.md
+• decompose: asking gpt-6-luna
+✓ decompose: gpt-6-luna answered at the prompt tier  13.6s
+✓ decompose source_b.md  13.6s
+• verify (forward)
+• verify: asking gpt-6-luna
+✓ verify: gpt-6-luna answered at the prompt tier  9.2s
+• verify: asking gpt-6-luna
+✓ verify: gpt-6-luna answered at the prompt tier  5.2s
+✓ verify (forward)  14.5s
+• decompose merged.md
+• decompose: asking gpt-6-luna
+✓ decompose: gpt-6-luna answered at the prompt tier  7.7s
+✓ decompose merged.md  7.7s
+• verify (reverse)
+• verify: asking gpt-6-luna
+✓ verify: gpt-6-luna answered at the prompt tier  11.2s
+✓ verify (reverse)  11.2s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  3 contradicted: the merge states something different (see `## Findings`)
+  3 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

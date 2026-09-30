@@ -1,0 +1,42 @@
+LLossless merge  claude-haiku-4-5-20251001 at lineup haiku-4.5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  161.3s
+✓ merge  161.3s
+• reconcile
+✓ reconcile  0.2s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  107.2s
+✓ decompose source_a.md  107.2s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  84.3s
+✓ decompose source_b.md  84.3s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  35.9s
+✓ verify (forward)  36.0s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  156.5s
+✓ decompose merged.md  156.5s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  102.9s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  126.6s
+✓ verify (reverse)  229.6s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  12 contradicted: the merge states something different (see `## Findings`)
+  3 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  4 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

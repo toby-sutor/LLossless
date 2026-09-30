@@ -1,0 +1,44 @@
+claimcheck merge  opus at Claude Code - Opus, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking opus
+✓ merge: opus (claude-opus-5) answered at the prompt tier  268.1s
+✓ merge  268.1s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  10.4s
+✓ decompose source_a.md  10.4s
+• decompose source_b.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  15.3s
+✓ decompose source_b.md  15.3s
+• verify (forward)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  29.4s
+claimcheck: cache off; response dumps for this run go to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-opus-xhigh/a1/tmp/claimcheck-run-491wzcsq
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  29.9s
+✓ verify (forward)  59.3s
+• decompose merged.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  22.8s
+✓ decompose merged.md  22.8s
+• verify (reverse)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  26.6s
+✓ verify (reverse)  26.6s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-opus-xhigh/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  The model retrieved. 1 of 7 call(s) took the turns a retrieval costs; which citation each retrieval backs is not recorded
+  1 dropped: in a source, not in the merge (see `## Findings`)
+  45 contradicted: the merge states something different (see `## Findings`)
+  1 partly invented: the sources carry some of this claim (see `## Findings`)
+  13 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-opus-xhigh/a1/merged.md
+  the full report went to stdout; exit code 1

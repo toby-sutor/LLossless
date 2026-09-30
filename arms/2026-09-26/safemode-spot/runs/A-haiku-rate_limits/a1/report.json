@@ -1,0 +1,5119 @@
+{
+ "command": "merge",
+ "exit_code": 1,
+ "documents": {
+  "source_a.md": "source_a.md",
+  "source_b.md": "source_b.md"
+ },
+ "steps": [
+  {
+   "name": "merge",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "reconcile",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "title",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_a.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_b.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (forward)",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose merged.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (reverse)",
+   "state": "ok",
+   "detail": ""
+  }
+ ],
+ "coverage": {
+  "extracted": {
+   "merged.md": 53,
+   "source_a.md": 64,
+   "source_b.md": 61
+  },
+  "forward_submitted": 125,
+  "forward_verdicts": 125,
+  "forward_partial": 8,
+  "forward_by_source": {
+   "source_a.md": {
+    "extracted": 64,
+    "checked": 64,
+    "accounted": 61,
+    "partial": 3
+   },
+   "source_b.md": {
+    "extracted": 61,
+    "checked": 61,
+    "accounted": 46,
+    "partial": 5
+   }
+  },
+  "reverse_submitted": 53,
+  "reverse_verdicts": 53,
+  "reverse_partial": 0,
+  "graded": 169,
+  "grounded": 166,
+  "errored": 0,
+  "ungraded": 0
+ },
+ "claims": [
+  {
+   "id": "A-001",
+   "source": "source_a.md",
+   "text": "Every credential has a cap.",
+   "line": 3,
+   "span": "Every credential has a cap",
+   "anchored": true
+  },
+  {
+   "id": "A-002",
+   "source": "source_a.md",
+   "text": "When a cap is spent, the gateway answers 429 at the edge without waking the service behind it.",
+   "line": 3,
+   "span": "When that cap is spent the gateway answers 429 at the edge — without waking the service behind it",
+   "anchored": true
+  },
+  {
+   "id": "A-003",
+   "source": "source_a.md",
+   "text": "The refusal costs the platform almost nothing.",
+   "line": 3,
+   "span": "the refusal costs the platform almost nothing",
+   "anchored": true
+  },
+  {
+   "id": "A-004",
+   "source": "source_a.md",
+   "text": "The refusal costs a caller that files it under transport error a great deal.",
+   "line": 3,
+   "span": "costs a caller that files it under transport error a great deal",
+   "anchored": true
+  },
+  {
+   "id": "A-005",
+   "source": "source_a.md",
+   "text": "Requests are counted against the credential that presented them.",
+   "line": 5,
+   "span": "Requests are counted against the credential that presented them",
+   "anchored": true
+  },
+  {
+   "id": "A-006",
+   "source": "source_a.md",
+   "text": "Requests are counted over a fixed window of 60 seconds.",
+   "line": 5,
+   "span": "over a fixed window of 60 seconds",
+   "anchored": true
+  },
+  {
+   "id": "A-007",
+   "source": "source_a.md",
+   "text": "Requests are never counted against a connection.",
+   "line": 5,
+   "span": "never against a connection",
+   "anchored": true
+  },
+  {
+   "id": "A-008",
+   "source": "source_a.md",
+   "text": "Opening a second socket buys a caller nothing.",
+   "line": 5,
+   "span": "Opening a second socket therefore buys a caller nothing",
+   "anchored": true
+  },
+  {
+   "id": "A-009",
+   "source": "source_a.md",
+   "text": "A client spread across eight worker processes is throttled at exactly the point one process would have been.",
+   "line": 5,
+   "span": "A client spread across eight worker processes is throttled at exactly the point one process would have been",
+   "anchored": true
+  },
+  {
+   "id": "A-010",
+   "source": "source_a.md",
+   "text": "A client spread across eight worker processes pays for the extra file descriptors.",
+   "line": 5,
+   "span": "pays for the extra file descriptors as well",
+   "anchored": true
+  },
+  {
+   "id": "A-011",
+   "source": "source_a.md",
+   "text": "The default allowance is 100 requests in a window.",
+   "line": 7,
+   "span": "The default allowance is 100 requests in a window",
+   "anchored": true
+  },
+  {
+   "id": "A-012",
+   "source": "source_a.md",
+   "text": "A credential marked for batch work is allowed 1000 in the same window.",
+   "line": 7,
+   "span": "a credential marked for batch work is allowed 1000 in the same window",
+   "anchored": true
+  },
+  {
+   "id": "A-013",
+   "source": "source_a.md",
+   "text": "A refusal is not an outage.",
+   "line": 7,
+   "span": "A refusal is not an outage",
+   "anchored": true
+  },
+  {
+   "id": "A-014",
+   "source": "source_a.md",
+   "text": "Waiting is the only correct answer.",
+   "line": 7,
+   "span": "waiting is the only correct answer",
+   "anchored": true
+  },
+  {
+   "id": "A-015",
+   "source": "source_a.md",
+   "text": "Callers that retry at once are the largest single reason the cap is there at all.",
+   "line": 7,
+   "span": "Callers that retry at once are the largest single reason the cap is there at all",
+   "anchored": true
+  },
+  {
+   "id": "A-016",
+   "source": "source_a.md",
+   "text": "The refusal carries a Retry-After header.",
+   "line": 11,
+   "span": "The refusal carries a Retry-After header",
+   "anchored": true
+  },
+  {
+   "id": "A-017",
+   "source": "source_a.md",
+   "text": "The value of the Retry-After header is a whole number of seconds to wait.",
+   "line": 11,
+   "span": "Its value is a whole number of seconds to wait",
+   "anchored": true
+  },
+  {
+   "id": "A-018",
+   "source": "source_a.md",
+   "text": "Waiting that long and then continuing is the whole of the contract.",
+   "line": 11,
+   "span": "Waiting that long and then continuing is the whole of the contract",
+   "anchored": true
+  },
+  {
+   "id": "A-019",
+   "source": "source_a.md",
+   "text": "A client that waits as specified and continues needs nothing else from this document.",
+   "line": 11,
+   "span": "a client that does it needs nothing else from this document",
+   "anchored": true
+  },
+  {
+   "id": "A-020",
+   "source": "source_a.md",
+   "text": "The gateway keeps no memory of who backed off politely.",
+   "line": 11,
+   "span": "The gateway keeps no memory of who backed off politely",
+   "anchored": true
+  },
+  {
+   "id": "A-021",
+   "source": "source_a.md",
+   "text": "Waiting longer than the header asks earns a caller no credit at all.",
+   "line": 11,
+   "span": "waiting longer than the header asks earns a caller no credit at all",
+   "anchored": true
+  },
+  {
+   "id": "A-022",
+   "source": "source_a.md",
+   "text": "The body of the refusal is JSON.",
+   "line": 13,
+   "span": "The body of the refusal is JSON",
+   "anchored": true
+  },
+  {
+   "id": "A-023",
+   "source": "source_a.md",
+   "text": "The refusal body names what the gateway calls the \"window\" it counted in.",
+   "line": 13,
+   "span": "it names what the gateway calls the \"window\" it counted in",
+   "anchored": false
+  },
+  {
+   "id": "A-024",
+   "source": "source_a.md",
+   "text": "The refusal body names the cap and the tier.",
+   "line": 13,
+   "span": "It names the cap and the tier as well",
+   "anchored": true
+  },
+  {
+   "id": "A-025",
+   "source": "source_a.md",
+   "text": "The fields in the refusal body are not a substitute for the header.",
+   "line": 13,
+   "span": "None of those fields is a substitute for the header",
+   "anchored": true
+  },
+  {
+   "id": "A-026",
+   "source": "source_a.md",
+   "text": "A caller that parses the body to compute its own wait is doing the same arithmetic twice.",
+   "line": 13,
+   "span": "a caller that parses the body to compute its own wait is doing the same arithmetic twice",
+   "anchored": true
+  },
+  {
+   "id": "A-027",
+   "source": "source_a.md",
+   "text": "The body is there so that a human reading a log afterwards can see why the request was refused.",
+   "line": 13,
+   "span": "The body is there so that a human reading a log afterwards can see why the request was refused",
+   "anchored": true
+  },
+  {
+   "id": "A-028",
+   "source": "source_a.md",
+   "text": "Nothing in the refusal body is meant for the retry loop.",
+   "line": 13,
+   "span": "nothing in it is meant for the retry loop",
+   "anchored": true
+  },
+  {
+   "id": "A-029",
+   "source": "source_a.md",
+   "text": "The gateway has already done the arithmetic for the header with information the caller does not have.",
+   "line": 19,
+   "span": "The gateway has already done that arithmetic, with information the caller does not have",
+   "anchored": true
+  },
+  {
+   "id": "A-030",
+   "source": "source_a.md",
+   "text": "The gateway does the same arithmetic on the 503 path.",
+   "line": 19,
+   "span": "it does the same on the 503 path",
+   "anchored": true
+  },
+  {
+   "id": "A-031",
+   "source": "source_a.md",
+   "text": "A wait derived on the client side is a guess about a counter it cannot see.",
+   "line": 19,
+   "span": "A wait derived on the client side is a guess about a counter it cannot see",
+   "anchored": true
+  },
+  {
+   "id": "A-032",
+   "source": "source_a.md",
+   "text": "There is no case at all where a guess is better than the header.",
+   "line": 19,
+   "span": "There is no case at all where a guess is the better of the two",
+   "anchored": true
+  },
+  {
+   "id": "A-033",
+   "source": "source_a.md",
+   "text": "A 200 wants nothing.",
+   "line": 21,
+   "span": "A 200 wants nothing",
+   "anchored": true
+  },
+  {
+   "id": "A-034",
+   "source": "source_a.md",
+   "text": "A 429 wants the stated wait.",
+   "line": 21,
+   "span": "a 429 wants the stated wait",
+   "anchored": true
+  },
+  {
+   "id": "A-035",
+   "source": "source_a.md",
+   "text": "A 500 may be retried once that wait has passed.",
+   "line": 21,
+   "span": "a 500 may be retried once that wait has passed",
+   "anchored": true
+  },
+  {
+   "id": "A-036",
+   "source": "source_a.md",
+   "text": "A 503 is the overload path.",
+   "line": 21,
+   "span": "a 503 is the overload path",
+   "anchored": true
+  },
+  {
+   "id": "A-037",
+   "source": "source_a.md",
+   "text": "The four cases are not interchangeable.",
+   "line": 21,
+   "span": "The four cases are not interchangeable",
+   "anchored": true
+  },
+  {
+   "id": "A-038",
+   "source": "source_a.md",
+   "text": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive.",
+   "line": 21,
+   "span": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive",
+   "anchored": true
+  },
+  {
+   "id": "A-039",
+   "source": "source_a.md",
+   "text": "A batch credential is allowed fifty times the default allowance.",
+   "line": 23,
+   "span": "A batch credential is allowed fifty times the default allowance",
+   "anchored": true
+  },
+  {
+   "id": "A-040",
+   "source": "source_a.md",
+   "text": "A batch credential is measured over exactly the same window.",
+   "line": 23,
+   "span": "it is measured over exactly the same window",
+   "anchored": true
+  },
+  {
+   "id": "A-041",
+   "source": "source_a.md",
+   "text": "The tier is set on the credential when it is issued.",
+   "line": 23,
+   "span": "The tier is set on the credential when it is issued",
+   "anchored": true
+  },
+  {
+   "id": "A-042",
+   "source": "source_a.md",
+   "text": "The tier cannot be asked for per call.",
+   "line": 23,
+   "span": "cannot be asked for per call",
+   "anchored": true
+  },
+  {
+   "id": "A-043",
+   "source": "source_a.md",
+   "text": "Nothing else about the two tiers differs in any way.",
+   "line": 23,
+   "span": "Nothing else about the two tiers differs in any way",
+   "anchored": true
+  },
+  {
+   "id": "A-044",
+   "source": "source_a.md",
+   "text": "A caller that cannot say how often it was refused last week cannot argue for a larger cap.",
+   "line": 25,
+   "span": "A caller that cannot say how often it was refused last week cannot argue for a larger cap",
+   "anchored": true
+  },
+  {
+   "id": "A-045",
+   "source": "source_a.md",
+   "text": "Nobody at the far end will assemble that argument on a caller's behalf.",
+   "line": 25,
+   "span": "nobody at the far end will assemble that argument on its behalf",
+   "anchored": true
+  },
+  {
+   "id": "A-046",
+   "source": "source_a.md",
+   "text": "The log line should carry the credential, the window and the wait.",
+   "line": 25,
+   "span": "The log line should carry the credential, the window and the wait",
+   "anchored": true
+  },
+  {
+   "id": "A-047",
+   "source": "source_a.md",
+   "text": "The gateway refuses requests for three reasons.",
+   "line": 29,
+   "span": "The gateway refuses a request for three reasons",
+   "anchored": true
+  },
+  {
+   "id": "A-048",
+   "source": "source_a.md",
+   "text": "Only one of the three reasons is a cap.",
+   "line": 29,
+   "span": "only one of them is the one above",
+   "anchored": true
+  },
+  {
+   "id": "A-049",
+   "source": "source_a.md",
+   "text": "A credential may be suspended.",
+   "line": 29,
+   "span": "A credential may be suspended",
+   "anchored": true
+  },
+  {
+   "id": "A-050",
+   "source": "source_a.md",
+   "text": "A route may be closed for maintenance.",
+   "line": 29,
+   "span": "a route may be closed for maintenance",
+   "anchored": true
+  },
+  {
+   "id": "A-051",
+   "source": "source_a.md",
+   "text": "A body may exceed the 5 megabyte limit.",
+   "line": 29,
+   "span": "a body may exceed the 5 megabyte limit",
+   "anchored": true
+  },
+  {
+   "id": "A-052",
+   "source": "source_a.md",
+   "text": "None of those three reasons clears itself by waiting for a stated number of seconds.",
+   "line": 29,
+   "span": "None of those three clears itself by waiting for a stated number of seconds",
+   "anchored": true
+  },
+  {
+   "id": "A-053",
+   "source": "source_a.md",
+   "text": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service.",
+   "line": 31,
+   "span": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service",
+   "anchored": true
+  },
+  {
+   "id": "A-054",
+   "source": "source_a.md",
+   "text": "The log afterwards shows nothing at all except a long run of refusals when retrying against a suspended credential.",
+   "line": 31,
+   "span": "the log afterwards shows nothing at all except a long run of refusals",
+   "anchored": true
+  },
+  {
+   "id": "A-055",
+   "source": "source_a.md",
+   "text": "Reading the status code rather than the class it belongs to separates the two cases.",
+   "line": 31,
+   "span": "Reading the status code rather than the class it belongs to is what separates the two cases",
+   "anchored": true
+  },
+  {
+   "id": "A-056",
+   "source": "source_a.md",
+   "text": "Reading the status code rather than the class it belongs to costs one comparison.",
+   "line": 31,
+   "span": "it costs one comparison",
+   "anchored": true
+  },
+  {
+   "id": "A-057",
+   "source": "source_a.md",
+   "text": "A cap can be raised.",
+   "line": 35,
+   "span": "A cap can be raised",
+   "anchored": true
+  },
+  {
+   "id": "A-058",
+   "source": "source_a.md",
+   "text": "The number of caps raised without a measurement behind them is 0.",
+   "line": 35,
+   "span": "the number of caps raised without a measurement behind them is 0",
+   "anchored": true
+  },
+  {
+   "id": "A-059",
+   "source": "source_a.md",
+   "text": "A burst is cheaper to smooth than it is to serve at its peak.",
+   "line": 35,
+   "span": "a burst is cheaper to smooth than it is to serve at its peak",
+   "anchored": true
+  },
+  {
+   "id": "A-060",
+   "source": "source_a.md",
+   "text": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all.",
+   "line": 35,
+   "span": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all",
+   "anchored": true
+  },
+  {
+   "id": "A-061",
+   "source": "source_a.md",
+   "text": "Requests reach the platform team through the usual channel.",
+   "line": 37,
+   "span": "Requests reach the platform team through the usual channel",
+   "anchored": true
+  },
+  {
+   "id": "A-062",
+   "source": "source_a.md",
+   "text": "Requests are answered within two working days.",
+   "line": 37,
+   "span": "they are answered within two working days",
+   "anchored": true
+  },
+  {
+   "id": "A-063",
+   "source": "source_a.md",
+   "text": "There is no expedited path.",
+   "line": 37,
+   "span": "There is no expedited path",
+   "anchored": true
+  },
+  {
+   "id": "A-064",
+   "source": "source_a.md",
+   "text": "There is no exception list.",
+   "line": 37,
+   "span": "no exception list",
+   "anchored": true
+  },
+  {
+   "id": "B-001",
+   "source": "source_b.md",
+   "text": "Every credential has a cap of its own.",
+   "line": 3,
+   "span": "Every credential has a cap of its own",
+   "anchored": true
+  },
+  {
+   "id": "B-002",
+   "source": "source_b.md",
+   "text": "When the cap is spent the gateway answers 429 at the edge, without troubling the service behind it.",
+   "line": 3,
+   "span": "When the cap is spent the gateway answers 429 at the edge, without troubling the service behind it",
+   "anchored": true
+  },
+  {
+   "id": "B-003",
+   "source": "source_b.md",
+   "text": "Requests are counted against the credential rather than the connection.",
+   "line": 5,
+   "span": "Requests are counted against the credential rather than the connection",
+   "anchored": true
+  },
+  {
+   "id": "B-004",
+   "source": "source_b.md",
+   "text": "Requests are counted over a fixed window of 60 seconds.",
+   "line": 5,
+   "span": "over a fixed window of 60 seconds",
+   "anchored": true
+  },
+  {
+   "id": "B-005",
+   "source": "source_b.md",
+   "text": "The gateway doesn't disclose the start of the window.",
+   "line": 5,
+   "span": "whose start the gateway doesn't disclose",
+   "anchored": false
+  },
+  {
+   "id": "B-006",
+   "source": "source_b.md",
+   "text": "The count follows the credential wherever the caller happens to put it.",
+   "line": 5,
+   "span": "The count follows the credential wherever the caller happens to put it",
+   "anchored": true
+  },
+  {
+   "id": "B-007",
+   "source": "source_b.md",
+   "text": "The count follows the credential including across hosts.",
+   "line": 5,
+   "span": "including across hosts",
+   "anchored": true
+  },
+  {
+   "id": "B-008",
+   "source": "source_b.md",
+   "text": "A caller spread over many worker processes is throttled at the same point a single process would have been.",
+   "line": 5,
+   "span": "A caller spread over many worker processes is throttled at the same point a single process would have been",
+   "anchored": true
+  },
+  {
+   "id": "B-009",
+   "source": "source_b.md",
+   "text": "The default allowance is 100 requests in a window.",
+   "line": 7,
+   "span": "The default allowance is 100 requests in a window",
+   "anchored": true
+  },
+  {
+   "id": "B-010",
+   "source": "source_b.md",
+   "text": "A caller that needs more than that is almost always doing batch work under an interactive credential.",
+   "line": 7,
+   "span": "a caller that needs more than that is almost always doing batch work under an interactive credential",
+   "anchored": true
+  },
+  {
+   "id": "B-011",
+   "source": "source_b.md",
+   "text": "Callers that retry immediately are most of the reason the cap is there.",
+   "line": 7,
+   "span": "Callers that retry immediately are most of the reason the cap is there",
+   "anchored": true
+  },
+  {
+   "id": "B-012",
+   "source": "source_b.md",
+   "text": "The header is called Retry-After.",
+   "line": 11,
+   "span": "The header is called Retry-After",
+   "anchored": true
+  },
+  {
+   "id": "B-013",
+   "source": "source_b.md",
+   "text": "Its value is a whole number of seconds.",
+   "line": 11,
+   "span": "Its value is a whole number of seconds",
+   "anchored": true
+  },
+  {
+   "id": "B-014",
+   "source": "source_b.md",
+   "text": "It is present on every refusal the gateway sends.",
+   "line": 11,
+   "span": "it is present on every refusal the gateway sends",
+   "anchored": true
+  },
+  {
+   "id": "B-015",
+   "source": "source_b.md",
+   "text": "Waiting that long and then continuing is the entire contract.",
+   "line": 11,
+   "span": "Waiting that long and then continuing is the entire contract",
+   "anchored": true
+  },
+  {
+   "id": "B-016",
+   "source": "source_b.md",
+   "text": "Nobody at this end is keeping score.",
+   "line": 11,
+   "span": "nobody at this end is keeping score",
+   "anchored": true
+  },
+  {
+   "id": "B-017",
+   "source": "source_b.md",
+   "text": "The response body is JSON.",
+   "line": 13,
+   "span": "The response body is JSON",
+   "anchored": true
+  },
+  {
+   "id": "B-018",
+   "source": "source_b.md",
+   "text": "It repeats the cap, the window and the tier as plain fields.",
+   "line": 13,
+   "span": "it repeats the cap, the window and the tier as plain fields",
+   "anchored": true
+  },
+  {
+   "id": "B-019",
+   "source": "source_b.md",
+   "text": "None of those fields is a substitute for the header.",
+   "line": 13,
+   "span": "None of those fields is a substitute for the header",
+   "anchored": true
+  },
+  {
+   "id": "B-020",
+   "source": "source_b.md",
+   "text": "There are four rules.",
+   "line": 17,
+   "span": "There are four rules",
+   "anchored": true
+  },
+  {
+   "id": "B-021",
+   "source": "source_b.md",
+   "text": "The order they are given in is the order to apply them.",
+   "line": 17,
+   "span": "the order they are given in is the order to apply them",
+   "anchored": true
+  },
+  {
+   "id": "B-022",
+   "source": "source_b.md",
+   "text": "The gateway has already done that arithmetic.",
+   "line": 19,
+   "span": "The gateway has already done that arithmetic",
+   "anchored": true
+  },
+  {
+   "id": "B-023",
+   "source": "source_b.md",
+   "text": "It did it with information the caller cannot see.",
+   "line": 19,
+   "span": "it did it with information the caller cannot see",
+   "anchored": true
+  },
+  {
+   "id": "B-024",
+   "source": "source_b.md",
+   "text": "On the 503 path the same rule holds.",
+   "line": 19,
+   "span": "On the 503 path the same rule holds",
+   "anchored": true
+  },
+  {
+   "id": "B-025",
+   "source": "source_b.md",
+   "text": "The cause of the refusal is an entirely different one.",
+   "line": 19,
+   "span": "the cause of the refusal is an entirely different one",
+   "anchored": true
+  },
+  {
+   "id": "B-026",
+   "source": "source_b.md",
+   "text": "Anything computed on the client side is a guess.",
+   "line": 19,
+   "span": "Anything computed on the client side is a guess",
+   "anchored": true
+  },
+  {
+   "id": "B-027",
+   "source": "source_b.md",
+   "text": "The safe set to retry is a smaller set than the set of responses that aren't a success.",
+   "line": 21,
+   "span": "which is a smaller set than the set of responses that aren't a success",
+   "anchored": false
+  },
+  {
+   "id": "B-028",
+   "source": "source_b.md",
+   "text": "A 200 needs nothing.",
+   "line": 21,
+   "span": "A 200 needs nothing",
+   "anchored": true
+  },
+  {
+   "id": "B-029",
+   "source": "source_b.md",
+   "text": "A 429 needs the stated wait.",
+   "line": 21,
+   "span": "a 429 needs the stated wait",
+   "anchored": true
+  },
+  {
+   "id": "B-030",
+   "source": "source_b.md",
+   "text": "A 500 can be retried once that wait has passed.",
+   "line": 21,
+   "span": "a 500 can be retried once that wait has passed",
+   "anchored": true
+  },
+  {
+   "id": "B-031",
+   "source": "source_b.md",
+   "text": "A 503 means the platform itself is overloaded.",
+   "line": 21,
+   "span": "a 503 means the platform itself is overloaded",
+   "anchored": true
+  },
+  {
+   "id": "B-032",
+   "source": "source_b.md",
+   "text": "A caller that folds all four into one branch will retry hardest during exactly the incident the cap was installed to survive.",
+   "line": 21,
+   "span": "A caller that folds all four into one branch will retry hardest during exactly the incident the cap was installed to survive",
+   "anchored": true
+  },
+  {
+   "id": "B-033",
+   "source": "source_b.md",
+   "text": "A batch credential is allowed 1000 requests in a window.",
+   "line": 23,
+   "span": "A batch credential is allowed 1000 requests in a window",
+   "anchored": true
+  },
+  {
+   "id": "B-034",
+   "source": "source_b.md",
+   "text": "Which is 50 times the default.",
+   "line": 23,
+   "span": "which is 50 times the default",
+   "anchored": true
+  },
+  {
+   "id": "B-035",
+   "source": "source_b.md",
+   "text": "The batch counting scheme is not a separate counting scheme.",
+   "line": 23,
+   "span": "not a separate counting scheme",
+   "anchored": true
+  },
+  {
+   "id": "B-036",
+   "source": "source_b.md",
+   "text": "The window, the header and the body are identical to the interactive case.",
+   "line": 23,
+   "span": "The window, the header and the body are identical to the interactive case",
+   "anchored": true
+  },
+  {
+   "id": "B-037",
+   "source": "source_b.md",
+   "text": "A client written for one tier needs no change at all to run against the other.",
+   "line": 23,
+   "span": "a client written for one tier needs no change at all to run against the other",
+   "anchored": true
+  },
+  {
+   "id": "B-038",
+   "source": "source_b.md",
+   "text": "Nothing else about the batch tier differs from the default.",
+   "line": 23,
+   "span": "Nothing else about the batch tier differs from the default",
+   "anchored": true
+  },
+  {
+   "id": "B-039",
+   "source": "source_b.md",
+   "text": "Keep the log for at least a week.",
+   "line": 25,
+   "span": "keep the log for at least a week",
+   "anchored": true
+  },
+  {
+   "id": "B-040",
+   "source": "source_b.md",
+   "text": "A caller that cannot say how often it was refused can't make a case for a larger cap.",
+   "line": 25,
+   "span": "A caller that cannot say how often it was refused can't make a case for a larger cap",
+   "anchored": false
+  },
+  {
+   "id": "B-041",
+   "source": "source_b.md",
+   "text": "The platform team won't assemble that case on its behalf.",
+   "line": 25,
+   "span": "the platform team won't assemble that case on its behalf",
+   "anchored": false
+  },
+  {
+   "id": "B-042",
+   "source": "source_b.md",
+   "text": "The counts are the whole of the argument.",
+   "line": 25,
+   "span": "The counts are the whole of the argument",
+   "anchored": true
+  },
+  {
+   "id": "B-043",
+   "source": "source_b.md",
+   "text": "The gateway refuses a request for three separate reasons.",
+   "line": 29,
+   "span": "The gateway refuses a request for three separate reasons",
+   "anchored": true
+  },
+  {
+   "id": "B-044",
+   "source": "source_b.md",
+   "text": "Only one of them is a cap.",
+   "line": 29,
+   "span": "only one of them is a cap",
+   "anchored": true
+  },
+  {
+   "id": "B-045",
+   "source": "source_b.md",
+   "text": "Two of the three have nothing to do with how much traffic a caller has sent in the window it is currently in.",
+   "line": 29,
+   "span": "Two of the three have nothing to do with how much traffic a caller has sent in the window it is currently in",
+   "anchored": true
+  },
+  {
+   "id": "B-046",
+   "source": "source_b.md",
+   "text": "A credential can be suspended.",
+   "line": 29,
+   "span": "A credential can be suspended",
+   "anchored": true
+  },
+  {
+   "id": "B-047",
+   "source": "source_b.md",
+   "text": "A route can be closed while it is being repaired.",
+   "line": 29,
+   "span": "a route can be closed while it is being repaired",
+   "anchored": true
+  },
+  {
+   "id": "B-048",
+   "source": "source_b.md",
+   "text": "A request body over the 5 megabyte limit is refused before it has been read at all.",
+   "line": 29,
+   "span": "a request body over the 5 megabyte limit is refused before it has been read at all",
+   "anchored": true
+  },
+  {
+   "id": "B-049",
+   "source": "source_b.md",
+   "text": "A loop retrying against a suspended credential burns its whole budget and reaches nothing.",
+   "line": 31,
+   "span": "A loop retrying against a suspended credential burns its whole budget and reaches nothing",
+   "anchored": true
+  },
+  {
+   "id": "B-050",
+   "source": "source_b.md",
+   "text": "The log afterwards shows a long run of refusals and no successes at all.",
+   "line": 31,
+   "span": "The log afterwards shows a long run of refusals and no successes at all",
+   "anchored": true
+  },
+  {
+   "id": "B-051",
+   "source": "source_b.md",
+   "text": "The wasted budget is the caller's own.",
+   "line": 31,
+   "span": "the wasted budget is the caller's own",
+   "anchored": false
+  },
+  {
+   "id": "B-052",
+   "source": "source_b.md",
+   "text": "A caller that can move half its work to a quieter hour usually finds it doesn't need a larger cap in the first place.",
+   "line": 33,
+   "span": "A caller that can move half its work to a quieter hour usually finds it doesn't need a larger cap in the first place",
+   "anchored": false
+  },
+  {
+   "id": "B-053",
+   "source": "source_b.md",
+   "text": "It is available to almost everybody.",
+   "line": 33,
+   "span": "it is available to almost everybody",
+   "anchored": true
+  },
+  {
+   "id": "B-054",
+   "source": "source_b.md",
+   "text": "A cap can be raised.",
+   "line": 33,
+   "span": "A cap can be raised",
+   "anchored": true
+  },
+  {
+   "id": "B-055",
+   "source": "source_b.md",
+   "text": "A cap cannot be raised but on the strength of an assertion that the current one is too small.",
+   "line": 33,
+   "span": "but not on the strength of an assertion that the current one is too small",
+   "anchored": true
+  },
+  {
+   "id": "B-056",
+   "source": "source_b.md",
+   "text": "The team wants to know whether the load is smooth or bursty before it looks at the number at all.",
+   "line": 35,
+   "span": "The team wants to know whether the load is smooth or bursty before it looks at the number at all",
+   "anchored": true
+  },
+  {
+   "id": "B-057",
+   "source": "source_b.md",
+   "text": "A burst is cheaper to smooth out than it is to serve at its peak.",
+   "line": 35,
+   "span": "A burst is cheaper to smooth out than it is to serve at its peak",
+   "anchored": true
+  },
+  {
+   "id": "B-058",
+   "source": "source_b.md",
+   "text": "Requests go to the platform team through the usual channel.",
+   "line": 35,
+   "span": "Requests go to the platform team through the usual channel",
+   "anchored": true
+  },
+  {
+   "id": "B-059",
+   "source": "source_b.md",
+   "text": "There is no expedited path.",
+   "line": 37,
+   "span": "There is no expedited path",
+   "anchored": true
+  },
+  {
+   "id": "B-060",
+   "source": "source_b.md",
+   "text": "An answer takes two working days.",
+   "line": 37,
+   "span": "An answer takes two working days",
+   "anchored": true
+  },
+  {
+   "id": "B-061",
+   "source": "source_b.md",
+   "text": "Chasing it doesn't make it take fewer.",
+   "line": 37,
+   "span": "chasing it doesn't make it take fewer",
+   "anchored": false
+  },
+  {
+   "id": "M-001",
+   "source": "merged.md",
+   "text": "Every credential has a cap",
+   "line": 3,
+   "span": "Every credential has a cap",
+   "anchored": true
+  },
+  {
+   "id": "M-002",
+   "source": "merged.md",
+   "text": "When a credential's cap is spent, the gateway answers 429 at the edge",
+   "line": 3,
+   "span": "When that cap is spent the gateway answers 429 at the edge",
+   "anchored": true
+  },
+  {
+   "id": "M-003",
+   "source": "merged.md",
+   "text": "Requests are counted against the credential that presented them over a fixed window of 60 seconds",
+   "line": 5,
+   "span": "Requests are counted against the credential that presented them, over a fixed window of 60 seconds",
+   "anchored": true
+  },
+  {
+   "id": "M-004",
+   "source": "merged.md",
+   "text": "Requests are never counted against a connection",
+   "line": 5,
+   "span": "never against a connection",
+   "anchored": true
+  },
+  {
+   "id": "M-005",
+   "source": "merged.md",
+   "text": "Opening a second socket therefore buys a caller nothing",
+   "line": 5,
+   "span": "Opening a second socket therefore buys a caller nothing",
+   "anchored": true
+  },
+  {
+   "id": "M-006",
+   "source": "merged.md",
+   "text": "The count follows the credential wherever the caller happens to put it, including across hosts",
+   "line": 5,
+   "span": "The count follows the credential wherever the caller happens to put it, including across hosts",
+   "anchored": true
+  },
+  {
+   "id": "M-007",
+   "source": "merged.md",
+   "text": "A client spread across multiple worker processes is throttled at exactly the point one process would have been",
+   "line": 5,
+   "span": "A client spread across multiple worker processes is throttled at exactly the point one process would have been",
+   "anchored": true
+  },
+  {
+   "id": "M-008",
+   "source": "merged.md",
+   "text": "A client spread across multiple worker processes pays for the extra file descriptors as well",
+   "line": 5,
+   "span": "pays for the extra file descriptors as well",
+   "anchored": true
+  },
+  {
+   "id": "M-009",
+   "source": "merged.md",
+   "text": "The default allowance is 100 requests in a window",
+   "line": 7,
+   "span": "The default allowance is 100 requests in a window",
+   "anchored": true
+  },
+  {
+   "id": "M-010",
+   "source": "merged.md",
+   "text": "A credential marked for batch work is allowed 1000 requests in the same window",
+   "line": 7,
+   "span": "a credential marked for batch work is allowed 1000 in the same window",
+   "anchored": true
+  },
+  {
+   "id": "M-011",
+   "source": "merged.md",
+   "text": "Callers that retry at once are the largest single reason the cap is there at all",
+   "line": 7,
+   "span": "Callers that retry at once are the largest single reason the cap is there at all",
+   "anchored": true
+  },
+  {
+   "id": "M-012",
+   "source": "merged.md",
+   "text": "The refusal carries a Retry-After header",
+   "line": 11,
+   "span": "The refusal carries a Retry-After header",
+   "anchored": true
+  },
+  {
+   "id": "M-013",
+   "source": "merged.md",
+   "text": "The value of the Retry-After header is a whole number of seconds to wait",
+   "line": 11,
+   "span": "Its value is a whole number of seconds to wait",
+   "anchored": true
+  },
+  {
+   "id": "M-014",
+   "source": "merged.md",
+   "text": "The gateway keeps no memory of who backed off politely",
+   "line": 11,
+   "span": "The gateway keeps no memory of who backed off politely",
+   "anchored": true
+  },
+  {
+   "id": "M-015",
+   "source": "merged.md",
+   "text": "Waiting longer than the Retry-After header asks earns a caller no credit at all",
+   "line": 11,
+   "span": "waiting longer than the header asks earns a caller no credit at all",
+   "anchored": true
+  },
+  {
+   "id": "M-016",
+   "source": "merged.md",
+   "text": "The body of the refusal is JSON",
+   "line": 13,
+   "span": "The body of the refusal is JSON",
+   "anchored": true
+  },
+  {
+   "id": "M-017",
+   "source": "merged.md",
+   "text": "The body of the refusal names what the gateway calls the \"window\" it counted in",
+   "line": 13,
+   "span": "it names what the gateway calls the \"window\" it counted in",
+   "anchored": true
+  },
+  {
+   "id": "M-018",
+   "source": "merged.md",
+   "text": "The body of the refusal names the cap and the tier",
+   "line": 13,
+   "span": "It names the cap and the tier as well",
+   "anchored": true
+  },
+  {
+   "id": "M-019",
+   "source": "merged.md",
+   "text": "The gateway has already done that arithmetic with information the caller does not have",
+   "line": 19,
+   "span": "The gateway has already done that arithmetic, with information the caller does not have",
+   "anchored": true
+  },
+  {
+   "id": "M-020",
+   "source": "merged.md",
+   "text": "The gateway does the same arithmetic on the 503 path",
+   "line": 19,
+   "span": "it does the same on the 503 path",
+   "anchored": true
+  },
+  {
+   "id": "M-021",
+   "source": "merged.md",
+   "text": "A 200 wants nothing",
+   "line": 21,
+   "span": "A 200 wants nothing",
+   "anchored": true
+  },
+  {
+   "id": "M-022",
+   "source": "merged.md",
+   "text": "A 429 wants the stated wait",
+   "line": 21,
+   "span": "a 429 wants the stated wait",
+   "anchored": true
+  },
+  {
+   "id": "M-023",
+   "source": "merged.md",
+   "text": "A 500 may be retried once that wait has passed",
+   "line": 21,
+   "span": "a 500 may be retried once that wait has passed",
+   "anchored": true
+  },
+  {
+   "id": "M-024",
+   "source": "merged.md",
+   "text": "A 503 is the overload path",
+   "line": 21,
+   "span": "a 503 is the overload path",
+   "anchored": true
+  },
+  {
+   "id": "M-025",
+   "source": "merged.md",
+   "text": "The four cases are not interchangeable",
+   "line": 21,
+   "span": "The four cases are not interchangeable",
+   "anchored": true
+  },
+  {
+   "id": "M-026",
+   "source": "merged.md",
+   "text": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive",
+   "line": 21,
+   "span": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive",
+   "anchored": true
+  },
+  {
+   "id": "M-027",
+   "source": "merged.md",
+   "text": "A batch credential is allowed 1000 requests in a window",
+   "line": 23,
+   "span": "A batch credential is allowed 1000 requests in a window",
+   "anchored": true
+  },
+  {
+   "id": "M-028",
+   "source": "merged.md",
+   "text": "1000 is 50 times the default allowance",
+   "line": 23,
+   "span": "which is 50 times the default allowance",
+   "anchored": true
+  },
+  {
+   "id": "M-029",
+   "source": "merged.md",
+   "text": "A batch credential is measured over exactly the same window as the interactive case",
+   "line": 23,
+   "span": "it is measured over exactly the same window",
+   "anchored": true
+  },
+  {
+   "id": "M-030",
+   "source": "merged.md",
+   "text": "The tier is set on the credential when it is issued",
+   "line": 23,
+   "span": "The tier is set on the credential when it is issued",
+   "anchored": true
+  },
+  {
+   "id": "M-031",
+   "source": "merged.md",
+   "text": "The tier cannot be asked for per call",
+   "line": 23,
+   "span": "cannot be asked for per call",
+   "anchored": true
+  },
+  {
+   "id": "M-032",
+   "source": "merged.md",
+   "text": "The window, the header and the body are identical to the interactive case",
+   "line": 23,
+   "span": "The window, the header and the body are identical to the interactive case",
+   "anchored": true
+  },
+  {
+   "id": "M-033",
+   "source": "merged.md",
+   "text": "A client written for one tier needs no change at all to run against the other tier",
+   "line": 23,
+   "span": "a client written for one tier needs no change at all to run against the other",
+   "anchored": true
+  },
+  {
+   "id": "M-034",
+   "source": "merged.md",
+   "text": "Nothing else about the two tiers differs in any way",
+   "line": 23,
+   "span": "Nothing else about the two tiers differs in any way",
+   "anchored": true
+  },
+  {
+   "id": "M-035",
+   "source": "merged.md",
+   "text": "Nobody at the far end will assemble an argument for a larger cap on a caller's behalf",
+   "line": 25,
+   "span": "nobody at the far end will assemble that argument on its behalf",
+   "anchored": true
+  },
+  {
+   "id": "M-036",
+   "source": "merged.md",
+   "text": "Not all refusals are due to caps",
+   "line": 29,
+   "span": "Not all are caps",
+   "anchored": true
+  },
+  {
+   "id": "M-037",
+   "source": "merged.md",
+   "text": "The gateway refuses a request for three reasons",
+   "line": 29,
+   "span": "The gateway refuses a request for three reasons",
+   "anchored": true
+  },
+  {
+   "id": "M-038",
+   "source": "merged.md",
+   "text": "Only one of the three reasons the gateway refuses a request is the cap",
+   "line": 29,
+   "span": "only one of them is the one above",
+   "anchored": true
+  },
+  {
+   "id": "M-039",
+   "source": "merged.md",
+   "text": "A credential may be suspended",
+   "line": 29,
+   "span": "A credential may be suspended",
+   "anchored": true
+  },
+  {
+   "id": "M-040",
+   "source": "merged.md",
+   "text": "A route may be closed for maintenance",
+   "line": 29,
+   "span": "a route may be closed for maintenance",
+   "anchored": true
+  },
+  {
+   "id": "M-041",
+   "source": "merged.md",
+   "text": "A body may exceed the 5 megabyte limit",
+   "line": 29,
+   "span": "a body may exceed the 5 megabyte limit",
+   "anchored": true
+  },
+  {
+   "id": "M-042",
+   "source": "merged.md",
+   "text": "None of those three reasons clears itself by waiting for a stated number of seconds",
+   "line": 29,
+   "span": "None of those three clears itself by waiting for a stated number of seconds",
+   "anchored": true
+  },
+  {
+   "id": "M-043",
+   "source": "merged.md",
+   "text": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service",
+   "line": 31,
+   "span": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service",
+   "anchored": true
+  },
+  {
+   "id": "M-044",
+   "source": "merged.md",
+   "text": "The log afterwards shows nothing except a long run of refusals",
+   "line": 31,
+   "span": "the log afterwards shows nothing at all except a long run of refusals",
+   "anchored": true
+  },
+  {
+   "id": "M-045",
+   "source": "merged.md",
+   "text": "A cap can be raised",
+   "line": 35,
+   "span": "A cap can be raised",
+   "anchored": true
+  },
+  {
+   "id": "M-046",
+   "source": "merged.md",
+   "text": "The number of caps raised without a measurement behind them is 0",
+   "line": 35,
+   "span": "the number of caps raised without a measurement behind them is 0",
+   "anchored": true
+  },
+  {
+   "id": "M-047",
+   "source": "merged.md",
+   "text": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all",
+   "line": 35,
+   "span": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all",
+   "anchored": true
+  },
+  {
+   "id": "M-048",
+   "source": "merged.md",
+   "text": "The platform team looks at whether the load is smooth or bursty",
+   "line": 35,
+   "span": "The platform team looks at whether the load is smooth or bursty",
+   "anchored": true
+  },
+  {
+   "id": "M-049",
+   "source": "merged.md",
+   "text": "A burst is cheaper to smooth than it is to serve at its peak",
+   "line": 35,
+   "span": "a burst is cheaper to smooth than it is to serve at its peak",
+   "anchored": true
+  },
+  {
+   "id": "M-050",
+   "source": "merged.md",
+   "text": "Requests reach the platform team through the usual channel",
+   "line": 37,
+   "span": "Requests reach the platform team through the usual channel",
+   "anchored": true
+  },
+  {
+   "id": "M-051",
+   "source": "merged.md",
+   "text": "Requests are answered within two working days",
+   "line": 37,
+   "span": "they are answered within two working days",
+   "anchored": true
+  },
+  {
+   "id": "M-052",
+   "source": "merged.md",
+   "text": "There is no expedited path",
+   "line": 37,
+   "span": "There is no expedited path",
+   "anchored": true
+  },
+  {
+   "id": "M-053",
+   "source": "merged.md",
+   "text": "There is no exception list",
+   "line": 37,
+   "span": "no exception list",
+   "anchored": true
+  }
+ ],
+ "verdicts": [
+  {
+   "claim_id": "A-001",
+   "verdict": "SUPPORTED",
+   "evidence": "Every credential has a cap.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-002",
+   "verdict": "SUPPORTED",
+   "evidence": "When that cap is spent the gateway answers 429 at the edge — without waking the service behind it",
+   "evidence_source": "merged.md",
+   "rationale": "The text states that 429 is answered at the edge without waking the service.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-003",
+   "verdict": "SUPPORTED",
+   "evidence": "so the refusal costs the platform almost nothing",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-004",
+   "verdict": "SUPPORTED",
+   "evidence": "and costs a caller that files it under transport error a great deal.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-005",
+   "verdict": "SUPPORTED",
+   "evidence": "Requests are counted against the credential that presented them",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-006",
+   "verdict": "SUPPORTED",
+   "evidence": "over a fixed window of 60 seconds",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-007",
+   "verdict": "SUPPORTED",
+   "evidence": "and never against a connection.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-008",
+   "verdict": "SUPPORTED",
+   "evidence": "Opening a second socket therefore buys a caller nothing.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-009",
+   "verdict": "PARTIAL",
+   "evidence": "A client spread across multiple worker processes is throttled at exactly the point one process would have been.",
+   "evidence_source": "merged.md",
+   "rationale": "The text states the principle but says 'multiple' not 'eight' specifically.",
+   "direction": "source_to_merged",
+   "grounding": "transcription_error",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "A-010",
+   "verdict": "PARTIAL",
+   "evidence": "pays for the extra file descriptors as well",
+   "evidence_source": "merged.md",
+   "rationale": "The text states the principle but does not specify 'eight' processes.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-011",
+   "verdict": "SUPPORTED",
+   "evidence": "The default allowance is 100 requests in a window",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-012",
+   "verdict": "SUPPORTED",
+   "evidence": "and a credential marked for batch work is allowed 1000 in the same window.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-013",
+   "verdict": "SUPPORTED",
+   "evidence": "A refusal is not an outage, whatever the error class in a client library happens to call it.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-014",
+   "verdict": "SUPPORTED",
+   "evidence": "and waiting is the only correct answer.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-015",
+   "verdict": "SUPPORTED",
+   "evidence": "Callers that retry at once are the largest single reason the cap is there at all.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-016",
+   "verdict": "SUPPORTED",
+   "evidence": "The refusal carries a Retry-After header.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-017",
+   "verdict": "SUPPORTED",
+   "evidence": "Its value is a whole number of seconds to wait.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-018",
+   "verdict": "SUPPORTED",
+   "evidence": "Waiting that long and then continuing is the whole of the contract",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-019",
+   "verdict": "SUPPORTED",
+   "evidence": "a client that does it needs nothing else from this document.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-020",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway keeps no memory of who backed off politely",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-021",
+   "verdict": "SUPPORTED",
+   "evidence": "so waiting longer than the header asks earns a caller no credit at all.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-022",
+   "verdict": "SUPPORTED",
+   "evidence": "The body of the refusal is JSON",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-023",
+   "verdict": "SUPPORTED",
+   "evidence": "and it names what the gateway calls the \"window\" it counted in.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-024",
+   "verdict": "SUPPORTED",
+   "evidence": "It names the cap and the tier as well.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-025",
+   "verdict": "SUPPORTED",
+   "evidence": "None of those fields is a substitute for the header",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-026",
+   "verdict": "SUPPORTED",
+   "evidence": "a caller that parses the body to compute its own wait is doing the same arithmetic twice",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-027",
+   "verdict": "SUPPORTED",
+   "evidence": "The body is there so that a human reading a log afterwards can see why the request was refused",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-028",
+   "verdict": "SUPPORTED",
+   "evidence": "nothing in it is meant for the retry loop.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-029",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway has already done that arithmetic, with information the caller does not have",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-030",
+   "verdict": "SUPPORTED",
+   "evidence": "and it does the same on the 503 path.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-031",
+   "verdict": "SUPPORTED",
+   "evidence": "A wait derived on the client side is a guess about a counter it cannot see.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-032",
+   "verdict": "SUPPORTED",
+   "evidence": "There is no case at all where a guess is the better of the two.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-033",
+   "verdict": "SUPPORTED",
+   "evidence": "A 200 wants nothing",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-034",
+   "verdict": "SUPPORTED",
+   "evidence": "a 429 wants the stated wait",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-035",
+   "verdict": "SUPPORTED",
+   "evidence": "a 500 may be retried once that wait has passed",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-036",
+   "verdict": "SUPPORTED",
+   "evidence": "and a 503 is the overload path.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-037",
+   "verdict": "SUPPORTED",
+   "evidence": "The four cases are not interchangeable.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-038",
+   "verdict": "SUPPORTED",
+   "evidence": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-039",
+   "verdict": "SUPPORTED",
+   "evidence": "A batch credential is allowed 1000 requests in a window, which is 50 times the default allowance",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states batch allows 1000 which is 50 times the default.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-040",
+   "verdict": "SUPPORTED",
+   "evidence": "and it is measured over exactly the same window.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-041",
+   "verdict": "SUPPORTED",
+   "evidence": "The tier is set on the credential when it is issued",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-042",
+   "verdict": "SUPPORTED",
+   "evidence": "and cannot be asked for per call.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-043",
+   "verdict": "SUPPORTED",
+   "evidence": "Nothing else about the two tiers differs in any way.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-044",
+   "verdict": "PARTIAL",
+   "evidence": "A caller that cannot say how often it was refused cannot argue for a larger cap",
+   "evidence_source": "merged.md",
+   "rationale": "The text does not specify 'last week' but logs should be kept for at least a week.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-045",
+   "verdict": "SUPPORTED",
+   "evidence": "and nobody at the far end will assemble that argument on its behalf.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-046",
+   "verdict": "SUPPORTED",
+   "evidence": "The log line should carry the credential, the window and the wait.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-047",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway refuses a request for three reasons",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-048",
+   "verdict": "SUPPORTED",
+   "evidence": "and only one of them is the one above.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-049",
+   "verdict": "SUPPORTED",
+   "evidence": "A credential may be suspended",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-050",
+   "verdict": "SUPPORTED",
+   "evidence": "a route may be closed for maintenance",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-051",
+   "verdict": "SUPPORTED",
+   "evidence": "or a body may exceed the 5 megabyte limit.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-052",
+   "verdict": "SUPPORTED",
+   "evidence": "None of those three clears itself by waiting for a stated number of seconds.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-053",
+   "verdict": "SUPPORTED",
+   "evidence": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-054",
+   "verdict": "SUPPORTED",
+   "evidence": "and the log afterwards shows nothing at all except a long run of refusals.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-055",
+   "verdict": "SUPPORTED",
+   "evidence": "Reading the status code rather than the class it belongs to is what separates the two cases",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-056",
+   "verdict": "SUPPORTED",
+   "evidence": "and it costs one comparison.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-057",
+   "verdict": "SUPPORTED",
+   "evidence": "A cap can be raised",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-058",
+   "verdict": "SUPPORTED",
+   "evidence": "and the number of caps raised without a measurement behind them is 0.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-059",
+   "verdict": "SUPPORTED",
+   "evidence": "a burst is cheaper to smooth than it is to serve at its peak.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-060",
+   "verdict": "SUPPORTED",
+   "evidence": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-061",
+   "verdict": "SUPPORTED",
+   "evidence": "Requests reach the platform team through the usual channel",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-062",
+   "verdict": "SUPPORTED",
+   "evidence": "and they are answered within two working days.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-063",
+   "verdict": "SUPPORTED",
+   "evidence": "There is no expedited path",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-064",
+   "verdict": "SUPPORTED",
+   "evidence": "and no exception list.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-001",
+   "verdict": "SUPPORTED",
+   "evidence": "Every credential has a cap.",
+   "evidence_source": "merged.md",
+   "rationale": "Same meaning as 'every credential has a cap of its own' in context.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-002",
+   "verdict": "SUPPORTED",
+   "evidence": "When that cap is spent the gateway answers 429 at the edge — without waking the service behind it",
+   "evidence_source": "merged.md",
+   "rationale": "'without waking' conveys same meaning as 'without troubling'.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-003",
+   "verdict": "SUPPORTED",
+   "evidence": "Requests are counted against the credential that presented them...and never against a connection.",
+   "evidence_source": "merged.md",
+   "rationale": "The text states requests are counted against credential, not connection.",
+   "direction": "source_to_merged",
+   "grounding": "transcription_error",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-004",
+   "verdict": "SUPPORTED",
+   "evidence": "over a fixed window of 60 seconds",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-005",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not mention whether the gateway discloses the start of the window.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-006",
+   "verdict": "SUPPORTED",
+   "evidence": "The count follows the credential wherever the caller happens to put it",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-007",
+   "verdict": "SUPPORTED",
+   "evidence": "including across hosts.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-008",
+   "verdict": "SUPPORTED",
+   "evidence": "A client spread across multiple worker processes is throttled at exactly the point one process would have been",
+   "evidence_source": "merged.md",
+   "rationale": "'many' and 'multiple' convey the same meaning in this context.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-009",
+   "verdict": "SUPPORTED",
+   "evidence": "The default allowance is 100 requests in a window",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-010",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not state that callers needing more than 100 are almost always doing batch work under an interactive credential.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-011",
+   "verdict": "SUPPORTED",
+   "evidence": "Callers that retry at once are the largest single reason the cap is there at all.",
+   "evidence_source": "merged.md",
+   "rationale": "'immediately' and 'at once' have identical meaning.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-012",
+   "verdict": "SUPPORTED",
+   "evidence": "The refusal carries a Retry-After header.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-013",
+   "verdict": "SUPPORTED",
+   "evidence": "Its value is a whole number of seconds to wait.",
+   "evidence_source": "merged.md",
+   "rationale": "The text includes the stated claim that it is a whole number of seconds.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-014",
+   "verdict": "SUPPORTED",
+   "evidence": "The refusal carries a Retry-After header.",
+   "evidence_source": "merged.md",
+   "rationale": "In a documentation section on how to read a refusal, stating the refusal carries this header means it is present on refusals.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-015",
+   "verdict": "SUPPORTED",
+   "evidence": "Waiting that long and then continuing is the whole of the contract",
+   "evidence_source": "merged.md",
+   "rationale": "'entire' and 'whole' convey the same meaning.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-016",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway keeps no memory of who backed off politely",
+   "evidence_source": "merged.md",
+   "rationale": "Gateway not keeping score is equivalent to not keeping memory of who backed off.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-017",
+   "verdict": "SUPPORTED",
+   "evidence": "The body of the refusal is JSON",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-018",
+   "verdict": "PARTIAL",
+   "evidence": "It names the cap and the tier as well",
+   "evidence_source": "merged.md",
+   "rationale": "Text states these are named but does not specify they are 'plain fields' specifically.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-019",
+   "verdict": "SUPPORTED",
+   "evidence": "None of those fields is a substitute for the header",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-020",
+   "verdict": "SUPPORTED",
+   "evidence": "Four rules",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states there are four rules.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-021",
+   "verdict": "SUPPORTED",
+   "evidence": "given in the order they should be applied.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-022",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway has already done that arithmetic",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-023",
+   "verdict": "SUPPORTED",
+   "evidence": "with information the caller does not have",
+   "evidence_source": "merged.md",
+   "rationale": "'cannot see' conveys same meaning as 'does not have'.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-024",
+   "verdict": "SUPPORTED",
+   "evidence": "and it does the same on the 503 path.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-025",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not state that the cause of refusal is an entirely different one.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-026",
+   "verdict": "PARTIAL",
+   "evidence": "A wait derived on the client side is a guess",
+   "evidence_source": "merged.md",
+   "rationale": "Text specifies 'wait' not 'anything computed', limiting the claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-027",
+   "verdict": "SUPPORTED",
+   "evidence": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive.",
+   "evidence_source": "merged.md",
+   "rationale": "This necessarily entails that safe retry set is smaller than all non-success responses.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-028",
+   "verdict": "SUPPORTED",
+   "evidence": "A 200 wants nothing",
+   "evidence_source": "merged.md",
+   "rationale": "'needs' and 'wants' have identical meaning in this context.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-029",
+   "verdict": "SUPPORTED",
+   "evidence": "a 429 wants the stated wait",
+   "evidence_source": "merged.md",
+   "rationale": "'needs' and 'wants' have identical meaning in this context.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-030",
+   "verdict": "SUPPORTED",
+   "evidence": "a 500 may be retried once that wait has passed",
+   "evidence_source": "merged.md",
+   "rationale": "'can' and 'may' have identical meaning in this context.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-031",
+   "verdict": "SUPPORTED",
+   "evidence": "a 503 is the overload path.",
+   "evidence_source": "merged.md",
+   "rationale": "'overload path' means the platform itself is overloaded.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-032",
+   "verdict": "PARTIAL",
+   "evidence": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive.",
+   "evidence_source": "merged.md",
+   "rationale": "Text says 'every non-success' not specifically 'all four' status codes mentioned.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-033",
+   "verdict": "SUPPORTED",
+   "evidence": "and a credential marked for batch work is allowed 1000 in the same window.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-034",
+   "verdict": "SUPPORTED",
+   "evidence": "which is 50 times the default allowance",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-035",
+   "verdict": "PARTIAL",
+   "evidence": "and it is measured over exactly the same window.",
+   "evidence_source": "merged.md",
+   "rationale": "Text states the window is the same but does not explicitly say the counting scheme is not separate.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-036",
+   "verdict": "SUPPORTED",
+   "evidence": "The window, the header and the body are identical to the interactive case",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-037",
+   "verdict": "SUPPORTED",
+   "evidence": "a client written for one tier needs no change at all to run against the other",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states this claim in the section describing batch tier handling.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-038",
+   "verdict": "SUPPORTED",
+   "evidence": "Nothing else about the two tiers differs in any way",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states this in the batch tier section.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-039",
+   "verdict": "SUPPORTED",
+   "evidence": "Keep the log for at least a week",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states this requirement exactly in the section on how to retry well.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-040",
+   "verdict": "SUPPORTED",
+   "evidence": "A caller that cannot say how often it was refused cannot argue for a larger cap",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states this claim with the same meaning in the cap increase section.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-041",
+   "verdict": "SUPPORTED",
+   "evidence": "nobody at the far end will assemble that argument on its behalf",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states this as part of describing the caller's responsibility to provide data.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-042",
+   "verdict": "CONTRADICTED",
+   "evidence": "Bring a week of refusal counts, the shape of the traffic across the day, and the deadline that traffic is serving",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text requires counts plus traffic shape plus deadline, contradicting that counts alone are sufficient.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-043",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway refuses a request for three reasons",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states this in the section on other refusals.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-044",
+   "verdict": "SUPPORTED",
+   "evidence": "only one of them is the one above",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states that of the three reasons, only one is the cap-related refusal.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-045",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text lists three refusal reasons but does not specify how many relate to traffic volume in the current window.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-046",
+   "verdict": "SUPPORTED",
+   "evidence": "A credential may be suspended",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text lists suspension of a credential as one of three refusal reasons.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-047",
+   "verdict": "SUPPORTED",
+   "evidence": "a route may be closed for maintenance",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states routes may be closed for maintenance; repair is a type of maintenance.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-048",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text mentions the 5 megabyte body limit but does not specify when the refusal occurs relative to reading.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-049",
+   "verdict": "SUPPORTED",
+   "evidence": "spends its whole budget without ever reaching the service",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text describes this outcome for retry loops against suspended credentials.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-050",
+   "verdict": "SUPPORTED",
+   "evidence": "the log afterwards shows nothing at all except a long run of refusals",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states what the log shows in this scenario.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-051",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "While the text describes budget being spent, it does not explicitly state the budget is the caller's own.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-052",
+   "verdict": "SUPPORTED",
+   "evidence": "usually gets what it needs without any change to the cap at all",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states that shifting work to quieter hours usually achieves the caller's goals without a cap increase.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-053",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not state that moving work to quieter hours is available to almost everybody.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-054",
+   "verdict": "SUPPORTED",
+   "evidence": "A cap can be raised",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly opens the cap increase section with this statement.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-055",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text states caps need measurements behind them but does not specify they must be assertions of the cap being too small.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-056",
+   "verdict": "PARTIAL",
+   "evidence": "The platform team looks at whether the load is smooth or bursty",
+   "evidence_source": "merged.md",
+   "rationale": "The text states the team examines load characteristics but does not explicitly specify the temporal order of investigation.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-057",
+   "verdict": "SUPPORTED",
+   "evidence": "a burst is cheaper to smooth than it is to serve at its peak",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states this directly in the discussion of load shape.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-058",
+   "verdict": "SUPPORTED",
+   "evidence": "Requests reach the platform team through the usual channel",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states requests reach the team through the usual channel; reach and go convey the same meaning.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-059",
+   "verdict": "SUPPORTED",
+   "evidence": "There is no expedited path",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states this as a constraint on the process.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-060",
+   "verdict": "SUPPORTED",
+   "evidence": "they are answered within two working days",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text states the timeframe for responses.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-061",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text notes no expedited path exists but does not explicitly state that attempting to expedite will not reduce the timeframe.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "M-001",
+   "verdict": "SUPPORTED",
+   "evidence": "Every credential has a cap.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-002",
+   "verdict": "SUPPORTED",
+   "evidence": "When that cap is spent the gateway answers 429 at the edge",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-003",
+   "verdict": "SUPPORTED",
+   "evidence": "Requests are counted against the credential that presented them, over a fixed window of 60 seconds",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-004",
+   "verdict": "SUPPORTED",
+   "evidence": "and never against a connection.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-005",
+   "verdict": "SUPPORTED",
+   "evidence": "Opening a second socket therefore buys a caller nothing.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-006",
+   "verdict": "SUPPORTED",
+   "evidence": "The count follows the credential wherever the caller happens to put it, including across hosts.",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-007",
+   "verdict": "SUPPORTED",
+   "evidence": "A client spread across eight worker processes is throttled at exactly the point one process would have been",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-008",
+   "verdict": "SUPPORTED",
+   "evidence": "and pays for the extra file descriptors as well.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-009",
+   "verdict": "SUPPORTED",
+   "evidence": "The default allowance is 100 requests in a window",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-010",
+   "verdict": "SUPPORTED",
+   "evidence": "and a credential marked for batch work is allowed 1000 in the same window.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-011",
+   "verdict": "SUPPORTED",
+   "evidence": "Callers that retry at once are the largest single reason the cap is there at all.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-012",
+   "verdict": "SUPPORTED",
+   "evidence": "The refusal carries a Retry-After header.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-013",
+   "verdict": "SUPPORTED",
+   "evidence": "Its value is a whole number of seconds to wait.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-014",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway keeps no memory of who backed off politely",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-015",
+   "verdict": "SUPPORTED",
+   "evidence": "Waiting longer than the header asks earns a caller no credit at all.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-016",
+   "verdict": "SUPPORTED",
+   "evidence": "The body of the refusal is JSON",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-017",
+   "verdict": "SUPPORTED",
+   "evidence": "and it names what the gateway calls the \"window\" it counted in.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "transcription_error",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": false
+  },
+  {
+   "claim_id": "M-018",
+   "verdict": "SUPPORTED",
+   "evidence": "It names the cap and the tier as well.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-019",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway has already done that arithmetic, with information the caller does not have",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-020",
+   "verdict": "SUPPORTED",
+   "evidence": "and it does the same on the 503 path.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-021",
+   "verdict": "SUPPORTED",
+   "evidence": "A 200 wants nothing",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-022",
+   "verdict": "SUPPORTED",
+   "evidence": "a 429 wants the stated wait",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-023",
+   "verdict": "SUPPORTED",
+   "evidence": "a 500 may be retried once that wait has passed",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-024",
+   "verdict": "SUPPORTED",
+   "evidence": "and a 503 is the overload path.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-025",
+   "verdict": "SUPPORTED",
+   "evidence": "The four cases are not interchangeable.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-026",
+   "verdict": "SUPPORTED",
+   "evidence": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-027",
+   "verdict": "SUPPORTED",
+   "evidence": "A batch credential is allowed 1000 requests in a window",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-028",
+   "verdict": "SUPPORTED",
+   "evidence": "which is 50 times the default",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-029",
+   "verdict": "SUPPORTED",
+   "evidence": "The window, the header and the body are identical to the interactive case",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-030",
+   "verdict": "SUPPORTED",
+   "evidence": "The tier is set on the credential when it is issued",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-031",
+   "verdict": "SUPPORTED",
+   "evidence": "and cannot be asked for per call.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-032",
+   "verdict": "SUPPORTED",
+   "evidence": "The window, the header and the body are identical to the interactive case",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-033",
+   "verdict": "SUPPORTED",
+   "evidence": "so a client written for one tier needs no change at all to run against the other.",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-034",
+   "verdict": "SUPPORTED",
+   "evidence": "Nothing else about the two tiers differs in any way.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-035",
+   "verdict": "SUPPORTED",
+   "evidence": "nobody at the far end will assemble that argument on its behalf.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-036",
+   "verdict": "SUPPORTED",
+   "evidence": "Not all are caps.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-037",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway refuses a request for three reasons and only one of them is the one above.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-038",
+   "verdict": "SUPPORTED",
+   "evidence": "The gateway refuses a request for three reasons and only one of them is the one above.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-039",
+   "verdict": "SUPPORTED",
+   "evidence": "A credential may be suspended",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-040",
+   "verdict": "SUPPORTED",
+   "evidence": "a route may be closed for maintenance",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-041",
+   "verdict": "SUPPORTED",
+   "evidence": "or a body may exceed the 5 megabyte limit.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-042",
+   "verdict": "SUPPORTED",
+   "evidence": "None of those three clears itself by waiting for a stated number of seconds.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-043",
+   "verdict": "SUPPORTED",
+   "evidence": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-044",
+   "verdict": "SUPPORTED",
+   "evidence": "and the log afterwards shows nothing at all except a long run of refusals.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-045",
+   "verdict": "SUPPORTED",
+   "evidence": "A cap can be raised",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-046",
+   "verdict": "SUPPORTED",
+   "evidence": "the number of caps raised without a measurement behind them is 0.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-047",
+   "verdict": "SUPPORTED",
+   "evidence": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-048",
+   "verdict": "SUPPORTED",
+   "evidence": "The platform team looks at whether the load is smooth or bursty",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-049",
+   "verdict": "SUPPORTED",
+   "evidence": "a burst is cheaper to smooth than it is to serve at its peak.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-050",
+   "verdict": "SUPPORTED",
+   "evidence": "Requests reach the platform team through the usual channel",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-051",
+   "verdict": "SUPPORTED",
+   "evidence": "they are answered within two working days.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-052",
+   "verdict": "SUPPORTED",
+   "evidence": "There is no expedited path and no exception list.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-053",
+   "verdict": "SUPPORTED",
+   "evidence": "There is no expedited path and no exception list.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states this claim directly.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  }
+ ],
+ "findings": [
+  {
+   "claim_id": "A-009",
+   "verdict": "PARTIAL",
+   "evidence": "A client spread across multiple worker processes is throttled at exactly the point one process would have been.",
+   "evidence_source": "merged.md",
+   "rationale": "The text states the principle but says 'multiple' not 'eight' specifically.",
+   "direction": "source_to_merged",
+   "grounding": "transcription_error",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "A-010",
+   "verdict": "PARTIAL",
+   "evidence": "pays for the extra file descriptors as well",
+   "evidence_source": "merged.md",
+   "rationale": "The text states the principle but does not specify 'eight' processes.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-044",
+   "verdict": "PARTIAL",
+   "evidence": "A caller that cannot say how often it was refused cannot argue for a larger cap",
+   "evidence_source": "merged.md",
+   "rationale": "The text does not specify 'last week' but logs should be kept for at least a week.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-005",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not mention whether the gateway discloses the start of the window.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-010",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not state that callers needing more than 100 are almost always doing batch work under an interactive credential.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-018",
+   "verdict": "PARTIAL",
+   "evidence": "It names the cap and the tier as well",
+   "evidence_source": "merged.md",
+   "rationale": "Text states these are named but does not specify they are 'plain fields' specifically.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-025",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not state that the cause of refusal is an entirely different one.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-026",
+   "verdict": "PARTIAL",
+   "evidence": "A wait derived on the client side is a guess",
+   "evidence_source": "merged.md",
+   "rationale": "Text specifies 'wait' not 'anything computed', limiting the claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-032",
+   "verdict": "PARTIAL",
+   "evidence": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive.",
+   "evidence_source": "merged.md",
+   "rationale": "Text says 'every non-success' not specifically 'all four' status codes mentioned.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-035",
+   "verdict": "PARTIAL",
+   "evidence": "and it is measured over exactly the same window.",
+   "evidence_source": "merged.md",
+   "rationale": "Text states the window is the same but does not explicitly say the counting scheme is not separate.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-042",
+   "verdict": "CONTRADICTED",
+   "evidence": "Bring a week of refusal counts, the shape of the traffic across the day, and the deadline that traffic is serving",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text requires counts plus traffic shape plus deadline, contradicting that counts alone are sufficient.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "contradicted",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-045",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text lists three refusal reasons but does not specify how many relate to traffic volume in the current window.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-048",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text mentions the 5 megabyte body limit but does not specify when the refusal occurs relative to reading.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-051",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "While the text describes budget being spent, it does not explicitly state the budget is the caller's own.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-053",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text does not state that moving work to quieter hours is available to almost everybody.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-055",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text states caps need measurements behind them but does not specify they must be assertions of the cap being too small.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  },
+  {
+   "claim_id": "B-056",
+   "verdict": "PARTIAL",
+   "evidence": "The platform team looks at whether the load is smooth or bursty",
+   "evidence_source": "merged.md",
+   "rationale": "The text states the team examines load characteristics but does not explicitly specify the temporal order of investigation.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "partially_dropped",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-061",
+   "verdict": "MISSING",
+   "evidence": "",
+   "evidence_source": "",
+   "rationale": "The reference text notes no expedited path exists but does not explicitly state that attempting to expedite will not reduce the timeframe.",
+   "direction": "source_to_merged",
+   "grounding": "not_graded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "dropped",
+   "grounded": false
+  }
+ ],
+ "review_queue": [],
+ "declarations": [
+  {
+   "segment": "a6",
+   "disposition": "reworded",
+   "grade": "rejected",
+   "detail": "declared 'reworded', which predicts SUPPORTED; A-009 came back PARTIAL, A-010 came back PARTIAL",
+   "claims": [
+    "A-009",
+    "A-010"
+   ],
+   "reason": "Changed specific count to general term for clarity.",
+   "replacement": "A client spread across multiple worker processes is throttled at exactly the point one process would have been — and pays for the extra file descriptors as well."
+  },
+  {
+   "segment": "a18",
+   "disposition": "reworded",
+   "grade": "confirmed",
+   "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+   "claims": [
+    "A-025",
+    "A-026"
+   ],
+   "reason": "Incorporated detail from source_b about client-side disagreement.",
+   "replacement": "None of those fields is a substitute for the header, and a caller that parses the body to compute its own wait is doing the same arithmetic twice and writing code whose only possible future is to disagree with the gateway it is talking to."
+  },
+  {
+   "segment": "a32",
+   "disposition": "reworded",
+   "grade": "confirmed",
+   "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+   "claims": [
+    "A-039",
+    "A-040"
+   ],
+   "reason": "Specified numeric allowance and ratio for precision.",
+   "replacement": "A batch credential is allowed 1000 requests in a window, which is 50 times the default allowance, and it is measured over exactly the same window."
+  },
+  {
+   "segment": "a36",
+   "disposition": "reworded",
+   "grade": "rejected",
+   "detail": "declared 'reworded', which predicts SUPPORTED; A-044 came back PARTIAL",
+   "claims": [
+    "A-044"
+   ],
+   "reason": "Removed time reference for general applicability.",
+   "replacement": "A caller that cannot say how often it was refused cannot argue for a larger cap, and nobody at the far end will assemble that argument on its behalf."
+  },
+  {
+   "segment": "b1",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Rate limiting and the 429 contract for gateway clients' and says so",
+   "claims": [],
+   "reason": "Base document title chosen for better coverage.",
+   "replacement": "# Rate limiting and the 429 contract for gateway clients"
+  },
+  {
+   "segment": "b2",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-001"
+   ],
+   "reason": "Same fact stated in a2.",
+   "replacement": "Every credential has a cap."
+  },
+  {
+   "segment": "b3",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-002"
+   ],
+   "reason": "Content absorbed in opening explanation.",
+   "replacement": "When that cap is spent the gateway answers 429 at the edge — without waking the service behind it — so the refusal costs the platform almost nothing and costs a caller that files it under transport error a great deal."
+  },
+  {
+   "segment": "b4",
+   "disposition": "dropped",
+   "grade": "confirmed",
+   "detail": "no claim was drawn from this segment, and its text is not in the merge, which is what 'dropped' says happened to it",
+   "claims": [],
+   "reason": "Meta-commentary on document drafting, not core guidance.",
+   "replacement": ""
+  },
+  {
+   "segment": "b5",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-003",
+    "B-004"
+   ],
+   "reason": "Factual content covered by a4.",
+   "replacement": "Requests are counted against the credential that presented them, over a fixed window of 60 seconds, and never against a connection."
+  },
+  {
+   "segment": "b6",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Same guidance in first paragraph.",
+   "replacement": "Opening a second socket therefore buys a caller nothing."
+  },
+  {
+   "segment": "b7",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-006",
+    "B-007"
+   ],
+   "reason": "Additional detail incorporated into first paragraph.",
+   "replacement": "The count follows the credential wherever the caller happens to put it, including across hosts."
+  },
+  {
+   "segment": "b8",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-008"
+   ],
+   "reason": "Same guidance as a6 in first paragraph.",
+   "replacement": "A client spread across multiple worker processes is throttled at exactly the point one process would have been — and pays for the extra file descriptors as well."
+  },
+  {
+   "segment": "b9",
+   "disposition": "subsumed",
+   "grade": "rejected",
+   "detail": "declared 'subsumed', which predicts SUPPORTED; B-010 came back MISSING",
+   "claims": [
+    "B-010"
+   ],
+   "reason": "Allowance information covered by a7.",
+   "replacement": "The default allowance is 100 requests in a window, and a credential marked for batch work is allowed 1000 in the same window."
+  },
+  {
+   "segment": "b10",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Same explanation of refusals in first section.",
+   "replacement": "A refusal is not an outage, whatever the error class in a client library happens to call it. It is the platform declining to spend capacity that has already been promised to somebody else, and waiting is the only correct answer."
+  },
+  {
+   "segment": "b11",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-011"
+   ],
+   "reason": "Retry behavior explained in a10.",
+   "replacement": "Callers that retry at once are the largest single reason the cap is there at all."
+  },
+  {
+   "segment": "b12",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Header identification covered by a12.",
+   "replacement": "The refusal carries a Retry-After header."
+  },
+  {
+   "segment": "b13",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-012"
+   ],
+   "reason": "Header format explained in a13.",
+   "replacement": "Its value is a whole number of seconds to wait."
+  },
+  {
+   "segment": "b14",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-013",
+    "B-014"
+   ],
+   "reason": "Contract defined in a14.",
+   "replacement": "Waiting that long and then continuing is the whole of the contract — a client that does it needs nothing else from this document."
+  },
+  {
+   "segment": "b15",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-015"
+   ],
+   "reason": "No reward for excess waiting explained in a15.",
+   "replacement": "The gateway keeps no memory of who backed off politely, so waiting longer than the header asks earns a caller no credit at all."
+  },
+  {
+   "segment": "b16",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-016"
+   ],
+   "reason": "Response body described in a16-a17.",
+   "replacement": "The body of the refusal is JSON, and it names what the gateway calls the \"window\" it counted in."
+  },
+  {
+   "segment": "b17",
+   "disposition": "reconciled",
+   "grade": "rejected",
+   "detail": "declared 'reconciled', which predicts SUPPORTED; B-018 came back PARTIAL",
+   "claims": [
+    "B-018"
+   ],
+   "reason": "Phrase combined with a18 to convey both sources' cautions.",
+   "replacement": "None of those fields is a substitute for the header, and a caller that parses the body to compute its own wait is doing the same arithmetic twice and writing code whose only possible future is to disagree with the gateway it is talking to."
+  },
+  {
+   "segment": "b18",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+   "claims": [
+    "B-019"
+   ],
+   "reason": "a19 provides more detail about body purpose.",
+   "replacement": "The body is there so that a human reading a log afterwards can see why the request was refused — nothing in it is meant for the retry loop."
+  },
+  {
+   "segment": "b19",
+   "disposition": "superseded",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+   "claims": [],
+   "reason": "Base section heading used instead.",
+   "replacement": "## How to retry well"
+  },
+  {
+   "segment": "b20",
+   "disposition": "superseded",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+   "claims": [],
+   "reason": "a21 states the same introduction.",
+   "replacement": "Four rules, given in the order they should be applied."
+  },
+  {
+   "segment": "b21",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+   "claims": [
+    "B-020",
+    "B-021"
+   ],
+   "reason": "a22 chosen for its emphatic phrasing.",
+   "replacement": "1. Honour the header, every time."
+  },
+  {
+   "segment": "b22",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Same reasoning in a23.",
+   "replacement": "The gateway has already done that arithmetic, with information the caller does not have, and it does the same on the 503 path."
+  },
+  {
+   "segment": "b23",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-022",
+    "B-023"
+   ],
+   "reason": "503 path rule covered in a23.",
+   "replacement": "The gateway has already done that arithmetic, with information the caller does not have, and it does the same on the 503 path."
+  },
+  {
+   "segment": "b24",
+   "disposition": "subsumed",
+   "grade": "rejected",
+   "detail": "declared 'subsumed', which predicts SUPPORTED; B-025 came back MISSING",
+   "claims": [
+    "B-025"
+   ],
+   "reason": "Same concept in a24.",
+   "replacement": "A wait derived on the client side is a guess about a counter it cannot see."
+  },
+  {
+   "segment": "b25",
+   "disposition": "subsumed",
+   "grade": "rejected",
+   "detail": "declared 'subsumed', which predicts SUPPORTED; B-026 came back PARTIAL",
+   "claims": [
+    "B-026"
+   ],
+   "reason": "Same conclusion in a25.",
+   "replacement": "There is no case at all where a guess is the better of the two."
+  },
+  {
+   "segment": "b26",
+   "disposition": "superseded",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+   "claims": [],
+   "reason": "a26 chosen for conciseness.",
+   "replacement": "2. Retry only what is safe to retry."
+  },
+  {
+   "segment": "b27",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Same status code guidance in a27.",
+   "replacement": "A 200 wants nothing, a 429 wants the stated wait, a 500 may be retried once that wait has passed, and a 503 is the overload path."
+  },
+  {
+   "segment": "b28",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-028",
+    "B-029",
+    "B-030",
+    "B-031"
+   ],
+   "reason": "Same danger identified in a29.",
+   "replacement": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive."
+  },
+  {
+   "segment": "b29",
+   "disposition": "subsumed",
+   "grade": "rejected",
+   "detail": "declared 'subsumed', which predicts SUPPORTED; B-032 came back PARTIAL",
+   "claims": [
+    "B-032"
+   ],
+   "reason": "Same avoidance recommendation in a30.",
+   "replacement": "Avoid writing that loop."
+  },
+  {
+   "segment": "b30",
+   "disposition": "reconciled",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'reconciled' is what happened to it",
+   "claims": [],
+   "reason": "Numeric detail from b30 combined with a32.",
+   "replacement": "A batch credential is allowed 1000 requests in a window, which is 50 times the default allowance, and it is measured over exactly the same window."
+  },
+  {
+   "segment": "b31",
+   "disposition": "reconciled",
+   "grade": "rejected",
+   "detail": "declared 'reconciled', which predicts SUPPORTED; B-035 came back PARTIAL",
+   "claims": [
+    "B-035"
+   ],
+   "reason": "Compatibility assurance from b31 added to rule 3.",
+   "replacement": "The window, the header and the body are identical to the interactive case, so a client written for one tier needs no change at all to run against the other."
+  },
+  {
+   "segment": "b32",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-036",
+    "B-037"
+   ],
+   "reason": "Same statement in a34.",
+   "replacement": "Nothing else about the two tiers differs in any way."
+  },
+  {
+   "segment": "b33",
+   "disposition": "reconciled",
+   "grade": "confirmed",
+   "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-038"
+   ],
+   "reason": "Retention requirement from b33 combined with a35-a37.",
+   "replacement": "Log every refusal seen. A caller that cannot say how often it was refused cannot argue for a larger cap, and nobody at the far end will assemble that argument on its behalf. The log line should carry the credential, the window and the wait. Keep the log for at least a week."
+  },
+  {
+   "segment": "b34",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-039"
+   ],
+   "reason": "Same guidance in a36.",
+   "replacement": "A caller that cannot say how often it was refused cannot argue for a larger cap, and nobody at the far end will assemble that argument on its behalf."
+  },
+  {
+   "segment": "b35",
+   "disposition": "dropped",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'dropped' is what happened to it",
+   "claims": [],
+   "reason": "Philosophical point about argument strength not needed.",
+   "replacement": ""
+  },
+  {
+   "segment": "b36",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+   "claims": [
+    "B-042"
+   ],
+   "reason": "Base section heading used.",
+   "replacement": "## Other refusals and their codes"
+  },
+  {
+   "segment": "b37",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Same enumeration in a39.",
+   "replacement": "The gateway refuses a request for three reasons and only one of them is the one above."
+  },
+  {
+   "segment": "b38",
+   "disposition": "dropped",
+   "grade": "rejected",
+   "detail": "declared 'dropped', which predicts MISSING; B-043 came back SUPPORTED, B-044 came back SUPPORTED",
+   "claims": [
+    "B-043",
+    "B-044"
+   ],
+   "reason": "Distinction between traffic and non-traffic reasons implicit.",
+   "replacement": ""
+  },
+  {
+   "segment": "b39",
+   "disposition": "superseded",
+   "grade": "rejected",
+   "detail": "declared 'superseded', which predicts SUPPORTED or CONTRADICTED or PARTIAL; B-045 came back MISSING",
+   "claims": [
+    "B-045"
+   ],
+   "reason": "a40 lists the same three reasons.",
+   "replacement": "A credential may be suspended, a route may be closed for maintenance, or a body may exceed the 5 megabyte limit."
+  },
+  {
+   "segment": "b40",
+   "disposition": "subsumed",
+   "grade": "rejected",
+   "detail": "declared 'subsumed', which predicts SUPPORTED; B-048 came back MISSING",
+   "claims": [
+    "B-048"
+   ],
+   "reason": "Same point in a42.",
+   "replacement": "The distinction matters to a retry loop."
+  },
+  {
+   "segment": "b41",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Same warning in a43.",
+   "replacement": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service — and the log afterwards shows nothing at all except a long run of refusals."
+  },
+  {
+   "segment": "b42",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-049"
+   ],
+   "reason": "Same consequence in a43.",
+   "replacement": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service — and the log afterwards shows nothing at all except a long run of refusals."
+  },
+  {
+   "segment": "b43",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+   "claims": [
+    "B-050"
+   ],
+   "reason": "a49 provides same advice with clearer framing.",
+   "replacement": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all, which is the outcome everyone prefers."
+  },
+  {
+   "segment": "b44",
+   "disposition": "dropped",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'dropped' is what happened to it",
+   "claims": [],
+   "reason": "Availability claim not essential to core guidance.",
+   "replacement": ""
+  },
+  {
+   "segment": "b45",
+   "disposition": "subsumed",
+   "grade": "rejected",
+   "detail": "declared 'subsumed', which predicts SUPPORTED; B-053 came back MISSING",
+   "claims": [
+    "B-053"
+   ],
+   "reason": "Conditional cap increase in a46.",
+   "replacement": "A cap can be raised, and the number of caps raised without a measurement behind them is 0."
+  },
+  {
+   "segment": "b46",
+   "disposition": "superseded",
+   "grade": "rejected",
+   "detail": "declared 'superseded', which predicts SUPPORTED or CONTRADICTED or PARTIAL; B-055 came back MISSING",
+   "claims": [
+    "B-055"
+   ],
+   "reason": "a47 states the same data requirements.",
+   "replacement": "Bring a week of refusal counts, the shape of the traffic across the day, and the deadline that traffic is serving."
+  },
+  {
+   "segment": "b47",
+   "disposition": "subsumed",
+   "grade": "unchecked",
+   "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+   "claims": [],
+   "reason": "Load analysis in a48.",
+   "replacement": "The platform team looks at whether the load is smooth or bursty — a burst is cheaper to smooth than it is to serve at its peak."
+  },
+  {
+   "segment": "b48",
+   "disposition": "subsumed",
+   "grade": "rejected",
+   "detail": "declared 'subsumed', which predicts SUPPORTED; B-056 came back PARTIAL",
+   "claims": [
+    "B-056"
+   ],
+   "reason": "Burst vs smooth analysis in a48.",
+   "replacement": "The platform team looks at whether the load is smooth or bursty — a burst is cheaper to smooth than it is to serve at its peak."
+  },
+  {
+   "segment": "b49",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-057"
+   ],
+   "reason": "Channel and timing in a50.",
+   "replacement": "Requests reach the platform team through the usual channel, and they are answered within two working days."
+  },
+  {
+   "segment": "b50",
+   "disposition": "subsumed",
+   "grade": "confirmed",
+   "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-058"
+   ],
+   "reason": "No expedited path stated in a51.",
+   "replacement": "There is no expedited path and no exception list."
+  },
+  {
+   "segment": "b51",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+   "claims": [
+    "B-059"
+   ],
+   "reason": "a50 specifies timing explicitly.",
+   "replacement": "Requests reach the platform team through the usual channel, and they are answered within two working days."
+  }
+ ],
+ "additions": [],
+ "mismatch": "",
+ "additions_cover": [],
+ "sourcing": {
+  "resolved": false,
+  "fetched": false,
+  "web_search": 0,
+  "web_fetch": 0,
+  "state": "not-searched",
+  "measured_calls": 9,
+  "unmeasured_calls": 0,
+  "tool_use": {
+   "state": "no-tool-use",
+   "retrieval": "not-retrieved",
+   "turns": 9,
+   "calls_with_tool_use": 0,
+   "measured_calls": 9,
+   "unmeasured_calls": 0
+  },
+  "retrieval_permitted": [],
+  "recall_only": false,
+  "retrieval": ""
+ },
+ "structural": {
+  "ran": true,
+  "checks": 9,
+  "segments": 104,
+  "findings": [
+   {
+    "kind": "undeclared_rewording",
+    "detail": "'The body of the refusal is JSON, and it names what the gateway calls the “window” it counted in.' is reworded in the merge and no disposition record explains it (nearest merge segment m17 at 0.98)",
+    "segment": "a16",
+    "document": "source_a.md",
+    "source_text": "The body of the refusal is JSON, and it names what the gateway calls the “window” it counted in.",
+    "merge_text": "The body of the refusal is JSON, and it names what the gateway calls the \"window\" it counted in.",
+    "difference": "The body of the refusal is JSON, and it names what the gateway calls the [-“window”-] {+\"window\"+} it counted in."
+   },
+   {
+    "kind": "false_departure",
+    "detail": "'The count follows the credential wherever the caller happens to put it, including across hosts.' is declared 'subsumed' but the merge carries it unchanged, and no other source has it to have superseded it; the record describes a departure that did not happen",
+    "segment": "b7",
+    "document": "source_b.md",
+    "source_text": "The count follows the credential wherever the caller happens to put it, including across hosts.",
+    "merge_text": "The count follows the credential wherever the caller happens to put it, including across hosts.",
+    "difference": ""
+   },
+   {
+    "kind": "false_departure",
+    "detail": "'The window, the header and the body are identical to the interactive case, so a client written for one tier needs no change at all to run against the other.' is declared 'subsumed' but the merge carries it unchanged, and no other source has it to have superseded it; the record describes a departure that did not happen",
+    "segment": "b32",
+    "document": "source_b.md",
+    "source_text": "The window, the header and the body are identical to the interactive case, so a client written for one tier needs no change at all to run against the other.",
+    "merge_text": "Nothing else about the two tiers differs in any way.",
+    "difference": ""
+   },
+   {
+    "kind": "undeclared_absence",
+    "detail": "'An answer takes two working days, and chasing it doesn’t make it take fewer.' is not in the merge and no disposition record explains it (nearest merge segment m53 at 0.38)",
+    "segment": "b52",
+    "document": "source_b.md",
+    "source_text": "An answer takes two working days, and chasing it doesn’t make it take fewer.",
+    "merge_text": "",
+    "difference": ""
+   },
+   {
+    "kind": "declared_loss_over_budget",
+    "detail": "4 of 104 segments are declared dropped (3.8%), over the 3% budget",
+    "segment": "",
+    "document": "",
+    "source_text": "",
+    "merge_text": "",
+    "difference": ""
+   }
+  ]
+ },
+ "decisions": {
+  "ran": true,
+  "authored_by": "the merge",
+  "graded": false,
+  "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+  "records": [
+   {
+    "slot": "title",
+    "candidates": [
+     {
+      "text": "# Rate limiting and the 429 contract for gateway clients",
+      "document": "source_a.md"
+     },
+     {
+      "text": "# What a client should do when the gateway says 429",
+      "document": "source_b.md"
+     }
+    ],
+    "chosen": "# Rate limiting and the 429 contract for gateway clients",
+    "resolved": true,
+    "reason": "Base document title more comprehensively names the subject."
+   }
+  ]
+ },
+ "title": {
+  "policy": "synthesise",
+  "sources_with_a_title": 2,
+  "has_referent": true,
+  "note": ""
+ },
+ "structure": {
+  "breaks_added_by_the_merge": 0,
+  "between": [],
+  "graded": false,
+  "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+ },
+ "prompt_leaks": {
+  "ran": true,
+  "markers": [
+   "marlbrook",
+   "funicular"
+  ],
+  "reason_clauses": 17,
+  "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+  "findings": []
+ },
+ "attributions": {
+  "ran": true,
+  "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+  "findings": []
+ },
+ "number_format": {
+  "ran": true,
+  "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+  "faults": [
+   "reading_changed"
+  ],
+  "findings": [],
+  "documents": [
+   {
+    "document": "source_a.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 261,
+     "de": 0
+    }
+   },
+   {
+    "document": "source_b.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 329,
+     "de": 0
+    }
+   },
+   {
+    "document": "merged.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 288,
+     "de": 0
+    }
+   }
+  ]
+ },
+ "restated_claims": {
+  "ran": true,
+  "claims": 53,
+  "source_claims": 125,
+  "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+  "counts_are_evidence_not_the_test": true,
+  "findings": []
+ },
+ "declared_loss": {
+  "drops": 4,
+  "segments": 104,
+  "budget": 0.03,
+  "ratio": 0.038461538461538464,
+  "check_disabled": false,
+  "over_budget": true
+ },
+ "unusable": [],
+ "truncations": [],
+ "order": {
+  "sequence": "aaaaabaaaaaaaaaaabaaaaaaaaaaaaaaabaaaabaaaaaaaaaaaaaaa",
+  "runs": 9,
+  "attributed": 54,
+  "interleaved": true,
+  "monotone": false,
+  "conclusive": true,
+  "blocked": true,
+  "stapled": false,
+  "headings_present": 6,
+  "headings_total": 9
+ },
+ "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/runs/A-haiku-rate_limits/a1/merged.md",
+ "provenance": {
+  "generated_at": "2026-09-26T15:54:22+00:00",
+  "claimcheck_commit": "6cc1b1703658",
+  "run_mode": "live",
+  "endpoint": {
+   "id": "bbb0be176544",
+   "location": "command",
+   "content_left_this_machine": true,
+   "route": "Claude Code - Haiku"
+  },
+  "merge_policy": {
+   "fidelity": "high",
+   "verify_depth": "full",
+   "title_policy": "synthesise",
+   "base": "source_a.md",
+   "base_chosen": "explicit"
+  },
+  "models": {
+   "merge": "haiku",
+   "decompose": "haiku",
+   "verify": "haiku"
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "probed",
+   "field_order": "schema"
+  },
+  "prompts": {
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/merge.md": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/verify.md": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-safemode-spot/tree/prompts/verify_reverse.md": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472"
+  },
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "subscription",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ],
+   "effort": {
+    "decompose": "low",
+    "merge": "medium",
+    "verify": "low"
+   }
+  },
+  "counts": {
+   "calls": 9,
+   "cache_hits": 0,
+   "replayed": 0,
+   "schema_repairs": 2,
+   "model_loads": 0,
+   "errors": 0,
+   "salvaged": 0
+  },
+  "tokens": {
+   "measured_calls": 0,
+   "unmeasured_calls": 9
+  },
+  "tokens_described": "unknown (9 call(s) reported no usage)",
+  "ledger": [
+   {
+    "role": "merge",
+    "model": "haiku",
+    "prompt_sha256": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+    "request_sha256": "0654fc505750977379a6fd4f5d1fb79d219f5412472435c495e4dee3986104b6",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 9586,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 217056
+   },
+   {
+    "role": "decompose",
+    "model": "haiku",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "fe22066719ccbe786bd8aa3ccc61bf648435ef2beb16aa5150e5e8080926f710",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2473,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 124293
+   },
+   {
+    "role": "decompose",
+    "model": "haiku",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "691e300404bcceaa561f27b42d482b4dcc82a8a1848a72df2711ec47da90602b",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2687,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 107072
+   },
+   {
+    "role": "verify",
+    "model": "haiku",
+    "prompt_sha256": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+    "request_sha256": "030e54316d33c345481cc8a01fbf4873f67697d078f01c488a0c9ae73066c2c2",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 6057,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 206625
+   },
+   {
+    "role": "verify",
+    "model": "haiku",
+    "prompt_sha256": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+    "request_sha256": "0b4684efe95e804ddee9c7a9f20dfdcee7424920f165e3ec06af83e79a51ebd7",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 6599,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 133425
+   },
+   {
+    "role": "verify",
+    "model": "haiku",
+    "prompt_sha256": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+    "request_sha256": "0b5d016432980c1167d62cd9113cfe3bcbc0a9f290278f84c4c8bac514d13162",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 4373,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 127043
+   },
+   {
+    "role": "verify",
+    "model": "haiku",
+    "prompt_sha256": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+    "request_sha256": "35cea9d16c810b9258c37ad436b3b3aadc7ca48bb3e1bae53bf5ab4a6ab563b8",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 4878,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 76484
+   },
+   {
+    "role": "decompose",
+    "model": "haiku",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "e627dbec6a1925658eb0b7987104b4a5fd3cfffb1f8d319259493a4087f5f520",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2608,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 157045
+   },
+   {
+    "role": "verify",
+    "model": "haiku",
+    "prompt_sha256": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472",
+    "request_sha256": "3816b14d38bfca5c93a39f8f1b03313a99eeecbad96b933bd7cca87f32168443",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 6626,
+    "tier": "prompt",
+    "source": "live",
+    "answered_by": {
+     "models": [
+      "claude-haiku-4-5-20251001"
+     ],
+     "output": "claude-haiku-4-5-20251001"
+    },
+    "latency_ms": 49390
+   }
+  ],
+  "cost": {
+   "state": "unmeasured",
+   "usd": null,
+   "priced_calls": 0,
+   "unpriced_calls": 0,
+   "unmeasured_calls": 9
+  },
+  "window": {
+   "decompose": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "merge": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "verify": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 5
+  },
+  "retrieval": {
+   "permitted": [],
+   "tool_use": {
+    "state": "no-tool-use",
+    "retrieval": "not-retrieved",
+    "turns": 9,
+    "calls_with_tool_use": 0,
+    "measured_calls": 9,
+    "unmeasured_calls": 0
+   },
+   "described": "no tool use (9 call(s), 9 turn(s) in total)"
+  },
+  "isolation": {
+   "merge": {
+    "safe_mode": true,
+    "tools": []
+   },
+   "decompose": {
+    "safe_mode": true,
+    "tools": []
+   },
+   "verify": {
+    "safe_mode": true,
+    "tools": []
+   }
+  },
+  "duration_seconds": 1200.7
+ }
+}

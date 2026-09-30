@@ -1,0 +1,670 @@
+{
+ "command": "merge",
+ "exit_code": 0,
+ "documents": {
+  "source_a.md": "source_a.md",
+  "source_b.md": "source_b.md"
+ },
+ "steps": [
+  {
+   "name": "merge",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "reconcile",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "title",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_a.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose source_b.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (forward)",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "decompose merged.md",
+   "state": "ok",
+   "detail": ""
+  },
+  {
+   "name": "verify (reverse)",
+   "state": "ok",
+   "detail": ""
+  }
+ ],
+ "coverage": {
+  "extracted": {
+   "merged.md": 4,
+   "source_a.md": 3,
+   "source_b.md": 3
+  },
+  "forward_submitted": 6,
+  "forward_verdicts": 6,
+  "forward_partial": 0,
+  "forward_by_source": {
+   "source_a.md": {
+    "extracted": 3,
+    "checked": 3,
+    "accounted": 3,
+    "partial": 0
+   },
+   "source_b.md": {
+    "extracted": 3,
+    "checked": 3,
+    "accounted": 3,
+    "partial": 0
+   }
+  },
+  "reverse_submitted": 4,
+  "reverse_verdicts": 4,
+  "reverse_partial": 0,
+  "graded": 10,
+  "grounded": 10,
+  "errored": 0,
+  "ungraded": 0
+ },
+ "claims": [
+  {
+   "id": "A-001",
+   "source": "source_a.md",
+   "text": "The Vandrell Relay listens on port 8443.",
+   "line": 3,
+   "span": "The relay listens on port 8443.",
+   "anchored": true
+  },
+  {
+   "id": "A-002",
+   "source": "source_a.md",
+   "text": "The health check path for the Vandrell Relay is /healthz.",
+   "line": 4,
+   "span": "The health check path is /healthz.",
+   "anchored": true
+  },
+  {
+   "id": "A-003",
+   "source": "source_a.md",
+   "text": "The read timeout for the Vandrell Relay is 30 seconds.",
+   "line": 5,
+   "span": "The read timeout is 30 seconds.",
+   "anchored": true
+  },
+  {
+   "id": "B-001",
+   "source": "source_b.md",
+   "text": "The relay listens on port 8443.",
+   "line": 3,
+   "span": "The relay listens on port 8443.",
+   "anchored": true
+  },
+  {
+   "id": "B-002",
+   "source": "source_b.md",
+   "text": "The health check path is /healthz.",
+   "line": 4,
+   "span": "The health check path is /healthz.",
+   "anchored": true
+  },
+  {
+   "id": "B-003",
+   "source": "source_b.md",
+   "text": "The minimum TLS version is 1.2.",
+   "line": 5,
+   "span": "The minimum TLS version is 1.2.",
+   "anchored": true
+  },
+  {
+   "id": "M-001",
+   "source": "merged.md",
+   "text": "The relay listens on port 8443.",
+   "line": 3,
+   "span": "The relay listens on port 8443.",
+   "anchored": true
+  },
+  {
+   "id": "M-002",
+   "source": "merged.md",
+   "text": "The health check path is /healthz.",
+   "line": 5,
+   "span": "The health check path is /healthz.",
+   "anchored": true
+  },
+  {
+   "id": "M-003",
+   "source": "merged.md",
+   "text": "The read timeout is 30 seconds.",
+   "line": 7,
+   "span": "The read timeout is 30 seconds.",
+   "anchored": true
+  },
+  {
+   "id": "M-004",
+   "source": "merged.md",
+   "text": "The minimum TLS version is 1.2.",
+   "line": 9,
+   "span": "The minimum TLS version is 1.2.",
+   "anchored": true
+  }
+ ],
+ "verdicts": [
+  {
+   "claim_id": "A-001",
+   "verdict": "SUPPORTED",
+   "evidence": "The relay listens on port 8443.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states that the relay listens on port 8443, matching the claim.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-002",
+   "verdict": "SUPPORTED",
+   "evidence": "The health check path is /healthz.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states the health check path is /healthz.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "A-003",
+   "verdict": "SUPPORTED",
+   "evidence": "The read timeout is 30 seconds.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states that the read timeout is 30 seconds.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-001",
+   "verdict": "SUPPORTED",
+   "evidence": "The relay listens on port 8443.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states the relay listens on port 8443.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-002",
+   "verdict": "SUPPORTED",
+   "evidence": "The health check path is /healthz.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text directly states the health check path is /healthz.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "B-003",
+   "verdict": "SUPPORTED",
+   "evidence": "The minimum TLS version is 1.2.",
+   "evidence_source": "merged.md",
+   "rationale": "The reference text explicitly states that the minimum TLS version is 1.2.",
+   "direction": "source_to_merged",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-001",
+   "verdict": "SUPPORTED",
+   "evidence": "The relay listens on port 8443.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A explicitly states that the relay listens on port 8443.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-002",
+   "verdict": "SUPPORTED",
+   "evidence": "The health check path is /healthz.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A directly confirms that the health check path is /healthz.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-003",
+   "verdict": "SUPPORTED",
+   "evidence": "The read timeout is 30 seconds.",
+   "evidence_source": "source_a.md",
+   "rationale": "Source A states that the read timeout is 30 seconds.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  },
+  {
+   "claim_id": "M-004",
+   "verdict": "SUPPORTED",
+   "evidence": "The minimum TLS version is 1.2.",
+   "evidence_source": "source_b.md",
+   "rationale": "Source B directly states that the minimum TLS version is 1.2.",
+   "direction": "merged_to_sources",
+   "grounding": "grounded",
+   "rationale_names": [],
+   "rationale_capped": false,
+   "finding": "none",
+   "grounded": true
+  }
+ ],
+ "findings": [],
+ "review_queue": [],
+ "declarations": [
+  {
+   "segment": "b1",
+   "disposition": "superseded",
+   "grade": "confirmed",
+   "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Vandrell Relay - Operator Guide' and says so",
+   "claims": [],
+   "reason": "Base title kept; this alternate title was not chosen.",
+   "replacement": "# Vandrell Relay - Operator Guide"
+  },
+  {
+   "segment": "b2",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-001"
+   ],
+   "reason": "Identical fact already covered by segment a2.",
+   "replacement": "The relay listens on port 8443."
+  },
+  {
+   "segment": "b3",
+   "disposition": "duplicate",
+   "grade": "confirmed",
+   "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+   "claims": [
+    "B-002"
+   ],
+   "reason": "Identical fact already covered by segment a3.",
+   "replacement": "The health check path is /healthz."
+  }
+ ],
+ "additions": [],
+ "mismatch": "",
+ "additions_cover": [],
+ "sourcing": {
+  "resolved": false,
+  "fetched": false,
+  "state": "unmeasured",
+  "measured_calls": 0,
+  "unmeasured_calls": 6,
+  "tool_use": {
+   "state": "unmeasured",
+   "retrieval": "unmeasured",
+   "turns": 0,
+   "calls_with_tool_use": 0,
+   "measured_calls": 0,
+   "unmeasured_calls": 6
+  },
+  "retrieval_permitted": [],
+  "recall_only": false,
+  "retrieval": ""
+ },
+ "structural": {
+  "ran": true,
+  "checks": 9,
+  "segments": 8,
+  "findings": []
+ },
+ "decisions": {
+  "ran": true,
+  "authored_by": "the merge",
+  "graded": false,
+  "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+  "records": [
+   {
+    "slot": "title",
+    "candidates": [
+     {
+      "text": "# Vandrell Relay - Operator Guide",
+      "document": "source_a.md"
+     },
+     {
+      "text": "# Vandrell Relay - Deployment Notes",
+      "document": "source_b.md"
+     }
+    ],
+    "chosen": "# Vandrell Relay - Operator Guide",
+    "resolved": true,
+    "reason": "Base document's title was kept."
+   }
+  ]
+ },
+ "title": {
+  "policy": "synthesise",
+  "sources_with_a_title": 2,
+  "has_referent": true,
+  "note": ""
+ },
+ "structure": {
+  "breaks_added_by_the_merge": 0,
+  "between": [],
+  "graded": false,
+  "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+ },
+ "prompt_leaks": {
+  "ran": true,
+  "markers": [
+   "marlbrook",
+   "funicular"
+  ],
+  "reason_clauses": 17,
+  "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+  "findings": []
+ },
+ "attributions": {
+  "ran": true,
+  "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+  "findings": []
+ },
+ "number_format": {
+  "ran": true,
+  "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+  "faults": [
+   "reading_changed"
+  ],
+  "findings": [],
+  "documents": [
+   {
+    "document": "source_a.md",
+    "convention": "decimal point",
+    "decided_by": "language",
+    "votes": {
+     "decimal_point": [],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 6,
+     "de": 0
+    }
+   },
+   {
+    "document": "source_b.md",
+    "convention": "decimal point",
+    "decided_by": "votes",
+    "votes": {
+     "decimal_point": [
+      "1.2"
+     ],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 6,
+     "de": 0
+    }
+   },
+   {
+    "document": "merged.md",
+    "convention": "decimal point",
+    "decided_by": "votes",
+    "votes": {
+     "decimal_point": [
+      "1.2"
+     ],
+     "decimal_comma": []
+    },
+    "language": "en",
+    "stop_words": {
+     "en": 8,
+     "de": 0
+    }
+   }
+  ]
+ },
+ "restated_claims": {
+  "ran": true,
+  "claims": 4,
+  "source_claims": 6,
+  "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+  "counts_are_evidence_not_the_test": true,
+  "findings": []
+ },
+ "declared_loss": {
+  "drops": 0,
+  "segments": 8,
+  "budget": 0.03,
+  "ratio": 0.0,
+  "check_disabled": false,
+  "over_budget": false
+ },
+ "unusable": [],
+ "truncations": [],
+ "order": {
+  "sequence": "aab",
+  "runs": 2,
+  "attributed": 3,
+  "interleaved": false,
+  "monotone": true,
+  "conclusive": true,
+  "blocked": false,
+  "stapled": false,
+  "headings_present": 1,
+  "headings_total": 2
+ },
+ "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/cells/probe-dedup-gemini-3.5-flash-lite/merged.md",
+ "provenance": {
+  "generated_at": "2026-09-25T18:40:30+00:00",
+  "claimcheck_commit": "0771aa6f830d",
+  "run_mode": "live",
+  "endpoint": {
+   "id": "37a58c167b3b",
+   "location": "hosted",
+   "content_left_this_machine": true
+  },
+  "merge_policy": {
+   "fidelity": "high",
+   "verify_depth": "full",
+   "title_policy": "synthesise",
+   "base": "source_a.md",
+   "base_chosen": "explicit"
+  },
+  "models": {
+   "merge": "gemini-3.5-flash-lite",
+   "decompose": "gemini-3.5-flash-lite",
+   "verify": "gemini-3.5-flash-lite"
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "pinned",
+   "field_order": "schema"
+  },
+  "prompts": {
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/merge.md": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/verify.md": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+   "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-google/tree/prompts/verify_reverse.md": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472"
+  },
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "google",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ]
+  },
+  "counts": {
+   "calls": 6,
+   "cache_hits": 0,
+   "replayed": 0,
+   "schema_repairs": 0,
+   "model_loads": 0,
+   "errors": 0,
+   "salvaged": 0,
+   "prompt_tokens": 11570,
+   "completion_tokens": 1097
+  },
+  "tokens": {
+   "input": 11570,
+   "output": 1097,
+   "total": 12667,
+   "measured_calls": 6,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "11,570 in, 1,097 out",
+  "ledger": [
+   {
+    "role": "merge",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+    "request_sha256": "47a9785ebf7640b5f1d3982d217b1011dfefc1e84c4f11730da2115ddac4b7ee",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 6256,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 17047,
+    "prompt_tokens": 4960,
+    "completion_tokens": 298
+   },
+   {
+    "role": "decompose",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "d33b3de41c3fe9efde6a93c79b3b3a5283c5bfbd848c74168b20e6601920f10c",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 949,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 6729,
+    "prompt_tokens": 879,
+    "completion_tokens": 63
+   },
+   {
+    "role": "decompose",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "12d4e502263792758fa4d77fa6084a6be32facded256e49efc23ec4207532d30",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 950,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 9115,
+    "prompt_tokens": 880,
+    "completion_tokens": 58
+   },
+   {
+    "role": "verify",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "5afca8163bfa3b4c64488fc900d7600c2e4a7f041043f54c5eb1f108fda9dfbf",
+    "request_sha256": "505ad96fd6578762d009383c5ee86323de7ec708ca44afea9136ade7d654ac52",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2315,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 14436,
+    "prompt_tokens": 2003,
+    "completion_tokens": 346
+   },
+   {
+    "role": "decompose",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+    "request_sha256": "00c6504cc8e3e12bd7f9c5ec9fbb0204e012c35e314905a242c2ee7acda726fb",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 966,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 9271,
+    "prompt_tokens": 904,
+    "completion_tokens": 90
+   },
+   {
+    "role": "verify",
+    "model": "gemini-3.5-flash-lite",
+    "prompt_sha256": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472",
+    "request_sha256": "6d066303a835c2ffd8ecea5249ba8dd1c0db6d6e6cd19de058b27340c73f2758",
+    "max_tokens": null,
+    "estimated_prompt_tokens": 2328,
+    "tier": "prompt",
+    "source": "live",
+    "latency_ms": 11201,
+    "prompt_tokens": 1944,
+    "completion_tokens": 242
+   }
+  ],
+  "cost": {
+   "state": "unpriced",
+   "usd": null,
+   "priced_calls": 0,
+   "unpriced_calls": 6,
+   "unmeasured_calls": 0,
+   "unpriced_models": [
+    "gemini-3.5-flash-lite"
+   ]
+  },
+  "window": {
+   "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+   "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 2
+  },
+  "retrieval": {
+   "permitted": [],
+   "tool_use": {
+    "state": "unmeasured",
+    "retrieval": "unmeasured",
+    "turns": 0,
+    "calls_with_tool_use": 0,
+    "measured_calls": 0,
+    "unmeasured_calls": 6
+   },
+   "described": "unmeasured (6 call(s) reported no turn count)"
+  },
+  "duration_seconds": 142.9
+ }
+}

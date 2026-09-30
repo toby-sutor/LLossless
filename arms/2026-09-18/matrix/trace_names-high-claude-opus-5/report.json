@@ -1,0 +1,1271 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 13,
+      "source_a.md": 10,
+      "source_b.md": 10
+    },
+    "forward_submitted": 20,
+    "forward_verdicts": 20,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 10,
+        "checked": 10,
+        "accounted": 8,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 10,
+        "checked": 10,
+        "accounted": 10,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 13,
+    "reverse_verdicts": 13,
+    "reverse_partial": 0,
+    "graded": 33,
+    "grounded": 33,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The author of the document is Rune Delacroix.",
+      "line": 3,
+      "span": "Author: Rune Delacroix",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The document was updated on 2026-01-29.",
+      "line": 4,
+      "span": "Updated: 2026-01-29",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Stream name is one of the mandatory fields for every Nimbrel Probe agent.",
+      "line": 8,
+      "span": "Stream name is one of the mandatry field for every Nimbrel Probe agent.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The stream name cannot contain arbitrary symbols.",
+      "line": 8,
+      "span": "The stream name cant contain arbitrary symbols as documented",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Stream names are validated against ^[A-Za-z0-9 -]+$ before the Nimbrel Probe agent registers.",
+      "line": 12,
+      "span": "Stream names are validated against ^[A-Za-z0-9 -]+$ before the agent registers.",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "Stream names may contain letters, digits, spaces and hyphens only, and nothing else, or the agent refuses to start.",
+      "line": 12,
+      "span": "Put plainly: letters, digits, spaces and hyphens only, and nothing else, or the agent refuses to start.",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "One customer wanted the stream name left exactly as it stood because that string was the product name in use everywhere in the organisation.",
+      "line": 15,
+      "span": "However , one customer wanted the stream name left exactly as it stood because that string was the product name in use everywhere in the org and their reporting keyed of it when",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "The issue applies to all Nimbrel Probe agents.",
+      "line": 19,
+      "span": "All Nimbrel Probe agents",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "Renaming the stream to drop the unsupported symbols allows the Nimbrel Probe agent to register.",
+      "line": 25,
+      "span": "Rename the stream to drop the unsupported symbols so the Nimbrel Probe agent will register",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "Carrying the original stream name along as a global tag keeps a link in each trace between the real name and the renamed one.",
+      "line": 26,
+      "span": "Then carry the orignal name along as a global tag, so at least each trace keeps a link between the real name and the renamed one",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Stream names containing a dot, for example `checkout.web`, are refused by Nimbrel Probe.",
+      "line": 8,
+      "span": "Stream name containing a . (dot) for exampe` checkout.web` along with a number of other symbols are refused by Nimbrel Probe",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The Nimbrel Probe stream name is what separates one instrumented process from the next.",
+      "line": 10,
+      "span": "The Nimbrel Probe stream name is what seperates one instrumented process from the next.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Only letters, digits, spaces and hyphens are accepted in a Nimbrel Probe stream name.",
+      "line": 10,
+      "span": "Only letters, digits, spaces and hyphens are accepted (it has to match ^[A-Za-z0-9 -]+$)",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "A Nimbrel Probe stream name has to match ^[A-Za-z0-9 -]+$.",
+      "line": 10,
+      "span": "Only letters, digits, spaces and hyphens are accepted (it has to match ^[A-Za-z0-9 -]+$)",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "The Nimbrel Probe stream name requirements are documented at https://docs.nimbrel.example/probe/agent/browser/current/configuration.html#stream-name",
+      "line": 10,
+      "span": "as documented [here](https://docs.nimbrel.example/probe/agent/browser/current/configuration.html#stream-name)",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "The author of the document is Marlowe Ferrante.",
+      "line": 3,
+      "span": "Author: Marlowe Ferrante",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "The document was updated on 2026-02-03.",
+      "line": 4,
+      "span": "Updated: 2026-02-03",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "The refusal of dots in Nimbrel Probe stream names is working as intended for now.",
+      "line": 14,
+      "span": "Working as intended for now",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "There is no fix at present for the refusal of symbols in Nimbrel Probe stream names.",
+      "line": 18,
+      "span": "No fix at present , rename the stream without the refused symbol",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "The workaround is to rename the stream without the refused symbol.",
+      "line": 18,
+      "span": "No fix at present , rename the stream without the refused symbol",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The stream name is one of the mandatory fields for every Nimbrel Probe agent.",
+      "line": 8,
+      "span": "The stream name is one of the mandatory fields for every Nimbrel Probe agent",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The stream name is what separates one instrumented process from the next.",
+      "line": 8,
+      "span": "it is what separates one instrumented process from the next",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The stream name cannot contain arbitrary symbols: only letters, digits, spaces and hyphens are accepted.",
+      "line": 10,
+      "span": "It cannot contain arbitrary symbols: only letters, digits, spaces and hyphens are accepted",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The stream name value has to match ^[A-Za-z0-9 -]+$.",
+      "line": 10,
+      "span": "the value has to match ^[A-Za-z0-9 -]+$",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Stream names are validated against ^[A-Za-z0-9 -]+$ before the Nimbrel Probe agent registers.",
+      "line": 13,
+      "span": "Stream names are validated against ^[A-Za-z0-9 -]+$ before the agent registers.",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "If a stream name contains anything other than letters, digits, spaces and hyphens, the Nimbrel Probe agent refuses to start.",
+      "line": 13,
+      "span": "letters, digits, spaces and hyphens only, and nothing else, or the agent refuses to start",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "A stream name containing a . (dot), for example `checkout.web`, is refused.",
+      "line": 16,
+      "span": "A stream name containing a . (dot), for example `checkout.web`, is refused, as are a number of other symbols.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "The stream name restriction applies to all Nimbrel Probe agents.",
+      "line": 22,
+      "span": "All Nimbrel Probe agents",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "The stream name symbol restriction is working as intended for now, and there is no fix at present.",
+      "line": 26,
+      "span": "This is working as intended for now; there is no fix at present",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "The workaround for a stream name with unsupported symbols is to rename the stream to drop the unsupported symbols so the Nimbrel Probe agent will register.",
+      "line": 28,
+      "span": "Rename the stream to drop the unsupported symbols so the Nimbrel Probe agent will register",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "The original stream name can be carried along as a global tag so each trace keeps a link between the real name and the renamed one.",
+      "line": 29,
+      "span": "Then carry the original name along as a global tag, so at least each trace keeps a link between the real name and the renamed one",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "The document was authored by Marlowe Ferrante.",
+      "line": 3,
+      "span": "Author: Marlowe Ferrante",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "The document was updated on 2026-02-03.",
+      "line": 4,
+      "span": "Updated: 2026-02-03",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "CONTRADICTED",
+      "evidence": "Author: Marlowe Ferrante",
+      "evidence_source": "merged.md",
+      "rationale": "The reference names a different author, contradicting the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "CONTRADICTED",
+      "evidence": "Updated: 2026-02-03",
+      "evidence_source": "merged.md",
+      "rationale": "The reference gives a different update date for the same attribute.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The stream name is one of the mandatory fields for every Nimbrel Probe agent",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "It cannot contain arbitrary symbols",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly about the stream name.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Stream names are validated against ^[A-Za-z0-9 -]+$ before the agent registers.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact restatement of the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "letters, digits, spaces and hyphens only, and nothing else, or the agent refuses to start",
+      "evidence_source": "merged.md",
+      "rationale": "Stated verbatim in the quoted documentation block.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "The existing name may nevertheless need to be kept exactly as it stands, where that string is the product name in use everywhere in the org and reporting keys off it.",
+      "evidence_source": "merged.md",
+      "rationale": "The merge states the customer's occasion in general terms, which carries the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "All Nimbrel Probe agents",
+      "evidence_source": "merged.md",
+      "rationale": "The Environment section states the issue applies to all agents.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Rename the stream to drop the unsupported symbols so the Nimbrel Probe agent will register",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly as step 1.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Then carry the original name along as a global tag, so at least each trace keeps a link between the real name and the renamed one",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly as step 2.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "A stream name containing a . (dot), for example `checkout.web`, is refused",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "it is what separates one instrumented process from the next",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly of the stream name.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "only letters, digits, spaces and hyphens are accepted",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "the value has to match ^[A-Za-z0-9 -]+$",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "[here](https://docs.nimbrel.example/probe/agent/browser/current/configuration.html#stream-name)",
+      "evidence_source": "merged.md",
+      "rationale": "The requirement is documented at that link per the reference.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Author: Marlowe Ferrante",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Updated: 2026-02-03",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "This is working as intended for now",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly about the refusal behaviour.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "there is no fix at present",
+      "evidence_source": "merged.md",
+      "rationale": "Stated directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-010",
+      "verdict": "SUPPORTED",
+      "evidence": "the way round it is to rename the stream",
+      "evidence_source": "merged.md",
+      "rationale": "The workaround of renaming the stream to drop unsupported symbols is stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Stream name is one of the mandatry field for every Nimbrel Probe agent.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A states the stream name is a mandatory field for every agent.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The Nimbrel Probe stream name is what seperates one instrumented process from the next.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states this directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Only letters, digits, spaces and hyphens are accepted",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states only these characters are accepted; source A says the name can't contain arbitrary symbols.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "it has to match ^[A-Za-z0-9 -]+$",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states the regex requirement explicitly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Stream names are validated against ^[A-Za-z0-9 -]+$ before the agent registers.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A's quoted documentation states exactly this.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "letters, digits, spaces and hyphens only, and nothing else, or the agent refuses to start",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A states the agent refuses to start otherwise.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Stream name containing a . (dot) for exampe` checkout.web` along with a number of other symbols are refused by Nimbrel Probe",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states the dot example is refused.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "All Nimbrel Probe agents",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A's Environment section scopes the issue to all Nimbrel Probe agents.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Working as intended for now",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B states working as intended and 'No fix at present'.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Rename the stream to drop the unsupported symbols so the Nimbrel Probe agent will register",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A gives this workaround verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "Then carry the orignal name along as a global tag, so at least each trace keeps a link between the real name and the renamed one",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A states this step.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "Author: Marlowe Ferrante",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B names Marlowe Ferrante as author.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "Updated: 2026-02-03",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B gives this update date.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "A-001",
+      "verdict": "CONTRADICTED",
+      "evidence": "Author: Marlowe Ferrante",
+      "evidence_source": "merged.md",
+      "rationale": "The reference names a different author, contradicting the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "CONTRADICTED",
+      "evidence": "Updated: 2026-02-03",
+      "evidence_source": "merged.md",
+      "rationale": "The reference gives a different update date for the same attribute.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "a2",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "A-001",
+        "A-002"
+      ],
+      "reason": "Revision block slot takes source_b's later-dated version."
+    },
+    {
+      "segment": "a4",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-003"
+      ],
+      "reason": "Topic: mandatory field and its purpose stated as one sentence."
+    },
+    {
+      "segment": "b5",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-002"
+      ],
+      "reason": "Topic: mandatory field and its purpose stated as one sentence."
+    },
+    {
+      "segment": "a5",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-004"
+      ],
+      "reason": "Topic: restriction and both doc links carried in one sentence."
+    },
+    {
+      "segment": "b6",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-003",
+        "B-004",
+        "B-005"
+      ],
+      "reason": "Topic: accepted characters and regex carried in the same sentence."
+    },
+    {
+      "segment": "a7",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-007"
+      ],
+      "reason": "Topic: stated generally and completed as a sentence."
+    },
+    {
+      "segment": "b4",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001"
+      ],
+      "reason": "Topic: typo and stray backtick placement fixed."
+    },
+    {
+      "segment": "b3",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Base heading used for the problem description slot."
+    },
+    {
+      "segment": "b7",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Cause content folded into the base's answer section."
+    },
+    {
+      "segment": "b8",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-008"
+      ],
+      "reason": "Answer: cause carried in the lead-in sentence."
+    },
+    {
+      "segment": "b9",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Workaround section consolidated under the base heading."
+    },
+    {
+      "segment": "b10",
+      "disposition": "subsumed",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+      "claims": [],
+      "reason": "Answer: no-fix and rename advice carried by the lead-in and step 1."
+    },
+    {
+      "segment": "b11",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Resolution section consolidated under the base heading."
+    },
+    {
+      "segment": "b12",
+      "disposition": "duplicate",
+      "grade": "rejected",
+      "detail": "declared 'duplicate', and its text is not in the merge",
+      "claims": [],
+      "reason": "Repeats b10 word for word; stated once."
+    },
+    {
+      "segment": "a11",
+      "disposition": "subsumed",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+      "claims": [],
+      "reason": "Answer: lead-in sentence introduces the working workaround."
+    },
+    {
+      "segment": "a13",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-010"
+      ],
+      "reason": "Answer step 2: spelling of \"original\" fixed, link unchanged."
+    },
+    {
+      "segment": "a14",
+      "disposition": "subsumed",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+      "claims": [],
+      "reason": "Internal notes: both ticket links held in one block."
+    },
+    {
+      "segment": "b13",
+      "disposition": "subsumed",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+      "claims": [],
+      "reason": "Internal notes: both ticket links held in one block."
+    },
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Nimbrel Probe stream name with unsupported symbols' and says so",
+      "claims": [],
+      "reason": "Title slot keeps the base title; this one was not used."
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 27,
+    "findings": [
+      {
+        "kind": "false_departure",
+        "detail": "'Working as intended for now' is declared 'subsumed' but the merge carries it unchanged, and no other source has it to have superseded it; the record describes a departure that did not happen",
+        "segment": "b8",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "verbatim_violation",
+        "detail": "code '` checkout.web`' does not survive into the merge unchanged",
+        "segment": "b4",
+        "document": "source_b.md"
+      }
+    ]
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "text": "# Nimbrel Probe stream name with unsupported symbols",
+            "document": "source_a.md"
+          },
+          {
+            "text": "# Nimbrel Probe - dot in stream name is refused",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "# Nimbrel Probe stream name with unsupported symbols",
+        "resolved": true,
+        "reason": "Base document's title is kept as written."
+      },
+      {
+        "slot": "author/updated block",
+        "candidates": [
+          {
+            "text": "Author: Rune Delacroix\nUpdated: 2026-01-29",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Author: Marlowe Ferrante\nUpdated: 2026-02-03",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Author: Marlowe Ferrante\nUpdated: 2026-02-03",
+        "resolved": true,
+        "reason": "Only one revision block can hold; the later update date is current."
+      },
+      {
+        "slot": "Topic heading",
+        "candidates": [
+          {
+            "text": "### Topic",
+            "document": "source_a.md"
+          },
+          {
+            "text": "### Issue Description",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "### Topic",
+        "resolved": true,
+        "reason": "Base heading for the problem description slot."
+      },
+      {
+        "slot": "answer heading for cause, workaround and resolution",
+        "candidates": [
+          {
+            "text": "### Instructions/Answer",
+            "document": "source_a.md"
+          },
+          {
+            "text": "### Cause / ### Workaround / ### Resolution",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "### Instructions/Answer",
+        "resolved": true,
+        "reason": "Base slot absorbs the three same-purpose sections of source_b."
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 1,
+    "between": [
+      [
+        "https://tickets.nimbrel.example/700Bb00000QrmTD",
+        "https://tickets.nimbrel.example/700Bb00000LnqWs"
+      ]
+    ],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 13,
+    "source_claims": 20,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 27,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "abababaaaaaa",
+    "runs": 7,
+    "attributed": 12,
+    "interleaved": true,
+    "monotone": false,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 4,
+    "headings_total": 9
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-18-matrix/trace_names-high-claude-opus-5/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-18T11:36:50+00:00",
+    "claimcheck_commit": "cf3020941b41",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "f9ef6eedd766",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "claude-opus-5",
+      "decompose": "claude-opus-5",
+      "verify": "claude-opus-5"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "anthropic",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 19427,
+      "completion_tokens": 12774
+    },
+    "tokens": {
+      "input": 19427,
+      "output": 12774,
+      "total": 32201,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "19,427 in, 12,774 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "claude-opus-5",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "179e58da1992547f18db82d267f125a9c1d88af374f37b42053bc3a6649f397f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 5584,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 6165,
+        "completion_tokens": 7201
+      },
+      {
+        "role": "decompose",
+        "model": "claude-opus-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "7df5b2feb1f2f3306ad73250c0d400a7f61a4241b7ded4b7ef1771298220f4af",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1354,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1804,
+        "completion_tokens": 716
+      },
+      {
+        "role": "decompose",
+        "model": "claude-opus-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "ca31289000c555272f9f2fc3cd80736733e4069d6b03fe02e198582e69121a13",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1216,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1651,
+        "completion_tokens": 728
+      },
+      {
+        "role": "verify",
+        "model": "claude-opus-5",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "997ad43c3e357c34135c5f9251811909bf39031f97bc58dc6ac835276927bcf6",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3381,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 4008,
+        "completion_tokens": 2017
+      },
+      {
+        "role": "decompose",
+        "model": "claude-opus-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "51be19d0d5b30bb9fad7ec35ae333302a8a38226792526b0452dd2db348891e9",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1524,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2000,
+        "completion_tokens": 921
+      },
+      {
+        "role": "verify",
+        "model": "claude-opus-5",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "08b723c56b15c9c94ff2e72d89c4de52d6e07bb6b9a6684dc87fa80bcd4aa3a0",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3266,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3799,
+        "completion_tokens": 1191
+      }
+    ],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 2
+    },
+    "duration_seconds": 135.1
+  }
+}

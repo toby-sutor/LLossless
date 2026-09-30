@@ -1,0 +1,40 @@
+LLossless merge  claude-haiku-4-5-20251001 at lineup haiku-4.5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  124.6s
+✓ merge  124.6s
+• reconcile
+✓ reconcile  0.2s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  73.5s
+✓ decompose source_a.md  73.5s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  169.9s
+✓ decompose source_b.md  169.9s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  152.7s
+✓ verify (forward)  152.7s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  152.9s
+✓ decompose merged.md  152.9s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  126.1s
+✓ verify (reverse)  126.1s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  15 contradicted: the merge states something different (see `## Findings`)
+  1 invented: in the merge, in neither source (see `## Findings`)
+  6 declared gone, still here: a record says the content departed and the merge carries the segment unchanged (see `## Structure`)
+  2 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

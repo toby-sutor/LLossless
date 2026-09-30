@@ -1,0 +1,45 @@
+claimcheck merge  haiku at Claude Code - Haiku, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking haiku
+✓ merge: haiku (claude-haiku-4-5-20251001) answered at the prompt tier  155.0s
+✓ merge  155.1s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking haiku
+✓ decompose: haiku (claude-haiku-4-5-20251001) answered at the prompt tier  138.2s
+✓ decompose source_a.md  138.2s
+• decompose source_b.md
+• decompose: asking haiku
+✓ decompose: haiku (claude-haiku-4-5-20251001) answered at the prompt tier  134.8s
+✓ decompose source_b.md  134.8s
+• verify (forward)
+• verify: asking haiku
+✓ verify: haiku (claude-haiku-4-5-20251001) answered at the prompt tier  127.3s
+claimcheck: cache off; response dumps for this run go to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-haiku-medium/a1/tmp/claimcheck-run-3gmidd2c
+• verify: asking haiku
+✓ verify: haiku (claude-haiku-4-5-20251001) answered at the prompt tier  91.4s
+✓ verify (forward)  218.7s
+• decompose merged.md
+• decompose: asking haiku
+✓ decompose: haiku (claude-haiku-4-5-20251001) answered at the prompt tier  105.2s
+✓ decompose merged.md  105.2s
+• verify (reverse)
+• verify: asking haiku
+✓ verify: haiku (claude-haiku-4-5-20251001) answered at the prompt tier  124.4s
+✓ verify (reverse)  124.4s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-haiku-medium/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  Nothing was retrieved. None of 7 call(s) took the turns a retrieval costs, so every source the merge names is a recollection
+  1 dropped: in a source, not in the merge (see `## Findings`)
+  21 contradicted: the merge states something different (see `## Findings`)
+  2 partly invented: the sources carry some of this claim (see `## Findings`)
+  4 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  11 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d3/voyager-haiku-medium/a1/merged.md
+  the full report went to stdout; exit code 1

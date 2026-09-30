@@ -1,0 +1,41 @@
+LLossless merge  claude-opus-5-5 at Claude Code - Opus, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-opus-5-5
+✓ merge: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  478.0s
+✓ merge  478.0s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  9.9s
+✓ decompose source_a.md  9.9s
+• decompose source_b.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  15.5s
+✓ decompose source_b.md  15.5s
+• verify (forward)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  24.6s
+✓ verify (forward)  24.7s
+• decompose merged.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  22.1s
+✓ decompose merged.md  22.1s
+• verify (reverse)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  23.4s
+✓ verify (reverse)  23.4s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-opus-max/runs/d1/voyager-max/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  The model retrieved. 1 of 6 call(s) took the turns a retrieval costs; which citation each retrieval backs is not recorded
+  51 contradicted: the merge states something different (see `## Findings`)
+  1 partly invented: the sources carry some of this claim (see `## Findings`)
+  13 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-26-opus-max/runs/d1/voyager-max/a1/merged.md
+  the full report went to stdout; exit code 1

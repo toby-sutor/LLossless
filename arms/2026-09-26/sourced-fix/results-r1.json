@@ -1,0 +1,1510 @@
+[
+ {
+  "cell": "sonnet-voyager-d1",
+  "part": "fix",
+  "pair": "voyager",
+  "model": "sonnet",
+  "attempt": 1,
+  "started_at": "2026-09-26T17:52:24+00:00",
+  "wall_seconds": 166.3,
+  "exit_code": 1,
+  "killed_at_limit": false,
+  "dir": "runs/r1/sonnet-voyager-d1/a1",
+  "report": true,
+  "claimcheck_commit": "b86a50510992",
+  "isolation": {
+   "merge": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "decompose": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "verify": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   }
+  },
+  "answered_by": {
+   "merge": [
+    "claude-sonnet-5"
+   ],
+   "decompose": [
+    "claude-sonnet-5"
+   ],
+   "verify": [
+    "claude-sonnet-5"
+   ]
+  },
+  "all_model_ids": [
+   "claude-haiku-4-5-20251001",
+   "claude-sonnet-5"
+  ],
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "subscription",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ],
+   "effort": {
+    "decompose": "low",
+    "merge": "medium",
+    "verify": "low"
+   }
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 3
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "probed",
+   "field_order": "schema"
+  },
+  "retrieval": {
+   "state": "tool-use",
+   "retrieval": "retrieved",
+   "turns": 13,
+   "calls_with_tool_use": 1,
+   "measured_calls": 7,
+   "unmeasured_calls": 0
+  },
+  "web_search_requests": 3,
+  "subagents_spawned": 0,
+  "calls": [
+   {
+    "role": "merge",
+    "effort": "medium",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 7,
+    "models": [
+     "claude-haiku-4-5-20251001",
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 14,
+      "outputTokens": 7006,
+      "cacheReadInputTokens": 102387,
+      "cacheCreationInputTokens": 18005,
+      "webSearchRequests": 0,
+      "costUSD": 0.1625854,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 3093,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     },
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 73775,
+      "outputTokens": 1863,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 3,
+      "costUSD": 0.11309,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 3,
+    "total_cost_usd": 0.27567539999999996,
+    "input_tokens": 14,
+    "output_tokens": 7006,
+    "thinking_tokens": 3093,
+    "cache_read_input_tokens": 102387,
+    "cache_creation_input_tokens": 18005,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 89259
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 910,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 2016,
+      "webSearchRequests": 0,
+      "costUSD": 0.0176288,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0176288,
+    "input_tokens": 2,
+    "output_tokens": 910,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 2016,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 6125
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 1073,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 2201,
+      "webSearchRequests": 0,
+      "costUSD": 0.0199988,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0199988,
+    "input_tokens": 2,
+    "output_tokens": 1073,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 2201,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 7311
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 2297,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 5008,
+      "webSearchRequests": 0,
+      "costUSD": 0.0434668,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0434668,
+    "input_tokens": 2,
+    "output_tokens": 2297,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 5008,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 13876
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 1917,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 2531,
+      "webSearchRequests": 0,
+      "costUSD": 0.029758800000000002,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.029758800000000002,
+    "input_tokens": 2,
+    "output_tokens": 1917,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 2531,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 11965
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 1968,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 5203,
+      "webSearchRequests": 0,
+      "costUSD": 0.0409568,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0409568,
+    "input_tokens": 2,
+    "output_tokens": 1968,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 5203,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 12379
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 2213,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 5794,
+      "webSearchRequests": 0,
+      "costUSD": 0.0457708,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0457708,
+    "input_tokens": 2,
+    "output_tokens": 2213,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 5794,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 14215
+   }
+  ],
+  "errors": 0,
+  "usage": {
+   "total_cost_usd": 0.4733,
+   "input_tokens": 26,
+   "output_tokens": 17384,
+   "cache_read_input_tokens": 116211,
+   "cache_creation_input_tokens": 40758
+  },
+  "failed": false,
+  "usage_limit": false
+ },
+ {
+  "cell": "sonnet-voyager-d2",
+  "part": "fix",
+  "pair": "voyager",
+  "model": "sonnet",
+  "attempt": 1,
+  "started_at": "2026-09-26T17:55:21+00:00",
+  "wall_seconds": 157.6,
+  "exit_code": 1,
+  "killed_at_limit": false,
+  "dir": "runs/r1/sonnet-voyager-d2/a1",
+  "report": true,
+  "claimcheck_commit": "b86a50510992",
+  "isolation": {
+   "merge": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "decompose": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "verify": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   }
+  },
+  "answered_by": {
+   "merge": [
+    "claude-sonnet-5"
+   ],
+   "decompose": [
+    "claude-sonnet-5"
+   ],
+   "verify": [
+    "claude-sonnet-5"
+   ]
+  },
+  "all_model_ids": [
+   "claude-haiku-4-5-20251001",
+   "claude-sonnet-5"
+  ],
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "subscription",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ],
+   "effort": {
+    "decompose": "low",
+    "merge": "medium",
+    "verify": "low"
+   }
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 2,
+   "verify": 3
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "probed",
+   "field_order": "schema"
+  },
+  "retrieval": {
+   "state": "tool-use",
+   "retrieval": "retrieved",
+   "turns": 10,
+   "calls_with_tool_use": 2,
+   "measured_calls": 8,
+   "unmeasured_calls": 0
+  },
+  "web_search_requests": 1,
+  "subagents_spawned": 0,
+  "calls": [
+   {
+    "role": "merge",
+    "effort": "medium",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 2,
+    "models": [
+     "claude-haiku-4-5-20251001",
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 4,
+      "outputTokens": 2839,
+      "cacheReadInputTokens": 16051,
+      "cacheCreationInputTokens": 12704,
+      "webSearchRequests": 0,
+      "costUSD": 0.0824242,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 802,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     },
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 12224,
+      "outputTokens": 350,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 1,
+      "costUSD": 0.023974000000000002,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 1,
+    "total_cost_usd": 0.1063982,
+    "input_tokens": 4,
+    "output_tokens": 2839,
+    "thinking_tokens": 802,
+    "cache_read_input_tokens": 16051,
+    "cache_creation_input_tokens": 12704,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 28625
+   },
+   {
+    "role": "merge",
+    "effort": "medium",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 2,
+    "models": [
+     "claude-haiku-4-5-20251001",
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 4,
+      "outputTokens": 5727,
+      "cacheReadInputTokens": 17021,
+      "cacheCreationInputTokens": 13151,
+      "webSearchRequests": 0,
+      "costUSD": 0.1132862,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 2261,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     },
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 16621,
+      "outputTokens": 335,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 0,
+      "costUSD": 0.018296,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.13158219999999998,
+    "input_tokens": 4,
+    "output_tokens": 5727,
+    "thinking_tokens": 2261,
+    "cache_read_input_tokens": 17021,
+    "cache_creation_input_tokens": 13151,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 47905
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 902,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 2016,
+      "webSearchRequests": 0,
+      "costUSD": 0.017548800000000003,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.017548800000000003,
+    "input_tokens": 2,
+    "output_tokens": 902,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 2016,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 6023
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 1161,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 2201,
+      "webSearchRequests": 0,
+      "costUSD": 0.0208788,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0208788,
+    "input_tokens": 2,
+    "output_tokens": 1161,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 2201,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 7866
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 2223,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 5052,
+      "webSearchRequests": 0,
+      "costUSD": 0.042902800000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.042902800000000005,
+    "input_tokens": 2,
+    "output_tokens": 2223,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 5052,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 13701
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 1876,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 2529,
+      "webSearchRequests": 0,
+      "costUSD": 0.0293408,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0293408,
+    "input_tokens": 2,
+    "output_tokens": 1876,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 2529,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 11771
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 1999,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 5199,
+      "webSearchRequests": 0,
+      "costUSD": 0.041250800000000004,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.041250800000000004,
+    "input_tokens": 2,
+    "output_tokens": 1999,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 5199,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 12840
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "sonnet",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "model_usage": {
+     "claude-sonnet-5": {
+      "inputTokens": 2,
+      "outputTokens": 2220,
+      "cacheReadInputTokens": 2304,
+      "cacheCreationInputTokens": 5790,
+      "webSearchRequests": 0,
+      "costUSD": 0.0458248,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0458248,
+    "input_tokens": 2,
+    "output_tokens": 2220,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2304,
+    "cache_creation_input_tokens": 5790,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 14017
+   }
+  ],
+  "errors": 0,
+  "usage": {
+   "total_cost_usd": 0.4357,
+   "input_tokens": 20,
+   "output_tokens": 18947,
+   "cache_read_input_tokens": 46896,
+   "cache_creation_input_tokens": 48642
+  },
+  "failed": false,
+  "usage_limit": false
+ },
+ {
+  "cell": "opus-voyager-d1",
+  "part": "fix",
+  "pair": "voyager",
+  "model": "opus",
+  "attempt": 1,
+  "started_at": "2026-09-26T17:57:59+00:00",
+  "wall_seconds": 244.5,
+  "exit_code": 1,
+  "killed_at_limit": false,
+  "dir": "runs/r1/opus-voyager-d1/a1",
+  "report": true,
+  "claimcheck_commit": "b86a50510992",
+  "isolation": {
+   "merge": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "decompose": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "verify": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   }
+  },
+  "answered_by": {
+   "merge": [
+    "claude-opus-5-5"
+   ],
+   "decompose": [
+    "claude-opus-5-5"
+   ],
+   "verify": [
+    "claude-opus-5-5"
+   ]
+  },
+  "all_model_ids": [
+   "claude-haiku-4-5-20251001",
+   "claude-opus-5-5"
+  ],
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "subscription",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ],
+   "effort": {
+    "decompose": "low",
+    "merge": "xhigh",
+    "verify": "low"
+   }
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 2
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "probed",
+   "field_order": "schema"
+  },
+  "retrieval": {
+   "state": "tool-use",
+   "retrieval": "retrieved",
+   "turns": 9,
+   "calls_with_tool_use": 1,
+   "measured_calls": 6,
+   "unmeasured_calls": 0
+  },
+  "web_search_requests": 1,
+  "subagents_spawned": 0,
+  "calls": [
+   {
+    "role": "merge",
+    "effort": "xhigh",
+    "model_flag": "opus",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 4,
+    "models": [
+     "claude-haiku-4-5-20251001",
+     "claude-opus-5-5"
+    ],
+    "model_usage": {
+     "claude-opus-5-5": {
+      "inputTokens": 8,
+      "outputTokens": 16847,
+      "cacheReadInputTokens": 49089,
+      "cacheCreationInputTokens": 19452,
+      "webSearchRequests": 0,
+      "costUSD": 0.5024058,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 8914,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     },
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 44613,
+      "outputTokens": 1193,
+      "cacheReadInputTokens": 0,
+      "cacheCreationInputTokens": 0,
+      "webSearchRequests": 1,
+      "costUSD": 0.060578,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 1,
+    "total_cost_usd": 0.5629838,
+    "input_tokens": 8,
+    "output_tokens": 16847,
+    "thinking_tokens": 8914,
+    "cache_read_input_tokens": 49089,
+    "cache_creation_input_tokens": 19452,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 147060
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "opus",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-opus-5-5"
+    ],
+    "model_usage": {
+     "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 1031,
+      "cacheReadInputTokens": 2410,
+      "cacheCreationInputTokens": 1950,
+      "webSearchRequests": 0,
+      "costUSD": 0.03671,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.03671,
+    "input_tokens": 2,
+    "output_tokens": 1031,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2410,
+    "cache_creation_input_tokens": 1950,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 13296
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "opus",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-opus-5-5"
+    ],
+    "model_usage": {
+     "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 1877,
+      "cacheReadInputTokens": 2410,
+      "cacheCreationInputTokens": 2135,
+      "webSearchRequests": 0,
+      "costUSD": 0.055110000000000006,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.055110000000000006,
+    "input_tokens": 2,
+    "output_tokens": 1877,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2410,
+    "cache_creation_input_tokens": 2135,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 14015
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "opus",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-opus-5-5"
+    ],
+    "model_usage": {
+     "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 3146,
+      "cacheReadInputTokens": 2410,
+      "cacheCreationInputTokens": 5273,
+      "webSearchRequests": 0,
+      "costUSD": 0.105594,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.105594,
+    "input_tokens": 2,
+    "output_tokens": 3146,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2410,
+    "cache_creation_input_tokens": 5273,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 22104
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "opus",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-opus-5-5"
+    ],
+    "model_usage": {
+     "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 2428,
+      "cacheReadInputTokens": 2410,
+      "cacheCreationInputTokens": 2472,
+      "webSearchRequests": 0,
+      "costUSD": 0.068826,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.068826,
+    "input_tokens": 2,
+    "output_tokens": 2428,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2410,
+    "cache_creation_input_tokens": 2472,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 16876
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "opus",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-opus-5-5"
+    ],
+    "model_usage": {
+     "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 3098,
+      "cacheReadInputTokens": 2410,
+      "cacheCreationInputTokens": 5482,
+      "webSearchRequests": 0,
+      "costUSD": 0.10630600000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 0,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.10630600000000001,
+    "input_tokens": 2,
+    "output_tokens": 3098,
+    "thinking_tokens": 0,
+    "cache_read_input_tokens": 2410,
+    "cache_creation_input_tokens": 5482,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 21825
+   }
+  ],
+  "errors": 0,
+  "usage": {
+   "total_cost_usd": 0.9355,
+   "input_tokens": 18,
+   "output_tokens": 28427,
+   "cache_read_input_tokens": 61139,
+   "cache_creation_input_tokens": 36764
+  },
+  "failed": false,
+  "usage_limit": false
+ },
+ {
+  "cell": "haiku-bip39-d1",
+  "part": "fix",
+  "pair": "bip39",
+  "model": "haiku",
+  "attempt": 1,
+  "started_at": "2026-09-26T18:02:03+00:00",
+  "wall_seconds": 483.4,
+  "exit_code": 1,
+  "killed_at_limit": false,
+  "dir": "runs/r1/haiku-bip39-d1/a1",
+  "report": true,
+  "claimcheck_commit": "b86a50510992",
+  "isolation": {
+   "merge": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "decompose": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   },
+   "verify": {
+    "safe_mode": true,
+    "tools": [
+     "WebSearch",
+     "WebFetch"
+    ]
+   }
+  },
+  "answered_by": {
+   "merge": [
+    "claude-haiku-4-5-20251001"
+   ],
+   "decompose": [
+    "claude-haiku-4-5-20251001"
+   ],
+   "verify": [
+    "claude-haiku-4-5-20251001"
+   ]
+  },
+  "all_model_ids": [
+   "claude-haiku-4-5-20251001"
+  ],
+  "decoding": {
+   "temperature": "not sent",
+   "seed": "not sent",
+   "profile": "subscription",
+   "thinking": [
+    "decompose",
+    "merge",
+    "verify"
+   ],
+   "effort": {
+    "decompose": "low",
+    "merge": "medium",
+    "verify": "low"
+   }
+  },
+  "calls_by_role": {
+   "decompose": 3,
+   "merge": 1,
+   "verify": 2
+  },
+  "structured_output": {
+   "mode": "prompt",
+   "how": "probed",
+   "field_order": "schema"
+  },
+  "retrieval": {
+   "state": "tool-use",
+   "retrieval": "retrieved",
+   "turns": 14,
+   "calls_with_tool_use": 1,
+   "measured_calls": 6,
+   "unmeasured_calls": 0
+  },
+  "web_search_requests": 3,
+  "subagents_spawned": 0,
+  "calls": [
+   {
+    "role": "merge",
+    "effort": "medium",
+    "model_flag": "haiku",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 9,
+    "models": [
+     "claude-haiku-4-5-20251001"
+    ],
+    "model_usage": {
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 47056,
+      "outputTokens": 10274,
+      "cacheReadInputTokens": 123557,
+      "cacheCreationInputTokens": 20421,
+      "webSearchRequests": 3,
+      "costUSD": 0.1816237,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 4887,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 3,
+    "total_cost_usd": 0.1816237,
+    "input_tokens": 66,
+    "output_tokens": 8337,
+    "thinking_tokens": 4887,
+    "cache_read_input_tokens": 123557,
+    "cache_creation_input_tokens": 20421,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 96492
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "haiku",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-haiku-4-5-20251001"
+    ],
+    "model_usage": {
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 10,
+      "outputTokens": 9771,
+      "cacheReadInputTokens": 4433,
+      "cacheCreationInputTokens": 1953,
+      "webSearchRequests": 0,
+      "costUSD": 0.053214300000000006,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 9271,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.053214300000000006,
+    "input_tokens": 10,
+    "output_tokens": 9771,
+    "thinking_tokens": 9271,
+    "cache_read_input_tokens": 4433,
+    "cache_creation_input_tokens": 1953,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 66034
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "haiku",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-haiku-4-5-20251001"
+    ],
+    "model_usage": {
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 10,
+      "outputTokens": 15749,
+      "cacheReadInputTokens": 4433,
+      "cacheCreationInputTokens": 2147,
+      "webSearchRequests": 0,
+      "costUSD": 0.08349229999999999,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 14778,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.08349229999999999,
+    "input_tokens": 10,
+    "output_tokens": 15749,
+    "thinking_tokens": 14778,
+    "cache_read_input_tokens": 4433,
+    "cache_creation_input_tokens": 2147,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 112898
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "haiku",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-haiku-4-5-20251001"
+    ],
+    "model_usage": {
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 10,
+      "outputTokens": 4340,
+      "cacheReadInputTokens": 4433,
+      "cacheCreationInputTokens": 4022,
+      "webSearchRequests": 0,
+      "costUSD": 0.030197300000000003,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 2232,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.030197300000000003,
+    "input_tokens": 10,
+    "output_tokens": 4340,
+    "thinking_tokens": 2232,
+    "cache_read_input_tokens": 4433,
+    "cache_creation_input_tokens": 4022,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 33182
+   },
+   {
+    "role": "decompose",
+    "effort": "low",
+    "model_flag": "haiku",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-haiku-4-5-20251001"
+    ],
+    "model_usage": {
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 10,
+      "outputTokens": 17066,
+      "cacheReadInputTokens": 4433,
+      "cacheCreationInputTokens": 2430,
+      "webSearchRequests": 0,
+      "costUSD": 0.0906433,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 16122,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0906433,
+    "input_tokens": 10,
+    "output_tokens": 17066,
+    "thinking_tokens": 16122,
+    "cache_read_input_tokens": 4433,
+    "cache_creation_input_tokens": 2430,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 125344
+   },
+   {
+    "role": "verify",
+    "effort": "low",
+    "model_flag": "haiku",
+    "safe_mode": true,
+    "tools": "WebSearch,WebFetch",
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "models": [
+     "claude-haiku-4-5-20251001"
+    ],
+    "model_usage": {
+     "claude-haiku-4-5-20251001": {
+      "inputTokens": 10,
+      "outputTokens": 5012,
+      "cacheReadInputTokens": 4433,
+      "cacheCreationInputTokens": 3950,
+      "webSearchRequests": 0,
+      "costUSD": 0.0334133,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000,
+      "thinkingTokens": 3499,
+      "canonicalModel": "claude-haiku-4-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+     }
+    },
+    "web_search_requests": 0,
+    "total_cost_usd": 0.0334133,
+    "input_tokens": 10,
+    "output_tokens": 5012,
+    "thinking_tokens": 3499,
+    "cache_read_input_tokens": 4433,
+    "cache_creation_input_tokens": 3950,
+    "subagents_spawned": 0,
+    "permission_denials": [],
+    "duration_ms": 40226
+   }
+  ],
+  "errors": 0,
+  "usage": {
+   "total_cost_usd": 0.4726,
+   "input_tokens": 116,
+   "output_tokens": 60275,
+   "cache_read_input_tokens": 145722,
+   "cache_creation_input_tokens": 34923
+  },
+  "failed": false,
+  "usage_limit": false
+ }
+]

@@ -1,0 +1,1869 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/disjoint_sources/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/disjoint_sources/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/disjoint_sources/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/disjoint_sources/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/disjoint_sources/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/disjoint_sources/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 35,
+      "source_a.md": 11,
+      "source_b.md": 31
+    },
+    "forward_submitted": 42,
+    "forward_verdicts": 42,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 11,
+        "checked": 11,
+        "accounted": 11,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 31,
+        "checked": 31,
+        "accounted": 31,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 35,
+    "reverse_verdicts": 35,
+    "reverse_partial": 1,
+    "graded": 77,
+    "grounded": 77,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "there was a princess in a distant country",
+      "line": 3,
+      "span": "there was a princess in a distant country",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The princess visited the rosegarden every morning from 8 am till 9 am",
+      "line": 7,
+      "span": "She visited the rosegarden every morning from 8 am till 9 am",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The princess visited the rosegarden right after her breakfast",
+      "line": 7,
+      "span": "right after her breakfast",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The princess worked in the rosegarden to tidy it up from 02:00 till 15:30 o'clock",
+      "line": 8,
+      "span": "From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "The rosegarden lost all his life in winter",
+      "line": 12,
+      "span": "The rosegarden lost all his life in winter",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "The rosegarden turned back to life and color",
+      "line": 13,
+      "span": "it turned back to life and color",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "The rose garden was the private property of the royal family",
+      "line": 17,
+      "span": "the rose garden was the private property of the royal family",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "The young princess insisted on making the garden accessible to the public every March 1st to March 31st",
+      "line": 17,
+      "span": "the young princess insisted on making the garden accessible to the public every March 1st to March 31st",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most",
+      "line": 22,
+      "span": "It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "People were starting to make bets on whether the postcard arrived at their home before they arrived home",
+      "line": 23,
+      "span": "People were starting to make bets on whether the postcard arrived at their home before they arrived home",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "It was a tie because the people and the postcards were usually transported in the same carriage",
+      "line": 24,
+      "span": "it was a tie because the people and the postcards were usually transported in the same carriage",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "there was an old lady that lived in a dark, spooky forest.",
+      "line": 3,
+      "span": "there was an old lady that lived in a dark, spooky forest",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The forest was not traversable between October and April.",
+      "line": 7,
+      "span": "The forest was not traversable between October and April",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "it was too wet and too cold.",
+      "line": 7,
+      "span": "it was too wet and too cold",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "The old lady nevertheless lived the entire year in the forest.",
+      "line": 8,
+      "span": "The old lady nevertheless lived the entire year in the forest",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "she acclimated to the weather.",
+      "line": 8,
+      "span": "she acclimated to the weather",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "built strategies to survive the harsh conditions.",
+      "line": 8,
+      "span": "built strategies to survive the harsh conditions",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "many people suspected the old lady would be a witch that worked on forbidden magic.",
+      "line": 12,
+      "span": "many people suspected the old lady would be a witch that worked on forbidden magic",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "She collected wild herbs.",
+      "line": 12,
+      "span": "she collected wild herbs",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "She did not harvest skulls and bones.",
+      "line": 12,
+      "span": "harvesting skulls and bones",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "Those wild herbs were tried.",
+      "line": 13,
+      "span": "Those wild herbs were tried",
+      "anchored": true
+    },
+    {
+      "id": "B-011",
+      "source": "source_b.md",
+      "text": "Those wild herbs were sold to wandering travelers.",
+      "line": 13,
+      "span": "were sold to wandering travelers",
+      "anchored": false
+    },
+    {
+      "id": "B-012",
+      "source": "source_b.md",
+      "text": "Wandering travelers transported and sold the herbs into the cities.",
+      "line": 13,
+      "span": "who transported and sold the herbs into the cities",
+      "anchored": true
+    },
+    {
+      "id": "B-013",
+      "source": "source_b.md",
+      "text": "many people of the nearby village became very sick.",
+      "line": 17,
+      "span": "many people of the nearby village became very sick",
+      "anchored": true
+    },
+    {
+      "id": "B-014",
+      "source": "source_b.md",
+      "text": "One young man traveled to the old lady's house deep in the woods.",
+      "line": 17,
+      "span": "traveled to the old lady's house deep in the woods",
+      "anchored": true
+    },
+    {
+      "id": "B-015",
+      "source": "source_b.md",
+      "text": "It took him days to reach her house.",
+      "line": 18,
+      "span": "It took him days to reach her house",
+      "anchored": true
+    },
+    {
+      "id": "B-016",
+      "source": "source_b.md",
+      "text": "he struggled with the wet and slippery ground.",
+      "line": 18,
+      "span": "he struggled with the wet and slippery ground",
+      "anchored": true
+    },
+    {
+      "id": "B-017",
+      "source": "source_b.md",
+      "text": "He lost his orientation several times.",
+      "line": 18,
+      "span": "He also lost his orientation several times",
+      "anchored": true
+    },
+    {
+      "id": "B-018",
+      "source": "source_b.md",
+      "text": "he eventually reached her house.",
+      "line": 19,
+      "span": "he reached her house",
+      "anchored": true
+    },
+    {
+      "id": "B-019",
+      "source": "source_b.md",
+      "text": "He carefully knocked.",
+      "line": 19,
+      "span": "He carefully knocked",
+      "anchored": true
+    },
+    {
+      "id": "B-020",
+      "source": "source_b.md",
+      "text": "she opened the door.",
+      "line": 20,
+      "span": "she opened the door",
+      "anchored": true
+    },
+    {
+      "id": "B-021",
+      "source": "source_b.md",
+      "text": "saw the young man.",
+      "line": 20,
+      "span": "saw the young man",
+      "anchored": true
+    },
+    {
+      "id": "B-022",
+      "source": "source_b.md",
+      "text": "she asked him to come into her house.",
+      "line": 20,
+      "span": "she asked him to come into her house",
+      "anchored": true
+    },
+    {
+      "id": "B-023",
+      "source": "source_b.md",
+      "text": "she asked him to sit at the fire.",
+      "line": 20,
+      "span": "sit at the fire",
+      "anchored": true
+    },
+    {
+      "id": "B-024",
+      "source": "source_b.md",
+      "text": "she asked him to drink some hot soup she made for him.",
+      "line": 20,
+      "span": "drink some hot soup she made for him",
+      "anchored": true
+    },
+    {
+      "id": "B-025",
+      "source": "source_b.md",
+      "text": "the man recovered again.",
+      "line": 24,
+      "span": "the man recovered again",
+      "anchored": true
+    },
+    {
+      "id": "B-026",
+      "source": "source_b.md",
+      "text": "she gave him enough medicine made out of the herbs she collected in spring for the entire village.",
+      "line": 24,
+      "span": "she gave him enough medicine made out of the herbs she collected in spring for the entire village",
+      "anchored": true
+    },
+    {
+      "id": "B-027",
+      "source": "source_b.md",
+      "text": "He traveled back to his village.",
+      "line": 25,
+      "span": "He traveled back to his village",
+      "anchored": true
+    },
+    {
+      "id": "B-028",
+      "source": "source_b.md",
+      "text": "went to the home of every sick person.",
+      "line": 25,
+      "span": "went to the home of every sick person",
+      "anchored": true
+    },
+    {
+      "id": "B-029",
+      "source": "source_b.md",
+      "text": "provide them with the correct amount of medicine as told by the old lady from the woods.",
+      "line": 25,
+      "span": "provide them with the correct amount of medicine as told by the old lady from the woods",
+      "anchored": true
+    },
+    {
+      "id": "B-030",
+      "source": "source_b.md",
+      "text": "everyone got healthy again.",
+      "line": 26,
+      "span": "everyone got healthy again",
+      "anchored": true
+    },
+    {
+      "id": "B-031",
+      "source": "source_b.md",
+      "text": "the villagers sent a huge basket of cheese and dried meat to the old lady every autumn.",
+      "line": 26,
+      "span": "the villagers sent a huge basket of cheese and dried meat to the old lady every autumn",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Once upon a time, there was a princess in a distant country that loved to spend time in her beautiful rosegarden.",
+      "line": 3,
+      "span": "Once upon a time, there was a princess in a distant country that loved to spend time in her beautiful rosegarden.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.",
+      "line": 7,
+      "span": "She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up.",
+      "line": 8,
+      "span": "From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Her mother did not appreciate that she, as a princess, would actually work in the garden.",
+      "line": 8,
+      "span": "Her mother did not appreciate that she, as a princess, would actually work in the garden",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The princess didn't care.",
+      "line": 8,
+      "span": "the princess didn't care",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "The rosegarden lost all his life in winter.",
+      "line": 12,
+      "span": "The rosegarden lost all his life in winter",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "The young lady could not enjoy the beautiful colors and all the life the rosegarden harbored.",
+      "line": 12,
+      "span": "the young lady could not enjoy the beautiful colors and all the life the rosegarden harbored.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "It turned back to life and color.",
+      "line": 13,
+      "span": "it turned back to life and color",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "The rose garden was the private property of the royal family.",
+      "line": 17,
+      "span": "the rose garden was the private property of the royal family",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "The young princess insisted on making the garden accessible to the public every March 1st to March 31st.",
+      "line": 17,
+      "span": "the young princess insisted on making the garden accessible to the public every March 1st to March 31st.",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "People from all over the country traveled to the castel to enjoy a nice day wandering through the rosegarden just like their beloved princess.",
+      "line": 18,
+      "span": "people from all over the country traveled to the castel to enjoy a nice day wandering through the rosegarden just like their beloved princess",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most.",
+      "line": 22,
+      "span": "It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most.",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "People were starting to make bets on whether the postcard arrived at their home before they arrived home.",
+      "line": 23,
+      "span": "People were starting to make bets on whether the postcard arrived at their home before they arrived home.",
+      "anchored": true
+    },
+    {
+      "id": "M-014",
+      "source": "merged.md",
+      "text": "In many cases, it was a tie because the people and the postcards were usually transported in the same carriage.",
+      "line": 24,
+      "span": "In many cases, it was a tie because the people and the postcards were usually transported in the same carriage.",
+      "anchored": true
+    },
+    {
+      "id": "M-015",
+      "source": "merged.md",
+      "text": "Once upon a time there was an old lady that lived in a dark, spooky forest.",
+      "line": 28,
+      "span": "Once upon a time there was an old lady that lived in a dark, spooky forest.",
+      "anchored": true
+    },
+    {
+      "id": "M-016",
+      "source": "merged.md",
+      "text": "The forest was not traversable between October and April as it was too wet and too cold.",
+      "line": 32,
+      "span": "The forest was not traversable between October and April as it was too wet and too cold.",
+      "anchored": true
+    },
+    {
+      "id": "M-017",
+      "source": "merged.md",
+      "text": "The old lady nevertheless lived the entire year in the forest.",
+      "line": 33,
+      "span": "The old lady nevertheless lived the entire year in the forest.",
+      "anchored": true
+    },
+    {
+      "id": "M-018",
+      "source": "merged.md",
+      "text": "Over the years, she acclimated to the weather and built strategies to survive the harsh conditions.",
+      "line": 33,
+      "span": "Over the years, she acclimated to the weather and built strategies to survive the harsh conditions.",
+      "anchored": true
+    },
+    {
+      "id": "M-019",
+      "source": "merged.md",
+      "text": "Many people suspected the old lady would be a witch that worked on forbidden magic.",
+      "line": 37,
+      "span": "many people suspected the old lady would be a witch that worked on forbidden magic",
+      "anchored": true
+    },
+    {
+      "id": "M-020",
+      "source": "merged.md",
+      "text": "She collected wild herbs.",
+      "line": 37,
+      "span": "she collected wild herbs.",
+      "anchored": true
+    },
+    {
+      "id": "M-021",
+      "source": "merged.md",
+      "text": "Those wild herbs were tried and sold to wandering travelers.",
+      "line": 38,
+      "span": "Those wild herbs were tried and sold to wandering travelers",
+      "anchored": true
+    },
+    {
+      "id": "M-022",
+      "source": "merged.md",
+      "text": "Wandering travelers transported and sold the herbs into the cities.",
+      "line": 38,
+      "span": "who transported and sold the herbs into the cities.",
+      "anchored": true
+    },
+    {
+      "id": "M-023",
+      "source": "merged.md",
+      "text": "Many people of the nearby village became very sick in one harsh winter.",
+      "line": 42,
+      "span": "In one harsh winter, many people of the nearby village became very sick.",
+      "anchored": true
+    },
+    {
+      "id": "M-024",
+      "source": "merged.md",
+      "text": "One young man traveled to the old lady's house deep in the woods in a desperate attempt to help the villagers.",
+      "line": 42,
+      "span": "In a desperate attempt to help the villagers, one young man took the courage and traveled to the old lady's house deep in the woods.",
+      "anchored": true
+    },
+    {
+      "id": "M-025",
+      "source": "merged.md",
+      "text": "It took him days to reach her house as he struggled with the wet and slippery ground.",
+      "line": 43,
+      "span": "It took him days to reach her house as he struggled with the wet and slippery ground.",
+      "anchored": true
+    },
+    {
+      "id": "M-026",
+      "source": "merged.md",
+      "text": "He also lost his orientation several times.",
+      "line": 43,
+      "span": "He also lost his orientation several times.",
+      "anchored": true
+    },
+    {
+      "id": "M-027",
+      "source": "merged.md",
+      "text": "He eventually reached her house.",
+      "line": 44,
+      "span": "But eventually, he reached her house.",
+      "anchored": true
+    },
+    {
+      "id": "M-028",
+      "source": "merged.md",
+      "text": "He carefully knocked and hoped that all the rumors about the lady were untrue.",
+      "line": 44,
+      "span": "He carefully knocked and hoped that all the rumors about the lady were untrue.",
+      "anchored": true
+    },
+    {
+      "id": "M-029",
+      "source": "merged.md",
+      "text": "She opened the door and saw the young man, she asked him to come into her house, sit at the fire and drink some hot soup she made for him.",
+      "line": 45,
+      "span": "she opened the door and saw the young man, she asked him to come into her house, sit at the fire and drink some hot soup she made for him.",
+      "anchored": true
+    },
+    {
+      "id": "M-030",
+      "source": "merged.md",
+      "text": "The man recovered again.",
+      "line": 49,
+      "span": "the man recovered again",
+      "anchored": true
+    },
+    {
+      "id": "M-031",
+      "source": "merged.md",
+      "text": "She gave him enough medicine made out of the herbs she collected in spring for the entire village.",
+      "line": 49,
+      "span": "she gave him enough medicine made out of the herbs she collected in spring for the entire village.",
+      "anchored": true
+    },
+    {
+      "id": "M-032",
+      "source": "merged.md",
+      "text": "He traveled back to his village.",
+      "line": 50,
+      "span": "He traveled back to his village",
+      "anchored": true
+    },
+    {
+      "id": "M-033",
+      "source": "merged.md",
+      "text": "He went to the home of every sick person to provide them with the correct amount of medicine as told by the old lady from the woods.",
+      "line": 50,
+      "span": "He went to the home of every sick person to provide them with the correct amount of medicine as told by the old lady from the woods.",
+      "anchored": false
+    },
+    {
+      "id": "M-034",
+      "source": "merged.md",
+      "text": "Everyone got healthy again.",
+      "line": 51,
+      "span": "everyone got healthy again",
+      "anchored": true
+    },
+    {
+      "id": "M-035",
+      "source": "merged.md",
+      "text": "The villagers sent a huge basket of cheese and dried meat to the old lady every autumn.",
+      "line": 51,
+      "span": "the villagers sent a huge basket of cheese and dried meat to the old lady every autumn",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Once upon a time, there was a princess in a distant country that loved to spend time in her beautiful rosegarden.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states there was a princess in a distant country.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence confirms the princess visited the rosegarden each morning from 8\u202fam to 9\u202fam.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.",
+      "evidence_source": "merged.md",
+      "rationale": "The same sentence adds that the visit was right after her breakfast.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up.",
+      "evidence_source": "merged.md",
+      "rationale": "The text states she worked in the rosegarden to tidy it up from 02:00 to 15:30.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "The rosegarden lost all his life in winter, so the young lady could not enjoy the beautiful colors and all the life the rosegarden harbored.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence directly says the rosegarden lost all its life in winter.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "it turned back to life and color.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference notes that the rosegarden turned back to life and color.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "While the rose garden was the private property of the royal family, the young princess insisted on making the garden accessible to the public every March 1st to March 31st.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence states the rose garden was private property of the royal family.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "While the rose garden was the private property of the royal family, the young princess insisted on making the garden accessible to the public every March 1st to March 31st.",
+      "evidence_source": "merged.md",
+      "rationale": "The same sentence confirms the princess insisted on public access each March 1\u201131.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most.",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly describes the tradition of visitors drawing their favorite scenery.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "SUPPORTED",
+      "evidence": "People were starting to make bets on whether the postcard arrived at their home before they arrived home.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence states that people began betting on postcard arrival versus their own arrival.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "SUPPORTED",
+      "evidence": "In many cases, it was a tie because the people and the postcards were usually transported in the same carriage.",
+      "evidence_source": "merged.md",
+      "rationale": "The passage explains that ties occurred because both people and postcards used the same carriage.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Once upon a time there was an old lady that lived in a dark, spooky forest.",
+      "evidence_source": "merged.md",
+      "rationale": "The opening sentence confirms an old lady lived in a dark, spooky forest.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The forest was not traversable between October and April as it was too wet and too cold.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence states the forest was not traversable between October and April.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The forest was not traversable between October and April as it was too wet and too cold.",
+      "evidence_source": "merged.md",
+      "rationale": "The same sentence explains the reason was that it was too wet and too cold.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The old lady nevertheless lived the entire year in the forest.",
+      "evidence_source": "merged.md",
+      "rationale": "The text directly says the old lady lived there all year.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "she acclimated to the weather",
+      "evidence_source": "merged.md",
+      "rationale": "The passage notes she acclimated to the weather.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "built strategies to survive the harsh conditions.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence mentions she built strategies to survive harsh conditions.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "While many people suspected the old lady would be a witch that worked on forbidden magic, the reality was less exciting.",
+      "evidence_source": "merged.md",
+      "rationale": "The text records that many people suspected she was a witch working on forbidden magic.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "she collected wild herbs.",
+      "evidence_source": "merged.md",
+      "rationale": "The passage states she collected wild herbs.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Instead of harvesting skulls and bones, she collected wild herbs.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence implies she did not harvest skulls and bones.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Those wild herbs were tried and sold to wandering travelers who transported and sold the herbs into the cities.",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly says those wild herbs were tried.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-011",
+      "verdict": "SUPPORTED",
+      "evidence": "Those wild herbs were tried and sold to wandering travelers who transported and sold the herbs into the cities.",
+      "evidence_source": "merged.md",
+      "rationale": "The same sentence confirms the herbs were sold to wandering travelers.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-012",
+      "verdict": "SUPPORTED",
+      "evidence": "who transported and sold the herbs into the cities.",
+      "evidence_source": "merged.md",
+      "rationale": "The passage states wandering travelers transported and sold the herbs into the cities.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-013",
+      "verdict": "SUPPORTED",
+      "evidence": "many people of the nearby village became very sick.",
+      "evidence_source": "merged.md",
+      "rationale": "The sentence directly reports many villagers became very sick.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-014",
+      "verdict": "SUPPORTED",
+      "evidence": "one young man took the courage and traveled to the old lady's house deep in the woods.",
+      "evidence_source": "merged.md",
+      "rationale": "The text describes a young man traveling to the old lady's house deep in the woods.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-015",
+      "verdict": "SUPPORTED",
+      "evidence": "It took him days to reach her house",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text contains the exact phrase stating that it took him days to reach her house.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-016",
+      "verdict": "SUPPORTED",
+      "evidence": "he struggled with the wet and slippery ground",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text includes the exact wording that he struggled with the wet and slippery ground.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-017",
+      "verdict": "SUPPORTED",
+      "evidence": "He also lost his orientation several times",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that he lost his orientation several times (with the additional word \"also\").",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-018",
+      "verdict": "SUPPORTED",
+      "evidence": "eventually, he reached her house",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text says \"eventually, he reached her house\", matching the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-019",
+      "verdict": "SUPPORTED",
+      "evidence": "He carefully knocked",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text contains the exact statement that he carefully knocked.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-020",
+      "verdict": "SUPPORTED",
+      "evidence": "she opened the door",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text includes the exact phrase that she opened the door.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-021",
+      "verdict": "SUPPORTED",
+      "evidence": "saw the young man",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text contains the exact wording that she saw the young man.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-022",
+      "verdict": "SUPPORTED",
+      "evidence": "she asked him to come into her house",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that she asked him to come into her house.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-023",
+      "verdict": "SUPPORTED",
+      "evidence": "she asked him to come into her house, sit at the fire",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text indicates she asked him to sit at the fire as part of the request.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-024",
+      "verdict": "SUPPORTED",
+      "evidence": "she asked him to come into her house, sit at the fire and drink some hot soup she made for him",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text includes the request to drink some hot soup she made for him.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-025",
+      "verdict": "SUPPORTED",
+      "evidence": "the man recovered again",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text contains the exact phrase that the man recovered again.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-026",
+      "verdict": "SUPPORTED",
+      "evidence": "she gave him enough medicine made out of the herbs she collected in spring for the entire village",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states she gave him enough medicine made out of the herbs she collected in spring for the entire village.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-027",
+      "verdict": "SUPPORTED",
+      "evidence": "He traveled back to his village",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text includes the exact statement that he traveled back to his village.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-028",
+      "verdict": "SUPPORTED",
+      "evidence": "went to the home of every sick person",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text contains the phrase that he went to the home of every sick person.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-029",
+      "verdict": "SUPPORTED",
+      "evidence": "provide them with the correct amount of medicine as told by the old lady from the woods",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that he provided them with the correct amount of medicine as told by the old lady from the woods.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-030",
+      "verdict": "SUPPORTED",
+      "evidence": "everyone got healthy again",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text includes the exact phrase that everyone got healthy again.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-031",
+      "verdict": "SUPPORTED",
+      "evidence": "the villagers sent a huge basket of cheese and dried meat to the old lady every autumn",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the villagers sent a huge basket of cheese and dried meat to the old lady every autumn.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Once upon a time, there was a princess in a distant country that loved to spend time in her beautiful rosegarden.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source contains the exact sentence stating the princess and the rosegarden.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "She visited the rosegarden every morning from 8 am till 9 am, right after her breakfast.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this visitation schedule verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "From 02:00 till 15:30 o'clock, she worked in the rosegarden to tidy it up.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source includes this exact work\u2011time sentence.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Her mother did not appreciate that she, as a princess, would actually work in the garden",
+      "evidence_source": "source_a.md",
+      "rationale": "The source contains this phrase, matching the claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "the princess didn't care",
+      "evidence_source": "source_a.md",
+      "rationale": "The source ends the sentence with this exact clause.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "The rosegarden lost all his life in winter",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this winter loss phrase verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "the young lady could not enjoy the beautiful colors and all the life the rosegarden harbored",
+      "evidence_source": "source_a.md",
+      "rationale": "The source includes this exact description of the young lady's inability.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "it turned back to life and color",
+      "evidence_source": "source_a.md",
+      "rationale": "The source contains this phrase about spring revival.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "the rose garden was the private property of the royal family",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says the garden was private property of the royal family.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "the young princess insisted on making the garden accessible to the public every March 1st to March 31st",
+      "evidence_source": "source_a.md",
+      "rationale": "The source contains this exact statement of public access dates.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "people from all over the country traveled to the castel to enjoy a nice day wandering through the rosegarden just like their beloved princess",
+      "evidence_source": "source_a.md",
+      "rationale": "The source includes this sentence verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "It became tradition that everyone who visited the rosegarden from the outside picked their favorite scenery and tried to draw what they liked most",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this tradition exactly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "People were starting to make bets on whether the postcard arrived at their home before they arrived home",
+      "evidence_source": "source_a.md",
+      "rationale": "The source contains this claim about postcard bets.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "SUPPORTED",
+      "evidence": "In many cases, it was a tie because the people and the postcards were usually transported in the same carriage",
+      "evidence_source": "source_a.md",
+      "rationale": "The source includes this exact explanation of ties.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-015",
+      "verdict": "SUPPORTED",
+      "evidence": "Once upon a time there was an old lady that lived in a dark, spooky forest",
+      "evidence_source": "source_b.md",
+      "rationale": "The source opens with this exact sentence.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-016",
+      "verdict": "SUPPORTED",
+      "evidence": "The forest was not traversable between October and April as it was too wet and too cold",
+      "evidence_source": "source_b.md",
+      "rationale": "The source states this traversability condition verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-017",
+      "verdict": "SUPPORTED",
+      "evidence": "The old lady nevertheless lived the entire year in the forest",
+      "evidence_source": "source_b.md",
+      "rationale": "The source contains this exact statement of year\u2011round residence.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-018",
+      "verdict": "SUPPORTED",
+      "evidence": "Over the years, she acclimated to the weather and built strategies to survive the harsh conditions",
+      "evidence_source": "source_b.md",
+      "rationale": "The source includes this sentence verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-019",
+      "verdict": "SUPPORTED",
+      "evidence": "many people suspected the old lady would be a witch that worked on forbidden magic",
+      "evidence_source": "source_b.md",
+      "rationale": "The source contains this phrase (lower\u2011case start) matching the claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-020",
+      "verdict": "SUPPORTED",
+      "evidence": "she collected wild herbs",
+      "evidence_source": "source_b.md",
+      "rationale": "The source states this activity exactly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-021",
+      "verdict": "SUPPORTED",
+      "evidence": "Those wild herbs were tried and sold to wandering travelers",
+      "evidence_source": "source_b.md",
+      "rationale": "The source includes this exact clause.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-022",
+      "verdict": "PARTIAL",
+      "evidence": "transported and sold the herbs into the cities",
+      "evidence_source": "source_b.md",
+      "rationale": "The source provides the verb phrase but omits the explicit subject \"Wandering travelers\".",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_invented",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-023",
+      "verdict": "SUPPORTED",
+      "evidence": "many people of the nearby village became very sick",
+      "evidence_source": "source_b.md",
+      "rationale": "The source contains this phrase, matching the claim's meaning.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-024",
+      "verdict": "SUPPORTED",
+      "evidence": "In a desperate attempt to help the villagers, one young man took the courage and traveled to the old lady's house deep in the woods.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source states the same event in different wording, satisfying the claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-025",
+      "verdict": "SUPPORTED",
+      "evidence": "It took him days to reach her house as he struggled with the wet and slippery ground.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source includes this exact sentence.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-026",
+      "verdict": "SUPPORTED",
+      "evidence": "He also lost his orientation several times.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source text contains the exact sentence stating he lost his orientation several times.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-027",
+      "verdict": "SUPPORTED",
+      "evidence": "But eventually, he reached her house.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source says \"But eventually, he reached her house,\" which matches the claim in meaning.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-028",
+      "verdict": "SUPPORTED",
+      "evidence": "He carefully knocked and hoped that all the rumors about the lady were untrue.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source includes the exact wording of the claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-029",
+      "verdict": "SUPPORTED",
+      "evidence": "When she opened the door and saw the young man, she asked him to come into her house, sit at the fire and drink some hot soup she made for him.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source sentence conveys the same actions and wording as the claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-030",
+      "verdict": "SUPPORTED",
+      "evidence": "the man recovered again",
+      "evidence_source": "source_b.md",
+      "rationale": "The phrase \"the man recovered again\" appears within the source sentence.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-031",
+      "verdict": "SUPPORTED",
+      "evidence": "she gave him enough medicine made out of the herbs she collected in spring for the entire village.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source contains the exact statement about her giving enough medicine made from spring herbs.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-032",
+      "verdict": "SUPPORTED",
+      "evidence": "He traveled back to his village",
+      "evidence_source": "source_b.md",
+      "rationale": "The source includes the phrase \"He traveled back to his village\".",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-033",
+      "verdict": "SUPPORTED",
+      "evidence": "went to the home of every sick person to provide them with the correct amount of medicine as told by the old lady from the woods",
+      "evidence_source": "source_b.md",
+      "rationale": "The source contains this exact clause describing his visits to each sick person.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-034",
+      "verdict": "SUPPORTED",
+      "evidence": "everyone got healthy again",
+      "evidence_source": "source_b.md",
+      "rationale": "The source states \"everyone got healthy again\".",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-035",
+      "verdict": "SUPPORTED",
+      "evidence": "the villagers sent a huge basket of cheese and dried meat to the old lady every autumn",
+      "evidence_source": "source_b.md",
+      "rationale": "The source includes the exact sentence about villagers sending a basket each autumn.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "M-022",
+      "verdict": "PARTIAL",
+      "evidence": "transported and sold the herbs into the cities",
+      "evidence_source": "source_b.md",
+      "rationale": "The source provides the verb phrase but omits the explicit subject \"Wandering travelers\".",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "partially_invented",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T12:42:51+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "gpt-oss:120b",
+      "verify": "gpt-oss:120b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 7,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 39501,
+      "completion_tokens": 9506
+    },
+    "tokens": {
+      "input": 39501,
+      "output": 9506,
+      "total": 49007,
+      "measured_calls": 7,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "39,501 in, 9,506 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "4a49194401c13907d707bd04d5ace7d5ce7179d7a0709e6795d8db17eb83e88c",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 5101,
+        "completion_tokens": 600
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "31a0d0e395ff33d080164626ab86e21cd8fd8e1e07f4d65a0f23dc2239e2807c",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 5729,
+        "completion_tokens": 1244
+      },
+      {
+        "role": "verify",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "f76cecfa0140c9ab9706ea38b22e5c9866e2caaceb4dd4dca45be0bb41e45e85",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 5093,
+        "completion_tokens": 1948
+      },
+      {
+        "role": "verify",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "2e9cccef912938efd6cdd714d58d9379c2799d5be6e20b6f83bb05d6055e58ab",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 5094,
+        "completion_tokens": 1224
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "39a2e8c01cec279ba0006a4a59ba3c247231fb9545d039e384a2c022b8bac0c5",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 7450,
+        "completion_tokens": 1909
+      },
+      {
+        "role": "verify",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "ea121b64c36861bba615214deb9ee4ad7ed4db628346a236b1bca37835d53599",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 6953,
+        "completion_tokens": 1833
+      },
+      {
+        "role": "verify",
+        "model": "gpt-oss:120b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "54137aab551bd6dba78eed6ccb99b249e19936b9ddeaa04c6a131f705abc7d66",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 4081,
+        "completion_tokens": 748
+      }
+    ],
+    "window": {},
+    "duration_seconds": 637.8
+  }
+}

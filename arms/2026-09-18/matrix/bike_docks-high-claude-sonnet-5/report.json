@@ -1,0 +1,1376 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 16,
+      "source_a.md": 11,
+      "source_b.md": 11
+    },
+    "forward_submitted": 22,
+    "forward_verdicts": 22,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 11,
+        "checked": 11,
+        "accounted": 11,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 11,
+        "checked": 11,
+        "accounted": 9,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 16,
+    "reverse_verdicts": 16,
+    "reverse_partial": 0,
+    "graded": 38,
+    "grounded": 38,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "A dock showing E2 has a jammed locking pin.",
+      "line": 5,
+      "span": "A dock showing E2 has a jammed locking pin",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "A dock showing E4 has lost power to the point.",
+      "line": 5,
+      "span": "A dock showing E4 has lost power to\nthe point",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "E2 is a mechanical fault.",
+      "line": 6,
+      "span": "E2 is a mechanical fault",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "E4 is an electrical fault.",
+      "line": 6,
+      "span": "E4 is an electrical one",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "E2 and E4 are escalated differently.",
+      "line": 6,
+      "span": "they are\nescalated differently",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "E2 is escalated to the workshop after 2 failed attempts.",
+      "line": 16,
+      "span": "Escalate E2 to the workshop after 2 failed attempts",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "Repeated forcing bends the pin.",
+      "line": 17,
+      "span": "repeated forcing bends the pin",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "Repeated forcing turns a 20 minute workshop job into a replacement.",
+      "line": 17,
+      "span": "turns a 20 minute\nworkshop job into a replacement",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "E4 must be reported to the electrical contractor the same day.",
+      "line": 22,
+      "span": "Report E4 to the electrical contractor the same day",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "Field crew do not open the power enclosure under any circumstances.",
+      "line": 22,
+      "span": "Field crew do not open the\npower enclosure under any circumstances",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "A station with more than half its docks faulted is taken out of service in the app.",
+      "line": 27,
+      "span": "A station with more than half its docks faulted is taken out of service in the\napp",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Riders call about bikes that will not release.",
+      "line": 5,
+      "span": "Riders call about bikes that will not release and bikes that will not lock",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Riders call about bikes that will not lock.",
+      "line": 5,
+      "span": "Riders call about bikes that will not release and bikes that will not lock",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Bikes that will not release or will not lock usually mean a dock fault rather than a bike fault.",
+      "line": 5,
+      "span": "Both\nusually mean a dock fault rather than a bike fault",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "E2 is a jammed locking pin.",
+      "line": 10,
+      "span": "E2 is a jammed locking pin",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "E4 is a loss of power to the point.",
+      "line": 11,
+      "span": "E4 is a loss of power to the point",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "An E2 fault is raised to the field crew.",
+      "line": 15,
+      "span": "Raise an E2 to the field crew",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "If the field crew have already tried 3 times, an E2 fault is raised to the workshop instead.",
+      "line": 15,
+      "span": "If the field crew have already tried 3 times,\nraise it to the workshop instead",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "An E4 fault is raised to the electrical contractor the same day.",
+      "line": 20,
+      "span": "Raise an E4 to the electrical contractor the same day",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "A rider charged for a journey that ended at a faulted dock gets the journey refunded.",
+      "line": 24,
+      "span": "A rider charged for a journey that ended at a faulted dock gets the journey\nrefunded",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "The refund is issued at the time of the call.",
+      "line": 25,
+      "span": "Refund at the time of the call",
+      "anchored": true
+    },
+    {
+      "id": "B-011",
+      "source": "source_b.md",
+      "text": "The support desk takes a station out of service in the app when more than half its docks are faulted.",
+      "line": 30,
+      "span": "The support desk takes a station out of service in the app when more than half\nits docks are faulted",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Riders call about bikes that will not release.",
+      "line": 5,
+      "span": "Riders call about bikes that will not release",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Riders call about bikes that will not lock.",
+      "line": 5,
+      "span": "bikes that will not lock",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Bikes that will not release or will not lock usually indicate a dock fault rather than a bike fault.",
+      "line": 5,
+      "span": "both usually indicate a dock fault rather than a bike fault",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Support desk staff ask the rider to read the fault code on the dock display.",
+      "line": 5,
+      "span": "Support desk staff ask the rider to read the fault code on the dock display.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "A dock showing E2 has a jammed locking pin.",
+      "line": 9,
+      "span": "A dock showing E2 has a jammed locking pin",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "A dock showing E4 has lost power to the point.",
+      "line": 9,
+      "span": "a dock showing E4 has lost power to the point",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "E2 is a mechanical fault.",
+      "line": 9,
+      "span": "E2 is a mechanical fault",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "E4 is an electrical fault.",
+      "line": 9,
+      "span": "E4 is an electrical one",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "E2 and E4 faults are escalated differently.",
+      "line": 9,
+      "span": "they are escalated differently",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "Support desk raises an E2 fault to the field crew.",
+      "line": 17,
+      "span": "Support desk raises an E2 fault to the field crew",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "The field crew escalate an E2 fault to the workshop after 2 failed attempts.",
+      "line": 17,
+      "span": "who escalate it to the workshop after 2 failed attempts",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "Repeated forcing bends the pin.",
+      "line": 17,
+      "span": "repeated forcing bends the pin",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "Repeated forcing turns a 20 minute workshop job into a replacement.",
+      "line": 17,
+      "span": "turns a 20 minute workshop job into a replacement",
+      "anchored": true
+    },
+    {
+      "id": "M-014",
+      "source": "merged.md",
+      "text": "Field crew do not open the power enclosure under any circumstances.",
+      "line": 21,
+      "span": "Field crew do not open the power enclosure under any circumstances.",
+      "anchored": true
+    },
+    {
+      "id": "M-015",
+      "source": "merged.md",
+      "text": "A rider charged for a journey that ended at a faulted dock gets the journey refunded.",
+      "line": 25,
+      "span": "A rider charged for a journey that ended at a faulted dock gets the journey refunded.",
+      "anchored": true
+    },
+    {
+      "id": "M-016",
+      "source": "merged.md",
+      "text": "A station with more than half its docks faulted is taken out of service in the app.",
+      "line": 29,
+      "span": "A station with more than half its docks faulted is taken out of service in the app.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "A dock showing E2 has a jammed locking pin",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "a dock showing E4 has lost power to the point",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "E2 is a mechanical fault",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "E4 is an electrical one",
+      "evidence_source": "merged.md",
+      "rationale": "E4 being 'an electrical one' means an electrical fault, matching the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "they are escalated differently",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "escalate it to the workshop after 2 failed attempts",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "repeated forcing bends the pin",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "turns a 20 minute workshop job into a replacement",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Report E4 to the electrical contractor the same day",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Field crew do not open the power enclosure under any circumstances",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "SUPPORTED",
+      "evidence": "A station with more than half its docks faulted is taken out of service in the app",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Riders call about bikes that will not release",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "bikes that will not lock",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "both usually indicate a dock fault rather than a bike fault",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "A dock showing E2 has a jammed locking pin",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "a dock showing E4 has lost power to the point",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Support desk raises an E2 fault to the field crew",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "CONTRADICTED",
+      "evidence": "escalate it to the workshop after 2 failed attempts",
+      "evidence_source": "merged.md",
+      "rationale": "The text states escalation happens after 2 failed attempts, not 3 as the claim asserts.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Report E4 to the electrical contractor the same day",
+      "evidence_source": "merged.md",
+      "rationale": "E4 is directed to the electrical contractor the same day, matching the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "A rider charged for a journey that ended at a faulted dock gets the journey refunded",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Refund at the time of the call",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-011",
+      "verdict": "CONTRADICTED",
+      "evidence": "Tell the support desk before you do this, not after.",
+      "evidence_source": "merged.md",
+      "rationale": "The instruction implies the field crew (the addressee) takes the station out of service and must inform the support desk beforehand, not that the support desk itself performs the action.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Riders call about bikes that will not release and bikes that will not lock.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Riders call about bikes that will not release and bikes that will not lock.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Both usually mean a dock fault rather than a bike fault.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Ask the rider to read the code on the dock display.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b under support desk section.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "A dock showing E2 has a jammed locking pin.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "A dock showing E4 has lost power to the point.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "E2 is a mechanical fault and E4 is an electrical one",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "E2 is a mechanical fault and E4 is an electrical one",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "and they are escalated differently.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "Raise an E2 to the field crew.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "Escalate E2 to the workshop after 2 failed attempts.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a as the field crew's escalation rule.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "repeated forcing bends the pin",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "turns a 20 minute workshop job into a replacement.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "SUPPORTED",
+      "evidence": "Field crew do not open the power enclosure under any circumstances.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-015",
+      "verdict": "SUPPORTED",
+      "evidence": "A rider charged for a journey that ended at a faulted dock gets the journey refunded.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-016",
+      "verdict": "SUPPORTED",
+      "evidence": "A station with more than half its docks faulted is taken out of service in the app.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "B-007",
+      "verdict": "CONTRADICTED",
+      "evidence": "escalate it to the workshop after 2 failed attempts",
+      "evidence_source": "merged.md",
+      "rationale": "The text states escalation happens after 2 failed attempts, not 3 as the claim asserts.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-011",
+      "verdict": "CONTRADICTED",
+      "evidence": "Tell the support desk before you do this, not after.",
+      "evidence_source": "merged.md",
+      "rationale": "The instruction implies the field crew (the addressee) takes the station out of service and must inform the support desk beforehand, not that the support desk itself performs the action.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Dock Fault Escalation - Field Crew' and says so",
+      "claims": [],
+      "reason": "Base title chosen over support desk title."
+    },
+    {
+      "segment": "b5",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading consolidated to base's heading."
+    },
+    {
+      "segment": "b6",
+      "disposition": "reworded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'reworded' is what happened to it",
+      "claims": [],
+      "reason": "Moved into riders section and reworded."
+    },
+    {
+      "segment": "a3",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-001"
+      ],
+      "reason": "Merged with a4 into one combined sentence."
+    },
+    {
+      "segment": "a4",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-002"
+      ],
+      "reason": "Merged with a3 into one combined sentence."
+    },
+    {
+      "segment": "b7",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-004",
+        "B-005"
+      ],
+      "reason": "Same fault facts stated; base wording kept."
+    },
+    {
+      "segment": "b3",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001",
+        "B-002"
+      ],
+      "reason": "Combined with b4 into a single sentence."
+    },
+    {
+      "segment": "b4",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-003"
+      ],
+      "reason": "Merged into b3's combined sentence."
+    },
+    {
+      "segment": "b8",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading consolidated to base's heading."
+    },
+    {
+      "segment": "a10",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-006"
+      ],
+      "reason": "Combined with b9's routing step into one instruction."
+    },
+    {
+      "segment": "b9",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-006"
+      ],
+      "reason": "Combined with a10's threshold into one instruction."
+    },
+    {
+      "segment": "b10",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Conflicting attempt count resolved in favour of 2."
+    },
+    {
+      "segment": "b11",
+      "disposition": "subsumed",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'subsumed' is what happened to it",
+      "claims": [],
+      "reason": "Escalation-to-workshop action already stated."
+    },
+    {
+      "segment": "b12",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading consolidated to base's heading."
+    },
+    {
+      "segment": "b13",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-008"
+      ],
+      "reason": "Same instruction; base wording kept."
+    },
+    {
+      "segment": "b17",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+      "claims": [],
+      "reason": "Identical heading already present from base."
+    },
+    {
+      "segment": "b18",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-011"
+      ],
+      "reason": "Same fact; base wording kept."
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 35,
+    "findings": [
+      {
+        "kind": "false_departure",
+        "detail": "'A dock showing E4 has lost power to the point.' is declared 'subsumed' but the merge carries it unchanged, and no other source has it to have superseded it; the record describes a departure that did not happen",
+        "segment": "a4",
+        "document": "source_a.md"
+      },
+      {
+        "kind": "verbatim_violation",
+        "detail": "numeric '3' (times) does not survive into the merge unchanged",
+        "segment": "b10",
+        "document": "source_b.md"
+      },
+      {
+        "kind": "declared_loss_over_budget",
+        "detail": "4 absent segments are declared replaced by the same replacement (a10, b10, b11, b9), over the ceiling of 3. One replacement standing in for that many segments has not replaced them, it has dropped them: the detail it names is gone from the document",
+        "segment": "",
+        "document": ""
+      }
+    ]
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "text": "# Dock Fault Escalation - Field Crew",
+            "document": "source_a.md"
+          },
+          {
+            "text": "# Docking Station Faults - Support Desk",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "# Dock Fault Escalation - Field Crew",
+        "resolved": true,
+        "reason": "Base document's title is kept per rule."
+      },
+      {
+        "slot": "heading for fault-code section",
+        "candidates": [
+          {
+            "text": "## Fault codes on the dock display",
+            "document": "source_a.md"
+          },
+          {
+            "text": "## Reading the fault code",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "## Fault codes on the dock display",
+        "resolved": true,
+        "reason": "Base heading kept for consolidated section."
+      },
+      {
+        "slot": "heading for E2 escalation section",
+        "candidates": [
+          {
+            "text": "## When to escalate E2",
+            "document": "source_a.md"
+          },
+          {
+            "text": "## Escalating E2",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "## When to escalate E2",
+        "resolved": true,
+        "reason": "Base heading kept for consolidated section."
+      },
+      {
+        "slot": "heading for E4 section",
+        "candidates": [
+          {
+            "text": "## E4 is never a field fix",
+            "document": "source_a.md"
+          },
+          {
+            "text": "## Escalating E4",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "## E4 is never a field fix",
+        "resolved": true,
+        "reason": "Base heading kept, states field policy precisely."
+      },
+      {
+        "slot": "E2 escalation threshold",
+        "candidates": [
+          {
+            "text": "Escalate E2 to the workshop after 2 failed attempts.",
+            "document": "source_a.md"
+          },
+          {
+            "text": "If the field crew have already tried 3 times,",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "2 failed attempts",
+        "resolved": true,
+        "reason": "Corroborated by a11's 'failed twice'; field crew's own count kept."
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 16,
+    "source_claims": 22,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 35,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "abbbabaaaaaaaaabbbaa",
+    "runs": 7,
+    "attributed": 20,
+    "interleaved": true,
+    "monotone": true,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 9,
+    "headings_total": 13
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-18-matrix/bike_docks-high-claude-sonnet-5/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-18T19:15:06+00:00",
+    "claimcheck_commit": "cf3020941b41",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "4b07d9a517e3",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "claude-sonnet-5",
+      "decompose": "claude-sonnet-5",
+      "verify": "claude-sonnet-5"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "anthropic",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 18503,
+      "completion_tokens": 24393
+    },
+    "tokens": {
+      "input": 18503,
+      "output": 24393,
+      "total": 42896,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "18,503 in, 24,393 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "0c40b9132ca791d0f7187d25b9df6fb57a77c90cfe2bdf58de6a6d855ac90428",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 5538,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 6066,
+        "completion_tokens": 15127
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "2d9d3159546718e947035545a7559e392aeb6d4532c50b2091171aa3d1f6a71b",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1269,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1673,
+        "completion_tokens": 1294
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "12cbf4deacc1e4fba7cf742195e5d102dd9cdc0db0a5abdfbc75d068a298f479",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1237,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1641,
+        "completion_tokens": 1337
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "41bad392d985e42b23d191d6042db1c5265b8afe380a98d6c39060b765ca97aa",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3171,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3698,
+        "completion_tokens": 2720
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "72d7fdc3b27cdf5cafe909c161b8bd223d0fa6f7fed50f901f60ee2c4090e60a",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1428,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1828,
+        "completion_tokens": 2121
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "0efcfd722e0cc4410b5f3a5d1e48ffec78ad0de0dc412c2be8e484f9105b9982",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3135,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3597,
+        "completion_tokens": 1794
+      }
+    ],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 2
+    },
+    "duration_seconds": 205.8
+  }
+}

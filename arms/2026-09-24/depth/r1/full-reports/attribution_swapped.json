@@ -1,0 +1,559 @@
+{
+  "command": "verify",
+  "exit_code": 1,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/tests/fixtures/attribution_swapped/merged.md",
+    "source_a.md": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/tests/fixtures/attribution_swapped/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/tests/fixtures/attribution_swapped/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 4,
+      "source_a.md": 3,
+      "source_b.md": 3
+    },
+    "forward_submitted": 6,
+    "forward_verdicts": 6,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 4,
+    "reverse_verdicts": 4,
+    "reverse_partial": 0,
+    "graded": 10,
+    "grounded": 10,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 4,
+      "span": "The read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The read timeout is 60 seconds.",
+      "line": 4,
+      "span": "The read timeout is 60 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The health check path is /healthz.",
+      "line": 5,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The health check path is /healthz.",
+      "line": 4,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "According to the Deployment Notes, the read timeout is 30 seconds.",
+      "line": 7,
+      "span": "According to the Deployment Notes, the read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "According to the Operator Guide, the read timeout is 60 seconds.",
+      "line": 8,
+      "span": "According to the Operator Guide, the read timeout is 60 seconds.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "According to the Deployment Notes, the read timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text attributes a read timeout of 30 seconds to the Deployment Notes, which supports the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the health check path is /healthz.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the relay listens on port 8443.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "According to the Operator Guide, the read timeout is 60 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text attributes a read timeout of 60 seconds to the Operator Guide, which supports the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the health check path is /healthz.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source documents explicitly state that the relay listens on port 8443.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source documents explicitly state that the health check path is /healthz.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 60 seconds.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B (Deployment Notes) states the read timeout is 60 seconds, which contradicts the claim that it is 30 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A (Operator Guide) states the read timeout is 30 seconds, which contradicts the claim that it is 60 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "M-003",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 60 seconds.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source B (Deployment Notes) states the read timeout is 60 seconds, which contradicts the claim that it is 30 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "CONTRADICTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source A (Operator Guide) states the read timeout is 30 seconds, which contradicts the claim that it is 60 seconds.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "state": "unmeasured",
+    "measured_calls": 0,
+    "unmeasured_calls": 5,
+    "tool_use": {
+      "state": "unmeasured",
+      "retrieval": "unmeasured",
+      "turns": 0,
+      "calls_with_tool_use": 0,
+      "measured_calls": 0,
+      "unmeasured_calls": 5
+    },
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": ""
+  },
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "decisions": {
+    "ran": false,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": []
+  },
+  "title": {
+    "policy": "",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": true,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": [
+      {
+        "kind": "misattributed",
+        "detail": "the merge credits 'the read timeout is 30 seconds' to the Deployment Notes (source_b.md), which does not state it; source_a.md does",
+        "segment": "m5",
+        "document": "source_b.md",
+        "source_text": "The read timeout is 30 seconds.",
+        "merge_text": "According to the Deployment Notes, the read timeout is 30 seconds.",
+        "difference": ""
+      },
+      {
+        "kind": "misattributed",
+        "detail": "the merge credits 'the read timeout is 60 seconds' to the Operator Guide (source_a.md), which does not state it; source_b.md does",
+        "segment": "m6",
+        "document": "source_a.md",
+        "source_text": "The read timeout is 60 seconds.",
+        "merge_text": "According to the Operator Guide, the read timeout is 60 seconds.",
+        "difference": ""
+      }
+    ]
+  },
+  "restated_claims": {
+    "ran": false,
+    "claims": 4,
+    "source_claims": 6,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.03,
+    "ratio": null,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-24T11:57:57+00:00",
+    "claimcheck_commit": "2a01e9b2f242",
+    "run_mode": "live",
+    "merge_policy": {
+      "fidelity": "high",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "Qwen/Qwen3.8-27B-FP8",
+      "verify": "Qwen/Qwen3.8-27B-FP8"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-depth-rerun/tree/prompts/verify_reverse.md": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": []
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 5613,
+      "completion_tokens": 1419
+    },
+    "tokens": {
+      "input": 5613,
+      "output": 1419,
+      "total": 7032,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "5,613 in, 1,419 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "bfb9a3e802b7a400d1c32ff89518c0200c36bb84b5f09e673779bb14d6df332b",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 949,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 8390,
+        "prompt_tokens": 719,
+        "completion_tokens": 149
+      },
+      {
+        "role": "decompose",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "58b5806ca2862762324ad0a97d3a08e2681e454cffb8ca75866169c5ad35e8f4",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 950,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 8385,
+        "prompt_tokens": 719,
+        "completion_tokens": 149
+      },
+      {
+        "role": "verify",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "e66a86f2ab83090f0f92f3d05ce468d49e76ca0384721dee544694a0cce9b0b8",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2395,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 28580,
+        "prompt_tokens": 1766,
+        "completion_tokens": 535
+      },
+      {
+        "role": "decompose",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "3b81df958e87d250b1a549dd90189bbdb5fe8fb9ad54524f73eee82a870e5bb7",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 998,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 12190,
+        "prompt_tokens": 756,
+        "completion_tokens": 217
+      },
+      {
+        "role": "verify",
+        "model": "Qwen/Qwen3.8-27B-FP8",
+        "prompt_sha256": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472",
+        "request_sha256": "fe25ee4b7436d17742904313876adec7538835ad151de426194c03acba2cd773",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2350,
+        "tier": "json_schema",
+        "source": "live",
+        "latency_ms": 20217,
+        "prompt_tokens": 1653,
+        "completion_tokens": 369
+      }
+    ],
+    "cost": {
+      "state": "unpriced",
+      "usd": null,
+      "priced_calls": 0,
+      "unpriced_calls": 5,
+      "unmeasured_calls": 0,
+      "unpriced_models": [
+        "Qwen/Qwen3.8-27B-FP8"
+      ]
+    },
+    "window": {
+      "decompose": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "verify": 2
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "unmeasured",
+        "retrieval": "unmeasured",
+        "turns": 0,
+        "calls_with_tool_use": 0,
+        "measured_calls": 0,
+        "unmeasured_calls": 5
+      },
+      "described": "unmeasured (5 call(s) reported no turn count)"
+    },
+    "duration_seconds": 77.8
+  }
+}

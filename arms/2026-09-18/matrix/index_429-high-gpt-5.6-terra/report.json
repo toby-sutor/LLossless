@@ -1,0 +1,2976 @@
+{
+  "command": "merge",
+  "exit_code": 0,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 61,
+      "source_a.md": 37,
+      "source_b.md": 20
+    },
+    "forward_submitted": 57,
+    "forward_verdicts": 57,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 37,
+        "checked": 37,
+        "accounted": 37,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 20,
+        "checked": 20,
+        "accounted": 20,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 61,
+    "reverse_verdicts": 61,
+    "reverse_partial": 0,
+    "graded": 118,
+    "grounded": 116,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "Append requests to Nimbrel Ledger come back with HTTP 429 `Too Many Requests`.",
+      "line": 8,
+      "span": "Append requests to Nimbrel Ledger come back with HTTP 429 `Too Many Requests`",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Callers see a write that will not land.",
+      "line": 8,
+      "span": "Callers see a write that will not land",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Nimbrel Relay stalls.",
+      "line": 8,
+      "span": "Nimbrel Relay stalls",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "Batch loaders resend the same envelope.",
+      "line": 8,
+      "span": "batch loaders resend the same envelope",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Reads against the same shard begin to time out.",
+      "line": 8,
+      "span": "reads against the same shard begin to time out",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "The refusal reaches the client.",
+      "line": 8,
+      "span": "The refusal reaches the client",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "The refusal is written to the Relay logs.",
+      "line": 8,
+      "span": "is written to the Relay",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "The refusal is written to the Collector logs.",
+      "line": 8,
+      "span": "Collector logs as well",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "A batched append was refused after 0 of 64 envelopes.",
+      "line": 13,
+      "span": "append batch refused after 0 of 64 envelopes",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "The batched append refusal was HTTP 429 Too Many Requests.",
+      "line": 13,
+      "span": "429 Too Many Requests",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "The root-cause error type was `nbl_queue_refused_exception`.",
+      "line": 13,
+      "span": "\"type\":\"nbl_queue_refused_exception\"",
+      "anchored": true
+    },
+    {
+      "id": "A-012",
+      "source": "source_a.md",
+      "text": "The append was refused on the ingest path.",
+      "line": 13,
+      "span": "\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"",
+      "anchored": true
+    },
+    {
+      "id": "A-013",
+      "source": "source_a.md",
+      "text": "The `ingest_and_leader_bytes` value was 88121344.",
+      "line": 13,
+      "span": "ingest_and_leader_bytes=88121344",
+      "anchored": true
+    },
+    {
+      "id": "A-014",
+      "source": "source_a.md",
+      "text": "The `follower_bytes` value was 212992.",
+      "line": 13,
+      "span": "follower_bytes=212992",
+      "anchored": true
+    },
+    {
+      "id": "A-015",
+      "source": "source_a.md",
+      "text": "The `all_bytes` value was 88334336.",
+      "line": 13,
+      "span": "all_bytes=88334336",
+      "anchored": true
+    },
+    {
+      "id": "A-016",
+      "source": "source_a.md",
+      "text": "The `ingest_op_bytes` value was 155648.",
+      "line": 13,
+      "span": "ingest_op_bytes=155648",
+      "anchored": true
+    },
+    {
+      "id": "A-017",
+      "source": "source_a.md",
+      "text": "The `max_ingest_bytes` value was 88080384.",
+      "line": 13,
+      "span": "max_ingest_bytes=88080384",
+      "anchored": true
+    },
+    {
+      "id": "A-018",
+      "source": "source_a.md",
+      "text": "The refusal response status was 429.",
+      "line": 13,
+      "span": "\"status\":429",
+      "anchored": true
+    },
+    {
+      "id": "A-019",
+      "source": "source_a.md",
+      "text": "Every Nimbrel Ledger release on every platform can refuse an append this way.",
+      "line": 20,
+      "span": "Every Nimbrel Ledger release on every platform can refuse an append this way",
+      "anchored": true
+    },
+    {
+      "id": "A-020",
+      "source": "source_a.md",
+      "text": "A Ledger node sends a `429 - Too Many Requests` reply once an append queue is full.",
+      "line": 24,
+      "span": "once [an append queue or a read queue is full](https://docs.nimbrel.example/ledger/why-appends-are-refused)",
+      "anchored": true
+    },
+    {
+      "id": "A-021",
+      "source": "source_a.md",
+      "text": "A Ledger node sends a `429 - Too Many Requests` reply once a read queue is full.",
+      "line": 24,
+      "span": "once [an append queue or a read queue is full](https://docs.nimbrel.example/ledger/why-appends-are-refused)",
+      "anchored": true
+    },
+    {
+      "id": "A-022",
+      "source": "source_a.md",
+      "text": "There are 3 ways an append draws a 429.",
+      "line": 26,
+      "span": "There are 3 ways an append draws a 429",
+      "anchored": true
+    },
+    {
+      "id": "A-023",
+      "source": "source_a.md",
+      "text": "The `append` worker pool can hold more batches than it has slots for.",
+      "line": 28,
+      "span": "The `append` or `system_append` worker pools hold more batches than they have slots for",
+      "anchored": true
+    },
+    {
+      "id": "A-024",
+      "source": "source_a.md",
+      "text": "The `system_append` worker pool can hold more batches than it has slots for.",
+      "line": 28,
+      "span": "The `append` or `system_append` worker pools hold more batches than they have slots for",
+      "anchored": true
+    },
+    {
+      "id": "A-025",
+      "source": "source_a.md",
+      "text": "The ingest memory guard can refuse a batch.",
+      "line": 29,
+      "span": "The ingest memory guard has refused the batch",
+      "anchored": true
+    },
+    {
+      "id": "A-026",
+      "source": "source_a.md",
+      "text": "A circuit breaker can trip.",
+      "line": 30,
+      "span": "A circuit breaker has tripped",
+      "anchored": true
+    },
+    {
+      "id": "A-027",
+      "source": "source_a.md",
+      "text": "A breaker trips on any operation.",
+      "line": 30,
+      "span": "a breaker trips on any operation",
+      "anchored": true
+    },
+    {
+      "id": "A-028",
+      "source": "source_a.md",
+      "text": "A breaker is not particular to appends.",
+      "line": 30,
+      "span": "is not particular to appends",
+      "anchored": true
+    },
+    {
+      "id": "A-029",
+      "source": "source_a.md",
+      "text": "From release 4.6 and release 5.1 onward, appending to a `wide_text` column draws a 429 whenever the batch would otherwise have run the node out of memory.",
+      "line": 32,
+      "span": "**From release 4.6 and release 5.1 onward**, appending to a `wide_text` column draws a 429 on its own account whenever the batch would otherwise have run the node out of memory",
+      "anchored": true
+    },
+    {
+      "id": "A-030",
+      "source": "source_a.md",
+      "text": "A cluster that refuses appends has been given more work than its hardware can carry.",
+      "line": 42,
+      "span": "A cluster that refuses appends has been given more work than its hardware can carry",
+      "anchored": true
+    },
+    {
+      "id": "A-031",
+      "source": "source_a.md",
+      "text": "Splitting a hot stream over more leader shards spreads append load across more nodes.",
+      "line": 44,
+      "span": "Splitting a hot stream over more leader shards spreads append load across more nodes",
+      "anchored": true
+    },
+    {
+      "id": "A-032",
+      "source": "source_a.md",
+      "text": "The `ingest_guard.memory.leader.ceiling` cluster setting defaults to 10% of the heap.",
+      "line": 50,
+      "span": "which defaults to 10% of the heap",
+      "anchored": true
+    },
+    {
+      "id": "A-033",
+      "source": "source_a.md",
+      "text": "A higher `ingest_guard.memory.leader.ceiling` lets a node hold more in-flight append memory before refusing.",
+      "line": 50,
+      "span": "A higher ceiling lets a node hold more in-flight append memory before refusing",
+      "anchored": true
+    },
+    {
+      "id": "A-034",
+      "source": "source_a.md",
+      "text": "A node holding too much runs out of memory instead of refusing.",
+      "line": 50,
+      "span": "a node holding too much runs out of memory instead of refusing",
+      "anchored": true
+    },
+    {
+      "id": "A-035",
+      "source": "source_a.md",
+      "text": "The `ingest_guard.memory.leader.ceiling` cluster setting is read at startup.",
+      "line": 50,
+      "span": "The setting is read at startup",
+      "anchored": true
+    },
+    {
+      "id": "A-036",
+      "source": "source_a.md",
+      "text": "The cluster must be restarted for a change to the `ingest_guard.memory.leader.ceiling` cluster setting to take.",
+      "line": 50,
+      "span": "the cluster must be restarted for a change to take",
+      "anchored": true
+    },
+    {
+      "id": "A-037",
+      "source": "source_a.md",
+      "text": "Refusals that show up only during a spike usually clear on their own once the queues drain.",
+      "line": 52,
+      "span": "Refusals that show up only during a spike usually clear on their own once the queues drain",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The share of HTTP `429` replies on a managed Nimbrel Ledger deployment (NMD) climbed over a fortnight.",
+      "line": 8,
+      "span": "This note concerns a managed Nimbrel Ledger deployment (NMD) whose share of HTTP `429` replies climbed over a fortnight, as counted at the front proxy",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The share of HTTP `429` replies was counted at the front proxy.",
+      "line": 8,
+      "span": "as counted at the front proxy",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Evidence pointed at expensive queries.",
+      "line": 8,
+      "span": "which was expensive queries",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Evidence pointed at deep grouping.",
+      "line": 8,
+      "span": "and deep grouping",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "The product is Nimbrel Ledger.",
+      "line": 12,
+      "span": "- Product: Nimbrel Ledger",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "The version is 4.4, 5.x.",
+      "line": 13,
+      "span": "- Version: 4.4, 5.x",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "The platform is Nimbrel Cloud.",
+      "line": 14,
+      "span": "- Platform: Nimbrel Cloud",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "The deployment is Managed Ledger Service (MLS).",
+      "line": 15,
+      "span": "- Deployment: Managed Ledger Service (MLS)",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "The production environment is Yes.",
+      "line": 16,
+      "span": "- Production Environment: Yes",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "The managed deployment returns HTTP `429` on a growing share of requests.",
+      "line": 20,
+      "span": "The managed deployment returns HTTP `429` on a growing share of requests",
+      "anchored": true
+    },
+    {
+      "id": "B-011",
+      "source": "source_b.md",
+      "text": "Ledger refuses work rather than queueing it when it returns HTTP `429`.",
+      "line": 20,
+      "span": "which is what the Ledger does when it refuses work rather than queueing it",
+      "anchored": true
+    },
+    {
+      "id": "B-012",
+      "source": "source_b.md",
+      "text": "Front proxy counters agree with client reports.",
+      "line": 20,
+      "span": "Front proxy counters agree with the client reports",
+      "anchored": true
+    },
+    {
+      "id": "B-013",
+      "source": "source_b.md",
+      "text": "The refusals are real.",
+      "line": 20,
+      "span": "the refusals are real",
+      "anchored": true
+    },
+    {
+      "id": "B-014",
+      "source": "source_b.md",
+      "text": "The refusals are not a client-side accounting error.",
+      "line": 20,
+      "span": "and not a client-side accounting error",
+      "anchored": true
+    },
+    {
+      "id": "B-015",
+      "source": "source_b.md",
+      "text": "A handful of queries run for as long as 2 seconds each.",
+      "line": 24,
+      "span": "a handful of queries run for as long as 2 seconds each",
+      "anchored": true
+    },
+    {
+      "id": "B-016",
+      "source": "source_b.md",
+      "text": "A worker slot is unavailable for as long as an expensive query holds it.",
+      "line": 24,
+      "span": "A worker slot is unavailable for as long as one of them holds it",
+      "anchored": true
+    },
+    {
+      "id": "B-017",
+      "source": "source_b.md",
+      "text": "The queue behind an expensive query grows.",
+      "line": 24,
+      "span": "and the queue behind it grows",
+      "anchored": true
+    },
+    {
+      "id": "B-018",
+      "source": "source_b.md",
+      "text": "Grouping on `channel.id` yields a very large number of groups.",
+      "line": 25,
+      "span": "grouping on `channel.id` yields a very large number of groups",
+      "anchored": true
+    },
+    {
+      "id": "B-019",
+      "source": "source_b.md",
+      "text": "The memory cost of grouping on `channel.id` is charged to the same pool the append path draws on.",
+      "line": 25,
+      "span": "and the memory that costs is charged to the same pool the append path draws on",
+      "anchored": true
+    },
+    {
+      "id": "B-020",
+      "source": "source_b.md",
+      "text": "The append path draws on the same pool to which the memory cost of grouping on `channel.id` is charged.",
+      "line": 25,
+      "span": "the same pool the append path draws on",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Append requests to Nimbrel Ledger come back with HTTP 429 `Too Many Requests`.",
+      "line": 10,
+      "span": "Append requests to Nimbrel Ledger come back with HTTP 429 `Too Many Requests`",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Nimbrel Ledger callers see writes that will not land.",
+      "line": 11,
+      "span": "Callers see a write that will not land",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Nimbrel Relay stalls.",
+      "line": 11,
+      "span": "Nimbrel Relay stalls",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Batch loaders resend the same envelope.",
+      "line": 11,
+      "span": "batch loaders resend the same envelope",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Reads against the same shard begin to time out.",
+      "line": 11,
+      "span": "reads against the same shard begin to time out",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "The refusal reaches the client.",
+      "line": 12,
+      "span": "The refusal reaches the client",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "The refusal is written to the Relay logs.",
+      "line": 12,
+      "span": "is written to the Relay",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "The refusal is written to the Collector logs.",
+      "line": 12,
+      "span": "Collector logs as well",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "On managed Nimbrel Ledger deployments (NMD), the share of HTTP `429` replies can climb over a fortnight.",
+      "line": 14,
+      "span": "On managed Nimbrel Ledger deployments (NMD), the share of HTTP `429` replies can climb over a fortnight",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "The share of HTTP `429` replies on managed Nimbrel Ledger deployments is counted at the front proxy.",
+      "line": 14,
+      "span": "as counted at the front proxy",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "Expensive queries can contribute to refusals.",
+      "line": 15,
+      "span": "Expensive queries",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "Deep grouping can contribute to refusals.",
+      "line": 15,
+      "span": "deep grouping can contribute to these refusals",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "The managed deployment returns HTTP `429` when Ledger refuses work rather than queueing it.",
+      "line": 16,
+      "span": "The managed deployment returns HTTP `429` when Ledger refuses work rather than queueing it",
+      "anchored": true
+    },
+    {
+      "id": "M-014",
+      "source": "merged.md",
+      "text": "Front proxy counters agree with client reports.",
+      "line": 17,
+      "span": "Front proxy counters agree with the client reports",
+      "anchored": true
+    },
+    {
+      "id": "M-015",
+      "source": "merged.md",
+      "text": "The refusals are real.",
+      "line": 17,
+      "span": "the refusals are real",
+      "anchored": true
+    },
+    {
+      "id": "M-016",
+      "source": "merged.md",
+      "text": "The refusals are not a client-side accounting error.",
+      "line": 17,
+      "span": "not a client-side accounting error",
+      "anchored": true
+    },
+    {
+      "id": "M-017",
+      "source": "merged.md",
+      "text": "A batched append was refused after 0 of 64 envelopes.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-018",
+      "source": "merged.md",
+      "text": "The batched append refusal was an HTTP 429 Too Many Requests response.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-019",
+      "source": "merged.md",
+      "text": "The refusal error type was `nbl_queue_refused_exception`.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-020",
+      "source": "merged.md",
+      "text": "The refused append had ingest_and_leader_bytes=88121344.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-021",
+      "source": "merged.md",
+      "text": "The refused append had follower_bytes=212992.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-022",
+      "source": "merged.md",
+      "text": "The refused append had all_bytes=88334336.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-023",
+      "source": "merged.md",
+      "text": "The refused append had ingest_op_bytes=155648.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-024",
+      "source": "merged.md",
+      "text": "The refused append had max_ingest_bytes=88080384.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-025",
+      "source": "merged.md",
+      "text": "The refusal response status was 429.",
+      "line": 22,
+      "span": "append batch refused after 0 of 64 envelopes: 429 Too Many Requests: {\"error\":{\"root_cause\":[{\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"}],\"type\":\"nbl_queue_refused_exception\",\"reason\":\"refused append on ingest path [ingest_and_leader_bytes=88121344, follower_bytes=212992, all_bytes=88334336, ingest_op_bytes=155648, max_ingest_bytes=88080384]\"},\"status\":429}",
+      "anchored": true
+    },
+    {
+      "id": "M-026",
+      "source": "merged.md",
+      "text": "Every Nimbrel Ledger release on every platform can refuse an append this way.",
+      "line": 29,
+      "span": "Every Nimbrel Ledger release on every platform can refuse an append this way",
+      "anchored": true
+    },
+    {
+      "id": "M-027",
+      "source": "merged.md",
+      "text": "The product is Nimbrel Ledger.",
+      "line": 31,
+      "span": "Product: Nimbrel Ledger",
+      "anchored": true
+    },
+    {
+      "id": "M-028",
+      "source": "merged.md",
+      "text": "The version is 4.4, 5.x.",
+      "line": 32,
+      "span": "Version: 4.4, 5.x",
+      "anchored": true
+    },
+    {
+      "id": "M-029",
+      "source": "merged.md",
+      "text": "The platform is Nimbrel Cloud.",
+      "line": 33,
+      "span": "Platform: Nimbrel Cloud",
+      "anchored": true
+    },
+    {
+      "id": "M-030",
+      "source": "merged.md",
+      "text": "The deployment is Managed Ledger Service (MLS).",
+      "line": 34,
+      "span": "Deployment: Managed Ledger Service (MLS)",
+      "anchored": true
+    },
+    {
+      "id": "M-031",
+      "source": "merged.md",
+      "text": "The Production Environment is Yes.",
+      "line": 35,
+      "span": "Production Environment: Yes",
+      "anchored": true
+    },
+    {
+      "id": "M-032",
+      "source": "merged.md",
+      "text": "A Ledger node sends a `429 - Too Many Requests` reply once it has nowhere left to put the work.",
+      "line": 39,
+      "span": "A [`429 - Too Many Requests` reply](https://docs.nimbrel.example/ledger/http-status-codes) is what a Ledger node sends once it has nowhere left to put the work",
+      "anchored": true
+    },
+    {
+      "id": "M-033",
+      "source": "merged.md",
+      "text": "A Ledger node sends a `429 - Too Many Requests` reply once an append queue or a read queue is full.",
+      "line": 39,
+      "span": "which is to say once [an append queue or a read queue is full](https://docs.nimbrel.example/ledger/why-appends-are-refused)",
+      "anchored": true
+    },
+    {
+      "id": "M-034",
+      "source": "merged.md",
+      "text": "There are 3 ways an append draws a 429.",
+      "line": 41,
+      "span": "There are 3 ways an append draws a 429",
+      "anchored": true
+    },
+    {
+      "id": "M-035",
+      "source": "merged.md",
+      "text": "An append draws a 429 when the `append` worker pool holds more batches than it has slots for.",
+      "line": 43,
+      "span": "The `append` or `system_append` worker pools hold more batches than they have slots for",
+      "anchored": true
+    },
+    {
+      "id": "M-036",
+      "source": "merged.md",
+      "text": "An append draws a 429 when the `system_append` worker pool holds more batches than it has slots for.",
+      "line": 43,
+      "span": "The `append` or `system_append` worker pools hold more batches than they have slots for",
+      "anchored": true
+    },
+    {
+      "id": "M-037",
+      "source": "merged.md",
+      "text": "An append draws a 429 when the ingest memory guard has refused the batch.",
+      "line": 44,
+      "span": "The ingest memory guard has refused the batch",
+      "anchored": true
+    },
+    {
+      "id": "M-038",
+      "source": "merged.md",
+      "text": "An append draws a 429 when a circuit breaker has tripped.",
+      "line": 45,
+      "span": "A circuit breaker has tripped",
+      "anchored": true
+    },
+    {
+      "id": "M-039",
+      "source": "merged.md",
+      "text": "A breaker trips on any operation.",
+      "line": 45,
+      "span": "a breaker trips on any operation",
+      "anchored": true
+    },
+    {
+      "id": "M-040",
+      "source": "merged.md",
+      "text": "A breaker is not particular to appends.",
+      "line": 45,
+      "span": "is not particular to appends",
+      "anchored": true
+    },
+    {
+      "id": "M-041",
+      "source": "merged.md",
+      "text": "From release 4.6 and release 5.1 onward, appending to a `wide_text` column draws a 429 whenever the batch would otherwise have run the node out of memory.",
+      "line": 47,
+      "span": "**From release 4.6 and release 5.1 onward**, appending to a `wide_text` column draws a 429 on its own account whenever the batch would otherwise have run the node out of memory",
+      "anchored": true
+    },
+    {
+      "id": "M-042",
+      "source": "merged.md",
+      "text": "A handful of expensive queries run for as long as 2 seconds each.",
+      "line": 49,
+      "span": "a handful of queries run for as long as 2 seconds each",
+      "anchored": true
+    },
+    {
+      "id": "M-043",
+      "source": "merged.md",
+      "text": "A worker slot is unavailable for as long as an expensive query holds it.",
+      "line": 50,
+      "span": "A worker slot is unavailable for as long as one of them holds it",
+      "anchored": true
+    },
+    {
+      "id": "M-044",
+      "source": "merged.md",
+      "text": "The queue behind an expensive query grows.",
+      "line": 50,
+      "span": "the queue behind it grows",
+      "anchored": true
+    },
+    {
+      "id": "M-045",
+      "source": "merged.md",
+      "text": "Grouping on `channel.id` yields a very large number of groups.",
+      "line": 51,
+      "span": "grouping on `channel.id` yields a very large number of groups",
+      "anchored": true
+    },
+    {
+      "id": "M-046",
+      "source": "merged.md",
+      "text": "Memory used by grouping on `channel.id` is charged to the same pool the append path draws on.",
+      "line": 51,
+      "span": "the memory that costs is charged to the same pool the append path draws on",
+      "anchored": true
+    },
+    {
+      "id": "M-047",
+      "source": "merged.md",
+      "text": "Memory sits high while processor load looks unremarkable.",
+      "line": 52,
+      "span": "processor load looks unremarkable while memory sits high",
+      "anchored": true
+    },
+    {
+      "id": "M-048",
+      "source": "merged.md",
+      "text": "Taking append and query load off the cluster allows the queues to drain.",
+      "line": 57,
+      "span": "Take append and query load off the cluster for long enough that the queues drain",
+      "anchored": true
+    },
+    {
+      "id": "M-049",
+      "source": "merged.md",
+      "text": "Taking append and query load off the cluster allows the nodes to fall back under their limits.",
+      "line": 57,
+      "span": "and the nodes fall back under their limits",
+      "anchored": true
+    },
+    {
+      "id": "M-050",
+      "source": "merged.md",
+      "text": "Where batches carry `wide_text` columns and the cluster runs release 4.6 or release 5.1 or later, fewer envelopes per batch should be sent.",
+      "line": 59,
+      "span": "Where batches carry `wide_text` columns and the cluster runs release 4.6 or release 5.1 or later, send fewer envelopes per batch",
+      "anchored": true
+    },
+    {
+      "id": "M-051",
+      "source": "merged.md",
+      "text": "Setting the slow query threshold to 1 second records the queries actually responsible instead of averaging them away.",
+      "line": 61,
+      "span": "set it to 1 second, so that the queries actually responsible are recorded instead of averaged away",
+      "anchored": true
+    },
+    {
+      "id": "M-052",
+      "source": "merged.md",
+      "text": "Append refusals mean that cluster work exceeds hardware capacity.",
+      "line": 67,
+      "span": "Append refusals mean that cluster work exceeds hardware capacity",
+      "anchored": true
+    },
+    {
+      "id": "M-053",
+      "source": "merged.md",
+      "text": "Larger nodes are scale up.",
+      "line": 67,
+      "span": "larger nodes (scale up)",
+      "anchored": true
+    },
+    {
+      "id": "M-054",
+      "source": "merged.md",
+      "text": "More nodes are scale out.",
+      "line": 67,
+      "span": "more nodes (scale out)",
+      "anchored": true
+    },
+    {
+      "id": "M-055",
+      "source": "merged.md",
+      "text": "Splitting a hot stream over more leader shards spreads append load across more nodes.",
+      "line": 70,
+      "span": "Splitting a hot stream over more leader shards spreads append load across more nodes",
+      "anchored": true
+    },
+    {
+      "id": "M-056",
+      "source": "merged.md",
+      "text": "The `ingest_guard.memory.leader.ceiling` cluster setting defaults to 10% of the heap.",
+      "line": 76,
+      "span": "the `ingest_guard.memory.leader.ceiling` cluster setting, which defaults to 10% of the heap",
+      "anchored": true
+    },
+    {
+      "id": "M-057",
+      "source": "merged.md",
+      "text": "A higher `ingest_guard.memory.leader.ceiling` lets a node hold more in-flight append memory before refusing.",
+      "line": 77,
+      "span": "A higher ceiling lets a node hold more in-flight append memory before refusing",
+      "anchored": true
+    },
+    {
+      "id": "M-058",
+      "source": "merged.md",
+      "text": "A node holding too much in-flight append memory runs out of memory instead of refusing.",
+      "line": 77,
+      "span": "a node holding too much runs out of memory instead of refusing",
+      "anchored": true
+    },
+    {
+      "id": "M-059",
+      "source": "merged.md",
+      "text": "The `ingest_guard.memory.leader.ceiling` setting is read at startup.",
+      "line": 78,
+      "span": "The setting is read at startup",
+      "anchored": true
+    },
+    {
+      "id": "M-060",
+      "source": "merged.md",
+      "text": "The cluster must be restarted for a change to the `ingest_guard.memory.leader.ceiling` setting to take.",
+      "line": 78,
+      "span": "the cluster must be restarted for a change to take",
+      "anchored": true
+    },
+    {
+      "id": "M-061",
+      "source": "merged.md",
+      "text": "Refusals that show up only during a spike usually clear on their own once the queues drain.",
+      "line": 81,
+      "span": "Refusals that show up only during a spike usually clear on their own once the queues drain",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Append requests to Nimbrel Ledger come back with HTTP 429 `Too Many Requests`.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states this directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Callers see a write that will not land",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly describes callers seeing a write that will not land.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Nimbrel Relay stalls",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that Nimbrel Relay stalls.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "batch loaders resend the same envelope",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that batch loaders resend the same envelope.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "reads against the same shard begin to time out.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text directly states this behavior.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "The refusal reaches the client",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly says the refusal reaches the client.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "is written to the Relay and Collector logs as well.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the refusal is written to the Relay and Collector logs.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "is written to the Relay and Collector logs as well.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the refusal is written to the Relay and Collector logs.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "append batch refused after 0 of 64 envelopes",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope states that the append batch was refused after 0 of 64 envelopes.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "SUPPORTED",
+      "evidence": "429 Too Many Requests",
+      "evidence_source": "merged.md",
+      "rationale": "The batched append refusal envelope identifies the refusal as HTTP 429 Too Many Requests.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "SUPPORTED",
+      "evidence": "\"type\":\"nbl_queue_refused_exception\"",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope gives nbl_queue_refused_exception as the root-cause error type.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-012",
+      "verdict": "SUPPORTED",
+      "evidence": "refused append on ingest path",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope states that the append was refused on the ingest path.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-013",
+      "verdict": "SUPPORTED",
+      "evidence": "ingest_and_leader_bytes=88121344",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope gives this ingest_and_leader_bytes value.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-014",
+      "verdict": "SUPPORTED",
+      "evidence": "follower_bytes=212992",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope gives this follower_bytes value.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-015",
+      "verdict": "SUPPORTED",
+      "evidence": "all_bytes=88334336",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope gives this all_bytes value.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-016",
+      "verdict": "SUPPORTED",
+      "evidence": "ingest_op_bytes=155648",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope gives this ingest_op_bytes value.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-017",
+      "verdict": "SUPPORTED",
+      "evidence": "max_ingest_bytes=88080384",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope gives this max_ingest_bytes value.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-018",
+      "verdict": "SUPPORTED",
+      "evidence": "\"status\":429",
+      "evidence_source": "merged.md",
+      "rationale": "The refusal envelope explicitly gives response status 429.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-019",
+      "verdict": "SUPPORTED",
+      "evidence": "Every Nimbrel Ledger release on every platform can refuse an append this way.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states this directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-020",
+      "verdict": "SUPPORTED",
+      "evidence": "A [`429 - Too Many Requests` reply](https://docs.nimbrel.example/ledger/http-status-codes) is what a Ledger node sends once it has nowhere left to put the work, which is to say once [an append queue or a read queue is full](https://docs.nimbrel.example/ledger/why-appends-are-refused).",
+      "evidence_source": "merged.md",
+      "rationale": "The text states that a Ledger node sends this reply once an append queue is full.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-021",
+      "verdict": "SUPPORTED",
+      "evidence": "A [`429 - Too Many Requests` reply](https://docs.nimbrel.example/ledger/http-status-codes) is what a Ledger node sends once it has nowhere left to put the work, which is to say once [an append queue or a read queue is full](https://docs.nimbrel.example/ledger/why-appends-are-refused).",
+      "evidence_source": "merged.md",
+      "rationale": "The text states that a Ledger node sends this reply once a read queue is full.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-022",
+      "verdict": "SUPPORTED",
+      "evidence": "There are 3 ways an append draws a 429:",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states this directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-023",
+      "verdict": "SUPPORTED",
+      "evidence": "The `append` or `system_append` worker pools hold more batches than they have slots for (`nbctl pool status --all`)",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the append worker pool can hold more batches than it has slots.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-024",
+      "verdict": "SUPPORTED",
+      "evidence": "The `append` or `system_append` worker pools hold more batches than they have slots for (`nbctl pool status --all`)",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the system_append worker pool can hold more batches than it has slots.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-025",
+      "verdict": "SUPPORTED",
+      "evidence": "The ingest memory guard has refused the batch (`nbctl guard report ingest --counters`).",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text explicitly states that the ingest memory guard can refuse a batch.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-026",
+      "verdict": "SUPPORTED",
+      "evidence": "A circuit breaker has tripped",
+      "evidence_source": "merged.md",
+      "rationale": "The text identifies a tripped circuit breaker as one of the three ways an append can draw a 429.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-027",
+      "verdict": "SUPPORTED",
+      "evidence": "a breaker trips on any operation",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly states that a breaker can trip on any operation.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-028",
+      "verdict": "SUPPORTED",
+      "evidence": "is not particular to appends",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly says that breaker trips are not particular to appends.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-029",
+      "verdict": "SUPPORTED",
+      "evidence": "From release 4.6 and release 5.1 onward, appending to a `wide_text` column draws a 429 on its own account whenever the batch would otherwise have run the node out of memory.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states the specified release condition, column type, 429 response, and memory condition.",
+      "direction": "source_to_merged",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "A-030",
+      "verdict": "SUPPORTED",
+      "evidence": "Append refusals mean that cluster work exceeds hardware capacity",
+      "evidence_source": "merged.md",
+      "rationale": "Work exceeding hardware capacity means the cluster has received more work than its hardware can carry.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-031",
+      "verdict": "SUPPORTED",
+      "evidence": "Splitting a hot stream over more leader shards spreads append load across more nodes",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly states that splitting the hot stream spreads append load across additional nodes.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-032",
+      "verdict": "SUPPORTED",
+      "evidence": "the `ingest_guard.memory.leader.ceiling` cluster setting, which defaults to 10% of the heap.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly gives the setting's default as 10% of heap.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-033",
+      "verdict": "SUPPORTED",
+      "evidence": "A higher ceiling lets a node hold more in-flight append memory before refusing",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly states the effect of raising the ceiling.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-034",
+      "verdict": "SUPPORTED",
+      "evidence": "a node holding too much runs out of memory instead of refusing",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly states that holding too much memory causes out-of-memory rather than refusal.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-035",
+      "verdict": "SUPPORTED",
+      "evidence": "The setting is read at startup",
+      "evidence_source": "merged.md",
+      "rationale": "The setting refers to `ingest_guard.memory.leader.ceiling` in the immediately preceding sentence.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-036",
+      "verdict": "SUPPORTED",
+      "evidence": "the cluster must be restarted for a change to take.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states that a restart is required for a change to the setting to take effect.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-037",
+      "verdict": "SUPPORTED",
+      "evidence": "Refusals that show up only during a spike usually clear on their own once the queues drain.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states this directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "On managed Nimbrel Ledger deployments (NMD), the share of HTTP `429` replies can climb over a fortnight",
+      "evidence_source": "merged.md",
+      "rationale": "The reference states that the share of 429 replies can climb over a fortnight on managed NMD deployments.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "as counted at the front proxy.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly says the share was counted at the front proxy.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Expensive queries and deep grouping can contribute to these refusals",
+      "evidence_source": "merged.md",
+      "rationale": "The reference identifies expensive queries as contributing to the refusals.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Expensive queries and deep grouping can contribute to these refusals",
+      "evidence_source": "merged.md",
+      "rationale": "The reference identifies deep grouping as contributing to the refusals.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Product: Nimbrel Ledger",
+      "evidence_source": "merged.md",
+      "rationale": "The environment section explicitly identifies the product.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Version: 4.4, 5.x",
+      "evidence_source": "merged.md",
+      "rationale": "The environment section explicitly lists the version.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Platform: Nimbrel Cloud",
+      "evidence_source": "merged.md",
+      "rationale": "The environment section explicitly identifies the platform.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Deployment: Managed Ledger Service (MLS)",
+      "evidence_source": "merged.md",
+      "rationale": "The environment section explicitly identifies the deployment.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Production Environment: Yes",
+      "evidence_source": "merged.md",
+      "rationale": "The environment section explicitly marks the production environment as Yes.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-010",
+      "verdict": "SUPPORTED",
+      "evidence": "On managed Nimbrel Ledger deployments (NMD), the share of HTTP `429` replies can climb over a fortnight",
+      "evidence_source": "merged.md",
+      "rationale": "A climbing share of HTTP 429 replies is a growing share of requests receiving that response.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-011",
+      "verdict": "SUPPORTED",
+      "evidence": "The managed deployment returns HTTP `429` when Ledger refuses work rather than queueing it.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference directly states that Ledger refuses work rather than queueing it when returning HTTP 429.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-012",
+      "verdict": "SUPPORTED",
+      "evidence": "Front proxy counters agree with the client reports",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly states agreement between front proxy counters and client reports.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-013",
+      "verdict": "SUPPORTED",
+      "evidence": "the refusals are real and not a client-side accounting error.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference explicitly states that the refusals are real.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-014",
+      "verdict": "SUPPORTED",
+      "evidence": "Front proxy counters agree with the client reports, so the refusals are real and not a client-side accounting error.",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly says the refusals are not a client-side accounting error.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-015",
+      "verdict": "SUPPORTED",
+      "evidence": "a handful of queries run for as long as 2 seconds each.",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly states that a handful of queries can run for up to two seconds each.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-016",
+      "verdict": "SUPPORTED",
+      "evidence": "A worker slot is unavailable for as long as one of them holds it",
+      "evidence_source": "merged.md",
+      "rationale": "The text states that a worker slot remains unavailable while an expensive query holds it.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-017",
+      "verdict": "SUPPORTED",
+      "evidence": "and the queue behind it grows.",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly states that the queue behind such a query grows.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-018",
+      "verdict": "SUPPORTED",
+      "evidence": "grouping on `channel.id` yields a very large number of groups",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly says grouping on `channel.id` yields a very large number of groups.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-019",
+      "verdict": "SUPPORTED",
+      "evidence": "the memory that costs is charged to the same pool the append path draws on.",
+      "evidence_source": "merged.md",
+      "rationale": "The text explicitly states that this grouping memory cost is charged to the pool used by the append path.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-020",
+      "verdict": "SUPPORTED",
+      "evidence": "the same pool the append path draws on.",
+      "evidence_source": "merged.md",
+      "rationale": "The text states that the append path draws on that same pool.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Append requests to Nimbrel Ledger come back with HTTP 429 `Too Many Requests`.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Callers see a write that will not land",
+      "evidence_source": "source_a.md",
+      "rationale": "The source directly describes callers seeing writes that will not land.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Nimbrel Relay stalls",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly states that Nimbrel Relay stalls.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "batch loaders resend the same envelope",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says batch loaders resend the same envelope.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "reads against the same shard begin to time out",
+      "evidence_source": "source_a.md",
+      "rationale": "The source directly states that reads against the same shard begin timing out.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "The refusal reaches the client and is written to the Relay and Collector logs as well.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says the refusal reaches the client.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "The refusal reaches the client and is written to the Relay and Collector logs as well.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says the refusal is written to Relay logs.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "The refusal reaches the client and is written to the Relay and Collector logs as well.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says the refusal is written to Collector logs.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "This note concerns a managed Nimbrel Ledger deployment (NMD) whose share of HTTP `429` replies climbed over a fortnight, as counted at the front proxy.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source describes an NMD deployment whose 429 share climbed over a fortnight.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "This note concerns a managed Nimbrel Ledger deployment (NMD) whose share of HTTP `429` replies climbed over a fortnight, as counted at the front proxy.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source states that the share was counted at the front proxy.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "- **Expensive queries**: a handful of queries run for as long as 2 seconds each. A worker slot is unavailable for as long as one of them holds it, and the queue behind it grows.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source identifies expensive queries as a contributing factor to growing queues and refusals.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "- **Deep grouping**: grouping on `channel.id` yields a very large number of groups, and the memory that costs is charged to the same pool the append path draws on.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source identifies deep grouping as a contributing factor affecting the append-path pool.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "The managed deployment returns HTTP `429` on a growing share of requests, which is what the Ledger does when it refuses work rather than queueing it.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source directly states that HTTP 429 represents refusing work rather than queueing it.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "SUPPORTED",
+      "evidence": "Front proxy counters agree with the client reports",
+      "evidence_source": "source_b.md",
+      "rationale": "The source explicitly states that the front proxy counters agree with client reports.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-015",
+      "verdict": "SUPPORTED",
+      "evidence": "so the refusals are real",
+      "evidence_source": "source_b.md",
+      "rationale": "The source explicitly concludes that the refusals are real.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-016",
+      "verdict": "SUPPORTED",
+      "evidence": "and not a client-side accounting error.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source explicitly says the refusals are not a client-side accounting error.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-017",
+      "verdict": "SUPPORTED",
+      "evidence": "append batch refused after 0 of 64 envelopes",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope states that the append batch was refused after 0 of 64 envelopes.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-018",
+      "verdict": "SUPPORTED",
+      "evidence": "429 Too Many Requests",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope identifies the response as 429 Too Many Requests.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-019",
+      "verdict": "SUPPORTED",
+      "evidence": "\"type\":\"nbl_queue_refused_exception\"",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope gives this error type.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-020",
+      "verdict": "SUPPORTED",
+      "evidence": "ingest_and_leader_bytes=88121344",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope contains this ingest_and_leader_bytes value.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-021",
+      "verdict": "SUPPORTED",
+      "evidence": "follower_bytes=212992",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope contains this follower_bytes value.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-022",
+      "verdict": "SUPPORTED",
+      "evidence": "all_bytes=88334336",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope contains this all_bytes value.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-023",
+      "verdict": "SUPPORTED",
+      "evidence": "ingest_op_bytes=155648",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope contains this ingest_op_bytes value.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-024",
+      "verdict": "SUPPORTED",
+      "evidence": "max_ingest_bytes=88080384",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope contains this max_ingest_bytes value.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-025",
+      "verdict": "SUPPORTED",
+      "evidence": "\"status\":429",
+      "evidence_source": "source_a.md",
+      "rationale": "The refusal envelope gives the response status as 429.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-026",
+      "verdict": "SUPPORTED",
+      "evidence": "Every Nimbrel Ledger release on every platform can refuse an append this way.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this claim verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-027",
+      "verdict": "SUPPORTED",
+      "evidence": "- Product: Nimbrel Ledger",
+      "evidence_source": "source_b.md",
+      "rationale": "The environment section identifies the product as Nimbrel Ledger.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-028",
+      "verdict": "SUPPORTED",
+      "evidence": "- Version: 4.4, 5.x",
+      "evidence_source": "source_b.md",
+      "rationale": "The environment section gives this version value.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-029",
+      "verdict": "SUPPORTED",
+      "evidence": "- Platform: Nimbrel Cloud",
+      "evidence_source": "source_b.md",
+      "rationale": "The environment section gives Nimbrel Cloud as the platform.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-030",
+      "verdict": "SUPPORTED",
+      "evidence": "- Deployment: Managed Ledger Service (MLS)",
+      "evidence_source": "source_b.md",
+      "rationale": "The environment section identifies the deployment as Managed Ledger Service.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-031",
+      "verdict": "SUPPORTED",
+      "evidence": "- Production Environment: Yes",
+      "evidence_source": "source_b.md",
+      "rationale": "The environment section explicitly marks the production environment as Yes.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-032",
+      "verdict": "SUPPORTED",
+      "evidence": "what a Ledger node sends once it has nowhere left to put the work",
+      "evidence_source": "source_a.md",
+      "rationale": "The source directly describes a 429 reply as what a Ledger node sends in that condition.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-033",
+      "verdict": "SUPPORTED",
+      "evidence": "once an append queue or a read queue is full",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says this is when the Ledger node sends the reply.",
+      "direction": "merged_to_sources",
+      "grounding": "transcription_error",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-034",
+      "verdict": "SUPPORTED",
+      "evidence": "There are 3 ways an append draws a 429:",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this claim verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-035",
+      "verdict": "SUPPORTED",
+      "evidence": "The `append` or `system_append` worker pools hold more batches than they have slots for",
+      "evidence_source": "source_a.md",
+      "rationale": "The source identifies an overloaded append worker pool as a 429 path.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-036",
+      "verdict": "SUPPORTED",
+      "evidence": "The `append` or `system_append` worker pools hold more batches than they have slots for",
+      "evidence_source": "source_a.md",
+      "rationale": "The source identifies an overloaded system_append worker pool as a 429 path.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-037",
+      "verdict": "SUPPORTED",
+      "evidence": "The ingest memory guard has refused the batch",
+      "evidence_source": "source_a.md",
+      "rationale": "The source lists ingest memory guard refusal as a way an append draws a 429.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-038",
+      "verdict": "SUPPORTED",
+      "evidence": "A circuit breaker has tripped",
+      "evidence_source": "source_a.md",
+      "rationale": "The source lists a tripped circuit breaker as a way an append draws a 429.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-039",
+      "verdict": "SUPPORTED",
+      "evidence": "a breaker trips on any operation",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly states that breakers trip on any operation.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-040",
+      "verdict": "SUPPORTED",
+      "evidence": "is not particular to appends.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says a breaker is not particular to appends.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-041",
+      "verdict": "SUPPORTED",
+      "evidence": "From release 4.6 and release 5.1 onward**, appending to a `wide_text` column draws a 429 on its own account whenever the batch would otherwise have run the node out of memory.",
+      "evidence_source": "source_a.md",
+      "rationale": "The footnote directly states the release conditions and wide_text behavior.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-042",
+      "verdict": "SUPPORTED",
+      "evidence": "a handful of queries run for as long as 2 seconds each.",
+      "evidence_source": "source_b.md",
+      "rationale": "The expensive queries factor states this directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-043",
+      "verdict": "SUPPORTED",
+      "evidence": "A worker slot is unavailable for as long as one of them holds it",
+      "evidence_source": "source_b.md",
+      "rationale": "The source says an expensive query keeps a worker slot unavailable while it holds it.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-044",
+      "verdict": "SUPPORTED",
+      "evidence": "and the queue behind it grows.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source directly says the queue behind the expensive query grows.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-045",
+      "verdict": "SUPPORTED",
+      "evidence": "grouping on `channel.id` yields a very large number of groups",
+      "evidence_source": "source_b.md",
+      "rationale": "The deep grouping factor states this directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-046",
+      "verdict": "SUPPORTED",
+      "evidence": "the memory that costs is charged to the same pool the append path draws on.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source directly states that grouping memory is charged to the append path's pool.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-047",
+      "verdict": "SUPPORTED",
+      "evidence": "processor load looks unremarkable while memory sits high.",
+      "evidence_source": "source_b.md",
+      "rationale": "The resource accounting factor states this relationship directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-048",
+      "verdict": "SUPPORTED",
+      "evidence": "Take append and query load off the cluster for long enough that the queues drain",
+      "evidence_source": "source_a.md",
+      "rationale": "The workaround says removing append and query load allows the queues to drain.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-049",
+      "verdict": "SUPPORTED",
+      "evidence": "Take append and query load off the cluster for long enough that the queues drain and the nodes fall back under their limits.",
+      "evidence_source": "source_a.md",
+      "rationale": "The workaround directly states that this lets nodes fall back under their limits.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-050",
+      "verdict": "SUPPORTED",
+      "evidence": "Where batches carry `wide_text` columns and the cluster runs release 4.6 or release 5.1 or later, send fewer envelopes per batch.",
+      "evidence_source": "source_a.md",
+      "rationale": "The workaround states this recommendation verbatim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-051",
+      "verdict": "SUPPORTED",
+      "evidence": "- **Lower the slow query threshold**: set it to 1 second, so that the queries actually responsible are recorded instead of averaged away.",
+      "evidence_source": "source_b.md",
+      "rationale": "The source explicitly proposes setting the threshold to 1 second for this purpose.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-052",
+      "verdict": "SUPPORTED",
+      "evidence": "A cluster that refuses appends has been given more work than its hardware can carry, so the answer is hardware: larger nodes (scale up), or more of them (scale out).",
+      "evidence_source": "source_a.md",
+      "rationale": "The source directly states that an append-refusing cluster has more work than its hardware can carry.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-053",
+      "verdict": "SUPPORTED",
+      "evidence": "A cluster that refuses appends has been given more work than its hardware can carry, so the answer is hardware: larger nodes (scale up), or more of them (scale out).",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly identifies larger nodes as scale up.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-054",
+      "verdict": "SUPPORTED",
+      "evidence": "A cluster that refuses appends has been given more work than its hardware can carry, so the answer is hardware: larger nodes (scale up), or more of them (scale out).",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly identifies adding more nodes as scale out.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-055",
+      "verdict": "SUPPORTED",
+      "evidence": "Splitting a hot stream over more leader shards spreads append load across more nodes, which helps in some layouts.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-056",
+      "verdict": "SUPPORTED",
+      "evidence": "Only then raise the `ingest_guard.memory.leader.ceiling` cluster setting, which defaults to 10% of the heap.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly gives the setting's default as 10% of heap.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-057",
+      "verdict": "SUPPORTED",
+      "evidence": "A higher ceiling lets a node hold more in-flight append memory before refusing, and a node holding too much runs out of memory instead of refusing, which is the worse outcome.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source directly states that a higher ceiling permits more in-flight append memory before refusal.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-058",
+      "verdict": "SUPPORTED",
+      "evidence": "A higher ceiling lets a node hold more in-flight append memory before refusing, and a node holding too much runs out of memory instead of refusing, which is the worse outcome.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source explicitly says that holding too much memory results in running out of memory rather than refusing.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-059",
+      "verdict": "SUPPORTED",
+      "evidence": "The setting is read at startup, so the cluster must be restarted for a change to take.",
+      "evidence_source": "source_a.md",
+      "rationale": "In context, \u201cThe setting\u201d refers to `ingest_guard.memory.leader.ceiling` and is read at startup.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-060",
+      "verdict": "SUPPORTED",
+      "evidence": "The setting is read at startup, so the cluster must be restarted for a change to take.",
+      "evidence_source": "source_a.md",
+      "rationale": "In context, the source states that changing `ingest_guard.memory.leader.ceiling` requires a cluster restart.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-061",
+      "verdict": "SUPPORTED",
+      "evidence": "Refusals that show up only during a spike usually clear on their own once the queues drain.",
+      "evidence_source": "source_a.md",
+      "rationale": "The source states this directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "a23",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-030"
+      ],
+      "reason": "Resolution wording is clarified in the base resolution slot."
+    },
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Nimbrel Ledger append rejected with HTTP 429' and says so",
+      "claims": [],
+      "reason": "The base document title is retained."
+    },
+    {
+      "segment": "b3",
+      "disposition": "dropped",
+      "grade": "confirmed",
+      "detail": "no claim was drawn from this segment, and its text is not in the merge, which is what 'dropped' says happened to it",
+      "claims": [],
+      "reason": "The summary heading has no content slot in the base structure."
+    },
+    {
+      "segment": "b4",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001",
+        "B-002"
+      ],
+      "reason": "Issue description is generalized and retained in the base issue slot."
+    },
+    {
+      "segment": "b5",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-003",
+        "B-004"
+      ],
+      "reason": "Contributing evidence is retained in the issue and cause slots."
+    },
+    {
+      "segment": "b6",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+      "claims": [],
+      "reason": "The base environment heading already serves this slot."
+    },
+    {
+      "segment": "b12",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "no claim was drawn from this segment, and its text is in the merge, which is what 'duplicate' says happened to it",
+      "claims": [],
+      "reason": "The base issue heading already serves this slot."
+    },
+    {
+      "segment": "b13",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-010",
+        "B-011"
+      ],
+      "reason": "Issue behaviour is clarified in the base issue slot."
+    },
+    {
+      "segment": "b15",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "The base cause heading consolidates contributing factors."
+    },
+    {
+      "segment": "b21",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "The base workaround heading consolidates proposed actions."
+    },
+    {
+      "segment": "b25",
+      "disposition": "reworded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'reworded' is what happened to it",
+      "claims": [],
+      "reason": "The reference label is retained without adding a base-level heading."
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 63,
+    "findings": []
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "text": "# Nimbrel Ledger append rejected with HTTP 429",
+            "document": "source_a.md"
+          },
+          {
+            "text": "# Rising 429 refusals on a managed Nimbrel Ledger deployment",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "# Nimbrel Ledger append rejected with HTTP 429",
+        "resolved": true,
+        "reason": "The base document's title is retained."
+      },
+      {
+        "slot": "cause heading",
+        "candidates": [
+          {
+            "text": "### Cause",
+            "document": "source_a.md"
+          },
+          {
+            "text": "### Contributing Factors",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "### Cause",
+        "resolved": true,
+        "reason": "The base heading consolidates causes and contributing factors."
+      },
+      {
+        "slot": "workaround heading",
+        "candidates": [
+          {
+            "text": "### Workaround",
+            "document": "source_a.md"
+          },
+          {
+            "text": "### Proposed Actions",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "### Workaround",
+        "resolved": true,
+        "reason": "The base heading contains the temporary mitigation actions."
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 1,
+    "between": [
+      [
+        "2026-03-18",
+        "Author:"
+      ]
+    ],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 61,
+    "source_claims": 57,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 1,
+    "segments": 63,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aaaaabbbaaaabbbbbaaaaaaabbbbbaaabbbaaaaaaaaaaabbbbbb",
+    "runs": 10,
+    "attributed": 52,
+    "interleaved": true,
+    "monotone": false,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 9,
+    "headings_total": 13
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-18-matrix/index_429-high-gpt-5.6-terra/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-18T11:47:45+00:00",
+    "claimcheck_commit": "cf3020941b41",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "deda3dc02a1d",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "gpt-5.6-terra",
+      "decompose": "gpt-5.6-terra",
+      "verify": "gpt-5.6-terra"
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": 0,
+      "profile": "openai-reasoning",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 10,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 31322,
+      "completion_tokens": 22175
+    },
+    "tokens": {
+      "input": 31322,
+      "output": 22175,
+      "cached": 0,
+      "thought": 7927,
+      "total": 53497,
+      "measured_calls": 10,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "31,322 in, 22,175 out, 0 cached, 7,927 reasoning",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "343c863b82551057ab68b4fed2b105fe99e518caccb67d68dba38e61c1f6c6bb",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 6923,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 5288,
+        "completion_tokens": 4086
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "1fed209251587da639de5b5354fa6b07adba305423d9fde8a57dfdf6ab32f776",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2224,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 1785,
+        "completion_tokens": 3282
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "5e922c5df16bbe49b24cb551e7edfc077e2f62a3a1b09e91e3081a0f75085413",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1690,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 1370,
+        "completion_tokens": 1677
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "572cd42a1f83fdb638ced3a469ff654df1908f024f1cab1dc171b767c9eb5b2d",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 4566,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 3487,
+        "completion_tokens": 1473
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "8c6793240b0f5b1be7ae7868473c337844c98e56fb9bc1b65caa8650f6f81cdd",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 4670,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 3532,
+        "completion_tokens": 1628
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "d3b42d7bd34a83ac49ac22b67e2eb2943a5251689f20374cb21ac0f7d27f23b7",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 4259,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 3212,
+        "completion_tokens": 404
+      },
+      {
+        "role": "decompose",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "ba802580aeaca10a34ae8f8a0a755625eee0eb7b528de05b830435e3ecd74a7e",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2905,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 2303,
+        "completion_tokens": 5405
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "d5aa8dadf32e281cea9294a9cb9047cd9df800a4dbc0d53432c95e4522592a46",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 4642,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 3468,
+        "completion_tokens": 1706
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "132502afc1bac297911ce3465430b3c6789418b4434bf115ae58b8114ee7dc33",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 4778,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 3575,
+        "completion_tokens": 1662
+      },
+      {
+        "role": "verify",
+        "model": "gpt-5.6-terra",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "572bf7e5956cdd414b65fb09297ca7c3f2a4d580653e7560bbb0bf521f87fba3",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 4454,
+        "tier": "prompt",
+        "source": "live",
+        "prompt_tokens": 3302,
+        "completion_tokens": 852
+      }
+    ],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 6
+    },
+    "duration_seconds": 264.6
+  }
+}

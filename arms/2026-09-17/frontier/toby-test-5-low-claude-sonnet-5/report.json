@@ -1,0 +1,2728 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "curry_1.md",
+    "source_b.md": "curry_2.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose curry_1.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose curry_2.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 60,
+      "source_a.md": 29,
+      "source_b.md": 16
+    },
+    "forward_submitted": 45,
+    "forward_verdicts": 45,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 29,
+        "checked": 29,
+        "accounted": 29,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 16,
+        "checked": 16,
+        "accounted": 16,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 60,
+    "reverse_verdicts": 60,
+    "reverse_partial": 0,
+    "graded": 105,
+    "grounded": 105,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The recipe serves 4.",
+      "line": 3,
+      "span": "Serves 4",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The recipe takes ~30 min.",
+      "line": 3,
+      "span": "~30 min",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The recipe requires 1 tbsp coconut oil.",
+      "line": 7,
+      "span": "1 tbsp coconut oil",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The recipe requires 2-3 tbsp green curry paste.",
+      "line": 8,
+      "span": "2-3 tbsp green curry paste",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Many green curry pastes contain shrimp paste.",
+      "line": 8,
+      "span": "many contain shrimp paste",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "The recipe requires 1 can (400 ml) full-fat coconut milk.",
+      "line": 9,
+      "span": "1 can (400 ml) full-fat coconut milk",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "The recipe requires 1 onion, sliced.",
+      "line": 10,
+      "span": "1 onion, sliced",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "The recipe requires 2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant.",
+      "line": 11,
+      "span": "2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "The recipe optionally requires 200 g firm tofu, cubed.",
+      "line": 12,
+      "span": "200 g firm tofu, cubed (optional)",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "The recipe requires 1 tsp palm or brown sugar.",
+      "line": 13,
+      "span": "1 tsp palm or brown sugar",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "The recipe requires 1-2 tbsp soy sauce or 1 tsp salt.",
+      "line": 14,
+      "span": "1-2 tbsp soy sauce or 1 tsp salt",
+      "anchored": true
+    },
+    {
+      "id": "A-012",
+      "source": "source_a.md",
+      "text": "The recipe requires the juice of \u00bd lime.",
+      "line": 15,
+      "span": "Juice of \u00bd lime",
+      "anchored": true
+    },
+    {
+      "id": "A-013",
+      "source": "source_a.md",
+      "text": "The recipe requires a handful of Thai basil or regular basil.",
+      "line": 16,
+      "span": "Handful Thai basil (or regular basil)",
+      "anchored": true
+    },
+    {
+      "id": "A-014",
+      "source": "source_a.md",
+      "text": "The recipe includes jasmine rice, to serve.",
+      "line": 17,
+      "span": "Jasmine rice, to serve",
+      "anchored": true
+    },
+    {
+      "id": "A-015",
+      "source": "source_a.md",
+      "text": "The method instructs to spoon the thick cream from the top of the coconut milk into a hot wok with the oil.",
+      "line": 21,
+      "span": "Spoon the thick cream from the top of the coconut milk into a hot wok with the oil",
+      "anchored": true
+    },
+    {
+      "id": "A-016",
+      "source": "source_a.md",
+      "text": "The method instructs to cook until it bubbles and the oil separates, ~2 min.",
+      "line": 21,
+      "span": "Cook until it bubbles and the oil separates, ~2 min",
+      "anchored": true
+    },
+    {
+      "id": "A-017",
+      "source": "source_a.md",
+      "text": "The method instructs to add the curry paste.",
+      "line": 22,
+      "span": "Add the curry paste",
+      "anchored": true
+    },
+    {
+      "id": "A-018",
+      "source": "source_a.md",
+      "text": "The method instructs to fry for 1 minute until fragrant.",
+      "line": 22,
+      "span": "fry 1 minute until fragrant",
+      "anchored": true
+    },
+    {
+      "id": "A-019",
+      "source": "source_a.md",
+      "text": "The method instructs to add onion and the remaining coconut milk.",
+      "line": 23,
+      "span": "Add onion and the remaining coconut milk",
+      "anchored": true
+    },
+    {
+      "id": "A-020",
+      "source": "source_a.md",
+      "text": "The method instructs to bring to a gentle simmer and not boil hard.",
+      "line": 23,
+      "span": "Bring to a gentle simmer - don't boil hard",
+      "anchored": true
+    },
+    {
+      "id": "A-021",
+      "source": "source_a.md",
+      "text": "The method instructs to add the harder vegetables first (beans, broccoli, eggplant).",
+      "line": 24,
+      "span": "Add the harder vegetables first (beans, broccoli, eggplant)",
+      "anchored": true
+    },
+    {
+      "id": "A-022",
+      "source": "source_a.md",
+      "text": "The method instructs to simmer for 5 min after adding the harder vegetables.",
+      "line": 24,
+      "span": "simmer 5 min",
+      "anchored": true
+    },
+    {
+      "id": "A-023",
+      "source": "source_a.md",
+      "text": "The method instructs to then add the softer vegetables (pepper, mushrooms) and the tofu.",
+      "line": 24,
+      "span": "then the softer ones (pepper, mushrooms) and the tofu",
+      "anchored": true
+    },
+    {
+      "id": "A-024",
+      "source": "source_a.md",
+      "text": "The method instructs to simmer another 5 min.",
+      "line": 24,
+      "span": "Simmer another 5 min",
+      "anchored": true
+    },
+    {
+      "id": "A-025",
+      "source": "source_a.md",
+      "text": "The method instructs to season with sugar, soy sauce and lime juice.",
+      "line": 25,
+      "span": "Season with sugar, soy sauce and lime juice",
+      "anchored": true
+    },
+    {
+      "id": "A-026",
+      "source": "source_a.md",
+      "text": "The method states the dish should be salty, slightly sweet, and sour.",
+      "line": 25,
+      "span": "it should be salty, slightly sweet, and sour",
+      "anchored": true
+    },
+    {
+      "id": "A-027",
+      "source": "source_a.md",
+      "text": "The method instructs to stir in the basil off the heat.",
+      "line": 26,
+      "span": "Stir in the basil off the heat",
+      "anchored": true
+    },
+    {
+      "id": "A-028",
+      "source": "source_a.md",
+      "text": "The method instructs to serve over jasmine rice.",
+      "line": 26,
+      "span": "Serve over jasmine rice",
+      "anchored": true
+    },
+    {
+      "id": "A-029",
+      "source": "source_a.md",
+      "text": "The tip instructs to add a splash of water or veg stock if it gets too thick.",
+      "line": 28,
+      "span": "Add a splash of water or veg stock if it gets too thick",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The recipe serves 4.",
+      "line": 3,
+      "span": "Serves: 4",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The recipe takes approximately 30 minutes.",
+      "line": 3,
+      "span": "Time: ~30 minutes",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The recipe requires 400g of extra-firm tofu, cubed.",
+      "line": 7,
+      "span": "400g extra-firm tofu, cubed",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "The recipe requires 1 can (400ml) of full-fat coconut milk.",
+      "line": 8,
+      "span": "1 can (400ml) full-fat coconut milk",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "The recipe requires 2\u20134 tbsp of green curry paste, adjusted to taste.",
+      "line": 9,
+      "span": "2\u20134 tbsp green curry paste (adjust to taste)",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "The recipe requires 1 cup of broccoli florets.",
+      "line": 10,
+      "span": "1 cup broccoli florets",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "The recipe requires 1 red bell pepper, sliced.",
+      "line": 11,
+      "span": "1 red bell pepper, sliced",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "The recipe requires 1 cup of zucchini, sliced.",
+      "line": 12,
+      "span": "1 cup zucchini, sliced",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "The recipe requires 1 tbsp of soy sauce.",
+      "line": 13,
+      "span": "1 tbsp soy sauce",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "The recipe requires 1 tbsp of brown sugar.",
+      "line": 14,
+      "span": "1 tbsp brown sugar",
+      "anchored": true
+    },
+    {
+      "id": "B-011",
+      "source": "source_b.md",
+      "text": "The recipe requires 4\u20136 kaffir lime leaves, lightly crushed.",
+      "line": 15,
+      "span": "4\u20136 kaffir lime leaves, lightly crushed",
+      "anchored": true
+    },
+    {
+      "id": "B-012",
+      "source": "source_b.md",
+      "text": "The recipe requires a handful of Thai basil leaves.",
+      "line": 16,
+      "span": "Handful of Thai basil leaves",
+      "anchored": true
+    },
+    {
+      "id": "B-013",
+      "source": "source_b.md",
+      "text": "The recipe requires the juice of half a lime.",
+      "line": 17,
+      "span": "Juice of half a lime",
+      "anchored": true
+    },
+    {
+      "id": "B-014",
+      "source": "source_b.md",
+      "text": "The recipe requires 1 tbsp of vegetable oil.",
+      "line": 18,
+      "span": "1 tbsp vegetable oil",
+      "anchored": true
+    },
+    {
+      "id": "B-015",
+      "source": "source_b.md",
+      "text": "The curry paste is stirred for 1\u20132 minutes until fragrant.",
+      "line": 24,
+      "span": "stir for 1\u20132 minutes until fragrant",
+      "anchored": true
+    },
+    {
+      "id": "B-016",
+      "source": "source_b.md",
+      "text": "The vegetables are cooked for 4\u20135 minutes until tender but still crisp.",
+      "line": 28,
+      "span": "Cook for 4\u20135 minutes until tender but still crisp.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The recipe serves 4.",
+      "line": 3,
+      "span": "Serves 4",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The recipe takes approximately 30 minutes.",
+      "line": 3,
+      "span": "~30 min",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 tbsp coconut oil.",
+      "line": 7,
+      "span": "1 tbsp coconut oil",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 tbsp vegetable oil.",
+      "line": 8,
+      "span": "1 tbsp vegetable oil",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "The recipe calls for 2-3 tbsp green curry paste.",
+      "line": 9,
+      "span": "2-3 tbsp green curry paste",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Many green curry pastes contain shrimp paste.",
+      "line": 9,
+      "span": "many contain shrimp paste",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "The recipe calls for 2\u20134 tbsp green curry paste.",
+      "line": 10,
+      "span": "2\u20134 tbsp green curry paste",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 can (400 ml) full-fat coconut milk.",
+      "line": 11,
+      "span": "1 can (400 ml) full-fat coconut milk",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 onion, sliced.",
+      "line": 12,
+      "span": "1 onion, sliced",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "The recipe calls for 2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant.",
+      "line": 13,
+      "span": "2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 cup broccoli florets.",
+      "line": 14,
+      "span": "1 cup broccoli florets",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 red bell pepper, sliced.",
+      "line": 15,
+      "span": "1 red bell pepper, sliced",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 cup zucchini, sliced.",
+      "line": 16,
+      "span": "1 cup zucchini, sliced",
+      "anchored": true
+    },
+    {
+      "id": "M-014",
+      "source": "merged.md",
+      "text": "The recipe calls for 200 g firm tofu, cubed, as optional.",
+      "line": 17,
+      "span": "200 g firm tofu, cubed (optional)",
+      "anchored": true
+    },
+    {
+      "id": "M-015",
+      "source": "merged.md",
+      "text": "The recipe calls for 400g extra-firm tofu, cubed.",
+      "line": 18,
+      "span": "400g extra-firm tofu, cubed",
+      "anchored": true
+    },
+    {
+      "id": "M-016",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 tsp palm or brown sugar.",
+      "line": 19,
+      "span": "1 tsp palm or brown sugar",
+      "anchored": true
+    },
+    {
+      "id": "M-017",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 tbsp brown sugar.",
+      "line": 20,
+      "span": "1 tbsp brown sugar",
+      "anchored": true
+    },
+    {
+      "id": "M-018",
+      "source": "merged.md",
+      "text": "The recipe calls for 1-2 tbsp soy sauce or 1 tsp salt.",
+      "line": 21,
+      "span": "1-2 tbsp soy sauce or 1 tsp salt",
+      "anchored": true
+    },
+    {
+      "id": "M-019",
+      "source": "merged.md",
+      "text": "The recipe calls for 1 tbsp soy sauce.",
+      "line": 22,
+      "span": "1 tbsp soy sauce",
+      "anchored": true
+    },
+    {
+      "id": "M-020",
+      "source": "merged.md",
+      "text": "The recipe calls for 4\u20136 kaffir lime leaves, lightly crushed.",
+      "line": 23,
+      "span": "4\u20136 kaffir lime leaves, lightly crushed",
+      "anchored": true
+    },
+    {
+      "id": "M-021",
+      "source": "merged.md",
+      "text": "The recipe calls for the juice of \u00bd lime.",
+      "line": 24,
+      "span": "Juice of \u00bd lime",
+      "anchored": true
+    },
+    {
+      "id": "M-022",
+      "source": "merged.md",
+      "text": "The recipe calls for a handful of Thai basil or regular basil.",
+      "line": 25,
+      "span": "Handful of Thai basil (or regular basil)",
+      "anchored": true
+    },
+    {
+      "id": "M-023",
+      "source": "merged.md",
+      "text": "The recipe calls for jasmine rice, to serve.",
+      "line": 26,
+      "span": "Jasmine rice, to serve",
+      "anchored": true
+    },
+    {
+      "id": "M-024",
+      "source": "merged.md",
+      "text": "The recipe instructs to spoon the thick cream from the top of the coconut milk into a hot wok with the oil.",
+      "line": 30,
+      "span": "Spoon the thick cream from the top of the coconut milk into a hot wok with the oil.",
+      "anchored": true
+    },
+    {
+      "id": "M-025",
+      "source": "merged.md",
+      "text": "The recipe instructs to cook until it bubbles and the oil separates.",
+      "line": 31,
+      "span": "Cook until it bubbles and the oil separates",
+      "anchored": true
+    },
+    {
+      "id": "M-026",
+      "source": "merged.md",
+      "text": "This cooking step takes approximately 2 minutes.",
+      "line": 31,
+      "span": "~2 min",
+      "anchored": true
+    },
+    {
+      "id": "M-027",
+      "source": "merged.md",
+      "text": "The recipe instructs to add the curry paste.",
+      "line": 32,
+      "span": "Add the curry paste",
+      "anchored": true
+    },
+    {
+      "id": "M-028",
+      "source": "merged.md",
+      "text": "The recipe instructs to fry the curry paste for 1 minute until fragrant.",
+      "line": 32,
+      "span": "fry 1 minute until fragrant",
+      "anchored": true
+    },
+    {
+      "id": "M-029",
+      "source": "merged.md",
+      "text": "The recipe instructs to add onion and the remaining coconut milk.",
+      "line": 33,
+      "span": "Add onion and the remaining coconut milk.",
+      "anchored": true
+    },
+    {
+      "id": "M-030",
+      "source": "merged.md",
+      "text": "The recipe instructs to bring the mixture to a gentle simmer.",
+      "line": 34,
+      "span": "Bring to a gentle simmer",
+      "anchored": true
+    },
+    {
+      "id": "M-031",
+      "source": "merged.md",
+      "text": "The recipe instructs not to boil the mixture hard.",
+      "line": 34,
+      "span": "don't boil hard",
+      "anchored": true
+    },
+    {
+      "id": "M-032",
+      "source": "merged.md",
+      "text": "The recipe instructs to add the harder vegetables first, namely beans, broccoli, and eggplant.",
+      "line": 35,
+      "span": "Add the harder vegetables first (beans, broccoli, eggplant)",
+      "anchored": true
+    },
+    {
+      "id": "M-033",
+      "source": "merged.md",
+      "text": "The recipe instructs to simmer for 5 min.",
+      "line": 35,
+      "span": "simmer 5 min",
+      "anchored": true
+    },
+    {
+      "id": "M-034",
+      "source": "merged.md",
+      "text": "The recipe instructs to then add the softer vegetables, pepper and mushrooms, and the tofu.",
+      "line": 35,
+      "span": "then the softer ones (pepper, mushrooms) and the tofu",
+      "anchored": true
+    },
+    {
+      "id": "M-035",
+      "source": "merged.md",
+      "text": "The recipe instructs to simmer for another 5 min.",
+      "line": 36,
+      "span": "Simmer another 5 min.",
+      "anchored": true
+    },
+    {
+      "id": "M-036",
+      "source": "merged.md",
+      "text": "The recipe instructs to season with sugar, soy sauce and lime juice.",
+      "line": 37,
+      "span": "Season with sugar, soy sauce and lime juice.",
+      "anchored": true
+    },
+    {
+      "id": "M-037",
+      "source": "merged.md",
+      "text": "The recipe instructs to stir in the basil off the heat.",
+      "line": 39,
+      "span": "Stir in the basil off the heat.",
+      "anchored": true
+    },
+    {
+      "id": "M-038",
+      "source": "merged.md",
+      "text": "The recipe instructs to serve over jasmine rice.",
+      "line": 40,
+      "span": "Serve over jasmine rice.",
+      "anchored": true
+    },
+    {
+      "id": "M-039",
+      "source": "merged.md",
+      "text": "The recipe instructs to press excess water from the tofu.",
+      "line": 43,
+      "span": "Press excess water from the tofu",
+      "anchored": true
+    },
+    {
+      "id": "M-040",
+      "source": "merged.md",
+      "text": "The recipe instructs to cut the tofu into cubes.",
+      "line": 43,
+      "span": "cut into cubes",
+      "anchored": true
+    },
+    {
+      "id": "M-041",
+      "source": "merged.md",
+      "text": "The recipe instructs to pan-fry the tofu in a little oil until golden on all sides.",
+      "line": 43,
+      "span": "pan-fry in a little oil until golden on all sides",
+      "anchored": true
+    },
+    {
+      "id": "M-042",
+      "source": "merged.md",
+      "text": "The recipe instructs to set the tofu aside.",
+      "line": 44,
+      "span": "Set aside.",
+      "anchored": true
+    },
+    {
+      "id": "M-043",
+      "source": "merged.md",
+      "text": "The recipe instructs to heat oil in a wok or large pan over medium heat.",
+      "line": 47,
+      "span": "Heat oil in a wok or large pan over medium heat.",
+      "anchored": true
+    },
+    {
+      "id": "M-044",
+      "source": "merged.md",
+      "text": "The recipe instructs to add the curry paste.",
+      "line": 48,
+      "span": "Add the curry paste",
+      "anchored": true
+    },
+    {
+      "id": "M-045",
+      "source": "merged.md",
+      "text": "The recipe instructs to stir the curry paste for 1\u20132 minutes until fragrant.",
+      "line": 48,
+      "span": "stir for 1\u20132 minutes until fragrant",
+      "anchored": true
+    },
+    {
+      "id": "M-046",
+      "source": "merged.md",
+      "text": "The recipe instructs to pour in half the coconut milk.",
+      "line": 51,
+      "span": "Pour in half the coconut milk",
+      "anchored": true
+    },
+    {
+      "id": "M-047",
+      "source": "merged.md",
+      "text": "The recipe instructs to stir until the paste is fully dissolved.",
+      "line": 51,
+      "span": "stir until the paste is fully dissolved",
+      "anchored": true
+    },
+    {
+      "id": "M-048",
+      "source": "merged.md",
+      "text": "The recipe instructs to then add the rest of the coconut milk along with the soy sauce, brown sugar, and lime leaves.",
+      "line": 51,
+      "span": "then add the rest along with the soy sauce, brown sugar, and lime leaves",
+      "anchored": true
+    },
+    {
+      "id": "M-049",
+      "source": "merged.md",
+      "text": "The recipe instructs to bring the mixture to a gentle simmer.",
+      "line": 54,
+      "span": "Bring to a gentle simmer",
+      "anchored": true
+    },
+    {
+      "id": "M-050",
+      "source": "merged.md",
+      "text": "The recipe instructs to add the broccoli, bell pepper, and zucchini.",
+      "line": 54,
+      "span": "add the broccoli, bell pepper, and zucchini",
+      "anchored": true
+    },
+    {
+      "id": "M-051",
+      "source": "merged.md",
+      "text": "The recipe instructs to cook for 4\u20135 minutes until tender but still crisp.",
+      "line": 55,
+      "span": "Cook for 4\u20135 minutes until tender but still crisp.",
+      "anchored": true
+    },
+    {
+      "id": "M-052",
+      "source": "merged.md",
+      "text": "The recipe instructs to add the tofu, lime juice, and Thai basil.",
+      "line": 58,
+      "span": "Add the tofu, lime juice, and Thai basil.",
+      "anchored": true
+    },
+    {
+      "id": "M-053",
+      "source": "merged.md",
+      "text": "The recipe instructs to stir the curry.",
+      "line": 59,
+      "span": "Stir",
+      "anchored": true
+    },
+    {
+      "id": "M-054",
+      "source": "merged.md",
+      "text": "The recipe instructs to taste the curry.",
+      "line": 59,
+      "span": "taste",
+      "anchored": true
+    },
+    {
+      "id": "M-055",
+      "source": "merged.md",
+      "text": "The recipe instructs to adjust seasoning with salt or more soy sauce.",
+      "line": 59,
+      "span": "adjust seasoning with salt or more soy sauce",
+      "anchored": true
+    },
+    {
+      "id": "M-056",
+      "source": "merged.md",
+      "text": "The recipe instructs to serve over steamed jasmine rice with extra basil and a wedge of lime.",
+      "line": 61,
+      "span": "Serve over steamed jasmine rice with extra basil and a wedge of lime.",
+      "anchored": true
+    },
+    {
+      "id": "M-057",
+      "source": "merged.md",
+      "text": "The recipe tip suggests adding a splash of water or veg stock if it gets too thick.",
+      "line": 63,
+      "span": "Add a splash of water or veg stock if it gets too thick.",
+      "anchored": true
+    },
+    {
+      "id": "M-058",
+      "source": "merged.md",
+      "text": "The recipe tip suggests using a splash of vegetable stock for a richer curry.",
+      "line": 64,
+      "span": "For a richer curry, use a splash of vegetable stock.",
+      "anchored": true
+    },
+    {
+      "id": "M-059",
+      "source": "merged.md",
+      "text": "The recipe suggests swapping in any seasonal vegetables you like.",
+      "line": 65,
+      "span": "Swap in any seasonal vegetables you like",
+      "anchored": true
+    },
+    {
+      "id": "M-060",
+      "source": "merged.md",
+      "text": "The recipe gives baby corn, sugar snap peas, and mushrooms as examples of seasonal vegetables that can be swapped in.",
+      "line": 65,
+      "span": "baby corn, sugar snap peas, and mushrooms",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Serves 4",
+      "evidence_source": "merged.md",
+      "rationale": "The recipe header states it serves 4.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "~30 min",
+      "evidence_source": "merged.md",
+      "rationale": "The recipe header states the time as ~30 min.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp coconut oil",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "2-3 tbsp green curry paste (check it's veg - many contain shrimp paste)",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "check it's veg - many contain shrimp paste",
+      "evidence_source": "merged.md",
+      "rationale": "States that many green curry pastes contain shrimp paste.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "1 can (400 ml) full-fat coconut milk",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "1 onion, sliced",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "200 g firm tofu, cubed (optional)",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly as an optional ingredient.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tsp palm or brown sugar",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "SUPPORTED",
+      "evidence": "1-2 tbsp soy sauce or 1 tsp salt",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-012",
+      "verdict": "SUPPORTED",
+      "evidence": "Juice of \u00bd lime",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-013",
+      "verdict": "SUPPORTED",
+      "evidence": "Handful of Thai basil (or regular basil)",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-014",
+      "verdict": "SUPPORTED",
+      "evidence": "Jasmine rice, to serve",
+      "evidence_source": "merged.md",
+      "rationale": "Listed directly in the ingredients.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-015",
+      "verdict": "SUPPORTED",
+      "evidence": "Spoon the thick cream from the top of the coconut milk into a hot wok with the oil.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches step 1 of the method exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-016",
+      "verdict": "SUPPORTED",
+      "evidence": "Cook until it bubbles and the oil separates, ~2 min.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches the second sentence of step 1.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-017",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the curry paste and fry 1 minute until fragrant.",
+      "evidence_source": "merged.md",
+      "rationale": "Step 2 instructs to add the curry paste.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-018",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the curry paste and fry 1 minute until fragrant.",
+      "evidence_source": "merged.md",
+      "rationale": "Step 2 instructs to fry for 1 minute until fragrant.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-019",
+      "verdict": "SUPPORTED",
+      "evidence": "Add onion and the remaining coconut milk.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches step 3 of the method.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-020",
+      "verdict": "SUPPORTED",
+      "evidence": "Bring to a gentle simmer - don't boil hard.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches the second sentence of step 3.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-021",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the harder vegetables first (beans, broccoli, eggplant), simmer 5 min, then the softer ones (pepper, mushrooms) and the tofu.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches step 4 of the method.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-022",
+      "verdict": "SUPPORTED",
+      "evidence": "simmer 5 min",
+      "evidence_source": "merged.md",
+      "rationale": "States simmering for 5 min after adding harder vegetables.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-023",
+      "verdict": "SUPPORTED",
+      "evidence": "then the softer ones (pepper, mushrooms) and the tofu.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches the instruction to add softer vegetables and tofu next.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-024",
+      "verdict": "SUPPORTED",
+      "evidence": "Simmer another 5 min.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches the final sentence of step 4.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-025",
+      "verdict": "SUPPORTED",
+      "evidence": "Season with sugar, soy sauce and lime juice.",
+      "evidence_source": "merged.md",
+      "rationale": "Matches step 5 of the method.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-026",
+      "verdict": "SUPPORTED",
+      "evidence": "it should be salty, slightly sweet, and sour",
+      "evidence_source": "merged.md",
+      "rationale": "The method explicitly states the dish should be salty, slightly sweet, and sour.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-027",
+      "verdict": "SUPPORTED",
+      "evidence": "Stir in the basil off the heat.",
+      "evidence_source": "merged.md",
+      "rationale": "The method instructs stirring in the basil off the heat.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-028",
+      "verdict": "SUPPORTED",
+      "evidence": "Serve over jasmine rice.",
+      "evidence_source": "merged.md",
+      "rationale": "The method instructs to serve over jasmine rice.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-029",
+      "verdict": "SUPPORTED",
+      "evidence": "Tip: Add a splash of water or veg stock if it gets too thick.",
+      "evidence_source": "merged.md",
+      "rationale": "The tip matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Serves 4",
+      "evidence_source": "merged.md",
+      "rationale": "The recipe states it serves 4.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "~30 min",
+      "evidence_source": "merged.md",
+      "rationale": "The recipe states approximately 30 minutes.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "400g extra-firm tofu, cubed",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "1 can (400 ml) full-fat coconut milk",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "2\u20134 tbsp green curry paste (adjust to taste)",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "1 cup broccoli florets",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "1 red bell pepper, sliced",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "1 cup zucchini, sliced",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp soy sauce",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-010",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp brown sugar",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-011",
+      "verdict": "SUPPORTED",
+      "evidence": "4\u20136 kaffir lime leaves, lightly crushed",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-012",
+      "verdict": "SUPPORTED",
+      "evidence": "Handful of Thai basil (or regular basil)",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list specifies a handful of Thai basil, matching the claim's meaning.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-013",
+      "verdict": "SUPPORTED",
+      "evidence": "Juice of \u00bd lime",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-014",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp vegetable oil",
+      "evidence_source": "merged.md",
+      "rationale": "The ingredient list matches the claim exactly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-015",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the curry paste and stir for 1\u20132 minutes until fragrant.",
+      "evidence_source": "merged.md",
+      "rationale": "The method instructs stirring the curry paste for 1\u20132 minutes until fragrant.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-016",
+      "verdict": "SUPPORTED",
+      "evidence": "Cook for 4\u20135 minutes until tender but still crisp.",
+      "evidence_source": "merged.md",
+      "rationale": "The method states the vegetables are cooked for 4\u20135 minutes until tender but still crisp.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Serves 4",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states the recipe serves 4.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "~30 min",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a gives a time of ~30 min matching the claim.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp coconut oil",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly listed as an ingredient in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp vegetable oil",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "2-3 tbsp green curry paste (check it's veg - many contain shrimp paste)",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the quantity given in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "check it's veg - many contain shrimp paste",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states many curry pastes contain shrimp paste.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "2\u20134 tbsp green curry paste (adjust to taste)",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches the quantity given in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "1 can (400 ml) full-fat coconut milk",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches exact wording and formatting in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "1 onion, sliced",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly listed as an ingredient in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "2 cups mixed vegetables: bell pepper, green beans, baby corn, broccoli, mushrooms, eggplant",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the ingredient list in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "1 cup broccoli florets",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "1 red bell pepper, sliced",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "1 cup zucchini, sliced",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "SUPPORTED",
+      "evidence": "200 g firm tofu, cubed (optional)",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the ingredient and optional status in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-015",
+      "verdict": "SUPPORTED",
+      "evidence": "400g extra-firm tofu, cubed",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-016",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tsp palm or brown sugar",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly listed as an ingredient in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-017",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp brown sugar",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-018",
+      "verdict": "SUPPORTED",
+      "evidence": "1-2 tbsp soy sauce or 1 tsp salt",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly listed as an ingredient in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-019",
+      "verdict": "SUPPORTED",
+      "evidence": "1 tbsp soy sauce",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-020",
+      "verdict": "SUPPORTED",
+      "evidence": "4\u20136 kaffir lime leaves, lightly crushed",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly listed as an ingredient in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-021",
+      "verdict": "SUPPORTED",
+      "evidence": "Juice of \u00bd lime",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the ingredient exactly as given in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-022",
+      "verdict": "SUPPORTED",
+      "evidence": "Handful Thai basil (or regular basil)",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly listed as an ingredient in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-023",
+      "verdict": "SUPPORTED",
+      "evidence": "Jasmine rice, to serve",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly listed as an ingredient in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-024",
+      "verdict": "SUPPORTED",
+      "evidence": "Spoon the thick cream from the top of the coconut milk into a hot wok with the oil.",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the first method step in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-025",
+      "verdict": "SUPPORTED",
+      "evidence": "Cook until it bubbles and the oil separates, ~2 min.",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the described cooking action in source_a, omitting only the timing detail.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-026",
+      "verdict": "SUPPORTED",
+      "evidence": "Cook until it bubbles and the oil separates, ~2 min.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states this step takes about 2 minutes.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-027",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the curry paste and fry 1 minute until fragrant.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a instructs to add the curry paste.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-028",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the curry paste and fry 1 minute until fragrant.",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the frying instruction exactly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-029",
+      "verdict": "SUPPORTED",
+      "evidence": "Add onion and the remaining coconut milk.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-030",
+      "verdict": "SUPPORTED",
+      "evidence": "Bring to a gentle simmer - don't boil hard.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-031",
+      "verdict": "SUPPORTED",
+      "evidence": "Bring to a gentle simmer - don't boil hard.",
+      "evidence_source": "source_a.md",
+      "rationale": "The instruction not to boil hard is in the same sentence.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-032",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the harder vegetables first (beans, broccoli, eggplant), simmer 5 min, then the softer ones (pepper, mushrooms) and the tofu.",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the listed harder vegetables.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-033",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the harder vegetables first (beans, broccoli, eggplant), simmer 5 min",
+      "evidence_source": "source_a.md",
+      "rationale": "States simmering for 5 minutes.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-034",
+      "verdict": "SUPPORTED",
+      "evidence": "then the softer ones (pepper, mushrooms) and the tofu.",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the softer vegetables and tofu addition.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-035",
+      "verdict": "SUPPORTED",
+      "evidence": "Simmer another 5 min.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-036",
+      "verdict": "SUPPORTED",
+      "evidence": "Season with sugar, soy sauce and lime juice.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-037",
+      "verdict": "SUPPORTED",
+      "evidence": "Stir in the basil off the heat.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-038",
+      "verdict": "SUPPORTED",
+      "evidence": "Serve over jasmine rice.",
+      "evidence_source": "source_a.md",
+      "rationale": "Directly stated in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-039",
+      "verdict": "SUPPORTED",
+      "evidence": "Press excess water from the tofu, cut into cubes, and pan-fry in a little oil until golden on all sides.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches the tofu pressing instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-040",
+      "verdict": "SUPPORTED",
+      "evidence": "Press excess water from the tofu, cut into cubes, and pan-fry in a little oil until golden on all sides.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches the tofu cutting instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-041",
+      "verdict": "SUPPORTED",
+      "evidence": "Press excess water from the tofu, cut into cubes, and pan-fry in a little oil until golden on all sides.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches the pan-frying instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-042",
+      "verdict": "SUPPORTED",
+      "evidence": "Set aside.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-043",
+      "verdict": "SUPPORTED",
+      "evidence": "Heat oil in a wok or large pan over medium heat.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly stated in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-044",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the curry paste and stir for 1\u20132 minutes until fragrant.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly instructs adding curry paste.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-045",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the curry paste and stir for 1\u20132 minutes until fragrant.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches stirring duration instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-046",
+      "verdict": "SUPPORTED",
+      "evidence": "Pour in half the coconut milk and stir until the paste is fully dissolved",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches pouring instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-047",
+      "verdict": "SUPPORTED",
+      "evidence": "Pour in half the coconut milk and stir until the paste is fully dissolved",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches stirring until dissolved instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-048",
+      "verdict": "SUPPORTED",
+      "evidence": "then add the rest along with the soy sauce, brown sugar, and lime leaves.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches adding remaining ingredients.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-049",
+      "verdict": "SUPPORTED",
+      "evidence": "Bring to a gentle simmer, add the broccoli, bell pepper, and zucchini.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches bringing to a simmer.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-050",
+      "verdict": "SUPPORTED",
+      "evidence": "Bring to a gentle simmer, add the broccoli, bell pepper, and zucchini.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches adding vegetables.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-051",
+      "verdict": "SUPPORTED",
+      "evidence": "Cook for 4\u20135 minutes until tender but still crisp.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches step 4 instructions verbatim in meaning.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-052",
+      "verdict": "SUPPORTED",
+      "evidence": "Add the tofu, lime juice, and Thai basil.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly matches step 5 instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-053",
+      "verdict": "SUPPORTED",
+      "evidence": "Stir, taste, and adjust seasoning with salt or more soy sauce.",
+      "evidence_source": "source_b.md",
+      "rationale": "Stir instruction appears in step 5.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-054",
+      "verdict": "SUPPORTED",
+      "evidence": "Stir, taste, and adjust seasoning with salt or more soy sauce.",
+      "evidence_source": "source_b.md",
+      "rationale": "Taste instruction appears in step 5.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-055",
+      "verdict": "SUPPORTED",
+      "evidence": "Stir, taste, and adjust seasoning with salt or more soy sauce.",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly matches the seasoning adjustment instruction.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-056",
+      "verdict": "SUPPORTED",
+      "evidence": "Serve over steamed jasmine rice with extra basil and a wedge of lime.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches step 6 instruction verbatim in meaning.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-057",
+      "verdict": "SUPPORTED",
+      "evidence": "Add a splash of water or veg stock if it gets too thick.",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches the tip in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-058",
+      "verdict": "SUPPORTED",
+      "evidence": "For a richer curry, use a splash of vegetable stock.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches the tip in source_b.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-059",
+      "verdict": "SUPPORTED",
+      "evidence": "Swap in any seasonal vegetables you like",
+      "evidence_source": "source_b.md",
+      "rationale": "Directly matches the suggestion in source_b's tip.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-060",
+      "verdict": "SUPPORTED",
+      "evidence": "baby corn, sugar snap peas, and mushrooms all work great.",
+      "evidence_source": "source_b.md",
+      "rationale": "Matches the example vegetables listed in source_b's tip.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Vegetarian Thai Curry Receipt' and says so",
+      "claims": [],
+      "reason": "Base title kept, this title not used."
+    },
+    {
+      "segment": "b2",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001",
+        "B-002"
+      ],
+      "reason": "Same serving/time fact already stated."
+    },
+    {
+      "segment": "b5",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-004"
+      ],
+      "reason": "Same coconut milk fact already stated."
+    },
+    {
+      "segment": "a13",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-013"
+      ],
+      "reason": "Added missing preposition 'of'."
+    },
+    {
+      "segment": "b13",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-012"
+      ],
+      "reason": "Same basil fact already stated."
+    },
+    {
+      "segment": "b14",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-013"
+      ],
+      "reason": "Same lime juice fact already stated."
+    },
+    {
+      "segment": "b16",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading consolidated to base's 'Method' heading."
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 60,
+    "findings": [
+      {
+        "kind": "verbatim_violation",
+        "detail": "numeric '400ml' does not survive into the merge unchanged",
+        "segment": "b5",
+        "document": "source_b.md"
+      }
+    ]
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "text": "Vegetarian Thai Curry Receipt",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Vegetarian Thai Green Curry",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Vegetarian Thai Curry Receipt",
+        "resolved": true,
+        "reason": "Base document's title is kept."
+      },
+      {
+        "slot": "method heading",
+        "candidates": [
+          {
+            "text": "Method",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Instructions",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Method",
+        "resolved": true,
+        "reason": "Consolidated to base's heading for the same content."
+      },
+      {
+        "slot": "serving info wording",
+        "candidates": [
+          {
+            "text": "Serves 4 \u00b7 ~30 min",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Serves: 4 | Time: ~30 minutes",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Serves 4 \u00b7 ~30 min",
+        "resolved": true,
+        "reason": "Same fact, base wording kept."
+      },
+      {
+        "slot": "coconut milk wording",
+        "candidates": [
+          {
+            "text": "1 can (400 ml) full-fat coconut milk",
+            "document": "source_a.md"
+          },
+          {
+            "text": "1 can (400ml) full-fat coconut milk",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "1 can (400 ml) full-fat coconut milk",
+        "resolved": true,
+        "reason": "Same fact, base wording kept."
+      },
+      {
+        "slot": "lime juice wording",
+        "candidates": [
+          {
+            "text": "Juice of \u00bd lime",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Juice of half a lime",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Juice of \u00bd lime",
+        "resolved": true,
+        "reason": "Same fact, base wording kept."
+      },
+      {
+        "slot": "basil wording",
+        "candidates": [
+          {
+            "text": "Handful Thai basil (or regular basil)",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Handful of Thai basil leaves",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Handful of Thai basil (or regular basil)",
+        "resolved": true,
+        "reason": "Base wording kept, missing preposition added."
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 60,
+    "source_claims": 45,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": [
+      {
+        "kind": "duplicated_content",
+        "detail": "'The recipe instructs to add the curry paste.' is extracted from lines 32, 48 of the merged document; the merge states the same fact more than once, in both sources' wordings",
+        "segment": "",
+        "document": ""
+      },
+      {
+        "kind": "duplicated_content",
+        "detail": "'The recipe instructs to bring the mixture to a gentle simmer.' is extracted from lines 34, 54 of the merged document; the merge states the same fact more than once, in both sources' wordings",
+        "segment": "",
+        "document": ""
+      }
+    ]
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 60,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aaababaaabbbabababbaaaaaaaaaaaaaaabbbbbbbbbbbbbbbabb",
+    "runs": 16,
+    "attributed": 52,
+    "interleaved": true,
+    "monotone": false,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 2,
+    "headings_total": 2
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-17-frontier/toby-test-5-low-claude-sonnet-5/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-17T14:08:40+00:00",
+    "claimcheck_commit": "3467a7cc28bc",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "4b07d9a517e3",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "low",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "claude-sonnet-5",
+      "decompose": "claude-sonnet-5",
+      "verify": "claude-sonnet-5"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "1b36d99e8c3e00d8df4c2fd656d96d78af8de7fc1d36615c6224f6d565106452",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "e12d7f86bfd3fc67e689f480d9fd135e5bb36351e5d7e66242578ed31377ee08",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f5a949169d2030780688e20dc435031e03c9ba88fed9b22aa140e3ec54b7a4ee"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "anthropic",
+      "thinking": []
+    },
+    "counts": {
+      "calls": 10,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 1,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 38580,
+      "completion_tokens": 73668
+    },
+    "tokens": {
+      "input": 38580,
+      "output": 73668,
+      "total": 112248,
+      "measured_calls": 10,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "38,580 in, 73,668 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "1b36d99e8c3e00d8df4c2fd656d96d78af8de7fc1d36615c6224f6d565106452",
+        "request_sha256": "bafa8295278504dfd93d90cdff3049b88cc8c64d4635280d2c2f081524dfa89d",
+        "max_tokens": 21504,
+        "estimated_prompt_tokens": 5153,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 6060,
+        "completion_tokens": 21504
+      },
+      {
+        "role": "merge",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "1b36d99e8c3e00d8df4c2fd656d96d78af8de7fc1d36615c6224f6d565106452",
+        "request_sha256": "f2a72e4503b76d963941681ecaf3347609653f4b1aeadd8a57a6181a5b402fdf",
+        "max_tokens": 21504,
+        "estimated_prompt_tokens": 5187,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 6095,
+        "completion_tokens": 19109
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "948c14677aeab5394d925e41d5715a60be4199a455f5f0fb02bbc73b0ad2e388",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1337,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1870,
+        "completion_tokens": 4125
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "af5d16f28e0b0d88b7ae3d35aee4a641f60d1a9ac9aec8e54c0463e8dfa0ce22",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1415,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1975,
+        "completion_tokens": 3661
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "e12d7f86bfd3fc67e689f480d9fd135e5bb36351e5d7e66242578ed31377ee08",
+        "request_sha256": "f383fe826fae867fc03a1591c31fc454b88e2b6507a5a91bc755850bbc8f634f",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3230,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 4164,
+        "completion_tokens": 2846
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "e12d7f86bfd3fc67e689f480d9fd135e5bb36351e5d7e66242578ed31377ee08",
+        "request_sha256": "2c68fb5860983b2bc886ef7b4fa6f57927ec08354fff96c62d391ef91bcacdec",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3079,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3998,
+        "completion_tokens": 2322
+      },
+      {
+        "role": "decompose",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "bda18e9fc2e2855dbef281b5fa186660b6d41147e2ade0da918f184c6ebe16de",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1814,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 2562,
+        "completion_tokens": 12099
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "f5a949169d2030780688e20dc435031e03c9ba88fed9b22aa140e3ec54b7a4ee",
+        "request_sha256": "51472696c63c42c50d2caa09e72e48d04b3943ed2d9f1f167eefc77126e99c78",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3161,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 4077,
+        "completion_tokens": 3275
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "f5a949169d2030780688e20dc435031e03c9ba88fed9b22aa140e3ec54b7a4ee",
+        "request_sha256": "db62159e3e39aab676737f7723caec4efc9aab9d4a0610e7158d8f49926ebaec",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3254,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 4081,
+        "completion_tokens": 3475
+      },
+      {
+        "role": "verify",
+        "model": "claude-sonnet-5",
+        "prompt_sha256": "f5a949169d2030780688e20dc435031e03c9ba88fed9b22aa140e3ec54b7a4ee",
+        "request_sha256": "b51d485f4388f49516eab5c80b706267b73e662bb8168a3a0b8fd9ef78849365",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2930,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3698,
+        "completion_tokens": 1252
+      }
+    ],
+    "window": {
+      "decompose": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 32768 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 2,
+      "verify": 5
+    },
+    "duration_seconds": 803.6
+  }
+}

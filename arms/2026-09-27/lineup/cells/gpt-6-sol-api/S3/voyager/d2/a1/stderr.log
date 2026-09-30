@@ -1,0 +1,45 @@
+LLossless merge  gpt-6-sol at https://api.openai.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking gpt-6-sol
+✓ merge: gpt-6-sol answered at the prompt tier  58.2s
+✓ merge  58.3s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking gpt-6-sol
+✓ decompose: gpt-6-sol answered at the prompt tier  14.4s
+✓ decompose source_a.md  14.5s
+• decompose source_b.md
+• decompose: asking gpt-6-sol
+✓ decompose: gpt-6-sol answered at the prompt tier  23.6s
+✓ decompose source_b.md  23.7s
+• verify (forward)
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  22.4s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  25.3s
+✓ verify (forward)  47.7s
+• decompose merged.md
+• decompose: asking gpt-6-sol
+✓ decompose: gpt-6-sol answered at the prompt tier  26.7s
+✓ decompose merged.md  26.7s
+• verify (reverse)
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  30.8s
+• verify: asking gpt-6-sol
+✓ verify: gpt-6-sol answered at the prompt tier  19.1s
+✓ verify (reverse)  50.0s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  2 partly dropped: the merge carries some of this claim (see `## Findings`)
+  63 contradicted: the merge states something different (see `## Findings`)
+  2 partly invented: the sources carry some of this claim (see `## Findings`)
+  15 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

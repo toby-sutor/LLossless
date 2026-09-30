@@ -1,0 +1,426 @@
+{
+  "command": "verify",
+  "exit_code": 0,
+  "documents": {
+    "merged.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dedup/merged.md",
+    "source_a.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dedup/source_a.md",
+    "source_b.md": "<home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dedup/source_b.md"
+  },
+  "steps": [
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dedup/source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dedup/source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose <home>/Documents/Dev/vibe-coding/claimcheck/tests/fixtures/dedup/merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 4,
+      "source_a.md": 3,
+      "source_b.md": 3
+    },
+    "forward_submitted": 6,
+    "forward_verdicts": 6,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 3,
+        "checked": 3,
+        "accounted": 3,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 4,
+    "reverse_verdicts": 4,
+    "reverse_partial": 0,
+    "graded": 10,
+    "grounded": 10,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "The health check path is /healthz.",
+      "line": 4,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 5,
+      "span": "The read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The health check path is /healthz.",
+      "line": 4,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "The minimum TLS version is 1.2.",
+      "line": 5,
+      "span": "The minimum TLS version is 1.2.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The relay listens on port 8443.",
+      "line": 3,
+      "span": "The relay listens on port 8443.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "The health check path is /healthz.",
+      "line": 4,
+      "span": "The health check path is /healthz.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "The read timeout is 30 seconds.",
+      "line": 5,
+      "span": "The read timeout is 30 seconds.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The minimum TLS version is 1.2.",
+      "line": 6,
+      "span": "The minimum TLS version is 1.2.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the relay listens on port 8443, matching the claim exactly. Verdict: SUPPORTED, evidence: 'The relay listens on port 8443.', source: merged.md, rationale: The claim is directly stated in the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains that the claim is supported because it is directly found",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the health check path is /healthz, matching the claim exactly. Verdict: SUPPORTED, evidence: 'The health check path is /healthz.', source: merged.md, rationale: The claim is directly stated in the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains that the claim is supported because it is directly",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the read timeout is 30 seconds, matching the claim exactly. Verdict: SUPPORTED, evidence: 'The read timeout is 30 seconds.', source: merged.md, rationale: The claim is directly stated in the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains that the claim is supported because it is directly",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the relay listens on port 8443, matching the claim exactly. Verdict: SUPPORTED, evidence: 'The relay listens on port 8443.', source: merged.md, rationale: The claim is directly stated in the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains that the claim is supported because it is directly",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the health check path is /healthz, matching the claim exactly. Verdict: SUPPORTED, evidence: 'The health check path is /healthz.', source: merged.md, rationale: The claim is directly stated in the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains that the claim is supported because it is directly",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": true,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum TLS version is 1.2.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states that the minimum TLS version is 1.2, matching the claim exactly. Verdict: SUPPORTED, evidence: 'The minimum TLS version is 1.2.', source: merged.md, rationale: The claim is directly stated in the reference text. The evidence is the exact sentence from the reference text that matches the claim. The rationale explains that the claim is supported because it is directly",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "The relay listens on port 8443.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source_a.md and source_b.md state that the relay listens on port 8443, so the claim is supported by at least one source document. The exact wording matches source_a.md, so the evidence is taken from there. The claim is SUPPORTED because it is stated in both source documents, but evidence is only required from one. The rationale is that the claim is present in both sources, so it is supported.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "The health check path is /healthz.",
+      "evidence_source": "source_a.md",
+      "rationale": "Both source_a.md and source_b.md state that the health check path is /healthz, so the claim is supported by at least one source document. The exact wording matches source_a.md, so the evidence is taken from there. The claim is SUPPORTED because it is stated in both source documents, but evidence is only required from one. The rationale is that the claim is present in both sources, so it is fully",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "The read timeout is 30 seconds.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a.md states that the read timeout is 30 seconds, so the claim is supported by at least one source document. Source_b.md does not mention the read timeout, but the claim is still supported because it appears in source_a.md. The evidence is taken from source_a.md because it explicitly states the claim. The rationale is that the claim is present in source_a.md, so it is supported.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The minimum TLS version is 1.2.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b.md states that the minimum TLS version is 1.2, so the claim is supported by at least one source document. Source_a.md does not mention the TLS version, but the claim is still supported because it appears in source_b.md. The evidence is taken from source_b.md because it explicitly states the claim. The rationale is that the claim is present in source_b.md, so it is supported.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [],
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 0,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-03T11:16:24+00:00",
+    "claimcheck_commit": "9988abc54d87",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "0d84ed4d2d30",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "decompose": "deepseek-r1:70b",
+      "verify": "deepseek-r1:70b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "pinned",
+      "field_order": "any"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 5,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 4721,
+      "completion_tokens": 3307
+    },
+    "tokens": {
+      "input": 4721,
+      "output": 3307,
+      "total": 8028,
+      "measured_calls": 5,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "4,721 in, 3,307 out",
+    "ledger": [
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "d15cf5f14c67a3f3d1434a8f0dfa06c062fca3789a012ff394c634a966fa3c00",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 659,
+        "completion_tokens": 404
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "968b48560c2ec40323e5ddb0843bbb03ad411fd015b6619099e6ad39a79aa0bb",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 661,
+        "completion_tokens": 359
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+        "request_sha256": "1f500495a7eff8289cdce58527f2a888a98382d0501ed9283db76f9e741d6902",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1406,
+        "completion_tokens": 1186
+      },
+      {
+        "role": "decompose",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "be260d06a4a7e36c32942cbce367283647ad9229bf09854b1a9d2a54f4440a14",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 672,
+        "completion_tokens": 441
+      },
+      {
+        "role": "verify",
+        "model": "deepseek-r1:70b",
+        "prompt_sha256": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522",
+        "request_sha256": "d3994d63c08b0a03228a152e0b95d03fcd621c6748fc8cb2a41c04d0a04ea434",
+        "max_tokens": null,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1323,
+        "completion_tokens": 917
+      }
+    ],
+    "window": {},
+    "duration_seconds": 176.3
+  }
+}

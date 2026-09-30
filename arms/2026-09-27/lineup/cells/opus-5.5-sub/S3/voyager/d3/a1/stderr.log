@@ -1,0 +1,39 @@
+LLossless merge  claude-opus-5-5 at lineup opus-5.5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-opus-5-5
+✓ merge: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  85.8s
+✓ merge  85.8s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  13.7s
+✓ decompose source_a.md  13.7s
+• decompose source_b.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  14.8s
+✓ decompose source_b.md  14.8s
+• verify (forward)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  40.0s
+✓ verify (forward)  40.0s
+• decompose merged.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  34.3s
+✓ decompose merged.md  34.3s
+• verify (reverse)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 (claude-opus-5-5) answered at the prompt tier  46.0s
+✓ verify (reverse)  46.0s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  47 contradicted: the merge states something different (see `## Findings`)
+  12 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

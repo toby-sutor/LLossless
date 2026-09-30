@@ -1,0 +1,1234 @@
+{
+  "command": "merge",
+  "exit_code": 0,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 12,
+      "source_a.md": 9,
+      "source_b.md": 10
+    },
+    "forward_submitted": 19,
+    "forward_verdicts": 19,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 9,
+        "checked": 9,
+        "accounted": 9,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 10,
+        "checked": 10,
+        "accounted": 10,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 12,
+    "reverse_verdicts": 12,
+    "reverse_partial": 0,
+    "graded": 30,
+    "grounded": 30,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "When a requested item arrives, a hold slip is printed and folded into the item so the name is visible from the spine.",
+      "line": 5,
+      "span": "When a requested item arrives, print a hold slip and fold it into the item so the\nname is visible from the spine.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Items are shelved alphabetically by the borrower's surname.",
+      "line": 6,
+      "span": "Shelve items alphabetically by the borrower's\nsurname.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "An item waits on the hold shelf for 7 days.",
+      "line": 11,
+      "span": "An item waits on the hold shelf for 7 days.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "Day one of the hold shelf wait is the day the borrower is notified, not the day the item arrived.",
+      "line": 11,
+      "span": "Day one is the day the borrower is\nnotified, not the day the item arrived.",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "The hold shelf is swept every morning before opening.",
+      "line": 16,
+      "span": "Sweep the shelf every morning before opening.",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "Items past 7 days on the hold shelf go back into circulation, or on to the next borrower in the queue if there is one.",
+      "line": 16,
+      "span": "Items past 7 days go back into\ncirculation, or on to the next borrower in the queue if there is one.",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "A borrower who asks before the 7 days are up can have the item held for a further 7 days.",
+      "line": 21,
+      "span": "A borrower who asks before the 7 days are up can have the item held for a further\n7 days.",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "A further 7 day hold is granted once per request.",
+      "line": 22,
+      "span": "This is granted once per request.",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "An item that has been on the hold shelf twice without being collected goes back to the shelves and the request is cancelled.",
+      "line": 26,
+      "span": "An item that has been on the hold shelf twice without being collected goes back\nto the shelves and the request is cancelled.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "A person can reserve an item that is on loan or held at another branch.",
+      "line": 5,
+      "span": "You can reserve an item that is on loan or held at another branch.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The library will email the person who reserved an item when the item is ready to collect.",
+      "line": 5,
+      "span": "We will email\nyou when it is ready to collect.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "A person collecting a reserved item must bring their library card.",
+      "line": 10,
+      "span": "Bring your library card.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Reserved items are on the hold shelf under the surname of the person who reserved them.",
+      "line": 10,
+      "span": "Items are on the hold shelf under your surname.",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "A person has 7 days from the day the library emails them to collect a reserved item.",
+      "line": 10,
+      "span": "You have\n7 days from the day we email you.",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "If a person asks the library before the 7 days are up, the library will hold the item for another 7 days.",
+      "line": 15,
+      "span": "If you cannot get in within the week, ask us before the 7 days are up and we will\nhold the item for another 7 days.",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "The library can extend a hold once per reservation.",
+      "line": 16,
+      "span": "We can do this once per reservation.",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "An item that is not collected goes back into circulation or on to the next person waiting.",
+      "line": 20,
+      "span": "An item you do not collect goes back into circulation or on to the next person\nwaiting.",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "If an item is not collected twice with the same reservation, the reservation is cancelled.",
+      "line": 21,
+      "span": "If this happens twice with the same reservation, the reservation is\ncancelled and you will need to reserve it again.",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "If a reservation is cancelled, the person will need to reserve the item again.",
+      "line": 21,
+      "span": "If this happens twice with the same reservation, the reservation is\ncancelled and you will need to reserve it again.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "Items that are on loan or held at another branch can be reserved.",
+      "line": 5,
+      "span": "Items that are on loan or held at another branch can be reserved.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "When a requested item arrives, a hold slip is printed and folded into the item so the name is visible from the spine.",
+      "line": 5,
+      "span": "When a requested item arrives, print a hold slip and fold it into the item so the name is visible from the spine.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Items are shelved alphabetically by the borrower's surname.",
+      "line": 5,
+      "span": "Shelve items alphabetically by the borrower's surname.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "Borrowers need their library card to collect an item.",
+      "line": 5,
+      "span": "Borrowers need their library card to collect an item.",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "An item waits on the hold shelf for 7 days.",
+      "line": 9,
+      "span": "An item waits on the hold shelf for 7 days.",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "Day one of the hold shelf wait is the day the borrower is notified by email that the item is ready to collect, not the day the item arrived.",
+      "line": 9,
+      "span": "Day one is the day the borrower is notified by email that the item is ready to collect, not the day the item arrived.",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "The hold shelf is swept every morning before opening.",
+      "line": 13,
+      "span": "Sweep the shelf every morning before opening.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "Items past 7 days go back into circulation, or on to the next borrower in the queue if there is one.",
+      "line": 13,
+      "span": "Items past 7 days go back into circulation, or on to the next borrower in the queue if there is one.",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "A borrower who asks before the 7 days are up can have the item held for a further 7 days.",
+      "line": 17,
+      "span": "A borrower who asks before the 7 days are up can have the item held for a further 7 days.",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "An extension of the hold period is granted once per request.",
+      "line": 17,
+      "span": "This is granted once per request.",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "An item that has been on the hold shelf twice without being collected goes back to the shelves and the request is cancelled.",
+      "line": 21,
+      "span": "An item that has been on the hold shelf twice without being collected goes back to the shelves and the request is cancelled; the borrower must make a new request to reserve it again.",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "A borrower must make a new request to reserve an item again after it has been on the hold shelf twice without being collected.",
+      "line": 21,
+      "span": "An item that has been on the hold shelf twice without being collected goes back to the shelves and the request is cancelled; the borrower must make a new request to reserve it again.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "When a requested item arrives, print a hold slip and fold it into the item so the name is visible from the spine.",
+      "evidence_source": "merged.md",
+      "rationale": "The reference text states this instruction directly.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Shelve items alphabetically by the borrower's surname.",
+      "evidence_source": "merged.md",
+      "rationale": "Identical meaning in imperative form.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "An item waits on the hold shelf for 7 days.",
+      "evidence_source": "merged.md",
+      "rationale": "Stated verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Day one is the day the borrower is notified by email that the item is ready to collect, not the day the item arrived.",
+      "evidence_source": "merged.md",
+      "rationale": "The span states day one is the notification day, not arrival day.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Sweep the shelf every morning before opening.",
+      "evidence_source": "merged.md",
+      "rationale": "Same instruction as the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "Items past 7 days go back into circulation, or on to the next borrower in the queue if there is one.",
+      "evidence_source": "merged.md",
+      "rationale": "Stated essentially verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "A borrower who asks before the 7 days are up can have the item held for a further 7 days.",
+      "evidence_source": "merged.md",
+      "rationale": "Stated verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "This is granted once per request.",
+      "evidence_source": "merged.md",
+      "rationale": "Refers to the further 7 day hold being granted once per request.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "An item that has been on the hold shelf twice without being collected goes back to the shelves and the request is cancelled",
+      "evidence_source": "merged.md",
+      "rationale": "Stated verbatim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Items that are on loan or held at another branch can be reserved.",
+      "evidence_source": "merged.md",
+      "rationale": "Same meaning in passive voice.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "SUPPORTED",
+      "evidence": "the day the borrower is notified by email that the item is ready to collect",
+      "evidence_source": "merged.md",
+      "rationale": "The text states the borrower is emailed when the item is ready to collect.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Borrowers need their library card to collect an item.",
+      "evidence_source": "merged.md",
+      "rationale": "Same requirement as the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Shelve items alphabetically by the borrower's surname.",
+      "evidence_source": "merged.md",
+      "rationale": "Hold shelf items are filed by the borrower's surname.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "An item waits on the hold shelf for 7 days. Day one is the day the borrower is notified by email that the item is ready to collect, not the day the item arrived.",
+      "evidence_source": "merged.md",
+      "rationale": "The span gives the 7 day period counted from the email notification day.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "A borrower who asks before the 7 days are up can have the item held for a further 7 days.",
+      "evidence_source": "merged.md",
+      "rationale": "Same extension rule as the claim.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "This is granted once per request.",
+      "evidence_source": "merged.md",
+      "rationale": "The extension is limited to once per request/reservation.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Items past 7 days go back into circulation, or on to the next borrower in the queue if there is one.",
+      "evidence_source": "merged.md",
+      "rationale": "Uncollected items return to circulation or pass to the next person waiting.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "An item that has been on the hold shelf twice without being collected goes back to the shelves and the request is cancelled",
+      "evidence_source": "merged.md",
+      "rationale": "The span states the request is cancelled after two uncollected shelf periods.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-010",
+      "verdict": "SUPPORTED",
+      "evidence": "the borrower must make a new request to reserve it again",
+      "evidence_source": "merged.md",
+      "rationale": "States that a new reservation is needed after cancellation.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "You can reserve an item that is on loan or held at another branch.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states reservations may be placed on items on loan or at another branch.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "When a requested item arrives, print a hold slip and fold it into the item so the\nname is visible from the spine.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a gives this instruction directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Shelve items alphabetically by the borrower's\nsurname.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states shelving is alphabetical by borrower surname.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "Bring your library card.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b instructs borrowers to bring their library card when collecting.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "An item waits on the hold shelf for 7 days.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated verbatim in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "DERIVED",
+      "evidence": "Day one is the day the borrower is notified, not the day the item arrived.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a gives day one as the notification day rather than arrival; source_b's \"We will email you when it is ready to collect\" and \"You have 7 days from the day we email you\" identify that notification as the email, so the two jointly entail the claim.",
+      "direction": "merged_to_sources",
+      "grounding": "not_graded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": false
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Sweep the shelf every morning before opening.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a states the sweep occurs each morning before opening.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Items past 7 days go back into\ncirculation, or on to the next borrower in the queue if there is one.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated verbatim in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "A borrower who asks before the 7 days are up can have the item held for a further\n7 days.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated verbatim in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "This is granted once per request.",
+      "evidence_source": "source_a.md",
+      "rationale": "Source_a limits the extension to once per request.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "An item that has been on the hold shelf twice without being collected goes back\nto the shelves and the request is cancelled.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated verbatim in source_a.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "If this happens twice with the same reservation, the reservation is\ncancelled and you will need to reserve it again.",
+      "evidence_source": "source_b.md",
+      "rationale": "Source_b states the borrower must reserve the item again after two uncollected occasions.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "a3",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-001"
+      ],
+      "reason": "Placing section: rewrapped as a single sentence."
+    },
+    {
+      "segment": "a4",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-002"
+      ],
+      "reason": "Placing section: rewrapped as a single sentence."
+    },
+    {
+      "segment": "a7",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-004"
+      ],
+      "reason": "Waiting section: notification, its medium and its content are one event."
+    },
+    {
+      "segment": "b4",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-002"
+      ],
+      "reason": "Waiting section: email notice is the notification day one counts from."
+    },
+    {
+      "segment": "b8",
+      "disposition": "reconciled",
+      "grade": "confirmed",
+      "detail": "declared 'reconciled' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-005"
+      ],
+      "reason": "Waiting section: the 7 days run from the emailed notification."
+    },
+    {
+      "segment": "a10",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-006"
+      ],
+      "reason": "Clearing section: rewrapped as a single sentence."
+    },
+    {
+      "segment": "a12",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-007"
+      ],
+      "reason": "Extension section: rewrapped as a single sentence."
+    },
+    {
+      "segment": "a15",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-009"
+      ],
+      "reason": "Twice-uncollected section: rewrapped and joined to the re-request rule."
+    },
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Hold Shelf Management' and says so",
+      "claims": [],
+      "reason": "Title slot: base title kept and this one was not."
+    },
+    {
+      "segment": "b2",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading slot: reserving content moved under the base heading."
+    },
+    {
+      "segment": "b3",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001"
+      ],
+      "reason": "Placing section: stated impersonally."
+    },
+    {
+      "segment": "b5",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading slot: collection detail moved under the base heading."
+    },
+    {
+      "segment": "b6",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-003"
+      ],
+      "reason": "Placing section: stated impersonally."
+    },
+    {
+      "segment": "b7",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-004"
+      ],
+      "reason": "Placing section: a4 already carries shelving by surname."
+    },
+    {
+      "segment": "b9",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading slot: base heading used for the extension rule."
+    },
+    {
+      "segment": "b10",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-006"
+      ],
+      "reason": "Extension section: base wording of the same rule kept."
+    },
+    {
+      "segment": "b11",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-007"
+      ],
+      "reason": "Extension section: a13 states the same limit once."
+    },
+    {
+      "segment": "b12",
+      "disposition": "superseded",
+      "grade": "unchecked",
+      "detail": "no claim was drawn from this segment, so the forward pass says nothing about whether 'superseded' is what happened to it",
+      "claims": [],
+      "reason": "Heading slot: base heading used for uncollected items."
+    },
+    {
+      "segment": "b13",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-008"
+      ],
+      "reason": "Clearing section: a10 already carries this outcome."
+    },
+    {
+      "segment": "b14",
+      "disposition": "subsumed",
+      "grade": "confirmed",
+      "detail": "declared 'subsumed' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-009",
+        "B-010"
+      ],
+      "reason": "Twice-uncollected section: cancellation and re-request carried in one sentence."
+    }
+  ],
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 29,
+    "findings": []
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "text": "Hold Shelf Management",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Reserving and Collecting Holds",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Hold Shelf Management",
+        "resolved": true,
+        "reason": "Base document's title is kept."
+      },
+      {
+        "slot": "heading for reserving and collecting content",
+        "candidates": [
+          {
+            "text": "## Reserving an item / ## Collecting",
+            "document": "source_b.md"
+          },
+          {
+            "text": "## Placing an item on the shelf",
+            "document": "source_a.md"
+          }
+        ],
+        "chosen": "## Placing an item on the shelf",
+        "resolved": true,
+        "reason": "Base structure holds one slot for shelf and collection detail."
+      },
+      {
+        "slot": "heading for extension of the hold period",
+        "candidates": [
+          {
+            "text": "## Extending",
+            "document": "source_b.md"
+          },
+          {
+            "text": "## Borrowers who cannot collect in time",
+            "document": "source_a.md"
+          }
+        ],
+        "chosen": "## Borrowers who cannot collect in time",
+        "resolved": true,
+        "reason": "Base heading for the same purpose is kept."
+      },
+      {
+        "slot": "heading for uncollected items",
+        "candidates": [
+          {
+            "text": "## If you do not collect",
+            "document": "source_b.md"
+          },
+          {
+            "text": "## Items nobody collects twice",
+            "document": "source_a.md"
+          }
+        ],
+        "chosen": "## Items nobody collects twice",
+        "resolved": true,
+        "reason": "Base heading retained; sweep detail sits in Clearing the shelf."
+      },
+      {
+        "slot": "wording of the extension rule",
+        "candidates": [
+          {
+            "text": "If you cannot get in within the week, ask us before the 7 days are up and we will hold the item for another 7 days.",
+            "document": "source_b.md"
+          },
+          {
+            "text": "A borrower who asks before the 7 days are up can have the item held for a further 7 days.",
+            "document": "source_a.md"
+          }
+        ],
+        "chosen": "A borrower who asks before the 7 days are up can have the item held for a further 7 days.",
+        "resolved": true,
+        "reason": "Base wording is the staff-facing statement of one rule."
+      },
+      {
+        "slot": "wording of shelving by surname",
+        "candidates": [
+          {
+            "text": "Shelve items alphabetically by the borrower's surname.",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Items are on the hold shelf under your surname.",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Shelve items alphabetically by the borrower's surname.",
+        "resolved": true,
+        "reason": "Base wording states the fact as an instruction."
+      }
+    ]
+  },
+  "title": {
+    "policy": "keep-base",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 10,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 12,
+    "source_claims": 19,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 29,
+    "budget": 0.05,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aabaaaaaaaaaaaaa",
+    "runs": 3,
+    "attributed": 16,
+    "interleaved": true,
+    "monotone": true,
+    "conclusive": true,
+    "blocked": false,
+    "stapled": false,
+    "headings_present": 6,
+    "headings_total": 11
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-18-matrix/library_holds-high-claude-opus-5/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-18T11:32:17+00:00",
+    "claimcheck_commit": "cf3020941b41",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "f9ef6eedd766",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "title_policy": "keep-base",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "claude-opus-5",
+      "decompose": "claude-opus-5",
+      "verify": "claude-opus-5"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "anthropic",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ]
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0,
+      "prompt_tokens": 17749,
+      "completion_tokens": 12017
+    },
+    "tokens": {
+      "input": 17749,
+      "output": 12017,
+      "total": 29766,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "tokens_described": "17,749 in, 12,017 out",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "claude-opus-5",
+        "prompt_sha256": "c3c79d8a79f7b2c21adba7c1cb15edc309e0ac1dc6566be628cda6bd8f6b3273",
+        "request_sha256": "40c183cd2324ac518f27ae0852f5a6ba05f029df88bf6db577e203dd15ec0bc8",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 5438,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 5914,
+        "completion_tokens": 6037
+      },
+      {
+        "role": "decompose",
+        "model": "claude-opus-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "6f63fe50835100fedffed0264ea1fa847477267e7d51d1c3dbf3bb20bd22b19d",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1233,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1616,
+        "completion_tokens": 603
+      },
+      {
+        "role": "decompose",
+        "model": "claude-opus-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "5b7185312326079a2d07c2bc062645510db5858fb91a7929792c7086d219e146",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1169,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1529,
+        "completion_tokens": 602
+      },
+      {
+        "role": "verify",
+        "model": "claude-opus-5",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "aea2a1482f5dc5f1599b54eac620251ff30c8344ea6d41e957d5b111d661b73d",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3159,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3593,
+        "completion_tokens": 2272
+      },
+      {
+        "role": "decompose",
+        "model": "claude-opus-5",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "d783abf4ba96c628ce9303aa6fc9da102b6925b664353145860c6e055998e439",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1296,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 1653,
+        "completion_tokens": 818
+      },
+      {
+        "role": "verify",
+        "model": "claude-opus-5",
+        "prompt_sha256": "f2753d46ad1f75ffbffda3adc0115c1a5156d3b1d30965873d7dde86cd89cc19",
+        "request_sha256": "a726bce7257509c28d6ee618dfa9dbde230773bbed7d380c721aa3a87630a4d3",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3077,
+        "tier": "json_schema",
+        "source": "live",
+        "prompt_tokens": 3444,
+        "completion_tokens": 1685
+      }
+    ],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 2
+    },
+    "duration_seconds": 120.3
+  }
+}

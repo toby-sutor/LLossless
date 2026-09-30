@@ -1,0 +1,46 @@
+LLossless merge  claude-haiku-4-5-20251001 at https://api.anthropic.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 answered at the prompt tier  16.0s
+✓ merge  16.1s
+• reconcile
+✓ reconcile  0.1s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 answered at the prompt tier  4.1s
+✓ decompose source_a.md  4.1s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 answered at the prompt tier  4.3s
+✓ decompose source_b.md  4.4s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  8.1s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  8.5s
+✓ verify (forward)  16.6s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 answered at the prompt tier  4.3s
+✓ decompose merged.md  4.3s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 answered at the prompt tier  5.9s
+✓ verify (reverse)  5.9s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  1 dropped: in a source, not in the merge (see `## Findings`)
+  3 contradicted: the merge states something different (see `## Findings`)
+  1 absent and undeclared: in a source, not in the merge, and no record explains it (see `## Structure`)
+  3 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  2 declared gone, still here: a record says the content departed and the merge carries the segment unchanged (see `## Structure`)
+  4 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  1 over budget: declared loss past the ceiling (see `## Structure`)
+  1 claim(s) the merge declared dropped are listed under `## Review queue`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

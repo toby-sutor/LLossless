@@ -1,0 +1,39 @@
+LLossless merge  claude-sonnet-5 at lineup sonnet-5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-sonnet-5
+✓ merge: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  119.8s
+✓ merge  119.8s
+• reconcile
+✓ reconcile  0.2s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  14.2s
+✓ decompose source_a.md  14.2s
+• decompose source_b.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  11.7s
+✓ decompose source_b.md  11.7s
+• verify (forward)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  29.7s
+✓ verify (forward)  29.7s
+• decompose merged.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  21.2s
+✓ decompose merged.md  21.2s
+• verify (reverse)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 (claude-sonnet-5) answered at the prompt tier  71.0s
+✓ verify (reverse)  71.0s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  27 contradicted: the merge states something different (see `## Findings`)
+  5 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

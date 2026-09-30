@@ -1,0 +1,148 @@
+[
+ {
+  "arm": "C1-120b-default",
+  "status": "error",
+  "model": "gpt-oss:120b",
+  "size_b": 120,
+  "draws_errored": 5,
+  "draws_k": 5,
+  "exit_code": 2,
+  "failed_at_stage": [
+   "decompose"
+  ],
+  "report_bytes": [
+   0
+  ],
+  "draws": {
+   "k": 5,
+   "errored": 5,
+   "identical_to_shown": 5
+  }
+ },
+ {
+  "arm": "C2-120b-think",
+  "model": "gpt-oss:120b",
+  "size_b": 120,
+  "thinking_requested": [
+   "decompose",
+   "merge",
+   "verify"
+  ],
+  "reasoned_anyway": null,
+  "field_order": "schema",
+  "tier": "json_schema",
+  "exit_code": 1,
+  "merged_bytes": 5690,
+  "structural": {
+   "ran": true,
+   "checks": 9,
+   "segments": 63,
+   "findings": 3,
+   "by_kind": {
+    "undeclared_absence": 3
+   },
+   "segments_hit": [
+    "a30",
+    "b15",
+    "b3"
+   ]
+  },
+  "declared_loss": {
+   "drops": 0,
+   "segments": 63,
+   "budget": 0.05,
+   "over_budget": false
+  },
+  "findings": 0,
+  "findings_grounded": 0,
+  "findings_ungrounded": 0,
+  "findings_by_kind": {},
+  "verdicts": {
+   "SUPPORTED": 85
+  },
+  "extracted": {
+   "merged.md": 36,
+   "source_a.md": 24,
+   "source_b.md": 25
+  },
+  "graded": 85,
+  "grounded": 80,
+  "errored": 0,
+  "review_queue": 0,
+  "census": {
+   "merged.md": {
+    "claims": 36,
+    "span_bytes_per_claim": 126.9,
+    "union_coverage": 0.3873,
+    "anchored": 0.7778
+   },
+   "source_a.md": {
+    "claims": 24,
+    "span_bytes_per_claim": 133.7,
+    "union_coverage": 0.6264,
+    "anchored": 0.9583
+   },
+   "source_b.md": {
+    "claims": 25,
+    "span_bytes_per_claim": 59.2,
+    "union_coverage": 0.5968,
+    "anchored": 0.88
+   }
+  },
+  "calls": 8,
+  "schema_repairs": 0,
+  "completion_tokens": 13922,
+  "seconds": 459.8,
+  "digest": {
+   "sha256": "a951a23b46a1f6093dafee2ea481d634b4e31ac720a8a16f3f91e04f5a40ecd9",
+   "seen_at": [
+    "after",
+    "before"
+   ]
+  },
+  "tokens": {
+   "input": 49674,
+   "output": 13922,
+   "total": 63596,
+   "measured_calls": 8,
+   "unmeasured_calls": 0
+  },
+  "tokens_described": "49,674 in, 13,922 out",
+  "draws": {
+   "k": 5,
+   "graded": 5,
+   "identical_to_shown": 1,
+   "all_identical": false
+  },
+  "varies": {
+   "completion_tokens": {
+    "values": {
+     "13140": 4,
+     "13922": 1
+    },
+    "distinct": 2
+   },
+   "grounded": {
+    "values": {
+     "78": 4,
+     "80": 1
+    },
+    "distinct": 2
+   },
+   "tokens": {
+    "values": {
+     "{\"input\": 49674, \"measured_calls\": 8, \"output\": 13922, \"total\": 63596, \"unmeasured_calls\": 0}": 1,
+     "{\"input\": 50008, \"measured_calls\": 8, \"output\": 13140, \"total\": 63148, \"unmeasured_calls\": 0}": 4
+    },
+    "distinct": 2
+   },
+   "tokens_described": {
+    "values": {
+     "\"49,674 in, 13,922 out\"": 1,
+     "\"50,008 in, 13,140 out\"": 4
+    },
+    "distinct": 2
+   }
+  }
+ }
+]

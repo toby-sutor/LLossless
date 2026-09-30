@@ -1,0 +1,42 @@
+LLossless merge  claude-sonnet-5 at https://api.anthropic.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-sonnet-5
+✓ merge: claude-sonnet-5 answered at the prompt tier  96.2s
+✓ merge  96.3s
+• reconcile
+✓ reconcile  0.2s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 answered at the prompt tier  24.4s
+✓ decompose source_a.md  24.4s
+• decompose source_b.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 answered at the prompt tier  26.5s
+✓ decompose source_b.md  26.5s
+• verify (forward)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  23.0s
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  3.8s
+✓ verify (forward)  26.8s
+• decompose merged.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 answered at the prompt tier  38.1s
+✓ decompose merged.md  38.1s
+• verify (reverse)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  60.8s
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  3.1s
+✓ verify (reverse)  63.9s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  21 contradicted: the merge states something different (see `## Findings`)
+  2 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

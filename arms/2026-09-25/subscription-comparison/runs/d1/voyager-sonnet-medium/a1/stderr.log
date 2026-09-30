@@ -1,0 +1,40 @@
+claimcheck merge  sonnet at Claude Code - Sonnet, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking sonnet
+✓ merge: sonnet (claude-sonnet-5) answered at the prompt tier  227.5s
+✓ merge  227.5s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking sonnet
+✓ decompose: sonnet (claude-sonnet-5) answered at the prompt tier  14.2s
+✓ decompose source_a.md  14.2s
+• decompose source_b.md
+• decompose: asking sonnet
+✓ decompose: sonnet (claude-sonnet-5) answered at the prompt tier  11.5s
+✓ decompose source_b.md  11.5s
+• verify (forward)
+• verify: asking sonnet
+✓ verify: sonnet (claude-sonnet-5) answered at the prompt tier  30.7s
+✓ verify (forward)  30.7s
+• decompose merged.md
+• decompose: asking sonnet
+✓ decompose: sonnet (claude-sonnet-5) answered at the prompt tier  22.2s
+✓ decompose merged.md  22.2s
+• verify (reverse)
+• verify: asking sonnet
+✓ verify: sonnet (claude-sonnet-5) answered at the prompt tier  25.2s
+✓ verify (reverse)  25.2s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d1/voyager-sonnet-medium/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  The model retrieved. 1 of 6 call(s) took the turns a retrieval costs; which citation each retrieval backs is not recorded
+  42 contradicted: the merge states something different (see `## Findings`)
+  1 partly invented: the sources carry some of this claim (see `## Findings`)
+  15 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d1/voyager-sonnet-medium/a1/merged.md
+  the full report went to stdout; exit code 1

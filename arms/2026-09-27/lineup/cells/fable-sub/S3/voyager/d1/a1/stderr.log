@@ -1,0 +1,40 @@
+LLossless merge  fable at lineup fable-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking fable
+✓ merge: fable (claude-fable-5-1) answered at the prompt tier  95.2s
+✓ merge  95.2s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking fable
+✓ decompose: fable (claude-fable-5-1) answered at the prompt tier  13.3s
+✓ decompose source_a.md  13.3s
+• decompose source_b.md
+• decompose: asking fable
+✓ decompose: fable (claude-fable-5-1) answered at the prompt tier  31.3s
+✓ decompose source_b.md  31.3s
+• verify (forward)
+• verify: asking fable
+✓ verify: fable (claude-fable-5-1) answered at the prompt tier  37.4s
+✓ verify (forward)  37.4s
+• decompose merged.md
+• decompose: asking fable
+✓ decompose: fable (claude-fable-5-1) answered at the prompt tier  36.2s
+✓ decompose merged.md  36.2s
+• verify (reverse)
+• verify: asking fable
+✓ verify: fable (claude-fable-5-1) answered at the prompt tier  48.7s
+✓ verify (reverse)  48.7s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  50 contradicted: the merge states something different (see `## Findings`)
+  1 partly invented: the sources carry some of this claim (see `## Findings`)
+  13 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

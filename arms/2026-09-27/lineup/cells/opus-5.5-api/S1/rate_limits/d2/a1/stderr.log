@@ -1,0 +1,51 @@
+LLossless merge  claude-opus-5-5 at https://api.anthropic.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-opus-5-5
+✓ merge: claude-opus-5-5 answered at the prompt tier  100.4s
+✓ merge  100.6s
+• reconcile
+✓ reconcile  2.8s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 answered at the prompt tier  19.9s
+✓ decompose source_a.md  19.9s
+• decompose source_b.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 answered at the prompt tier  34.4s
+✓ decompose source_b.md  34.4s
+• verify (forward)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  22.6s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  22.0s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  21.5s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  23.4s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  10.6s
+✓ verify (forward)  100.1s
+• decompose merged.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 answered at the prompt tier  35.8s
+✓ decompose merged.md  35.9s
+• verify (reverse)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  21.8s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  23.0s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  10.6s
+✓ verify (reverse)  55.5s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  1 declared gone, still here: a record says the content departed and the merge carries the segment unchanged (see `## Structure`)
+  1 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  1 over budget: declared loss past the ceiling (see `## Structure`)
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

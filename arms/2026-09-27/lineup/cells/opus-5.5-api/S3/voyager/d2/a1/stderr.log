@@ -1,0 +1,44 @@
+LLossless merge  claude-opus-5-5 at https://api.anthropic.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-opus-5-5
+✓ merge: claude-opus-5-5 answered at the prompt tier  66.6s
+✓ merge  66.6s
+• reconcile
+✓ reconcile  0.2s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 answered at the prompt tier  9.1s
+✓ decompose source_a.md  9.2s
+• decompose source_b.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 answered at the prompt tier  19.8s
+✓ decompose source_b.md  19.8s
+• verify (forward)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  23.9s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  6.7s
+✓ verify (forward)  30.7s
+• decompose merged.md
+• decompose: asking claude-opus-5-5
+✓ decompose: claude-opus-5-5 answered at the prompt tier  29.4s
+✓ decompose merged.md  29.4s
+• verify (reverse)
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  33.3s
+• verify: asking claude-opus-5-5
+✓ verify: claude-opus-5-5 answered at the prompt tier  12.8s
+✓ verify (reverse)  46.1s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  1 partly dropped: the merge carries some of this claim (see `## Findings`)
+  45 contradicted: the merge states something different (see `## Findings`)
+  12 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

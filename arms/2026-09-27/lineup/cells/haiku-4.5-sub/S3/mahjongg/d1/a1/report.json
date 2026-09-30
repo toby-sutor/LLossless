@@ -1,0 +1,1379 @@
+{
+  "command": "merge",
+  "exit_code": 2,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md",
+    "source_c.md": "source_c.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "errored",
+      "detail": "merge: model did not return a usable response after 5 attempts: invalid JSON: Expecting ',' delimiter at line 2 column 180\n  raw response written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/cells/haiku-4.5-sub/S3/mahjongg/d1/a1/cache/failures/20260927T224333Z-merge-0005-attempt5.txt"
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_c.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "skipped",
+      "detail": "there is no merged document to check against"
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "skipped",
+      "detail": "there is no merged document"
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "skipped",
+      "detail": "there is no merged document"
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "source_a.md": 50,
+      "source_b.md": 28,
+      "source_c.md": 14
+    },
+    "forward_submitted": 92,
+    "forward_verdicts": 0,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 50,
+        "checked": 0,
+        "accounted": 0,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 28,
+        "checked": 0,
+        "accounted": 0,
+        "partial": 0
+      },
+      "source_c.md": {
+        "extracted": 14,
+        "checked": 0,
+        "accounted": 0,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 0,
+    "reverse_verdicts": 0,
+    "reverse_partial": 0,
+    "graded": 0,
+    "grounded": 0,
+    "errored": 1,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The Mah-Jongg caller receives an additional bonus of 10 (often 20) points.",
+      "line": 1,
+      "span": "Der Mah-Jongg-Rufer erh\u00e4lt eine zus\u00e4tzliche Pr\u00e4mie von 10 (h\u00e4ufig 20) Punkten gutgeschrieben",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "For the robbery of the Kong, the player receives an additional bonus of 10 points.",
+      "line": 5,
+      "span": "F\u00fcr diese Beraubung des Kong erh\u00e4lt er einen zus\u00e4tzlichen Bonus von 10 Punkten",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Doublings are calculated one after another.",
+      "line": 9,
+      "span": "Die Verdopplungen werden nacheinander gerechnet",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "Doubling twice quadruples, for example, the original value of the game pattern.",
+      "line": 9,
+      "span": "zweimaliges Verdoppeln vervierfacht beispielsweise den urspr\u00fcnglichen Wert des Spielbildes",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Usually a limit is agreed upon.",
+      "line": 17,
+      "span": "sodass \u00fcblicherweise ein Limit vereinbart wird",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "The limit usually amounts to 300 or 500 points.",
+      "line": 17,
+      "span": "Dieses betr\u00e4gt meist 300 oder 500 Punkte",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "If the calculated point value exceeds the agreed limit, the game pattern is only counted with this maximum value.",
+      "line": 17,
+      "span": "\u00dcbersteigt der errechnete Punktewert das vereinbarte Limit, so wird das Spielbild nur mit diesem H\u00f6chstwert gez\u00e4hlt",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "If the Mah-Jongg caller's game pattern consists exclusively of tiles of the trump suit, consisting only of wind and dragon tiles, then this hand is evaluated with the maximum points.",
+      "line": 19,
+      "span": "Besteht das Spielbild des Mah-Jongg-Rufers ausschlie\u00dflich aus Ziegeln der Trumpffarbe, also nur aus Wind- und Drachenziegeln, so wird diese Hand mit dem Punktemaximum bewertet",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "If East wind can call Mah-Jongg immediately after drawing their tiles, they possess the blessing of heaven and receive the maximum points.",
+      "line": 21,
+      "span": "Kann Ostwind sofort nach Aufnehmen seiner Ziegel Mah-Jongg rufen, so besitzt er den Segen des Himmels und erh\u00e4lt das Punktemaximum gutgeschrieben",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "If another player can call the first tile discarded by East wind and thereby declare Mah-Jongg, this is the blessing of earth and the player receives half the limit.",
+      "line": 21,
+      "span": "Kann ein anderer Spieler den ersten von Ostwind abgelegten Stein aufrufen und damit Mah-Jongg erkl\u00e4ren, so ist dies der Segen der Erde und der Spieler erh\u00e4lt die H\u00e4lfte des Limits gutgeschrieben",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "Many rulebooks contain additional point bonuses or doublings for special features of the Mah-Jongg caller's game pattern.",
+      "line": 25,
+      "span": "In vielen Regelb\u00fcchern finden sich weitere Punktepr\u00e4mien oder Verdopplungen f\u00fcr Besonderheiten des Spielbildes des Mah-Jongg-Rufers",
+      "anchored": true
+    },
+    {
+      "id": "A-012",
+      "source": "source_a.md",
+      "text": "Once all players have determined the value of their game patterns, the settlement takes place.",
+      "line": 29,
+      "span": "Haben alle Spieler den Wert ihrer Spielbilder ermittelt, so erfolgt die Abrechnung",
+      "anchored": true
+    },
+    {
+      "id": "A-013",
+      "source": "source_a.md",
+      "text": "If Mah-Jongg is played with 144 stones, including the stones of the main suit (the flower and season tiles), then each side of the wall consists of 18 tile stacks.",
+      "line": 33,
+      "span": "Wird Mah-Jongg mit 144 Steinen, also einschlie\u00dflich der Steine der Hauptfarbe (der Blumen- und Jahreszeitenziegel), gespielt, so besteht jede Seite der Mauer aus 18 Ziegelstapeln",
+      "anchored": true
+    },
+    {
+      "id": "A-014",
+      "source": "source_a.md",
+      "text": "When a player picks up their tiles at the start of a game, they place their flower and season tiles openly before them and draw a replacement tile from the dead end of the wall; the same procedure is followed when a player purchases such a tile from the wall.",
+      "line": 33,
+      "span": "Sobald ein Spieler zu Beginn eines Spieles seine Steine aufnimmt, legt er seine Blumen- und Jahreszeitenziegel offen vor sich und zieht daf\u00fcr einen Ersatzziegel vom toten Ende der Mauer; ebenso wird verfahren, wenn ein Spieler einen solchen Stein von der Mauer kauft",
+      "anchored": true
+    },
+    {
+      "id": "A-015",
+      "source": "source_a.md",
+      "text": "The tiles of the main suit are assigned to the four winds.",
+      "line": 35,
+      "span": "Die Ziegel der Hauptfarbe sind den vier Winden zugeordnet",
+      "anchored": true
+    },
+    {
+      "id": "A-016",
+      "source": "source_a.md",
+      "text": "No. 1 applies to East wind.",
+      "line": 35,
+      "span": "Nr. 1 gilt f\u00fcr den Ostwind",
+      "anchored": true
+    },
+    {
+      "id": "A-017",
+      "source": "source_a.md",
+      "text": "No. 2 applies to South wind.",
+      "line": 35,
+      "span": "Nr. 2 f\u00fcr den S\u00fcdwind",
+      "anchored": true
+    },
+    {
+      "id": "A-018",
+      "source": "source_a.md",
+      "text": "No. 3 applies to West wind.",
+      "line": 35,
+      "span": "Nr. 3 f\u00fcr den Westwind",
+      "anchored": true
+    },
+    {
+      "id": "A-019",
+      "source": "source_a.md",
+      "text": "No. 4 applies to North wind.",
+      "line": 35,
+      "span": "Nr. 4. f\u00fcr den Nordwind",
+      "anchored": true
+    },
+    {
+      "id": "A-020",
+      "source": "source_a.md",
+      "text": "If East wind can call Mah-Jongg, they remain East wind in the next game and all other positions remain unchanged.",
+      "line": 39,
+      "span": "Wenn Ostwind Mah-Jongg rufen kann, so bleibt er im n\u00e4chsten Spiel weiter Ostwind und auch die \u00fcbrigen Positionen bleiben unver\u00e4ndert",
+      "anchored": true
+    },
+    {
+      "id": "A-021",
+      "source": "source_a.md",
+      "text": "If another player calls Mah-Jongg, the previous South wind assumes the role of East wind, and the positions change by one place counter-clockwise.",
+      "line": 39,
+      "span": "Wenn ein anderer Spieler Mah-Jongg ruft, so \u00fcbernimmt der bisherige S\u00fcdwind die Rolle von Ostwind, und die Positionen wechseln um einen Platz gegen den Uhrzeigersinn",
+      "anchored": true
+    },
+    {
+      "id": "A-022",
+      "source": "source_a.md",
+      "text": "A round is finished as soon as the player who held the position of North wind in the first game loses a game as East wind.",
+      "line": 41,
+      "span": "Eine Runde ist beendet, sobald der Spieler, der im ersten Spiel die Position des Nordwindes innehatte, ein Spiel als Ostwind verliert \u2013 es w\u00fcrde Ostwind des ersten Spieles wiederum zu Ostwind",
+      "anchored": true
+    },
+    {
+      "id": "A-023",
+      "source": "source_a.md",
+      "text": "A round consists of at least four games.",
+      "line": 41,
+      "span": "Eine Runde besteht aus mindestens vier Spielen",
+      "anchored": true
+    },
+    {
+      "id": "A-024",
+      "source": "source_a.md",
+      "text": "If not just a single round is played but a match is agreed upon, then it consists of four rounds.",
+      "line": 43,
+      "span": "Wird nicht nur eine einzelne Runde gespielt, sondern eine Partie vereinbart, so besteht diese aus vier Runden",
+      "anchored": true
+    },
+    {
+      "id": "A-025",
+      "source": "source_a.md",
+      "text": "In the first round, the East wind round, East is the prevailing wind.",
+      "line": 43,
+      "span": "In der ersten Runde, der Ostwindrunde, ist Ost der vorherrschende Wind (Rundenwind)",
+      "anchored": true
+    },
+    {
+      "id": "A-026",
+      "source": "source_a.md",
+      "text": "In the second round, the South wind round, South wind prevails.",
+      "line": 43,
+      "span": "in der zweiten Runde (S\u00fcdwindrunde) herrscht S\u00fcdwind vor",
+      "anchored": true
+    },
+    {
+      "id": "A-027",
+      "source": "source_a.md",
+      "text": "The third round is the West wind round.",
+      "line": 43,
+      "span": "die dritte Runde ist die Westwindrunde",
+      "anchored": true
+    },
+    {
+      "id": "A-028",
+      "source": "source_a.md",
+      "text": "The fourth round is the North wind round.",
+      "line": 43,
+      "span": "die vierte die Nordwindrunde",
+      "anchored": true
+    },
+    {
+      "id": "A-029",
+      "source": "source_a.md",
+      "text": "A small container (Mingg) is used to keep track of individual games and rounds.",
+      "line": 47,
+      "span": "Um die einzelnen Spiele und Runden mitzuz\u00e4hlen, wird eine kleine Dose (Mingg)verwendet",
+      "anchored": true
+    },
+    {
+      "id": "A-030",
+      "source": "source_a.md",
+      "text": "This is placed on the table in front of the respective East wind player.",
+      "line": 47,
+      "span": "Diese stellt der jeweilige Spieler des Ostwindes vor sich auf den Tisch",
+      "anchored": true
+    },
+    {
+      "id": "A-031",
+      "source": "source_a.md",
+      "text": "The position stone of the prevailing wind is placed on top of the Mingg.",
+      "line": 47,
+      "span": "der Platzstein des vorherrschenden Windes wird oben auf die Mingg gelegt",
+      "anchored": true
+    },
+    {
+      "id": "A-032",
+      "source": "source_a.md",
+      "text": "Before another match, the seating is drawn again.",
+      "line": 49,
+      "span": "Vor einer weiteren Partie werden die Sitzpl\u00e4tze neu gelost",
+      "anchored": true
+    },
+    {
+      "id": "A-033",
+      "source": "source_a.md",
+      "text": "Usually no more than two matches are played.",
+      "line": 49,
+      "span": "meist werden nicht mehr als zwei Partien gespielt",
+      "anchored": true
+    },
+    {
+      "id": "A-034",
+      "source": "source_a.md",
+      "text": "In the traditional Chinese game, certain game patterns are evaluated with the maximum points.",
+      "line": 53,
+      "span": "Im traditionellen chinesischen Spiel werden bestimmte Spielbilder mit dem Punktemaximum (Limit) bewertet",
+      "anchored": true
+    },
+    {
+      "id": "A-035",
+      "source": "source_a.md",
+      "text": "The poetic names of these game patterns contributed substantially to the popularity of the game in the 1920s.",
+      "line": 55,
+      "span": "Die poetischen Namen dieser Spielbilder trugen sicher zur Popularit\u00e4t des Spiels in den 1920er Jahren wesentlich bei",
+      "anchored": true
+    },
+    {
+      "id": "A-036",
+      "source": "source_a.md",
+      "text": "Countless new special hands were invented, especially in the USA.",
+      "line": 55,
+      "span": "unz\u00e4hlige neue special hands erfunden wurden",
+      "anchored": true
+    },
+    {
+      "id": "A-037",
+      "source": "source_a.md",
+      "text": "The ruleset became increasingly complex.",
+      "line": 55,
+      "span": "das Regelwerk immer komplizierter wurde",
+      "anchored": true
+    },
+    {
+      "id": "A-038",
+      "source": "source_a.md",
+      "text": "Modern Mah-Jongg, as officially recognized by China's State Sports Commission in 1998 as the 255th sport, is a further development of the classical game style.",
+      "line": 55,
+      "span": "Das moderne Mah-Jongg, so wie es 1998 von der staatlichen Sportkommission Chinas offiziell als 255. Sportart anerkannt wurde, ist eine Weiterentwicklung der klassischen Spielweise",
+      "anchored": true
+    },
+    {
+      "id": "A-039",
+      "source": "source_a.md",
+      "text": "Bridge developed from the older Whist.",
+      "line": 55,
+      "span": "\u00e4hnlich wie das Bridge-Spiel aus dem \u00e4lteren Whist hervorgegangen ist",
+      "anchored": true
+    },
+    {
+      "id": "A-040",
+      "source": "source_a.md",
+      "text": "The official rules of this modern game are applied in international tournaments such as World and European Championships.",
+      "line": 57,
+      "span": "Die offiziellen Regeln dieser modernen Spielweise finden bei internationalen Turnieren wie Welt- und Europameisterschaften Anwendung",
+      "anchored": true
+    },
+    {
+      "id": "A-041",
+      "source": "source_a.md",
+      "text": "In the ranking of the European Mahjong Association, only results are considered that were achieved according to these game rules.",
+      "line": 57,
+      "span": "In der Rangliste der European Mahjong Association werden nur Ergebnisse ber\u00fccksichtigt, die aufgrund dieser Spielregeln erzielt wurden",
+      "anchored": true
+    },
+    {
+      "id": "A-042",
+      "source": "source_a.md",
+      "text": "The Finnish manufacturer Lagarto offers a paid Windows version of traditional Mah-Jongg called Four Winds.",
+      "line": 61,
+      "span": "Der finnische Hersteller Lagarto bietet eine kostenpflichtige Windows-Version des traditionellen Mah-Jongg namens Four Winds an",
+      "anchored": true
+    },
+    {
+      "id": "A-043",
+      "source": "source_a.md",
+      "text": "A player can play against three players simulated by the software.",
+      "line": 61,
+      "span": "Ein Spieler kann gegen drei durch die Software nachgebildete Spieler antreten",
+      "anchored": true
+    },
+    {
+      "id": "A-044",
+      "source": "source_a.md",
+      "text": "Multiple real players can compete against each other or against the software over a network.",
+      "line": 61,
+      "span": "Ebenso k\u00f6nnen \u00fcber ein Netzwerk mehrere reale Spieler gegeneinander oder gegen die Software antreten",
+      "anchored": true
+    },
+    {
+      "id": "A-045",
+      "source": "source_a.md",
+      "text": "It can be played according to various rules.",
+      "line": 61,
+      "span": "Es kann nach verschiedenen Regeln gespielt werden",
+      "anchored": true
+    },
+    {
+      "id": "A-046",
+      "source": "source_a.md",
+      "text": "The KDE Project contains a free version of Mah-Jongg called Kajongg.",
+      "line": 61,
+      "span": "Das KDE-Projekt enth\u00e4lt eine kostenfreie Version von Mah-Jongg, die Kajongg genannt wird",
+      "anchored": true
+    },
+    {
+      "id": "A-047",
+      "source": "source_a.md",
+      "text": "In various parts of the Yakuza game series, such as Yakuza 0, the Japanese variant of Mah-Jongg (Riichi Mahjong) is present as a minigame.",
+      "line": 63,
+      "span": "In verschiedenen Teilen der Yakuza-Spieleserie, wie zum Beispiel Yakuza 0 ist die japanische Variante von Mah-Jongg (Riichi Mahjong) als Minispiel vorhanden",
+      "anchored": true
+    },
+    {
+      "id": "A-048",
+      "source": "source_a.md",
+      "text": "For iPhone and iPad there is a traditional version in the Apple App Store under the name Mahjong! by POK-Software.",
+      "line": 65,
+      "span": "F\u00fcr iPhone und iPad gibt es im Apple App Store unter dem Namen Mahjong! von POK-Software eine traditionelle Version",
+      "anchored": true
+    },
+    {
+      "id": "A-049",
+      "source": "source_a.md",
+      "text": "The app simulates up to 3 fellow players.",
+      "line": 65,
+      "span": "die bis zu 3 Mitspieler simuliert",
+      "anchored": true
+    },
+    {
+      "id": "A-050",
+      "source": "source_a.md",
+      "text": "There are numerous platforms where you can play against other players.",
+      "line": 69,
+      "span": "Es gibt zahlreiche Plattformen, auf denen man gegen andere Spieler antreten kann",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "Mah-Jongg Solitaire became popular from the mid-1980s onwards initially under the name Shanghai as a computer game.",
+      "line": 4,
+      "span": "Ab Mitte der 1980er Jahre wurde Mah-Jongg Solitaire zun\u00e4chst unter dem Namen Shanghai als Computerspiel popul\u00e4r",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "The improved graphics capabilities of the new Amiga computer for the first time allowed an attractive representation of this game.",
+      "line": 4,
+      "span": "die verbesserten grafischen M\u00f6glichkeiten des neuen Amiga-Computers erstmals eine ansprechende Darstellung dieses Spiels erlaubten",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "In the most popular computer game variant, all 144 stones lie on the table at the beginning of the game, partly in multiple layers on top of each other.",
+      "line": 6,
+      "span": "Bei der beliebtesten Computerspiel-Variante liegen zu Spielbeginn alle 144 Steine auf dem Tisch, teils in mehreren Lagen \u00fcbereinander",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "Traditionally, game stones are arranged in the figure of a dragon or a turtle.",
+      "line": 6,
+      "span": "Traditionell werden die Spielsteine in der Figur eines Drachen oder einer Schildkr\u00f6te aufgebaut",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Computer game variants often offer many different starting figures.",
+      "line": 6,
+      "span": "die Computerspielvarianten bieten oft viele verschiedene Startfiguren an",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "A single player must remove all 144 stones from the table in pairs.",
+      "line": 6,
+      "span": "Ein einzelner Spieler muss paarweise alle 144 Steine vom Tisch nehmen",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "A pair may only be removed if both stones are not partially or completely covered by any other stone and are exposed on at least one long side.",
+      "line": 6,
+      "span": "Ein Paar darf nur abgetragen werden, wenn beide Steine von keinem anderen Stein teilweise oder vollst\u00e4ndig \u00fcberdeckt sind und an zumindest einer L\u00e4ngsseite freiliegen",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "Stones of the main colors each occur only once and cannot form pairs.",
+      "line": 6,
+      "span": "W\u00e4hrend die Steine der Hauptfarben jeweils nur einmal vorkommen und keine Paare bilden k\u00f6nnen",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "Flower tiles and season tiles can each be arbitrarily combined with each other, for example plum with orchid or winter with spring.",
+      "line": 6,
+      "span": "d\u00fcrfen die Blumenziegel und die Jahreszeitenziegel jeweils untereinander beliebig kombiniert werden, beispielsweise Pflaume mit Orchidee oder Winter mit Fr\u00fchling",
+      "anchored": true
+    },
+    {
+      "id": "B-010",
+      "source": "source_b.md",
+      "text": "In some variants, the flower and season tiles are doubled and the wind tiles are only contained twice as compensation.",
+      "line": 6,
+      "span": "In einigen Varianten sind die Blumen- und Jahreszeitenziegel verdoppelt und daf\u00fcr zum Ausgleich beispielsweise die Windziegel nur zweimal enthalten",
+      "anchored": true
+    },
+    {
+      "id": "B-011",
+      "source": "source_b.md",
+      "text": "Sometimes the season tiles appear twice and there are no flower tiles.",
+      "line": 6,
+      "span": "Mitunter kommen die Jahreszeitenziegel doppelt vor und daf\u00fcr keine Blumenziegel",
+      "anchored": true
+    },
+    {
+      "id": "B-012",
+      "source": "source_b.md",
+      "text": "As a further development of computer games, there are today online offers where Mahjong Solitaire can be played.",
+      "line": 8,
+      "span": "Als Weiterentwicklung der Computerspiele gibt es heute Angebote auf dem Netz, auf denen Mahjong Solitaire online gespielt werden kann",
+      "anchored": true
+    },
+    {
+      "id": "B-013",
+      "source": "source_b.md",
+      "text": "Online Mahjong Solitaire is usually the single-player game variant.",
+      "line": 8,
+      "span": "Dabei handelt es sich in der Regel meist um die Spielvariante f\u00fcr Einzelspieler",
+      "anchored": true
+    },
+    {
+      "id": "B-014",
+      "source": "source_b.md",
+      "text": "Through leaderboards or competitions, one plays quasi against other Mahjong players in online Mahjong Solitaire.",
+      "line": 8,
+      "span": "aber durch Bestenlisten oder Wettk\u00e4mpfe spielt man quasi gegen andere Mahjong-Spieler",
+      "anchored": true
+    },
+    {
+      "id": "B-015",
+      "source": "source_b.md",
+      "text": "Online Mahjong Solitaire often has additional functions such as the display of still available pairs or the ability to undo moves.",
+      "line": 8,
+      "span": "Oft gibt es zus\u00e4tzliche Funktionen, wie die Anzeige der noch verf\u00fcgbaren Paare oder die M\u00f6glichkeit Spielz\u00fcge r\u00fcckg\u00e4ngig zu machen",
+      "anchored": true
+    },
+    {
+      "id": "B-016",
+      "source": "source_b.md",
+      "text": "In Mahjong Connect, identical game stones can only be selected if a line can be drawn between them.",
+      "line": 10,
+      "span": "Zum Beispiel k\u00f6nnen beim Mahjong Connect die identischen Spielsteine nur ausgew\u00e4hlt werden, wenn zwischen ihnen eine Linie gezogen werden kann",
+      "anchored": true
+    },
+    {
+      "id": "B-017",
+      "source": "source_b.md",
+      "text": "In Mahjong Dimensions, there is no two-dimensional game field, but the game stones are assembled into a three-dimensional object.",
+      "line": 10,
+      "span": "Beim Mahjong Dimensions gibt es kein zweidimensionales Spielfeld, sondern die Spielsteine sind zu einem dreidimensionalen Objekt gef\u00fcgt",
+      "anchored": true
+    },
+    {
+      "id": "B-018",
+      "source": "source_b.md",
+      "text": "In Japan, based on the game, the genre Mah-Jongg in anime and manga developed.",
+      "line": 16,
+      "span": "In Japan entwickelte sich auf Grundlage des Spiels das Genre Mah-Jongg in Anime und Manga",
+      "anchored": true
+    },
+    {
+      "id": "B-019",
+      "source": "source_b.md",
+      "text": "In Crazy Rich Asians (2018), a Mah-Jongg game forms the dramaturgical climax of a central confrontation.",
+      "line": 20,
+      "span": "In der romantischen Filmkom\u00f6die Crazy Rich Asians (2018) bildet eine Mah-Jongg-Partie den dramaturgischen H\u00f6hepunkt einer zentralen Konfrontation",
+      "anchored": true
+    },
+    {
+      "id": "B-020",
+      "source": "source_b.md",
+      "text": "The film Gefahr und Begierde is based on the same-named short story by Eileen Chang.",
+      "line": 22,
+      "span": "In dem Film Gefahr und Begierde, nach der gleichnamigen Kurzgeschichte von Eileen Chang",
+      "anchored": true
+    },
+    {
+      "id": "B-021",
+      "source": "source_b.md",
+      "text": "Ang Lee tells the story of a tragic love relationship between a resistance fighter and the intelligence chief of Wang Jingwei's collaboration government in Gefahr und Begierde.",
+      "line": 22,
+      "span": "erz\u00e4hlt Ang Lee die Geschichte einer tragischen Liebesbeziehung zwischen einer Widerstandsk\u00e4mpferin und dem Geheimdienstchef der Kollaborationsregierung von Wang Jingwei",
+      "anchored": true
+    },
+    {
+      "id": "B-022",
+      "source": "source_b.md",
+      "text": "There are numerous artfully staged Mah-Jongg scenes in Gefahr und Begierde.",
+      "line": 22,
+      "span": "Bemerkenswert sind hier die zahlreichen kunstvoll inszenierten Mah-Jongg-Szenen",
+      "anchored": true
+    },
+    {
+      "id": "B-023",
+      "source": "source_b.md",
+      "text": "A resistance fighter, played by Tang Wei, meets the wives of government members in Mah-Jongg scenes in Gefahr und Begierde.",
+      "line": 22,
+      "span": "die Widerstandsk\u00e4mpferin, gespielt von Tang Wei, auf die Ehefrauen der Regierungsmitglieder trifft",
+      "anchored": true
+    },
+    {
+      "id": "B-024",
+      "source": "source_b.md",
+      "text": "In the crime novel Sous les vents de Neptun by Fred Vargas (Fr\u00e9d\u00e9rique Audoin-Rouzeau), the game Mah-Jongg plays a central role.",
+      "line": 24,
+      "span": "Im Kriminalroman Sous les vents de Neptun (dt. \"Der vierzehnte Stein\") von Fred Vargas (Fr\u00e9d\u00e9rique Audoin-Rouzeau) nimmt das Spiel Mah-Jongg eine zentrale Rolle ein",
+      "anchored": false
+    },
+    {
+      "id": "B-025",
+      "source": "source_b.md",
+      "text": "Sous les vents de Neptun was filmed in 2008.",
+      "line": 24,
+      "span": "Das Buch wurde 2008 verfilmt",
+      "anchored": true
+    },
+    {
+      "id": "B-026",
+      "source": "source_b.md",
+      "text": "In the French-Swiss film Die Gleichung ihres Lebens (2023), the main character Marguerite learns Mah-Jongg after discontinuing her mathematics doctorate.",
+      "line": 26,
+      "span": "Im franz\u00f6sisch-Schweizer Spielfilm Die Gleichung ihres Lebens (2023) lernt die Hauptperson Marguerite nach dem Abbruch ihrer Mathematik-Promotion Mah-Jongg",
+      "anchored": true
+    },
+    {
+      "id": "B-027",
+      "source": "source_b.md",
+      "text": "Marguerite achieves considerable income from Mah-Jongg.",
+      "line": 26,
+      "span": "erzielt erhebliche Einnahmen damit",
+      "anchored": true
+    },
+    {
+      "id": "B-028",
+      "source": "source_b.md",
+      "text": "The structure of the game Mah-Jongg provides Marguerite with inspirations for a re-entry into mathematics.",
+      "line": 26,
+      "span": "Die Struktur des Spiels liefert ihr wiederum Inspirationen f\u00fcr einen Wiedereinstieg in die Mathematik",
+      "anchored": true
+    },
+    {
+      "id": "C-001",
+      "source": "source_c.md",
+      "text": "If no player calls the discarded tile, the right neighbor draws a tile from the live end of the wall",
+      "line": 102,
+      "span": "Wenn kein Spieler den abgelegten Stein aufruft, so zieht der rechte Nachbar einen Stein vom lebenden Ende der Mauer",
+      "anchored": true
+    },
+    {
+      "id": "C-002",
+      "source": "source_c.md",
+      "text": "After drawing, the right neighbor may declare one or more figures if desired",
+      "line": 102,
+      "span": "meldet, wenn er m\u00f6chte, eine oder mehrere Figuren",
+      "anchored": true
+    },
+    {
+      "id": "C-003",
+      "source": "source_c.md",
+      "text": "The right neighbor finally discards a tile",
+      "line": 102,
+      "span": "und legt zuletzt einen Stein ab",
+      "anchored": true
+    },
+    {
+      "id": "C-004",
+      "source": "source_c.md",
+      "text": "If a tile is discarded, it is dead and remains openly in the middle of the table",
+      "line": 104,
+      "span": "Wird ein Stein abgelegt, so ist er tot, er bleibt offen in der Mitte des Tisches liegen",
+      "anchored": true
+    },
+    {
+      "id": "C-005",
+      "source": "source_c.md",
+      "text": "The next player after a discarded tile can play a Chow",
+      "line": 104,
+      "span": "der n\u00e4chste Spieler kann einen Chow spielen",
+      "anchored": true
+    },
+    {
+      "id": "C-006",
+      "source": "source_c.md",
+      "text": "That player and all further players can play a Pong or Kong with a discarded tile",
+      "line": 104,
+      "span": "sowie jener und alle weiteren Spieler einen Pong oder einen Kong",
+      "anchored": true
+    },
+    {
+      "id": "C-007",
+      "source": "source_c.md",
+      "text": "After all players have had the opportunity to call a discarded tile, it is no longer available for the game",
+      "line": 104,
+      "span": "Danach ist der Stein nicht mehr f\u00fcr das Spiel verf\u00fcgbar beziehungsweise aufnehmbar",
+      "anchored": true
+    },
+    {
+      "id": "C-008",
+      "source": "source_c.md",
+      "text": "If a tile is called by a player, the player takes the discarded tile and must place the relevant figure openly",
+      "line": 106,
+      "span": "Wird ein Stein von einem Spieler aufgerufen, so nimmt der Spieler den abgelegten Stein und muss die betreffende Figur offen auflegen",
+      "anchored": true
+    },
+    {
+      "id": "C-009",
+      "source": "source_c.md",
+      "text": "After placing a called figure, the player discards a tile and the game continues with that player",
+      "line": 106,
+      "span": "Danach wirft er einen Stein ab, und das Spiel wird mit diesem Spieler fortgesetzt",
+      "anchored": true
+    },
+    {
+      "id": "C-010",
+      "source": "source_c.md",
+      "text": "Players can be skipped when one player calls a tile discarded by another player",
+      "line": 106,
+      "span": "Auf diese Weise k\u00f6nnen auch Spieler \u00fcbergangen werden: Legt beispielsweise S\u00fcdwind einen Stein ab, der von Nordwind gerufen wird, so wird Westwind \u00fcbersprungen",
+      "anchored": true
+    },
+    {
+      "id": "C-011",
+      "source": "source_c.md",
+      "text": "If a tile is called by multiple players, the player needing the tile for a Mah-Jongg call has priority",
+      "line": 108,
+      "span": "Wird ein Ziegel von mehreren Spielern gerufen, so gilt folgende Rangordnung: Ben\u00f6tigt ein Spieler den Stein f\u00fcr einen Mah-Jongg-Ruf, so hat er Vorrang",
+      "anchored": true
+    },
+    {
+      "id": "C-012",
+      "source": "source_c.md",
+      "text": "Kong and Pong calls have priority over Chow calls",
+      "line": 108,
+      "span": "Kong- oder Pong-Ruf und diese wiederum haben Vorrang vor einem Chow",
+      "anchored": true
+    },
+    {
+      "id": "C-013",
+      "source": "source_c.md",
+      "text": "Concealed combinations in Mah-Jongg scoring count double",
+      "line": 124,
+      "span": "Verdeckte Kombinationen z\u00e4hlen das Doppelte",
+      "anchored": true
+    },
+    {
+      "id": "C-014",
+      "source": "source_c.md",
+      "text": "A Kong in Mah-Jongg scoring counts four times as much as the corresponding Pong",
+      "line": 128,
+      "span": "Ein Kong z\u00e4hlt viermal so viel wie der entsprechende Pong",
+      "anchored": true
+    }
+  ],
+  "verdicts": [],
+  "findings": [],
+  "review_queue": [],
+  "declarations": [],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "web_search": 0,
+    "web_fetch": 0,
+    "state": "not-searched",
+    "measured_calls": 10,
+    "unmeasured_calls": 0,
+    "tool_use": {
+      "state": "tool-use",
+      "retrieval": "retrieved",
+      "turns": 12,
+      "calls_with_tool_use": 2,
+      "measured_calls": 10,
+      "unmeasured_calls": 0
+    },
+    "retrieval_judged_on": "merge",
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": "",
+    "inconclusive_not_sourced": false
+  },
+  "structural": {
+    "ran": false,
+    "checks": 9,
+    "segments": 0,
+    "findings": []
+  },
+  "decisions": {
+    "ran": false,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": []
+  },
+  "title": {
+    "policy": "",
+    "sources_with_a_title": 0,
+    "has_referent": false,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": false,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": false,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": []
+  },
+  "number_format": {
+    "ran": true,
+    "predicate": "each document's convention (decimal point or decimal comma) is decided by its numerals that can only be read one way when they all agree; otherwise by its language (English: point, German: comma, from a stop-word count); otherwise by the majority of its numerals; and on a tie with no language by nobody. A numeral in the other convention is reported, as is a separator before exactly three digits that the document's convention reads as a fraction, or any such numeral where nothing decided. A document whose numerals decided the convention its language does not write is reported once, naming them. A merged numeral with the same digits before the same word as a source numeral but a different value is a fault. No number is rewritten and no model is asked",
+    "faults": [
+      "reading_changed"
+    ],
+    "findings": [],
+    "documents": [
+      {
+        "document": "source_a.md",
+        "convention": "decimal comma",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "de",
+        "stop_words": {
+          "en": 0,
+          "de": 255
+        }
+      },
+      {
+        "document": "source_b.md",
+        "convention": "decimal comma",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "de",
+        "stop_words": {
+          "en": 2,
+          "de": 130
+        }
+      },
+      {
+        "document": "source_c.md",
+        "convention": "decimal comma",
+        "decided_by": "language",
+        "votes": {
+          "decimal_point": [],
+          "decimal_comma": []
+        },
+        "language": "de",
+        "stop_words": {
+          "en": 3,
+          "de": 593
+        }
+      }
+    ]
+  },
+  "restated_claims": {
+    "ran": false,
+    "claims": 0,
+    "source_claims": 92,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 216,
+    "budget": 0.03,
+    "ratio": 0.0,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": null,
+  "merged_written_to": null,
+  "provenance": {
+    "generated_at": "2026-09-27T22:58:47+00:00",
+    "claimcheck_commit": "73b61563c13c",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "45fff742d0ed",
+      "location": "command",
+      "content_left_this_machine": true,
+      "route": "lineup haiku-4.5-sub"
+    },
+    "merge_policy": {
+      "fidelity": "open",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "merge": "claude-haiku-4-5-20251001",
+      "decompose": "claude-haiku-4-5-20251001",
+      "verify": "claude-haiku-4-5-20251001"
+    },
+    "models_answered": {
+      "merge": {
+        "models": [
+          "claude-haiku-4-5-20251001"
+        ],
+        "output": "claude-haiku-4-5-20251001"
+      },
+      "decompose": {
+        "models": [
+          "claude-haiku-4-5-20251001"
+        ],
+        "output": "claude-haiku-4-5-20251001"
+      }
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "pinned",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-27-release-lineup/tree/prompts/merge.md": "5f7133b7091c8c22b3050f27662eb9ac45ce702f292630510b3910f87bac26bf"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "subscription",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ],
+      "effort_single_level": {
+        "decompose": "one level (extended thinking on/off; default kept)",
+        "merge": "one level (extended thinking on/off; default kept)",
+        "verify": "one level (extended thinking on/off; default kept)"
+      }
+    },
+    "counts": {
+      "calls": 10,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 2,
+      "model_loads": 0,
+      "errors": 1,
+      "salvaged": 0
+    },
+    "tokens": {
+      "measured_calls": 0,
+      "unmeasured_calls": 10
+    },
+    "tokens_described": "unknown (10 call(s) reported no usage)",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "5f7133b7091c8c22b3050f27662eb9ac45ce702f292630510b3910f87bac26bf",
+        "request_sha256": "9b7ee4c32b7c6a6a60de2a5ba592f650acfc7bef4a3c735e16c8c4ba90b2eb62",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 18084,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 501727,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 501727,
+        "failed_ms": 0,
+        "cli_duration_ms": 500549,
+        "cli_duration_api_ms": 500472,
+        "outcome": "repair"
+      },
+      {
+        "role": "merge",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "5f7133b7091c8c22b3050f27662eb9ac45ce702f292630510b3910f87bac26bf",
+        "request_sha256": "90814e0c91044d6d83a2d79dec94aacc53e0092f96dcd122041b8fda63018ae0",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 18113,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 263860,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 263860,
+        "failed_ms": 0,
+        "cli_duration_ms": 262624,
+        "cli_duration_api_ms": 262556,
+        "outcome": "repair"
+      },
+      {
+        "role": "merge",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "5f7133b7091c8c22b3050f27662eb9ac45ce702f292630510b3910f87bac26bf",
+        "request_sha256": "2662dd74674e87c4452a4d67ebbd35dffa1583a8cee1926911ca784eefb4b4e0",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 18142,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 247606,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 247606,
+        "failed_ms": 0,
+        "cli_duration_ms": 246375,
+        "cli_duration_api_ms": 246309,
+        "outcome": "repair"
+      },
+      {
+        "role": "merge",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "5f7133b7091c8c22b3050f27662eb9ac45ce702f292630510b3910f87bac26bf",
+        "request_sha256": "94e6c509b7fba4c586105e47aa3da4c90d7ca31f203579eb136231e778c6930c",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 18197,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 321940,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 321940,
+        "failed_ms": 0,
+        "cli_duration_ms": 320723,
+        "cli_duration_api_ms": 320603,
+        "outcome": "repair"
+      },
+      {
+        "role": "merge",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "5f7133b7091c8c22b3050f27662eb9ac45ce702f292630510b3910f87bac26bf",
+        "request_sha256": "e7a3ed27f52e0a51b1cdcc2045a461ab594f009287b237567200b5ba62e13576",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 18225,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 288149,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 288149,
+        "failed_ms": 0,
+        "cli_duration_ms": 286893,
+        "cli_duration_api_ms": 286825,
+        "outcome": "failed"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "8591149f569e6a6039cb21ad54cda50bb095f5b806df3b55591c73bee6108519",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3137,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 180507,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 180507,
+        "failed_ms": 0,
+        "cli_duration_ms": 179295,
+        "cli_duration_api_ms": 179229,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "69660e176d6f875e7f6982fed92310aef5bdb2bb6c6f4548b4be2034a261dc72",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2237,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 182464,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 182464,
+        "failed_ms": 0,
+        "cli_duration_ms": 181222,
+        "cli_duration_api_ms": 181155,
+        "outcome": "repair"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "76cc38bea518127e7f97f4585e0b774ea758de177defafa604f8407b76ecbb00",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 2292,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 81770,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 81770,
+        "failed_ms": 0,
+        "cli_duration_ms": 80532,
+        "cli_duration_api_ms": 80468,
+        "outcome": "answer"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "9831ada765286039525bd8cce3119adee5946981c2f5ab7c6bc69b1c93b7f704",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 6141,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 178987,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 178987,
+        "failed_ms": 0,
+        "cli_duration_ms": 177748,
+        "cli_duration_api_ms": 177679,
+        "outcome": "repair"
+      },
+      {
+        "role": "decompose",
+        "model": "claude-haiku-4-5-20251001",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "cff19e55d2980d8f73ea9efb49c470b1d79cfc92104e9d54284e1ceb4287a7d5",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 6196,
+        "tier": "prompt",
+        "source": "live",
+        "answered_by": {
+          "models": [
+            "claude-haiku-4-5-20251001"
+          ],
+          "output": "claude-haiku-4-5-20251001"
+        },
+        "latency_ms": 290709,
+        "attempts": 1,
+        "waited_ms": 0,
+        "answer_ms": 290709,
+        "failed_ms": 0,
+        "cli_duration_ms": 289485,
+        "cli_duration_api_ms": 289408,
+        "outcome": "answer"
+      }
+    ],
+    "cost": {
+      "state": "unmeasured",
+      "usd": null,
+      "usd_exact": null,
+      "priced_calls": 0,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 10
+    },
+    "answering_seconds": {
+      "total": 2537.719,
+      "by_role": {
+        "decompose": 914.437,
+        "merge": 1623.282
+      },
+      "cli": {
+        "duration": {
+          "total": 2525.446,
+          "by_role": {
+            "decompose": 908.282,
+            "merge": 1617.164
+          }
+        },
+        "duration_api": {
+          "total": 2524.704,
+          "by_role": {
+            "decompose": 907.939,
+            "merge": 1616.765
+          }
+        }
+      }
+    },
+    "answering_cost": {
+      "state": "unmeasured",
+      "usd": null,
+      "usd_exact": null,
+      "priced_calls": 0,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 10
+    },
+    "excluded": {
+      "calls": {
+        "retries": 0
+      },
+      "seconds": {
+        "waited": 0.0,
+        "failed": 0.0,
+        "discarded": 0.0,
+        "total": 0.0
+      },
+      "cost": {
+        "state": "none",
+        "usd": null,
+        "usd_exact": null,
+        "priced_calls": 0,
+        "unpriced_calls": 0,
+        "unmeasured_calls": 0
+      }
+    },
+    "discarded_calls": [],
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / LLOSSLESS_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 5,
+      "merge": 5
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "tool-use",
+        "retrieval": "retrieved",
+        "turns": 12,
+        "calls_with_tool_use": 2,
+        "measured_calls": 10,
+        "unmeasured_calls": 0
+      },
+      "described": "2 of 10 call(s) used a tool (12 turn(s) in total)"
+    },
+    "isolation": {
+      "merge": {
+        "safe_mode": true,
+        "tools": [],
+        "env_dropped": [],
+        "timeout": 1800.0
+      },
+      "decompose": {
+        "safe_mode": true,
+        "tools": [],
+        "env_dropped": [],
+        "timeout": 1800.0
+      },
+      "verify": {
+        "safe_mode": true,
+        "tools": [],
+        "env_dropped": [],
+        "timeout": 1800.0
+      }
+    },
+    "duration_seconds": 2537.9
+  }
+}

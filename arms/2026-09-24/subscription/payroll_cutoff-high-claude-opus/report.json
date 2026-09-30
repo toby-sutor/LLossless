@@ -1,0 +1,1443 @@
+{
+  "command": "merge",
+  "exit_code": 1,
+  "documents": {
+    "source_a.md": "source_a.md",
+    "source_b.md": "source_b.md"
+  },
+  "steps": [
+    {
+      "name": "merge",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "reconcile",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "title",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_a.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose source_b.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (forward)",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "decompose merged.md",
+      "state": "ok",
+      "detail": ""
+    },
+    {
+      "name": "verify (reverse)",
+      "state": "ok",
+      "detail": ""
+    }
+  ],
+  "coverage": {
+    "extracted": {
+      "merged.md": 15,
+      "source_a.md": 14,
+      "source_b.md": 9
+    },
+    "forward_submitted": 23,
+    "forward_verdicts": 23,
+    "forward_partial": 0,
+    "forward_by_source": {
+      "source_a.md": {
+        "extracted": 14,
+        "checked": 14,
+        "accounted": 14,
+        "partial": 0
+      },
+      "source_b.md": {
+        "extracted": 9,
+        "checked": 9,
+        "accounted": 7,
+        "partial": 0
+      }
+    },
+    "reverse_submitted": 15,
+    "reverse_verdicts": 15,
+    "reverse_partial": 0,
+    "graded": 38,
+    "grounded": 38,
+    "errored": 0,
+    "ungraded": 0
+  },
+  "claims": [
+    {
+      "id": "A-001",
+      "source": "source_a.md",
+      "text": "The payroll submission deadlines page is for team leads who submit timesheet totals for hourly staff.",
+      "line": 5,
+      "span": "Team leads who submit timesheet totals for hourly staff.",
+      "anchored": true
+    },
+    {
+      "id": "A-002",
+      "source": "source_a.md",
+      "text": "Salaried staff are not covered by the payroll submission deadlines page.",
+      "line": 5,
+      "span": "Salaried staff are not\ncovered by this page.",
+      "anchored": true
+    },
+    {
+      "id": "A-003",
+      "source": "source_a.md",
+      "text": "Timesheet totals must be submitted by 12:00 on the 18th of the month.",
+      "line": 10,
+      "span": "Totals must be submitted by 12:00 on the 18th of the month.",
+      "anchored": true
+    },
+    {
+      "id": "A-004",
+      "source": "source_a.md",
+      "text": "The 18th of the month is a hard cut-off, not a target.",
+      "line": 10,
+      "span": "The 18th is a hard\ncut-off, not a target.",
+      "anchored": true
+    },
+    {
+      "id": "A-005",
+      "source": "source_a.md",
+      "text": "Submissions that arrive after the cut-off are held for the following month's run.",
+      "line": 11,
+      "span": "Submissions that arrive after it are held for the\nfollowing month's run.",
+      "anchored": true
+    },
+    {
+      "id": "A-006",
+      "source": "source_a.md",
+      "text": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it.",
+      "line": 14,
+      "span": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the\nlast working day before it.",
+      "anchored": true
+    },
+    {
+      "id": "A-007",
+      "source": "source_a.md",
+      "text": "One file per team must be submitted.",
+      "line": 19,
+      "span": "Submit one file per team.",
+      "anchored": true
+    },
+    {
+      "id": "A-008",
+      "source": "source_a.md",
+      "text": "The submitted file must list every hourly worker with hours and the cost centre the hours are charged to.",
+      "line": 19,
+      "span": "The file must list every hourly worker with hours and\nthe cost centre the hours are charged to.",
+      "anchored": true
+    },
+    {
+      "id": "A-009",
+      "source": "source_a.md",
+      "text": "Blank rows are rejected by the upload page.",
+      "line": 20,
+      "span": "Blank rows are rejected by the upload\npage.",
+      "anchored": true
+    },
+    {
+      "id": "A-010",
+      "source": "source_a.md",
+      "text": "A correction submitted before the cut-off replaces the earlier file entirely.",
+      "line": 25,
+      "span": "A correction submitted before the cut-off replaces the earlier file entirely.",
+      "anchored": true
+    },
+    {
+      "id": "A-011",
+      "source": "source_a.md",
+      "text": "After the cut-off, corrections go to the payroll inbox as a written request.",
+      "line": 26,
+      "span": "After the cut-off, corrections go to the payroll inbox as a written request and\nare applied to the following month.",
+      "anchored": true
+    },
+    {
+      "id": "A-012",
+      "source": "source_a.md",
+      "text": "Corrections submitted after the cut-off are applied to the following month.",
+      "line": 26,
+      "span": "After the cut-off, corrections go to the payroll inbox as a written request and\nare applied to the following month.",
+      "anchored": true
+    },
+    {
+      "id": "A-013",
+      "source": "source_a.md",
+      "text": "If the upload page is unavailable in the hour before the cut-off, email the payroll team and keep the file.",
+      "line": 31,
+      "span": "If the upload page is unavailable in the hour before the cut-off, email the\npayroll team and keep the file.",
+      "anchored": true
+    },
+    {
+      "id": "A-014",
+      "source": "source_a.md",
+      "text": "Totals must not be sent in the body of an email.",
+      "line": 32,
+      "span": "Do not send totals in the body of an email.",
+      "anchored": true
+    },
+    {
+      "id": "B-001",
+      "source": "source_b.md",
+      "text": "The payroll submission deadlines document is for team leads who submit timesheet totals for hourly staff.",
+      "line": 5,
+      "span": "Team leads who submit timesheet totals for hourly staff.",
+      "anchored": true
+    },
+    {
+      "id": "B-002",
+      "source": "source_b.md",
+      "text": "Timesheet totals must be submitted by 15:00 on the 20th of the month.",
+      "line": 9,
+      "span": "Totals must be submitted by 15:00 on the 20th of the month.",
+      "anchored": true
+    },
+    {
+      "id": "B-003",
+      "source": "source_b.md",
+      "text": "Submissions that arrive after the cut-off are held for the following month's run.",
+      "line": 9,
+      "span": "Submissions that\narrive after the cut-off are held for the following month's run.",
+      "anchored": true
+    },
+    {
+      "id": "B-004",
+      "source": "source_b.md",
+      "text": "If the 20th falls on a weekend, the payroll cut-off moves to the following Monday.",
+      "line": 12,
+      "span": "If the 20th falls on a weekend, the cut-off moves to the following Monday.",
+      "anchored": true
+    },
+    {
+      "id": "B-005",
+      "source": "source_b.md",
+      "text": "Team leads submit one file per team listing every hourly worker with hours and the cost centre the hours are charged to.",
+      "line": 16,
+      "span": "Submit one file per team listing every hourly worker with hours and the cost\ncentre the hours are charged to.",
+      "anchored": true
+    },
+    {
+      "id": "B-006",
+      "source": "source_b.md",
+      "text": "A correction submitted before the payroll cut-off replaces the earlier file entirely.",
+      "line": 21,
+      "span": "A correction submitted before the cut-off replaces the earlier file entirely.",
+      "anchored": true
+    },
+    {
+      "id": "B-007",
+      "source": "source_b.md",
+      "text": "After the payroll cut-off, corrections go to the payroll inbox as a written request.",
+      "line": 22,
+      "span": "After the cut-off, corrections go to the payroll inbox as a written request.",
+      "anchored": true
+    },
+    {
+      "id": "B-008",
+      "source": "source_b.md",
+      "text": "Teams without terminal access may send paper timesheets to the payroll office by internal post.",
+      "line": 26,
+      "span": "Teams without terminal access may send paper timesheets to the payroll office by\ninternal post, to arrive no later than the cut-off.",
+      "anchored": true
+    },
+    {
+      "id": "B-009",
+      "source": "source_b.md",
+      "text": "Paper timesheets sent by internal post must arrive no later than the payroll cut-off.",
+      "line": 26,
+      "span": "Teams without terminal access may send paper timesheets to the payroll office by\ninternal post, to arrive no later than the cut-off.",
+      "anchored": true
+    },
+    {
+      "id": "M-001",
+      "source": "merged.md",
+      "text": "The payroll submission deadlines page is for team leads who submit timesheet totals for hourly staff.",
+      "line": 5,
+      "span": "Team leads who submit timesheet totals for hourly staff.",
+      "anchored": true
+    },
+    {
+      "id": "M-002",
+      "source": "merged.md",
+      "text": "Salaried staff are not covered by the payroll submission deadlines page.",
+      "line": 5,
+      "span": "Salaried staff are not covered by this page.",
+      "anchored": true
+    },
+    {
+      "id": "M-003",
+      "source": "merged.md",
+      "text": "Timesheet totals must be submitted by 12:00 on the 18th of the month.",
+      "line": 9,
+      "span": "Totals must be submitted by 12:00 on the 18th of the month.",
+      "anchored": true
+    },
+    {
+      "id": "M-004",
+      "source": "merged.md",
+      "text": "The 18th of the month is a hard cut-off, not a target.",
+      "line": 9,
+      "span": "The 18th is a hard cut-off, not a target",
+      "anchored": true
+    },
+    {
+      "id": "M-005",
+      "source": "merged.md",
+      "text": "Submissions that arrive after the 18th of the month are held for the following month's payroll run.",
+      "line": 9,
+      "span": "submissions that arrive after it are held for the following month's run",
+      "anchored": true
+    },
+    {
+      "id": "M-006",
+      "source": "merged.md",
+      "text": "If the 18th falls on a weekend or a public holiday, the payroll cut-off moves to the last working day before it.",
+      "line": 11,
+      "span": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it.",
+      "anchored": true
+    },
+    {
+      "id": "M-007",
+      "source": "merged.md",
+      "text": "Team leads submit one file per team, listing every hourly worker with hours and the cost centre the hours are charged to.",
+      "line": 15,
+      "span": "Submit one file per team, listing every hourly worker with hours and the cost centre the hours are charged to.",
+      "anchored": true
+    },
+    {
+      "id": "M-008",
+      "source": "merged.md",
+      "text": "Blank rows are rejected by the upload page.",
+      "line": 15,
+      "span": "Blank rows are rejected by the upload page.",
+      "anchored": true
+    },
+    {
+      "id": "M-009",
+      "source": "merged.md",
+      "text": "A correction submitted before the payroll cut-off replaces the earlier file entirely.",
+      "line": 19,
+      "span": "A correction submitted before the cut-off replaces the earlier file entirely.",
+      "anchored": true
+    },
+    {
+      "id": "M-010",
+      "source": "merged.md",
+      "text": "After the payroll cut-off, corrections go to the payroll inbox as a written request.",
+      "line": 19,
+      "span": "After the cut-off, corrections go to the payroll inbox as a written request and are applied to the following month.",
+      "anchored": true
+    },
+    {
+      "id": "M-011",
+      "source": "merged.md",
+      "text": "Corrections submitted after the payroll cut-off are applied to the following month.",
+      "line": 19,
+      "span": "After the cut-off, corrections go to the payroll inbox as a written request and are applied to the following month.",
+      "anchored": true
+    },
+    {
+      "id": "M-012",
+      "source": "merged.md",
+      "text": "Teams without terminal access may send paper timesheets to the payroll office by internal post.",
+      "line": 23,
+      "span": "Teams without terminal access may send paper timesheets to the payroll office by internal post, to arrive no later than the cut-off.",
+      "anchored": true
+    },
+    {
+      "id": "M-013",
+      "source": "merged.md",
+      "text": "Paper timesheets sent by internal post must arrive no later than the payroll cut-off.",
+      "line": 23,
+      "span": "Teams without terminal access may send paper timesheets to the payroll office by internal post, to arrive no later than the cut-off.",
+      "anchored": true
+    },
+    {
+      "id": "M-014",
+      "source": "merged.md",
+      "text": "If the upload page is unavailable in the hour before the payroll cut-off, team leads should email the payroll team and keep the file.",
+      "line": 27,
+      "span": "If the upload page is unavailable in the hour before the cut-off, email the payroll team and keep the file.",
+      "anchored": true
+    },
+    {
+      "id": "M-015",
+      "source": "merged.md",
+      "text": "Team leads must not send timesheet totals in the body of an email.",
+      "line": 27,
+      "span": "Do not send totals in the body of an email.",
+      "anchored": true
+    }
+  ],
+  "verdicts": [
+    {
+      "claim_id": "A-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Team leads who submit timesheet totals for hourly staff.",
+      "evidence_source": "merged.md",
+      "rationale": "Stated under \"Who this is for\".",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Salaried staff are not covered by this page.",
+      "evidence_source": "merged.md",
+      "rationale": "Directly stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Totals must be submitted by 12:00 on the 18th of the month.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The 18th is a hard cut-off, not a target",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-005",
+      "verdict": "SUPPORTED",
+      "evidence": "submissions that arrive after it are held for the following month's run",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-006",
+      "verdict": "SUPPORTED",
+      "evidence": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Submit one file per team",
+      "evidence_source": "merged.md",
+      "rationale": "Stated.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-008",
+      "verdict": "SUPPORTED",
+      "evidence": "listing every hourly worker with hours and the cost centre the hours are charged to",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-009",
+      "verdict": "SUPPORTED",
+      "evidence": "Blank rows are rejected by the upload page.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-010",
+      "verdict": "SUPPORTED",
+      "evidence": "A correction submitted before the cut-off replaces the earlier file entirely.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-011",
+      "verdict": "SUPPORTED",
+      "evidence": "After the cut-off, corrections go to the payroll inbox as a written request",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-012",
+      "verdict": "SUPPORTED",
+      "evidence": "are applied to the following month",
+      "evidence_source": "merged.md",
+      "rationale": "Stated in the corrections sentence.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-013",
+      "verdict": "SUPPORTED",
+      "evidence": "If the upload page is unavailable in the hour before the cut-off, email the payroll team and keep the file.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "A-014",
+      "verdict": "SUPPORTED",
+      "evidence": "Do not send totals in the body of an email.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Team leads who submit timesheet totals for hourly staff.",
+      "evidence_source": "merged.md",
+      "rationale": "Stated audience.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-002",
+      "verdict": "CONTRADICTED",
+      "evidence": "Totals must be submitted by 12:00 on the 18th of the month.",
+      "evidence_source": "merged.md",
+      "rationale": "Different time and date for same attribute.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-003",
+      "verdict": "SUPPORTED",
+      "evidence": "submissions that arrive after it are held for the following month's run",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "CONTRADICTED",
+      "evidence": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it.",
+      "evidence_source": "merged.md",
+      "rationale": "Merged text moves the cut-off earlier, not to the following Monday, and uses the 18th.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Submit one file per team, listing every hourly worker with hours and the cost centre the hours are charged to.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-006",
+      "verdict": "SUPPORTED",
+      "evidence": "A correction submitted before the cut-off replaces the earlier file entirely.",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-007",
+      "verdict": "SUPPORTED",
+      "evidence": "After the cut-off, corrections go to the payroll inbox as a written request",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Teams without terminal access may send paper timesheets to the payroll office by internal post",
+      "evidence_source": "merged.md",
+      "rationale": "Exact match.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-009",
+      "verdict": "SUPPORTED",
+      "evidence": "to arrive no later than the cut-off",
+      "evidence_source": "merged.md",
+      "rationale": "Stated for paper timesheets by internal post.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-001",
+      "verdict": "SUPPORTED",
+      "evidence": "Team leads who submit timesheet totals for hourly staff.",
+      "evidence_source": "source_b.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-002",
+      "verdict": "SUPPORTED",
+      "evidence": "Salaried staff are not\ncovered by this page.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-003",
+      "verdict": "SUPPORTED",
+      "evidence": "Totals must be submitted by 12:00 on the 18th of the month.",
+      "evidence_source": "source_a.md",
+      "rationale": "Matches source_a (2026 schedule).",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-004",
+      "verdict": "SUPPORTED",
+      "evidence": "The 18th is a hard\ncut-off, not a target.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-005",
+      "verdict": "SUPPORTED",
+      "evidence": "Submissions that arrive after it are held for the\nfollowing month's run.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-006",
+      "verdict": "SUPPORTED",
+      "evidence": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the\nlast working day before it.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-007",
+      "verdict": "SUPPORTED",
+      "evidence": "Submit one file per team. The file must list every hourly worker with hours and\nthe cost centre the hours are charged to.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-008",
+      "verdict": "SUPPORTED",
+      "evidence": "Blank rows are rejected by the upload\npage.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-009",
+      "verdict": "SUPPORTED",
+      "evidence": "A correction submitted before the cut-off replaces the earlier file entirely.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-010",
+      "verdict": "SUPPORTED",
+      "evidence": "After the cut-off, corrections go to the payroll inbox as a written request",
+      "evidence_source": "source_b.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-011",
+      "verdict": "SUPPORTED",
+      "evidence": "are applied to the following month",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-012",
+      "verdict": "SUPPORTED",
+      "evidence": "Teams without terminal access may send paper timesheets to the payroll office by\ninternal post",
+      "evidence_source": "source_b.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-013",
+      "verdict": "SUPPORTED",
+      "evidence": "to arrive no later than the cut-off.",
+      "evidence_source": "source_b.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-014",
+      "verdict": "SUPPORTED",
+      "evidence": "If the upload page is unavailable in the hour before the cut-off, email the\npayroll team and keep the file.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    },
+    {
+      "claim_id": "M-015",
+      "verdict": "SUPPORTED",
+      "evidence": "Do not send totals in the body of an email.",
+      "evidence_source": "source_a.md",
+      "rationale": "Stated directly.",
+      "direction": "merged_to_sources",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "none",
+      "grounded": true
+    }
+  ],
+  "findings": [
+    {
+      "claim_id": "B-002",
+      "verdict": "CONTRADICTED",
+      "evidence": "Totals must be submitted by 12:00 on the 18th of the month.",
+      "evidence_source": "merged.md",
+      "rationale": "Different time and date for same attribute.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    },
+    {
+      "claim_id": "B-004",
+      "verdict": "CONTRADICTED",
+      "evidence": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it.",
+      "evidence_source": "merged.md",
+      "rationale": "Merged text moves the cut-off earlier, not to the following Monday, and uses the 18th.",
+      "direction": "source_to_merged",
+      "grounding": "grounded",
+      "rationale_names": [],
+      "rationale_capped": false,
+      "finding": "contradicted",
+      "grounded": true
+    }
+  ],
+  "review_queue": [],
+  "declarations": [
+    {
+      "segment": "a4",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-002"
+      ],
+      "reason": "Reflowed into one paragraph line.",
+      "replacement": "Team leads who submit timesheet totals for hourly staff. Salaried staff are not covered by this page."
+    },
+    {
+      "segment": "a7",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-004"
+      ],
+      "reason": "Joined with the following sentence in the cut-off section.",
+      "replacement": "The 18th is a hard cut-off, not a target: submissions that arrive after it are held for the following month's run."
+    },
+    {
+      "segment": "a8",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-005"
+      ],
+      "reason": "Joined with the preceding sentence in the cut-off section.",
+      "replacement": "The 18th is a hard cut-off, not a target: submissions that arrive after it are held for the following month's run."
+    },
+    {
+      "segment": "a9",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-006"
+      ],
+      "reason": "Reflowed onto one line.",
+      "replacement": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it."
+    },
+    {
+      "segment": "a11",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-007"
+      ],
+      "reason": "Merged into a single submission sentence.",
+      "replacement": "Submit one file per team, listing every hourly worker with hours and the cost centre the hours are charged to."
+    },
+    {
+      "segment": "a12",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-008"
+      ],
+      "reason": "Merged into a single submission sentence.",
+      "replacement": "Submit one file per team, listing every hourly worker with hours and the cost centre the hours are charged to."
+    },
+    {
+      "segment": "a13",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-009"
+      ],
+      "reason": "Reflowed onto one line.",
+      "replacement": "Blank rows are rejected by the upload page."
+    },
+    {
+      "segment": "a15",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-010"
+      ],
+      "reason": "Reflowed into one paragraph line.",
+      "replacement": "A correction submitted before the cut-off replaces the earlier file entirely."
+    },
+    {
+      "segment": "a16",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-011",
+        "A-012"
+      ],
+      "reason": "Reflowed into one paragraph line.",
+      "replacement": "After the cut-off, corrections go to the payroll inbox as a written request and are applied to the following month."
+    },
+    {
+      "segment": "a18",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "A-013"
+      ],
+      "reason": "Reflowed into one paragraph line.",
+      "replacement": "If the upload page is unavailable in the hour before the cut-off, email the payroll team and keep the file."
+    },
+    {
+      "segment": "b1",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "no claim is drawn from a title, and the title check passed this one: it is superseded by 'Payroll Submission Deadlines (2026 Schedule)' and says so",
+      "claims": [],
+      "reason": "Base title kept; this one was not.",
+      "replacement": "# Payroll Submission Deadlines (2026 Schedule)"
+    },
+    {
+      "segment": "b3",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-001"
+      ],
+      "reason": "a3 already states this audience.",
+      "replacement": "Team leads who submit timesheet totals for hourly staff."
+    },
+    {
+      "segment": "b5",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-002"
+      ],
+      "reason": "Cut-off slot takes the base value.",
+      "replacement": "Totals must be submitted by 12:00 on the 18th of the month."
+    },
+    {
+      "segment": "b6",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-003"
+      ],
+      "reason": "a8 states the same rule and its wording is kept.",
+      "replacement": "The 18th is a hard cut-off, not a target: submissions that arrive after it are held for the following month's run."
+    },
+    {
+      "segment": "b7",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-004"
+      ],
+      "reason": "Weekend/holiday slot takes the base rule.",
+      "replacement": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it."
+    },
+    {
+      "segment": "b9",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-005"
+      ],
+      "reason": "a11 and a12 carry this content; one wording is kept.",
+      "replacement": "Submit one file per team, listing every hourly worker with hours and the cost centre the hours are charged to."
+    },
+    {
+      "segment": "b11",
+      "disposition": "duplicate",
+      "grade": "confirmed",
+      "detail": "declared 'duplicate' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-006"
+      ],
+      "reason": "a15 already states this.",
+      "replacement": "A correction submitted before the cut-off replaces the earlier file entirely."
+    },
+    {
+      "segment": "b12",
+      "disposition": "superseded",
+      "grade": "confirmed",
+      "detail": "declared 'superseded' and every claim from it came back SUPPORTED or CONTRADICTED or PARTIAL",
+      "claims": [
+        "B-007"
+      ],
+      "reason": "a16 states the same rule with the timing detail.",
+      "replacement": "After the cut-off, corrections go to the payroll inbox as a written request and are applied to the following month."
+    },
+    {
+      "segment": "b14",
+      "disposition": "reworded",
+      "grade": "confirmed",
+      "detail": "declared 'reworded' and every claim from it came back SUPPORTED",
+      "claims": [
+        "B-008",
+        "B-009"
+      ],
+      "reason": "Reflowed onto one line.",
+      "replacement": "Teams without terminal access may send paper timesheets to the payroll office by internal post, to arrive no later than the cut-off."
+    }
+  ],
+  "additions": [],
+  "mismatch": "",
+  "additions_cover": [],
+  "sourcing": {
+    "resolved": false,
+    "fetched": false,
+    "web_search": 0,
+    "web_fetch": 0,
+    "state": "not-searched",
+    "measured_calls": 6,
+    "unmeasured_calls": 0,
+    "tool_use": {
+      "state": "no-tool-use",
+      "retrieval": "not-retrieved",
+      "turns": 6,
+      "calls_with_tool_use": 0,
+      "measured_calls": 6,
+      "unmeasured_calls": 0
+    },
+    "retrieval_permitted": [],
+    "recall_only": false,
+    "retrieval": ""
+  },
+  "structural": {
+    "ran": true,
+    "checks": 9,
+    "segments": 33,
+    "findings": []
+  },
+  "decisions": {
+    "ran": true,
+    "authored_by": "the merge",
+    "graded": false,
+    "note": "what the merge says it chose between. At off, low and mid the merge may not choose, so a record with no chosen value is the only place a disagreement is written down: the merged document may not carry a marker and the reconciler cannot derive one. Nothing here checks that the conflict is real",
+    "records": [
+      {
+        "slot": "title",
+        "candidates": [
+          {
+            "text": "# Payroll Submission Deadlines (2026 Schedule)",
+            "document": "source_a.md"
+          },
+          {
+            "text": "# Payroll Submission Deadlines (2025 Schedule)",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "# Payroll Submission Deadlines (2026 Schedule)",
+        "resolved": true,
+        "reason": "Base document title, and the later schedule year."
+      },
+      {
+        "slot": "cut-off time and date",
+        "candidates": [
+          {
+            "text": "Totals must be submitted by 12:00 on the 18th of the month.",
+            "document": "source_a.md"
+          },
+          {
+            "text": "Totals must be submitted by 15:00 on the 20th of the month.",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "Totals must be submitted by 12:00 on the 18th of the month.",
+        "resolved": true,
+        "reason": "Base document, 2026 schedule supersedes the 2025 one."
+      },
+      {
+        "slot": "weekend/holiday rule",
+        "candidates": [
+          {
+            "text": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it.",
+            "document": "source_a.md"
+          },
+          {
+            "text": "If the 20th falls on a weekend, the cut-off moves to the following Monday.",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "If the 18th falls on a weekend or a public holiday, the cut-off moves to the last working day before it.",
+        "resolved": true,
+        "reason": "Base rule matches the chosen date and covers holidays too."
+      },
+      {
+        "slot": "Paper timesheets section placement",
+        "candidates": [
+          {
+            "text": "after Corrections, before Escalation",
+            "document": "source_a.md"
+          },
+          {
+            "text": "final section",
+            "document": "source_b.md"
+          }
+        ],
+        "chosen": "after Corrections, before Escalation",
+        "resolved": true,
+        "reason": "Keeps the base's Escalation section last."
+      }
+    ]
+  },
+  "title": {
+    "policy": "synthesise",
+    "sources_with_a_title": 2,
+    "has_referent": true,
+    "note": ""
+  },
+  "structure": {
+    "breaks_added_by_the_merge": 0,
+    "between": [],
+    "graded": false,
+    "note": "a line break inside a merged segment that no source segment carries. Permitted at every level, so this is a description of the merge and not a finding against it"
+  },
+  "prompt_leaks": {
+    "ran": true,
+    "markers": [
+      "marlbrook",
+      "funicular"
+    ],
+    "reason_clauses": 17,
+    "not_checked": "a record that follows the worked example's shape in its own words rather than repeating it: both halves are exact-string, so a slot-filled template is outside them. On the run this was written for, one reason of eight was verbatim and seven were not",
+    "findings": []
+  },
+  "attributions": {
+    "ran": true,
+    "predicate": "a merged sentence of the shape 'according to NAME, CONTENT' or 'NAME states that CONTENT', not in any source as written, whose NAME is the title, a separated part of the title or the filename of exactly one source, and whose CONTENT is in another source and not in that one",
+    "findings": []
+  },
+  "restated_claims": {
+    "ran": true,
+    "claims": 15,
+    "source_claims": 23,
+    "predicate": "one claim text extracted from two different lines of the merged document, both copies anchored to a span found in it. Same-line repeats are decomposer noise and are not counted; near matches are not counted either, because no similarity threshold separates a restated merge from a correct one in this corpus",
+    "counts_are_evidence_not_the_test": true,
+    "findings": []
+  },
+  "declared_loss": {
+    "drops": 0,
+    "segments": 33,
+    "budget": 0.03,
+    "ratio": 0.0,
+    "check_disabled": false,
+    "over_budget": false
+  },
+  "unusable": [],
+  "truncations": [],
+  "order": {
+    "sequence": "aaaaabaabbaaa",
+    "runs": 5,
+    "attributed": 13,
+    "interleaved": true,
+    "monotone": true,
+    "conclusive": true,
+    "blocked": true,
+    "stapled": false,
+    "headings_present": 12,
+    "headings_total": 12
+  },
+  "merged_written_to": "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-ui/sub/cells/payroll_cutoff-high-claude-opus/merged.md",
+  "provenance": {
+    "generated_at": "2026-09-24T22:10:22+00:00",
+    "claimcheck_commit": "3480292d0724",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "6feb5a30fafb",
+      "location": "command",
+      "content_left_this_machine": true,
+      "route": "Claude Code - Opus"
+    },
+    "merge_policy": {
+      "fidelity": "high",
+      "verify_depth": "full",
+      "title_policy": "synthesise",
+      "base": "source_a.md",
+      "base_chosen": "explicit"
+    },
+    "models": {
+      "merge": "opus",
+      "decompose": "opus",
+      "verify": "opus"
+    },
+    "structured_output": {
+      "mode": "prompt",
+      "how": "probed",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-ui/sub/tree/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-ui/sub/tree/prompts/merge.md": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-ui/sub/tree/prompts/verify.md": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+      "<home>/Documents/Dev/claude-tmp/claimcheck/2026-09-24-ui/sub/tree/prompts/verify_reverse.md": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472"
+    },
+    "decoding": {
+      "temperature": "not sent",
+      "seed": "not sent",
+      "profile": "subscription",
+      "thinking": [
+        "decompose",
+        "merge",
+        "verify"
+      ],
+      "effort": {
+        "decompose": "low",
+        "merge": "medium",
+        "verify": "low"
+      }
+    },
+    "counts": {
+      "calls": 6,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "salvaged": 0
+    },
+    "tokens": {
+      "measured_calls": 0,
+      "unmeasured_calls": 6
+    },
+    "tokens_described": "unknown (6 call(s) reported no usage)",
+    "ledger": [
+      {
+        "role": "merge",
+        "model": "opus",
+        "prompt_sha256": "af5cd272c023dc452eac71305d6cde0de3fc2dcab7fe428057a11945835250bf",
+        "request_sha256": "910ebe06b52ebfa0b42220dd363e27e1162b7e155562820f7a7f064ed463d5f0",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 6840,
+        "tier": "prompt",
+        "source": "live",
+        "latency_ms": 44952
+      },
+      {
+        "role": "decompose",
+        "model": "opus",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "494ab78b91e985de1ac5de11932f6d4717e34e407033b4738b60555a60f79db9",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1297,
+        "tier": "prompt",
+        "source": "live",
+        "latency_ms": 12451
+      },
+      {
+        "role": "decompose",
+        "model": "opus",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "07e0aedaa236c60dfe56a7cb8885aa323a4cdcc39cd57967cbb3e2fe0b076acb",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1217,
+        "tier": "prompt",
+        "source": "live",
+        "latency_ms": 8722
+      },
+      {
+        "role": "verify",
+        "model": "opus",
+        "prompt_sha256": "1a15e334a1f7618d5c66d488d64609e47744b2306f95aa11569feb7e41463c5f",
+        "request_sha256": "aa88986911d359b4dfe2eed75beae40fd12330ba3b3a948e76600736d961257c",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3298,
+        "tier": "prompt",
+        "source": "live",
+        "latency_ms": 19070
+      },
+      {
+        "role": "decompose",
+        "model": "opus",
+        "prompt_sha256": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+        "request_sha256": "a1166072f106e0ccc0c24b2d5e634921a716c6c1a32241649fdfd2f06265c62e",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 1337,
+        "tier": "prompt",
+        "source": "live",
+        "latency_ms": 13008
+      },
+      {
+        "role": "verify",
+        "model": "opus",
+        "prompt_sha256": "cb2face6b7f48094cb30e6f3a26e4e18bda9afc894fdda59d45814d8ea630472",
+        "request_sha256": "6e86ac79d97c1f42b4c4fb70f676448bfef7c94e9476164e9c0b69da260c9dfe",
+        "max_tokens": null,
+        "estimated_prompt_tokens": 3278,
+        "tier": "prompt",
+        "source": "live",
+        "latency_ms": 12638
+      }
+    ],
+    "cost": {
+      "state": "unmeasured",
+      "usd": null,
+      "priced_calls": 0,
+      "unpriced_calls": 0,
+      "unmeasured_calls": 6
+    },
+    "window": {
+      "decompose": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "merge": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it",
+      "verify": "stated: 200000 tokens, declared by --window / CLAIMCHECK_WINDOW; no probe was sent, so this figure is the operator's statement about the endpoint and not a measurement of it"
+    },
+    "calls_by_role": {
+      "decompose": 3,
+      "merge": 1,
+      "verify": 2
+    },
+    "retrieval": {
+      "permitted": [],
+      "tool_use": {
+        "state": "no-tool-use",
+        "retrieval": "not-retrieved",
+        "turns": 6,
+        "calls_with_tool_use": 0,
+        "measured_calls": 6,
+        "unmeasured_calls": 0
+      },
+      "described": "no tool use (6 call(s), 6 turn(s) in total)"
+    },
+    "duration_seconds": 111.0
+  }
+}

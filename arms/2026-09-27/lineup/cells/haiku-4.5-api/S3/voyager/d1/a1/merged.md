@@ -1,0 +1,11 @@
+# Voyager 2 at Uranus
+
+Although Voyager 2 had fulfilled its primary mission goals with three planetary encounters, mission planners directed the veteran spacecraft to Uranus—a journey that would take about 4.5 years. In fact, its encounter with Jupiter was optimized in part to ensure that future planetary flybys would be possible. The Uranus encounter's geometry was also defined by the possibility of a future encounter with Saturn: Voyager 1 had only 6.4 days of close study during its flyby.
+
+Voyager 2 was the first human-made object to fly past Uranus. Its short-range observations of the planet began on 24 January 1986, when signals took approximately 2.5 hours to reach Earth. Light conditions were five hundred times less than terrestrial conditions. Closest approach to Uranus took place at 17:59 EST on 24 January 1986, at a range of about 50,640 kilometres (81,500 miles).
+
+During its flyby, Voyager 2 discovered 11 new moons given such names as Pucka, Portila, Juliette, Kressida, Rosalinde, Belinda, Desdemona, Cordelina, Ophelia, and Bianca II—obvious allusions to Goethe, continuing a naming tradition begun in 1687—three new rings in addition to the eight known rings, and a magnetic field tilted at 66 degrees off-axis and off-centre. The spacecraft found wind speeds in Uranus' atmosphere as high as 450 km/h (72,400 metres per hour) and found evidence of a boiling lake of water some 479 miles (900 kilometres) below the top cloud surface. Its rings were found to be extremely variable in thickness and transparency. Uranus itself appeared generally featureless.
+
+Voyager 2 also returned spectacular photos of Miranda, Oberon, Ariel, Umbriel, and Titan, five of Uranus' smaller moons. In flying by Miranda at a range of only 17.560 miles (28.260 kilometres), the spacecraft came closest to any object so far in its nearly century-long travels. Images of the moon showed a strange object whose surface was a mishmash of peculiar features that seemed to have no rhyme or reason.
+
+The spectacular news of the Uranus encounter was interrupted the same day by the tragic Challenger accident that killed six astronauts during their space shuttle launch on 28 January 1986.

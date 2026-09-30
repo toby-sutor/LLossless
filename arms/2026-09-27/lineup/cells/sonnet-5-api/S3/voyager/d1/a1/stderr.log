@@ -1,0 +1,43 @@
+LLossless merge  claude-sonnet-5 at https://api.anthropic.com, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-sonnet-5
+✓ merge: claude-sonnet-5 answered at the prompt tier  205.0s
+✓ merge  205.1s
+• reconcile
+✓ reconcile  0.2s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 answered at the prompt tier  12.9s
+✓ decompose source_a.md  13.0s
+• decompose source_b.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 answered at the prompt tier  18.6s
+✓ decompose source_b.md  18.6s
+• verify (forward)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  25.5s
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  7.3s
+✓ verify (forward)  32.8s
+• decompose merged.md
+• decompose: asking claude-sonnet-5
+✓ decompose: claude-sonnet-5 answered at the prompt tier  28.6s
+✓ decompose merged.md  28.6s
+• verify (reverse)
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  108.3s
+• verify: asking claude-sonnet-5
+✓ verify: claude-sonnet-5 answered at the prompt tier  4.8s
+✓ verify (reverse)  113.0s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  37 contradicted: the merge states something different (see `## Findings`)
+  7 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  8 number-format warning(s), on numerals that could be misread, are listed under `## Number format`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

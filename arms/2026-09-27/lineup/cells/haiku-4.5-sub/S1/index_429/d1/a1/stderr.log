@@ -1,0 +1,45 @@
+LLossless merge  claude-haiku-4-5-20251001 at lineup haiku-4.5-sub, window 200,000 (stated)
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking claude-haiku-4-5-20251001
+✓ merge: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  290.6s
+✓ merge  290.6s
+• reconcile
+✓ reconcile  1.1s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  179.5s
+✓ decompose source_a.md  179.5s
+• decompose source_b.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  91.3s
+✓ decompose source_b.md  91.3s
+• verify (forward)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  121.1s
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  140.7s
+✓ verify (forward)  261.8s
+• decompose merged.md
+• decompose: asking claude-haiku-4-5-20251001
+✓ decompose: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  117.5s
+✓ decompose merged.md  117.5s
+• verify (reverse)
+• verify: asking claude-haiku-4-5-20251001
+✓ verify: claude-haiku-4-5-20251001 (claude-haiku-4-5-20251001) answered at the prompt tier  56.1s
+✓ verify (reverse)  56.2s
+✓ merged document written to merged.md
+
+Finished, with problems. The report lists what was found.
+  9 dropped: in a source, not in the merge (see `## Findings`)
+  1 contradicted: the merge states something different (see `## Findings`)
+  1 reworded and undeclared: in the merge in altered wording, and no record explains it. At off this also covers layout: a segment whose source line breaks the merge ran together is altered and undeclared, and 380 reuses this kind rather than moving FINDING_KINDS off 12 (see `## Structure`)
+  1 unresolved replacement: a record points at text the merge does not contain (see `## Structure`)
+  4 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  2 over budget: declared loss past the ceiling (see `## Structure`)
+  1 claim(s) the merge declared dropped are listed under `## Review queue`
+  merged document written to merged.md
+  the full report went to stdout; exit code 1

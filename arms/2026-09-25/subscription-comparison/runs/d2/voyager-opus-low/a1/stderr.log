@@ -1,0 +1,39 @@
+claimcheck merge  opus at Claude Code - Opus, window 200,000 (stated), retrieval WebSearch, WebFetch
+• reading 2 document(s)
+• loading prompts
+• merge
+• merge: asking opus
+✓ merge: opus (claude-opus-5) answered at the prompt tier  35.6s
+✓ merge  35.6s
+• reconcile
+✓ reconcile  0.3s
+• title
+✓ title  0.0s
+• decompose source_a.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  10.7s
+✓ decompose source_a.md  10.7s
+• decompose source_b.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  15.6s
+✓ decompose source_b.md  15.6s
+• verify (forward)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  27.4s
+✓ verify (forward)  27.4s
+• decompose merged.md
+• decompose: asking opus
+✓ decompose: opus (claude-opus-5) answered at the prompt tier  23.8s
+✓ decompose merged.md  23.8s
+• verify (reverse)
+• verify: asking opus
+✓ verify: opus (claude-opus-5) answered at the prompt tier  24.7s
+✓ verify (reverse)  24.7s
+✓ merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d2/voyager-opus-low/a1/merged.md
+
+Finished, with problems. The report lists what was found.
+  Nothing was retrieved. None of 6 call(s) took the turns a retrieval costs, so every source the merge names is a recollection
+  39 contradicted: the merge states something different (see `## Findings`)
+  11 verbatim violation: an invariant-core token did not survive unchanged (see `## Structure`)
+  merged document written to <home>/Documents/Dev/claude-tmp/claimcheck/2026-09-25-subscription-comparison/run/runs/d2/voyager-opus-low/a1/merged.md
+  the full report went to stdout; exit code 1
