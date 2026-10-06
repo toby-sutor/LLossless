@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 from itertools import chain
+import re
 import ssl
 import time
 import urllib.error
@@ -48,6 +49,106 @@ MAX_RETRY_AFTER = 60.0
 BODY_EXCERPT = 600
 
 
+# What stands where a credential was taken out of a relayed body.
+REDACTED = "<redacted>"
+
+# The fewest trailing characters of a key that count as part of it. Four is
+# what a vendor's "ending in ..." names, and what the settings page shows the
+# key's owner and nobody else.
+MIN_KEY_TAIL = 4
+
+# And the fewest leading characters. More than a tail needs, because the
+# start of a key is the part that is not secret: `sk-`, `AIza` and their like
+# are a vendor's prefix and stand in ordinary sentences about keys. Six is
+# past every prefix that is a word of its own, and short enough that an echo
+# of "the first eight characters" does not get through.
+MIN_KEY_HEAD = 6
+
+# Stands for the key this process holds while the shapes below are applied,
+# so that no shape can match half of a mark already made. A private-use
+# character: no key, no mask and no error message is written with one.
+_HELD = "\ue000"
+
+# What a key looks like in somebody else's text. An endpoint's error body is
+# written by the endpoint, and it reaches whoever ran the job: the terminal on
+# the command line, and on a shared server a member whose run spent the
+# operator's key. A 401 that says which key it refused is ordinary.
+#
+# The first two shapes are the repository's own definition of a secret, the
+# one its release scan uses (`secret_patterns` in `tests/test_client.py`),
+# restated because nothing under `src/` may import the test tree. The other
+# three are a key that was masked before it was echoed: a run of asterisks or
+# bullets with whatever is left of the key on either side, an ellipsis
+# between two pieces of one, and a sentence about a key that names the
+# characters it ends in. Each is paired with what replaces a match, and the
+# last keeps the sentence and takes only the characters.
+_KEY = r"-A-Za-z0-9_"
+_KEY_SHAPES = tuple((re.compile(shape), put) for shape, put in (
+    (rf"(?<![A-Za-z0-9])(?:sk-[{_KEY}]{{16,}}|AIza[{_KEY}]{{20,}}"
+     rf"|xoxb-[A-Za-z0-9-]{{10,}})", REDACTED),
+    (r"Bearer\s+[A-Za-z0-9._-]{12,}", REDACTED),
+    (rf"(?<![{_KEY}])[{_KEY}]+[*\u2022]{{3,}}[{_KEY}*\u2022{_HELD}]*"
+     rf"|(?<![*\u2022])[*\u2022]{{3,}}[{_KEY}{_HELD}][{_KEY}*\u2022{_HELD}]*",
+     REDACTED),
+    (rf"(?<![{_KEY}])[{_KEY}]+(?:\.{{3,}}|\u2026)[{_KEY}{_HELD}]+", REDACTED),
+    (rf"(?i)(\b(?:key|token)\b[^.\n]{{0,60}}?\b(?:ending|ends)\s+(?:in|with)"
+     rf"[\s:'\"`]{{0,3}})[{_KEY}]{{2,}}", r"\1" + REDACTED),
+))
+_MARKS = re.compile(f"(?:{_HELD}|{re.escape(REDACTED)})+")
+
+
+def scrub(text: str, secret: str | None = None) -> str:
+    """`text` with every credential, and every piece of one, taken out.
+
+    `secret` is the key this process sent with the request the text answers.
+    It goes first and it is exact: the key itself, any tail of it of
+    `MIN_KEY_TAIL` characters or more, and any head of it of `MIN_KEY_HEAD`
+    or more, wherever one occurs. That is the part that is certain. A masked
+    echo keeps an end of a key, and both ends of this key are known here, so
+    they are removed whatever is written around them. An echo of the start
+    alone, "the key beginning sk-proj-Ab12Cd34", used to pass: no shape
+    below matches a piece of a key with no mask beside it.
+
+    Then the shapes, which are a guess and are still worth making: an
+    endpoint can echo a key this process never held, such as the upstream
+    key of a proxy.
+
+    The rest of the text is left as it was. The status and the reason an
+    endpoint gave are what an operator reads a failed call for.
+    """
+    if secret and len(secret) >= MIN_KEY_TAIL:
+        text = text.replace(secret, _HELD)
+        tail = secret[-MIN_KEY_TAIL:]
+        kept, done = [], 0
+        at = text.find(tail)
+        while at != -1:
+            # As much of the key's end as stands in front of these four.
+            start, back = at, len(secret) - MIN_KEY_TAIL
+            while start > done and back > 0 and text[start - 1] == secret[back - 1]:
+                start, back = start - 1, back - 1
+            kept += (text[done:start], _HELD)
+            done = at + MIN_KEY_TAIL
+            at = text.find(tail, done)
+        text = "".join(kept) + text[done:]
+    if secret and len(secret) >= MIN_KEY_HEAD:
+        head = secret[:MIN_KEY_HEAD]
+        kept, done = [], 0
+        at = text.find(head)
+        while at != -1:
+            # As much of the key's start as follows these six.
+            end = at + MIN_KEY_HEAD
+            while (end < len(text) and end - at < len(secret)
+                   and text[end] == secret[end - at]):
+                end += 1
+            kept += (text[done:at], _HELD)
+            done = end
+            at = text.find(head, done)
+        text = "".join(kept) + text[done:]
+    for shape, put in _KEY_SHAPES:
+        text = shape.sub(put, text)
+    return _MARKS.sub(REDACTED, text)
+
+
 class TransportError(RuntimeError):
     """A request could not be completed. Always fatal at the call site."""
 
@@ -69,9 +170,16 @@ class HTTPStatusError(TransportError):
     `status` and `body` are exposed because the capability probe reads them to
     decide whether an endpoint rejected `response_format` specifically or is
     simply misconfigured.
+
+    The body is the endpoint's own text and the message carries an excerpt of
+    it to whoever ran the call, so it is passed through `scrub` first.
+    `secret` is the key that was sent with the request. It is used for that
+    and is not kept: no key is stored on an exception from this module.
     """
 
-    def __init__(self, status: int, body: str, host: str, model: str) -> None:
+    def __init__(self, status: int, body: str, host: str, model: str,
+                 *, secret: str | None = None) -> None:
+        body = scrub(body, secret)
         excerpt = body.strip()[:BODY_EXCERPT]
         super().__init__(
             f"HTTP {status} from {host} for model {model}"
@@ -327,13 +435,16 @@ class EmptyBody(TransportError):
         self.content_type = content_type
 
 
-def _events(response) -> "list[dict]":
+def _events(response, secret: str | None = None) -> "list[dict]":
     """The parsed `data:` events of a server-sent-event response, in order.
 
     Blank lines and comment lines are skipped, `[DONE]` ends the stream, and an
     unparseable event raises rather than being dropped: a stream is a document
     delivered in pieces, and a piece silently discarded is a hole in the middle
     of the answer that nothing downstream could see.
+
+    `secret` is the key the request carried, for `scrub`: the event that does
+    not parse is quoted in the error, and an endpoint can put anything in it.
     """
     events: list[dict] = []
     for line in response:
@@ -350,7 +461,7 @@ def _events(response) -> "list[dict]":
         except ValueError as exc:
             raise StreamTruncated(
                 f"a streamed event was not JSON after {len(events)} good ones: "
-                f"{chunk[:BODY_EXCERPT]}"
+                f"{scrub(chunk[:4 * BODY_EXCERPT], secret)[:BODY_EXCERPT]}"
             ) from exc
     return events
 
@@ -520,7 +631,7 @@ def post_json(
                 # the moment the whole generation was done.
                 first_byte = time.monotonic()
                 streamed = head.lstrip().startswith((b"data:", b":"))
-                body = (reassemble(_events(chain([head], response))) if streamed
+                body = (reassemble(_events(chain([head], response), api_key)) if streamed
                         else (head + response.read()).decode("utf-8", errors="replace"))
                 content_type = response.headers.get_content_type()
             if not body.strip():
@@ -549,12 +660,14 @@ def post_json(
             if exc.code in FATAL_STATUS:
                 # Configuration, not weather. Retrying a 401 three times just
                 # makes the operator wait longer for the same wrong answer.
-                raise _stamp(HTTPStatusError(exc.code, body, host, model),
+                raise _stamp(HTTPStatusError(exc.code, body, host, model,
+                                             secret=api_key),
                              attempts=attempt, failed=failed, waited=waited) from None
             if exc.code not in RETRYABLE_STATUS:
-                raise _stamp(HTTPStatusError(exc.code, body, host, model),
+                raise _stamp(HTTPStatusError(exc.code, body, host, model,
+                                             secret=api_key),
                              attempts=attempt, failed=failed, waited=waited) from None
-            last = HTTPStatusError(exc.code, body, host, model)
+            last = HTTPStatusError(exc.code, body, host, model, secret=api_key)
             wait = _retry_after(exc.headers)
         except urllib.error.URLError as exc:
             # urllib wraps the connect and send phases in URLError and lets the
@@ -644,8 +757,9 @@ def get_json(
         except urllib.error.HTTPError as exc:
             body = exc.read().decode("utf-8", errors="replace") if exc.fp else ""
             if exc.code in FATAL_STATUS or exc.code not in RETRYABLE_STATUS:
-                raise HTTPStatusError(exc.code, body, host, "") from None
-            last = HTTPStatusError(exc.code, body, host, "")
+                raise HTTPStatusError(exc.code, body, host, "",
+                                      secret=api_key) from None
+            last = HTTPStatusError(exc.code, body, host, "", secret=api_key)
             wait = _retry_after(exc.headers)
         except urllib.error.URLError as exc:
             last = (

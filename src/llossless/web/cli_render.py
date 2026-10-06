@@ -41,6 +41,7 @@ from typing import TYPE_CHECKING
 
 from .. import cli, config, merge as merge_module
 from ..structured import DEFAULT_PROFILE as HTTP_DEFAULT_PROFILE
+from . import accounts, credentials
 
 if TYPE_CHECKING:  # pragma: no cover - types only; avoids a jobs <-> here cycle
     from ..report import Run
@@ -125,7 +126,8 @@ def _env_line(name: str, value) -> str:
     return f"export {name}={shlex.quote(str(value))}"
 
 
-def _endpoint(settings: config.Settings) -> tuple[list[str], list[str]]:
+def _endpoint(settings: config.Settings, shown=None
+              ) -> tuple[list[str], list[str], list[dict]]:
     """The HTTP transport: address and key, flag where one suffices, env where not.
 
     A single shared endpoint (the ordinary case) gets `--base-url` -- a real
@@ -140,11 +142,36 @@ def _endpoint(settings: config.Settings) -> tuple[list[str], list[str]]:
     is written only where the variable is not this build's own default, so an
     operator who changed nothing sees one `export LLOSSLESS_API_KEY=<your key>`
     rather than a line explaining a default that was never overridden.
+
+    `shown` is the set of addresses the reader stored themselves, or `None`
+    for no restriction. A member's run on the operator's endpoint is
+    rendered with that endpoint as scheme, host and port
+    (`accounts.reduced`), and a note says so: the path of an operator's
+    address can carry a token or name a private service, and this block
+    reaches the member's page and the report they download.
+
+    A role that sent no key reads `credentials.NO_KEY_ENV`. The variable is
+    named, because pointing a role at a variable nothing sets is how the
+    command line says "no key here" too, and it is given no value.
     """
     argv: list[str] = []
     env: list[str] = []
-    addr_by_role = {role: settings.base_url_for(role) for role in cli.ROLES}
+    notes: list[dict] = []
+    own = None if shown is None else {config.with_api_path(a) for a in shown}
+
+    def address(role: str) -> str:
+        full = settings.base_url_for(role)
+        if own is None or full in own or full == config.DEFAULT_BASE_URL:
+            return full
+        if not any(note["key"] == "address_reduced" for note in notes):
+            notes.append({"key": "address_reduced"})
+        return accounts.reduced(full)
+
+    addr_by_role = {role: address(role) for role in cli.ROLES}
     key_by_role = {role: settings.api_key_env_for(role) for role in cli.ROLES}
+    if credentials.NO_KEY_ENV in key_by_role.values():
+        notes.append({"key": "key_withheld",
+                      "variable": credentials.NO_KEY_ENV})
 
     if len(set(addr_by_role.values())) == 1:
         addr = next(iter(addr_by_role.values()))
@@ -158,7 +185,8 @@ def _endpoint(settings: config.Settings) -> tuple[list[str], list[str]]:
         name = next(iter(key_by_role.values()))
         if name != config.DEFAULT_KEY_ENV:
             env.append(_env_line("LLOSSLESS_API_KEY_ENV", name))
-        env.append(_env_line(name, PLACEHOLDER_KEY))
+        if name != credentials.NO_KEY_ENV:
+            env.append(_env_line(name, PLACEHOLDER_KEY))
     else:
         for role in cli.ROLES:
             env.append(_env_line(f"LLOSSLESS_API_KEY_ENV_{role.upper()}", key_by_role[role]))
@@ -166,8 +194,9 @@ def _endpoint(settings: config.Settings) -> tuple[list[str], list[str]]:
         # sharing a provider share a variable, and a page that exported it
         # twice would not be wrong, only a worse read of a real run.
         for name in dict.fromkeys(key_by_role.values()):
-            env.append(_env_line(name, PLACEHOLDER_KEY))
-    return argv, env
+            if name != credentials.NO_KEY_ENV:
+                env.append(_env_line(name, PLACEHOLDER_KEY))
+    return argv, env, notes
 
 
 def _window(settings: config.Settings) -> tuple[list[str], list[str]]:
@@ -235,7 +264,7 @@ def _base_document(request: "MergeRequest", run: "Run | None",
 
 
 def render(settings: config.Settings, request: "MergeRequest",
-           run: "Run | None" = None) -> dict:
+           run: "Run | None" = None, *, shown=None) -> dict:
     """The CLI-equivalent payload: `{command, env, documents, shell, notes}`.
 
     Called twice over one run's life with the same two rules either time --
@@ -245,10 +274,12 @@ def render(settings: config.Settings, request: "MergeRequest",
     from "the job's best guess" to "what the merge actually followed".
 
     `notes` is a list of `{"key": ..., **params}`, not prose: this page is
-    shown in English and German, and the five things a note can say are a
+    shown in English and German, and the things a note can say are a
     closed, known set (`locales/{en,de}.json`'s `cli.note.*` keys), so the
     sentence itself belongs on the page, not baked into a string this module
     would otherwise have to compose twice.
+
+    `shown` is `_endpoint`'s: the addresses the reader may see in full.
     """
     labels = list(request.documents)
     filenames = _unique_filenames(labels)
@@ -281,9 +312,10 @@ def render(settings: config.Settings, request: "MergeRequest",
             notes.append({"key": "command_envelope", "envelope": settings.command_envelope})
         argv += ["--answer-with", answer_with]
     else:
-        endpoint_argv, endpoint_env = _endpoint(settings)
+        endpoint_argv, endpoint_env, endpoint_notes = _endpoint(settings, shown)
         argv += endpoint_argv
         env += endpoint_env
+        notes += endpoint_notes
 
     merge_model = settings.model_for("merge")
     check_model = settings.model_for("verify")

@@ -1,161 +1,96 @@
-# The six audience-coherence pairs
+# The six audience pairs
 
-These are not the registered seven-pair corpus of `tests/pairs/`. Its primary
-denominator is 7 pairs x 2 levels x 1 title not taken = 14, registered before
-any arm ran and asserted in `tests/test_pairs.py`. Six more pairs there would
-make it 26 and would retroactively change what the recorded arms were measured
-against, so this corpus lives beside that one.
+A merge can keep every fact from both of its sources, invent nothing, and still be wrong: it can put instructions written for one audience under a title that names another. Take a courier's guide and a laboratory technician's guide to the same sample collection. Merged under the courier's title, with no section marked, the result tells a courier to break the tamper seal at the bench. Nothing was lost. The document now tells its reader to do a job that is not theirs.
 
-Two pairs have since been added to `tests/pairs/`, and the recorded denominator
-stays at 14 because `tests/run_arm.py` names the seven as `M9_PAIRS`. That
-mechanism did not exist when this corpus was placed here, so the arithmetic
-above is no longer the reason these six live apart. The reason now is that they
-are a different corpus with a different question and a fifth file,
-`inverted.md`, that `tests/pairs/` has no place for.
+This directory holds six small document pairs built to test for that defect. Two of them carry a merge that has the defect. The other four are correct merges that look similar and must not be flagged.
 
-They exist because of one merge. Arm C's `bike_docks` at `off` put a support
-desk's escalation path under a field crew's title, lost nothing, invented
-nothing, declared its title honestly, and scored clean on every metric the
-reconciler rewards. The corpus was scoped to two pairs of the shape that must
-fire and one of each of the four shapes that must not, and that is exactly what
-is here.
+**No check in LLossless detects this defect today.** The corpus exists so that a check can be built against it, and `tests/test_attribution.py` records the gap: both defective merges pass every mechanical check, the checks that compare text and use no model, with no finding. The pairs are not part of the benchmark, and no published figure uses them.
 
-## The distinguishing question
+Nothing here is taken from a real document. The names, numbers and wording were invented for these pairs.
 
-Not the title - the same title sits on the correct and the incorrect merge of
-the same two documents. Not the content - both merges contain the same union of
-facts. It is whether the merged document **marks the boundary**:
+## The question each pair asks
 
-> Would a reader who is the title's stated audience attempt a step they cannot
-> perform or are not authorised to perform?
+The title does not show the defect: the correct and the defective merge of the same two documents carry the same title. The content does not show it either: both merges hold the same facts. What differs is whether the merged document tells its reader which parts are theirs. So the question is:
 
-## What each pair is
+> Would a reader who is the audience the title names attempt a step they cannot perform, or are not allowed to perform?
 
-**incident_pager** *(shape 1, must fire)* - The pager procedure as written for
-the on-call engineer and as written for the duty manager. They share how to
-acknowledge a page and what to check first, and diverge on what each role is
-allowed to do: the engineer restarts production services, the manager approves
-customer notices and calls the executive sponsor. `inverted.md` keeps all of it
-under the engineer's title with the role headings stripped, so the document
-instructs an engineer to approve an external notice they have no authority over.
+A correct merge of two audiences does one of two things. It takes a title that fits both, or it marks each section that belongs to one audience with its reader, as in `## Opening the box (laboratory technician only)`. This page calls the part of a title or heading that names its reader a *qualifier*.
 
-**sample_intake** *(shape 1, must fire)* - Collecting pathology samples, written
-for the courier and for the laboratory technician. The courier's own document
-says *"Do not open the box at any point"*; the technician's says to break the
-tamper seal at the bench and record the seal number in LIMS. `inverted.md` puts
-both under the courier's title. The reader is told to do a thing the same
-document forbids them, and has no LIMS account to do it with.
+## The six pairs
 
-**Shape 1 is two defects and they are recorded apart.** `sample_intake` is a
-**self-contradiction**: the merged document forbids what it instructs, both
-sentences are in it, and a checker needs no model of who a courier is to see
-that they cannot both be followed. `incident_pager` is an **authority
-mismatch**: nothing contradicts anything, and the only thing wrong is that the
-stated reader lacks the standing - a fact that is in neither source. Each
-`shape.json` carries `defect` and `audience_model_required`, and
-`test_the_two_firing_pairs_are_two_different_defects` asserts one of each. A
-predicate scoring 1 of 2 here is not a coin flip: which one it caught says
-whether it read the text or modelled the reader.
+| Pair | The two sources | A check must | Why |
+|---|---|---|---|
+| `incident_pager` | The pager procedure as written for the on-call engineer, and as written for the duty manager | flag `inverted.md` | Under the engineer's title, with no section marked, the engineer is told to approve customer notices and to call the executive sponsor. No sentence contradicts another. Seeing the defect takes knowing what an on-call engineer is allowed to do. |
+| `sample_intake` | Collecting pathology samples, for the courier and for the laboratory technician | flag `inverted.md` | Under the courier's title the document says "Do not open the box at any point" and also "Break the tamper seal at the bench". The two instructions cannot both be followed, so the defect shows in the text alone. |
+| `parking_permits` | Staff parking permits, and visitor permits | stay silent | A correct merge of two audiences: it takes the neutral title of the two, and every section that belongs to one audience names its reader. A check that fires here fires on every legitimate merge of two audiences. |
+| `fire_drill` | A fire drill procedure titled for the ground floor wardens, and the same content under a general title | stay silent | Only one title names a reader, and the other document is the same content in other words, not a wider document. Everything under the wardens' title is the wardens'. |
+| `kettle_descaling` | Two notes on descaling an office kettle | stay silent | Neither title names a reader, so there is no audience to check. |
+| `helpdesk_tickets` | Ticket triage for the "Support Desk", and for the "Service Desk" | stay silent | Two names for one team. A check that fires here compares the words of two titles, not their audiences. |
 
-**parking_permits** *(shape 6, must not fire)* - **The important control.** A
-genuine two-audience merge, done correctly: staff renewals and visitor permits
-both present, every audience-specific heading naming its reader, and the neutral
-of the two titles chosen. A predicate that fires here fires on every legitimate
-merge of two audiences, which is most of what this tool is for.
+The two pairs that must be flagged are two different defects on purpose. `sample_intake` contradicts itself, and `incident_pager` only oversteps its reader's authority. A check that catches one of the two shows, by which one, whether it read the text or reasoned about the reader.
 
-**fire_drill** *(shape 7, must not fire)* - `badge_access` and `freezer_alarm`'s
-shape. One title carries an audience qualifier and the other is the general
-*wording* of the same ground-floor content, not a wider document. Three of the
-seven registered pairs are already this, which is why a naive predicate would look good
-on that corpus while being wrong.
+## The files in a pair directory
 
-**kettle_descaling** *(shape 8, must not fire)* - Neither title names a reader.
-A check that needs a qualifier to be present must be *silent* here, and silence
-has to be seen to be deliberate: absent-by-accident and correctly-silent produce
-the same output and only this fixture separates them.
+| File | In | What it is |
+|---|---|---|
+| `source_a.md`, `source_b.md` | all six | The two inputs. |
+| `ideal.md` | all six | A correct merge. It carries source A's title. |
+| `ideal.json` | all six | The merge's declarations: what it did to each source segment it did not keep word for word. In every pair this is one record, which declares source B's title `superseded` by source A's. |
+| `shape.json` | all six | What the pair is for. The fields are listed below. |
+| `inverted.md` | `incident_pager`, `sample_intake` | The defective merge: `ideal.md` with the qualifier removed from four section headings and nothing else changed. `## Opening the box (laboratory technician only)` becomes `## Opening the box`. |
+| `inverted.json` | `incident_pager`, `sample_intake` | The declarations for `inverted.md`. Byte for byte the same as `ideal.json`: the defective merge declares exactly what the correct one does. |
 
-**helpdesk_tickets** *(shape 9, must not fire)* - "Support Desk" against
-"Service Desk": two names for one team, differing in wording and not in scope. A
-predicate that fires here is a string comparison wearing a semantic label.
-That predicate was rejected in advance and this pair is how the rejection is
-enforced rather than remembered.
+A segment is a title, a heading or a sentence.
 
-## The files
+The fields of `shape.json`:
 
-`source_a.md` and `source_b.md` are the inputs. `ideal.md` is a correct merge
-and `ideal.json` records what it did to anything it did not keep word for word.
-`shape.json` names the shape, whether it must fire, and which merged document is
-under audit. The two shape-1 pairs also carry `inverted.md` and `inverted.json`:
-the defect, built deliberately.
+| Field | In | Meaning |
+|---|---|---|
+| `shape` | all six | A number for the kind of pair. The numbers are labels, and these five are the only ones in use: `1`, `6`, `7`, `8` and `9`. |
+| `name` | all six | The kind of pair, in words: "audience inversion" (`1`), "a legitimate two-audience merge" (`6`), "a one-sided qualifier over the same scope" (`7`), "no qualifier on either title" (`8`), "a qualifier that differs in wording and not in scope" (`9`). |
+| `must_fire` | all six | `true` when a check must flag the document named in `merged_under_audit`. It is `true` exactly on the two `shape` 1 pairs. |
+| `merged_under_audit` | all six | The merged document the pair tests: `inverted.md` on the two `shape` 1 pairs, `ideal.md` on the others. |
+| `title_audience` | all six | The reader the merged title names, in words. |
+| `why` | all six | The reason for `must_fire`. |
+| `defect` | `shape` 1 only | `self_contradiction` (`sample_intake`) or `authority_mismatch` (`incident_pager`). |
+| `audience_model_required` | `shape` 1 only | `true` when the defect cannot be seen from the text alone (`incident_pager`). |
+| `giveaway` | `shape` 1 only | One sentence of `inverted.md` that comes from source B, the source whose title was not taken. |
+| `defect_why` | `shape` 1 only | The defect, described in a paragraph. |
+| `inverted_differs_from_ideal_by` | `shape` 1 only | A statement that only the heading qualifiers differ. |
 
-`inverted.md` is `ideal.md` with the heading qualifiers stripped and **nothing
-else changed** - same line count, same section order, same sentences. Exactly
-one variable separates the correct merge from the defective one, so a predicate
-cannot score here by noticing that the sections moved.
-`test_the_inversion_differs_from_the_ideal_in_one_variable` holds that: every
-differing line must be a `##` heading whose ideal form is the inverted form plus
-a trailing parenthesis.
+Two of the `why` texts cite "section 4" of a design note that is not part of the published copy. The rule they take from it is the one above: a reader must be able to tell which part of the document is theirs.
 
-**A claim made here when this corpus landed, and withdrawn.** The first version
-of this file said the honest merge costs declarations and the dishonest one does
-not. It does not, on these pairs: `ideal.json` and `inverted.json` are
-byte-identical on both shape-1 pairs, one `superseded` record each for the
-title, and `ideal.md` pays for its honesty in heading text rather than in
-declared dispositions. The claim is true of a different remedy -
-`tests/pairs/bike_docks/ideal.json` folds source B into the field crew's
-sections and declares it in **eight** records - and false of the one used here.
+## What uses these pairs today
 
-Nothing here is taken from a real document. The names, numbers and wording were
-all invented for these fixtures.
+**One test module, and no check in the tool.** `python3 tests/test_attribution.py` runs offline and ends with `attribution: 15 checks pass over 6 pair(s), 8 merged document(s), 0 predicates`. The `0 predicates` says that no check for this defect exists. The module asserts:
 
-## What the audit checks, and what it cannot
+- **Every `ideal.md` is a correct answer.** With its `ideal.json` it draws no finding from the mechanical checks at two fidelity levels, `verbatim` (the strictest, spelled `off` in the test code) and `high` (the default), with source A's title kept and the default loss budget of 3%.
+- **Every `inverted.md` passes the same checks, also with no finding,** and keeps exactly the source segments its `ideal.md` keeps. This is the gap, written down as an assertion. It fails on the day a mechanical check starts to flag an inverted merge, so whoever adds such a check has to update this test and this page.
+- **No finding kind has a name that claims this check.** A finding kind whose name contains `audience`, `scope` or `coheren` fails the module. If such a check is real, this corpus has to be updated with it. If it is not, the name has to change.
+- **The corpus has the shape described above:** six complete pairs, two that must be flagged with two different defects, four that must not, an `inverted.md` that differs from its `ideal.md` only in heading qualifiers, and a `giveaway` sentence that is in `inverted.md` and in source B only.
 
-`tests/test_attribution.py` runs the same answerability audit `test_pairs.py`
-runs: `ideal.md` plus `ideal.json` through the reconciler at both fidelity
-levels, zero findings required. All six pass.
+`tests/test_segment.py` also reads the directory: it pins how each document here splits into segments, in `tests/segment_pins.json`.
 
-Then it asserts the thing this corpus is for, which is a **blindness**:
+Nothing else reads these pairs. No command, harness or benchmark run uses them, and no recorded run in this repository merged them, so whether the model-based claim checks would notice the defect has not been measured.
 
-    the ideal merge is answerable       checked
-    the inverted merge is answerable    checked -- and that is the finding
-    the inverted merge is wrong         NOT checked; no predicate exists
+**This is not the report's Attributions check.** That check finds a merged sentence that credits a statement to the wrong source, for example "according to source A" on a fact only source B states. It exists, and its test cases are `tests/fixtures/attribution_invented/` and `tests/fixtures/attribution_swapped/`.
 
-Both inverted merges draw zero findings at both levels and cover exactly what
-their ideal merge covers. That assertion is written to **fail** the day an
-audience predicate lands, which is the correct behaviour: the predicate is
-built after the pairs, so the pairs have to be able to notice it arriving.
+## If you change this corpus
 
-One further blindness, found while measuring these. `Order.stapled` is True of
-`incident_pager`'s and `sample_intake`'s **ideal.md and inverted.md alike**, and
-of `parking_permits/ideal.md`. It separates nothing here. An earlier version of
-this file recorded it as True of the correct merges and False of the inversions,
-which read as the measurement pointing the wrong way; that was the section
-*order*, which the inversions no longer differ in, and not the qualifiers. The
-staple measurement is reported and never judged, which is why neither
-reading of it costs anything.
+- **Keep one difference between `inverted.md` and `ideal.md`.** Same line count, same section order, same sentences: every differing line must be a `##` heading whose `ideal.md` form is the `inverted.md` form plus a qualifier in parentheses. If the two also differed in section order, a check could score on order and appear to detect audience. `test_the_inversion_differs_from_the_ideal_in_one_variable` enforces it.
+- **Keep the pairs small and single-purpose.** Every pair is 25 to 29 segments and declares one record. A long pair, or one that declares drops, would test document length or the loss budget at the same time as the audience question.
+- **Do not read the report's `Ordering:` line as a sign of this defect.** That line describes how the merge arranged its sources. Here it reads "each source in one unbroken block" for `ideal.md` and `inverted.md` of both flagged pairs alike, and for `parking_permits/ideal.md`: a correct merge of two audiences is grouped by audience, which is one block per source. `test_the_order_members_that_point_the_wrong_way_are_pinned` holds the measured values.
+- **A new document needs a segment pin.** Add it with `python3 tests/test_segment.py --pin`. An edited document fails `tests/test_segment.py` until its entry in `tests/segment_pins.json` is replaced.
 
 ## Sizes
 
-| Pair | Shape | Must fire | Source A | Source B | Segments | Sentences both sources state |
-| --- | --- | --- | --- | --- | --- | --- |
-| fire_drill | 7 | no | 13 segments, 127 words | 14 segments, 143 words | 27 | 5 |
-| helpdesk_tickets | 9 | no | 14 segments, 142 words | 14 segments, 129 words | 28 | 5 |
-| incident_pager | 1 | **yes** | 15 segments, 154 words | 14 segments, 140 words | 29 | 5 |
-| kettle_descaling | 8 | no | 14 segments, 130 words | 14 segments, 125 words | 28 | 5 |
-| parking_permits | 6 | no | 13 segments, 125 words | 12 segments, 124 words | 25 | 3 |
-| sample_intake | 1 | **yes** | 14 segments, 130 words | 14 segments, 131 words | 28 | 5 |
+| Pair | Source A | Source B | Segments in both |
+|---|---|---|---|
+| `fire_drill` | 13 segments, 127 words | 14 segments, 143 words | 27 |
+| `helpdesk_tickets` | 14 segments, 142 words | 14 segments, 129 words | 28 |
+| `incident_pager` | 15 segments, 154 words | 14 segments, 140 words | 29 |
+| `kettle_descaling` | 14 segments, 130 words | 14 segments, 125 words | 28 |
+| `parking_permits` | 13 segments, 125 words | 12 segments, 124 words | 25 |
+| `sample_intake` | 14 segments, 130 words | 14 segments, 131 words | 28 |
 
-The last column counts sentences only. Each pair also shares exactly two
-headings, so the block a staple would repeat verbatim is two larger than the
-figure shown - 7 segments, or 5 for `parking_permits`. That block is also what
-`reconcile.order` excludes from `attributed`: a segment both sources state
-identically is evidence about neither.
-
-A "segment" is a title, a heading or a sentence. Every pair sits in the 25-29
-band, close to the registered corpus's short six at 29-36 and deliberately nowhere near
-`rate_limits` at 104: length is `rate_limits`' job and confounding the two would
-mean a predicate measured on this corpus was also being measured on size.
-
-Each pair's `ideal.json` declares one record, the superseded source title, so
-none of them comes near the 5% declared-loss budget. That is on purpose too. A
-pair where the budget binds tests the budget; these test one question each.
+The pairs are about the size of the short pairs in `tests/pairs/`, which run from 27 to 36 segments.

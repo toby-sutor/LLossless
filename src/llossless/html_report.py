@@ -508,10 +508,10 @@ def coverage_block(run: Run) -> list[str]:
             "Evidence grounded",
             _bar(len(grounded), len(graded), "no verdict quoted a span"),
         ),
-        (
-            "Units of work errored",
-            f'<span class="value mono">{len(run.errored)}</span>',
-        ),
+        ("Units of work errored",
+         f'<span class="value mono">{len(run.errored)}</span>'),
+        ("Claims submitted but not graded",
+         f'<span class="value mono">{len(run.unusable)}</span>'),
     ]
 
     body = _rows(pairs)
@@ -1155,6 +1155,11 @@ def render(run: Run) -> str:
     if run.number_format:
         toc.insert(3 + bool(run.attributions), ("numbers", "Number format"))
         body += _section("numbers", "Number format", number_format_block(run))
+    # `report.render`'s next two sections, on every run and in its order:
+    # what a model overran and had capped, then what could not be graded.
+    toc[-1:-1] = [("capped", "Length capped"), ("ungraded", "Not graded")]
+    body += _section("capped", "Length capped", capping_block(run))
+    body += _section("ungraded", "Not graded", unusable_block(run))
     body += _section("inventory", "Inventory", inventory_block(run))
     if run.command == "merge" and run.merged is not None:
         toc += [("structure", "Structure"), ("queue", "Review queue"),
@@ -1168,9 +1173,9 @@ def render(run: Run) -> str:
         # saying nothing was found; this one is not a check, and at a level
         # permitting no additions its absence leaves no question open.
         if run.additions:
-            toc.append(("additions", "Added from outside"))
-            body += _section("additions", "Added from outside",
-                             additions_block(run))
+            added = additions_heading(run)
+            toc.append(("additions", added))
+            body += _section("additions", added, additions_block(run))
     if run.provenance is not None:
         toc.append(("provenance", "Provenance"))
         body += _section("provenance", "Provenance", provenance_block(run))
@@ -1249,3 +1254,83 @@ def number_format_block(run: Run) -> list[str]:
             f'<p class="text">{esc(finding.detail)}</p>{evidence}</article>'
         )
     return out
+
+
+def capping_block(run: Run) -> list[str]:
+    """The Length capped section as HTML, one card per capped record.
+
+    The words are `report.capping_section`'s own, so the two reports cannot
+    word a capped field two ways. Each names a field path or a claim id inside
+    backticks, which is why they go through `code_only` and not `inline`:
+    escaped first, code spans honoured, no emphasis.
+
+    One card per record and not per line of the Markdown section. A field
+    path and a claim id are quoted from the model's answer, and one that
+    carried a line break made two lines there and so two cards here for one
+    capped field. So the Markdown renderer is asked for each record on its
+    own, and whatever it prints for that record is one card.
+    """
+    from types import SimpleNamespace
+
+    from .report import capping_section
+
+    def said(**only) -> str:
+        """What the Markdown section says of this much: its one entry, bare."""
+        alone = SimpleNamespace(**{"truncations": (), "capped_verdicts": (), **only})
+        entry = capping_section(alone).split("\n", 2)[2]
+        return entry.removesuffix("\n").removeprefix("- ")
+
+    if not run.truncations and not run.capped_verdicts:
+        empty = said()
+        return [f'<p class="empty">{esc(empty)}</p>']
+    capped = [said(truncations=(item,)) for item in run.truncations]
+    capped += [said(capped_verdicts=(verdict,)) for verdict in run.capped_verdicts]
+    return [
+        f'<article class="card" data-filterable data-kind="capped">'
+        f'<p class="text">{code_only(text)}</p></article>'
+        for text in capped
+    ]
+
+
+def unusable_block(run: Run) -> list[str]:
+    """The Not graded section as HTML: the Markdown lead, then a card per record.
+
+    The lead sentence and its count are `report.unusable_section`'s. The cards
+    are built from the records themselves and never through `inline`: the
+    claim id is the model's word and each defect quotes what the model sent,
+    so both are escaped and neither is read for markup. Grey, the colour of
+    "not checked", because that is what happened to these claims.
+    """
+    from .report import unusable_section
+
+    lead = unusable_section(run).splitlines()[2]
+    if not run.unusable:
+        return [f'<p class="empty">{esc(lead)}</p>']
+    out = [f"<p>{inline(lead)}</p>"]
+    for item in run.unusable:
+        named = esc(item.claim_id) or '<span class="note">no claim id</span>'
+        out += [
+            f'<article class="card" data-filterable data-kind="not_graded" '
+            f'data-claim-id="{esc(item.claim_id)}">',
+            f'<div class="head">{named} <span class="mono note">'
+            f"({esc(item.direction)}, record {esc(item.index)})</span></div>",
+            "<ul>",
+            *(f"<li>{esc(defect)}</li>" for defect in item.defects),
+            "</ul>",
+            "</article>",
+        ]
+    return out
+
+
+def additions_heading(run: Run) -> str:
+    """The title of the additions section: the Markdown report's heading.
+
+    Read off `report.additions_section` and not written a second time. The
+    page headed this section "Added from outside" under a Markdown report
+    that says "Added from outside the documents", which is one section under
+    two names. Called only where the run has additions, so the Markdown
+    section is never the empty string here.
+    """
+    from .report import additions_section
+
+    return additions_section(run).splitlines()[0].removeprefix("## ")

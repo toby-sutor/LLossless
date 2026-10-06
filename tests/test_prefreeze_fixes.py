@@ -414,6 +414,53 @@ def test_i8_dropped_names_are_reported_never_values() -> None:
           f"only names may appear, never values: {dropped}")
 
 
+def test_i8_every_provider_key_the_web_interface_stores_is_withheld() -> None:
+    """MUST FIRE: the variable each provider's key is kept under, read off the
+    web interface's own `PROVIDERS` table, is dropped from the program that
+    answers in place of an endpoint, and named (never its value) in the report.
+
+    The first two prefixes covered one vendor each, so `OPEN_AI_API_KEY` and
+    `GOOGLE_AI_API_KEY` reached every subscription program. The sentinel
+    values are not key-shaped, so no secret-scan exemption is needed.
+
+    MUST NOT FIRE: `CLAUDE_CODE_OAUTH_TOKEN`, `HOME` and `PATH` still pass.
+    The probe is seeded on the shipped table: with the prefixes the table had
+    before this fix, the same check finds both keys leaking.
+    """
+    from llossless.web import credentials
+
+    names = sorted(set(credentials.PROVIDERS.values()) | {"GOOGLE_API_KEY", "GEMINI_API_KEY"})
+    sentinel_env = {name: "sentinel-not-a-key-" + name for name in names}
+    sentinel_env.update({"CLAUDE_CODE_OAUTH_TOKEN": "sentinel-oauth", "HOME": "/h",
+                         "PATH": "/bin"})
+
+    def leaked() -> list[str]:
+        child = backend._child_env(sentinel_env)
+        return [name for name in names if name in child]
+
+    check(leaked() == [], f"a provider key reached the child program: {leaked()}")
+    child = backend._child_env(sentinel_env)
+    for kept in ("CLAUDE_CODE_OAUTH_TOKEN", "HOME", "PATH"):
+        check(kept in child, f"{kept} must still reach the child program")
+    for for_report in (False, True):
+        dropped = config.dropped_env_names(sentinel_env, for_report=for_report)
+        expected = {n for n in names if not (for_report and n.startswith("LLOSSLESS_"))}
+        check(expected <= set(dropped),
+              f"every provider key name must be reported dropped: {dropped}")
+        check(not any("sentinel" in name for name in dropped),
+              "only names may appear in the report, never values")
+
+    shipped = config.DROPPED_ENV_PREFIXES
+    config.DROPPED_ENV_PREFIXES = ("ANTHROPIC", "OPENAI", "LLOSSLESS_", "CLAIMCHECK_",
+                                   "CLAUDE_CODE_", "CLAUDE_AGENT_", "AI_AGENT")
+    try:
+        before = leaked()
+    finally:
+        config.DROPPED_ENV_PREFIXES = shipped
+    check("OPEN_AI_API_KEY" in before and "GOOGLE_AI_API_KEY" in before,
+          f"seeded check: the earlier prefixes must leak both keys: {before}")
+
+
 def test_i8_env_dropped_report_does_not_depend_on_the_commands_spelling() -> None:
     """MUST FIRE: the report's `env_dropped` must not list `LLOSSLESS_*`, so a
     run configured by `LLOSSLESS_COMMAND=` and one configured by

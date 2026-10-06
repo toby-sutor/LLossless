@@ -150,6 +150,11 @@ def request(url: str, *, method: str = "GET", payload=None, headers=None,
     if payload is not None:
         body = json.dumps(payload).encode("utf-8")
         sent.setdefault("Content-Type", "application/json")
+    if body is None and method in ("POST", "PUT", "DELETE"):
+        # A request that changes something declares the JSON type with or
+        # without a body, which is what the page sends and what the server
+        # asks for. A caller that means otherwise passes the header itself.
+        sent.setdefault("Content-Type", "application/json")
     call = urllib.request.Request(url, data=body, method=method, headers=sent)
     try:
         with urllib.request.urlopen(call, timeout=timeout) as answer:
@@ -902,6 +907,103 @@ def test_the_first_account_inherits_the_existing_credentials_file() -> None:
               "a member's settings page carries the operator's key")
 
 
+def shared_key_problems() -> list[str]:
+    """What each account is told about the operator's shared key, as sentences.
+
+    The operator owns the shared key and is told its last four characters. A
+    member is told that it is set and nothing of what it is. A member's own
+    key, stored against their own endpoint, is theirs to be told about.
+    """
+    found: list[str] = []
+    last = ALICE_KEY[-credentials.SUFFIX_LENGTH:]
+    with environment(), Deployment() as live:
+        live.keys.set(PROVIDER, ALICE_KEY)
+        live.keys.apply(os.environ, live.built.store.environ)
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+
+        def row(who: dict) -> dict:
+            rows = as_json(request(live.url(f"{P}/settings/keys"),
+                                   headers=who)[2])["providers"]
+            return [entry for entry in rows if entry["name"] == PROVIDER][0]
+
+        theirs = row(alice)
+        if not (theirs["configured"] is True and theirs.get("suffix") == last
+                and theirs["owner"] == "operator"):
+            found.append(f"the operator is not told the last characters of "
+                         f"their own shared key: {theirs}")
+        seen = row(bob)
+        if not (seen["configured"] is True and seen["owner"] == "operator"
+                and seen["editable"] is False):
+            found.append(f"a member is not told that the operator's key is "
+                         f"set: {seen}")
+        if "suffix" in seen:
+            found.append(f"a member's row for the operator's key carries a "
+                         f"suffix: {seen.get('suffix')!r}")
+        # Nothing else a member can read carries the characters either.
+        for path in (f"{P}/settings/keys", f"{P}/config", f"{P}/health",
+                     f"{P}/session"):
+            body = request(live.url(path), headers=bob)[2].decode("utf-8")
+            if last in body:
+                found.append(f"GET {path} gives a member the last characters "
+                             f"of the operator's key")
+        # A member's own key: theirs, so its characters are theirs to see.
+        if live.set_endpoint(bob, "http://127.0.0.1:2")[0] != 200 \
+                or live.set_key(bob, BOB_KEY)[0] != 204:
+            found.append("a member could not store a key of their own")
+        mine = row(bob)
+        if not (mine["owner"] == "you"
+                and mine.get("suffix") == BOB_KEY[-credentials.SUFFIX_LENGTH:]):
+            found.append(f"a member is not told the last characters of their "
+                         f"own key: {mine}")
+        # And the operator's view is not changed by any of that.
+        if row(alice).get("suffix") != last:
+            found.append("the operator's own view lost its characters")
+    return found
+
+
+def test_a_member_learns_only_that_the_shared_key_is_set() -> None:
+    """The last four characters of a key go to the account that owns it.
+
+    Must not fire: the operator sees the characters of the shared key, a
+    member sees `configured` and no `suffix`, and a member sees the
+    characters of a key they stored themselves.
+
+    Must fire: `Directory.rows_for` with the one expression that withholds
+    the suffix taken out of its own source, which is the server this was
+    before. The member's row then carries the operator's characters and the
+    check says so.
+    """
+    import inspect
+    import textwrap
+
+    for problem in shared_key_problems():
+        check(False, f"shared key: {problem}")
+
+    shipped = accounts.Directory.rows_for
+    text = textwrap.dedent(inspect.getsource(shipped))
+    withheld = "seen = row if operator else {"
+    start = text.index(withheld)
+    end = text.index("}", start) + 1
+    seeded_text = text[:start] + "seen = row" + text[end:]
+    scope = dict(vars(accounts))
+    exec(compile(seeded_text, "seeded rows_for", "exec"), scope)  # noqa: S102
+    accounts.Directory.rows_for = scope["rows_for"]
+    try:
+        seeded = shared_key_problems()
+    finally:
+        accounts.Directory.rows_for = shipped
+    check(any("carries a suffix" in problem for problem in seeded)
+          and any("gives a member the last characters" in problem
+                  for problem in seeded),
+          f"seeded check: a server that sends a member the operator's "
+          f"characters passed: {seeded}")
+    check(shared_key_problems() == [],
+          "rows_for was not put back after the seed")
+
+
 # --------------------------------------------------------------------------
 # the bind token, superseded
 # --------------------------------------------------------------------------
@@ -987,6 +1089,101 @@ def test_the_bind_token_is_not_consulted_once_an_account_exists() -> None:
         check(request(live.url(f"{P}/runs"), headers=who)[0] == 200,
               "a session id in the same header is refused too, so scripts have "
               "no way in at all")
+
+
+def network_setup_problems() -> list[str]:
+    """A server on every interface, a token, no account: the path to signed in.
+
+    What the page does, request by request, against a real wildcard bind: it
+    is refused without the token, is answered with it, creates the first
+    account with it, and is then carried by the cookie alone. Returned as
+    sentences so the seeded run below can ask the same question.
+    """
+    found: list[str] = []
+    token = "probe-bind-token-0123456789"
+    carried = {credentials.TOKEN_HEADER: token}
+    with Deployment(host=WILDCARDS[0], token=token) as live:
+        # The token is required on every API route, the open ones included,
+        # and a wrong one is refused the same way as none.
+        for method, path in routes_of(live.built):
+            for headers in (None, {credentials.TOKEN_HEADER: token + "x"}):
+                status, _, body = request(
+                    live.url(path), method=method, headers=headers,
+                    payload={} if method in ("POST", "PUT") else None)
+                if status != 401 or code_of(body) != "no_token":
+                    found.append(f"{method} {path} answered {status} "
+                                 f"{code_of(body)!r} without the token")
+        for path in (f"{P}/session", f"{P}/locales"):
+            status, _, body = request(live.url(path))
+            if status != 401 or code_of(body) != "no_token":
+                found.append(f"GET {path} answered {status} {code_of(body)!r} "
+                             f"without the token")
+        # The page itself is public, or there is nothing to type the token into.
+        if request(live.url("/"))[0] != 200:
+            found.append("the page is not served, so the token cannot be given")
+
+        # With the token: the session route says setup is wanted.
+        status, _, body = request(live.url(f"{P}/session"), headers=carried)
+        state = as_json(body) or {}
+        if status != 200 or state.get("setup_required") is not True:
+            found.append(f"with the token the session route answered {status} "
+                         f"{body[:160]!r}, not a server waiting for setup")
+        if request(live.url(f"{P}/locales"), headers=carried)[0] != 200:
+            found.append("with the token the strings are still refused")
+
+        # The first account needs both: the access token and the setup token.
+        bare = live.first_account()
+        if bare[0] != 401 or code_of(bare[2]) != "no_token":
+            found.append(f"setup without the access token answered {bare[0]} "
+                         f"{code_of(bare[2])!r}")
+        made = live.first_account(headers=carried)
+        cookie = (made[1].get("Set-Cookie") or "").split(";")[0]
+        if made[0] != 200 or not cookie:
+            found.append(f"setup with both tokens answered {made[0]} and set "
+                         f"{cookie!r}")
+            return found
+
+        # Signed in, by the cookie alone, and the token is finished with.
+        status, _, body = request(live.url(f"{P}/session"),
+                                  headers={"Cookie": cookie})
+        state = as_json(body) or {}
+        if not (status == 200 and state.get("authenticated") is True
+                and (state.get("user") or {}).get("username") == OPERATOR):
+            found.append(f"the cookie setup set does not sign the operator in: "
+                         f"{status} {body[:160]!r}")
+        if request(live.url(f"{P}/runs"), headers={"Cookie": cookie})[0] != 200:
+            found.append("the signed-in operator is refused their own runs")
+        # Why the page has to drop the token here: the same header is a
+        # session id now, and it outranks the cookie.
+        status, _, body = request(live.url(f"{P}/session"),
+                                  headers={"Cookie": cookie, **carried})
+        if (as_json(body) or {}).get("authenticated") is not False:
+            found.append("the access token beside a good cookie still reads as "
+                         "signed in, so the header no longer outranks the cookie")
+    return found
+
+
+def test_a_network_server_with_a_token_is_set_up_through_the_api() -> None:
+    """Token, then the first account, then signed in, on a wildcard bind.
+
+    Must not fire: the path works with the token in the header and ends in a
+    session carried by the cookie.
+
+    Must fire: with the token check taken out, the routes that must refuse a
+    request without it answer, and the check says so. The token is the only
+    thing in front of a server with no account.
+    """
+    for problem in network_setup_problems():
+        check(False, f"network setup: {problem}")
+    shipped = api.check_token
+    api.check_token = lambda headers, expected: None
+    try:
+        seeded = network_setup_problems()
+    finally:
+        api.check_token = shipped
+    check(any("without the token" in problem for problem in seeded),
+          f"seeded check: a server that no longer asks for the token passed: "
+          f"{seeded}")
 
 
 def test_serve_always_has_an_account_store() -> None:
@@ -1436,6 +1633,458 @@ def test_the_operators_key_never_travels_to_an_address_a_member_typed() -> None:
               "while the page goes on reporting it as configured")
 
 
+class Seeded:
+    """Patch one attribute for the length of a `with`, and put it back.
+
+    What is put back is the attribute as the owner holds it, not as
+    `getattr` hands it over: a `staticmethod` read off its class comes back
+    as a bare function, and restoring that would leave a method that takes
+    one argument too many for every check that runs afterwards.
+    """
+
+    def __init__(self, owner, name: str, value) -> None:
+        self.owner, self.name, self.value = owner, name, value
+
+    def __enter__(self):
+        self.before = vars(self.owner).get(self.name,
+                                           getattr(self.owner, self.name))
+        setattr(self.owner, self.name, self.value)
+        return self
+
+    def __exit__(self, *exc_info) -> None:
+        setattr(self.owner, self.name, self.before)
+
+
+def one_state_problems(change: str, seed=None) -> list[str]:
+    """A member changes their endpoint while their run is starting. Who got whose key?
+
+    Asked on the wire: what is read is the `Authorization` header each
+    endpoint was handed. The change is made from inside the first read of
+    the member's file that the worker makes, so it lands after that read and
+    before any later one, every time, with no race to win.
+
+    `change` is `delete` (the member had an endpoint of their own and removes
+    it: a second read would then hand over the operator's shared key, for a
+    run already addressed to the member's endpoint) or `create` (the member
+    had none and stores one with a key: a second read would send the member's
+    key to the operator's endpoint).
+    """
+    problems: list[str] = []
+    with contextlib.ExitStack() as stack:
+        shared_endpoint = FakeEndpoint(Script(**CLEAN))
+        member_endpoint = FakeEndpoint(Script(**CLEAN))
+        shared_url = stack.enter_context(shared_endpoint)
+        member_url = stack.enter_context(member_endpoint)
+        stack.enter_context(environment())
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        if live.set_endpoint(alice, shared_url)[0] != 200 \
+                or live.set_key(alice, ALICE_KEY)[0] != 204:
+            return ["the operator could not configure the shared endpoint"]
+        own = live.built.api.directory.own(live.accounts.get(MEMBER).id)
+        if change == "delete" and live.set_endpoint(bob, member_url)[0] != 200:
+            return ["a member could not configure an endpoint of their own"]
+
+        shipped = credentials.Credentials.read
+        state = {"reads": 0, "changing": False}
+
+        def read(self):
+            rows = shipped(self)
+            if (self.path == own.path and not state["changing"]
+                    and threading.current_thread().name.startswith(
+                        "llossless-job")):
+                state["reads"] += 1
+                if state["reads"] == 1:
+                    state["changing"] = True
+                    try:
+                        if change == "delete":
+                            own.remove_endpoint(PROVIDER)
+                        else:
+                            own.set_endpoint(PROVIDER, member_url)
+                            own.set(PROVIDER, BOB_KEY)
+                    finally:
+                        state["changing"] = False
+            return rows
+
+        with contextlib.ExitStack() as patches:
+            patches.enter_context(Seeded(credentials.Credentials, "read", read))
+            if seed is not None:
+                patches.enter_context(seed)
+            answer = request(live.url(f"{P}/runs"), method="POST", headers=bob,
+                             payload=a_submission())
+            if answer[0] != 202:
+                return [f"the submit answered {answer[0]}: {answer[2][:200]!r}"]
+            run_id = as_json(answer[2])["id"]
+            if not wait_for(lambda: state_of(live, run_id, bob)
+                            in ("done", "failed")):
+                return ["the run never finished"]
+
+        if state["reads"] < 1:
+            problems.append("the worker never read the member's file, so the "
+                            "change was never made and nothing was probed")
+        addressed, other = ((member_endpoint, shared_endpoint)
+                            if change == "delete"
+                            else (shared_endpoint, member_endpoint))
+        if not addressed.headers:
+            problems.append("the endpoint the run was addressed to was never "
+                            "called, so the assertions are over nothing")
+        if other.headers:
+            problems.append("one run called both endpoints")
+        if ALICE_KEY in bearer_keys(member_endpoint):
+            problems.append("the member's endpoint was handed the operator's key")
+        if BOB_KEY in bearer_keys(shared_endpoint):
+            problems.append("the operator's endpoint was handed the member's key")
+    return problems
+
+
+def test_a_run_s_address_and_its_key_come_from_one_read() -> None:
+    """The operator's key never reaches a member's endpoint, whatever the timing.
+
+    A run's address and its key used to be two reads of the member's settings
+    file, one when the worker built the run and one a moment later on the same
+    thread. A member who deleted their own endpoint between the two got a run
+    addressed to their endpoint and carrying the operator's shared key, which
+    their endpoint then received on every call.
+
+    Must not fire: with the change landing straight after the first read, the
+    member's endpoint is called and is handed no key of the operator's; and
+    the other way round, the operator's endpoint is handed none of the
+    member's.
+
+    Must fire: `JobStore.resolved_for` replaced by the two shipped halves read
+    one after the other, which is the store this was before.
+    """
+    for change in ("delete", "create"):
+        problems = one_state_problems(change)
+        check(not problems, f"one state, member {change}s their endpoint: "
+                            + "; ".join(problems))
+
+    def two_reads(self, owner):
+        return self.environ_for(owner), self.keys_for(owner)
+
+    seeded = one_state_problems(
+        "delete", Seeded(jobs.JobStore, "resolved_for", two_reads))
+    check("the member's endpoint was handed the operator's key" in seeded,
+          f"must fire: a store that reads the address and the key separately "
+          f"passed: {seeded}")
+    seeded = one_state_problems(
+        "create", Seeded(jobs.JobStore, "resolved_for", two_reads))
+    check("the operator's endpoint was handed the member's key" in seeded,
+          f"must fire: a store that reads the address and the key separately "
+          f"passed the other direction: {seeded}")
+
+    # And the same seed one layer down, on the function the store calls. A
+    # second rule now stands behind this one: the operator's key is read
+    # through `jobs.MemberKeys`, which hands it out only while the run's
+    # address for that provider is the operator's own. So a directory that
+    # reads twice no longer gets the key across by itself, and that is
+    # asserted; the seed fires once the store hands over what the directory
+    # read as it stands, which is the store this was before.
+    def two_reads_below(self, account_id, environ=None):
+        return self.environ_for(account_id), self.keys_for(account_id, environ)
+
+    behind = one_state_problems(
+        "delete", Seeded(accounts.Directory, "for_run", two_reads_below))
+    check("the member's endpoint was handed the operator's key" not in behind,
+          f"a directory that reads twice got the operator's key to a "
+          f"member's endpoint past the store's own rule: {behind}")
+
+    def as_read(keys, shared, standing, addresses=()):
+        return dict(keys)
+
+    with Seeded(jobs, "MemberKeys", as_read):
+        seeded = one_state_problems(
+            "delete", Seeded(accounts.Directory, "for_run", two_reads_below))
+    check("the member's endpoint was handed the operator's key" in seeded,
+          f"must fire: a directory that reads its file twice for one run, "
+          f"under a store that hands over what it read, passed: {seeded}")
+
+
+def moved_endpoint_problems() -> list[str]:
+    """The operator moves a shared endpoint between a run's two sources.
+
+    The address a member's run uses for a shared provider is the one in the
+    environment the run resolves against; the shared file is read a moment
+    later. The file is given the endpoint's new address and new key here
+    while the environment still names the old pair.
+    """
+    problems: list[str] = []
+    old_address, new_address = "http://127.0.0.1:1", "http://127.0.0.1:2"
+    with tempfile.TemporaryDirectory() as raw:
+        shared = credentials.Credentials(Path(raw) / "credentials.json")
+        directory = accounts.Directory(shared)
+        member = "d" * 32
+        shared.set_endpoint(PROVIDER, old_address)
+        shared.set(PROVIDER, ALICE_KEY)
+        environ = shared.mapping()
+        both = directory.for_run(member, environ)[1]
+        if both.get(KEY_VARIABLE) != ALICE_KEY:
+            problems.append("the shared key is not handed out for the address "
+                            "it is stored with, so the shared endpoint is "
+                            "unusable")
+        shared.set_endpoint(PROVIDER, new_address)
+        shared.set(PROVIDER, BOB_KEY)
+        for name, keys in (("for_run", directory.for_run(member, environ)[1]),
+                           ("keys_for", directory.keys_for(member, environ))):
+            if keys.get(KEY_VARIABLE) == BOB_KEY:
+                problems.append(f"{name} hands out the key stored with the "
+                                f"new address for a run that resolves the "
+                                f"old one")
+            elif keys.get(KEY_VARIABLE) != ALICE_KEY:
+                problems.append(f"{name} hands out no key at all, though the "
+                                f"environment holds the old pair whole")
+    return problems
+
+
+def test_a_shared_key_is_handed_out_only_for_the_address_it_is_stored_with() -> None:
+    """The operator's half of the same rule. Must not fire, then must fire.
+
+    Must fire: `Directory._keys` with the line that leaves the file's key out
+    removed from its own source.
+    """
+    import inspect
+    import textwrap
+
+    problems = moved_endpoint_problems()
+    check(not problems, "moved shared endpoint: " + "; ".join(problems))
+
+    shipped = accounts.Directory._keys
+    text = textwrap.dedent(inspect.getsource(shipped))
+    check(text.count('stored = ""') == 1,
+          "the line this probe removes is no longer in `_keys` exactly once")
+    scope = dict(vars(accounts))
+    exec(compile(text.replace('stored = ""', "pass"),  # noqa: S102
+                 "seeded _keys", "exec"), scope)
+    with Seeded(accounts.Directory, "_keys", scope["_keys"]):
+        seeded = moved_endpoint_problems()
+    check(any("stored with the new address" in problem for problem in seeded),
+          f"must fire: a directory that pairs the file's key with whatever "
+          f"address the environment holds passed: {seeded}")
+
+
+# A key saved for an endpoint's new address, while a run still calls the old one.
+LATER_KEY = "probe-key-saved-for-the-new-address-9z4"
+
+
+def moved_mid_run_problems(seed=None) -> list[str]:
+    """The operator moves an endpoint while their own run is under way.
+
+    The run's first call is held at the old address until the endpoint has
+    been moved and a key saved for the new one, so every later call of the
+    run is made after the change. What the old address was handed is read
+    off the wire.
+    """
+    problems: list[str] = []
+    hold, entered = threading.Event(), threading.Event()
+    script = Script(**CLEAN)
+
+    def held(body, call):
+        if call == 1:
+            entered.set()
+            hold.wait(timeout=PATIENCE)
+        return script(body, call)
+
+    with contextlib.ExitStack() as stack:
+        old_endpoint = FakeEndpoint(held)
+        new_endpoint = FakeEndpoint(Script(**CLEAN))
+        old_url = stack.enter_context(old_endpoint)
+        new_url = stack.enter_context(new_endpoint)
+        stack.enter_context(environment())
+        if seed is not None:
+            stack.enter_context(seed)
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        try:
+            if live.set_endpoint(alice, old_url)[0] != 200 \
+                    or live.set_key(alice, ALICE_KEY)[0] != 204:
+                return ["the operator could not configure the endpoint"]
+            answer = request(live.url(f"{P}/runs"), method="POST",
+                             headers=alice, payload=a_submission())
+            if answer[0] != 202:
+                return [f"the submit answered {answer[0]}"]
+            run_id = as_json(answer[2])["id"]
+            if not entered.wait(timeout=PATIENCE):
+                return ["the run never called its endpoint"]
+            if live.set_endpoint(alice, new_url)[0] != 200 \
+                    or live.set_key(alice, LATER_KEY)[0] != 204:
+                return ["the operator could not move the endpoint"]
+        finally:
+            hold.set()
+        if not wait_for(lambda: state_of(live, run_id, alice)
+                        in ("done", "failed")):
+            return ["the run never finished"]
+        if len(old_endpoint.headers) < 2:
+            problems.append("the run made no call after the endpoint moved, "
+                            "so nothing was probed")
+        saw = bearer_keys(old_endpoint)
+        if ALICE_KEY not in saw:
+            problems.append("the old address was never handed its own key, "
+                            "so the run was not using it to begin with")
+        if LATER_KEY in saw:
+            problems.append("the old address was handed the key saved for "
+                            "the new one")
+        if new_endpoint.headers:
+            problems.append("the run moved to the new address part-way")
+    return problems
+
+
+def test_a_key_saved_for_a_new_address_never_reaches_a_run_on_the_old_one() -> None:
+    """The same rule for the operator's own run, which reads its key at send time.
+
+    A run resolves its addresses when it starts and the operator's key is
+    read from the process environment on every call. So a run under way
+    when the operator moved the endpoint and saved a key for the new address
+    was handed that key on its next call, and sent it to the old address.
+
+    Must not fire: a key replaced at the *same* address does reach a run
+    under way, which is the reason the key is read at send time at all.
+
+    Must fire: `StandingKeys.get` reading the environment with no regard to
+    the address, which is the unswapped source this was before.
+    """
+    problems = moved_mid_run_problems()
+    check(not problems, "endpoint moved mid-run: " + "; ".join(problems))
+
+    def unbound(self, name, default=None):
+        return os.environ.get(name, default)
+
+    seeded = moved_mid_run_problems(Seeded(jobs.StandingKeys, "get", unbound))
+    check("the old address was handed the key saved for the new one" in seeded,
+          f"must fire: a run that reads the process's key whatever its "
+          f"address has become passed: {seeded}")
+
+    address = credentials.url_env(PROVIDER)
+    with environment():
+        live = {address: "http://127.0.0.1:1"}
+        os.environ[KEY_VARIABLE] = ALICE_KEY
+        os.environ["PROBE_UNRELATED_VARIABLE"] = "unrelated"
+        source = jobs.StandingKeys(live, dict(live))
+        check(source.get(KEY_VARIABLE) == ALICE_KEY,
+              "a run is not handed the key of an address that has not moved")
+        os.environ[KEY_VARIABLE] = LATER_KEY
+        check(source.get(KEY_VARIABLE) == LATER_KEY,
+              "a key replaced at the same address does not reach a run "
+              "under way")
+        live[address] = "http://127.0.0.1:2"
+        check(source.get(KEY_VARIABLE) is None,
+              "a run is handed a key after its address moved")
+        check(source.get("PROBE_UNRELATED_VARIABLE") == "unrelated",
+              "a variable that is no provider's key is not read through")
+        check(ALICE_KEY not in repr(source) and LATER_KEY not in repr(vars(source)),
+              "the key source holds or prints a key")
+
+
+class Watched(dict):
+    """An environment that records every state it passes through."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.states: list[dict] = []
+        self.locked: list[bool] = []
+        self.lock = None
+
+    def _note(self) -> None:
+        self.states.append(dict(self))
+        if self.lock is not None:
+            self.locked.append(self.lock.locked())
+
+    def __setitem__(self, name, value) -> None:
+        super().__setitem__(name, value)
+        self._note()
+
+    def pop(self, name, *default):
+        value = super().pop(name, *default)
+        self._note()
+        return value
+
+
+def apply_order_problems() -> list[str]:
+    """One `apply` takes an environment from one address and key to another.
+
+    Every state on the way is one a starting run could copy, so each is
+    asked the question a run asks: is this key beside the address it was
+    stored with? Every provider, because the order used to be alphabetical
+    and so differed from one provider's variable names to the next.
+    """
+    problems: list[str] = []
+    old_address, new_address = "http://127.0.0.1:1", "http://127.0.0.1:2"
+    for name, variable in sorted(credentials.PROVIDERS.items()):
+        with tempfile.TemporaryDirectory() as raw:
+            keys = credentials.Credentials(Path(raw) / "credentials.json")
+            target = Watched()
+            keys.set_endpoint(name, old_address)
+            keys.set(name, ALICE_KEY)
+            keys.apply(target)
+            keys.set_endpoint(name, new_address)
+            keys.set(name, LATER_KEY)
+            target.states.clear()
+            target.lock = keys._applying
+            keys.apply(target)
+            if target.get(credentials.url_env(name)) != new_address \
+                    or target.get(variable) != LATER_KEY:
+                problems.append(f"{name}: the environment did not arrive at "
+                                f"the new address and its key")
+            for state in target.states:
+                pair = (state.get(credentials.url_env(name)), state.get(variable))
+                if pair == (old_address, LATER_KEY):
+                    problems.append(f"{name}: the new key beside the old address")
+                if pair == (new_address, ALICE_KEY):
+                    problems.append(f"{name}: the old key beside the new address")
+            if not target.locked or not all(target.locked):
+                problems.append(f"{name}: the environment was written outside "
+                                f"the lock")
+            # And a pass that changes no address leaves no moment without a key.
+            target.states.clear()
+            keys.apply(target)
+            if any(variable not in state for state in target.states):
+                problems.append(f"{name}: a pass that moved nothing took the "
+                                f"key away for a moment")
+    return problems
+
+
+def test_apply_never_leaves_a_key_beside_an_address_it_was_not_stored_with() -> None:
+    """`Credentials.apply`, state by state. Must not fire, then must fire twice.
+
+    Must fire: the same function writing its variables in alphabetical
+    order, which is the order it had, and the same function with its lock
+    taken away.
+    """
+    import inspect
+    import textwrap
+
+    problems = apply_order_problems()
+    check(not problems, "apply order: " + "; ".join(sorted(set(problems))))
+
+    shipped = credentials.Credentials.apply
+    text = textwrap.dedent(inspect.getsource(shipped))
+    for wanted in ("gone | (moving & set(wanted))",
+                   "key=lambda name: (name in secret, name)",
+                   "with self._applying:"):
+        check(text.count(wanted) == 1,
+              f"the expression this probe replaces is not in `apply` exactly "
+              f"once: {wanted!r}")
+    alphabetical = (text.replace("gone | (moving & set(wanted))", "gone")
+                    .replace("key=lambda name: (name in secret, name)",
+                             "key=lambda name: name"))
+    unlocked = text.replace("with self._applying:",
+                            "with contextlib.nullcontext():")
+    for seeded_text, expected in ((alphabetical, "the new key beside the old address"),
+                                  (unlocked, "written outside the lock")):
+        scope = dict(vars(credentials))
+        exec(compile(seeded_text, "seeded apply", "exec"), scope)  # noqa: S102
+        with Seeded(credentials.Credentials, "apply", scope["apply"]):
+            seeded = apply_order_problems()
+        check(any(expected in problem for problem in seeded),
+              f"must fire ({expected}): a seeded apply passed: "
+              f"{sorted(set(seeded))}")
+
+
 def test_a_per_user_endpoint_is_checked_by_both_of_configs_guards() -> None:
     """A per-user endpoint is still an endpoint. Must fire on both guards.
 
@@ -1476,6 +2125,98 @@ def test_a_per_user_endpoint_is_checked_by_both_of_configs_guards() -> None:
         check(cleartext[0] == 400 and b"clear" in cleartext[2].lower(),
               f"a member sent their own key over plain HTTP to a host that is "
               f"not this machine: {cleartext[0]} {cleartext[2][:300]!r}")
+
+
+# A cleartext address on another machine. A reserved name rather than an
+# address literal, for the reason given in the check above.
+ELSEWHERE = "http://not-this-machine.invalid:9"
+
+
+def not_probed(*args, **kwargs):
+    """Stands in for `discover.models`: an accepted address is not contacted."""
+    return [], "not probed by this check"
+
+
+def members_cleartext_problems() -> list[str]:
+    """A member stores a cleartext endpoint of their own on a shared server.
+
+    Two questions, and they have different answers. With the operator's key
+    set for the provider and none of the member's own, nothing would travel
+    to the member's address, so it is stored. With a key of the member's own
+    saved, that key would travel, so it is refused, and the refusal has to
+    name something a member can change.
+    """
+    problems: list[str] = []
+    with environment(), Deployment() as live, \
+            Seeded(api.discover, "models", not_probed):
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        if live.set_endpoint(alice, "http://127.0.0.1:1")[0] != 200 \
+                or live.set_key(alice, ALICE_KEY)[0] != 204:
+            return ["the operator could not configure the shared endpoint"]
+        # The operator's own guard is not what is being loosened: the same
+        # address, asked for by the account whose key would travel to it.
+        theirs = live.set_endpoint(alice, ELSEWHERE)
+        if theirs[0] != 400 or KEY_VARIABLE.encode() not in theirs[2]:
+            problems.append(f"the operator moved a keyed endpoint to a "
+                            f"cleartext address: {theirs[0]}")
+        stored = live.set_endpoint(bob, ELSEWHERE)
+        if stored[0] != 200:
+            problems.append(f"a member's own cleartext endpoint was refused "
+                            f"over a key that is never sent to it: "
+                            f"{stored[0]} {stored[2][:160]!r}")
+        keys = live.built.api.directory.keys_for(
+            live.accounts.get(MEMBER).id, live.built.store.environ)
+        if stored[0] == 200 and keys.get(KEY_VARIABLE) is not None:
+            problems.append("the operator's key would be sent to the "
+                            "member's cleartext address after all")
+        # Now a key of the member's own, which would travel in the clear.
+        if live.set_endpoint(bob, "http://127.0.0.1:9")[0] != 200 \
+                or live.set_key(bob, BOB_KEY)[0] != 204:
+            return problems + ["a member could not store a key of their own"]
+        refused = live.set_endpoint(bob, ELSEWHERE)
+        text = refused[2].decode("utf-8", "replace")
+        if refused[0] != 400 or "cleartext" not in text:
+            problems.append(f"a member's own key may travel in cleartext: "
+                            f"{refused[0]} {text[:160]!r}")
+        if KEY_VARIABLE in text or "unset" in text:
+            problems.append("the refusal tells a member to unset a variable, "
+                            "which a member cannot do")
+        if refused[0] == 400 and "delete your" not in text:
+            problems.append("the refusal names nothing a member can act on")
+    return problems
+
+
+def test_a_members_cleartext_endpoint_is_judged_by_the_members_own_key() -> None:
+    """The cleartext guard asks about the key that would be sent. Both ways.
+
+    The operator shares a key for a provider. A member who stored a
+    cleartext address of their own for it was refused, and told to unset the
+    operator's variable: a key that is never sent to a member's address, and
+    a variable a member has no shell to unset.
+
+    Must fire, twice: the route under the wider key source it used before
+    (`Api._as`, which includes the operator's key), and the refusal left in
+    the operator's wording.
+    """
+    problems = members_cleartext_problems()
+    check(not problems, "a member's cleartext endpoint: " + "; ".join(problems))
+
+    with Seeded(api.Api, "_as_owner", api.Api._as):
+        seeded = members_cleartext_problems()
+    check(any("never sent to it" in problem for problem in seeded),
+          f"must fire: a guard that counts the operator's key against a "
+          f"member's address passed: {seeded}")
+    with Seeded(api.Api, "_cleartext_refusal",
+                staticmethod(lambda who, provider, refusal: str(refusal))):
+        seeded = members_cleartext_problems()
+    check(any("unset a variable" in problem for problem in seeded)
+          and any("nothing a member can act on" in problem
+                  for problem in seeded),
+          f"must fire: a refusal that names the operator's variable to a "
+          f"member passed: {seeded}")
 
 
 def test_the_request_allowlist_still_carries_no_url_or_key_variable() -> None:
@@ -1532,6 +2273,1253 @@ def test_an_empty_key_source_is_not_a_fallback_to_the_environment() -> None:
                   "a swapped source is not read")
         check(settings.api_key() == ALICE_KEY,
               "the source was not restored on the way out")
+
+
+# --------------------------------------------------------------------------
+# a key goes to the address it was saved with, and nowhere else
+# --------------------------------------------------------------------------
+
+
+class Recorder:
+    """A loopback server that keeps the headers of everything it is sent.
+
+    `FakeEndpoint` keeps a completion's headers and not a probe's, and one of
+    the requests asked about below is a probe: `GET /api/ps`, which every run
+    sends to this server's own endpoint. It answers 404 to a GET and 400 to a
+    POST, so a run sent here fails on its first call, at once, and what it
+    was handed is on record.
+    """
+
+    def __init__(self) -> None:
+        self.seen: list[tuple[str, str, dict]] = []
+
+    def __enter__(self) -> "Recorder":
+        from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+        recorder = self
+
+        class Handler(BaseHTTPRequestHandler):
+            protocol_version = "HTTP/1.1"
+
+            def answer(self) -> None:
+                length = int(self.headers.get("Content-Length") or 0)
+                if length:
+                    self.rfile.read(length)
+                recorder.seen.append((self.command, self.path, dict(self.headers)))
+                body = b'{"error": "a recorder answers nothing"}'
+                self.send_response(404 if self.command == "GET" else 400)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            do_GET = do_POST = answer  # noqa: N815
+
+            def log_message(self, *_args) -> None:
+                pass
+
+        class Quiet(ThreadingHTTPServer):
+            def handle_error(self, request, client_address) -> None:
+                """A client that hangs up is the run failing, as it is meant to."""
+                if not isinstance(sys.exc_info()[1], ConnectionError):
+                    super().handle_error(request, client_address)
+
+        self._server = Quiet(("127.0.0.1", 0), Handler)
+        self._thread = threading.Thread(target=self._server.serve_forever,
+                                        daemon=True)
+        self._thread.start()
+        self.url = f"http://127.0.0.1:{self._server.server_address[1]}/v1"
+        return self
+
+    def __exit__(self, *exc_info) -> None:
+        self._server.shutdown()
+        self._server.server_close()
+        self._thread.join(timeout=5)
+
+    def keys(self) -> set[str]:
+        """Every bearer token this server was handed, on any request."""
+        found = set()
+        for _, _, headers in self.seen:
+            for name, value in headers.items():
+                if name.lower() == "authorization":
+                    found.add(str(value).split(" ", 1)[-1].strip())
+        return found
+
+    def posts(self) -> int:
+        return sum(1 for method, _, _ in self.seen if method == "POST")
+
+
+KEY_SCOPE_SHAPES = ("member, endpoint named", "member, typed model",
+                    "operator, another address", "operator, the server's own address",
+                    "environment key", "operator's role, member's vendor key")
+
+
+def key_scope_problems(shape: str, seed=None) -> list[str]:
+    """Which key this server's own endpoint was handed, read off the wire.
+
+    `self-hosted` keeps its key in the variable every role with no provider
+    of its own reads, so a key saved with a self-hosted address also went to
+    this server's own endpoint (`LLOSSLESS_BASE_URL`). Six arrangements:
+
+      member, endpoint named      a member's own endpoint and key, and a run
+                                  that names it. Every call goes to the
+                                  member's endpoint; the window probe still
+                                  goes to the server's own.
+      member, typed model         the same member, a typed model and no
+                                  endpoint: the run goes to the server's own.
+      operator, another address   the operator stored a self-hosted address
+                                  that is not the server's own, with a key.
+      operator, the server's own  the operator stored the server's own
+      address                     address, with a key. It is that address's.
+      environment key             the key came with the server's environment
+                                  and the operator stored an address with no
+                                  key. The key is the server's own endpoint's.
+      operator's role, member's   the operator's environment sends the merge
+      vendor key                  role to an address of its own and names a
+                                  vendor's key variable for it; a member has
+                                  their own endpoint and key for that vendor.
+    """
+    problems: list[str] = []
+    with contextlib.ExitStack() as stack:
+        default = stack.enter_context(Recorder())
+        role_address = stack.enter_context(Recorder())
+        own_endpoint = FakeEndpoint(Script(**CLEAN))
+        own_url = stack.enter_context(own_endpoint)
+        stack.enter_context(environment())
+        if seed is not None:
+            stack.enter_context(seed)
+        environ = {"LLOSSLESS_STRUCTURED": "prompt",
+                   "LLOSSLESS_BASE_URL": default.url}
+        if shape == "operator's role, member's vendor key":
+            environ["LLOSSLESS_BASE_URL_MERGE"] = role_address.url
+            environ["LLOSSLESS_API_KEY_ENV_MERGE"] = credentials.PROVIDERS["openai"]
+        if shape == "environment key":
+            environ[KEY_VARIABLE] = ALICE_KEY
+            os.environ[KEY_VARIABLE] = ALICE_KEY
+        live = stack.enter_context(Deployment(environ=environ))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        who, stored = bob, []
+        if shape in ("member, endpoint named", "member, typed model"):
+            stored = [live.set_endpoint(bob, own_url)[0],
+                      live.set_key(bob, BOB_KEY)[0]]
+        elif shape == "operator's role, member's vendor key":
+            stored = [live.set_endpoint(bob, own_url, provider="openai")[0],
+                      live.set_key(bob, BOB_KEY, provider="openai")[0]]
+        elif shape == "operator, another address":
+            who = alice
+            stored = [live.set_endpoint(alice, own_url)[0],
+                      live.set_key(alice, ALICE_KEY)[0]]
+        elif shape == "operator, the server's own address":
+            who = alice
+            stored = [live.set_endpoint(alice, default.url)[0],
+                      live.set_key(alice, ALICE_KEY)[0]]
+        elif shape == "environment key":
+            who = alice
+            stored = [live.set_endpoint(alice, own_url)[0], 204]
+        if stored != [200, 204]:
+            return [f"the endpoint and key could not be stored: {stored}"]
+        body = a_submission()
+        if shape != "member, endpoint named":
+            body.pop("endpoint")
+        answer = request(live.url(f"{P}/runs"), method="POST", headers=who,
+                         payload=body)
+        if answer[0] != 202:
+            return [f"the submit answered {answer[0]}: {answer[2][:200]!r}"]
+        run_id = as_json(answer[2])["id"]
+        if not wait_for(lambda: state_of(live, run_id, who) in ("done", "failed")):
+            return ["the run never finished"]
+        heard = default.keys()
+        if shape == "member, endpoint named":
+            if BOB_KEY not in bearer_keys(own_endpoint):
+                problems.append("the member's own endpoint was not handed "
+                                "the member's key")
+            if BOB_KEY in heard:
+                problems.append("the server's own endpoint was handed the "
+                                "member's key")
+        elif shape == "member, typed model":
+            if not default.posts():
+                problems.append("the run did not go to the server's own "
+                                "endpoint, so nothing was probed")
+            if BOB_KEY in heard:
+                problems.append("the server's own endpoint was handed the "
+                                "member's key")
+        elif shape == "operator, another address":
+            if not default.posts():
+                problems.append("the run did not go to the server's own "
+                                "endpoint, so nothing was probed")
+            if ALICE_KEY in heard:
+                problems.append("the server's own endpoint was handed the key "
+                                "stored with another address")
+        elif shape in ("operator, the server's own address", "environment key"):
+            sent = {key for method, _, headers in default.seen if method == "POST"
+                    for name, key in headers.items()
+                    if name.lower() == "authorization"}
+            if f"Bearer {ALICE_KEY}" not in sent:
+                problems.append("the server's own endpoint was not handed its "
+                                "own key")
+        else:
+            if not role_address.posts():
+                problems.append("the merge did not go to the operator's "
+                                "address for it, so nothing was probed")
+            if BOB_KEY in role_address.keys() | heard:
+                problems.append("an address of the operator's was handed the "
+                                "member's key")
+    return problems
+
+
+def test_a_key_saved_with_an_address_is_sent_to_no_other_address() -> None:
+    """The server's own endpoint gets a key only when the key is its own.
+
+    Must not fire: a role sent to the provider still carries the provider's
+    key, the server's own address stored with a key still gets that key, and
+    so does a key that came with the server's environment.
+
+    Must fire: `credentials.key_scope` withholding nothing, which is the
+    server this was before. The member's key then reaches the server's own
+    endpoint on the window probe of every run and on every call of a typed
+    model, the operator's stored key reaches an address it was not stored
+    with, and a member's vendor key reaches the operator's address for a role.
+    """
+    for shape in KEY_SCOPE_SHAPES:
+        problems = key_scope_problems(shape)
+        check(not problems, f"key scope, {shape}: " + "; ".join(problems))
+
+    def nothing_withheld(environ, paired):
+        return {}
+
+    for shape, wanted in (
+            ("member, endpoint named", "handed the member's key"),
+            ("member, typed model", "handed the member's key"),
+            ("operator, another address", "stored with another address"),
+            ("operator's role, member's vendor key", "handed the member's key")):
+        seeded = key_scope_problems(
+            shape, Seeded(credentials, "key_scope", nothing_withheld))
+        check(any(wanted in problem for problem in seeded),
+              f"must fire: with no key withheld, {shape} passed: {seeded}")
+
+    # The name a withheld role reads is one nothing can supply.
+    with environment():
+        os.environ[credentials.NO_KEY_ENV] = ALICE_KEY
+        source = jobs.StandingKeys({}, {})
+        check(source.get(credentials.NO_KEY_ENV) is None,
+              "a key exported under the withheld name is read by a run")
+        member = jobs.MemberKeys({credentials.NO_KEY_ENV: BOB_KEY,
+                                  "PROBE_UNRELATED_VARIABLE": "unrelated"},
+                                 (), source)
+        os.environ["PROBE_SERVER_VARIABLE"] = "the server's"
+        check(member.get("PROBE_SERVER_VARIABLE") is None,
+              "a member's run reads a variable of the server's environment "
+              "that is no provider's key")
+    check(credentials.NO_KEY_ENV not in credentials.PROVIDERS.values(),
+          "the withheld name is a provider's key variable")
+
+
+def test_an_endpoint_address_cannot_carry_a_query_or_a_fragment() -> None:
+    """`?` and `#` are refused in an address, for everybody.
+
+    Each request adds its own path to an endpoint. Behind a `?` that path is
+    part of the query, so a member's own endpoint could aim this server at
+    any path of any address it can reach: the model listing read an internal
+    JSON document back to the member, and a run relayed 600 characters of an
+    internal error body.
+
+    Must not fire: a private and a loopback address are stored, because a
+    member's own local model server is a supported use.
+
+    Must fire: `credentials.clean_base_url` with the two characters let
+    through, which is the function this was before.
+    """
+    with contextlib.ExitStack() as stack:
+        inside = stack.enter_context(Recorder())
+        stack.enter_context(environment())
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+
+        def stored(address: str, who) -> tuple[int, list]:
+            del inside.seen[:]
+            answer = live.set_endpoint(who, address.replace(
+                "INSIDE", inside.url.removesuffix("/v1")))
+            return answer[0], [path for _, path, _ in inside.seen]
+
+        for who_is, who in (("member", bob), ("operator", alice)):
+            for address in ("INSIDE/admin/list?x=", "INSIDE/admin/list#",
+                            "INSIDE/v1?", "INSIDE/v1#frag"):
+                status, sent = stored(address, who)
+                check(status == 400 and not sent,
+                      f"a {who_is}'s endpoint {address!r} answered {status} "
+                      f"and the server sent {sent}")
+        for address in ("INSIDE/v1", "http://127.0.0.1:9/v1",
+                        "http://localhost:9"):
+            status, _ = stored(address, bob)
+            check(status == 200,
+                  f"a member's local endpoint {address!r} was refused: {status}")
+
+        shipped = credentials.clean_base_url
+
+        def lets_them_through(name, value):
+            return shipped(name, value.replace("?", "%3F").replace("#", "%23")
+                           ).replace("%3F", "?").replace("%23", "#")
+
+        with Seeded(credentials, "clean_base_url", lets_them_through):
+            status, sent = stored("INSIDE/admin/list?x=", bob)
+        check(status == 200 and any("?" in path for path in sent),
+              f"must fire: with the two characters let through, the address "
+              f"was still refused ({status}) or nothing was sent ({sent})")
+
+
+# --------------------------------------------------------------------------
+# an account that is removed stops running
+# --------------------------------------------------------------------------
+
+
+def removal_problems(seed=None) -> list[str]:
+    """The operator removes a member with one run in flight and two queued.
+
+    The first call of the first run is held until the account is gone, so
+    every later call is made after the removal. What ran afterwards is read
+    off the endpoint.
+    """
+    problems: list[str] = []
+    hold, entered = threading.Event(), threading.Event()
+    script = Script(**CLEAN)
+
+    def held(body, call):
+        if call == 1:
+            entered.set()
+            hold.wait(timeout=PATIENCE)
+        return script(body, call)
+
+    with contextlib.ExitStack() as stack:
+        endpoint = FakeEndpoint(held)
+        base_url = stack.enter_context(endpoint)
+        stack.enter_context(environment())
+        if seed is not None:
+            stack.enter_context(seed)
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        try:
+            if live.set_endpoint(alice, base_url)[0] != 200 \
+                    or live.set_key(alice, ALICE_KEY)[0] != 204:
+                return ["the operator could not configure the endpoint"]
+            ids = []
+            for _ in range(3):
+                answer = request(live.url(f"{P}/runs"), method="POST",
+                                 headers=bob, payload=a_submission())
+                if answer[0] != 202:
+                    return [f"a submit answered {answer[0]}"]
+                ids.append(as_json(answer[2])["id"])
+            if not entered.wait(timeout=PATIENCE):
+                return ["the first run never called its endpoint"]
+            removed = request(live.url(f"{P}/accounts/{MEMBER}"),
+                              method="DELETE", headers=alice)
+            if removed[0] != 204:
+                return [f"the removal answered {removed[0]}"]
+            before = len(endpoint.headers)
+        finally:
+            hold.set()
+        if not wait_for(lambda: all(live.built.store.get(run_id).terminal
+                                    for run_id in ids)):
+            return ["the removed account's runs never ended"]
+        jobs_now = [live.built.store.get(run_id) for run_id in ids]
+        later = len(endpoint.headers) - before
+        if later:
+            problems.append(f"{later} model call(s) were made for the removed "
+                            f"account after it was removed")
+        if jobs_now[0].state != "cancelled":
+            problems.append(f"the run in flight ended {jobs_now[0].state!r}")
+        for job in jobs_now[1:]:
+            if job.state == "done":
+                problems.append("a queued run of the removed account ran to "
+                                "the end")
+            elif job.state == "failed" and "removed" in (job.error or ""):
+                problems.append("a queued run was refused when it started")
+    return problems
+
+
+def test_removing_an_account_stops_its_runs() -> None:
+    """Queued and running, they are cancelled with the account.
+
+    They used to run to the end after the removal, as a member with nothing
+    of their own, which is on the operator's key: 17 calls in the review's
+    reproduction, visible to nobody.
+
+    Must fire: `JobStore.cancel_owned` doing nothing. The run in flight then
+    goes on calling. The queued ones are still stopped, by the second rule
+    behind this one: a run whose account is gone is refused when it starts
+    (`Directory.for_run`), and that refusal is asserted too, with the
+    condition taken out of the function's own source as its probe.
+    """
+    import inspect
+    import textwrap
+
+    problems = removal_problems()
+    check(not problems, "account removed: " + "; ".join(problems))
+
+    def nothing(self, owner):
+        return 0
+
+    seeded = removal_problems(Seeded(jobs.JobStore, "cancel_owned", nothing))
+    check(any("model call(s) were made" in problem for problem in seeded),
+          f"must fire: a removal that cancels nothing passed: {seeded}")
+    check(sum("refused when it started" in problem for problem in seeded) == 2
+          and not any("ran to the end" in problem for problem in seeded),
+          f"with nothing cancelled, the queued runs of a removed account "
+          f"were not refused at their start: {seeded}")
+
+    shipped = accounts.Directory.for_run
+    text = textwrap.dedent(inspect.getsource(shipped))
+    guard = ("if self.accounts is not None and "
+             "self.accounts.by_id(account_id) is None:")
+    check(guard in text, "the refusal of a removed account's run is not where "
+                         "this check looks for it")
+    scope = dict(vars(accounts))
+    exec(compile(text.replace(guard, "if False:"), "seeded for_run", "exec"),  # noqa: S102
+         scope)
+    with Seeded(accounts.Directory, "for_run", scope["for_run"]):
+        seeded = removal_problems(Seeded(jobs.JobStore, "cancel_owned", nothing))
+    check(any("ran to the end" in problem for problem in seeded),
+          f"must fire: with neither rule, a removed account's queued run "
+          f"did not run: {seeded}")
+
+
+def in_flight_key_problems(seed=None) -> list[str]:
+    """The operator deletes the shared key while a member's run is using it."""
+    problems: list[str] = []
+    hold, entered = threading.Event(), threading.Event()
+    script = Script(**CLEAN)
+
+    def held(body, call):
+        if call == 1:
+            entered.set()
+            hold.wait(timeout=PATIENCE)
+        return script(body, call)
+
+    with contextlib.ExitStack() as stack:
+        endpoint = FakeEndpoint(held)
+        base_url = stack.enter_context(endpoint)
+        stack.enter_context(environment())
+        if seed is not None:
+            stack.enter_context(seed)
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        try:
+            if live.set_endpoint(alice, base_url)[0] != 200 \
+                    or live.set_key(alice, ALICE_KEY)[0] != 204:
+                return ["the operator could not configure the endpoint"]
+            answer = request(live.url(f"{P}/runs"), method="POST", headers=bob,
+                             payload=a_submission())
+            if answer[0] != 202:
+                return [f"the submit answered {answer[0]}"]
+            run_id = as_json(answer[2])["id"]
+            if not entered.wait(timeout=PATIENCE):
+                return ["the run never called its endpoint"]
+            gone = request(live.url(f"{P}/settings/keys/{PROVIDER}"),
+                           method="DELETE", headers=alice)
+            if gone[0] != 204:
+                return [f"deleting the key answered {gone[0]}"]
+            before = len(endpoint.headers)
+        finally:
+            hold.set()
+        if not wait_for(lambda: state_of(live, run_id, bob) in ("done", "failed")):
+            return ["the run never finished"]
+        first = [value for name, value in endpoint.headers[0].items()
+                 if name.lower() == "authorization"]
+        if first != [f"Bearer {ALICE_KEY}"]:
+            problems.append("the run was not using the shared key to begin "
+                            "with, so nothing was probed")
+        later = endpoint.headers[before:]
+        if not later:
+            problems.append("the run made no call after the key was deleted")
+        carried = sum(1 for headers in later for name, value in headers.items()
+                      if name.lower() == "authorization" and ALICE_KEY in value)
+        if carried:
+            problems.append(f"{carried} call(s) carried the shared key after "
+                            f"the operator deleted it")
+    return problems
+
+
+def test_a_deleted_shared_key_is_not_sent_by_a_members_run_in_flight() -> None:
+    """The member's run follows the rule the operator's own run follows.
+
+    A member's run was handed the operator's key in a mapping read once at
+    its start, so it went on sending a key the operator had deleted: 5 of 5
+    later calls in the review's reproduction, where the operator's own run
+    sent none.
+
+    Must fire: the store handing a member's run the mapping as it was read,
+    which is `jobs.MemberKeys` taken out.
+    """
+    problems = in_flight_key_problems()
+    check(not problems, "shared key deleted mid-run: " + "; ".join(problems))
+
+    def as_read(keys, shared, standing, addresses=()):
+        return dict(keys)
+
+    seeded = in_flight_key_problems(Seeded(jobs, "MemberKeys", as_read))
+    check(any("after the operator deleted it" in problem for problem in seeded),
+          f"must fire: a member's run on a mapping read once passed: {seeded}")
+
+
+# --------------------------------------------------------------------------
+# a worker outlives a file it cannot read
+# --------------------------------------------------------------------------
+
+
+def unusable_file_problems(seed=None) -> list[str]:
+    """A member's credentials file becomes unusable between submit and start."""
+    problems: list[str] = []
+    hold, entered = threading.Event(), threading.Event()
+    script = Script(**CLEAN)
+
+    def held(body, call):
+        if call == 1:
+            entered.set()
+            hold.wait(timeout=PATIENCE)
+        return script(body, call)
+
+    noise = io.StringIO()
+    with contextlib.ExitStack() as stack:
+        endpoint = FakeEndpoint(held)
+        base_url = stack.enter_context(endpoint)
+        stack.enter_context(environment())
+        stack.enter_context(contextlib.redirect_stderr(noise))
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        member = live.accounts.get(MEMBER).id
+        if seed is not None:
+            stack.enter_context(seed(member))
+        own = live.built.api.directory.own(member)
+        try:
+            if live.set_endpoint(alice, base_url)[0] != 200 \
+                    or live.set_endpoint(bob, base_url)[0] != 200:
+                return ["the endpoints could not be configured"]
+
+            def submit(who) -> str:
+                answer = request(live.url(f"{P}/runs"), method="POST",
+                                 headers=who, payload=a_submission())
+                return (as_json(answer[2]) or {}).get("id", "")
+
+            first = submit(alice)
+            if not entered.wait(timeout=PATIENCE):
+                return ["the operator's run never started"]
+            queued = submit(bob)
+            if not queued:
+                return ["the member's run was not accepted"]
+            os.chmod(own.path, 0o644)
+        finally:
+            hold.set()
+        if not wait_for(lambda: state_of(live, first, alice) in ("done", "failed")):
+            return ["the operator's first run never finished"]
+        wait_for(lambda: state_of(live, queued, bob) in ("done", "failed"),
+                 timeout=10)
+        os.chmod(own.path, 0o600)
+        told = as_json(request(live.url(f"{P}/runs/{queued}"), headers=bob)[2]) or {}
+        if told.get("state") != "failed":
+            problems.append(f"the member's run is {told.get('state')!r} and "
+                            f"not failed")
+        error = str(told.get("error") or "")
+        if live.root.name in error or str(own.path.parent.name) in error:
+            problems.append(f"the member is told a path on this server: {error}")
+        if told.get("state") == "failed" and "not started" not in error:
+            problems.append(f"the member is not told what happened: {error}")
+        after = submit(alice)
+        if not wait_for(lambda: state_of(live, after, alice) in ("done", "failed"),
+                        timeout=20):
+            problems.append(f"a later run stayed "
+                            f"{state_of(live, after, alice)!r}: the worker "
+                            f"did not survive")
+        if str(own.path) not in noise.getvalue() and told.get("state") == "failed":
+            problems.append("the operator's stream does not name the file")
+    return problems
+
+
+def test_a_worker_survives_a_credentials_file_it_cannot_use() -> None:
+    """The job fails with a sentence, and the next job runs.
+
+    The read was made outside any handler, so a member's file with the wrong
+    mode ended the worker thread: the job stayed `running`, and with one
+    worker every later run stayed queued.
+
+    Must not fire: the member is told the run was not started, in words that
+    name no path; the operator's stream names the file.
+
+    Must fire: the read failing with something `_execute` does not catch,
+    which is every failure it had before.
+    """
+    problems = unusable_file_problems()
+    check(not problems, "unusable member file: " + "; ".join(problems))
+
+    def uncaught(member):
+        shipped = jobs.JobStore.resolved_for
+
+        def resolved_for(self, owner):
+            if owner == member and threading.current_thread().name.startswith(
+                    "llossless-job"):
+                raise RuntimeError("seeded: a read nothing catches")
+            return shipped(self, owner)
+
+        return Seeded(jobs.JobStore, "resolved_for", resolved_for)
+
+    seeded = unusable_file_problems(uncaught)
+    check(any("the worker did not survive" in problem for problem in seeded)
+          and any("not failed" in problem for problem in seeded),
+          f"must fire: a worker whose read raised past it passed: {seeded}")
+
+
+# --------------------------------------------------------------------------
+# what a member is shown of this server
+# --------------------------------------------------------------------------
+
+# A path segment an operator's address carries and a member must not be sent.
+PATH_MARK = "tenant-9f3c1e-probe-path"
+
+
+def address_problems(seed=None) -> list[str]:
+    """Where the operator's full address reaches, for the operator and for a member."""
+    import zipfile
+
+    problems: list[str] = []
+    with contextlib.ExitStack() as stack:
+        shared_endpoint = FakeEndpoint(Script(**CLEAN))
+        member_endpoint = FakeEndpoint(Script(**CLEAN))
+        shared_url = stack.enter_context(shared_endpoint).replace(
+            "/v1", f"/{PATH_MARK}/v1")
+        member_url = stack.enter_context(member_endpoint).replace(
+            "/v1", "/the-members-own-path/v1")
+        stack.enter_context(environment())
+        if seed is not None:
+            stack.enter_context(seed)
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        if live.set_endpoint(alice, shared_url)[0] != 200:
+            return ["the operator could not configure the endpoint"]
+
+        def run(who) -> str:
+            answer = request(live.url(f"{P}/runs"), method="POST", headers=who,
+                             payload=a_submission())
+            run_id = (as_json(answer[2]) or {}).get("id", "")
+            wait_for(lambda: state_of(live, run_id, who) in ("done", "failed"))
+            return run_id
+
+        def everything(who, run_id) -> dict[str, str]:
+            read = {}
+            for path in (f"{P}/config", f"{P}/settings/keys", f"{P}/health",
+                         f"{P}/runs", f"{P}/runs/{run_id}",
+                         f"{P}/runs/{run_id}/events",
+                         f"{P}/runs/{run_id}/report.html"):
+                read[path] = request(live.url(path), headers=who)[2].decode(
+                    "utf-8", "replace")
+            status, _, packed = request(live.url(f"{P}/runs/{run_id}/bundle.zip"),
+                                        headers=who)
+            if status == 200:
+                with zipfile.ZipFile(io.BytesIO(packed)) as archive:
+                    read["bundle.zip"] = "\n".join(
+                        archive.read(name).decode("utf-8", "replace")
+                        for name in archive.namelist())
+            return read
+
+        theirs = run(bob)
+        if state_of(live, theirs, bob) != "done":
+            return ["the member's run on the shared endpoint did not finish"]
+        for where, text in everything(bob, theirs).items():
+            if PATH_MARK in text:
+                problems.append(f"a member is sent the operator's full "
+                                f"address in {where.replace(theirs, '<id>')}")
+        short = accounts.reduced(shared_url)
+        rows = {row["name"]: row for row in as_json(request(
+            live.url(f"{P}/config"), headers=bob)[2])["endpoints"]["providers"]}
+        if rows[PROVIDER]["base_url"] != short or not short.startswith("http://127.0.0.1:"):
+            problems.append(f"a member's row for the shared endpoint reads "
+                            f"{rows[PROVIDER]['base_url']!r} and not {short!r}")
+        told = as_json(request(live.url(f"{P}/runs/{theirs}"), headers=bob)[2])
+        command = (told.get("cli_equivalent") or {}).get("command", "")
+        if f"--base-url {short} " not in command:
+            problems.append(f"a member's command does not name the endpoint "
+                            f"by scheme, host and port: {command}")
+        if not any(note.get("key") == "address_reduced"
+                   for note in (told.get("cli_equivalent") or {}).get("notes", [])):
+            problems.append("a member's command does not say its address is "
+                            "shortened")
+
+        # The operator is shown the whole of their own address, everywhere.
+        own = run(alice)
+        seen = everything(alice, own)
+        for where in (f"{P}/config", f"{P}/settings/keys", f"{P}/runs/{own}"):
+            if PATH_MARK not in seen[where]:
+                problems.append(f"the operator is not shown their own address "
+                                f"in {where.replace(own, '<id>')}")
+
+        # And a member is shown the whole of an address they stored themselves.
+        if live.set_endpoint(bob, member_url)[0] != 200:
+            return problems + ["a member could not configure their own endpoint"]
+        mine = run(bob)
+        told = as_json(request(live.url(f"{P}/runs/{mine}"), headers=bob)[2])
+        command = (told.get("cli_equivalent") or {}).get("command", "")
+        if f"--base-url {member_url} " not in command:
+            problems.append(f"a member's own address is not shown to them in "
+                            f"full: {command}")
+        rows = {row["name"]: row for row in as_json(request(
+            live.url(f"{P}/settings/keys"), headers=bob)[2])["providers"]}
+        if rows[PROVIDER]["base_url"] != member_url:
+            problems.append("a member's own row does not carry their address")
+    return problems
+
+
+def test_a_member_is_shown_scheme_host_and_port_of_the_operators_address() -> None:
+    """The path of an operator's address stays with the operator.
+
+    A member received the operator's full `base_url` from `/config`, from
+    `/settings/keys`, and in the command-line block of their own run, which
+    is also in the `report.json` they download. A path or a query can carry
+    a token or name a private service.
+
+    Must not fire: the operator sees their whole address, and a member sees
+    the whole of an address they stored.
+
+    Must fire: `accounts.reduced` handing the address back whole.
+    """
+    problems = address_problems()
+    check(not problems, "operator's address: " + "; ".join(problems))
+
+    seeded = address_problems(Seeded(accounts, "reduced", lambda address: address))
+    for where in ("/config", "/settings/keys", "/runs/<id>", "bundle.zip"):
+        check(any(problem.endswith(f"{P}{where}") or problem.endswith(where)
+                  for problem in seeded if "full address" in problem),
+              f"must fire: with nothing shortened, a member's {where} "
+              f"passed: {seeded}")
+
+    check(accounts.reduced("https://example.invalid:8443/a/b?c=d#e")
+          == "https://example.invalid:8443"
+          and accounts.reduced("http://[::1]:11434/v1") == "http://[::1]:11434"
+          and accounts.reduced("https://user:pw@example.invalid/v1")
+          == "https://example.invalid"
+          and accounts.reduced("not an address") == "",
+          "an address is not reduced to its scheme, host and port")
+
+
+def server_path_problems(seed=None) -> list[str]:
+    """Every place a path on this server reached a member, asked as a member."""
+    from llossless.web import commands
+
+    problems: list[str] = []
+    with contextlib.ExitStack() as stack:
+        endpoint = FakeEndpoint(Script(**CLEAN))
+        base_url = stack.enter_context(endpoint)
+        stack.enter_context(environment())
+        stack.enter_context(contextlib.redirect_stderr(io.StringIO()))
+        if seed is not None:
+            stack.enter_context(seed)
+        live = stack.enter_context(Deployment(
+            environ={"LLOSSLESS_STRUCTURED": "prompt"}))
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        if live.set_endpoint(alice, base_url)[0] != 200 \
+                or live.set_endpoint(bob, base_url)[0] != 200:
+            return ["the endpoints could not be configured"]
+        # The name of this server's own directory, and not its whole path: a
+        # suite run with its temporary directory under the home directory
+        # has the front of that path taken out by the home rule alone, and
+        # the name is what is left when nothing else is.
+        root = live.root.name
+
+        # A write that fails inside a run, as a full disk would make it.
+        shipped = jobs.write_private
+
+        def full(path, text):
+            if str(path).endswith(jobs.MERGED_MD):
+                raise OSError(28, "No space left on device", str(path))
+            return shipped(path, text)
+
+        with Seeded(jobs, "write_private", full):
+            answer = request(live.url(f"{P}/runs"), method="POST", headers=bob,
+                             payload=a_submission())
+            run_id = (as_json(answer[2]) or {}).get("id", "")
+            wait_for(lambda: state_of(live, run_id, bob) in ("done", "failed"))
+        told = request(live.url(f"{P}/runs/{run_id}"), headers=bob)[2].decode()
+        if "No space left on device" not in told:
+            problems.append("the member is not told why the run failed, so "
+                            "the path was never in question")
+        if root in told:
+            problems.append("a member's run status carries the work directory")
+        listed = request(live.url(f"{P}/runs"), headers=bob)[2].decode()
+        if root in listed:
+            problems.append("a member's run list carries the work directory")
+        stream = request(live.url(f"{P}/runs/{run_id}/events"), headers=bob)[2].decode()
+        if "No space left on device" not in stream:
+            problems.append("the event stream does not carry the failure")
+        if root in stream:
+            problems.append("a member's event stream carries the work directory")
+
+        # A commands file with a row this build cannot use.
+        routes = live.root / "commands.json"
+        routes.write_text(json.dumps({"version": 1, "routes": {"broken": {
+            "label": "Broken", "command": "/bin/true --x", "window": "nope",
+            "model": "m"}}}), encoding="utf-8")
+        os.chmod(routes, 0o600)
+        live.built.api.routes = commands.Commands(routes)
+        for who, name in ((bob, "member"), (alice, "operator")):
+            config_now = as_json(request(live.url(f"{P}/config"), headers=who)[2])
+            reasons = [row["reason"] for row in config_now["commands"]["problems"]]
+            if not reasons:
+                problems.append("the unusable route is not reported")
+            if name == "member" and any(root in reason for reason in reasons):
+                problems.append(f"a member's /config names where the commands "
+                                f"file is: {reasons}")
+            if not all("commands.json" in reason for reason in reasons):
+                problems.append(f"the {name} is not told which file: {reasons}")
+
+        # A credentials file this server refuses to read.
+        own = live.built.api.directory.own(live.accounts.get(MEMBER).id)
+        os.chmod(own.path, 0o644)
+        refused = request(live.url(f"{P}/settings/keys"), headers=bob)
+        os.chmod(own.path, 0o600)
+        body = refused[2].decode()
+        if refused[0] != 409 or code_of(refused[2]) != "bad_credentials":
+            problems.append(f"an unusable file answered {refused[0]}")
+        if root in body or "users" in body or "credentials.json" in body:
+            problems.append(f"a member's refusal names a path: {body}")
+        os.chmod(live.keys.path, 0o644)
+        refused = request(live.url(f"{P}/settings/keys"), headers=alice)
+        os.chmod(live.keys.path, 0o600)
+        if "credentials.json" not in refused[2].decode():
+            problems.append("the operator is not told which file is unusable")
+    return problems
+
+
+def test_a_member_is_sent_no_path_on_this_server() -> None:
+    """A failed write, a refused file and an unusable route, as a member reads them.
+
+    The work directory reached a member in the `error` of a run that could
+    not write its file and in that run's event stream, and the commands
+    file's and the credentials file's own paths reached one with only the
+    home directory taken out.
+
+    Must not fire: the member is still told what failed, and the operator is
+    still told which file.
+
+    Must fire: `Api.roots_for` answering nothing, for the status, the run
+    list and the stream, and a member read as the operator for the two files.
+    """
+    problems = server_path_problems()
+    check(not problems, "server paths: " + "; ".join(problems))
+
+    seeded = server_path_problems(
+        Seeded(api.Api, "roots_for", lambda self, who: ()))
+    for what in ("run status", "run list", "event stream"):
+        check(any(f"a member's {what} carries" in problem for problem in seeded),
+              f"must fire: with no directory taken out, a member's {what} "
+              f"passed: {seeded}")
+    seeded = server_path_problems(
+        Seeded(api.Api, "_member", staticmethod(lambda who: False)))
+    check(any("a member's refusal names a path" in problem for problem in seeded)
+          and any("a member's /config names" in problem for problem in seeded),
+          f"must fire: a member answered as the operator is passed: {seeded}")
+
+
+# --------------------------------------------------------------------------
+# the operator's routes
+# --------------------------------------------------------------------------
+
+
+def operator_route_problems(seed=None) -> list[str]:
+    """Every route that is the operator's alone, asked by a member."""
+    problems: list[str] = []
+    with contextlib.ExitStack() as stack:
+        stack.enter_context(environment())
+        if seed is not None:
+            stack.enter_context(seed)
+        live = stack.enter_context(Deployment())
+        live.first_account()
+        alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+        live.add_account(alice, MEMBER, BOB_PASSWORD)
+        live.add_account(alice, "carol", "carol-password-for-the-route-walk-27")
+        bob = live.sign_in(MEMBER, BOB_PASSWORD)
+        walk = (
+            ("GET", f"{P}/accounts", None),
+            ("POST", f"{P}/accounts",
+             {"username": "eve", "password": "eve-password-of-enough-length",
+              "operator": True}),
+            ("DELETE", f"{P}/accounts/carol", None),
+            ("PUT", f"{P}/accounts/carol/password",
+             {"password": "a-password-somebody-else-chose-51"}),
+            ("PUT", f"{P}/settings/commands/claude-opus", None),
+            ("DELETE", f"{P}/settings/commands/claude-opus", None),
+        )
+        for method, path, payload in walk:
+            # A PUT with no body still states its length, as a browser does.
+            headers = ({**bob, "Content-Length": "0"}
+                       if method == "PUT" and payload is None else bob)
+            status, _, body = request(live.url(path), method=method,
+                                      headers=headers, payload=payload)
+            if status != 403 or code_of(body) != "not_operator":
+                problems.append(f"{method} {path} answered a member "
+                                f"{status} {code_of(body)!r}")
+        names = sorted(live.accounts.read())
+        if names != sorted((OPERATOR, MEMBER, "carol")):
+            problems.append(f"a member changed the accounts: {names}")
+        if live.accounts.verify("carol", "carol-password-for-the-route-walk-27") is None:
+            problems.append("a member changed somebody else's password")
+        problems.append(f"walked {len(walk)}")
+    return problems
+
+
+def test_every_operator_route_refuses_a_member() -> None:
+    """403 `not_operator`, on each of them, and nothing changed.
+
+    With `Api._operator` made to permit everybody, no check in this module or
+    in `tests/test_web_server.py` failed: the gate was asserted nowhere.
+
+    Must fire: that same change. A member then lists the accounts, adds an
+    operator, removes an account and sets somebody else's password.
+
+    The walk is held against the source: one entry per call of the gate, so
+    a route added behind it is a route this has to be told about.
+    """
+    import inspect
+
+    problems = operator_route_problems()
+    walked = [problem for problem in problems if problem.startswith("walked ")]
+    check(problems == walked, "operator routes: " + "; ".join(problems))
+    gates = inspect.getsource(api.Api).count("self._operator(who)")
+    check(walked == [f"walked {gates}"],
+          f"the walk covers {walked} and the API calls its operator gate in "
+          f"{gates} places")
+
+    seeded = operator_route_problems(
+        Seeded(api.Api, "_operator", lambda self, who: who))
+    check(sum("answered a member" in problem for problem in seeded) >= 4
+          and any("changed the accounts" in problem for problem in seeded),
+          f"must fire: with the operator gate open, the walk passed: {seeded}")
+
+
+# --------------------------------------------------------------------------
+# before anybody has signed in
+# --------------------------------------------------------------------------
+
+
+def test_the_first_account_is_made_once_whatever_arrives_together() -> None:
+    """Two setup requests that both find no account make one operator.
+
+    The route counted the accounts and then created one, as two steps, so two
+    requests carrying the code at the same moment both passed the count and
+    both made an operator.
+
+    Asked without a race to win: the count is held at zero for both requests,
+    which is what each of two that arrive together sees.
+
+    Must fire: `Accounts.create` not being told this is the first account.
+    """
+    def twice(seed=None) -> list[str]:
+        problems: list[str] = []
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(environment())
+            if seed is not None:
+                stack.enter_context(seed)
+            live = stack.enter_context(Deployment())
+            with Seeded(api.Api, "account_count", lambda self: 0):
+                first = live.first_account()
+                second = live.first_account(username="mallory")
+            if first[0] != 200:
+                problems.append(f"the first setup answered {first[0]}")
+            if second[0] != 409 or code_of(second[2]) != "already_set_up":
+                problems.append(f"the second setup answered {second[0]} "
+                                f"{code_of(second[2])!r}")
+            rows = live.accounts.read()
+            if sum(1 for row in rows.values() if row.operator) != 1 or len(rows) != 1:
+                problems.append(f"the server has {len(rows)} accounts")
+        return problems
+
+    problems = twice()
+    check(not problems, "setup twice: " + "; ".join(problems))
+
+    shipped = accounts.Accounts.create
+
+    def not_told(self, username, password, *, operator=False, now=None,
+                 first=False):
+        return shipped(self, username, password, operator=operator, now=now)
+
+    seeded = twice(Seeded(accounts.Accounts, "create", not_told))
+    check(any("the server has 2 accounts" in problem for problem in seeded),
+          f"must fire: a store not told the account is the first passed: {seeded}")
+
+
+def test_a_name_no_account_can_have_is_not_kept() -> None:
+    """A submitted name longer than a username is answered and not stored.
+
+    The sign-in throttle is keyed on the submitted name, before any password
+    is checked, by anybody who can reach the port. A name of a million
+    characters was held for five minutes.
+
+    Must not fire: the refusal is the one a wrong sign-in gets.
+
+    Must fire: the bound taken away.
+    """
+    def longest(seed=None) -> tuple[int, tuple]:
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(environment())
+            if seed is not None:
+                stack.enter_context(seed)
+            live = stack.enter_context(Deployment())
+            live.first_account()
+            wrong = request(live.url(f"{P}/session"), method="POST", payload={
+                "username": OPERATOR, "password": "not-the-password-at-all"})
+            long = request(live.url(f"{P}/session"), method="POST", payload={
+                "username": "x" * 50_000, "password": ALICE_PASSWORD})
+            held = max(len(name) for name in live.built.api.throttle._failures)
+            return held, (wrong[0], wrong[2], long[0], long[2])
+
+    held, (status, body, long_status, long_body) = longest()
+    check(held <= accounts.USERNAME_MAX,
+          f"the throttle holds a name of {held} characters")
+    check((status, body) == (long_status, long_body) and status == 401,
+          f"a name no account can have is refused differently from a wrong "
+          f"sign-in: {long_status} {long_body[:120]!r}")
+    held, _ = longest(Seeded(accounts, "USERNAME_MAX", 10 ** 9))
+    check(held == 50_000,
+          f"must fire: with no bound the throttle held {held} characters")
+    check(accounts.USERNAME.match("a" * accounts.USERNAME_MAX) is not None
+          and accounts.USERNAME.match("a" * (accounts.USERNAME_MAX + 1)) is None,
+          "USERNAME_MAX is not the longest name the pattern takes")
+
+
+def test_guesses_of_the_current_password_are_throttled() -> None:
+    """Under the sign-in throttle, by the same name.
+
+    A session could try the `current` password of its own account as fast as
+    the hash allows: 15 guesses in under a second in the review.
+
+    Must not fire: another account is unaffected, and the refusal a throttled
+    guess gets is the one a wrong guess gets.
+
+    Must fire: the throttle never locking.
+    """
+    new = "a-new-password-for-the-throttle-check"
+
+    def guesses(seed=None) -> list[str]:
+        problems: list[str] = []
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(environment())
+            if seed is not None:
+                stack.enter_context(seed)
+            live = stack.enter_context(Deployment())
+            live.first_account()
+            alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+            live.add_account(alice, MEMBER, BOB_PASSWORD)
+            bob = live.sign_in(MEMBER, BOB_PASSWORD)
+
+            def change(current: str):
+                return request(live.url(f"{P}/accounts/{MEMBER}/password"),
+                               method="PUT", headers=bob,
+                               payload={"password": new, "current": current})
+
+            wrong = [change(f"a-wrong-guess-number-{n}") for n in range(10)]
+            if {(status, code_of(body)) for status, _, body in wrong} \
+                    != {(403, "bad_current_password")}:
+                problems.append("a wrong guess is not refused as one")
+            right = change(BOB_PASSWORD)
+            if (right[0], right[2]) != (wrong[0][0], wrong[0][2]):
+                problems.append(f"after ten wrong guesses the right password "
+                                f"answered {right[0]}")
+            if request(live.url(f"{P}/session"), method="POST", payload={
+                    "username": MEMBER, "password": BOB_PASSWORD})[0] != 401 \
+                    and right[0] == 403:
+                problems.append("the sign-in for that name is not under the "
+                                "same throttle")
+            if request(live.url(f"{P}/session"), method="POST", payload={
+                    "username": OPERATOR, "password": ALICE_PASSWORD})[0] != 200:
+                problems.append("another account was locked with it")
+        return problems
+
+    problems = guesses()
+    check(not problems, "guessing the current password: " + "; ".join(problems))
+    seeded = guesses(Seeded(accounts.Throttle, "locked", lambda self, name: False))
+    check(any("the right password answered 204" in problem for problem in seeded),
+          f"must fire: a throttle that never locks passed: {seeded}")
+
+
+def test_a_body_is_not_read_before_its_sender_is_known() -> None:
+    """An unauthenticated request is answered before its body arrives.
+
+    The server read a body in full, up to four megabytes, and only then asked
+    who sent it. Asked here by declaring a body and not sending it: an answer
+    that arrives is an answer that did not wait for the body.
+
+    Must not fire: a signed-in request of the same size is read and answered,
+    and a sign-in of ordinary size is taken.
+
+    Must fire: `Api.admit` checking the size alone, which is what stood in
+    front of the read before.
+    """
+    import socket
+
+    def answer_to(live, path: str, length: int, extra: str = "") -> bytes:
+        """What the server says to the headers alone, within two seconds.
+
+        Where it says nothing, the body is then sent and the answer read, so
+        the server is never left writing to a connection that went away.
+        """
+        with socket.create_connection(("127.0.0.1", live.built.port),
+                                      timeout=5) as link:
+            link.sendall((f"POST {path} HTTP/1.1\r\nHost: 127.0.0.1\r\n"
+                          f"Content-Type: application/json\r\n{extra}"
+                          f"Connection: close\r\n"
+                          f"Content-Length: {length}\r\n\r\n").encode("ascii"))
+            def whole() -> bytes:
+                """One answer, read to its end, so the server is not cut off."""
+                got = b""
+                while b"\r\n\r\n" not in got:
+                    more = link.recv(4096)
+                    if not more:
+                        return got
+                    got += more
+                head, _, body = got.partition(b"\r\n\r\n")
+                size = 0
+                for line in head.split(b"\r\n"):
+                    if line.lower().startswith(b"content-length:"):
+                        size = int(line.split(b":", 1)[1])
+                while len(body) < size:
+                    more = link.recv(4096)
+                    if not more:
+                        break
+                    body += more
+                return head
+
+            link.settimeout(2)
+            try:
+                return whole()
+            except (TimeoutError, socket.timeout):
+                link.settimeout(PATIENCE)
+                link.sendall(b" " * length)
+                whole()
+                return b"(no answer without the body)"
+
+    def unread(seed=None) -> list[str]:
+        problems: list[str] = []
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(environment())
+            if seed is not None:
+                stack.enter_context(seed)
+            live = stack.enter_context(Deployment())
+            live.first_account()
+            alice = live.sign_in(OPERATOR, ALICE_PASSWORD)
+            stranger = answer_to(live, f"{P}/runs", api.MAX_BODY_BYTES - 10)
+            if b" 401 " not in stranger.split(b"\r\n")[0]:
+                problems.append(f"a stranger's body was waited for: "
+                                f"{stranger[:40]!r}")
+            sign_in = answer_to(live, f"{P}/session", api.MAX_OPEN_BODY_BYTES + 1)
+            if b" 413 " not in sign_in.split(b"\r\n")[0]:
+                problems.append(f"a sign-in of {api.MAX_OPEN_BODY_BYTES + 1} "
+                                f"bytes was waited for: {sign_in[:40]!r}")
+            # Must not fire: with a session, the body is what is waited for.
+            known = answer_to(
+                live, f"{P}/runs", 1000,
+                f"{accounts.SESSION_HEADER}: {alice[accounts.SESSION_HEADER]}\r\n")
+            if known != b"(no answer without the body)":
+                problems.append(f"a signed-in request was answered before its "
+                                f"body: {known[:40]!r}")
+            if request(live.url(f"{P}/session"), method="POST", payload={
+                    "username": OPERATOR, "password": ALICE_PASSWORD})[0] != 200:
+                problems.append("an ordinary sign-in is refused")
+        return problems
+
+    problems = unread()
+    check(not problems, "body before identity: " + "; ".join(problems))
+
+    def size_alone(self, path, headers, length):
+        api.check_body_size(length)
+
+    seeded = unread(Seeded(api.Api, "admit", size_alone))
+    check(any("a stranger's body was waited for" in problem for problem in seeded)
+          and any("a sign-in of" in problem for problem in seeded),
+          f"must fire: a server that reads before it asks passed: {seeded}")
+
+
+def test_the_users_directory_is_its_owners_alone() -> None:
+    """`users/` is created `0700`, and one made `0755` is repaired.
+
+    Each member's own folder was `0700` and the directory holding them was
+    whatever `mkdir(parents=True)` made it, which is `0755`: any account on
+    the machine could list which accounts exist.
+
+    Must fire: `credentials.private_dir` making the directories the way the
+    old code did.
+    """
+    from llossless.web import defaults
+
+    def modes(seed=None) -> list[str]:
+        problems: list[str] = []
+        before = os.umask(0o022)
+        try:
+            with contextlib.ExitStack() as stack:
+                raw = stack.enter_context(tempfile.TemporaryDirectory())
+                if seed is not None:
+                    stack.enter_context(seed)
+                for what in ("credentials", "defaults"):
+                    root = Path(raw) / what / "config"
+                    directory = accounts.Directory(
+                        credentials.Credentials(root / "credentials.json"))
+                    account = "0" * 31 + "1"
+                    if what == "credentials":
+                        directory.own(account).set_endpoint(
+                            PROVIDER, "http://127.0.0.1:2")
+                    else:
+                        defaults.Store(directory.path_for(account).with_name(
+                            defaults.FILE_NAME)).write({})
+                    for path in (root / accounts.USERS_DIR,
+                                 root / accounts.USERS_DIR / account, root):
+                        mode = stat.S_IMODE(path.stat().st_mode)
+                        if mode != 0o700:
+                            problems.append(
+                                f"{path.relative_to(Path(raw) / what)} made "
+                                f"by a {what} write is {mode:04o}")
+        finally:
+            os.umask(before)
+        return problems
+
+    problems = modes()
+    check(not problems, "directory modes: " + "; ".join(problems))
+
+    def as_before(directory):
+        Path(directory).mkdir(parents=True, exist_ok=True)
+        os.chmod(directory, credentials.DIR_MODE)
+
+    seeded = modes(Seeded(credentials, "private_dir", as_before))
+    check(sum("config/users made" in problem and "0755" in problem
+              for problem in seeded) == 2,
+          f"must fire: directories made the old way passed: {seeded}")
+
+    # One an earlier version made is repaired when the server starts.
+    with tempfile.TemporaryDirectory() as raw:
+        users = Path(raw) / accounts.USERS_DIR
+        users.mkdir()
+        os.chmod(users, 0o755)
+        accounts.Directory(credentials.Credentials(Path(raw) / "credentials.json"))
+        check(stat.S_IMODE(users.stat().st_mode) == 0o700,
+              "an existing users directory is not repaired")
 
 
 # --------------------------------------------------------------------------

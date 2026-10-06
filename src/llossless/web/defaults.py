@@ -369,8 +369,7 @@ class Store:
                               f"bytes on disk.")
         parent = self.path.parent
         with _LOCK:
-            parent.mkdir(parents=True, exist_ok=True)
-            os.chmod(parent, DIR_MODE)
+            credentials.private_dir(parent)
             temporary = parent / (f".{self.path.name}.{os.getpid()}."
                                   f"{threading.get_ident()}.tmp")
             try:

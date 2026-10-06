@@ -241,8 +241,8 @@ COMMAND_VERIFY_BATCH = 100
 # 14 as the level rises on the single calls below, because a higher level
 # consolidates several corrections into one broader record. The calls were
 # then scored against 22 seeded errors typed from reading the voyager pair; a
-# diff of the pair finds 47. Re-scored on the merged text:
-#
+# diff of the pair finds 47, counting one per changed word (the published key
+# counts one per changed unit, 44). Re-scored on the merged text, of the 47:
 #     setting                wall     records   fixed of 47   kept
 #     medium, thinking off   125 s      13          42           5
 #     medium, thinking on    130 s      27          46           1
@@ -443,8 +443,8 @@ assert all(set(table) == set(ROLES) for table in AUTO_EFFORT.values())
 # unrelated family. An earlier measurement also found thinking on this role *worse*
 # (P1 1/12 to 4/12, s = 0.0) and called for a re-measurement before it was enabled,
 # which never happened and is still parked. The claimed third reason, that every
-# recorded cassette carries `thinking=False`, was false for merge: 76 of the 151
-# merge cassettes were recorded with thinking on (m4 33, m7 39, pairs 4); every
+# recorded cassette carries `thinking=False`, was false for merge: 37 of the 115
+# recorded merge calls carry reasoning (m4 33, pairs 4, none in m7); every
 # decompose and verify cassette is off. The default rests on the first two.
 DEFAULT_THINKING: frozenset[str] = frozenset()
 STRUCTURED_MODES = ("auto", "json_schema", "tool_call", "prompt")
@@ -3235,6 +3235,11 @@ def command_with_isolation(command: str) -> str:
 # exists to reach, and it would leak that key to a program this project does
 # not control.
 #
+# `OPEN_AI`, `GOOGLE_AI`, `GOOGLE_API_KEY` and `GEMINI`: another vendor's
+# API key. The web interface stores provider keys under `OPEN_AI_API_KEY` and
+# `GOOGLE_AI_API_KEY`, which the two prefixes above do not match, and a
+# subscription program for one vendor has no use for another vendor's key.
+#
 # `LLOSSLESS_` and the retired prefix it replaced: this tool's own
 # configuration, meaningless to the program being run.
 #
@@ -3246,7 +3251,8 @@ def command_with_isolation(command: str) -> str:
 # reads it to override `--effort`, which would make the argv's own flag a lie
 # the report could not see. `CLAUDE_EFFORT`, `CLAUDE_PID` and `AI_AGENT`
 # (bare, not only a suffixed form) are the same class of fact by other names.
-DROPPED_ENV_PREFIXES = ("ANTHROPIC", "OPENAI", "LLOSSLESS_", "CLAIMCHECK_",
+DROPPED_ENV_PREFIXES = ("ANTHROPIC", "OPENAI", "OPEN_AI", "GOOGLE_AI",
+                        "GOOGLE_API_KEY", "GEMINI", "LLOSSLESS_", "CLAIMCHECK_",
                         "CLAUDE_CODE_", "CLAUDE_AGENT_", "AI_AGENT")
 DROPPED_ENV_NAMES = frozenset({"CLAUDECODE", "CLAUDE_EFFORT", "CLAUDE_PID"})
 

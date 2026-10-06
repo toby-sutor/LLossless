@@ -38,8 +38,11 @@ tested against generated output would be tested against a moving fixture.
 from __future__ import annotations
 
 import base64
+import contextlib
+import inspect
 import json
 import sys
+import textwrap
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -53,7 +56,7 @@ import socket_guard  # noqa: E402
 # turns that sentence into something that fails when it stops being true.
 socket_guard.install()
 
-from llossless import config, html_report, report  # noqa: E402
+from llossless import config, html_report, parsing, report  # noqa: E402
 from llossless.client import Client  # noqa: E402
 from llossless.decompose import Claim  # noqa: E402
 from llossless.provenance import Provenance  # noqa: E402
@@ -67,6 +70,7 @@ from llossless.verify import (  # noqa: E402
     NOT_GRADED,
     SOURCE_TO_MERGED,
     Graded,
+    Unusable,
     Verdict,
 )
 
@@ -591,8 +595,8 @@ def test_the_sections_are_the_markdown_sections_in_the_markdown_order() -> None:
     page = html_report.render(run)
     shape = parse(page, "sections")
     ids = [a["id"] for tag, a in shape.attrs if tag == "section" and "id" in a]
-    check(ids == ["coverage", "findings", "inventory", "structure", "queue",
-                  "declarations", "provenance", "merged"],
+    check(ids == ["coverage", "findings", "capped", "ungraded", "inventory",
+                  "structure", "queue", "declarations", "provenance", "merged"],
           f"the sections are in the wrong order or missing: {ids}")
     targets = [href[1:] for href in attrs_of(shape, "a", "href") if href.startswith("#")]
     check(set(targets) <= set(ids) | {"verdict"},
@@ -1090,6 +1094,503 @@ def test_an_argument_to_the_control_is_escaped_like_everything_else() -> None:
           "a filename closed its attribute and opened an event handler")
     check("&quot;" in control_of(served),
           "the quotes went somewhere other than an entity")
+
+
+# --------------------------------------------------------------------------
+# what was capped and what was not graded: two sections and a coverage row
+# --------------------------------------------------------------------------
+
+
+def ungraded_run() -> Run:
+    """A run with one record that could not be graded and two capped fields.
+
+    The claim id and the defect of the ungraded record are the model's words,
+    so both carry the hostile string: this run goes through the escaping
+    check as well as the parity check.
+    """
+    run = structural_run()
+    run.unusable = [
+        Unusable(claim_id=f"X-{HOSTILE}", direction=SOURCE_TO_MERGED, index=2,
+                 defects=(f"$.verdicts[2].verdict: {HOSTILE} is not a verdict",
+                          "$.verdicts[2].evidence: missing")),
+        Unusable(claim_id="", direction=MERGED_TO_SOURCES, index=0,
+                 defects=("$.verdicts[0]: not an object",)),
+    ]
+    run.truncations = (
+        parsing.Truncation(path="$.dispositions[0].reason", original_length=912,
+                           cap=400),
+    )
+    first = run.forward[0]
+    run.forward[0] = Verdict(
+        claim_id=first.claim_id, verdict=first.verdict, evidence=first.evidence,
+        evidence_source=first.evidence_source, rationale=first.rationale,
+        direction=first.direction, grounding=first.grounding,
+        rationale_capped=True,
+    )
+    return run
+
+
+def bare(text: str) -> str:
+    """Markdown prose as a reader of the page sees it: no markers, one spacing."""
+    return " ".join(text.replace("**", "").replace("`", "").replace("_", "").split())
+
+
+def ungraded_gaps(run: Run, page: str) -> list[str]:
+    """What the page is missing of the two sections and the row, as sentences.
+
+    Returned rather than recorded, so the must-fire probes below can ask the
+    same question of a page that is known to be missing something.
+    """
+    gaps: list[str] = []
+    shape = parse(page, "ungraded")
+    seen = " ".join("".join(shape.text).split())
+    ids = [a["id"] for tag, a in shape.attrs if tag == "section" and "id" in a]
+    targets = [href[1:] for href in attrs_of(shape, "a", "href")
+               if href.startswith("#")]
+
+    # The sections, where the Markdown report has them, under its headings.
+    for anchor, section in (("capped", report.capping_section(run)),
+                            ("ungraded", report.unusable_section(run))):
+        heading, *lines = [line for line in section.splitlines() if line]
+        title = heading.removeprefix("## ")
+        if anchor not in ids:
+            gaps.append(f"no {title!r} section on the page")
+        if anchor not in targets:
+            gaps.append(f"no table-of-contents entry for {title!r}")
+        if f">{title}</h2>" not in page:
+            gaps.append(f"no heading {title!r}, which is the Markdown heading")
+        # Every line the Markdown section prints, as visible text.
+        for line in lines:
+            wanted = bare(line.strip().removeprefix("- ").removesuffix(":"))
+            if wanted not in bare(seen):
+                gaps.append(f"the {title!r} line {wanted!r} is not on the page")
+    order = [anchor for anchor in ids
+             if anchor in ("findings", "capped", "ungraded", "inventory")]
+    if order != ["findings", "capped", "ungraded", "inventory"]:
+        gaps.append(f"the two sections are not between Findings and Inventory, "
+                    f"in the Markdown order: {order}")
+
+    # The coverage row, with the count the Markdown table prints.
+    row = [line for line in report.coverage_section(run).splitlines()
+           if "not graded" in line]
+    label, count = [cell.strip() for cell in row[0].strip("|").split("|")]
+    if f">{label}</th><td><span class=\"value mono\">{count}</span>" not in page:
+        gaps.append(f"no coverage row {label!r} with the value {count}")
+
+    # One filterable card per record and per capped field.
+    kinds = [a.get("data-kind") for tag, a in shape.attrs
+             if tag == "article" and "data-filterable" in a]
+    if kinds.count("not_graded") != len(run.unusable):
+        gaps.append(f"{kinds.count('not_graded')} filterable card(s) for "
+                    f"{len(run.unusable)} ungraded record(s)")
+    capped = len(run.truncations) + len(run.capped_verdicts)
+    if kinds.count("capped") != capped:
+        gaps.append(f"{kinds.count('capped')} filterable card(s) for "
+                    f"{capped} capped field(s)")
+    return gaps
+
+
+def test_the_page_lists_what_was_capped_and_what_was_not_graded() -> None:
+    """Both sections and the coverage row, in the Markdown report's words.
+
+    A run that exits 2 because a claim was not graded has to name the claim
+    on the page: the banner says the run is inconclusive, and the list is how
+    a reader finds out which claims have no verdict.
+    """
+    run = ungraded_run()
+    page = html_report.render(run)
+    check(report.exit_code(run) == 2 and 'data-exit-code="2"' in page,
+          "an ungraded record makes the run inconclusive, on the banner too")
+    for gap in ungraded_gaps(run, page):
+        check(False, f"ungraded: {gap}")
+    check(HOSTILE not in page,
+          "an ungraded record's claim id or defect reached the page unescaped")
+    seen = "".join(parse(page, "ungraded escaping").text)
+    check(seen.count(HOSTILE) >= 2,
+          "the claim id and the defect must both survive as visible text")
+    parity(run, "ungraded")
+
+    # And a run with neither says so in both sections, in the Markdown's words.
+    clean = fixture_run("dedup")
+    page = html_report.render(clean)
+    for gap in ungraded_gaps(clean, page):
+        check(False, f"nothing capped, nothing ungraded: {gap}")
+
+
+def test_the_ungraded_check_fires_on_a_page_without_the_sections() -> None:
+    """Must fire: the shipped renderer, with each new part taken away in turn.
+
+    Three seeds, one per part, each through the shipped `render`: the two
+    sections left out, the two blocks emptied, and the coverage row left out.
+    The page without any of the three is the page this renderer produced
+    before it had them.
+    """
+    run = ungraded_run()
+    section, rows = html_report._section, html_report._rows
+    capping, unusable = html_report.capping_block, html_report.unusable_block
+    label = "Claims submitted but not graded"
+    try:
+        html_report._section = lambda anchor, title, body: (
+            [] if anchor in ("capped", "ungraded") else section(anchor, title, body))
+        without_sections = ungraded_gaps(run, html_report.render(run))
+        html_report._section = section
+
+        html_report.capping_block = html_report.unusable_block = lambda run: []
+        without_lists = ungraded_gaps(run, html_report.render(run))
+        html_report.capping_block, html_report.unusable_block = capping, unusable
+
+        html_report._rows = lambda pairs: rows(
+            [pair for pair in pairs if pair[0] != label])
+        without_row = ungraded_gaps(run, html_report.render(run))
+    finally:
+        html_report._section, html_report._rows = section, rows
+        html_report.capping_block, html_report.unusable_block = capping, unusable
+    check(any("no 'Not graded' section" in gap for gap in without_sections)
+          and any("no 'Length capped' section" in gap for gap in without_sections),
+          f"seeded check: a page without the two sections passed: {without_sections}")
+    check(any("'Not graded' line" in gap for gap in without_lists)
+          and any("'Length capped' line" in gap for gap in without_lists),
+          f"seeded check: a page with the two sections empty passed: {without_lists}")
+    check(without_row == [f"no coverage row {label!r} with the value 2"],
+          f"seeded check: a page without the coverage row passed: {without_row}")
+    check(ungraded_gaps(run, html_report.render(run)) == [],
+          "the renderer was not put back after the seeds")
+
+
+# --------------------------------------------------------------------------
+# seeds: the shipped renderer with one expression changed
+# --------------------------------------------------------------------------
+
+
+@contextlib.contextmanager
+def seeded(function: str, old: str, new: str):
+    """The shipped `html_report.<function>` with `old` replaced by `new`.
+
+    Rebuilt from the function's own source, never from a copy kept in this
+    file: when the renderer rewords the expression a seed aims at, `old` is no
+    longer in it and the seed raises instead of passing on the function as
+    shipped. A raising test is a failing one (`main`).
+    """
+    shipped = getattr(html_report, function)
+    source = textwrap.dedent(inspect.getsource(shipped))
+    if source.count(old) != 1:
+        raise AssertionError(
+            f"seed for html_report.{function}: {old!r} is in its source "
+            f"{source.count(old)} time(s), not once, so the seed aims at nothing")
+    # Defined in the module's own namespace, which rebinds the name there:
+    # every caller looks the function up in the module, and the seeded
+    # function sees the module's other names as the shipped one does.
+    exec(compile(source.replace(old, new), f"<seeded {function}>", "exec"),
+         vars(html_report))
+    try:
+        yield
+    finally:
+        setattr(html_report, function, shipped)
+
+
+def section_of(page: str, anchor: str) -> str:
+    """What one section of the page holds, between its opening and closing tag."""
+    opened = f'<section id="{anchor}">'
+    if page.count(opened) != 1:
+        return ""
+    return page.split(opened, 1)[1].split("</section>", 1)[0]
+
+
+# --------------------------------------------------------------------------
+# a capped field whose value is hostile: escaped, and still one card
+# --------------------------------------------------------------------------
+
+# Everything a capped value could carry that the page must not act on: a tag,
+# a quote and an angle bracket that would close what they are inside and open
+# an element with a handler on it, the backtick and the `**` this module's own
+# markup is written in, and three kinds of line break (the last is U+2028,
+# which `str.splitlines` cuts at like the other two).
+CAPPED_HOSTILE = (HOSTILE + '"><img src=x onerror="alert(2)">` **bold** `'
+                  + "\nsecond line\r\nthird line" + chr(0x2028) + "fourth line")
+
+
+def capped_hostile_run() -> Run:
+    """Two capped fields and one capped rationale, the first field hostile.
+
+    The path of a capped field is quoted from the model's answer, so it is
+    the string to attack. Three records, so "one card per record" has a count
+    to be wrong about.
+    """
+    run = structural_run()
+    run.truncations = (
+        parsing.Truncation(path=f"$.dispositions[0].{CAPPED_HOSTILE}",
+                           original_length=912, cap=400),
+        parsing.Truncation(path="$.dispositions[1].reason", original_length=433,
+                           cap=400),
+    )
+    first = run.forward[0]
+    run.forward[0] = Verdict(
+        claim_id=first.claim_id, verdict=first.verdict, evidence=first.evidence,
+        evidence_source=first.evidence_source, rationale=first.rationale,
+        direction=first.direction, grounding=first.grounding,
+        rationale_capped=True,
+    )
+    return run
+
+
+def capped_gaps(run: Run, page: str) -> list[str]:
+    """What is wrong with the Length capped section of `page`, as sentences."""
+    gaps: list[str] = []
+    section = section_of(page, "capped")
+    if not section:
+        return ["no Length capped section on the page"]
+    shape = Shape()
+    shape.feed(section)
+    shape.close()
+    if shape.errors or shape.stack:
+        gaps.append(f"the section is not well formed: {shape.errors[:2]} "
+                    f"{shape.stack}")
+    # Nothing the value carried became markup.
+    written = {"h2", "article", "p", "code"}
+    if set(shape.tags) - written:
+        gaps.append(f"a capped value put a tag on the page: "
+                    f"{sorted(set(shape.tags) - written)}")
+    names = {key for _, attrs in shape.attrs for key in attrs}
+    if names - {"class", "data-filterable", "data-kind"}:
+        gaps.append(f"a capped value put an attribute on the page: "
+                    f"{sorted(names - {'class', 'data-filterable', 'data-kind'})}")
+    if "<strong>" in section or "<em>" in section:
+        gaps.append("a capped value was read for emphasis")
+    if section.count("<code>") != section.count("</code>"):
+        gaps.append("the code spans do not balance")
+    # And all of it is still there to read, in one card per record.
+    cards = [a for tag, a in shape.attrs if tag == "article"]
+    records = len(run.truncations) + len(run.capped_verdicts)
+    if len(cards) != records:
+        gaps.append(f"{len(cards)} card(s) for {records} capped record(s)")
+    if any(a.get("data-kind") != "capped" or "data-filterable" not in a
+           for a in cards):
+        gaps.append("a capped card is not filterable as one")
+    seen = "".join(shape.text)
+    hostile = [item.path for item in run.truncations if HOSTILE in item.path]
+    for path in hostile:
+        if path not in seen.replace("`", "") and path.replace("`", "") not in seen:
+            gaps.append("the hostile value is not on the page as visible text")
+        card = [part for part in section.split("</article>") if "second line" in part]
+        if len(card) != 1 or "fourth line" not in card[0] or "&lt;script&gt;" not in card[0]:
+            gaps.append("the hostile value is not whole inside one card")
+    return gaps
+
+
+def test_a_hostile_capped_value_is_escaped_and_stays_one_card() -> None:
+    """A capped line is quoted from the model: a tag, a quote, markup, line breaks.
+
+    The section is built from the Markdown report's lines, which wrap the
+    value in backticks. None of that may become structure on the page, and a
+    value that carries a line break is still one record: one card, with the
+    whole value in it.
+    """
+    run = capped_hostile_run()
+    page = html_report.render(run)
+    for gap in capped_gaps(run, page):
+        check(False, f"capped, hostile: {gap}")
+    shape = parse(page, "capped hostile")
+    check(shape.tags.count("script") == 1,
+          f"the page must carry its own script element and no other: "
+          f"{shape.tags.count('script')}")
+    check("img" not in shape.tags
+          and not any("onerror" in attrs for _, attrs in shape.attrs),
+          "a capped value opened an element of its own, with a handler on it")
+
+    # The claim id of a capped rationale is the model's word as well. Asked of
+    # the block and not the page: an id no claim carries is one the inventory
+    # refuses to count, which is a different check.
+    first = run.forward[0]
+    run.forward[0] = Verdict(
+        claim_id=f"X-{CAPPED_HOSTILE}", verdict=first.verdict,
+        evidence=first.evidence, evidence_source=first.evidence_source,
+        rationale=first.rationale, direction=first.direction,
+        grounding=first.grounding, rationale_capped=True,
+    )
+    block = "\n".join(html_report.capping_block(run))
+    check(HOSTILE not in block and block.count("&lt;script&gt;") == 2,
+          f"a hostile claim id in a capped rationale reached the page raw, or "
+          f"was dropped: {block.count('&lt;script&gt;')} escaped tag(s)")
+    check(block.count("<article ") == 3,
+          f"three capped records are three cards whatever their values hold: "
+          f"{block.count('<article ')}")
+
+
+def test_the_capped_check_fires_when_the_escaping_or_the_card_is_taken_away() -> None:
+    """Must fire: the shipped `capping_block`, with one expression changed.
+
+    Two seeds. The first prints the capped line without escaping it. The
+    second cuts each record at its line breaks, one card per line, which is
+    what this block did before it was built per record.
+    """
+    run = capped_hostile_run()
+    with seeded("capping_block", "code_only(text)", "_CODE.sub(r'<code>\\1</code>', text)"):
+        raw = capped_gaps(run, html_report.render(run))
+    with seeded("capping_block", "for text in capped",
+                "for record in capped for text in record.splitlines() if text"):
+        cut = capped_gaps(run, html_report.render(run))
+    check(any("put a tag on the page" in gap for gap in raw)
+          and any("put an attribute on the page" in gap for gap in raw),
+          f"seeded check: a capped line printed unescaped passed: {raw}")
+    check(any("card(s) for 3 capped record(s)" in gap for gap in cut)
+          and any("not whole inside one card" in gap for gap in cut),
+          f"seeded check: a capped record cut at its line breaks passed: {cut}")
+    check(capped_gaps(run, html_report.render(run)) == [],
+          "the renderer was not put back after the seeds")
+
+
+# --------------------------------------------------------------------------
+# the table of contents is the page's order, not only its members
+# --------------------------------------------------------------------------
+
+
+def toc_gaps(page: str, label: str) -> list[str]:
+    """Whether the table of contents lists the sections in the page's order."""
+    shape = parse(page, label)
+    ids = [a["id"] for tag, a in shape.attrs if tag == "section" and "id" in a]
+    targets = [href[1:] for href in attrs_of(shape, "a", "href")
+               if href.startswith("#")]
+    if targets != ["verdict", *ids]:
+        return [f"{label}: the table of contents reads {targets} and the page "
+                f"reads {['verdict', *ids]}"]
+    return []
+
+
+def with_additions(run: Run) -> Run:
+    run.additions = ({"statement": "Something the sources do not say.",
+                      "corrects": "", "basis": "own-knowledge", "source": "",
+                      "reason": "confident"},)
+    return run
+
+
+def test_the_table_of_contents_is_in_the_order_of_the_page() -> None:
+    """Every entry, in the order the sections come, on the widest pages.
+
+    Presence was checked and order was not, so the two entries added last
+    could sit at the end of the list above a page that prints them in the
+    middle. A reader uses the list to find out what comes after what.
+    """
+    pages = {
+        "merge": html_report.render(structural_run()),
+        "merge with additions": html_report.render(with_additions(structural_run())),
+        "ungraded": html_report.render(ungraded_run()),
+        "verify": html_report.render(fixture_run("dedup")),
+    }
+    for label, page in pages.items():
+        for gap in toc_gaps(page, label):
+            check(False, gap)
+    capped = [href for href in attrs_of(parse(pages["merge"], "toc"), "a", "href")
+              if href in ("#findings", "#capped", "#ungraded", "#inventory")]
+    check(capped == ["#findings", "#capped", "#ungraded", "#inventory"],
+          f"Length capped and Not graded sit between Findings and Inventory in "
+          f"the table of contents, as on the page: {capped}")
+
+    # Must fire: the shipped `render` with the two entries appended at the end,
+    # and with the additions entry put first.
+    entries = 'toc[-1:-1] = [("capped", "Length capped"), ("ungraded", "Not graded")]'
+    with seeded("render", entries, entries.replace("toc[-1:-1] =", "toc +=")):
+        moved = toc_gaps(html_report.render(structural_run()), "seeded")
+    with seeded("render", 'toc.append(("additions", added))',
+                'toc.insert(0, ("additions", added))'):
+        first = toc_gaps(html_report.render(with_additions(structural_run())), "seeded")
+    check(len(moved) == 1 and len(first) == 1,
+          f"seeded check: a table of contents out of the page's order passed: "
+          f"{moved} {first}")
+
+
+# --------------------------------------------------------------------------
+# nothing capped, nothing ungraded: said inside the section it is about
+# --------------------------------------------------------------------------
+
+
+def empty_gaps(run: Run, page: str) -> list[str]:
+    """Whether each of the two sections says, in itself, that it is empty.
+
+    Looked for inside the section and not on the page: `None.` is a word
+    several sections of a clean page print, so finding it somewhere says
+    nothing about this one.
+    """
+    gaps = []
+    for anchor, markdown in (("capped", report.capping_section(run)),
+                             ("ungraded", report.unusable_section(run))):
+        heading, sentence = [line for line in markdown.splitlines() if line]
+        wanted = (f"<h2>{html_report.esc(heading.removeprefix('## '))}</h2>\n"
+                  f'<p class="empty">{html_report.esc(sentence)}</p>')
+        if section_of(page, anchor).strip() != wanted:
+            gaps.append(f"the {anchor} section of a run with nothing in it does "
+                        f"not read {sentence!r}: {section_of(page, anchor)!r}")
+    return gaps
+
+
+def test_an_empty_section_says_so_in_its_own_words() -> None:
+    """`None.` under Length capped, and the full sentence under Not graded.
+
+    A section left blank reads as a section that failed to render. Both
+    sentences are the Markdown report's, and each is pinned to its section.
+    """
+    clean = fixture_run("dedup")
+    check(report.capping_section(clean).splitlines()[2] == "None."
+          and not clean.unusable,
+          "the clean fixture has something capped or ungraded, so this test "
+          "has no empty section to read")
+    for gap in empty_gaps(clean, html_report.render(clean)):
+        check(False, gap)
+
+    # Must fire: each block, as shipped, returning nothing for an empty run.
+    with seeded("capping_block",
+                """return [f'<p class="empty">{esc(empty)}</p>']""", "return []"):
+        no_capped = empty_gaps(clean, html_report.render(clean))
+    with seeded("unusable_block",
+                """return [f'<p class="empty">{esc(lead)}</p>']""", "return []"):
+        no_ungraded = empty_gaps(clean, html_report.render(clean))
+    check(len(no_capped) == 1 and "the capped section" in no_capped[0],
+          f"seeded check: a Length capped section with no `None.` passed: "
+          f"{no_capped}")
+    check(len(no_ungraded) == 1 and "the ungraded section" in no_ungraded[0],
+          f"seeded check: a Not graded section with no sentence passed: "
+          f"{no_ungraded}")
+
+
+# --------------------------------------------------------------------------
+# one heading for the additions, in both reports
+# --------------------------------------------------------------------------
+
+
+def test_the_additions_heading_is_the_markdown_heading() -> None:
+    """The section, its table-of-contents entry and the Markdown heading agree.
+
+    The page headed it "Added from outside" under a Markdown report that says
+    "Added from outside the documents": one section, two names, and a reader
+    moving between the two reports has to work out that they are the same.
+    """
+    run = with_additions(structural_run())
+    heading = report.additions_section(run).splitlines()[0]
+    check(heading == "## Added from outside the documents",
+          f"the Markdown heading this test is written against moved: {heading!r}")
+    title = heading.removeprefix("## ")
+    page = html_report.render(run)
+    check(section_of(page, "additions").lstrip().startswith(f"<h2>{title}</h2>"),
+          f"the section must be headed as the Markdown report heads it: "
+          f"{section_of(page, 'additions')[:80]!r}")
+    check(f'<li><a href="#additions">{title}</a></li>' in page,
+          "and its table-of-contents entry must carry the same words and "
+          "point at it")
+    check(page.count(">Added from outside<") == 0,
+          "the short heading must be gone from the page")
+
+    # The words are the Markdown renderer's and not a second copy: reword the
+    # Markdown heading and the page follows.
+    shipped = report.additions_section
+    try:
+        report.additions_section = lambda run: shipped(run).replace(
+            heading, "## Reworded for the probe", 1)
+        follows = html_report.render(run)
+    finally:
+        report.additions_section = shipped
+    check("<h2>Reworded for the probe</h2>" in section_of(follows, "additions")
+          and '<a href="#additions">Reworded for the probe</a>' in follows,
+          "seeded check: the page kept its own wording when the Markdown "
+          "heading changed, so the two can drift again")
 
 
 def main() -> int:

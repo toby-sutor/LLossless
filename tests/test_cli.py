@@ -6838,6 +6838,521 @@ def test_the_old_variable_names_are_ignored() -> None:
               f"the old name must be neither read nor mentioned: {old.stderr[:300]!r}")
 
 
+# --------------------------------------------------------------------------
+# an inconclusive run that no errored unit caused says what did cause it
+# --------------------------------------------------------------------------
+
+
+def verdict_of(out: str) -> str:
+    """The one paragraph under `## Verdict` in a Markdown report."""
+    if "## Verdict\n\n" not in out:
+        return ""
+    return out.split("## Verdict\n\n", 1)[1].split("\n", 1)[0]
+
+
+NOT_ANSWERED = ("The model could not be made to answer usably, so this run does "
+                "not establish that the claims it did check are the only ones "
+                "there were.")
+
+
+def test_an_inconclusive_verdict_gives_the_reason_the_run_has() -> None:
+    """Exit 2 with every call answered is not "the model could not be made to answer".
+
+    Two rules reach 2 without an errored unit or an ungraded claim: a source
+    that yielded no claims on `verify`, and verdicts of which not one quote
+    was grounded. Both printed "**Inconclusive.** . The model could not be
+    made to answer usably": an empty reason, a stray full stop, and a sentence
+    about a failure that did not happen. Through the real command, in the
+    Markdown report and on the HTML page, which takes the same sentence.
+    """
+    no_claims = {**CLEAN,
+                 "decompose": lambda n: claims() if n == 2
+                 else claims(("The relay listens on port 8443.", 1)),
+                 "forward": verdicts(
+                     ("A-001", "SUPPORTED", "The relay listens on port 8443.", "merged.md")),
+                 "reverse": verdicts(
+                     ("M-001", "SUPPORTED", "The relay listens on port 8443.", "source_a.md"))}
+    with workspace(Script(**no_claims), merged_on_disk=True) as (home, base_url):
+        code, out, _ = invoke(home, base_url, "verify",
+                              str(home / "notes-a.md"), str(home / "notes-b.md"),
+                              str(home / "draft.md"), "--html", str(home / "r.html"))
+        page = (home / "r.html").read_text(encoding="utf-8")
+    unexamined = verdict_of(out)
+    check(code == 2, f"an unexamined source on verify is exit 2: {code}")
+    check(unexamined.startswith(
+        "**Inconclusive.** 1 source(s) produced no claims, so this run does not "
+        "establish that the claims it did check are the only ones there were."),
+        f"the verdict must open on the reason this run has: {unexamined[:200]!r}")
+    check("`source_b.md` produced no claims" in unexamined,
+          f"and still name the source, last: {unexamined[-200:]!r}")
+
+    nowhere = {**CLEAN,
+               "forward": verdicts(
+                   ("A-001", "SUPPORTED", "a sentence no document contains", "merged.md"),
+                   ("B-001", "SUPPORTED", "another sentence no document contains", "merged.md")),
+               "reverse": verdicts(
+                   ("M-001", "SUPPORTED", "a third sentence nothing contains", "source_a.md"))}
+    with workspace(Script(**nowhere)) as (home, base_url):
+        code, out, _ = invoke(home, base_url, "merge", str(home / "notes-a.md"),
+                              str(home / "notes-b.md"))
+    ungrounded = verdict_of(out)
+    check(code == 2, f"a run where nothing grounded is exit 2: {code}")
+    check(ungrounded.startswith(
+        "**Inconclusive.** 3 verdict(s) quote evidence and none of the quotes was "
+        "found in the file it names, so no verdict here rests on anything shown "
+        "to be in the documents."),
+        f"the verdict must open on the reason this run has: {ungrounded[:220]!r}")
+
+    for label, line in (("no claims", unexamined), ("nothing grounded", ungrounded)):
+        check(re.match(r"\*\*Inconclusive\.\*\* [0-9A-Z]", line) is not None,
+              f"{label}: the bold word must be followed by a sentence: {line[:60]!r}")
+        check("** ." not in line and " . " not in line and ".." not in line,
+              f"{label}: a stray full stop is in the verdict: {line[:120]!r}")
+        check("could not be made to answer" not in line,
+              f"{label}: every call was answered, so the verdict must not say "
+              f"the model could not be made to answer: {line[:200]!r}")
+    banner = page.split('class="banner', 1)[-1].split("</div>", 1)[0]
+    check("<strong>Inconclusive.</strong> 1 source(s) produced no claims" in banner
+          and "could not be made to answer" not in banner,
+          f"the HTML banner takes the same sentence: {banner[:260]!r}")
+
+    # Must not fire: where a unit of work did error, the sentence that says so
+    # is the one it always was, to the byte.
+    with workspace(Script(**{**CLEAN, "forward": None})) as (home, base_url):
+        code, out, _ = invoke(home, base_url, "merge", str(home / "notes-a.md"),
+                              str(home / "notes-b.md"))
+    errored = verdict_of(out)
+    check(code == 2 and errored.startswith(
+        "**Inconclusive.** 1 unit(s) of work errored (verify (forward)). "
+        + NOT_ANSWERED),
+        f"an errored unit keeps its own sentence: {errored[:260]!r}")
+
+
+def test_the_verdict_opening_is_reached_only_with_no_fault_to_name() -> None:
+    """Must fire, on the shipped `verdict_line`: the new sentence taken away.
+
+    With `report.unanswered_by_no_fault` answering what the verdict used to
+    print, the verdict of a run with an unexamined source opens on the stray
+    full stop the test above refuses; and the errored-unit verdict does not
+    change, because that branch never asks it.
+    """
+    claim = Claim("A-001", "source_a.md", "The relay listens.", 1, "listens", True)
+    graded = Verdict("A-001", "SUPPORTED", "The relay listens.", "merged.md", "found",
+                     SOURCE_TO_MERGED, "grounded")
+    run = report.Run(command="verify",
+                     claims={"source_a.md": [claim], "source_b.md": []},
+                     forward=[graded])
+    run.paths = {"source_a.md": "a.md", "source_b.md": "b.md"}
+    check(report.exit_code(run) == 2 and not run.errored and not run.unusable,
+          "the probe run must be inconclusive for an unexamined source alone")
+    shipped_line = report.verdict_line(run)
+    check(shipped_line.startswith("**Inconclusive.** 1 source(s) produced no claims"),
+          f"the shipped verdict for the probe run: {shipped_line[:120]!r}")
+    shipped = report.unanswered_by_no_fault
+    try:
+        report.unanswered_by_no_fault = lambda run: "**Inconclusive.** . " + NOT_ANSWERED
+        seeded_line = report.verdict_line(run)
+        run.steps.append(report.Step("verify (forward)", report.ERRORED, "refused"))
+        errored_line = report.verdict_line(run)
+    finally:
+        report.unanswered_by_no_fault = shipped
+    check(seeded_line.startswith("**Inconclusive.** . The model could not"),
+          f"seeded check: the verdict of an unexamined source does not come "
+          f"from the sentence under test: {seeded_line[:80]!r}")
+    check(errored_line.startswith("**Inconclusive.** 1 unit(s) of work errored")
+          and NOT_ANSWERED in errored_line,
+          f"an errored unit must not be routed through it: {errored_line[:120]!r}")
+
+
+# --------------------------------------------------------------------------
+# a report that will not print two counts for one quantity
+# --------------------------------------------------------------------------
+
+
+@contextlib.contextmanager
+def coverage_counting_one_too_many():
+    """The shipped report, with one of its two counts of the same claims off by one.
+
+    `Run.forward_by_source` is what the Coverage table prints and what the
+    guard in `report.inventory_section` holds the Inventory rows against.
+    Saying one more claim was accounted for leaves the rows alone, so it is
+    the shipped guard that raises the shipped `InventoryDisagrees`, from
+    inside the shipped `render`, on the path `cli.main` takes.
+    """
+    shipped = report.Run.forward_by_source
+
+    def off_by_one(self):
+        return {name: {**row, "accounted": row["accounted"] + 1}
+                for name, row in shipped(self).items()}
+
+    report.Run.forward_by_source = off_by_one
+    try:
+        yield
+    finally:
+        report.Run.forward_by_source = shipped
+
+
+def refused(home: Path, base_url: str, *argv: str) -> tuple[object, str, str]:
+    """`invoke`, with an exception that escaped `main` returned as the code."""
+    out, err = io.StringIO(), io.StringIO()
+    try:
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            code, printed, said = invoke(home, base_url, *argv)
+    except Exception as exc:  # noqa: BLE001 - an escaped exception is the defect
+        return exc, out.getvalue(), err.getvalue()
+    return code, printed, said
+
+
+def test_a_report_that_counts_one_quantity_two_ways_is_an_inconclusive_run() -> None:
+    """`InventoryDisagrees` reached nobody: `cli.main` let it out as a traceback.
+
+    The report raises it sooner than print an Inventory and a Coverage table
+    that disagree. It is a defect in the tool when it fires, and the run is
+    inconclusive: exit 2, one plain line that says what was refused and whose
+    fault it is, and the merged document not lost with the report.
+    """
+    said = "refuses to print two different counts for one quantity"
+    with workspace(Script(**CLEAN), merged_on_disk=True) as (home, base_url):
+        sources = (str(home / "notes-a.md"), str(home / "notes-b.md"))
+
+        # Must not fire: the same command, as shipped, prints its report.
+        code, out, err = refused(home, base_url, "merge", *sources)
+        check(code == 0 and "## Inventory" in out and said not in err,
+              f"an ordinary run must not be refused: {code!r} {strip(err)[-200:]!r}")
+
+        with coverage_counting_one_too_many():
+            code, out, err = refused(home, base_url, "merge", *sources)
+            check(code == 2,
+                  f"merge: a report that disagrees with itself is exit 2, not "
+                  f"{code!r}")
+            err = strip(err)
+            check("Traceback" not in err and err.count("error: ") == 1,
+                  f"merge: one refusal and no traceback: {err[-300:]!r}")
+            check(said in err and "defect in LLossless and not in your documents" in err
+                  and "please report it" in err and "inconclusive" in err,
+                  f"merge: the line must say what was refused and whose defect "
+                  f"it is: {err[-400:]!r}")
+            check("One report, two answers." in err,
+                  f"merge: and carry the two counts, for the report: {err[-300:]!r}")
+            check(out == MERGED and "printed in its place" in err,
+                  f"merge without -o: the merged document must not be lost with "
+                  f"the report: {out[:200]!r}")
+
+            target, json_path, html_path = (home / "m.md", home / "r.json",
+                                            home / "r.html")
+            code, out, err = refused(home, base_url, "merge", *sources,
+                                     "-o", str(target), "--json", str(json_path),
+                                     "--html", str(html_path))
+            check(code == 2 and out == "" and said in strip(err),
+                  f"merge -o: exit 2 and no report: {code!r} {out[:120]!r}")
+            check(target.exists() and target.read_text(encoding="utf-8") == MERGED
+                  and f"the merged document is in {target}" in strip(err),
+                  f"merge -o: the merged document is still written, and the "
+                  f"line says where: {strip(err)[:200]!r}")
+            check(not json_path.exists() and not html_path.exists(),
+                  "merge -o: no JSON and no HTML report beside a report that "
+                  "was refused")
+
+            code, out, err = refused(home, base_url, "verify", *sources,
+                                     str(home / "draft.md"))
+            check(code == 2 and out == "" and said in strip(err)
+                  and "Traceback" not in err,
+                  f"verify: exit 2, no report, the same line: {code!r} "
+                  f"{strip(err)[-200:]!r}")
+
+        # The page holds the same two figures against each other, on its own
+        # rows. Only its count is seeded here, so the Markdown report prints.
+        shipped = html_report._inventory_table
+
+        def one_row_too_many(run, name, reverse):
+            rows, statuses = shipped(run, name, reverse)
+            return rows, statuses + statuses[:1]
+
+        html_report._inventory_table = one_row_too_many
+        try:
+            page = home / "only.html"
+            code, out, err = refused(home, base_url, "merge", *sources,
+                                     "--html", str(page))
+        finally:
+            html_report._inventory_table = shipped
+        check(code == 2 and "## Inventory" in out and not page.exists(),
+              f"--html: the page is refused and the Markdown report stands: "
+              f"{code!r}")
+        check(f"the HTML report was not written to {page}" in strip(err)
+              and said in strip(err),
+              f"--html: the line names the page it did not write: "
+              f"{strip(err)[-300:]!r}")
+
+
+# --------------------------------------------------------------------------
+# a message names only settings that exist
+# --------------------------------------------------------------------------
+
+
+_SETTINGS: list[tuple[set[str], set[str]]] = []
+
+
+def settings_that_exist() -> tuple[set[str], set[str]]:
+    """Every flag the three commands take, and every variable the tool reads.
+
+    The flags are the parser's own. The variables are the `LLOSSLESS_` names
+    in the source of the modules that read the environment and in the help
+    text that documents them, with a per-role family (`LLOSSLESS_WINDOW_`)
+    kept as its prefix. Worked out once: the reader below asks it of every
+    string in three modules.
+    """
+    if _SETTINGS:
+        return _SETTINGS[0]
+    parser = cli.build_parser()
+    parsers = [parser]
+    for action in parser._subparsers._group_actions:
+        parsers += action.choices.values()
+    flags = {option for each in parsers for option in each._option_string_actions
+             if option.startswith("--")}
+    package = ROOT / "src" / "llossless"
+    read = "".join(path.read_text(encoding="utf-8")
+                   for path in [package / "config.py",
+                                *sorted((package / "web").glob("*.py"))])
+    variables = set(re.findall(r"LLOSSLESS_[A-Z_]+",
+                               read + cli.EPILOG + cli.SERVE_EPILOG))
+    _SETTINGS.append((flags, variables))
+    return flags, variables
+
+
+def unknown_settings(text: str) -> list[str]:
+    """The `--flags` and `LLOSSLESS_` variables `text` names that do not exist."""
+    flags, variables = settings_that_exist()
+    named_flags = set(re.findall(r"(?<![\w-])--[a-z][a-z-]*[a-z]", text))
+    named_variables = set(re.findall(r"LLOSSLESS_[A-Z_]+", text))
+    families = {name for name in variables if name.endswith("_")}
+    return sorted(named_flags - flags) + sorted(
+        name for name in named_variables - variables
+        if not any(name.startswith(family) for family in families)
+        and name.rstrip("_") not in variables)
+
+
+def messages_of(source: str) -> list[str]:
+    """Every string a module's code holds, docstrings left out.
+
+    A docstring may name a flag that does not exist in order to say so (this
+    command's own says there is no `--offline`); a string in the code is
+    something the tool can print.
+    """
+    import ast
+
+    tree = ast.parse(source)
+    docstrings = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef,
+                             ast.AsyncFunctionDef)):
+            first = node.body[0] if node.body else None
+            if (isinstance(first, ast.Expr) and isinstance(first.value, ast.Constant)
+                    and isinstance(first.value.value, str)):
+                docstrings.add(id(first.value))
+    return [node.value for node in ast.walk(tree)
+            if isinstance(node, ast.Constant) and isinstance(node.value, str)
+            and id(node) not in docstrings]
+
+
+def refusals_of(module) -> dict[str, str]:
+    """Each refusal `window` can raise, raised, by the name of what raises it."""
+    served = module.Window(tokens=5, source="reported", model="m", detail="d")
+    calls = {
+        "assert_untruncated": lambda: module.assert_untruncated(
+            {"max_tokens": 10, "completion_tokens": 10}, what="merge"),
+        "assert_prompt_not_trimmed": lambda: module.assert_prompt_not_trimmed(
+            {"estimated_prompt_tokens": 100, "prompt_tokens": 10}, what="merge"),
+        "preflight": lambda: module.preflight(None, needed=10, what="verify",
+                                              role="verify"),
+        "guard": lambda: module.guard(needed=10, window=served, what="merge"),
+    }
+    raised = {}
+    for name, call in calls.items():
+        try:
+            call()
+        except RuntimeError as exc:
+            raised[name] = str(exc)
+    return raised
+
+
+def test_a_message_names_only_flags_and_variables_that_exist() -> None:
+    """`raise --max-tokens`, said to a reader who has no such flag to raise.
+
+    A truncated merge told its operator to raise `--max-tokens`. There is no
+    such flag: the ceiling is `LLOSSLESS_MAX_TOKENS`. Every refusal `window`
+    raises is raised here and read, and every string in the code of the three
+    modules that talk to the operator is read as well, against the flags the
+    parser really takes and the variables the tool really reads.
+    """
+    import inspect
+    import textwrap
+    import types
+
+    from llossless import window
+
+    flags, variables = settings_that_exist()
+    check({"--window", "--fidelity", "--timeout"} <= flags
+          and "LLOSSLESS_MAX_TOKENS" in variables and "LLOSSLESS_WINDOW" in variables,
+          f"the list of what exists is not the parser's and the tool's: "
+          f"{sorted(flags)[:5]} {sorted(variables)[:5]}")
+    raised = refusals_of(window)
+    check(len(raised) == 4, f"each of the four refusals must be raised: {sorted(raised)}")
+    for name, message in raised.items():
+        check(not unknown_settings(message),
+              f"window.{name} names a setting that does not exist: "
+              f"{unknown_settings(message)} in {message[-200:]!r}")
+    check("LLOSSLESS_MAX_TOKENS" in raised.get("assert_untruncated", ""),
+          "a completion that hit its ceiling must name the variable that sets "
+          "the ceiling")
+    for module in ("window.py", "cli.py", "report.py"):
+        source = (ROOT / "src" / "llossless" / module).read_text(encoding="utf-8")
+        for message in messages_of(source):
+            check(not unknown_settings(message),
+                  f"{module} holds a string naming a setting that does not "
+                  f"exist: {unknown_settings(message)} in {message[:120]!r}")
+
+    # Must fire: the shipped refusal with the flag put back, and the reader of
+    # strings on a source that holds one.
+    shipped = textwrap.dedent(inspect.getsource(window.assert_untruncated))
+    check(shipped.count("LLOSSLESS_MAX_TOKENS higher") == 1,
+          "the seed aims at nothing: the sentence under test was reworded")
+    scope = dict(vars(window))
+    exec(compile(shipped.replace("LLOSSLESS_MAX_TOKENS higher", "--max-tokens"),
+                 "<seeded assert_untruncated>", "exec"), scope)
+    seeded = types.SimpleNamespace(**{**vars(window),
+                                      "assert_untruncated": scope["assert_untruncated"]})
+    check(unknown_settings(refusals_of(seeded).get("assert_untruncated", ""))
+          == ["--max-tokens"],
+          "seeded check: a refusal naming --max-tokens passed")
+    planted = ('def f():\n    "--not-a-flag, in a docstring."\n'
+               '    return "set LLOSSLESS_NO_SUCH or --no-such-flag"\n')
+    check([unknown_settings(message) for message in messages_of(planted)]
+          == [["--no-such-flag", "LLOSSLESS_NO_SUCH"]],
+          f"seeded check: the reader of strings missed a planted flag and "
+          f"variable, or read a docstring: "
+          f"{[unknown_settings(message) for message in messages_of(planted)]}")
+    check(unknown_settings("--window / LLOSSLESS_WINDOW, LLOSSLESS_BASE_URL_MERGE, "
+                           "LLOSSLESS_WINDOW_<ROLE>") == [],
+          "must not fire: real flags, real variables and a per-role family")
+
+
+def closing_block(run: report.Run) -> tuple[int, str]:
+    """What `summarise` says on stderr for this run, with the code `exit_code` gives it."""
+    code = report.exit_code(run)
+    stream = io.StringIO()
+    cli.summarise(run, code, output=None, coloured=False, piped=False, stream=stream)
+    return code, " ".join(stream.getvalue().split())
+
+
+def test_an_inconclusive_run_that_finished_is_not_described_as_unfinished() -> None:
+    """MUST FIRE: a `verify` source that produced no claims, and claims graded
+    with no quote found in the file named, exit 2 with every call answered.
+
+    The closing block said "Part of this run did not finish" for both, which is
+    false: the run finished and its verdict gives the real reason. Driven
+    through `summarise` on runs built the way `verify` builds them, so the
+    code is the one `report.exit_code` gives and the sentence is the shipped
+    one.
+
+    MUST NOT FIRE: a run with an errored unit still says it did not finish,
+    and says so in the words the reference quotes for a failed merge.
+    """
+    claim = Claim(id="A-001", source="a.md", text="x", line=1, span="x", anchored=True)
+    unfinished = " ".join(" ".join(cli.OUTCOME[2]).split())
+
+    empty = report.Run(command="verify")
+    empty.claims = {"a.md": [], "b.md": [claim], cli.MERGED: [claim]}
+    code, said = closing_block(empty)
+    check(code == 2, f"a source with no claims on verify must exit 2: {code}")
+    check("did not finish" not in said, f"the run finished: {said!r}")
+    check("1 source(s) produced no claims" in said and "a.md" in said,
+          f"the reason and the source must be named: {said!r}")
+    check(said.startswith("Inconclusive."), f"one word for the verdict: {said!r}")
+
+    ungrounded = report.Run(command="verify")
+    ungrounded.claims = {"a.md": [claim], cli.MERGED: [claim]}
+    ungrounded.forward = [Verdict("A-001", "SUPPORTED", "a quote", "a.md", "r",
+                                  SOURCE_TO_MERGED, "ungrounded")]
+    code, said = closing_block(ungrounded)
+    check(code == 2, f"graded claims with no grounded quote must exit 2: {code}")
+    check("did not finish" not in said, f"the run finished: {said!r}")
+    check("none of the quotes was found in the file it names" in said,
+          f"the reason must be named: {said!r}")
+
+    broken = report.Run(command="merge")
+    broken.steps.append(report.Step("merge", report.ERRORED, "merge: no usable response"))
+    code, said = closing_block(broken)
+    check(code == 2 and said.startswith(unfinished),
+          f"a unit that errored keeps the unfinished sentence: {said!r}")
+
+    # Seeded on the shipped function: with the new branch's helper made to
+    # answer nothing, the first run above says "did not finish" again.
+    kept = cli.finished_inconclusive
+    cli.finished_inconclusive = lambda run: None
+    try:
+        _, regressed = closing_block(empty)
+    finally:
+        cli.finished_inconclusive = kept
+    check("did not finish" in regressed,
+          f"seeded check: without the branch the old sentence returns: {regressed!r}")
+
+
+def test_the_help_lists_every_case_that_exits_two() -> None:
+    """MUST FIRE: each case that exits 2 today is named under `exit 2` in the help."""
+    top = parser_prints(["--help"], "--help must print and exit 0")
+    block = " ".join(top.split("  exit 2", 1)[1].split("  exit 3", 1)[0].split())
+    for needed in ("configuration", "unreachable endpoint", "could not answer",
+                   "no claims on verify", "no evidence quote found",
+                   "sourced merge that looked nothing up", "unwritable -o",
+                   "disagreeing counts"):
+        check(needed in block, f"`exit 2` in the help must name {needed!r}: {block!r}")
+    check(len(block) < 400, f"and stay short: {len(block)} characters")
+
+
+def headings_a_message_names(source: str) -> list[str]:
+    """Every `## Heading` written in backticks in a string of this module's source."""
+    import ast
+    named: list[str] = []
+    for node in ast.walk(ast.parse(source)):
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            named += re.findall(r"`## ([A-Z][A-Za-z ]*?)`", node.value)
+    return named
+
+
+def headings_the_report_prints() -> set[str]:
+    """Every `## Heading` the report's own section functions write, read off their source."""
+    import ast
+    found: set[str] = set()
+    for module in (report, sys.modules[Provenance.__module__]):
+        for node in ast.walk(ast.parse(Path(module.__file__).read_text())):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                match = re.match(r"## ([A-Z][A-Za-z ]*?)\s*(?:\n|$)", node.value)
+                if match:
+                    found.add(match.group(1))
+    return found
+
+
+def test_every_heading_a_terminal_message_names_is_one_the_report_prints() -> None:
+    """MUST FIRE: a message that says "see `## Additions`" sends a reader to a
+    heading the report does not have. Every backticked `## Heading` in the
+    terminal's own source is held to the headings the report's section
+    functions write, read from `report.py` and `provenance.py` and not typed
+    here.
+    """
+    printed = headings_the_report_prints()
+    check({"Verdict", "Findings", "Added from outside the documents",
+           "Review queue", "Merged document"} <= printed,
+          f"the heading list must be read off the report, not empty: {sorted(printed)}")
+    named = headings_a_message_names((ROOT / "src/llossless/cli.py").read_text())
+    check(len(named) >= 5, f"the scan must find the messages: {named}")
+    for heading in named:
+        check(heading in printed,
+              f"a message names `## {heading}`, which the report never prints")
+    seeded = headings_a_message_names('say("see `## Additions`")')
+    check(seeded == ["Additions"] and seeded[0] not in printed,
+          f"seeded check: the old wrong name must be found and refused: {seeded}")
+
+
 def main() -> int:
     for name, function in sorted(globals().items()):
         if name.startswith("test_") and callable(function):

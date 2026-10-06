@@ -112,6 +112,28 @@
 </header>
 
 <!-- ------------------------------------------------------------------ -->
+<!-- the access token: asked for first, by a server with a token and no account -->
+<!-- ------------------------------------------------------------------ -->
+<!-- Every word of this form is written here, in the reference language.
+     The catalogue is behind the token too, so until the token is given the
+     script has no string to put anywhere. -->
+<section class="card gate" data-cc="access-gate" hidden aria-labelledby="access-heading">
+  <div class="card-head">
+    <h2 id="access-heading" data-cc="gate-access-heading" data-t="auth.access.heading">Access token</h2>
+    <p class="hint" data-cc="gate-access-hint" data-t="auth.access.hint">This server was started with an access token and asks for it before anything else: the value LLOSSLESS_WEB_TOKEN had when the server was started. A server with accounts asks for it only until its first account exists.</p>
+  </div>
+  <div class="field">
+    <label for="gate-access" data-cc="gate-access-label" data-t="auth.access">Access token</label>
+    <input type="password" id="gate-access" data-cc="gate-access" autocomplete="off" spellcheck="false">
+    <p class="hint" data-cc="gate-access-kept" data-t="auth.access.kept">The token is kept only while this page is open. It is not saved in the browser.</p>
+  </div>
+  <div class="runbar-inner">
+    <button type="button" class="primary" data-cc="gate-access-submit" data-t="auth.access.submit">Continue</button>
+    <p class="status" data-cc="gate-access-refused" role="status" aria-live="polite" data-t="auth.access.refused" hidden>The server did not accept that token. Check it and try again.</p>
+  </div>
+</section>
+
+<!-- ------------------------------------------------------------------ -->
 <!-- the gate: sign in, or make the first account                        -->
 <!-- ------------------------------------------------------------------ -->
 <!-- One form for both, because they are the same three fields with one
@@ -1017,7 +1039,7 @@
   <div class="sheet-head">
     <h2 id="settings-heading" data-t="settings.heading">Credentials</h2>
   </div>
-  <p class="hint" data-t="settings.hint">A key is written to this server and never read back. This page only ever learns whether one is set, and its last four characters.</p>
+  <p class="hint" data-t="settings.hint">A key is written to this server and never read back. This page only ever learns whether one is set, and the last four characters of a key that is yours.</p>
   <ul class="providers" data-cc="providers"></ul>
   <p class="hint" data-cc="settings-note"></p>
 

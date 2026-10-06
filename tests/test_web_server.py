@@ -178,6 +178,11 @@ def request(url: str, *, method: str = "GET", payload=None, headers=None,
     if payload is not None:
         body = json.dumps(payload).encode("utf-8")
         sent.setdefault("Content-Type", "application/json")
+    if body is None and method in ("POST", "PUT", "DELETE"):
+        # A request that changes something declares the JSON type with or
+        # without a body, which is what the page sends and what the server
+        # asks for. A caller that means otherwise passes the header itself.
+        sent.setdefault("Content-Type", "application/json")
     call = urllib.request.Request(url, data=body, method=method, headers=sent)
     try:
         with urllib.request.urlopen(call, timeout=timeout) as answer:
@@ -1014,6 +1019,74 @@ def test_a_host_header_that_is_not_loopback_is_refused() -> None:
         for allowed in ("127.0.0.1", f"localhost:{built.port}", "[::1]"):
             check(request(url, headers={"Host": allowed})[0] == 200,
                   f"Host: {allowed} is a loopback name and must be served")
+
+
+def host_refusal_problems() -> list[str]:
+    """What the refusal of a foreign `Host` says about where this server binds."""
+    problems: list[str] = []
+    with live_server() as (built, _):
+        url = f"{built.url}{api.API_PREFIX}/health"
+        status, _, body = request(url, headers={"Host": "attacker.example"})
+        if status != 403:
+            return [f"a foreign Host answered {status}"]
+        said = as_json(body)["error"]["message"]
+        if "no setting" in said or "127.0.0.1" in said:
+            problems.append("the refusal says this server can bind nothing "
+                            "but 127.0.0.1")
+        if "--host" not in said:
+            problems.append("the refusal does not name the setting that "
+                            "binds another address")
+    return problems
+
+
+def test_the_host_refusal_does_not_deny_a_setting_the_server_has() -> None:
+    """The message used to say there was "no setting that binds anything else".
+
+    There is one, `--host`, and this refusal is only ever given by a server
+    that was not started with it: the check runs on a loopback bind alone.
+
+    Must not fire: `serve` really takes a host, so naming the flag is true.
+    Must fire: `check_host` with the sentence it used to carry.
+    """
+    problems = host_refusal_problems()
+    check(not problems, "host refusal: " + "; ".join(problems))
+    check("host" in inspect.signature(server.serve).parameters
+          and '"--host"' in inspect.getsource(cli),
+          "there is no --host to name, so the message is wrong the other way")
+
+    source = inspect.getsource(api.check_host)
+    start = source.index('f"{host!r}. It is bound')
+    stale = ('f"{host!r}. It binds 127.0.0.1 and has no setting that binds "\n'
+             '            f"anything else.")\n')
+    scope = dict(vars(api))
+    exec(compile(source[:start] + stale, "seeded check_host", "exec"), scope)  # noqa: S102
+    with Seeded(api, "check_host", scope["check_host"]):
+        seeded = host_refusal_problems()
+    check(len(seeded) == 2,
+          f"must fire: the stale sentence passed: {seeded}")
+
+
+def test_the_forgotten_refusal_s_docstring_says_where_the_page_states_the_window() -> None:
+    """A sentence about the page, checked against the page.
+
+    `Api._artefact` explains why its refusal may name the retention setting,
+    and used to add that the window "is on the page before anything is
+    uploaded". It is not: the page states it under a finished run's
+    download buttons, in an element that starts hidden.
+    """
+    said = " ".join((api.Api._artefact.__doc__ or "").split())
+    check("before anything is uploaded" not in said,
+          "the docstring still says the window is on the page before an upload")
+    check("under a finished run's download buttons" in said,
+          f"the docstring no longer says where the page states the window")
+    page = (ROOT / "src" / "llossless" / "web" / "static"
+            / "index.html").read_text(encoding="utf-8")
+    note = page.find('data-cc="retention-note" hidden')
+    buttons = page.find('data-cc="download-bundle"')
+    check(0 <= buttons < note and page.count('data-cc="retention-note"') == 1,
+          "the page's one retention note is not under the download buttons "
+          "and hidden until a run fills it, so the docstring describes a "
+          "page that is not this one")
 
 
 def test_a_malformed_or_unknown_submit_field_is_refused_with_a_reason() -> None:
@@ -1928,6 +2001,115 @@ def _interrupt(thread: threading.Thread) -> None:
         ctypes.py_object(KeyboardInterrupt))
 
 
+def test_serve_on_every_interface_with_a_token_says_how_the_first_account_is_made() -> None:
+    """The `--help` example, run: a network address, a token, no account.
+
+    The command an operator copies out of `llossless serve --help`. Read off
+    the banner, because that is all the operator has: it must say that the
+    page asks for the token, and from where the printed address can be
+    opened. Then the path the page takes, with what the banner printed: the
+    token opens the session route, and the token plus the setup address make
+    the first account.
+
+    Every file the command would read or write is pointed at the temporary
+    directory, so this touches nobody's accounts or keys.
+    """
+    from llossless.web import credentials
+
+    token = "probe-serve-token-0123456789"
+    out = io.StringIO()
+    banner = threading.Event()
+
+    class Watch(io.StringIO):
+        def write(self, text: str) -> int:
+            written = out.write(text)
+            if "shares." in out.getvalue() or "serve: " in text:
+                banner.set()
+            return written
+
+    names = ("LLOSSLESS_ACCOUNTS", "LLOSSLESS_CREDENTIALS", "LLOSSLESS_COMMANDS",
+             credentials.TOKEN_ENV)
+    before = {name: os.environ.get(name) for name in names}
+    with tempfile.TemporaryDirectory() as raw:
+        def run() -> None:
+            with contextlib.redirect_stderr(Watch()):
+                cli.main(["serve", "--host", "0.0.0.0", "--port", "0",
+                          "--work-dir", str(Path(raw) / "w")])
+
+        for name in names[:3]:
+            os.environ[name] = str(Path(raw) / f"{name.lower()}.json")
+        os.environ[credentials.TOKEN_ENV] = token
+        thread = threading.Thread(target=run, daemon=True)
+        thread.start()
+        try:
+            check(banner.wait(timeout=PATIENCE),
+                  f"`llossless serve --host 0.0.0.0` never finished its "
+                  f"banner: {out.getvalue()[:400]!r}")
+            text = out.getvalue()
+            port = re.search(r"serving http://0\.0\.0\.0:(\d+)", text)
+            setup = re.search(r"http://0\.0\.0\.0:\d+/#setup=(\S+)", text)
+            if port is None or setup is None:
+                check(False, f"no address or no setup address in the banner: "
+                             f"{text[:600]!r}")
+                return
+            said = " ".join(text.split())
+            check(f"The page asks for the access token first: the value of "
+                  f"{credentials.TOKEN_ENV}." in said,
+                  f"the banner does not say the page asks for the token: "
+                  f"{text[-700:]!r}")
+            check("From another machine, open it with this machine's name or "
+                  "address as the host." in said,
+                  f"the banner prints an every-interface address and does not "
+                  f"say what to open from elsewhere: {text[-700:]!r}")
+            check(token not in text,
+                  "the banner printed the access token itself")
+            url = f"http://127.0.0.1:{port.group(1)}"
+            carried = {credentials.TOKEN_HEADER: token}
+            refused = request(f"{url}{api.API_PREFIX}/session")
+            check(refused[0] == 401
+                  and as_json(refused[2])["error"]["code"] == "no_token",
+                  f"without the token the session route answered {refused[0]}")
+            asked = request(f"{url}{api.API_PREFIX}/session", headers=carried)
+            check(asked[0] == 200 and as_json(asked[2])["setup_required"] is True,
+                  f"with the token the session route answered {asked[0]} "
+                  f"{asked[2][:160]!r}")
+            made = request(f"{url}{api.API_PREFIX}/setup", method="POST",
+                           headers=carried,
+                           payload={"token": setup.group(1), "username": "probe",
+                                    "password": "probe-password-01"})
+            check(made[0] == 200,
+                  f"the token and the printed setup address must make the "
+                  f"first account; got {made[0]} {made[2][:200]!r}")
+        finally:
+            where = re.search(r"serving http://0\.0\.0\.0:(\d+)", out.getvalue())
+            if where:
+                with contextlib.suppress(Exception):
+                    request(f"http://127.0.0.1:{where.group(1)}"
+                            f"{api.API_PREFIX}/health")
+            _interrupt(thread)
+            thread.join(timeout=PATIENCE)
+            check(not thread.is_alive(),
+                  "a `llossless serve` started on every interface is still running")
+            for name, value in before.items():
+                if value is None:
+                    os.environ.pop(name, None)
+                else:
+                    os.environ[name] = value
+
+    # `--help` leads into this arrangement, so it says how it continues.
+    shown = io.StringIO()
+    with contextlib.redirect_stdout(shown), contextlib.suppress(SystemExit):
+        cli.main(["serve", "--help"])
+    helped = " ".join(shown.getvalue().split())
+    check(f"{cli.SERVE_TOKEN_ENV}=$(head -c 24 /dev/urandom | base64) llossless "
+          f"serve --host 0.0.0.0" in helped,
+          "the help no longer carries the example this test runs")
+    check("X-LLossless-Token header; the page asks for it, then offers the "
+          "first-account form" in helped,
+          f"`serve --help` gives the token example and does not say the page "
+          f"asks for the token")
+
+
 def test_the_retention_window_is_the_flag_then_the_variable_then_the_default() -> None:
     """Three sources, ranked, asserted through the command an operator runs.
 
@@ -2502,6 +2684,371 @@ def a_finished_run_body(built, body: dict) -> tuple[str, dict]:
 # --------------------------------------------------------------------------
 
 
+# --------------------------------------------------------------------------
+# the edge: origins, types, numbers, methods and idle connections
+# --------------------------------------------------------------------------
+
+
+def raw_request(built, method: str, path: str, headers=None, body=None):
+    """One request with every header as given. Returns (status, headers, bytes).
+
+    `http.client` and not `urllib`: these checks are about a `Host` the
+    caller chooses, a method `urllib` will not send, and a body sent under a
+    type `urllib` would rewrite.
+    """
+    import http.client
+
+    link = http.client.HTTPConnection("127.0.0.1", built.port, timeout=15)
+    link.putrequest(method, path, skip_host=True, skip_accept_encoding=True)
+    sent = dict(headers or {})
+    sent.setdefault("Host", f"127.0.0.1:{built.port}")
+    if body is not None:
+        sent.setdefault("Content-Length", str(len(body)))
+    for name, value in sent.items():
+        link.putheader(name, value)
+    link.endheaders()
+    if body:
+        link.send(body)
+    answer = link.getresponse()
+    data = answer.read(READ_CAP)
+    link.close()
+    return answer.status, dict(answer.getheaders()), data
+
+
+def code_of(body: bytes) -> str:
+    return str(((as_json(body) or {}).get("error") or {}).get("code", ""))
+
+
+def origin_problems() -> list[str]:
+    """Which origins a request that changes something is taken from."""
+    problems: list[str] = []
+    with live_server() as (built, _):
+        gone = f"{api.API_PREFIX}/runs/{'0' * 32}"
+        json_type = {"Content-Type": "application/json"}
+        for label, origin, wanted in (
+                ("this server's own origin", built.url, 204),
+                ("another port of this machine", "http://127.0.0.1:9", 403),
+                ("this address over the other scheme",
+                 built.url.replace("http://", "https://"), 403),
+                ("this host with no port", "http://127.0.0.1", 403),
+                ("null", "null", 403),
+                ("another host", "http://evil.example", 403),
+                ("something that is not an origin", "127.0.0.1", 403)):
+            status, _, body = raw_request(built, "DELETE", gone,
+                                          {**json_type, "Origin": origin})
+            if status != wanted or (wanted == 403 and code_of(body) != "cross_origin"):
+                problems.append(f"a DELETE from {label} answered {status} "
+                                f"{code_of(body)!r}")
+        if raw_request(built, "DELETE", gone, json_type)[0] != 204:
+            problems.append("a request with no Origin, which is a script's, "
+                            "is refused")
+
+    # Behind a proxy that terminates TLS, as a function call: the header
+    # mapping is the whole of what the rule reads.
+    def taken(**headers) -> bool:
+        try:
+            api.check_origin({name.replace("_", "-"): value
+                              for name, value in headers.items()})
+        except api.ApiError as refusal:
+            return refusal.status != 403
+        return True
+
+    name = "merge.example.invalid"
+    for label, headers, wanted in (
+            ("a proxy that says it terminated TLS",
+             {"Host": name, "Origin": f"https://{name}",
+              "X_Forwarded_Proto": "https"}, True),
+            ("the same on a port of its own",
+             {"Host": f"{name}:8443", "Origin": f"https://{name}:8443",
+              "X_Forwarded_Proto": "https, http"}, True),
+            ("a proxy that does not say so",
+             {"Host": name, "Origin": f"https://{name}"}, False),
+            ("another port behind the proxy",
+             {"Host": name, "Origin": f"https://{name}:8443",
+              "X_Forwarded_Proto": "https"}, False),
+            ("plain http named by its host alone",
+             {"Host": name, "Origin": f"http://{name}"}, True),
+            ("the same with its default port written out",
+             {"Host": f"{name}:80", "Origin": f"http://{name}"}, True),
+            ("a host in another case",
+             {"Host": "LOCALHOST:8765", "Origin": "http://localhost:8765"}, True),
+            ("an IPv6 host", {"Host": "[::1]:8765",
+                              "Origin": "http://[::1]:8765"}, True)):
+        if taken(**headers) is not wanted:
+            problems.append(f"{label} is {'refused' if wanted else 'taken'}")
+    try:
+        api.check_origin({"Host": name, "Origin": f"https://{name}"})
+    except api.ApiError as refusal:
+        if api.FORWARDED_PROTO not in refusal.message:
+            problems.append("the refusal behind a silent proxy does not name "
+                            "the header the proxy has to send")
+    return problems
+
+
+def test_an_origin_is_its_scheme_its_host_and_its_port() -> None:
+    """A request that changes something comes from this server's own origin.
+
+    The check compared the host and nothing else, and let `null` through. A
+    page on another port of the same machine is another origin, and the
+    session cookie travels to it all the same: `SameSite` goes by site, and
+    a site has no port.
+
+    Must not fire: the server's own origin, a script that sends none, and a
+    deployment behind a proxy that says it terminated TLS.
+
+    Must fire: the comparison made on the host alone.
+    """
+    problems = origin_problems()
+    check(not problems, "origin: " + "; ".join(problems))
+
+    def host_alone(scheme, authority):
+        return api.hostname(authority) or None
+
+    with Seeded(api, "_origin", host_alone):
+        seeded = origin_problems()
+    check(any("another port of this machine" in problem for problem in seeded)
+          and any("the other scheme" in problem for problem in seeded),
+          f"must fire: an origin compared by its host alone passed: {seeded}")
+
+
+def forged_post_problems() -> list[str]:
+    """A form on another page posts to the routes that take no body."""
+    problems: list[str] = []
+    refused = lambda body, n: (401, json.dumps({"error": "no"}))  # noqa: E731
+    with FakeEndpoint(refused) as endpoint_url, \
+            tempfile.TemporaryDirectory() as raw:
+        built = server.build(port=0, work_dir=Path(raw) / "work", environ={
+            "LLOSSLESS_BASE_URL": endpoint_url, "LLOSSLESS_STRUCTURED": "prompt"})
+        thread = server.background(built)
+        try:
+            run_id, told = a_finished_run(built)
+            if told.get("state") != "failed":
+                return [f"the run to retry is {told.get('state')!r}"]
+            root = f"{api.API_PREFIX}/runs"
+            before = {run["id"] for run in
+                      as_json(request(f"{built.url}{root}")[2])["runs"]}
+            form = {"Content-Type": "application/x-www-form-urlencoded"}
+            for label, headers in (
+                    ("a form", form),
+                    ("a form from another port",
+                     {**form, "Origin": "http://127.0.0.1:9"}),
+                    ("text/plain", {"Content-Type": "text/plain"}),
+                    ("no type at all", {})):
+                for verb, path in (("POST", f"{root}/{run_id}/retry"),
+                                   ("POST", f"{root}/{run_id}/cancel"),
+                                   ("DELETE", f"{root}/{run_id}")):
+                    status, _, body = raw_request(
+                        built, verb, path, headers,
+                        b"a=1" if verb == "POST" else None)
+                    if status not in (415, 403):
+                        problems.append(f"{verb} {path.rsplit('/', 1)[-1][:6]} "
+                                        f"sent as {label} answered {status}")
+            started = [run for run in
+                       as_json(request(f"{built.url}{root}")[2])["runs"]
+                       if run["id"] not in before]
+            if started:
+                problems.append(f"a forged request started "
+                                f"{len(started)} run(s)")
+            # Must not fire: the page's own way of asking, which declares the
+            # type on a request with no body.
+            status, _, body = raw_request(
+                built, "POST", f"{root}/{run_id}/retry",
+                {"Content-Type": "application/json", "Origin": built.url}, b"{}")
+            if status != 202:
+                problems.append(f"the page's own retry answered {status}")
+            status, _, _ = raw_request(built, "DELETE", f"{root}/{run_id}",
+                                       {"Content-Type": "application/json"})
+            if status != 204:
+                problems.append(f"the page's own delete answered {status}")
+        finally:
+            built.shutdown()
+            built.server_close()
+            built.store.close()
+            thread.join(timeout=5)
+    return problems
+
+
+def test_every_request_that_changes_something_declares_json() -> None:
+    """Retry, cancel and delete take no body, and still ask for the type.
+
+    The JSON type was asked of the routes that parse a body. Retry and cancel
+    parse none, so a form on another page, sent with the session cookie,
+    started a new run and its model calls.
+
+    Must fire: the type not asked for.
+    """
+    problems = forged_post_problems()
+    check(not problems, "forged post: " + "; ".join(problems))
+    with Seeded(api, "check_content_type", lambda headers: None):
+        seeded = forged_post_problems()
+    check(any("retry sent as a form answered 202" in problem for problem in seeded)
+          and any("a forged request started" in problem for problem in seeded),
+          f"must fire: a server that asks for no type passed: {seeded}")
+
+
+def number_problems() -> list[str]:
+    """Numbers that are not numbers, in the one field that takes a fraction."""
+    problems: list[str] = []
+    with live_server() as (built, _):
+        url = f"{api.API_PREFIX}/runs"
+        whole = json.dumps(a_submission())[:-1]
+        for label, tail, wanted in (
+                ("NaN", ', "loss_budget": NaN}', "bad_json"),
+                ("Infinity", ', "loss_budget": Infinity}', "bad_json"),
+                ("-Infinity", ', "loss_budget": -Infinity}', "bad_json"),
+                ("a float past the largest", ', "loss_budget": 1e999}',
+                 "bad_loss_budget"),
+                ("an integer past the largest float",
+                 ', "loss_budget": 1' + "0" * 400 + "}", "bad_loss_budget")):
+            status, _, body = raw_request(
+                built, "POST", url, {"Content-Type": "application/json"},
+                (whole + tail).encode("utf-8"))
+            if status != 400 or code_of(body) != wanted:
+                problems.append(f"a loss budget of {label} answered {status} "
+                                f"{code_of(body)!r}")
+        status, _, _ = raw_request(
+            built, "POST", url, {"Content-Type": "application/json"},
+            (whole + ', "loss_budget": 0.05}').encode("utf-8"))
+        if status != 202:
+            problems.append(f"an ordinary loss budget answered {status}")
+    return problems
+
+
+def test_a_number_that_is_not_finite_is_refused() -> None:
+    """`NaN` and the infinities are not JSON here, and no fraction is infinite.
+
+    A `loss_budget` of `NaN` was accepted and queued. Every comparison with
+    it is false, so it is a budget no merge is ever over.
+
+    Must fire, twice: the parser taking the three constants, and the
+    fraction not asked whether it is finite.
+    """
+    import math
+
+    problems = number_problems()
+    check(not problems, "numbers: " + "; ".join(problems))
+    with Seeded(api, "_not_a_number", float):
+        seeded = number_problems()
+    check(sum("answered 400 'bad_loss_budget'" in problem for problem in seeded) == 3,
+          f"must fire: a parser that reads NaN passed: {seeded}")
+    with Seeded(api, "_not_a_number", float), \
+            Seeded(math, "isfinite", lambda value: True):
+        seeded = number_problems()
+    check(any("a loss budget of NaN answered 202" in problem for problem in seeded)
+          and any("a float past the largest answered 202" in problem
+                  for problem in seeded),
+          f"must fire: a fraction that is not asked whether it is finite "
+          f"passed: {seeded}")
+
+
+def bare_answer_problems() -> list[str]:
+    """The answers the base class writes, and the page asked for by HEAD."""
+    problems: list[str] = []
+    with live_server() as (built, _):
+        wanted = dict(server.SECURITY_HEADERS)
+        for method in ("OPTIONS", "PATCH", "TRACE", "PROPFIND"):
+            status, headers, _ = raw_request(built, method,
+                                             f"{api.API_PREFIX}/runs")
+            if status != 501:
+                problems.append(f"{method} answered {status}")
+            missing = [name for name, value in wanted.items()
+                       if headers.get(name) != value]
+            if missing:
+                problems.append(f"the answer to {method} carries no "
+                                f"{', '.join(missing)}")
+        for method in ("GET", "HEAD"):
+            status, _, _ = raw_request(built, method, "/",
+                                       {"Host": "evil.example"})
+            if status != 403:
+                problems.append(f"{method} / under a Host that is not this "
+                                f"machine answered {status}")
+            status, _, _ = raw_request(built, method, "/")
+            if status != 200:
+                problems.append(f"{method} / under this machine's own Host "
+                                f"answered {status}")
+    return problems
+
+
+def test_an_answer_the_base_class_writes_carries_the_headers_too() -> None:
+    """A 501 for an unknown method, and a HEAD for the page.
+
+    Both went round this server's own writing: the 501 page carried none of
+    the security headers, and a HEAD for the page skipped the `Host` check a
+    GET for it makes.
+
+    Must fire, twice: the base class's `end_headers`, and a server that
+    checks no `Host`.
+    """
+    from http.server import BaseHTTPRequestHandler
+
+    problems = bare_answer_problems()
+    check(not problems, "bare answers: " + "; ".join(problems))
+    with Seeded(server.Handler, "end_headers", BaseHTTPRequestHandler.end_headers):
+        seeded = bare_answer_problems()
+    check(sum("carries no" in problem for problem in seeded) == 4,
+          f"must fire: the base class's own error page passed: {seeded}")
+    shipped = server.Handler.do_HEAD
+
+    def unguarded(self):
+        with Seeded(api.Api, "check_transport", lambda api_self, headers: None):
+            shipped(self)
+
+    with Seeded(server.Handler, "do_HEAD", unguarded):
+        seeded = bare_answer_problems()
+    check(any("HEAD / under a Host that is not this machine answered 200"
+              in problem for problem in seeded),
+          f"must fire: a HEAD that checks no Host passed: {seeded}")
+
+
+def test_a_connection_that_says_nothing_is_closed() -> None:
+    """A read on a connection waits `SOCKET_TIMEOUT` and no longer.
+
+    There was no limit: a connection that declared a body and never sent it
+    held a thread until the client went away.
+
+    Asked with the wait shortened, so the check takes seconds. Must fire:
+    no timeout at all, which is the handler this was before.
+    """
+    import socket
+
+    def closed_within(seconds: float, timeout) -> bool:
+        with Seeded(server.Handler, "timeout", timeout), \
+                live_server() as (built, _):
+            with socket.create_connection(("127.0.0.1", built.port),
+                                          timeout=5) as link:
+                link.sendall(b"POST /api/v1/runs HTTP/1.1\r\nHost: 127.0.0.1\r\n"
+                             b"Content-Type: application/json\r\n"
+                             b"Connection: close\r\n"
+                             b"Content-Length: 100\r\n\r\n{")
+                link.settimeout(seconds)
+                try:
+                    # Whatever the server says, it ends the wait: an answer,
+                    # or the connection closed with none.
+                    link.recv(100)
+                    return True
+                except (TimeoutError, socket.timeout):
+                    # Still open. The rest of the body is sent and the answer
+                    # read, so the server is not left writing to nobody.
+                    link.settimeout(PATIENCE)
+                    link.sendall(b" " * 99)
+                    # To its end: the request asked for the connection to be
+                    # closed, so the answer ends where the server stops.
+                    while link.recv(4096):
+                        pass
+                    return False
+
+    check(isinstance(server.SOCKET_TIMEOUT, float)
+          and 5 <= server.SOCKET_TIMEOUT <= 120
+          and server.Handler.timeout == server.SOCKET_TIMEOUT,
+          f"the handler's timeout is {server.Handler.timeout!r}")
+    check(closed_within(4.0, 1.0),
+          "a connection that sent one byte of a hundred was still open after "
+          "four times the timeout")
+    check(not closed_within(3.0, None),
+          "must fire: with no timeout the connection was closed anyway, so "
+          "the check above is not about the timeout")
+
+
 def test_web_server_offline() -> None:
     """pytest entry point."""
     main()
@@ -2836,6 +3383,112 @@ def test_a_restart_that_cannot_bind_runs_nothing() -> None:
         seeded = failed_bind_verdict()
     check(any("ran the queue" in problem for problem in seeded),
           f"must fire: a store started before the bind passed: {seeded}")
+
+
+# Two access tokens with a character outside ASCII: one a browser sends as a
+# single Latin-1 byte, and one above U+00FF that no header can carry at all.
+# Written as escapes so this file stays ASCII.
+UNPRESENTABLE_TOKENS = ("probe-t\u00f6ken-0123456789", "probe-t\u20acken-0123456789")
+
+
+def unpresentable_token_problems() -> list[str]:
+    """Start a server on a token with a character outside ASCII. What happens?
+
+    If it starts, the token is presented both ways a client spells it: the
+    bytes a browser sends (Latin-1) and the bytes a script sends (UTF-8). A
+    server that answers the two differently has a token its operator can use
+    from one client and not from another.
+    """
+    from llossless.web import credentials
+
+    problems: list[str] = []
+    with tempfile.TemporaryDirectory() as raw:
+        for number, token in enumerate(UNPRESENTABLE_TOKENS):
+            work = Path(raw) / f"work-{number}"
+            try:
+                built = server.build(port=0, token=token, work_dir=work,
+                                     environ={})
+            except credentials.BindRefused as refusal:
+                said = str(refusal)
+                if credentials.TOKEN_ENV not in said or "ASCII" not in said:
+                    problems.append(f"the refusal does not say which setting "
+                                    f"or why: {said!r}")
+                if token in said:
+                    problems.append("the refusal repeats the token")
+                if work.exists():
+                    problems.append("the refusal came after the job store "
+                                    "was built, so not before the bind")
+            else:
+                thread = server.background(built)
+                try:
+                    url = f"http://127.0.0.1:{built.port}{api.API_PREFIX}/health"
+                    answers = {}
+                    for spelling in ("latin-1", "utf-8"):
+                        try:
+                            carried = token.encode(spelling).decode("latin-1")
+                        except UnicodeEncodeError:
+                            answers[spelling] = "cannot be sent"
+                            continue
+                        answers[spelling] = request(url, headers={
+                            credentials.TOKEN_HEADER: carried})[0]
+                    problems.append(f"a server started on a token that "
+                                    f"answers {answers}")
+                finally:
+                    built.shutdown()
+                    built.server_close()
+                    built.store.close()
+                    thread.join(timeout=5)
+            # The same ruling for a network address, asked without binding one.
+            try:
+                credentials.require_token("0.0.0.0", token)
+                problems.append("a network bind accepts a token with a "
+                                "character outside ASCII")
+            except credentials.BindRefused:
+                pass
+    return problems
+
+
+def test_a_token_no_client_can_present_consistently_is_refused_at_start() -> None:
+    """`LLOSSLESS_WEB_TOKEN` with a character outside ASCII. Refused, with the reason.
+
+    It used to be accepted: the server started, answered 401 to the token
+    sent as UTF-8 and 200 to the same token sent as Latin-1, and a token with
+    a character above U+00FF could not be presented at all.
+
+    Must not fire: an ASCII token of the same length starts and is accepted,
+    and a server with an account, where the token is not consulted, is not
+    refused over one.
+
+    Must fire: `credentials.presentable` answering yes to everything, which
+    is the server this was before. It then starts, and the two spellings of
+    one token get two different answers.
+    """
+    from llossless.web import credentials
+
+    problems = unpresentable_token_problems()
+    check(not problems, "token outside ASCII: " + "; ".join(problems))
+
+    plain = "probe-token-0123456789ab"
+    with live_server(token=plain) as (built, _):
+        url = f"http://127.0.0.1:{built.port}{api.API_PREFIX}/health"
+        check(request(url, headers={credentials.TOKEN_HEADER: plain})[0] == 200,
+              "an ASCII token is not accepted, so the refusal above is not "
+              "about the characters")
+    check(credentials.require_token("0.0.0.0", plain) == plain,
+          "an ASCII token is refused for a network bind")
+    for token in UNPRESENTABLE_TOKENS:
+        check(credentials.require_token("0.0.0.0", token, accounts=1) == token,
+              "a server with an account was refused over a token it does "
+              "not consult")
+
+    with Seeded(credentials, "presentable", lambda token: True):
+        seeded = unpresentable_token_problems()
+    check(any("'latin-1': 200" in problem and "'utf-8': 401" in problem
+              for problem in seeded)
+          and any("cannot be sent" in problem for problem in seeded)
+          and any("network bind accepts" in problem for problem in seeded),
+          f"must fire: a server that accepts any token at start passed: "
+          f"{seeded}")
 
 
 def test_serve_refuses_a_work_directory_another_server_owns() -> None:

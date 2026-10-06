@@ -195,6 +195,11 @@ def request(url: str, *, method: str = "GET", payload=None, headers=None,
     if payload is not None:
         body = json.dumps(payload).encode("utf-8")
         sent.setdefault("Content-Type", "application/json")
+    if body is None and method in ("POST", "PUT", "DELETE"):
+        # A request that changes something declares the JSON type with or
+        # without a body, which is what the page sends and what the server
+        # asks for. A caller that means otherwise passes the header itself.
+        sent.setdefault("Content-Type", "application/json")
     call = urllib.request.Request(url, data=body, method=method, headers=sent)
     try:
         with urllib.request.urlopen(call, timeout=timeout) as answer:
@@ -1625,7 +1630,7 @@ def test_the_page_saves_the_address_on_screen_before_the_key() -> None:
     app = (ROOT / "src" / "llossless" / "web" / "static" / "app.js").read_text(encoding="utf-8")
     check(not page_save_order_problems(app), f"{page_save_order_problems(app)}")
     seeded = app.replace(
-        "      if (shown && !sameAddress(shown, String(provider.base_url || \"\"))) {\n"
+        "      if (shown && !sameAddress(shown, theirAddress)) {\n"
         "        await sendJson(\"PUT\", route(ROUTES.endpoint, { name: String(provider.name) }),\n"
         "                       { base_url: shown });\n"
         "      }\n", "", 1)

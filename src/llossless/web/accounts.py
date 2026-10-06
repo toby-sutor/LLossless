@@ -86,6 +86,7 @@ import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from .. import config
 from . import credentials
@@ -121,6 +122,12 @@ DIR_MODE = 0o700
 # filesystem -- `Record.id` does, and a name is never joined to a path
 # anywhere in this package.
 USERNAME = re.compile(r"\A[a-z0-9][a-z0-9._-]{1,31}\Z")
+
+# The longest name `USERNAME` matches. A submitted name longer than this is no
+# account's, and the sign-in route says so without keeping it: the throttle
+# is keyed on what was submitted, by anybody, before any password is checked.
+USERNAME_MAX = 32
+assert USERNAME.match("a" * USERNAME_MAX) and not USERNAME.match("a" * (USERNAME_MAX + 1))
 
 # An account id: 32 hexadecimal characters from `secrets.token_hex(16)`. The
 # same shape and the same reasoning as `api.JOB_ID`, and `\A`/`\Z` rather than
@@ -210,6 +217,10 @@ class AccountError(Exception):
     it is served -- and the value most likely to be in scope here is a
     password.
     """
+
+
+class AlreadySetUp(AccountError):
+    """The first account was asked for on a server that already has one."""
 
 
 class UnknownAccount(AccountError):
@@ -609,12 +620,17 @@ class Accounts:
     # -- writing ---------------------------------------------------------
 
     def create(self, username, password, *, operator: bool = False,
-               now: float | None = None) -> Record:
+               now: float | None = None, first: bool = False) -> Record:
         """Add one account. Refuses a name that is already there.
 
         The id comes from `secrets.token_hex` rather than from the username,
         and that is what keeps a rename from moving a directory and a username
         from ever being a path segment.
+
+        `first` is the setup route's: the account is created only if the
+        file holds none, and that is decided under the same lock as the
+        write. Decided by the caller beforehand, two setup requests that
+        arrived together both found no account and both made an operator.
         """
         name = check_username(username)
         check_password(password)
@@ -623,6 +639,10 @@ class Accounts:
         derived = derive(password, salt, algorithm=algorithm, cost=cost)
         with self._lock:
             rows = self.read()
+            if first and rows:
+                raise AlreadySetUp(
+                    "this server already has an account on it. The setup "
+                    "address works once, and once only.")
             if name in rows:
                 raise AccountError(
                     f"there is already an account called {name}. Names are how "
@@ -712,8 +732,7 @@ class Accounts:
         writing the other's shape.
         """
         parent = self.path.parent
-        parent.mkdir(parents=True, exist_ok=True)
-        os.chmod(parent, DIR_MODE)
+        credentials.private_dir(parent)
         stored = {
             name: {
                 "id": row.id,
@@ -1055,6 +1074,39 @@ class Setup:
 # --------------------------------------------------------------------------
 
 
+class RunKeys(dict):
+    """A member's keys for one run, and which of them are the operator's.
+
+    A `dict` of key variable to key, as `config.keys_for_this_run` takes.
+    `shared` names the variables whose key is the operator's, handed over
+    because the member has no endpoint of their own for that provider. The
+    job layer needs the difference: a member's own key is theirs for the
+    whole run, and the operator's is handed out only while it is still the
+    key stored for the address the run started with.
+    """
+
+    shared: frozenset = frozenset()
+
+
+def reduced(address: str) -> str:
+    """An address as scheme, host and port, with nothing after them.
+
+    What a member is shown of an endpoint the operator set up. A path or a
+    query in an address can carry a token or name a private service, and the
+    member needs neither to pick the endpoint: a run's own banner has shown
+    this form since it existed (`config.Settings.banner_endpoint`).
+    """
+    try:
+        parts = urlsplit(address.strip())
+        port = f":{parts.port}" if parts.port else ""
+    except ValueError:
+        return ""
+    if not parts.scheme or not parts.hostname:
+        return ""
+    host = f"[{parts.hostname}]" if ":" in parts.hostname else parts.hostname
+    return f"{parts.scheme}://{host}{port}"
+
+
 class Directory:
     """Which credentials file belongs to whom, and what a run reads from it.
 
@@ -1097,6 +1149,12 @@ class Directory:
         # everybody else. `None` on a server that has no accounts, where the
         # question never arises.
         self.accounts = accounts
+        # A `users` directory an earlier version created is `0755`: see
+        # `credentials.private_dir`. Repaired where it exists; a new one is
+        # created owner-only by whichever write makes it.
+        with contextlib.suppress(OSError):
+            if (self.root / USERS_DIR).is_dir():
+                os.chmod(self.root / USERS_DIR, DIR_MODE)
 
     def __repr__(self) -> str:
         """The root. Never a key, never an account."""
@@ -1170,13 +1228,105 @@ class Directory:
         """
         if not account_id:
             return {}
+        return self._addresses(self.own(account_id).read())
+
+    @staticmethod
+    def _addresses(mine: dict) -> dict[str, str]:
+        """One read of an account's file, as the address variables it sets."""
         out: dict[str, str] = {}
-        for name, row in self.own(account_id).read().items():
+        for name, row in mine.items():
             if row.base_url:
                 out[credentials.url_env(name)] = row.base_url
             if row.models:
                 out[credentials.models_env(name)] = "\n".join(row.models)
         return out
+
+    def for_run(self, account_id: str, environ=None
+                ) -> tuple[dict[str, str], dict[str, str] | None]:
+        """This account's addresses and its keys, both out of **one** read.
+
+        What a run is built from: `environ_for`'s answer and `keys_for`'s,
+        as a pair. The two are one decision per provider, the member's own
+        address with the member's own key or the operator's address with the
+        operator's key, so they have to be decided over one state of the
+        member's file. Read separately they can straddle a change to it: an
+        endpoint deleted between the two reads left a run addressed to the
+        member's endpoint and holding the operator's key, which is the one
+        pairing this class exists to make impossible.
+
+        `environ` is the environment the run resolves its addresses against.
+        The operator's half of each pair is read from it and nowhere else at
+        a later moment, so pass the same mapping the addresses are laid over.
+
+        An unusable file raises here, as it does in `environ_for`: a run is
+        not started on half an answer. So does an account that is no longer
+        in the account store. Its run would otherwise be built as a member's
+        with nothing of its own, which is a run on the operator's endpoints
+        and the operator's key for somebody the operator has removed.
+
+        The addresses carry one more thing a run resolves against:
+        `credentials.key_scope`, which roles may not read the key their
+        variable names. It is decided here because it needs the same read:
+        whether a key was saved with an address is a fact about these files.
+        An empty `account_id` is a run nobody owns, on a server with no
+        accounts, and gets the scope the shared file alone decides.
+        """
+        if not account_id:
+            return self._scope({}, {}, environ), None
+        if self.accounts is not None and self.accounts.by_id(account_id) is None:
+            raise UnknownAccount(
+                "the account that submitted this run has been removed, so "
+                "the run was not started. No model was called.")
+        mine = self.own(account_id).read()
+        operator = self._is_operator(account_id)
+        keys = None if operator else self._keys(mine, environ)
+        addresses = self._addresses(mine)
+        return ({**addresses,
+                 **self._scope({} if operator else mine, addresses, environ)},
+                keys)
+
+    def _scope(self, mine: dict, addresses: dict, environ) -> dict[str, str]:
+        """`credentials.key_scope` for one run, over one read of each file.
+
+        A provider's key was saved with an address when the member has an
+        endpoint of their own for it, or, failing that, when the operator's
+        shared file holds both an address and a key for it. Anything else in
+        a key variable came from the server's own environment or was stored
+        with no address, and belongs to the server's own endpoint.
+        """
+        if environ is None:
+            return {}
+        try:
+            shared = self.shared.read()
+        except credentials.CredentialsError:
+            shared = {}
+        paired = {name for name in credentials.PROVIDERS
+                  if (name in mine and mine[name].base_url)
+                  or (name in shared and shared[name].base_url
+                      and shared[name].key)}
+        return credentials.key_scope({**environ, **addresses}, paired)
+
+    def own_keys(self, account_id: str) -> dict[str, str]:
+        """The keys this member stored against addresses of their own. Only those.
+
+        Never the operator's, which is the difference from `keys_for`. It is
+        the key source for a question about an address the member is storing:
+        the operator's key is not sent to a member's address, so it has no
+        part in whether one may be saved.
+        """
+        return {credentials.PROVIDERS[name]: row.key
+                for name, row in self.own(account_id).read().items()
+                if row.base_url and row.key}
+
+    def _is_operator(self, account_id: str) -> bool:
+        """Is this id an operator's? False where there is no account store."""
+        if self.accounts is None:
+            return False
+        try:
+            record = self.accounts.by_id(account_id)
+        except AccountError:
+            return False
+        return record is not None and record.operator
 
     def keys_for(self, account_id: str, environ=None) -> dict[str, str] | None:
         """What `config.keys_for_this_run` is handed for this account's job.
@@ -1214,15 +1364,8 @@ class Directory:
         `Credentials.describe` reports from the same place. A caller with no
         environ to offer falls back to the file.
         """
-        if not account_id:
+        if not account_id or self._is_operator(account_id):
             return None
-        if self.accounts is not None:
-            try:
-                record = self.accounts.by_id(account_id)
-            except AccountError:
-                record = None
-            if record is not None and record.operator:
-                return None
         try:
             mine = self.own(account_id).read()
         except credentials.CredentialsError:
@@ -1231,23 +1374,59 @@ class Directory:
             # on the operator's shared endpoints -- and the settings page
             # reports the same refusal over the same file.
             mine = {}
+        return self._keys(mine, environ)
+
+    def _keys(self, mine: dict, environ=None) -> dict[str, str]:
+        """The rule in `keys_for`, over one read of the member's file.
+
+        Split out so that `for_run` applies it to the same read its addresses
+        come from, and so there is one copy of the rule and not two.
+
+        **The operator's stored key is handed out only for the address it is
+        stored with.** The address a member's run uses for a shared provider
+        is the one in `environ`, and the shared file is read here, a moment
+        later. If the operator moved that endpoint in between, the file's key
+        belongs to the new address and `environ` still names the old one, so
+        the file's key is left out and the key `environ` itself holds is
+        used: that one was put there together with the address beside it.
+        """
         try:
             shared = self.shared.read()
         except credentials.CredentialsError:
             shared = {}
-        out: dict[str, str] = {}
+        out = RunKeys()
+        theirs = set()
         for name, variable in credentials.PROVIDERS.items():
             row = mine.get(name)
             if row is not None and row.base_url:
                 if row.key:
                     out[variable] = row.key
                 continue
+            # The operator's from here on, whether or not there is one now:
+            # a key the operator saves while the run is under way is this
+            # provider's key for the run as well.
+            theirs.add(variable)
             operators = shared.get(name)
-            value = (operators.key if operators is not None else "") or (
-                (environ or {}).get(variable) or "")
+            stored = operators.key if operators is not None else ""
+            if (stored and operators.base_url and environ is not None
+                    and (environ.get(credentials.url_env(name)) or "").strip()
+                    != operators.base_url):
+                stored = ""
+            value = stored or ((environ or {}).get(variable) or "")
             if value:
                 out[variable] = value
+        out.shared = frozenset(theirs)
         return out
+
+    def shared_keys(self, environ) -> dict[str, str]:
+        """The operator's keys as a member with nothing of their own gets them.
+
+        `_keys` over an empty file, against `environ`. Asked again by a
+        member's run each time it is about to send the operator's key
+        (`jobs.MemberKeys`), so a key the operator has deleted is not sent
+        by a run that started before the deletion.
+        """
+        return self._keys({}, environ)
 
     def rows_for(self, record: Record | None, *, environ) -> list[dict]:
         """Every provider, as the settings page sees it for this account.
@@ -1264,6 +1443,11 @@ class Directory:
         their file, their shell, or the unit that started the server. A user's
         rows are answered out of their file alone, because that is the only
         place theirs can come from.
+
+        `suffix`, the last four characters of a key, is on a row only for the
+        account that owns the key: the operator for a shared row, a member for
+        their own. A member's view of a shared row says `configured` and
+        carries no `suffix`.
         """
         operator = record is None or record.operator
         shared = {row["name"]: row for row in self.shared.describe(environ)}
@@ -1277,7 +1461,20 @@ class Directory:
                 continue
             row = shared[name]
             if row["endpoint_configured"] or row["configured"]:
-                out.append(dict(row, owner="operator", editable=operator))
+                # The last four characters are for the account that owns the
+                # key. A member learns that the operator's key is set, and
+                # nothing of what it is.
+                seen = row if operator else {
+                    field: value for field, value in row.items()
+                    if field != "suffix"}
+                # Nor the whole of its address. A member is served scheme,
+                # host and port, which is what names the endpoint in the
+                # picker; the path and anything after it stay with the
+                # operator. Nothing reads this field back as an address: a
+                # request names an endpoint by its provider.
+                shown = seen["base_url"] if operator else reduced(seen["base_url"])
+                out.append(dict(seen, base_url=shown, owner="operator",
+                                editable=operator))
                 continue
             # Nobody has configured this provider. It is offered to everyone,
             # and where the write lands is `store_for`'s answer rather than

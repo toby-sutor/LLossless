@@ -4024,8 +4024,8 @@ PUBLIC_REFERENCES = ("www.apache.org", "creativecommons.org",
     # the entries above: each upload is pinned by its own id, so another asset under
     # `user-attachments` still fires.
     "github.com/toby-sutor/LLossless",
-    "github.com/user-attachments/assets/cf0a9646-d93f-4ca5-bd78-a13dc0bc4459",
-    "github.com/user-attachments/assets/80a19e18-9d3a-4e95-898e-aa8876f4d7ea",
+    "github.com/user-attachments/assets/6d9ce6f1-dddf-4da8-acbc-3ec2d592f0b6",
+    "github.com/user-attachments/assets/c7036387-eb90-4157-bfad-660c041a51fe",
     # The README's "About the author" names the operator's own public profile,
     # the committed text of the README the operator wrote and this
     # session was told not to touch. Same ground as the repository link
@@ -4612,8 +4612,8 @@ SECRET_CANARIES = {
          "https://github.com/anthropics/anthropic-sdk-python/issues/1942",
          # The README's clone URL and screenshot uploads, verbatim.
          "https://github.com/toby-sutor/LLossless/",
-         "https://github.com/user-attachments/assets/cf0a9646-d93f-4ca5-bd78-a13dc0bc4459",
-         "https://github.com/user-attachments/assets/80a19e18-9d3a-4e95-898e-aa8876f4d7ea",
+         "https://github.com/user-attachments/assets/6d9ce6f1-dddf-4da8-acbc-3ec2d592f0b6",
+         "https://github.com/user-attachments/assets/c7036387-eb90-4157-bfad-660c041a51fe",
          # The README's "About the author" link, verbatim.
          "https://www.linkedin.com/in/tobysu/"],
     ),

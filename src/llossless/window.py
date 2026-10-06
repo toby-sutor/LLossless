@@ -679,9 +679,9 @@ def assert_untruncated(row: dict, *, what: str) -> None:
             f"a {max_tokens}-token ceiling. That is what a truncated completion "
             f"looks like from its own usage counts -- the served window could "
             f"not be measured before this call, so nothing caught it sooner. "
-            f"Lower the fidelity level, split the documents, or raise "
-            f"--max-tokens if the ceiling was the tool's own budget rather than "
-            f"the endpoint's."
+            f"Lower the fidelity level, split the documents, or set "
+            f"LLOSSLESS_MAX_TOKENS higher if the ceiling was the tool's own "
+            f"budget rather than the endpoint's."
         )
 
 

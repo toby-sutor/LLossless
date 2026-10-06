@@ -97,6 +97,55 @@ def commit_id_problems(name: str, text: str, pattern: re.Pattern) -> list[str]:
             for candidate in commit_ids_in(text, pattern)]
 
 
+# Any Markdown heading. The probes below plant their text on the first one a
+# page has, whatever it says, so renaming a heading cannot break a check that
+# is about commit ids and nothing else.
+HEADING = re.compile(r"^#{1,6} .*$", re.M)
+
+
+def planted(page: str, addition: str) -> str:
+    """`page` with `addition` put at the end of its first heading.
+
+    A page with no heading at all gets the addition as a line of its own at
+    the top, so the probe takes on any text it is handed.
+    """
+    heading = HEADING.search(page)
+    if heading is None:
+        return f"{addition.lstrip(' ,')}\n\n{page}"
+    return page[:heading.end()] + addition + page[heading.end():]
+
+
+def docs_probe_problems(sample: str, head: str) -> list[str]:
+    """What is wrong with the two docs probes on `sample`, as sentences.
+
+    Returned and not recorded, so the same two probes can be asked of a page
+    whose headings were renamed and of one that has none.
+    """
+    problems = []
+    # Must-fire: a real, resolvable commit (this repository's own HEAD)
+    # planted into a copy of a real page.
+    seeded = planted(sample, f", tool commit `{head}`")
+    if seeded == sample or f"`{head}`" not in seeded:
+        problems.append("the docs probe did not take")
+    if not any(f"`{head}`" in problem
+               for problem in commit_id_problems("seed", seeded, BACKTICK_HASH)):
+        problems.append("seeded check: a real commit id planted in a docs page "
+                        "passed")
+
+    # Must-not-fire: a made-up hex string of the same shape, in backticks,
+    # that names no commit (a digest or a placeholder) must not fire, or
+    # this check would be a denylist of one specific hash by another name.
+    # Planted at the same place, so the two probes differ in the hash alone.
+    fake = planted(sample, ", ref `abc1234`")
+    if fake == sample or "`abc1234`" not in fake:
+        problems.append("the docs must-not-fire probe did not take")
+    if commit_id_problems("seed", fake, BACKTICK_HASH) != commit_id_problems(
+            "seed", sample, BACKTICK_HASH):
+        problems.append("seeded check: a non-resolving, made-up hex string in "
+                        "backticks wrongly fired")
+    return problems
+
+
 def test_no_commit_ids_in_docs() -> None:
     for path in sorted(DOCS.glob("*.md")):
         for problem in commit_id_problems(str(path.relative_to(ROOT)),
@@ -104,25 +153,51 @@ def test_no_commit_ids_in_docs() -> None:
                                           BACKTICK_HASH):
             check(False, problem)
 
-    # Must-fire: a real, resolvable commit (this repository's own HEAD)
-    # planted into a copy of a real page.
     head = subprocess.run(["git", "rev-parse", "--short=7", "HEAD"], cwd=ROOT,
                           capture_output=True, text=True, check=True).stdout.strip()
     sample = (DOCS / "results.md").read_text(encoding="utf-8")
-    seeded = sample.replace("## How well it works",
-                            f"## How well it works, tool commit `{head}`", 1)
-    check(seeded != sample, "the docs probe did not take")
-    check(bool(commit_id_problems("seed", seeded, BACKTICK_HASH)),
-          "seeded check: a real commit id planted in docs/results.md passed")
+    problems = docs_probe_problems(sample, head)
+    check(not problems, f"docs/results.md: {problems}")
 
-    # Must-not-fire: a made-up hex string of the same shape, in backticks,
-    # that names no commit -- a digest or a placeholder -- must not fire, or
-    # this check would be a denylist of one specific hash by another name.
-    fake = sample.replace("## How well it works",
-                          "## How well it works, ref `abc1234`", 1)
-    check(not commit_id_problems("seed", fake, BACKTICK_HASH),
-          "seeded check: a non-resolving, made-up hex string in backticks "
-          "wrongly fired")
+
+def test_the_docs_probes_do_not_depend_on_a_heading() -> None:
+    """Renaming every heading of the probed page leaves both probes working.
+
+    The probes used to plant their text by replacing one heading of
+    `docs/results.md` by name, so renaming that heading failed this file for a
+    reason that has nothing to do with commit ids. Asked here of the real
+    page with every heading reworded, of the page with its headings removed,
+    and of an empty page: the must-fire probe still fires and the
+    must-not-fire probe still does not.
+    """
+    head = subprocess.run(["git", "rev-parse", "--short=7", "HEAD"], cwd=ROOT,
+                          capture_output=True, text=True, check=True).stdout.strip()
+    sample = (DOCS / "results.md").read_text(encoding="utf-8")
+    renamed = HEADING.sub(lambda m: m.group(0).split(" ", 1)[0] + " Renamed", sample)
+    check(renamed != sample and "## Renamed" in renamed,
+          "the renaming did not take, so this check has nothing to stand on")
+    for label, page in (("every heading renamed", renamed),
+                        ("no heading", HEADING.sub("", sample)),
+                        ("an empty page", "")):
+        problems = docs_probe_problems(page, head)
+        check(not problems, f"{label}: {problems}")
+
+    # And the probes are still probes: with the lookup that decides what a
+    # commit is switched off, the must-fire half has to report that it passed.
+    real = globals()["resolves_to_a_commit"]
+    try:
+        globals()["resolves_to_a_commit"] = lambda candidate: False
+        blind = docs_probe_problems(renamed, head)
+        globals()["resolves_to_a_commit"] = lambda candidate: True
+        eager = docs_probe_problems(renamed, head)
+    finally:
+        globals()["resolves_to_a_commit"] = real
+    check(any("planted in a docs page passed" in problem for problem in blind),
+          f"seeded check: a scan that finds no commit passed the must-fire "
+          f"probe: {blind}")
+    check(any("wrongly fired" in problem for problem in eager),
+          f"seeded check: a scan that calls every hex string a commit passed "
+          f"the must-not-fire probe: {eager}")
 
 
 def test_no_commit_ids_in_the_web_ui() -> None:

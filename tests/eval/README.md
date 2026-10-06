@@ -1,40 +1,19 @@
-# `tests/eval/` — exploratory cassettes, not the record
+# `tests/eval/`: trial recordings that are not kept
 
-This directory holds recorded responses from a one-off cross-model sweep run on
-2026-08-07. **It is not the project's cassette corpus and nothing replays from
-it.** The corpus that offline runs depend on is `tests/responses/`, which holds
-local `qwen3:8b` cassettes only.
+This directory is the place for trial recordings of model responses that should not become part of the repository, such as a first look at a new model or endpoint. Git ignores every subdirectory here (the `tests/eval/*/` line in `.gitignore`), so in a published copy this README is the only file. Nothing here is published, the test suite replays nothing from it, and no published figure is computed from it.
 
-The cassettes themselves are gitignored; this README is the only tracked file
-here. Two reasons they are not committed:
+The recordings that are published, and that the test suite replays offline, are in `tests/responses/`. `tests/responses/README.md` describes them.
 
-1. They were recorded from a dirty working tree — every one of them carries
-   `meta.claimcheck_source` stamped `-dirty`, so no commit reproduces the
-   inputs that produced them. A cassette whose provenance says "dirty" is
-   evidence of a conversation, not of a build.
-2. They were recorded against a prompt version that no longer exists in the
-   tree, so their keys cannot be hit by any current run in any case.
+## Recording into this directory
 
-They were not deleted because the sweep's cross-model figures were computed from
-them, and those figures should stay checkable for as long as the files survive
-on the machine that produced them.
+Pass `--record tests/eval/NAME` to `tests/run_decompose.py`, `tests/run_merge.py` or `tests/run_verify.py` to write every model call to a directory, and `--replay tests/eval/NAME` to answer every call from it again. Recording needs a model endpoint; [the command reference](../../docs/reference.md) says how to configure one.
 
-## What is in them
+A recording is matched by a key computed from the whole request, and the request contains the prompt. When a prompt file changes, earlier recordings no longer match. That is why trial recordings are not kept: they stop being replayable at the next prompt edit, and nobody else could check a figure taken from them.
 
-Six models, one sample each, 8 fixtures: `gpt-5-1`, `claude-sonnet-4-5`,
-`claude-opus-5`, `kimi-k2`, `kimi-k3`, and `qwen3:8b` recorded through the same
-path for comparison. `kimi-k3`'s decompose run and `qwen-3-5-397b` entirely are
-missing because the endpoint returned HTTP 504; those are non-measurements, not
-results.
+## What refers to this directory
 
-The five hosted models were reached through one OpenAI-compatible endpoint
-configured in `.env`. Which endpoint that was is not recorded anywhere in the
-repo and does not matter: any provider serving the same model ids would produce
-a comparable sweep, and the finding is about the models, not about who was
-hosting them.
+Three published files refer to recordings in this directory, which a published copy does not have:
 
-No cassette in this directory or in `tests/responses/` contains an API key or an
-`Authorization` header — checked by scanning every JSON file under `tests/` for
-the key, the header name, and the full endpoint URL. The only trace of the
-hosted endpoint is `meta.endpoint_id`, a truncated `sha256` of the hostname,
-which answers whether two recordings share a machine without naming one.
+- `tests/calibrate_endpoint.py` measures an endpoint's latency with ten merge calls and writes its recordings to `tests/eval/m7-calibration/`.
+- `tests/test_client.py` has one test that reads three recorded error responses from `tests/eval/m4-tier-latch/failures/` when that directory exists. When it does not, the module prints a line starting `unjudged: failure bodies: evidence not in this copy` and counts the step as unjudged, neither passed nor failed.
+- `arms/BENCHMARK-MATRIX.md` lists seven early exploratory runs of 2026-08-07 and 2026-08-08 (rows X1 to X7) whose recordings were kept here. It marks them as having no published evidence, and their figures are not published.

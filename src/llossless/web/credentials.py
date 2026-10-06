@@ -112,6 +112,7 @@ import ipaddress
 import json
 import os
 import stat
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -267,6 +268,93 @@ def provider_serving(model: str, environ) -> str | None:
     return None
 
 
+# The name a role's key variable is pointed at when the role must send no key.
+# Nothing sets it: no provider's key is stored under it, a member's key source
+# never holds it, and `jobs.StandingKeys` refuses to read it. It is a name and
+# not an empty string because `config` reads an empty key variable as "use the
+# default", which is the variable being withheld.
+NO_KEY_ENV = "LLOSSLESS_NO_KEY"
+assert NO_KEY_ENV not in PROVIDERS.values()
+
+
+def key_scope(environ, paired) -> dict[str, str]:
+    """Which roles of a run may not read the key their variable names.
+
+    **A key saved with an address goes to that address and to no other.**
+    `self-hosted` stores its key under `config.DEFAULT_KEY_ENV`, which is also
+    the variable every role with no provider of its own reads, and the
+    variable a role-less probe reads. So a key saved with a self-hosted
+    address was also sent to this server's own endpoint: by a typed model
+    that named no endpoint, and by the window probe of every run. An
+    operator's `LLOSSLESS_API_KEY_ENV_<ROLE>` naming a vendor's variable is
+    the same pairing one field along.
+
+    `paired` names the providers whose key, in the run this environment
+    belongs to, was saved with an address: a member's own endpoint, or the
+    operator's stored endpoint with its stored key. For each of them the
+    address is the one in `environ`, and a role (or the run-wide default)
+    that reads the provider's variable and is addressed anywhere else has its
+    key variable pointed at `NO_KEY_ENV`. A key from the server's own
+    environment, and a key stored with no address, belong to this server's
+    own endpoint as they always have and are not in `paired`.
+
+    `jobs.endpoint_plan` writes its own address and key variable for every
+    role it places, after this and over it, so a role sent to the provider
+    still reads the provider's key. A role that inherited the run-wide
+    variable and may keep it is given that variable by name when the
+    run-wide one is withheld.
+
+    Nothing if the environment does not resolve: the run is refused where
+    that is reported.
+    """
+    try:
+        settings = config.from_env(dict(environ))
+    except config.ConfigError:
+        return {}
+    by_variable = {variable: name for name, variable in PROVIDERS.items()}
+
+    def withheld(role) -> bool:
+        name = by_variable.get(settings.api_key_env_for(role))
+        if name is None or name not in paired:
+            return False
+        stored = (environ.get(url_env(name)) or "").strip()
+        return bool(stored) and (config.with_api_path(stored)
+                                 != settings.base_url_for(role))
+
+    scope: dict[str, str] = {}
+    run_wide = withheld(None)
+    if run_wide:
+        scope["LLOSSLESS_API_KEY_ENV"] = NO_KEY_ENV
+    for role in config.ROLES:
+        variable = f"LLOSSLESS_API_KEY_ENV_{role.upper()}"
+        if withheld(role):
+            scope[variable] = NO_KEY_ENV
+        elif run_wide and not (environ.get(variable) or "").strip():
+            scope[variable] = settings.api_key_env_for(role)
+    return scope
+
+
+def private_dir(directory: Path) -> None:
+    """Create `directory`, and every missing directory above it, owner-only.
+
+    `mkdir(parents=True)` gives the directories it creates on the way down
+    the process's default mode, so the `users` directory holding every
+    member's own folder was created `0755` while each folder in it was
+    `0700`: any account on the machine could list which accounts exist.
+    """
+    missing = []
+    current = Path(directory)
+    while not current.exists():
+        missing.append(current)
+        if current.parent == current:
+            break
+        current = current.parent
+    for path in reversed(missing):
+        path.mkdir(mode=DIR_MODE, exist_ok=True)
+        os.chmod(path, DIR_MODE)
+    os.chmod(directory, DIR_MODE)
+
+
 # The same assertion as the one above, for the same failure one field along:
 # two providers whose names differed only by a hyphen would share one variable,
 # and clearing either endpoint would clear both.
@@ -357,6 +445,16 @@ class CredentialsError(Exception):
 
 class UnknownProvider(CredentialsError):
     """A provider name that is not in `PROVIDERS`. Refused, never looked up."""
+
+
+class CleartextKey(CredentialsError):
+    """An address refused because a key would travel to it unencrypted.
+
+    Its own class so that the caller storing the address can say whose key
+    that is. `config.check_cleartext_key` words the refusal for somebody who
+    exported a variable in a shell, and a member of a shared server has a key
+    on the credentials sheet and no shell.
+    """
 
 
 class BindRefused(Exception):
@@ -566,6 +664,13 @@ def clean_base_url(name, value) -> str:
             "that endpoint carries a space, a line break or a control "
             "character. An address has none of those, so this is a paste that "
             "brought something with it.")
+    if "?" in url or "#" in url:
+        raise CredentialsError(
+            "that endpoint carries a ? or a #. Each request adds its own "
+            "path to the end of an endpoint, and behind either character "
+            "that path would no longer be part of the address: the request "
+            "would go to a path the endpoint's owner never named. Give the "
+            "address up to its path and nothing after it.")
     url = url.rstrip("/")
     if "@" in urlsplit(url).netloc:
         raise CredentialsError(
@@ -577,9 +682,12 @@ def clean_base_url(name, value) -> str:
     probe = config.Settings(base_url=url, api_key_env=PROVIDERS[name])
     try:
         config.check_base_url(probe)
-        config.check_cleartext_key(probe)
     except config.ConfigError as refusal:
         raise CredentialsError(str(refusal)) from None
+    try:
+        config.check_cleartext_key(probe)
+    except config.ConfigError as refusal:
+        raise CleartextKey(str(refusal)) from None
     return url
 
 
@@ -628,7 +736,7 @@ def require_token(host, token, *, accounts: int = 0) -> str:
     reach it -- and a four-character token on a network port is a password
     guessable at whatever rate the box will answer.
 
-    **`accounts` is what retires this.** 461 demanded a token for a
+    **`accounts` is what retires this.** A token is demanded for a
     non-loopback bind because opening to a network and authenticating the
     caller are one decision and there was nothing else that could make it. With
     accounts there is: logging in *is* that authentication, per request and per
@@ -642,11 +750,24 @@ def require_token(host, token, *, accounts: int = 0) -> str:
     leftover: a server nobody has an account on is a server in setup, its one
     reachable route creates the first account, and a networked bind still has
     to be something more than a URL somebody found.
+
+    **A token that not every client can present is refused, on any address.**
+    See `presentable`. It is asked wherever the token is consulted, so on a
+    loopback bind too, and not once an account exists.
     """
     given = (token or "").strip()
-    if is_loopback(host):
-        return given
     if accounts > 0:
+        return given
+    if not presentable(given):
+        raise BindRefused(
+            f"refusing to start: {TOKEN_ENV} holds a character outside "
+            f"ASCII. The token travels in an HTTP header, and a header has "
+            f"one agreed spelling for ASCII only: a browser sends any other "
+            f"character as Latin-1 and cannot send one above U+00FF at all, "
+            f"and a script sends UTF-8, so the same token would be accepted "
+            f"from one client and refused from another. Set {TOKEN_ENV} to "
+            f"ASCII letters, digits and punctuation.")
+    if is_loopback(host):
         return given
     if not given:
         raise BindRefused(
@@ -668,6 +789,23 @@ def require_token(host, token, *, accounts: int = 0) -> str:
             f"Once this server has an account on it, logging in is that "
             f"authentication and no token is wanted here at all.")
     return given
+
+
+def presentable(token: str) -> bool:
+    """Can every client present this token the same way? ASCII only can.
+
+    An HTTP header value is bytes, and the standard library reads them as
+    Latin-1. So a token with an accented letter matched when a browser sent
+    it (one byte) and not when `curl` did (two bytes of UTF-8), and one with
+    a character above U+00FF could not be put in a header by a browser at all.
+    Nothing was let in that should not have been. The server started, and
+    then refused its own operator from some clients and not others.
+
+    Asked where the token is consulted, which is every bind while this
+    server has no account, loopback included. The empty token is
+    presentable: it means none is configured.
+    """
+    return token.isascii()
 
 
 def token_from(environ=None) -> str:
@@ -728,6 +866,10 @@ class Credentials:
     def __init__(self, path=None, *, environ=None) -> None:
         self.path = Path(path) if path is not None else default_path(environ)
         self._applied: set[str] = set()
+        # One `apply` at a time, each over the file as it then is. Two that
+        # interleaved could leave an address from one state of the file
+        # beside a key from another.
+        self._applying = threading.Lock()
 
     def __repr__(self) -> str:
         """The file and the count. Never a name, never a value.
@@ -1008,8 +1150,7 @@ class Credentials:
         empty new one.
         """
         parent = self.path.parent
-        parent.mkdir(parents=True, exist_ok=True)
-        os.chmod(parent, DIR_MODE)
+        private_dir(parent)
         # An empty pair is dropped rather than written as a row of blanks: a
         # provider nobody has configured and a provider whose configuration was
         # deleted are the same state, and two spellings of one state is how a
@@ -1044,7 +1185,10 @@ class Credentials:
         there is a key the next model call uses -- including a call in a merge
         that is already running, which is correct: the operator changed their
         credential, and the alternative is a queued job spending a key its
-        owner has just revoked.
+        owner has just revoked. That holds while the address stands. A run
+        under way when its provider's address is moved is handed no key for
+        that provider from then on (`jobs.StandingKeys`): the key saved next
+        belongs to the new address, and the run is still calling the old one.
 
         Called at start and after every change. Calling it after a change is
         what makes the settings page a setting rather than a note to self: the
@@ -1057,17 +1201,35 @@ class Credentials:
         hold half a pair. A variable this object did not set is never removed,
         which is what lets an operator configure a provider entirely in the
         unit file that starts the server and have the page leave it alone.
+
+        **A key leaves before its address changes and arrives after it.** An
+        environment is read while this writes it, by a run that is starting
+        and by one that is under way, so every state it passes through has to
+        be one a run may be built from: an address with its own key, or an
+        address with none. Never an address beside the key stored with
+        another.
         """
         targets = environs or (os.environ,)
-        wanted = self.mapping()
-        for variable in sorted(self._applied - set(wanted)):
-            for target in targets:
-                target.pop(variable, None)
-        self._applied = set(wanted)
-        for variable, value in sorted(wanted.items()):
-            for target in targets:
-                target[variable] = value
-        return tuple(sorted(wanted))
+        secret = set(PROVIDERS.values())
+        with self._applying:
+            wanted = self.mapping()
+            gone = self._applied - set(wanted)
+            # The providers whose address this pass changes or takes away.
+            moving = {
+                PROVIDERS[name] for name in PROVIDERS
+                if url_env(name) in gone or any(
+                    target.get(url_env(name)) != wanted[url_env(name)]
+                    for target in targets if url_env(name) in wanted)}
+            for variable in sorted(gone | (moving & set(wanted)),
+                                   key=lambda name: (name not in secret, name)):
+                for target in targets:
+                    target.pop(variable, None)
+            self._applied = set(wanted)
+            for variable in sorted(wanted,
+                                   key=lambda name: (name in secret, name)):
+                for target in targets:
+                    target[variable] = wanted[variable]
+            return tuple(sorted(wanted))
 
     def describe(self, environ=None) -> list[dict]:
         """Every provider: its endpoint, whether a key is in effect, and four characters.

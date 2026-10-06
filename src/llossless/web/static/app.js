@@ -610,14 +610,129 @@ const store = {
 /* ------------------------------------------------------------------ */
 
 /**
+ * The server's access token, and the header that carries it.
+ *
+ * A server started with an access token answers no request without it until
+ * its first account exists, which is the arrangement a network address needs
+ * while there is no account. The reader types it once
+ * (`submitAccess`); it is held in this variable and nowhere else, and
+ * `refreshSession` drops it as soon as the server reports an account. From
+ * then on the same header would be read as a session id, and a browser is
+ * carried by its cookie. It is never written to storage and never put in an
+ * address. `accessNeeded` is the server's last answer to "do you want one".
+ */
+const ACCESS_HEADER = "X-LLossless-Token";
+let accessToken = "";
+let accessNeeded = false;
+/** The last failure `refreshSession` met, or null when the answer arrived.
+ * @type {any} */
+let sessionError = null;
+/** Is an access token being checked right now? */
+let accessBusy = false;
+
+/**
+ * `headers`, with the access token added while one is held.
+ * @param {Record<string, string>} headers
+ * @returns {Record<string, string>}
+ */
+function withAccess(headers) {
+  return accessToken ? { ...headers, [ACCESS_HEADER]: accessToken } : headers;
+}
+
+/**
+ * The words of the access form, in both languages, inside the page.
+ *
+ * The catalogue is served by a route that needs the token as well, so until
+ * the token is accepted no string can be fetched. This table is for exactly
+ * this form and nothing else; the first six entries repeat the catalogue's
+ * `auth.access*` strings, and `tests/test_web_i18n.py` holds the two copies,
+ * and the two languages, to the same keys and the same placeholders.
+ * @type {Record<string, Record<string, string>>}
+ */
+const ACCESS_STRINGS = {
+  en: {
+    heading: "Access token",
+    hint: "This server was started with an access token and asks for it before anything else: the value LLOSSLESS_WEB_TOKEN had when the server was started. A server with accounts asks for it only until its first account exists.",
+    label: "Access token",
+    kept: "The token is kept only while this page is open. It is not saved in the browser.",
+    submit: "Continue",
+    refused: "The server did not accept that token. Check it and try again.",
+    empty: "Type the access token first.",
+    unreachable: "The server could not be reached or did not answer, so the token was not checked. Check the connection and try again.",
+    unsendable: "That token contains a character that cannot be sent to the server. Check that it was copied exactly.",
+  },
+  de: {
+    heading: "Zugangstoken",
+    hint: "Dieser Server wurde mit einem Zugangstoken gestartet und verlangt es vor allem anderen: den Wert, den LLOSSLESS_WEB_TOKEN beim Start des Servers hatte. Ein Server mit Konten verlangt es nur, bis das erste Konto existiert.",
+    label: "Zugangstoken",
+    kept: "Das Token bleibt nur erhalten, solange diese Seite geöffnet ist. Es wird nicht im Browser gespeichert.",
+    submit: "Weiter",
+    refused: "Der Server hat dieses Token nicht angenommen. Prüfen Sie es und versuchen Sie es erneut.",
+    empty: "Geben Sie zuerst das Zugangstoken ein.",
+    unreachable: "Der Server war nicht erreichbar oder hat nicht geantwortet, das Token wurde also nicht geprüft. Prüfen Sie die Verbindung und versuchen Sie es erneut.",
+    unsendable: "Dieses Token enthält ein Zeichen, das nicht an den Server gesendet werden kann. Prüfen Sie, ob es genau so kopiert wurde.",
+  },
+};
+
+/**
+ * Which language the access form speaks: the stored choice, else the
+ * browser's own, else English.
+ * @returns {string}
+ */
+function accessLanguage() {
+  const wanted = [storedLocale()];
+  try {
+    wanted.push(String(navigator.language || ""));
+  } catch (error) {
+    // No `navigator`: the form is English.
+  }
+  for (const tag of wanted) {
+    const primary = tag.toLowerCase().split(/[-_]/)[0];
+    if (primary && Object.prototype.hasOwnProperty.call(ACCESS_STRINGS, primary)) {
+      return primary;
+    }
+  }
+  return "en";
+}
+
+/**
+ * One word of the access form, in its language.
+ * @param {string} key
+ * @returns {string}
+ */
+function accessText(key) {
+  return ACCESS_STRINGS[accessLanguage()][key];
+}
+
+/**
+ * A character the `X-LLossless-Token` header cannot carry: `fetch` refuses
+ * anything above U+00FF before a byte is sent.
+ * @param {string} text
+ * @returns {boolean}
+ */
+function unsendable(text) {
+  for (let index = 0; index < text.length; index += 1) {
+    if (text.charCodeAt(index) > 255) return true;
+  }
+  return false;
+}
+
+/**
  * A GET that answers with JSON, or throws with the server's own message.
+ *
+ * The error also carries the server's `code` for the refusal, which is how
+ * `refreshSession` tells "this server wants its access token" from any other
+ * failure without reading the sentence.
  * @param {string} path
  * @returns {Promise<any>}
  */
 async function getJson(path) {
-  const answer = await fetch(path, { headers: { Accept: "application/json" } });
+  const answer = await fetch(path, { headers: withAccess({ Accept: "application/json" }) });
   const body = await answer.json().catch(() => null);
-  if (!answer.ok) throw new Error(errorMessage(body, answer.status));
+  if (!answer.ok) {
+    throw Object.assign(new Error(errorMessage(body, answer.status)),
+                        { code: String((body && body.error && body.error.code) || "") });
+  }
   return body;
 }
 
@@ -636,7 +751,7 @@ async function getJson(path) {
 async function sendJson(method, path, payload) {
   const answer = await fetch(path, {
     method: method,
-    headers: { "Content-Type": "application/json" },
+    headers: withAccess({ "Content-Type": "application/json" }),
     body: payload === undefined ? undefined : JSON.stringify(payload),
   });
   if (answer.status === 204) {
@@ -2167,6 +2282,7 @@ function renderScorecard() {
     dear: figure(RANK_SCALES.usd_per_merge.poor, 2) || "",
     fast: RANK_SCALES.seconds_per_merge.good,
     slow: RANK_SCALES.seconds_per_merge.poor,
+    lossy: RANK_SCALES.silent_loss_per_pair.poor,
     clean: RANK_SCALES.deviations_per_pair.good,
     noisy: RANK_SCALES.deviations_per_pair.poor,
   }));
@@ -6035,9 +6151,10 @@ function forgetShownRun() {
  * than a preference.
  * @param {string} url
  * @param {string} filename
+ * @param {string} [runId] the run it belongs to, when that is not the one on screen
  * @returns {Promise<void>}
  */
-async function saveFrom(url, filename) {
+async function saveFrom(url, filename, runId) {
   /** @type {Response} */
   let answer;
   try {
@@ -6051,7 +6168,12 @@ async function saveFrom(url, filename) {
     say("bad", t("word.lost"), t("download.failed", {
       detail: errorMessage(body, answer.status),
     }));
-    if (answer.status === 410) forgetShownRun();
+    // Only the run on screen is forgotten by its own countdown; an earlier
+    // run's refusal leaves the result alone and refreshes the list.
+    if (answer.status === 410) {
+      if (!runId || runId === store.runId) forgetShownRun();
+      else void refreshHistory();
+    }
     return;
   }
   const blob = await answer.blob();
@@ -7868,12 +7990,47 @@ function renderChecks(report) {
     item.appendChild(name);
     item.appendChild(chip);
     item.appendChild(detail);
+    if (key === "check.coverage") {
+      const list = ungradedList(report.unusable || []);
+      if (list) item.appendChild(list);
+    }
     return item;
   });
   fill(el("checks"), items);
   chipFor(el("checks-chip"), unchecked ? "unchecked" : "clean", unchecked);
   openIf("checks-section", unchecked > 0);
   return tileOf("results.checks", unchecked ? "unchecked" : "clean", unchecked);
+}
+
+/**
+ * The claims no verdict was given for, as an expandable list under the count.
+ *
+ * The report's `unusable` list says which claim, in which direction, and what
+ * was wrong with the record; the count beside it said only how many. The
+ * defect text is the checker's own words and is shown as written.
+ * @param {any[]} unusable
+ * @returns {HTMLElement|null}
+ */
+function ungradedList(unusable) {
+  if (!unusable.length) return null;
+  const fold = document.createElement("details");
+  fold.className = "ungraded-list";
+  const summary = document.createElement("summary");
+  setText(summary, t("check.ungraded.summary", { n: figure(unusable.length) || "0" }));
+  fold.appendChild(summary);
+  const list = document.createElement("ul");
+  for (const entry of unusable) {
+    const line = document.createElement("li");
+    const defects = (entry.defects || []).map(String).join("; ");
+    setText(line, t(entry.claim_id ? "check.ungraded.item" : "check.ungraded.noid", {
+      id: String(entry.claim_id || ""),
+      direction: String(entry.direction || ""),
+      defects: defects,
+    }));
+    list.appendChild(line);
+  }
+  fold.appendChild(list);
+  return fold;
 }
 
 /**
@@ -8183,6 +8340,18 @@ async function refreshHistory() {
     // A cancelled run's report is the account of what ran, and it
     // opens by saying it was cancelled.
     if (state === "done" || state === "cancelled") item.appendChild(open);
+    // The saves the current result offers, for a run that finished earlier.
+    // A cancelled run has its report and the archive, whose merged document
+    // is optional, but not necessarily a merged document of its own.
+    if (state === "done") {
+      item.appendChild(historyDownload(runId, ROUTES.merged, "merged.md", "results.download"));
+    }
+    if (state === "done" || state === "cancelled") {
+      item.appendChild(historyDownload(runId, ROUTES.report, "report.html",
+                                       "results.download.report"));
+      item.appendChild(historyDownload(runId, ROUTES.bundle, "bundle.zip",
+                                       "results.download.bundle"));
+    }
     // Follow a live run; replay the log of one that stopped short, which is
     // where an interrupted run's finished steps are.
     const followable = state === "queued" || state === "running";
@@ -8217,6 +8386,27 @@ async function refreshHistory() {
   });
   fill(el("history"), items);
   if (live) store.historyTimer = window.setTimeout(() => void refreshHistory(), 5000);
+}
+
+/**
+ * One save link on an earlier run's row, wired as the result's own are.
+ * @param {string} runId
+ * @param {string} template one of `ROUTES`
+ * @param {string} filename
+ * @param {string} key the catalogue key of the label
+ * @returns {HTMLAnchorElement}
+ */
+function historyDownload(runId, template, filename, key) {
+  const link = document.createElement("a");
+  link.className = "ghost";
+  link.href = route(template, { id: runId });
+  link.download = filename;
+  setText(link, t(key));
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    void saveFrom(route(template, { id: runId }), filename, runId);
+  });
+  return link;
 }
 
 /**
@@ -8261,10 +8451,33 @@ function stateWord(state) {
  * endpoint, and for the same reason.
  */
 async function refreshSession() {
+  accessNeeded = false;
+  sessionError = null;
   try {
-    store.session = await getJson(ROUTES.session);
+    /** @type {any} */
+    let session;
+    try {
+      session = await getJson(ROUTES.session);
+    } catch (first) {
+      // A held token is read as a session id once an account exists, and an
+      // id nobody issued answers `no_session` even when the cookie is good.
+      // The token goes and the question is asked again with the cookie alone.
+      if (!accessToken || /** @type {any} */ (first).code !== "no_session") throw first;
+      accessToken = "";
+      session = await getJson(ROUTES.session);
+    }
+    store.session = session;
+    // The access token is for a server with no account. Once one exists the
+    // same header is read as a session id, so the token is dropped and the
+    // question is asked again with the cookie alone.
+    if (accessToken && session && session.tenanted && !session.setup_required) {
+      accessToken = "";
+      store.session = await getJson(ROUTES.session);
+    }
   } catch (error) {
     store.session = null;
+    sessionError = error;
+    accessNeeded = /** @type {any} */ (error).code === "no_token";
   }
   renderSession();
 }
@@ -8319,6 +8532,95 @@ function setupToken() {
     if (name === "setup" && value) return decodeURIComponent(value);
   }
   return "";
+}
+
+/**
+ * Ask for the server's access token, and show nothing else.
+ *
+ * Every word on this form is in `index.html`, in the reference language: the
+ * catalogue is behind the token too, so `t` has nothing to say yet. That is
+ * also why the status pill is hidden here and not written.
+ */
+function showAccessGate() {
+  el("workspace").hidden = true;
+  el("gate").hidden = true;
+  el("open-settings").hidden = true;
+  el("status-pill").hidden = true;
+  el("access-gate").hidden = false;
+  paintAccessGate();
+  input("gate-access").focus();
+}
+
+/** Put the form's words on it, in the language `accessLanguage` chose. */
+function paintAccessGate() {
+  document.documentElement.lang = accessLanguage();
+  setText(el("gate-access-heading"), accessText("heading"));
+  setText(el("gate-access-hint"), accessText("hint"));
+  setText(el("gate-access-label"), accessText("label"));
+  setText(el("gate-access-kept"), accessText("kept"));
+  setText(el("gate-access-submit"), accessText("submit"));
+}
+
+/**
+ * Say one thing under the access form.
+ * @param {string} key
+ */
+function refuseAccess(key) {
+  setText(el("gate-access-refused"), accessText(key));
+  el("gate-access-refused").hidden = false;
+  input("gate-access").focus();
+}
+
+/**
+ * Hold what was typed as the access token, and start again with it.
+ *
+ * The field is cleared in the step that reads it, as the password field is.
+ * A token the server refuses is dropped again and the form says so. One it
+ * accepts opens the catalogue, so the page is put into the reader's language
+ * before the next form is drawn: the one that makes the first account.
+ */
+async function submitAccess() {
+  // A double click or a held Enter arrives while the first is still asking;
+  // the second would read the field the first has already cleared.
+  if (accessBusy) return;
+  const typed = input("gate-access").value.trim();
+  el("gate-access-refused").hidden = true;
+  if (!typed) {
+    refuseAccess("empty");
+    return;
+  }
+  input("gate-access").value = "";
+  if (unsendable(typed)) {
+    refuseAccess("unsendable");
+    return;
+  }
+  accessBusy = true;
+  try {
+    accessToken = typed;
+    await refreshSession();
+  } finally {
+    accessBusy = false;
+  }
+  // Only a session answer that arrived and was accepted lets the page on.
+  if (accessNeeded) {
+    accessToken = "";
+    refuseAccess("refused");
+    return;
+  }
+  if (sessionError) {
+    accessToken = "";
+    refuseAccess("unreachable");
+    return;
+  }
+  el("access-gate").hidden = true;
+  await loadLocale(storedLocale()).catch(() => null);
+  applyStrings();
+  renderLocalePicker();
+  if (gated()) {
+    showGate();
+    return;
+  }
+  await start();
 }
 
 /**
@@ -8384,6 +8686,7 @@ async function signIn() {
                        { username: username, password: password });
   } catch (error) {
     setText(el("gate-status"), describe(error));
+    if (setting) await resumeAfterFailedSetup(error);
     return;
   }
   // The fragment goes, so a reload does not re-offer a token that has already
@@ -8394,7 +8697,40 @@ async function signIn() {
   hideGate();
   await start();
   const note = answer && answer.migrated && answer.migrated.note;
-  if (note) say("ok", t("word.ready"), String(note));
+  if (note) {
+    // The note rides on the same line the readiness sentence would have
+    // filled, so the word, the colour and the button agree and the line
+    // still says what is missing.
+    const state = readiness();
+    say(state.ready ? "ok" : "warn", t(state.ready ? "word.ready" : "word.notready"),
+        String(note) + " " + state.text);
+  }
+}
+
+/**
+ * After a first-account request failed, ask the server where things stand.
+ *
+ * A second tab may have made the account in the meantime: this tab then still
+ * holds an access token that the server reads as a session id, and the setup
+ * form is the wrong form. The session is asked again (which drops the token
+ * when the server reports an account) and the right form is drawn.
+ * @param {unknown} failure
+ */
+async function resumeAfterFailedSetup(failure) {
+  await refreshSession();
+  const session = store.session;
+  // The server wants its token again, or did not answer: nothing to redraw.
+  if (accessNeeded) showAccessGate();
+  if (accessNeeded || !session) return;
+  // Still waiting for its first account: the same form stays.
+  if (session.tenanted && session.setup_required) return;
+  if (gated()) {
+    showGate();
+    setText(el("gate-status"), describe(failure));
+    return;
+  }
+  hideGate();
+  await start();
 }
 
 /** End the session and put the gate back. */
@@ -8822,8 +9158,19 @@ function providerRow(provider, readOnly) {
   setText(find(row, "provider-name"), String(provider.name || ""));
   const chip = find(row, "provider-chip");
   setState(chip, provider.configured ? "ok" : "");
+  // The last four characters come only with a key that is this account's.
+  // The operator's shared key reaches a member as "set" and no more, so the
+  // chip says whose it is where it would have said which.
+  const theirs = provider.owner === "operator" && provider.editable === false;
+  // The same row is also where this member may set their own. Whatever they
+  // save lands in their own file and replaces the operator's for their runs;
+  // the operator's address is not shown and not edited, so the fields start
+  // empty as they do for a provider nobody has set up.
+  const shared = theirs;
+  const theirAddress = shared ? "" : String(provider.base_url || "");
   setText(chip, provider.configured
-    ? t("settings.configured") + (provider.suffix ? " · …" + provider.suffix : "")
+    ? (theirs ? t("settings.configured.operator")
+       : t("settings.configured") + (provider.suffix ? " · …" + provider.suffix : ""))
     : t("settings.unconfigured"));
   // Whose row this is. Empty when nobody has configured one, because an unset
   // provider belongs to nobody and a chip saying otherwise would be a claim.
@@ -8846,7 +9193,7 @@ function providerRow(provider, readOnly) {
 
   const url = /** @type {HTMLInputElement} */ (find(row, "provider-url"));
   associate(find(row, "provider-url-label"), url);
-  url.value = String(provider.base_url || "");
+  url.value = theirAddress;
   // A description, not the variable name and not an example address. The
   // variable belongs on the line above; in the field it reads as something to
   // type, which is how an operator ends up with a base URL of
@@ -8868,7 +9215,7 @@ function providerRow(provider, readOnly) {
   // the picker all the same: say that, not "type a model id".
   const known = ((store.config && store.config.catalogue && store.config.catalogue.models) || [])
     .filter((/** @type {any} */ model) => model.provider === provider.name && !isRetired(model)).length;
-  setText(note, provider.base_url
+  setText(note, theirAddress
     ? (listed ? t("settings.listed", { n: listed })
        : known ? t("settings.catalogue", { n: known }) : t("settings.notlisted", { n: listed }))
     : t("settings.noendpoint"));
@@ -8877,14 +9224,11 @@ function providerRow(provider, readOnly) {
   associate(find(row, "provider-input-label"), field);
   const save = /** @type {HTMLButtonElement} */ (find(row, "provider-save"));
   const clear = /** @type {HTMLButtonElement} */ (find(row, "provider-clear"));
-  // A row the operator owns is not yours to change, and the page says so
-  // rather than offering four controls the server answers 403 to. Configuring
-  // your own for the same provider is the way to use a different one, and the
-  // sentence says that too.
-  if (provider.editable === false) {
-    setText(note, t("settings.notyours"));
-    readOnly = true;
-  }
+  // A row the operator owns is not yours to change, and the note says so.
+  // Setting your own for the same provider is the way to use a different
+  // one, and the controls below do exactly that: every write a member makes
+  // goes to their own file, never to the operator's.
+  if (shared) setText(note, t("settings.notyours"));
   if (readOnly) {
     field.disabled = true; save.disabled = true; clear.disabled = true;
     url.disabled = true; urlSave.disabled = true; urlClear.disabled = true;
@@ -8896,11 +9240,11 @@ function providerRow(provider, readOnly) {
   // this address first, as an explicit value. A stored address that is the
   // usual one reads the same way. Any other stored address shows the field.
   const preset = String(provider.preset_url || "");
-  const stored = String(provider.base_url || "");
+  const stored = theirAddress;
   const offered = Boolean(preset) && (!stored || sameAddress(stored, preset));
   if (!stored && preset) {
     url.value = preset;
-    setText(note, t("settings.preset.note"));
+    if (!shared) setText(note, t("settings.preset.note"));
   }
   const line = find(row, "provider-address");
   const fieldRow = find(row, "provider-url-row");
@@ -8914,6 +9258,7 @@ function providerRow(provider, readOnly) {
     url.select();
   });
   urlSave.addEventListener("click", async () => {
+    let refused = "";
     try {
       // The answer carries what the endpoint said it serves, so the note is
       // the probe's own sentence rather than a guess about whether it worked.
@@ -8923,9 +9268,13 @@ function providerRow(provider, readOnly) {
       setText(el("settings-note"), t("settings.endpoint.saved"));
       setText(note, String((answer && answer.note) || ""));
     } catch (error) {
-      setText(el("settings-note"), describe(error));
+      refused = describe(error);
     }
     await reloadAfterSettings();
+    // After the reload, which clears this line (`loadProviders`). Set before
+    // it, the server's reason for refusing an address was on screen for the
+    // length of one request and then gone.
+    if (refused) setText(el("settings-note"), refused);
   });
   urlClear.addEventListener("click", async () => {
     try {
@@ -8949,7 +9298,7 @@ function providerRow(provider, readOnly) {
     const shown = url.value.trim();
     let said = t("settings.saved");
     try {
-      if (shown && !sameAddress(shown, String(provider.base_url || ""))) {
+      if (shown && !sameAddress(shown, theirAddress)) {
         await sendJson("PUT", route(ROUTES.endpoint, { name: String(provider.name) }),
                        { base_url: shown });
       }
@@ -10030,6 +10379,10 @@ function wire() {
   // The empty picker's way to a fix: the same sheet the top bar opens.
   el("picker-credentials").addEventListener("click", () => el("open-settings").click());
   el("gate-submit").addEventListener("click", () => void signIn());
+  el("gate-access-submit").addEventListener("click", () => void submitAccess());
+  el("gate-access").addEventListener("keydown", (event) => {
+    if (/** @type {KeyboardEvent} */ (event).key === "Enter") void submitAccess();
+  });
   // Enter in either field submits. A login form where the password field does
   // nothing on Enter is a login form people think is broken.
   for (const hook of ["gate-username", "gate-password", "gate-token"]) {
@@ -10095,7 +10448,10 @@ async function boot() {
     try {
       await loadLocale("");
     } catch (second) {
-      rememberLocale("");
+      // Both fetches answer 401 on a server that is waiting for its access
+      // token. That is not a language the server has dropped, and the choice
+      // is still wanted once the token has been given.
+      if (/** @type {any} */ (second).code !== "no_token") rememberLocale("");
     }
   }
   applyStrings();
@@ -10105,6 +10461,10 @@ async function boot() {
   // Before the catalogue and before `/health`, because on a server with
   // accounts every other route answers 401 until this one has been answered.
   await refreshSession();
+  if (accessNeeded) {
+    showAccessGate();
+    return;
+  }
   if (gated()) {
     showGate();
     return;

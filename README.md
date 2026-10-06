@@ -124,11 +124,11 @@ LLossless answers each one with evidence.
 
 **What it does not do:**
 
-- **It checks facts, not writing.** LLossless does not evaluate writing quality, so a merge that reads badly passes, and a *notation* change is silent: "512" written as "0x200" is not a finding, while "approximately 500" is.
+- **It checks facts, not writing.** LLossless does not evaluate writing quality, so a merge that reads badly passes, and rewording or reordering within what the fidelity level allows is silent. Numbers are different: in a merge the tool made they must survive exactly, so "512" rewritten as "0x200" is a finding, and so is "approximately 500".
 - **Long documents are checked more coarsely.** Claims get bigger as documents get longer, and one claim that bundles three facts can hide a dropped one. [Measured, not yet fixed](docs/results.md#known-limitation-claims-coarsen-as-documents-get-longer).
 - **It is for prose, not source code.** Code inside fenced blocks in a document is protected; whole source files are not. Do not use it to merge code.
 - **It does not decide what belongs together.** It merges unrelated documents if asked. In the one measured case, the declared-loss budget made that run fail loudly.
-- **Two sources are what has been measured.** Three or more are accepted and checked, but no published figure covers them.
+- **Two sources are what has been measured.** Up to twelve are accepted and checked, but almost every published figure comes from a pair: the one exception is the three-source `mahjongg` control document in the benchmark.
 - **The checker is a model too.** Its verdicts must quote real evidence, which catches a fabricated quote but not every wrong judgement. Temperature 0 and a fixed seed do not make the model deterministic, and claim extraction varies a little between runs.
 - **The evidence base is small**: short hand-written test documents, mostly English, and mostly one run per cell.
 
@@ -140,7 +140,7 @@ Which model should you trust with a merge? Price and reputation do not answer th
 
 ### Results, 2026-09-27
 
-Nine merge pairs at `high`, three documents with planted factual errors at `open`, 295 runs. The registration, every report and the figures are in [`arms/2026-09-27/lineup/`](arms/2026-09-27/lineup/figures.md).
+Nine merge pairs at `high`, two documents with planted factual errors and one clean control document at `open`, 295 runs. The registration, every report and the figures are in [`arms/2026-09-27/lineup/`](arms/2026-09-27/lineup/figures.md).
 
 
 | Model, route | Silent loss, 9 pairs | Deviations per pair | Planted errors fixed, voyager (of 44) | bip39 (of 14) | $ per merge |
@@ -236,7 +236,7 @@ export LLOSSLESS_API_KEY=...                      # or name another variable in 
 
 **A Claude subscription.** LLossless can answer through the `claude` command line instead of a metered API. The web interface finds an installed `claude` and switches it on with one toggle; on the command line it is `--answer-with` and a few variables, listed in the [reference](docs/reference.md#answering-through-a-program). Subscription runs are not priced per call, and they are not reproducible run to run, because they do not allow setting a seed or temperature. For most uses, that is fine.
 
-**A local model (the default).** The default endpoint is a local Ollama at `http://localhost:11434/v1`: copy `models.local.example.json` to `models.local.json` and name your model, as in `{ "merge": "qwen3:8b", "verify": "qwen3:8b" }`. Start Ollama with `OLLAMA_CONTEXT_LENGTH=16384` or more, because a merge needs more context than its default. A local model is the default because it needs no key, not because it merges well: see [the benchmark results](#results-2026-09-27) before relying on one.
+**A local model (the default).** The default endpoint is a local Ollama at `http://localhost:11434/v1`: copy `models.local.example.json` to `models.local.json` and name your model, as in `{ "merge": "qwen3:8b", "verify": "qwen3:8b" }`. Start Ollama with `OLLAMA_CONTEXT_LENGTH=32768` or more, because a merge needs more context than its default. A local model is the default because it needs no key, not because it merges well: see [the benchmark results](#results-2026-09-27) before relying on one.
 
 ### Merge two documents, or check a merge you already have
 
@@ -336,7 +336,7 @@ Elastic-2.0, the Elastic License 2.0, with the text in `LICENSE`. It is source-a
 
 If you are interested in a commercial licence that allows hosted or managed services, please contact the author directly.
 
-Four directories are excluded from this licence. The fixture corpora in `tests/pairs/`, the hand-written document pairs in `tests/handwritten/`, the raw model-study outputs in `arms/` and the annotated pages in `annotated/` are under Creative Commons Attribution 4.0 International, which permits commercial use. Each carries its own `LICENSE`, and that file governs its directory rather than this one. [How it works](docs/how-it-works.md#licence) says where the licence text and the copyright notice live.
+Four directories are excluded from this licence. The fixture corpora in `tests/pairs/`, the hand-written document pairs in `tests/handwritten/`, the raw model-study outputs in `arms/` and the annotated pages in `annotated/` are under Creative Commons Attribution 4.0 International, which permits commercial use. Each carries its own `LICENSE`, and that file governs its directory rather than this one. One exception inside them: four document sets in `tests/handwritten/` are adapted from Wikipedia articles, and they and the benchmark runs that merged one of them are under Creative Commons Attribution-ShareAlike 4.0 International, which also permits commercial use and requires anything built from them to carry the same licence. `NOTICE` lists them. [How it works](docs/how-it-works.md#licence) says where the licence text and the copyright notice live.
 
 ## Documentation
 

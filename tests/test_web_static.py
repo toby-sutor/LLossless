@@ -2354,6 +2354,11 @@ def request(url: str, *, method: str = "GET", payload=None, headers=None,
     if payload is not None:
         body = json.dumps(payload).encode("utf-8")
         sent.setdefault("Content-Type", "application/json")
+    if body is None and method in ("POST", "PUT", "DELETE"):
+        # A request that changes something declares the JSON type with or
+        # without a body, which is what the page sends and what the server
+        # asks for. A caller that means otherwise passes the header itself.
+        sent.setdefault("Content-Type", "application/json")
     call = urllib.request.Request(url, data=body, method=method, headers=sent)
     try:
         with urllib.request.urlopen(call, timeout=timeout) as answer:
@@ -8406,6 +8411,7 @@ def drive_send(js: str):
         return None
     program = ("async " + js_function("sendJson", js) + "\n}\n"
                + "function errorMessage() { return 'x'; }\n"
+               + "function withAccess(headers) { return headers; }\n"
                + "(async () => {" + SEND_DRIVE + "})();")
     run = subprocess.run(node + ["-e", program], capture_output=True, text=True,
                          timeout=60, cwd=ROOT)
@@ -8432,6 +8438,396 @@ def test_a_204_is_read_before_it_is_answered() -> None:
     check(seeded != js, "the seed 'the 204 left unread' did not change the script")
     check(drive_send(seeded) != SEND_EXPECTED,
           "the 204 check did not fire on a sendJson that leaves the body unread")
+
+
+# --------------------------------------------------------------------------
+# the access token: a network server with no account, set up from the page
+# --------------------------------------------------------------------------
+
+# The shipped script from `boot` to signed in, under node, against a real
+# server bound to every interface with a token and no account. `fetch` is the
+# real one, pointed at that server, with the one thing a browser adds and node
+# does not: the cookie the server set is sent back. What draws the tool is
+# stubbed, because the question is which form shows and what each request
+# carries.
+ACCESS_DRIVE = r"""
+;(async () => {
+  El.prototype.addEventListener = function () {};
+  El.prototype.focus = function () {};
+  const log = [];
+  let jar = "";
+  const real = globalThis.fetch;
+  globalThis.fetch = async (path, init) => {
+    const headers = Object.assign({}, (init && init.headers) || {});
+    const sent = Object.keys(headers)
+      .filter((name) => name.toLowerCase() === INPUT.header.toLowerCase())
+      .map((name) => headers[name])[0] || "";
+    if (jar) headers.Cookie = jar;
+    const answer = await real(INPUT.base + path, Object.assign({}, init, { headers }));
+    const set = answer.headers.get("set-cookie");
+    if (set) jar = set.split(";")[0];
+    log.push([(init && init.method) || "GET", path, answer.status, sent]);
+    return answer;
+  };
+  const kept = [];
+  const storage = { getItem() { return null; }, removeItem() {},
+                    setItem(name, value) { kept.push(String(name) + "=" + String(value)); } };
+  globalThis.location = { hash: "#setup=" + INPUT.setup, pathname: "/" };
+  globalThis.history = { replaceState(a, b, where) { kept.push("address=" + where); location.hash = ""; } };
+  globalThis.window = { localStorage: storage, sessionStorage: storage, location };
+  let started = 0, drawn = 0;
+  wire = () => {}; renderLocalePicker = () => {}; renderPill = () => {};
+  renderSession = () => {}; say = () => {};
+  applyStrings = () => { drawn += 1; };
+  start = async () => { started += 1; };
+  for (const hook of ["access-gate", "gate", "gate-access-refused", "gate-token-field"]) el(hook).hidden = true;
+  const out = { steps: {} };
+  const snap = (name) => { out.steps[name] = {
+    access: !el("access-gate").hidden, gate: !el("gate").hidden,
+    workspace: !el("workspace").hidden, refused: !el("gate-access-refused").hidden,
+    setupField: !el("gate-token-field").hidden, setupValue: el("gate-token").value,
+    typed: el("gate-access").value, started, drawn,
+    held: Object.keys(withAccess({})).length,
+    session: store.session, requests: log.splice(0) }; };
+  try {
+    await boot();
+    snap("boot");
+    el("gate-access").value = INPUT.token + "-wrong";
+    await submitAccess();
+    snap("wrong");
+    el("gate-access").value = INPUT.token;
+    await submitAccess();
+    snap("given");
+    el("gate-username").value = "operator";
+    el("gate-password").value = "probe-password-operator-1";
+    await signIn();
+    snap("made");
+    out.runs = await getJson(ROUTES.runs).then(() => "answered", (e) => "refused: " + e.message);
+    snap("after");
+  } catch (error) {
+    out.error = String(error && error.stack || error);
+  }
+  out.kept = kept;
+  out.hash = location.hash;
+  process.stdout.write(JSON.stringify(out));
+})();
+"""
+
+ACCESS_TOKEN = "probe-access-token-0123456789"
+
+
+def drive_access(js: str) -> dict | None:
+    """`boot`, the token, the first account, signed in: shipped script, real server."""
+    node = node_command()
+    if node is None:
+        return None
+    from test_web_accounts import WILDCARDS, Deployment
+    from llossless.web import credentials
+    with Deployment(host=WILDCARDS[0], token=ACCESS_TOKEN) as live:
+        program = (EFFORT_DOM + "\nconst INPUT = " + json.dumps(
+            {"base": live.base, "token": ACCESS_TOKEN, "setup": live.setup.token,
+             "header": credentials.TOKEN_HEADER}) + ";\n" + js + ACCESS_DRIVE)
+        with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                         encoding="utf-8") as handle:
+            handle.write(program)
+            path = handle.name
+        try:
+            run = subprocess.run(node + [path], capture_output=True, text=True,
+                                 timeout=120, cwd=ROOT)
+        finally:
+            os.unlink(path)
+    if run.returncode != 0:
+        return {"error": run.stderr[-600:]}
+    return json.loads(run.stdout)
+
+
+def access_problems(driven: dict) -> list[str]:
+    """What is wrong with one drive of the access path, as sentences."""
+    if driven.get("error"):
+        return [f"the access drive did not finish: {driven['error']}"]
+    found: list[str] = []
+    steps = driven["steps"]
+
+    def requests(step: str, method: str, tail: str) -> list[list]:
+        return [row for row in steps[step]["requests"]
+                if row[0] == method and row[1].endswith(tail)]
+
+    # 1. Refused without the token: the page asks for it and shows nothing else.
+    boot = steps["boot"]
+    if not (boot["access"] and not boot["gate"] and not boot["workspace"]):
+        found.append(f"a server that wants its token does not get the token "
+                     f"form alone: {boot['access']=} {boot['gate']=} "
+                     f"{boot['workspace']=}")
+    if boot["started"]:
+        found.append("the tool was started behind a server that refuses it")
+    # 2. A wrong token is sent, refused, said, and not kept.
+    wrong = steps["wrong"]
+    sent = requests("wrong", "GET", "/session")
+    if not (sent and sent[-1][2] == 401 and sent[-1][3] == ACCESS_TOKEN + "-wrong"):
+        found.append(f"the typed token was not sent with the session request: {sent}")
+    if not (wrong["access"] and wrong["refused"] and wrong["held"] == 0
+            and wrong["typed"] == ""):
+        found.append(f"a refused token is not reported, or is kept: "
+                     f"{wrong['refused']=} {wrong['held']=} {wrong['typed']=}")
+    # 3. The right token opens the session route and the strings, and the
+    #    next form is the one that makes the first account, address filled in.
+    given = steps["given"]
+    sent = requests("given", "GET", "/session")
+    if not (sent and sent[-1][2] == 200 and sent[-1][3] == ACCESS_TOKEN):
+        found.append(f"the right token did not open the session route: {sent}")
+    strings = [row for row in steps["given"]["requests"] if "/locales" in row[1]]
+    if not (strings and strings[-1][2] == 200 and given["drawn"] > boot["drawn"]):
+        found.append(f"the page was not put into words once the token let it "
+                     f"read them: {strings}")
+    if not (given["gate"] and not given["access"] and given["setupField"]
+            and given["setupValue"] and given["typed"] == ""):
+        found.append(f"after the token the first-account form is not shown "
+                     f"with its setup address: {given['gate']=} "
+                     f"{given['access']=} {given['setupField']=}")
+    # 4. The first account is made with the token, and then the token goes:
+    #    the session is the cookie's.
+    made = steps["made"]
+    setup = requests("made", "POST", "/setup")
+    if not (setup and setup[-1][2] == 200 and setup[-1][3] == ACCESS_TOKEN):
+        found.append(f"the first account was not made with the token: {setup}")
+    session = made["session"] or {}
+    if not (session.get("authenticated") is True
+            and (session.get("user") or {}).get("username") == "operator"):
+        found.append(f"after the first account the page is not signed in: {session}")
+    if made["held"] != 0:
+        found.append("the token is still sent after the first account exists")
+    if made["started"] != 1:
+        found.append(f"the tool was started {made['started']} time(s) after sign-in")
+    last = requests("made", "GET", "/session")
+    if not (last and last[-1][2] == 200 and last[-1][3] == ""):
+        found.append(f"the session was not asked for again without the token: {last}")
+    after = steps["after"]["requests"]
+    if driven.get("runs") != "answered" or any(row[3] for row in after):
+        found.append(f"a request after sign-in was refused or still carried the "
+                     f"token: {driven.get('runs')} {after}")
+    # 5. Memory only: nothing stored, nothing in an address.
+    everything = json.dumps([driven["kept"], driven["hash"],
+                             [row[1] for step in steps.values()
+                              for row in step["requests"]]])
+    if ACCESS_TOKEN in everything:
+        found.append("the access token reached storage or an address")
+    if driven["hash"]:
+        found.append("the setup address is still in the address bar after use")
+    return found
+
+
+def test_a_network_server_with_a_token_is_set_up_from_the_page() -> None:
+    """Token, then the first account, then signed in, through the shipped script.
+
+    A server on a network address with a token and no account refuses every
+    API request without the token. The page used to send none, so it drew the
+    tool over five refusals and the first account could not be made from a
+    browser. It now asks for the token, sends it, makes the account, and
+    drops the token for the cookie.
+
+    MUST FIRE, three seeds of the shipped script: the header never sent, the
+    token never asked for, and the token kept after the account exists.
+    """
+    js = source(APP_JS)
+    markup = source(STATIC / "index.html")
+    from llossless.web import credentials
+    check(f'const ACCESS_HEADER = "{credentials.TOKEN_HEADER}";' in js,
+          "the page's access header is not the server's")
+    field = re.search(r'<input[^>]*data-cc="gate-access"[^>]*>', markup)
+    check(field is not None and 'type="password"' in field.group(0)
+          and 'autocomplete="off"' in field.group(0),
+          "the access token is not typed into a password field")
+    # Memory only, by source: the variable is touched in four places, and
+    # none of them is storage or an address.
+    code = strip_comments(js)
+    homes = ("function withAccess(", "async function refreshSession(",
+             "async function submitAccess(")
+    inside = sum(body_of(code, home).count("accessToken") for home in homes)
+    check(code.count("accessToken") == inside + 1,
+          f"accessToken is used outside its declaration and {homes}")
+    for home in homes:
+        for sink in ("Storage", "location", "history", "cookie", "console"):
+            check(sink not in body_of(code, home),
+                  f"{home.split()[-1][:-1]} mentions {sink}, where the access "
+                  f"token is in reach")
+
+    driven = drive_access(js)
+    if driven is None:
+        decline("UNMEASURED: the access-token path needs node, and none runs here")
+        return
+    for problem in access_problems(driven):
+        check(False, f"access token: {problem}")
+
+    seeds = {
+        "the header never sent": (
+            "  return accessToken ? { ...headers, [ACCESS_HEADER]: accessToken } : headers;\n",
+            "  return headers;\n"),
+        "the token never asked for": (
+            "  if (accessNeeded) {\n    showAccessGate();\n    return;\n  }\n", ""),
+        "the token kept after the account exists": (
+            "      accessToken = \"\";\n      store.session = await getJson(ROUTES.session);\n",
+            ""),
+    }
+    for name, (old, new) in seeds.items():
+        seeded = js.replace(old, new, 1)
+        check(seeded != js, f"the seed {name!r} did not change the script")
+        check(bool(access_problems(drive_access(seeded) or {"error": "no node"})),
+              f"the access check did not fire on a script with {name}")
+
+
+# --------------------------------------------------------------------------
+# the credentials sheet: four characters of a key, for its owner only
+# --------------------------------------------------------------------------
+
+# The shipped `providerRow` under node, over rows shaped like the ones
+# `GET /settings/keys` serves. A template cannot be cloned in the fake DOM,
+# so `clone` hands back a bare element whose parts are made on demand.
+KEY_ROW_DRIVE = r"""
+;(() => {
+  El.prototype.addEventListener = function () {};
+  clone = () => {
+    const row = new El("div");
+    const parts = {};
+    row.querySelector = (selector) => {
+      const hook = /data-cc="([^"]+)"/.exec(selector)[1];
+      return parts[hook] || (parts[hook] = new El("span"));
+    };
+    row.parts = parts;
+    return row;
+  };
+  strings = INPUT.strings;
+  store.config = null;
+  const out = {};
+  for (const [name, provider] of Object.entries(INPUT.rows)) {
+    const row = providerRow(provider);
+    out[name] = { chip: row.parts["provider-chip"].textContent,
+                  owner: row.parts["provider-owner"].textContent,
+                  ownerHidden: Boolean(row.parts["provider-owner"].hidden),
+                  locked: Boolean(row.parts["provider-key"].disabled)
+                          || Boolean(row.parts["provider-save"].disabled)
+                          || Boolean(row.parts["provider-url"].disabled)
+                          || Boolean(row.parts["provider-url-save"].disabled),
+                  address: row.parts["provider-url"].value };
+  }
+  process.stdout.write(JSON.stringify(out));
+})();
+"""
+
+KEY_ROWS = {
+    # A member looking at the operator's shared key, as the server sends it:
+    # set, and no characters.
+    "shared_to_member": {"name": "openai", "configured": True, "owner": "operator",
+                         "editable": False, "base_url": "u"},
+    # The same row from a server that still sent the characters.
+    "shared_to_member_old_server": {"name": "openai", "configured": True,
+                                    "owner": "operator", "editable": False,
+                                    "base_url": "u", "suffix": "9zQ4"},
+    "shared_to_operator": {"name": "openai", "configured": True, "owner": "operator",
+                           "editable": True, "base_url": "u", "suffix": "9zQ4"},
+    "own": {"name": "openai", "configured": True, "owner": "you",
+            "editable": True, "base_url": "u", "suffix": "7c5k"},
+    "shared_endpoint_no_key": {"name": "openai", "configured": False,
+                               "owner": "operator", "editable": False,
+                               "base_url": "u"},
+}
+
+
+def drive_key_rows(js: str, tag: str) -> dict | None:
+    node = node_command()
+    if node is None:
+        return None
+    program = (EFFORT_DOM + "\nconst INPUT = " + json.dumps(
+        {"strings": catalogues()[tag], "rows": KEY_ROWS}) + ";\n" + js + KEY_ROW_DRIVE)
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                     encoding="utf-8") as handle:
+        handle.write(program)
+        path = handle.name
+    try:
+        run = subprocess.run(node + [path], capture_output=True, text=True,
+                             timeout=120, cwd=ROOT)
+    finally:
+        os.unlink(path)
+    if run.returncode != 0:
+        return {"error": run.stderr[-600:]}
+    return json.loads(run.stdout)
+
+
+def key_row_problems(driven: dict, table: dict, tag: str) -> list[str]:
+    if "error" in driven:
+        return [f"{tag}: the key rows did not render under node: {driven['error']}"]
+    found = []
+    theirs = table["settings.configured.operator"]
+    for name in ("shared_to_member", "shared_to_member_old_server"):
+        got = driven[name]
+        if got["chip"] != theirs or got["locked"]:
+            found.append(f"{tag} {name}: a member's view of the operator's key "
+                         f"reads {got['chip']!r}, not {theirs!r} on a row the "
+                         f"member can set their own on")
+    # The member's controls start empty: the operator's address is not shown
+    # and not offered for editing; their own save replaces it for their runs.
+    for name in ("shared_to_member", "shared_to_member_old_server",
+                 "shared_endpoint_no_key"):
+        if driven[name]["address"] != "" or driven[name]["locked"]:
+            found.append(f"{tag} {name}: a member sees {driven[name]['address']!r} "
+                         f"in the address field, or the row is locked")
+    for name in ("shared_to_operator", "own"):
+        got = driven[name]
+        if got["address"] != KEY_ROWS[name]["base_url"]:
+            found.append(f"{tag} {name}: the owner's own address is not shown")
+        want = table["settings.configured"] + " · …" + KEY_ROWS[name]["suffix"]
+        if got["chip"] != want or got["locked"]:
+            found.append(f"{tag} {name}: the owner of a key reads {got['chip']!r}, "
+                         f"not {want!r}")
+    if driven["shared_endpoint_no_key"]["chip"] != table["settings.unconfigured"]:
+        found.append(f"{tag}: a shared endpoint with no key reads "
+                     f"{driven['shared_endpoint_no_key']['chip']!r}")
+    for name, got in driven.items():
+        if "9zQ4" in json.dumps(got) and name != "shared_to_operator":
+            found.append(f"{tag} {name}: the operator's characters are on a "
+                         f"row that is not the operator's own view")
+    return found
+
+
+def test_a_member_sees_that_the_shared_key_is_set_and_none_of_it() -> None:
+    """The last four characters of a key are shown to the account that owns it.
+
+    A member's row for the operator's shared key says who set it, in both
+    languages, and prints no characters, even from a server that sent some.
+    The operator's own view of that row and a member's own key keep theirs.
+
+    MUST FIRE: the shipped script with the member's branch taken out prints
+    the characters a server sent.
+    """
+    js = source(APP_JS)
+    for tag, table in sorted(catalogues().items()):
+        check(table.get("settings.configured.operator", "")
+              not in ("", table.get("settings.configured")),
+              f"{tag}: the member's view has no words of its own")
+        driven = drive_key_rows(js, tag)
+        if driven is None:
+            decline("UNMEASURED: the key rows need node, and none runs here")
+            return
+        for problem in key_row_problems(driven, table, tag):
+            check(False, problem)
+    seeded = js.replace('(theirs ? t("settings.configured.operator")\n       : ', "(", 1)
+    check(seeded != js, "the seed 'no member's branch' did not change the script")
+    tag, table = sorted(catalogues().items())[0]
+    check(any("old_server" in problem for problem in
+              key_row_problems(drive_key_rows(seeded, tag) or {"error": "no node"},
+                               table, tag)),
+          "the key-row check did not fire on a script that prints a member "
+          "the operator's characters")
+    # The member's own endpoint and key controls on a shared row: locked again,
+    # or the operator's address shown again, must each be caught.
+    for what, old, new in (
+            ("a locked member row", "  if (readOnly) {", "  if (readOnly || shared) {"),
+            ("the operator's address shown", 'const theirAddress = shared ? "" : ',
+             "const theirAddress = ")):
+        reseeded = js.replace(old, new, 1)
+        check(reseeded != js, f"the seed {what!r} did not change the script")
+        check(bool(key_row_problems(
+            drive_key_rows(reseeded, tag) or {"error": "no node"}, table, tag)),
+            f"the key-row check did not fire on {what}")
 
 
 # --------------------------------------------------------------------------
@@ -8809,6 +9205,629 @@ def test_the_page_names_its_favicon() -> None:
     seeded = seeded.replace("<title>", '<link rel="icon" href="data:,">\n<title>', 1)
     check(bool(favicon_problems(seeded)),
           "must fire: the empty placeholder icon passed")
+
+
+# --------------------------------------------------------------------------
+# the access-token form: five defects, in the shipped script, no server
+# --------------------------------------------------------------------------
+
+# One process, many scenarios, each from a reset page. The fake `fetch` plays a
+# server that has a token and no account, and a second tab that can make the
+# account in the middle of a scenario. `fetch` refuses a header value above
+# U+00FF before sending, as a browser does.
+ACCESS_FORM_DRIVE = r"""
+;(() => {
+  El.prototype.addEventListener = function () {};
+  El.prototype.focus = function () {};
+  const GOOD = "good-token-0123456789";
+  const server = { accounts: false, cookie: false, down: false, delay: 5 };
+  let log = [];
+  const reply = (status, body) => ({ ok: status >= 200 && status < 300, status,
+    json: async () => body, text: async () => JSON.stringify(body),
+    arrayBuffer: async () => new ArrayBuffer(0) });
+  const refuse = (status, code, message) => reply(status, { error: { code, message } });
+  globalThis.fetch = async (path, init) => {
+    const headers = Object.assign({}, (init && init.headers) || {});
+    const sent = headers["X-LLossless-Token"] || "";
+    const method = (init && init.method) || "GET";
+    for (const ch of sent) if (ch.charCodeAt(0) > 255) throw new TypeError("Failed to fetch");
+    log.push([method, path, sent]);
+    if (server.down) throw new TypeError("Failed to fetch");
+    await new Promise((resolve) => setTimeout(resolve, server.delay));
+    if (path.endsWith("/setup") && method === "POST") {
+      if (server.accounts) return refuse(409, "exists", "There is already an account.");
+      server.accounts = true; server.cookie = true;
+      return reply(200, { user: { username: "operator" } });
+    }
+    if (server.accounts) {
+      if (sent) return refuse(401, "no_session", "Sign in first.");
+      if (path.endsWith("/session")) {
+        return reply(200, { tenanted: true, setup_required: false, authenticated: server.cookie,
+                            user: server.cookie ? { username: "operator" } : null });
+      }
+      return reply(200, { tag: "de", strings: {}, available: [] });
+    }
+    if (sent !== GOOD) return refuse(401, "no_token", "This server wants its access token.");
+    if (path.endsWith("/session")) {
+      return reply(200, { tenanted: true, setup_required: true, authenticated: false });
+    }
+    return reply(200, { tag: "de", strings: {}, available: [] });
+  };
+  const stored = {};
+  const ops = [];
+  globalThis.window = { localStorage: {
+    getItem: (n) => (n in stored ? stored[n] : null),
+    setItem: (n, v) => { stored[n] = String(v); },
+    removeItem: (n) => { ops.push("remove " + n); delete stored[n]; } },
+    location: { hash: "" } };
+  globalThis.location = window.location;
+  globalThis.history = { replaceState() {} };
+  let started = 0;
+  wire = () => {}; renderLocalePicker = () => {}; renderPill = () => {};
+  renderSession = () => {}; applyStrings = () => {}; say = () => {};
+  start = async () => { started += 1; };
+  const language = (value) => Object.defineProperty(globalThis, "navigator",
+    { value: { language: value }, configurable: true });
+  const reset = (opts) => {
+    accessToken = ""; accessNeeded = false; sessionError = null; accessBusy = false;
+    store.session = null; started = 0; log = []; ops.length = 0;
+    for (const key of Object.keys(stored)) delete stored[key];
+    Object.assign(stored, opts.stored || {});
+    Object.assign(server, { accounts: false, cookie: false, down: false });
+    language(opts.browser || "en-US");
+    strings = {}; locale.tag = "";
+    for (const hook of ["access-gate", "gate", "gate-access-refused", "gate-token-field"]) el(hook).hidden = true;
+    el("workspace").hidden = false;
+    el("gate-access").value = ""; el("gate-status").textContent = "";
+  };
+  const snap = () => ({
+    access: !el("access-gate").hidden, gate: !el("gate").hidden,
+    setupField: !el("gate-token-field").hidden,
+    refusedShown: !el("gate-access-refused").hidden, refused: el("gate-access-refused").textContent,
+    heading: el("gate-access-heading").textContent, submit: el("gate-access-submit").textContent,
+    held: withAccess({})["X-LLossless-Token"] || "", started,
+    sessionRequests: log.filter((row) => row[1].endsWith("/session") && row[0] === "GET").length,
+    sent: log.map((row) => row[2]), stored: Object.assign({}, stored), ops: ops.slice(),
+    status: el("gate-status").textContent });
+  const out = {};
+  (async () => { try {
+    // 1. a double press with the right token
+    reset({}); await boot();
+    el("gate-access").value = GOOD;
+    await Promise.all([submitAccess(), submitAccess()]);
+    out.double = snap();
+    // 1b. an empty field says so and sends nothing
+    reset({}); await boot(); log = [];
+    el("gate-access").value = "   "; await submitAccess();
+    out.empty = snap();
+    // 2. a token the header cannot carry, and a network error, and a wrong token
+    reset({}); await boot(); log = [];
+    el("gate-access").value = "tök€-0123456789"; await submitAccess();
+    out.unsendable = snap();
+    reset({}); await boot(); server.down = true; log = [];
+    el("gate-access").value = GOOD; await submitAccess();
+    out.down = snap();
+    server.down = false; el("gate-access").value = GOOD; await submitAccess();
+    out.recovered = snap();
+    reset({}); await boot(); log = [];
+    el("gate-access").value = "wrong-token-000000"; await submitAccess();
+    out.wrong = snap();
+    // 3. a second tab made the account; this tab is still on the setup form
+    for (const cookie of [true, false]) {
+      reset({}); await boot();
+      el("gate-access").value = GOOD; await submitAccess();
+      out["tab" + cookie + "Before"] = snap();
+      server.accounts = true; server.cookie = cookie; log = [];
+      el("gate-username").value = "second"; el("gate-password").value = "a-long-enough-password";
+      el("gate-token").value = "setup-code";
+      await signIn();
+      out["tab" + cookie] = snap();
+    }
+    // 4. the stored language survives a server that is waiting for its token
+    reset({ stored: { "llossless.locale": "de" } }); await boot();
+    out.stored = snap();
+    reset({ stored: { "llossless.locale": "de" } }); await boot();
+    el("gate-access").value = GOOD; await submitAccess();
+    out.storedAfter = snap();
+    // 5. the form's own language: stored choice, else the browser's, else English
+    reset({ stored: { "llossless.locale": "de" }, browser: "en-US" }); await boot();
+    out.langStored = snap();
+    reset({ browser: "de-DE" }); await boot();
+    out.langBrowser = snap();
+    reset({ browser: "fr-FR" }); await boot();
+    out.langOther = snap();
+    out.table = ACCESS_STRINGS;
+  } catch (error) { out.error = String(error && error.stack || error); }
+  process.stdout.write(JSON.stringify(out)); })();
+})();
+"""
+
+
+def drive_access_form(js: str) -> dict | None:
+    node = node_command()
+    if node is None:
+        return None
+    program = EFFORT_DOM + "\n" + js + ACCESS_FORM_DRIVE
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                     encoding="utf-8") as handle:
+        handle.write(program)
+        path = handle.name
+    try:
+        run = subprocess.run(node + [path], capture_output=True, text=True,
+                             timeout=120, cwd=ROOT)
+    finally:
+        os.unlink(path)
+    if run.returncode != 0:
+        return {"error": run.stderr[-600:]}
+    return json.loads(run.stdout)
+
+
+def access_form_problems(driven: dict) -> list[str]:
+    """What is wrong with the access form across the five scenarios, as sentences."""
+    if driven.get("error"):
+        return [f"the access form drive did not finish: {driven['error']}"]
+    table = driven["table"]
+    good = "good-token-0123456789"
+    found: list[str] = []
+    d = driven["double"]
+    if d["refusedShown"]:
+        found.append(f"a double press left a message under the form: {d['refused']!r}")
+    if not (d["held"] == good and d["gate"] and not d["access"] and d["sessionRequests"] >= 2):
+        found.append(f"a double press with the right token did not leave the token held "
+                     f"and the next form up: {d['held']=} {d['gate']=} {d['access']=}")
+    if "" in [value for value in d["sent"][-2:] if value == ""] and d["held"] != good:
+        found.append("a double press sent an empty token")
+    e = driven["empty"]
+    if not (e["access"] and e["refused"] == table["en"]["empty"] and not e["sent"]):
+        found.append(f"an empty field is not said, or a request was sent: {e['refused']!r} {e['sent']}")
+    for name, key in (("unsendable", "unsendable"), ("down", "unreachable"), ("wrong", "refused")):
+        s = driven[name]
+        if not (s["access"] and s["refusedShown"] and s["refused"] == table["en"][key]
+                and s["held"] == "" and s["started"] == 0 and not s["gate"]):
+            found.append(f"{name}: the form must stay up saying {key!r} with no token held "
+                         f"and the tool not started: {s['refused']!r} held={s['held']!r} "
+                         f"access={s['access']} started={s['started']} gate={s['gate']}")
+    if driven["unsendable"]["sent"]:
+        found.append(f"a token with a character above U+00FF was sent: {driven['unsendable']['sent']}")
+    r = driven["recovered"]
+    if not (r["gate"] and not r["access"] and r["held"] == good):
+        found.append(f"after the server came back the right token did not get through: {r}")
+    for cookie in ("true", "false"):
+        before, after = driven["tab" + cookie + "Before"], driven["tab" + cookie]
+        if not (before["gate"] and before["setupField"] and before["held"] == good):
+            found.append(f"tab {cookie}: the scenario did not start on the setup form with the token held")
+        if after["held"] != "":
+            found.append(f"tab {cookie}: a stale token is still held after the account was made elsewhere")
+        if cookie == "true" and not (after["started"] == 1 and not after["gate"]):
+            found.append(f"tab true: the good cookie did not carry this tab into the tool: {after}")
+        if cookie == "false" and not (after["gate"] and not after["setupField"] and after["started"] == 0):
+            found.append(f"tab false: the sign-in form was not drawn in place of the setup form: {after}")
+    if driven["stored"]["stored"].get("llossless.locale") != "de" or driven["stored"]["ops"]:
+        found.append(f"the stored language was forgotten at the access form: {driven['stored']}")
+    if driven["storedAfter"]["stored"].get("llossless.locale") != "de":
+        found.append("the stored language was forgotten after the token was given")
+    for name, tag in (("langStored", "de"), ("langBrowser", "de"), ("langOther", "en")):
+        s = driven[name]
+        if s["heading"] != table[tag]["heading"] or s["submit"] != table[tag]["submit"]:
+            found.append(f"{name}: the access form speaks {s['heading']!r}, not {tag}")
+    return found
+
+
+def test_the_access_form_survives_a_double_press_a_bad_token_and_a_second_tab() -> None:
+    """The five defects of the access form, driven through the shipped script.
+
+    A double press keeps the token and the next form; a token the header cannot
+    carry, a network error and a wrong token each leave the form up with their
+    own sentence and no token held; a second tab that made the account moves
+    this tab onto the right form and drops its stale token; a stored language
+    survives the refusals the access form lives behind; and the form speaks the
+    stored language, else the browser's, from a table inside the page.
+
+    MUST FIRE: six seeds of the shipped script, one per defect.
+    """
+    js = source(APP_JS)
+    driven = drive_access_form(js)
+    if driven is None:
+        decline("UNMEASURED: the access form needs node, and none runs here")
+        return
+    for problem in access_form_problems(driven):
+        check(False, f"access form: {problem}")
+    seeds = {
+        "re-entry allowed": ("  if (accessBusy) return;\n", ""),
+        "an empty field sent": ("  if (!typed) {\n    refuseAccess(\"empty\");\n    return;\n  }\n", ""),
+        "a failed answer counted as accepted": (
+            "  if (sessionError) {\n    accessToken = \"\";\n    refuseAccess(\"unreachable\");\n    return;\n  }\n", ""),
+        "a failed setup not re-asked": ("    if (setting) await resumeAfterFailedSetup(error);\n", ""),
+        "the stored language forgotten": (
+            "      if (/** @type {any} */ (second).code !== \"no_token\") rememberLocale(\"\");",
+            "      rememberLocale(\"\");"),
+    }
+    seeds["the form always English"] = (
+        "    if (primary && Object.prototype.hasOwnProperty.call(ACCESS_STRINGS, primary)) {\n      return primary;\n    }\n",
+        "")
+    for name, (old, new) in seeds.items():
+        seeded = js.replace(old, new, 1)
+        check(seeded != js, f"the seed {name!r} did not change the script")
+        check(bool(access_form_problems(drive_access_form(seeded) or {"error": "no node"})),
+              f"the access form check did not fire on a script with {name}")
+
+
+# --------------------------------------------------------------------------
+# earlier runs: the saves the current result offers
+# --------------------------------------------------------------------------
+
+HISTORY_DRIVE = r"""
+;(() => {
+  El.prototype.addEventListener = function (type, fn) { (this.handlers = this.handlers || {})[type] = fn; };
+  strings = INPUT.strings;
+  syncHistoryTab = () => {}; announceLanding = () => {};
+  const saved = [];
+  saveFrom = async (url, name, id) => { saved.push([url, name, id]); };
+  getJson = async () => ({ runs: INPUT.runs });
+  const out = {};
+  (async () => {
+    await refreshHistory();
+    for (const li of hooks["history"].childNodes) {
+      const run = li.childNodes[0].textContent;
+      const links = li.childNodes.filter((c) => c.tagName === "a");
+      out[run] = links.map((a) => {
+        const row = { label: a.textContent, href: a.href, download: a.download || "" };
+        if (a.handlers && a.handlers.click) {
+          saved.length = 0;
+          let prevented = false;
+          a.handlers.click({ preventDefault() { prevented = true; } });
+          row.saved = saved.slice(); row.prevented = prevented;
+        }
+        return row;
+      });
+    }
+    process.stdout.write(JSON.stringify(out));
+  })();
+})();
+"""
+
+HISTORY_RUNS = [
+    {"id": "d0000000-aaaa", "state": "done", "documents": 2, "created_at": 1},
+    {"id": "c0000000-aaaa", "state": "cancelled", "documents": 2, "created_at": 2},
+    {"id": "f0000000-aaaa", "state": "failed", "documents": 2, "created_at": 3, "error": "x"},
+    {"id": "i0000000-aaaa", "state": "interrupted", "documents": 2, "created_at": 4},
+]
+
+
+def drive_history(js: str, strings: dict) -> dict | None:
+    node = node_command()
+    if node is None:
+        return None
+    program = (EFFORT_DOM + "\nconst INPUT = " + json.dumps(
+        {"strings": strings, "runs": HISTORY_RUNS}) + ";\n" + js + HISTORY_DRIVE)
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                     encoding="utf-8") as handle:
+        handle.write(program)
+        path = handle.name
+    try:
+        run = subprocess.run(node + [path], capture_output=True, text=True,
+                             timeout=120, cwd=ROOT)
+    finally:
+        os.unlink(path)
+    if run.returncode != 0:
+        return {"error": run.stderr[-600:]}
+    return json.loads(run.stdout)
+
+
+def history_problems(driven: dict, table: dict) -> list[str]:
+    if "error" in driven:
+        return [f"the history did not render under node: {driven['error']}"]
+    prefix = "/api/v1/runs/"
+    save = [(table["results.download"], "merged", "merged.md"),
+            (table["results.download.report"], "report.html", "report.html"),
+            (table["results.download.bundle"], "bundle.zip", "bundle.zip")]
+    found = []
+    for run, state, offered in (("d0000000", "done", save), ("c0000000", "cancelled", save[1:]),
+                                ("f0000000", "failed", []), ("i0000000", "interrupted", [])):
+        links = [row for row in driven.get(run, []) if row["download"]]
+        got = [(row["label"], row["href"].rsplit("/", 1)[-1], row["download"]) for row in links]
+        want = [(label, tail, name) for label, tail, name in offered]
+        if got != want:
+            found.append(f"a {state} run offers {got}, not {want}")
+        for row in links:
+            if not (row["prevented"] and row["saved"]
+                    and row["saved"][0][1] == row["download"]
+                    and row["saved"][0][2] == run + "-aaaa"):
+                found.append(f"a {state} run's {row['download']} link is not wired to a save "
+                             f"of its own run: {row}")
+        opens = [row for row in driven.get(run, []) if not row["download"]]
+        if bool(opens) != (state in ("done", "cancelled")):
+            found.append(f"a {state} run's Open link is {'there' if opens else 'missing'}")
+    return found
+
+
+def test_a_finished_earlier_run_offers_the_saves_the_result_does() -> None:
+    """Previous runs: Open, and for a finished run the document, report and archive.
+
+    A done run offers all three saves, a cancelled one the report and the
+    archive (its merged document may not exist), a failed or interrupted one
+    none; each link saves its own run, not the one on screen.
+
+    MUST FIRE: the saves left off, and every state offering them.
+    """
+    js = source(APP_JS)
+    for tag, table in sorted(catalogues().items()):
+        driven = drive_history(js, table)
+        if driven is None:
+            decline("UNMEASURED: the history needs node, and none runs here")
+            return
+        for problem in history_problems(driven, table):
+            check(False, f"{tag}: {problem}")
+    tag, table = sorted(catalogues().items())[0]
+    for what, old, new in (
+            ("the saves left off", '    if (state === "done" || state === "cancelled") {\n      item.appendChild(historyDownload(runId, ROUTES.report',
+             '    if (false) {\n      item.appendChild(historyDownload(runId, ROUTES.report'),
+            ("every state offering them", '    if (state === "done" || state === "cancelled") {\n      item.appendChild(historyDownload(runId, ROUTES.report',
+             '    if (true) {\n      item.appendChild(historyDownload(runId, ROUTES.report'),
+            ("a cancelled run offering a document it may not have",
+             '    if (state === "done") {\n      item.appendChild(historyDownload(runId, ROUTES.merged',
+             '    if (state === "done" || state === "cancelled") {\n      item.appendChild(historyDownload(runId, ROUTES.merged')):
+        seeded = js.replace(old, new, 1)
+        check(seeded != js, f"the seed {what!r} did not change the script")
+        check(bool(history_problems(drive_history(seeded, table) or {"error": "no node"}, table)),
+              f"the history check did not fire on {what}")
+
+
+# --------------------------------------------------------------------------
+# the status line after the first account
+# --------------------------------------------------------------------------
+
+SETUP_NOTE_DRIVE = r"""
+;(() => {
+  El.prototype.addEventListener = function () {};
+  strings = INPUT.strings;
+  store.config = INPUT.config;
+  store.docs = [{ name: "", text: "", id: "a" }, { name: "", text: "", id: "b" }];
+  store.runId = "";
+  sendJson = async () => ({ migrated: { note: "NOTE-TEXT" } });
+  refreshSession = async () => {}; hideGate = () => {}; start = async () => {};
+  (async () => {
+    el("gate-username").value = "operator"; el("gate-password").value = "x";
+    await signIn();
+    process.stdout.write(JSON.stringify({
+      word: hooks["status-word"].textContent, text: hooks["status-text"].textContent,
+      tone: hooks["status"].attributes["data-state"] || hooks["status"].className || "",
+      ready: readiness().ready }));
+  })();
+})();
+"""
+
+
+def drive_setup_note(js: str, table: dict, config: dict) -> dict | None:
+    node = node_command()
+    if node is None:
+        return None
+    program = (EFFORT_DOM + "\nconst INPUT = " + json.dumps(
+        {"strings": table, "config": config}) + ";\n" + js + SETUP_NOTE_DRIVE)
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                     encoding="utf-8") as handle:
+        handle.write(program)
+        path = handle.name
+    try:
+        run = subprocess.run(node + [path], capture_output=True, text=True,
+                             timeout=120, cwd=ROOT)
+    finally:
+        os.unlink(path)
+    if run.returncode != 0:
+        return {"error": run.stderr[-600:]}
+    return json.loads(run.stdout)
+
+
+def setup_note_problems(driven: dict, table: dict) -> list[str]:
+    if "error" in driven:
+        return [f"the first-account note did not render under node: {driven['error']}"]
+    found = []
+    want_text = table["status.needdocs"].replace("{min}", "2")
+    if driven["ready"]:
+        found.append("the scenario is not one where the button is disabled")
+    if driven["word"] != table["word.notready"]:
+        found.append(f"the status word reads {driven['word']!r} while the button is "
+                     f"disabled, not {table['word.notready']!r}")
+    if "NOTE-TEXT" not in driven["text"] or want_text not in driven["text"]:
+        found.append(f"the line must carry the note and what is missing: {driven['text']!r}")
+    return found
+
+
+def test_the_status_after_the_first_account_agrees_with_the_button() -> None:
+    """The note about migrated keys no longer makes the line say ready over a disabled button.
+
+    MUST FIRE: the shipped script with the old unconditional green line.
+    """
+    js = source(APP_JS)
+    config = served_config_with_routes()
+    for tag, table in sorted(catalogues().items()):
+        driven = drive_setup_note(js, table, config)
+        if driven is None:
+            decline("UNMEASURED: the status line needs node, and none runs here")
+            return
+        for problem in setup_note_problems(driven, table):
+            check(False, f"{tag}: {problem}")
+    old = '''    say(state.ready ? "ok" : "warn", t(state.ready ? "word.ready" : "word.notready"),
+        String(note) + " " + state.text);'''
+    seeded = js.replace(old, 'say("ok", t("word.ready"), String(note));', 1)
+    check(seeded != js, "the seed 'always ready' did not change the script")
+    tag, table = sorted(catalogues().items())[0]
+    check(bool(setup_note_problems(drive_setup_note(seeded, table, config) or {"error": "no node"}, table)),
+          "the first-account status check did not fire on the old green line")
+
+
+# --------------------------------------------------------------------------
+# the band legend states the thresholds band() applies
+# --------------------------------------------------------------------------
+
+def band_legend_problems(js: str, tables: dict) -> list[str]:
+    """Each column's sentence in each language, against what `band()` does at its edges."""
+    scales = rank_scales()
+    call = body_of(strip_comments(js), 'setText(el("model-bands"), t("models.bands", {')
+    pairs = dict((name, (scale, field)) for name, scale, field in re.findall(
+        r"(\w+):\s*(?:figure\()?RANK_SCALES\.(\w+)\.(good|poor)", call))
+    probes = []
+    for name in ("usd_per_merge", "seconds_per_merge", "silent_loss_per_pair", "deviations_per_pair"):
+        s = scales[name]
+        probes += [(name, 0), (name, s["good"]), (name, s["poor"]), (name, s["poor"] + 0.001)]
+    got = shipped_bands(js, probes)
+    if got is None:
+        return []
+    bands = {probe: band for probe, band in zip(probes, got)}
+    found = []
+
+    def number(name: str) -> str:
+        scale, field = pairs[name]
+        value = scales[scale][field]
+        return f"{value:.2f}" if scale == "usd_per_merge" else f"{value:g}"
+    loss, dev = scales["silent_loss_per_pair"], scales["deviations_per_pair"]
+    loss_fair_at_poor = bands[("silent_loss_per_pair", loss["poor"])] == "fair"
+    dev_poor_at_poor = bands[("deviations_per_pair", dev["poor"])] == "poor"
+    for name in ("cheap", "dear", "fast", "slow", "lossy", "clean", "noisy"):
+        if name not in pairs:
+            found.append(f"the legend call supplies no {{{name}}}")
+    if found:
+        return found
+    for tag, table in sorted(tables.items()):
+        text = table["models.bands"]
+        for name in pairs:
+            text = text.replace("{" + name + "}", number(name))
+        if tag == "en":
+            want = [f"${number('cheap')} or less is good, over ${number('dear')} is poor",
+                    f"{number('fast')} or less is good, over {number('slow')} is poor",
+                    ("more than %s per test is poor" if loss_fair_at_poor
+                     else "%s or more per test is poor") % number("lossy"),
+                    ("%s per test or more is poor" if dev_poor_at_poor
+                     else "more than %s per test is poor") % number("noisy"),
+                    f"{number('clean')} per test or less is good"]
+        else:
+            want = [f"${number('cheap')} oder weniger ist gut, über ${number('dear')} ist schlecht",
+                    f"{number('fast')} oder weniger ist gut, über {number('slow')} ist schlecht",
+                    ("mehr als %s pro Test ist schlecht" if loss_fair_at_poor
+                     else "%s oder mehr pro Test ist schlecht") % number("lossy"),
+                    ("%s pro Test oder mehr ist schlecht" if dev_poor_at_poor
+                     else "mehr als %s pro Test ist schlecht") % number("noisy"),
+                    f"{number('clean')} pro Test oder weniger ist gut"]
+        found += [f"{tag}: the legend lacks {phrase!r}" for phrase in want if phrase not in text]
+    return found
+
+
+def test_the_band_legend_states_the_thresholds_the_code_applies() -> None:
+    """`models.bands` against `band()`, for the four columns, in both languages.
+
+    A silent loss of exactly 1.0 is "fair" in the shipped `band()`, so the legend
+    says "more than 1" is poor and not "one or more". MUST FIRE: the old
+    sentence, and a legend call that no longer supplies the threshold.
+    """
+    js = source(APP_JS)
+    tables = catalogues()
+    check(not band_legend_problems(js, tables), f"band legend: {band_legend_problems(js, tables)}")
+    old = json.loads(json.dumps(tables))
+    old["en"]["models.bands"] = old["en"]["models.bands"].replace(
+        "more than {lossy} per test is poor", "one or more per test is poor")
+    check(bool(band_legend_problems(js, old)), "the legend check did not fire on the old sentence")
+    old = json.loads(json.dumps(tables))
+    old["de"]["models.bands"] = old["de"]["models.bands"].replace(
+        "mehr als {lossy} pro Test ist schlecht", "einer oder mehr pro Test ist schlecht")
+    check(bool(band_legend_problems(js, old)), "the legend check did not fire on the old German sentence")
+    seeded = js.replace("    lossy: RANK_SCALES.silent_loss_per_pair.poor,\n", "", 1)
+    check(seeded != js and bool(band_legend_problems(seeded, tables)),
+          "the legend check did not fire on a call without the threshold")
+
+
+# --------------------------------------------------------------------------
+# What was checked: the claims that got no verdict
+# --------------------------------------------------------------------------
+
+UNGRADED_DRIVE = r"""
+;(() => {
+  strings = INPUT.strings;
+  addsAtThisLevel = () => false; chipFor = () => {}; openIf = () => {}; tileOf = () => ({});
+  renderChecks(INPUT.report);
+  const rows = hooks["checks"].childNodes;
+  const coverage = rows.find((li) => li.childNodes[0].textContent === strings["check.coverage"]);
+  const fold = coverage && coverage.childNodes.find((c) => c.tagName === "details");
+  process.stdout.write(JSON.stringify({
+    found: Boolean(coverage), fold: Boolean(fold),
+    summary: fold ? fold.childNodes[0].textContent : "",
+    lines: fold ? fold.childNodes[1].childNodes.map((li) => li.textContent) : [] }));
+})();
+"""
+
+UNGRADED = [
+    {"claim_id": "A-007", "direction": "forward", "index": 3,
+     "defects": ["verdict is not one of the allowed labels", "rationale missing"]},
+    {"claim_id": "", "direction": "backward", "index": 0, "defects": ["no claim id"]},
+]
+
+
+def drive_ungraded(js: str, table: dict, unusable: list) -> dict | None:
+    node = node_command()
+    if node is None:
+        return None
+    report = {"claims": [{}], "unusable": unusable, "coverage": {"ungraded": len(unusable)}}
+    program = (EFFORT_DOM + "\nconst INPUT = " + json.dumps({"strings": table, "report": report})
+               + ";\n" + js + UNGRADED_DRIVE)
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                     encoding="utf-8") as handle:
+        handle.write(program)
+        path = handle.name
+    try:
+        run = subprocess.run(node + [path], capture_output=True, text=True,
+                             timeout=120, cwd=ROOT)
+    finally:
+        os.unlink(path)
+    if run.returncode != 0:
+        return {"error": run.stderr[-600:]}
+    return json.loads(run.stdout)
+
+
+def ungraded_problems(driven: dict, table: dict, expect: bool) -> list[str]:
+    if "error" in driven:
+        return [f"renderChecks did not run under node: {driven['error']}"]
+    if not driven["found"]:
+        return ["the coverage row is not in the checks list"]
+    if not expect:
+        return [] if not driven["fold"] else ["a list is shown with nothing to list"]
+    want = [table["check.ungraded.item"].replace("{id}", "A-007").replace("{direction}", "forward")
+            .replace("{defects}", "verdict is not one of the allowed labels; rationale missing"),
+            table["check.ungraded.noid"].replace("{direction}", "backward")
+            .replace("{defects}", "no claim id")]
+    found = []
+    if not driven["fold"]:
+        return ["the ungraded claims are not listed under their count"]
+    if driven["summary"] != table["check.ungraded.summary"].replace("{n}", "2"):
+        found.append(f"the list's summary reads {driven['summary']!r}")
+    if driven["lines"] != want:
+        found.append(f"the list reads {driven['lines']}, not {want}")
+    return found
+
+
+def test_the_ungraded_claims_are_listed_under_their_count() -> None:
+    """"What was checked" names each claim no verdict was given for, in both languages.
+
+    The report's own `unusable` list: claim id, direction and the checker's
+    words. Nothing is listed when nothing was ungraded. MUST FIRE: the list
+    taken out, and one shown with nothing in it.
+    """
+    js = source(APP_JS)
+    for tag, table in sorted(catalogues().items()):
+        for unusable, expect in ((UNGRADED, True), ([], False)):
+            driven = drive_ungraded(js, table, unusable)
+            if driven is None:
+                decline("UNMEASURED: the checks list needs node, and none runs here")
+                return
+            for problem in ungraded_problems(driven, table, expect):
+                check(False, f"{tag}: {problem}")
+    tag, table = sorted(catalogues().items())[0]
+    seeded = js.replace('      const list = ungradedList(report.unusable || []);\n      if (list) item.appendChild(list);\n', "", 1)
+    check(seeded != js, "the seed 'list left out' did not change the script")
+    check(bool(ungraded_problems(drive_ungraded(seeded, table, UNGRADED) or {"error": "no node"}, table, True)),
+          "the ungraded check did not fire on a page without the list")
+    seeded = js.replace("  if (!unusable.length) return null;\n", "", 1)
+    check(seeded != js, "the seed 'empty list shown' did not change the script")
+    check(bool(ungraded_problems(drive_ungraded(seeded, table, []) or {"error": "no node"}, table, False)),
+          "the ungraded check did not fire on an empty list shown")
 
 
 def main() -> int:

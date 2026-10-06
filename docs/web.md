@@ -1,63 +1,134 @@
 # The web interface
 
-`llossless serve` puts the same merge and the same checks behind a small web page on your own machine: drop in documents, pick a model, watch the run, read the report. This page is the full reference for it, for the person running the server and for anyone scripting against its API. The [README](../README.md) has the short version, and the [command-line reference](reference.md) covers the settings both share.
+`llossless serve` runs LLossless as a web page on your own machine: add documents, pick a model, watch the run, read the result. It runs the same merge and the same checks as `llossless merge`. This page explains how to start the server, set up accounts and keys, choose a model and run a merge, and what the server keeps and for how long, and ends with the JSON API and the security details. The [README](../README.md) has the short version, the [command-line reference](reference.md) explains the settings both interfaces share, and [Reading the report](report.md) explains the findings.
 
 ![The web interface after a run with findings. The answers came from a scripted test endpoint, not a real model.](img/web-ui-light.png)
 
 *A finished run with findings. The answers in this screenshot came from a scripted test endpoint, not from a real model.*
 
+**In short**
+
+- The server answers on this machine only, at `http://127.0.0.1:8765`, until you start it with `--host`.
+- The first start prints a one-time address that creates the first account. There is no default password.
+- Every account can hold its own API keys. A member who has none runs on the operator's key, so give an account only to people you trust with that key.
+- Only the person who submitted a run can see it.
+- Documents and results are deleted 48 hours after a run finishes, unless you set `--retention`.
+
+**On this page**
+
+- [Quick start](#quick-start)
 - [Starting the server](#starting-the-server)
-- [Accounts and signing in](#accounts-and-signing-in), [whose key a run uses](#whose-key-a-run-uses), [who can see a run](#who-can-see-a-run)
+- [Accounts](#accounts), [whose key a run uses](#whose-key-a-run-uses), [who can see a run](#who-can-see-a-run)
 - [API keys and endpoints](#api-keys-and-endpoints)
-- [Choosing a model](#choosing-a-model), [the picker and the scorecard](#the-model-picker-and-the-scorecard), [models an endpoint serves](#models-an-endpoint-serves)
-- [Subscription command routes](#subscription-command-routes)
-- [Runs](#runs)
-- [Languages](#languages)
+- [Choosing a model](#choosing-a-model)
+- [Subscription routes](#subscription-routes)
+- [Running a merge](#running-a-merge)
 - [Retention](#retention)
-- [What a submitted form may choose](#what-a-submitted-form-may-choose)
+- [Languages](#languages)
+- [What a request may choose](#what-a-request-may-choose)
 - [The JSON API](#the-json-api)
+- [Security details](#security-details)
+- [For contributors](#for-contributors)
+
+## Quick start
+
+1. Start the server. From a cloned repository without installing, use `PYTHONPATH=src python3 -m llossless serve` instead.
+
+   ```sh
+   llossless serve
+   ```
+
+2. The terminal prints a one-time address that ends in `#setup=` and a long code. Open it in a browser on the same machine, choose a username and a password of at least 10 characters, and press **Create the account**. This first account is the operator's.
+3. Press **Credentials** at the top right and give the server a model to use. Do one of these, then press **Done**:
+   - paste an API key for Anthropic, OpenAI or Google and press **Save**;
+   - enter the address of your own model server under `self-hosted` and press **Save endpoint**;
+   - tick **Answer merges with this tool** beside a Claude Code row, if the server found the `claude` program.
+4. In step 1, **Documents**, paste or upload at least two documents. In step 2, **Model**, pick a row.
+5. Press **Merge and check**. The button names how the run is paid for, for example `Merge and check - metered API`.
+6. The right-hand pane shows the progress and then the result: a verdict, the merged document and the findings.
 
 ## Starting the server
 
-`llossless serve` runs the same two commands behind a small HTTP server on this machine. It exists because a merge takes between 23 seconds and 76 minutes over the runs recorded here, which no request can hold open: the browser submits documents, gets a run id back, and watches the run on a Server-Sent Events stream. The merge itself is the pipeline `llossless merge` runs, against the endpoint this server's own environment configures, and a test holds one merge through each path against the same endpoint and requires the two reports to agree.
+`llossless serve` takes five flags:
 
-| flag | what it does |
-|---|---|
-| `--port PORT` | listen on this port (default 8765). `0` asks the operating system for a free one and prints what it gave |
-| `--host HOST` | listen on this address (default `127.0.0.1`). Anything that is not loopback needs either an account or a token in `LLOSSLESS_WEB_TOKEN`; the token is consulted only while the server has no accounts |
-| `--work-dir DIR` | where submitted documents and their reports are kept until the retention window passes (default: a `web` directory under the cache directory). Created owner-only |
-| `--workers N` | how many merges may run at once (default 1). The engine is synchronous and `--min-interval` paces one client, not a pool |
-| `--retention SECONDS` | delete a finished run's documents, merge and report this long after it finishes (default 172800, which is 48 hours). `0` keeps them until they are deleted, across restarts |
+| flag | default | what it does |
+|---|---|---|
+| `--port PORT` | `8765` | The port to listen on. `0` picks a free port and prints it. |
+| `--host HOST` | `127.0.0.1` | The address to listen on. Any address other than this machine's own needs an account or an access token: see [Opening the server to a network](#opening-the-server-to-a-network). |
+| `--work-dir DIR` | a `web` folder in the cache directory | Where submitted documents and their results are kept until they are deleted. Only its owner can read it. |
+| `--workers N` | `1` | How many merges run at the same time. Further runs wait in a queue. Raise it only if your model endpoint can serve that many runs at once. |
+| `--retention SECONDS` | `172800` (48 hours) | How long a finished run is kept. `0` keeps runs until someone deletes them. See [Retention](#retention). |
 
-## Accounts and signing in
-
-**The first start prints a one-time address, and nothing else answers until it has been used.** A server with no accounts is a server in setup: every route but the login one refuses, and the line on stderr carries a URL whose fragment holds a token from `secrets`. Opening it once creates the first account, which is the operator's. The address stops working the moment that account exists, and a new one is generated on every start. There is no default password, because the password that has not been changed yet is the one a scanner finds. Whatever is already in the credentials file becomes that first account's, and from there it is the set of endpoints every later account shares.
+It reads five environment variables of its own:
 
 | variable | what it does |
 |---|---|
-| `LLOSSLESS_ACCOUNTS` | where the accounts file lives (default `$XDG_CONFIG_HOME/llossless/accounts.json`) |
-| `LLOSSLESS_CREDENTIALS` | where the operator's shared credentials file lives |
-| `LLOSSLESS_WEB_TOKEN` | a bind token, consulted only while this server has no accounts |
-| `LLOSSLESS_RETENTION` | the retention window in seconds, for a deployment configured by environment rather than by command line. `--retention` beats it; `0` keeps runs until they are deleted |
-| `LLOSSLESS_COMMANDS` | where the command-route file lives (default `$XDG_CONFIG_HOME/llossless/commands.json`). Absent is the default and means this server offers no command backend until one is written there, by hand or by the credentials sheet's toggle |
+| `LLOSSLESS_RETENTION` | The same as `--retention`, for a server started without a command line. The flag wins. A value that is not a number stops the server from starting. |
+| `LLOSSLESS_WEB_TOKEN` | An access token of at least 16 ASCII characters, for a network address while the server has no account yet. |
+| `LLOSSLESS_ACCOUNTS` | Where the accounts file is. Default: `~/.config/llossless/accounts.json`. |
+| `LLOSSLESS_CREDENTIALS` | Where the operator's shared keys and endpoints are stored. Default: `~/.config/llossless/credentials.json`. |
+| `LLOSSLESS_COMMANDS` | Where the [subscription routes](#subscription-routes) are stored. Default: `~/.config/llossless/commands.json`. |
 
-Operators can add and remove accounts and reset a password; anybody can change their own, and doing so ends every session that account had, including the one that asked. Sessions live in the server process and go when it stops, so a restart signs everybody out. The runs do not: see [the queue survives a restart](#runs).
+The cache directory is `.llossless-cache/` in a cloned repository and `~/.cache/llossless` for an installed package. `XDG_CACHE_HOME` and `XDG_CONFIG_HOME` replace `~/.cache` and `~/.config` where they are set.
 
-**Before you give someone an account: they can spend your money.** A member who has not set up their own endpoint for a provider runs on the operator's endpoint, with the operator's key, and so on the operator's credit. There is no spending limit per account, and the only thing that is rate-limited is the login. Anyone who can sign in can therefore spend as much as the operator's key allows. Only give an account to someone you would trust with shell access to the server. [Whose key a run uses](#whose-key-a-run-uses) has the details.
+The server also reads the variables the command line reads, such as `LLOSSLESS_BASE_URL`. They define "this server's own endpoint", which is where a [typed model id](#a-model-that-is-not-in-the-table) goes by default.
 
-### How a request is authenticated
+Stop the server with Ctrl+C. That signs everybody out. Runs are kept: see [After a restart](#after-a-restart).
 
-**Signing in is what authenticates a request**, per person rather than per server. The session id comes from `secrets.token_urlsafe`, is held server-side and compared with `hmac.compare_digest`, and reaches a browser as a cookie that is `HttpOnly`, `SameSite=Strict` and `Path=/`, and `Secure` as well when the request reached the front of the deployment over TLS. `SameSite=Strict` is the defence against cross-site request forgery: a cross-site navigation or form post arrives with no cookie at all, and the `Origin` check on every mutating request stays in place as a second layer. A script presents the same session id in an `X-LLossless-Token` header, which is also the header a token-protected deployment uses.
+### Opening the server to a network
 
-Passwords are hashed with `hashlib.scrypt` where the build offers it and `hashlib.pbkdf2_hmac` where it does not, with a per-user salt from `secrets` and the cost written into the record, so the cost can be raised later without invalidating the accounts already in the file. An unknown username and a wrong password produce the same status, the same code, the same sentence and the same order of duration: the derivation runs either way, against a decoy when the name is not there, because a login that returns early on an unknown name reveals which usernames exist to anyone with a stopwatch.
+By default only this machine can reach the server. With `--host` and another address, anyone who can reach that address can reach the server, so every request must then be signed in. The simplest order is:
 
-**`--host` with anything that is not loopback needs either an account or a token.** The server spends a credential on every document submitted to it, so reaching it from another machine and authenticating the submitter are one decision and not two. With no accounts that is `LLOSSLESS_WEB_TOKEN` naming a secret of at least 16 characters, refused before the socket is bound rather than after. With at least one account, logging in *is* that authentication and the token is not consulted at all: a script still presenting it gets a 401 naming the login route, and the startup banner says so where one is set. Keeping one secret, not two in parallel, avoids a superseded one staying configured for years.
+```sh
+llossless serve                  # once: open the printed address, create the first account, stop with Ctrl+C
+llossless serve --host 0.0.0.0   # from now on: reachable from the network, sign-in required
+```
 
-The page itself is served to anybody who can reach the port, and it is a shell: every byte of state on it (the catalogue, the limits, the endpoints, the runs, the reports) arrives through a route behind the check above. The routes that answer without an identity are `session`, `setup` and `locales`, and that list is an allowlist of exact path segments rather than a prefix. A server bound to loopback also refuses any request whose `Host` header is not loopback, which guards against DNS rebinding; a server bound to a network address does not, because a deployment reached over a network is reached by some name.
+A server with no account refuses to start on a network address, unless `LLOSSLESS_WEB_TOKEN` is set. With the token, the first account can be created over the network. Open the address the server prints, with the server's name or address as the host. The page asks for the access token first: type the value of `LLOSSLESS_WEB_TOKEN`. The form that creates the first account appears next. The page keeps the token only while it is open, and stops sending it once the account exists. A script has to send the token itself, in an `X-LLossless-Token` header on every API request, until the first account exists. Once an account exists, the token is no longer used.
+
+The server speaks plain HTTP. For anything beyond a trusted network, put a reverse proxy with TLS in front of it. The proxy must pass the `Host` header through and send `X-Forwarded-Proto: https`. The server then marks the sign-in cookie `Secure` and accepts the page's requests. Without that header, every request that changes something, sign-in included, is refused with 403 `cross_origin`.
+
+## Accounts
+
+### The first account
+
+A new server has no accounts and answers nothing except the form that creates the first one. Every start prints a one-time address for that form. The address works once, only while there is no account, and is different on every start. There is no default password.
+
+The first account is the **operator**: the person who runs the server. Keys and endpoints that are already stored on the server become the operator's, and they are the ones every later account shares.
+
+### Operators and members
+
+Every other account is a **member**.
+
+| | operator | member |
+|---|---|---|
+| Run merges, and see, cancel and retry their own runs | yes | yes |
+| Set endpoints and keys | the shared ones, used by everybody | their own, used only by their runs |
+| Change their own password | yes | yes |
+| Add and remove accounts | yes | no |
+| Switch subscription tools on and off | yes | no |
+| Cancel somebody else's run | yes | no |
+| See somebody else's run | no | no |
+
+The operator adds an account in **Credentials**, under **Accounts**: a username, a password, **Add**. A username is 2 to 32 characters: lowercase letters, digits, dot, dash or underscore. A password is at least 10 characters.
+
+Removing an account deletes the keys and the saved settings it had stored, signs it out, and cancels its queued and running runs. Its finished runs stay on the server, visible to nobody, until [retention](#retention) deletes them. The last operator account cannot be removed.
+
+Anyone can change their own password under **Your password**, which signs that account out everywhere. Setting somebody else's password and adding a second operator work only through the [API](#the-json-api).
+
+If the only operator's password is lost, the page offers no recovery. Stop the server, delete the accounts file and the `users` folder beside the credentials file, and start again. The server is then back in setup: every account is gone, and the shared keys become the new first account's.
+
+A sign-in ends after 12 hours without use, and after 7 days in any case. Restarting the server signs everybody out.
+
+### Before you give someone an account
+
+**They can spend your money.** A member who has not set up their own endpoint for a provider runs on the operator's endpoint, with the operator's key, and so on the operator's credit. There is no spending limit per account. Anyone who can sign in can therefore spend as much as the operator's key allows. Only give an account to someone you would trust with that key.
+
+**They can make the server send requests.** A member can save an endpoint address of their own, and the server then sends model requests to it. That address can be anything the server can reach, including a machine on its own network that the member cannot reach directly.
 
 ### Whose key a run uses
 
-**A run uses the key of the person who submitted it.** If two people run at the same time, each run spends its own submitter's key, and neither can see the other's. Only the operator's keys are placed in the server's environment, and no key is ever part of anything the server prints or writes out as JSON. (For contributors: `config.keys_for_this_run` sets where `Settings.api_key` reads from, for the worker thread that runs the job.)
+**A run uses the key of the person who submitted it.** If two people run at the same time, each run spends its own submitter's key, and neither can see the other's.
 
 There are two kinds of endpoint:
 
@@ -70,54 +141,94 @@ So a member with no endpoint of their own for a provider runs on the operator's,
 
 **Only the person who submitted a run can see it.** That covers the list of runs, a run's status, its report, the merged document, the live progress stream and deleting it. A request for somebody else's run gets exactly the answer a run that does not exist gets. Knowing a run's id is not enough to open it: an id shows up in the address bar, in browser history and in links pasted into a chat, so it is not treated as a secret.
 
+The one exception is cancelling: an operator may cancel anybody's run, because it may be spending the operator's key.
+
 ## API keys and endpoints
 
-**Anthropic, OpenAI and Google come with their usual address filled in** (`https://api.anthropic.com/v1`, `https://api.openai.com/v1`, `https://generativelanguage.googleapis.com/v1beta/openai`), so on a fresh server you only paste a key. Saving the key saves that address first, as an ordinary stored value, and the key is bound to it; "Change address" opens the field for a proxy or a regional endpoint. An address you already stored is never replaced, and changing one clears the key that was bound to the old one.
+**Credentials** lists four providers: `anthropic`, `google`, `openai` and `self-hosted`. Each has an endpoint, which is the address requests are sent to, and an API key. A model can be picked only when its provider has an endpoint.
 
-**API keys set through the settings page live in a file of their own.** It is `$XDG_CONFIG_HOME/llossless/credentials.json`, or `~/.config/...` where that variable is unset, or wherever `LLOSSLESS_CREDENTIALS` names. The file is `0600` inside a `0700` directory, written through a temporary file that is `0600` before a byte of it is written, and a file whose mode is wider than that is **refused** rather than quietly repaired: every account on the machine has already had the chance to read it, so the keys in it want rotating. The server loads the file into its own environment under the variable each provider's key is read from, and no endpoint ever returns a key. The settings endpoints answer with the variable name, whether something is configured, and the last four characters.
+- **Anthropic, OpenAI, Google.** The usual address is already shown (`https://api.anthropic.com/v1`, `https://api.openai.com/v1`, `https://generativelanguage.googleapis.com/v1beta/openai`). Paste the key and press **Save**: the address is stored with it. **Change address** opens the field, for a proxy or a regional endpoint.
+- **Self-hosted.** Enter the address of your own OpenAI-compatible server, for example `http://localhost:11434/v1` for Ollama, and press **Save endpoint**. A key is optional.
 
-**An endpoint is stored beside the key it is paired with, and changing one clears the other.** The same file holds a base URL per provider, set on the same settings sheet and freely editable. Saving a provider's endpoint clears whatever key was stored for that provider, deliberately: moving an endpoint without noticing that the previous provider's key is still attached would send a real credential to a host typed in thirty seconds ago, and `Endpoint.moved_to` is the only way an address changes, so there is no call that keeps one. A URL carrying a username or password is refused rather than stripped; the key goes in the key field. The same two guards a run's own endpoint gets apply here: a scheme that is not http(s) is refused, because `urllib` would otherwise read a `file://` URL as a model answer, and a cleartext `http://` endpoint off this machine is refused while a key for that provider is set.
+When an endpoint is saved, the server asks it which models it serves, without sending a key, and the models it lists appear in the picker. An endpoint that does not answer can still be used: type the model id, as described under [A model that is not in the table](#a-model-that-is-not-in-the-table).
 
-**The credentials sheet has no draft state.** A key, an endpoint, an account or a toggle saves the moment you use its own control, row by row, and closing the sheet keeps what was saved and drops whatever was typed and never saved.
+What to know:
+
+- **Each row saves on its own button.** **Done** only closes the sheet. Text that was typed and not saved is dropped.
+- **A key is never shown again.** The sheet shows whether a key is set. The last four characters are shown only to the account the key belongs to: the operator for a shared key, a member for a key of their own. A member's row for a shared key reads **set by the operator**.
+- **Saving an endpoint clears the key stored for that provider.** A key is only ever sent to the address it was saved with, so after changing an address, paste the key again. A run that is under way when its endpoint's address is changed gets no key for that provider from then on and fails on its next call: retry it once the new key is saved. The same holds when the operator deletes a shared key: no run under way sends it again, a member's included.
+- **A key saved with a `self-hosted` address is sent to that address only.** `self-hosted` and this server's own endpoint read the same variable, `LLOSSLESS_API_KEY`. So once a key is saved with a self-hosted address, a typed model id that goes to this server's own endpoint is sent without a key, unless the two addresses are the same.
+- **Some addresses are refused:** one that is not `http://` or `https://`, one with a username or password in it, one with a `?` or a `#` in it, and a plain `http://` address on another machine while a key that would be sent to it is set, because the key would travel unencrypted. For a member that means a key of their own: the operator's shared key is never sent to a member's address and does not count.
+- **A member's own rows.** A member can set an endpoint and a key of their own for any provider, including one the operator shares. For a shared provider the row reads **set by the operator** and its fields start empty: the operator's address and key are never filled in. Once the member saves an endpoint of their own, the row reads **yours** and their runs use it. A member sees an operator's endpoint as scheme, host and port only, never its path.
+- **A key given as an environment variable has no address stored with it.** It is sent to whichever address is in effect for its provider, also after that address is changed on the page. To move such a provider, change both variables where the server is started, or save the key on the page together with the new address.
+- **Where it is stored.** The operator's keys and endpoints are in the shared credentials file, and every other account has a file of its own in a `users` folder beside it. The operator can also provide them as environment variables when starting the server: each row names its two variables.
 
 ## Choosing a model
 
-**A model is sent to the endpoint stored for its provider and to nowhere else.** So the picker lists only what can run here: a catalogue model whose provider has an endpoint configured, a model an endpoint listed, and the command routes this server offers. A model with no endpoint is not offered, so it cannot be submitted and fail two steps into a run; the scorecard below still lists it, with the reason beside it. With nothing configured the picker says so and points at the credentials sheet. A model id typed into the free-text field goes to this server's own endpoint, or to whichever configured endpoint the control beside it names: a provider name, never an address.
+Step 2, **Model**, lists only what you can run right now: models LLossless has measured whose provider has an endpoint, models an endpoint listed when it was saved, and [subscription routes](#subscription-routes) that are switched on. With nothing set up, the step says so and offers the **Credentials** button.
 
-The status line beside the button says "more input needed" in amber, with what is missing ("Add at least 2 documents to merge.", "Nothing is in document 2 yet."), or "ready" in green, and the button is enabled exactly when it says ready.
+### The picker
 
-### The model picker and the scorecard
+Each row is one way to reach a model. The same model can appear twice, once through an API and once through a subscription. The badge after the name tells the two apart:
 
-**The picker is one list and every row is a route to a model.** `Claude Haiku 4.5` and `Claude Code - Haiku` are two rows, each badged with what it is (metered API, subscription, local) rather than one model with a toggle beside it, because a toggle is a second piece of state to misread. Each row's badge names its route: "subscription" and "command on this server" in blue, "metered API" in amber, "local" in grey, and "route not identified" in grey with a dashed border. An address is classified by the server: loopback, private, link-local and the reserved `localhost` names are local, anything it cannot place reads as metered, and nothing to classify reads as unidentified. Where both exist, the subscription is preselected: firing at a metered API when you meant the plan costs money, and the reverse costs a run against a plan you already pay for.
+| badge | colour | what it means |
+|---|---|---|
+| metered API | amber | A vendor's API. Every call is billed to the key in use. |
+| subscription | blue | A program on the server that runs on a flat-rate plan. The run counts against that plan. |
+| command on this server | blue | A hand-written route that is not marked as a subscription. |
+| local | grey | A self-hosted endpoint. |
+| route not identified | grey, dashed | The page cannot tell where the run would go. |
 
-**The submit button names the route it is about to take** (`Merge and check - subscription`), since the click is the irreversible moment. **Every** route names itself there, including `local` for an endpoint on this network and `route not identified` for a selection the page cannot classify: a label that appeared for some routes and not others would teach a reader that its absence means nothing in particular.
+The **Merge and check** button repeats the badge of the selected row. A subscription route that is switched on is preselected ahead of the metered rows.
 
-**Every figure is on the main page; every model, its notes and its dates are in the Model scorecard, one click away.** The picker keeps four bands per row (cost per merge, seconds per merge, silent loss and deviations per test) as a band and a word, with no raw number, so the row stays one line. Its four headers are one word each (Cost, Speed, Loss, Deviations), so a longer language (German's "Kosten", "Tempo", "Verlust", "Abweichungen") never squeezes the model name; a small "?" beside each explains the unit and the full meaning in plain language on hover and on keyboard focus.
+The four figure columns come from LLossless's own test runs, which [the results page](results.md) explains. **Cost** is what one merge cost at list prices, and **Speed** is how many seconds it took. **Loss** counts the facts that went missing without the merge saying so, and **Deviations** counts the changes it made without flagging them, both per test. Lower is better in all four.
 
-The "Model scorecard" button beside the table opens a dialog with every catalogue model and route, configured here or not: the same four figures, under their longer, precise headers ("Cost / merge", "Seconds / merge", "Silent loss", "Deviations / test"), with their raw numbers and the test count each rate was formed over, each row's measured date, its catalogue notes behind a fold (English, and marked so on a page in any other language, since they are a measurement record rather than page prose), a retired row, when there is one, dimmed with its reason, and "About this list".
+Each figure is shown as a band, in a word and a colour: **excellent**, **good**, **fair** or **poor**. Cost also shows the price. A cell with no figure says why: **on plan** (a subscription has no price per merge), **per GPU-minute** (a self-hosted model is billed by time), **free tier** (measured on a vendor's free quota) or **unmeasured** (nobody has run this model through LLossless). A model that an endpoint listed is always unmeasured.
 
-**Sorting.** Each column heading sorts, ascending and then descending, on the picker and the scorecard independently; the default is the catalogue's order. A row with no figure in that column (unmeasured, `on plan`, `free tier`, `per GPU-minute`) sorts last in both directions and is never read as zero, retired rows sort after every live one, and the silent-loss column sorts by quality: silent loss per test first, deviations per test to break a tie. Sorting never changes the selection. Each table's chosen sort is remembered in this browser, separately.
+Click a column heading to sort by it, and again to reverse. Rows without a figure sort last either way. Sorting never changes the selection.
 
-**A subscription route is marked "not directly comparable"**, with the reason on hover and on keyboard focus: it is told the answer format in the prompt rather than having it enforced, and cannot fix its randomness, so its figures compare with other routes like it, not with rows measured over an endpoint. The marker is a property of the route and does not go away with more runs.
+### The scorecard
 
-### Models an endpoint serves
+**Model scorecard** opens every measured model and route, including those you cannot run here. It shows the numbers behind the bands, how many tests each was measured over, and the date. A row you cannot run says why, for example `no endpoint configured for anthropic`. **About this list** at the bottom states where each band begins and what every marker means.
 
-**Saving an endpoint asks it what it serves.** The OpenAI-compatible `GET /v1/models` and ollama's `GET /api/tags` are both tried, with a short timeout and no backoff, and whatever comes back is offered in the picker. Those rows are `unmeasured` in every figure column: nobody has run them through this tool, so there is no cost, no duration and no silent-loss figure, and none is estimated from a neighbouring row. An endpoint that will not list is not an error: the page says so and the free-text field still works.
+### A model that is not in the table
 
-**A typed id sent to a vendor needs its context window stated.** A vendor has no `/api/ps`, so the window cannot be measured there, and a model the catalogue does not know has none on record; LLossless does not guess one. The "Context window (tokens)" field beside the id is required when the id goes to a vendor and the server states no window of its own (the figure is on the vendor's page for the model), and optional for this server's own endpoint or a self-hosted one, where an ollama reports it. The request carries it as `window`, which is `--window` on the command line: a whole number of tokens from 4,096 to 10,000,000, recorded as stated rather than measured. Without one, a vendor-bound id is refused before any call, on the page and by the server, instead of merging and then failing every check.
+Tick **Use a model id not in the table**. Three fields appear:
 
-**The checks can only go where the merge's route goes.** With `Use a different model for the checks` ticked under a metered or local merge, a command row cannot be picked for the checks: one run answers through one command or over HTTP, never both, and the only request a page could build for that pairing would send the route's model name over the merge's route, to the metered API itself where the two share a name. Where the two roles are billed differently the button names both, and a run from the page records how each role was billed under `provenance.endpoint.billed`, printed as the `Route` row of the provenance block on the page and in both reports.
+- **Model id.** It is sent exactly as typed. LLossless never guesses a provider from a name.
+- **Send it to.** This server's own endpoint, or one of the endpoints set up under Credentials. An id the table already knows goes to that row's endpoint instead, and the page says so. A member who has a `self-hosted` endpoint of their own and sends an id to this server's own endpoint sends it without a key.
+- **Context window (tokens).** The number of tokens the model accepts, from 4,096 to 10,000,000. It is required when the id goes to Anthropic, OpenAI or Google, because those endpoints do not report it and LLossless does not guess it. The figure is on the vendor's page for the model. It is optional for this server's own endpoint and for a self-hosted one: left empty, the window is measured, which works on an Ollama server.
 
-## Subscription command routes
+The context window field also appears when you pick a row that an endpoint listed and LLossless has no window for.
 
-**A flat-rate subscription CLI can answer instead of a metered API, and the browser never names the command.** `--answer-with` is safe on the command line because whoever types a flag already has a shell; a web form that accepted a command and a server that ran it would be remote code execution with a submit button on it. So the operator writes the routes into `$XDG_CONFIG_HOME/llossless/commands.json` (or wherever `LLOSSLESS_COMMANDS` names), a request names one by **id**, and the server supplies the command from its own file. `/api/v1/config` serves the ids and the labels and never the command. An id this server does not have is refused naming the field, never answered some other way.
+### A different model for the checks
+
+Normally one model writes the merge and runs the checks. Tick **Use a different model for the checks** and a **Check** column appears, so the two can be chosen separately. The report names both. When the two are paid for differently, the button names both, for example `Merge - metered API, check - local`.
+
+This is not available with a subscription route: that program does the merge and the checks itself. A subscription row also cannot do only the checks.
+
+## Subscription routes
+
+A subscription route answers a run by starting a program on the server, such as the Claude Code CLI on a flat-rate plan, in place of a metered API.
+
+**A browser never names the program.** A request carries only the id of a route. The command comes from a file on the server that only the operator can write. A form that accepted a command would let anyone who can sign in run any program on the server.
+
+### Switching one on from the page
+
+**Credentials** has a section **Subscription tools on this server**. The server looks for the tools it knows by name: first on its own `PATH`, then in `~/.local/bin`, `/usr/local/bin`, `~/.npm-global/bin` and `/opt/homebrew/bin`. This version knows one tool, `claude` (Claude Code), and offers one row per model: Haiku, Sonnet, Opus and Fable. Each row says **found** or **not found**. The page never shows where the program is.
+
+Tick **Answer merges with this tool** to add the row to the picker. Only the operator can do this, because a route is shared by every account. On an untouched page the Opus row is preselected, or a route you wrote by hand if there is one. Fable, the most expensive, is never preselected.
+
+### Writing a route by hand
+
+For another program, another model or other arguments, the operator writes the route into the commands file:
 
 ```json
 {
   "version": 1,
   "routes": {
     "opus-sub": {
-      "label": "Opus 5 - Subscription",
+      "label": "Opus - Subscription",
       "command": "claude --print --output-format json --model opus",
       "window": 200000,
       "model": "opus",
@@ -128,110 +239,289 @@ The "Model scorecard" button beside the table opens a dialog with every catalogu
 }
 ```
 
-**Or switch one on from the credentials sheet, which writes the same file.** The server looks up a small hard-coded table of recognised subscription CLIs on its own `PATH`, and then in the usual per-user install directories (`~/.local/bin`, `/usr/local/bin`, `~/.npm-global/bin`, `/opt/homebrew/bin`), and reports what it found: the label, the id, the model, whether it is installed and whether it is on, and **never the resolved path**. `PATH` answers first and the directories are reached only when it found nothing, because a server's `PATH` is whatever started it (a unit file, a container, a desktop sandbox) and a per-user CLI is usually not on it. What is widened is where a name this build already knows is looked for, never what may be run. A toggle writes the route into the file above, with the command set to the path this server resolved plus the arguments the table lists, and the label taken from the table. A request still carries only an id, and an id that is not in the table is refused before anything is resolved or written, so there is no path by which text from a browser reaches a command line. Only the operator can switch one on, because a command route is shared by every account on the instance. Rows written this way carry `"discovered": true`; the page switches its own rows on and off and refuses to edit or delete one you wrote by hand.
+The key (`opus-sub` here) is the route's id: lowercase letters, digits, hyphen and underscore, at most 64 characters.
 
-**One tool is several routes, one per model.** A CLI answers with whichever model it defaults to unless it is told otherwise, and relying on that is not a strategy: the default may be the dearest model on the plan and nothing on screen says which it is. So the table declares the models each tool can be told to use and the exact arguments that select them, and discovery emits one route per model: `Claude Code - Haiku` and `Claude Code - Opus` are two rows in the picker, and whichever is highlighted is what runs. The rows are ordered cheapest first, and any route you wrote by hand comes before them. An untouched page preselects a route you wrote by hand if there is one, and otherwise the Opus route, the operator's ruling on the 2026-09-25 subscription grid; never Fable, the dearest.
+| field | required | meaning |
+|---|---|---|
+| `label` | yes | The name shown in the picker, exactly as written. |
+| `command` | yes | The program and its arguments. It gets the prompt on standard input and writes the answer to standard output. It is never sent to a browser. |
+| `window` | yes | The model's context window in tokens. A program cannot be asked for it. |
+| `model` | yes | The model the command selects. The report records this name. Nothing checks that the command really selects it, so make sure it does. |
+| `envelope` | no, `raw` | How the program answers. `raw`: its output is the answer. `result`: its output is a JSON result envelope, which is what `--output-format json` produces. The field and the command must agree. |
+| `web_tools` | no, none | The web tools the command's own `--allowed-tools` grants: `WebSearch`, `WebFetch` or both. Listing a tool the command does not grant is refused. |
+| `timeout` | no, `890` | Seconds one call may take. State it for a slower program. |
+| `profile` | no, `subscription` | Leave it out for a flat-rate plan. With another profile the row's badge reads "command on this server". |
 
-This build recognises `claude` with `haiku`, `sonnet`, `opus` and `fable`. The flag and three of the four aliases come from `claude --help` at version 2.1.274; `haiku` was confirmed from the same binary's string table. A tool or a model it does not know by name is added by writing the route above.
+A row with a missing or unknown field is refused, and only that row: the Credentials sheet and the terminal name it and the reason, and every other route still works. The file must be readable and writable by its owner only, or none of its routes is offered. With no file, the server offers no subscription route.
 
-### The fields of a route
+The page marks the rows it wrote with `"discovered": true`. It switches only those on and off, and never changes a row written by hand.
 
-- **`label`** is required and is rendered verbatim: nothing here infers which model a program reaches, because guessing that `claude` means Opus 5 is how a correct-looking screen produces a wrong bill.
-- **`window`** is required, because a command backend cannot be asked for its context window and there is no token count to check afterwards.
-- **`model`** is **required**, and a route without one is refused when the file is read. A command backend cannot be asked which model answered it, so a route that does not say runs on whatever the program defaults to and then reports a name nobody chose. State the model the command selects, and make sure the command really selects it, because nothing here can check that for you.
-- **`profile`** defaults to `subscription`.
-- **`timeout`** is optional: leave it out and a route gets the command backend's own default of 890 seconds a call; state it in seconds for a program slower than that. It is the one run setting a web submitter cannot pass, since there is no `--timeout` on a form, so a slow route carries its own figure and every run through it gets it.
-- **`envelope`** says how the command answers, and defaults to `raw`: standard output is the answer, byte for byte. `result` means standard output is a JSON result envelope, the shape that also carries the token counts (deliberately left unread) and a turn count. The retrieval signal read from it is that turn count (`num_turns`), not the vendor's own server-side web-tool counter, which cannot see this CLI's own tools and reports zero even on a call that fetched. It is declared here and never sniffed: the answer under `raw` is itself JSON at the `prompt` tier, so a sniffer would be choosing between two JSON objects on the presence of a key. **The field and the command have to agree.** A route declaring `result` whose command does not carry `--output-format json` is refused when the file is read, and so is the reverse; otherwise the failure would arrive halfway through a paid run looking like the model's fault.
-- **`web_tools`** is which of the model's own retrieval tools the route permits, and defaults to none. `WebSearch` and `WebFetch` are named separately because they carry different risk: this tool's whole input is documents somebody supplied, a document is a place a URL can come from, so `WebFetch` is a path both to exfiltration and to poisoned evidence dressed as a citation. Like `envelope`, the field records what the command's arguments grant and never adds it: listing a tool without `--allowed-tools` in the command is refused. It is a property of the route the operator wrote and never a browser input: a submitter chooses among your routes and never describes one.
+### What a subscription row tells you
+
+| note | what it means |
+|---|---|
+| on plan | The run counts against a subscription. LLossless cannot see how much of it a merge uses. This does not mean free. |
+| shared | The program runs under the server's own login. Every account on this server uses the same subscription and the same rate limit. |
+| not directly comparable | Nothing enforces the answer format and the randomness cannot be fixed, so two runs can differ. Compare its figures with other subscription rows, not with API rows. |
+| retrieval (WebSearch, WebFetch) | At the `sourced` fidelity level, the model may search the web. A search can send text from your documents to a third party. |
+| needs Claude Code ... or newer | The `claude` program on the server is too old for this model, and the run will be refused. Claude Opus 5.5 needs Claude Code 2.1.280 or newer. |
+
+The report of such a run says the content left this machine. LLossless cannot see what the program sends, so it does not claim that nothing left.
 
 ### Safe mode for `claude`
 
-**A `claude` route runs the CLI in safe mode, so your personal CLAUDE.md, skills, plugins and MCP servers are not loaded, with only the web tools at `sourced` and no tools at any other level.** Every call through a program named `claude`, a route or `--answer-with`, is started with `--safe-mode` and with `--tools` naming exactly the web tools its arguments grant: `WebSearch,WebFetch` at `sourced`, `""` below it. Without them the CLI loaded the operator's own CLAUDE.md and auto-memory and offered the model its whole tool set whatever `--allowed-tools` said, and one measured merge spawned subagents through it. A `--safe-mode` or `--tools` you write into a route is yours and nothing is appended beside it: a web tool your `--tools` leaves out is not granted, and `sourced` refuses a route whose `--tools` makes none available. A grant in your own `--allowed-tools` stays in force at every level. `--bare` is not used, because it never reads a subscription's login; a wrapper script under another name is started exactly as written, which is the way to run the CLI with your own setup.
+A route whose program is `claude` runs in the CLI's safe mode. Your personal `CLAUDE.md`, skills, plugins and MCP servers are not loaded. The model gets no tools, except the two web tools at the `sourced` fidelity level. To do this, the server adds `--safe-mode` and `--tools` to the command.
 
-### Merge effort on a subscription route
+A `--safe-mode` or `--tools` in your own command is kept as you wrote it. A grant in your own `--allowed-tools` applies at every fidelity level. A `sourced` run is refused on a route that cannot use a web tool. To run the CLI with your own setup, wrap it in a script with a different name: a wrapper is started exactly as written.
 
-**Merge effort is a slider on a subscription route.** With a `claude` route picked, the page shows a `Merge effort` slider (low, medium, high, extra high, max) set to the route's default (`high` on Opus, `medium` on the others), and a card beside it with what the registered grid measured at that level: planted errors fixed on the two test documents, as the middle of three runs and the range, the licence on the second, time per merge with the checks included, and how often the model searched. The card changes as the slider moves. A level nobody measured says `Not measured at this level` rather than showing a blank or a zero (Haiku at every level but `medium`, Opus 5.5 at every level but `xhigh` and `max`, Fable at every level), and the figures carry their caveat on the card: measured 2026-09-25, before safe mode, three runs per level, on two small test documents. At `low` with `sourced` the card says that level is not recommended for looking facts up.
+### Merge effort
 
-The figures are `catalogue.json`'s `measured_by_effort` blocks, re-derived from `arms/2026-09-25/subscription-comparison/` by `tests/effort_figures.py --check`; the table's own figures for these routes were measured at merge `medium`, and each row says so. The request carries the level as `effort`, one of `low`, `medium`, `high`, `xhigh` and `max`, and only beside a `command_route` whose program takes `--effort` and whose command names no level of its own; anywhere else it is refused as `400 bad_effort`. `/api/v1/config` serves each route's levels and default. The level goes onto the merge's command line alone, the checks keep `low`, the run header names it, and the report's provenance records it as the requester's choice.
+When the selected route's program accepts an effort level, step 3 shows a **Merge effort** slider: low, medium, high, extra high, max. It starts at high for Opus and at medium for the other models. Haiku has a single level, so it gets a line saying so and no slider. A route written by hand gets the slider when its program is `claude` and its command names no `--effort` of its own.
 
-**At `max` the card keeps a cost warning.** On the Opus route it shows one small run of 2026-09-26 on Opus 5.5 in safe mode, asked for by its full id `claude-opus-5-5`: `voyager` only, `xhigh` twice and `max` three times. `max` fixed 38 of 44 (37-38) against `xhigh`'s 38 (38-38), within the spread between runs, and took about 2.2x the time and about 2x the usage. At `max` the card says what was measured in plain words: "No gain over extra high on this test (38 of 44 either way); about 2x the time and usage." They are `catalogue.json`'s `pinned_by_effort` block, re-derived from `arms/2026-09-26/opus-max/` by `tests/opus55_effort_figures.py --check`.
+The level applies to writing the merge. The checks run at low. The report records the level you chose.
 
-**Opus 5.5 needs Claude Code 2.1.280 or newer.** Version 2.1.274 refuses it: `API Error: 400 Claude Code 2.1.274 does not support this model; version 2.1.280 or newer is required`. The measured run therefore used 2.1.281; the installed CLI it was registered against was 2.1.274, and after `claude update` on the same day it is 2.1.283, which meets the minimum. The server reads the version of each `claude` it runs off the native installer's layout (`~/.local/bin/claude` links to `versions/<version>`) and never by starting the program, and serves it; a CLI installed any other way reads as unknown and is never called too old. A route whose model the CLI is too old for is marked `needs Claude Code 2.1.280 or newer` in the picker, and so is the Opus 5.5 section of the effort card. The route is still offered and still runs: the note says it will be refused, and nothing here checks the model's availability beyond the version.
+The **?** beside the slider shows what LLossless measured at the selected level: how many planted errors the merge fixed in the test documents, the time per merge, and how often the model searched the web. A level nobody measured says so. The figures come from a few runs on small test documents and are a guide, not a promise. [For contributors](#for-contributors) says where the runs are.
 
-### What a command row says about itself
+Two warnings stay visible:
 
-Three things a command row says on its face, and each is a limitation rather than a feature. It is **not per-user**: API keys are per account, but a command runs as the server process with that machine's credentials, so everybody on a shared instance shares one subscription and one rate limit. Its figures are **not comparable** with the catalogue's endpoint rows: the `subscription` profile answers at the `prompt` tier through a CLI with its own harness, with no `temperature` and no `seed`, so a run under it is not reproducible by construction. And its cost is **unmeasured, not zero**: LLossless deliberately leaves the envelope's token counts unread, so every call is `unmeasured` and the cost column says it counts against your plan, never `$0.00`, which would read as measured and free.
+- At **max**, a warning under the slider and above the **Merge and check** button says the run may use a large share of the subscription's weekly allowance. In the one test where max was measured, it fixed no more errors than extra high and took about twice the time and usage.
+- At **low** together with the `sourced` fidelity level, a note says the combination is not recommended.
 
-A command run's provenance says `location: command`, names the route by the operator's label, and reports `content_left_this_machine: true`. That is not a claim that something left: it is that this tool cannot establish that nothing did, because there is no address to classify and a child process that opens a socket opens it unobserved.
+## Running a merge
 
-**A route that cannot be read takes out itself and nothing else.** The refusal names that route and the field it is missing, the page shows it beside that route, and every other route in the file is still offered and still runs. A route the credentials sheet wrote before this build knew about models (one carrying `"discovered": true` and no `model`) is retired at startup and the page says so once; nothing you wrote by hand is ever touched, whatever state it is in. The only route the API writes is a discovered one, by the toggle above and under the id of a `KNOWN_TOOLS` row. The file is `0600` and a wider one is refused rather than repaired, because another account that can write it is another account choosing what this server executes. **Empty is the default**: with no file and nothing switched on, the page offers no command backend at all.
+The left pane holds four steps and the run bar. The right pane shows the current run or the list of previous runs. A **?** beside a control explains it.
 
-## Runs
+### The four steps
 
-**A running merge can be cancelled.** "Cancel run" sits beside "Stop watching" while a run is followed ("Stop watching" only stops the page following it) and asks first: calls already made are billed and cannot be undone. A cancelled run makes no further model call, abandons an HTTP call in flight (the provider may still bill it), stops a command route's program (SIGTERM, then SIGKILL after 5 seconds), and ends in the `cancelled` state with the report of what ran, which opens "Cancelled." and counts the calls made. `POST /api/v1/runs/<id>/cancel` does the same for a script; only the run's submitter or an operator may cancel it, and anybody else gets the 404 an unknown id gets.
+**Step 1, Documents.** Paste each document into its own tab, press **Upload files**, or drop files onto the document. A merge takes 2 to 12 documents.
 
-**The queue survives a restart.** Submit several runs, close the tab and come back hours later: the list of earlier runs on the page is where they are, with a queued run's place ("position 2 of 3") updating live and a Follow button to watch it. "Notify me" asks the browser for permission only when clicked, and the notification says "Run finished" or "Run failed" and the run's short id, nothing else.
+- Several files uploaded or dropped at once become one document each, in the order given.
+- Text you already typed is never overwritten: files go into empty tabs.
+- A file that is not text, a file that is too large, or a file past the twelfth is not loaded, and the page names it. One submission may hold about 4 MB in total.
+- **Name** is what the report calls the document. **Base document** decides whose structure the merged document follows. It starts as the first document.
 
-**A run cut off by a restart is never re-run by itself.** A run that was *running* when the server stopped (a crash, a kill, a power cut) comes back as `interrupted`, because a re-run would make and bill its model calls again. Its entry says the run is not complete, "Show log" replays what reached disk before the stop, and **Retry** starts a new run from the same documents and settings after a confirm step that says it may be billed again (`POST /api/v1/runs/<id>/retry`, submitter only). A failed run can be retried the same way.
+**Step 2, Model.** See [Choosing a model](#choosing-a-model).
 
-**How the queue is kept.** The index of runs is `index.json` in the work directory, rewritten through a synced temporary file and a rename on every change of state, `0600` in the `0700` work directory. On start the server reloads it: queued runs resume in their order, finished runs and their files are listed again, and anything whose retention window passed while the server was down is deleted before anything is served. To make resuming possible, each job directory also holds `sources.json` (the documents as submitted) and `events.jsonl` (the progress log); retention deletes them with the rest. The index holds states, timestamps, the owner's account id, a document count and the run's allowlisted settings, never a document, a filename or a key, and a forgotten run keeps only its tombstone there, for one more window. An index that cannot be read stops `llossless serve` with exit 2 rather than starting with an empty list; moving the file aside is the way out, and the next start then deletes the job directories no index names. A second server on a work directory another one is using is refused.
+**Step 3, Settings.**
 
-**Dropping several files makes one document per file**, in drop order, up to the twelve-document ceiling; a file past it, or one that does not decode as text, is refused by name rather than silently dropped, and text already typed into a pane is never overwritten by a drop. Once a run has a report, the actions group orders itself narrow to wide: the copy control first, since it writes nothing to disk, then `View report`, then `Download report` and `Download everything`.
+- **How much the wording may change** is the fidelity level, from `verbatim` (only your own sentences, copied exactly) to `sourced` (the model may correct facts and look them up on the web). It starts at `high`. **See examples** shows what each level does to one small text.
+- **How thoroughly to check**. **Full** checks that nothing was lost and nothing was invented. **Coverage** checks only that nothing was lost. Each option shows how many model calls it needs for the documents you loaded.
+- **Merge effort** appears on a subscription route only: see [Merge effort](#merge-effort).
 
-## Languages
+**Step 4, Tuning.**
 
-**The interface speaks English and German; nothing it produces does.** The page's strings are `src/llossless/web/locales/en.json` and `de.json`, served whole or not at all: a catalogue missing a key is refused rather than filled in from English, because a half-translated page looks translated and nobody reports it. A choice made in the picker is remembered in this browser and beats everything else; with no choice made, `Accept-Language` decides and English is the fallback. Adding a language is adding a file: copy `en.json`, translate the values, and `python3 tests/test_web_i18n.py` will name every key you missed and every placeholder you renamed.
+- **How much may be left out** is the share of your documents the merge may openly leave out. It starts at 0.03, which is 3%. A merge that goes over it is still delivered, marked for review.
+- **Title** decides where the merged document's title comes from: `keep-base`, `choose-best` or `synthesise`. It starts at `synthesise`.
 
-What does **not** change with the language is anything recorded. `report.json`, `merged.md` and `report.html` are byte-identical whoever downloads them, and their identifiers (`silent_loss`, `contradicted`, the finding kinds) stay English everywhere they are written down. Only the *display* of a kind is translated. The command line, its `--help` and both report renderers are English and are not affected by any of this. Neither are the prompts: a prompt is hashed and the digest keys the response cache, so translating one would re-key every recorded run in this repository.
+The [command-line reference](reference.md) explains these settings in full. They are the same as `--fidelity`, `--verify-depth`, `--loss-budget` and `--title-policy`.
+
+### Starting the run
+
+The status line under the button says **more input needed** in amber, with what is missing, or **ready** in green. The button works only when it says ready. **Merge and check** sends the documents. From then on the run belongs to the server: you can close the tab and come back later.
+
+**Start over** clears the documents, the settings and the result from the page, after asking. The run itself stays in **Previous runs**.
+
+### Saved defaults
+
+Tick **Save these settings as my defaults** before you start a run. When the run is accepted, the server stores your choices for your account: the models, the context window, the merge effort and the settings of steps 3 and 4. Documents are never stored this way. From then on the page starts from these choices, in every browser you sign in from.
+
+**Reset to server defaults**, in step 4, removes them again, after asking. If a saved choice is no longer available, for example a model whose endpoint was removed, the page says which one, uses the server's default for it, and offers **Update my defaults**.
+
+### While it runs
+
+- **Current run** shows the progress log, step by step, with the model, the endpoint and the settings the run is using.
+- **Stop watching** stops the page following the run. The run goes on.
+- **Cancel run** asks first, then stops the run. No further model call is made, and a subscription program is stopped. Calls already made are billed, and a call that was cut off may still be billed. A run cancelled while it was running keeps a report of what ran.
+- **Notify me** asks the browser for permission, then shows a notification when the run ends. It says "Run finished" or "Run failed" and the run's short id, and nothing from your documents.
+- **Run this from the command line** shows the `llossless merge` command that matches this run, with a **Copy command** button and the file name to save each document under. Your key is never in it. For a subscription route the program is not in it either. For a member, an endpoint the operator set up is named by scheme, host and port only, and a note says so.
+
+### The result
+
+- **The verdict**: "Passed every check", "Needs your review", "Document passed, notes are off" or "Not cleared", with a sentence on what to do.
+- **Merged document**, with five buttons: **Copy merged document**, **Download markdown**, **View report** (the full report in a new tab), **Download report** (the same report as one HTML file) and **Download everything** (a zip with your documents, the merged document, `report.json` and `report.html`). A sentence below them says how long the run is kept.
+- **Findings**, in tabs. **What needs your attention** lists every item that needs a decision from you and says what to decide. **Conflicts** and **Omitted content** hold the findings by kind. **Attributions**, **Number format** and **Added from outside your documents** appear only when they have something. **Claims** lists every checked claim. **What was checked** lists each check and whether it ran, then the run's details: models, route, settings, calls, tokens and cost.
+
+A finding names its **Source**, the **Evidence**, the document it was **Checked against** and **Why it was flagged (the checker's words)**. [Reading the report](report.md) explains each kind of finding.
+
+Over plain `http://` to an address other than localhost, a browser does not let a page write to the clipboard. **Copy merged document** then selects the text so you can copy it yourself.
+
+### Previous runs and the queue
+
+**Previous runs** lists your runs, newest first. What it offers depends on the run's state:
+
+| state | what the list offers |
+|---|---|
+| queued | Its place in the queue, for example "position 2 of 3", and **Follow**. |
+| running | **Follow**, which shows its progress under **Current run**. |
+| done | **Open**, which shows its HTML report in a new tab, and three downloads: **Download markdown** (the merged document), **Download report** and **Download everything**. |
+| cancelled | **Open**, **Download report** and **Download everything**: what ran before the cancel. The merged document may not exist. |
+| failed | The reason, **Show log** and **Retry**. |
+| interrupted | **Show log** and **Retry**. See [After a restart](#after-a-restart). |
+
+All accounts share one queue, and `--workers` sets how many runs it serves at once. The list updates by itself while a run is queued or running.
+
+**Retry** starts a new run from the same documents and settings, after asking. Every model call is made again and may be billed again. Only the run's submitter can retry it, and only while its documents are still on the server.
+
+The downloads work until the run is deleted. The [API](#the-json-api) serves the same files.
+
+### After a restart
+
+- **Queued runs** keep their place and start when their turn comes. Finished runs are listed again.
+- **A run that was running** when the server stopped is marked **interrupted**. It is never restarted by itself, because that would make and bill its model calls again. **Show log** shows what it had done, and **Retry** starts it again as a new run.
+- **Runs whose retention period ended** while the server was down are deleted before anything is served.
+
+For operators: the work directory holds one folder per run and an `index.json` that lists the runs. If the index cannot be read, the server refuses to start. Move the file aside to start fresh: the next start then deletes the run folders that no index lists. Two servers cannot use one work directory.
 
 ## Retention
 
-**Uploaded documents are deleted by default**, 48 hours after the run that used them finishes: the documents, the merged document, the report, the HTML page and the progress log. Two days rather than one because the window runs from the moment the run finished rather than from the end of a day, so a 24-hour window expires at the hour it started and a run finished on Monday morning is already gone on Tuesday morning. `--retention SECONDS` and `LLOSSLESS_RETENTION` set it, in that order of precedence, and `--retention 0` keeps runs until they are deleted, across restarts. What survives a deletion is a tombstone (an id, a state, three timestamps and an exit code), so a bookmarked run is told it was forgotten rather than being shown a 404 it cannot tell from a typo, and the refusal names the setting so the reader can stop it happening again.
+**A run is deleted 48 hours after it finishes.** That removes the uploaded documents, the merged document, both reports, the progress log, and any model answer the run kept because it could not be read. The period starts when the run finishes, so a run made at the end of one working day is still there the next morning.
 
-The page says which window it is on before anything is uploaded, warns when a run is inside the last stretch of it (a quarter of the window, capped at four hours, so at the default 48-hour retention the warning starts four hours before expiry, not twelve), and replaces the download controls with the explanation once a run is gone. It works that out from seconds remaining that this server computes, never from a comparison between the browser's clock and the server's.
+- `--retention SECONDS` or `LLOSSLESS_RETENTION` changes the period, and `--retention 0` keeps runs until someone deletes them.
+- Under a finished run's download buttons, the page says how long runs are kept and how long this one has left.
+- In the last quarter of the period, and at most 4 hours before the end, that sentence becomes a warning: "Download anything you want to keep."
+- After deletion the download buttons are gone, and the page says the run was deleted. A short record that the run existed is kept for one more period, so an old link is answered with "deleted" and not with "not found".
+- `DELETE /api/v1/runs/{id}` deletes a run before its time.
 
-## What a submitted form may choose
+## Languages
 
-**A submitted form may choose the model, the fidelity level, the verification depth, the title policy and the loss budget, and may name one of the operator's configured endpoints or command routes. It may choose nothing else.** It may not choose the endpoint *address*, the variable an API key is read from, the command a route runs, or any path this server reads or writes. A request able to set the address would aim this server, holding the operator's key, at a host of the submitter's choosing, and a request able to set the command would run a program of the submitter's choosing on the machine. Both are answered the same way: choose among the operator's, never describe one.
+The page speaks English and German. Choose with the globe at the top right. The choice is remembered in the browser. Without a choice, the browser's language setting decides, and English is the fallback.
+
+Only the page is translated. The merged document, `report.json` and `report.html` are the same bytes whatever language the page is in, and the report, the command line and the model notes in the scorecard stay English.
+
+## What a request may choose
+
+A run submitted from the page or through the API may choose its documents and their base, its models, the fidelity level, the verification depth, the title policy, the loss budget and a context window. It may name one of this server's endpoints or subscription routes, and a merge effort for a route.
+
+It may not supply an endpoint address, a command, the name of the variable a key is read from, or any path on the server. A request that could set an address would send the operator's key to a server of the submitter's choosing, and one that could set a command would run a program of the submitter's choosing. A request with an unknown field is refused.
 
 ## The JSON API
 
-The interface is a JSON API under `/api/v1/`, versioned from the start so that a second implementation can satisfy the same contract:
+Everything the page does goes through a JSON API under `/api/v1/`, and a script can use it the same way. A script signs in with `"token": true` in the body. The answer then carries the session id as `token`, and the script sends it in an `X-LLossless-Token` header:
 
-```
-GET    /api/v1/health                 the version, and which credentials are configured
-GET    /api/v1/config                 fidelity levels, verify depths, title policies, the loss budget, the model catalogue, the command routes by id, the languages, the size limits and how long a run is kept
-GET    /api/v1/defaults               your saved run settings that this server still offers, and the ones it no longer does
-PUT    /api/v1/defaults               save them: model, checks model, window, effort, fidelity, depth, loss ceiling, title; each checked against this server
-DELETE /api/v1/defaults               forget them, so the page starts from the server's defaults
-GET    /api/v1/locales                the interface's strings in whatever `Accept-Language` negotiates
-GET    /api/v1/locales/{tag}          the same, in one named language; 404 `no_locale` for any other
-POST   /api/v1/runs                   documents and settings; answers 202 with an id
-GET    /api/v1/runs                   every run this server still holds
-GET    /api/v1/runs/{id}              state, timings, exit code, and the report once there is one
-GET    /api/v1/runs/{id}/events       progress, as Server-Sent Events, honouring Last-Event-ID
-GET    /api/v1/runs/{id}/merged       the merged document
-GET    /api/v1/runs/{id}/report.html  the self-contained HTML report, as a file to keep
-GET    /api/v1/runs/{id}/report       the same report as a page to read, with a control that saves it
-GET    /api/v1/runs/{id}/bundle.zip   sources, the merge, report.json and report.html, for an audit
-DELETE /api/v1/runs/{id}              forget a run and everything it produced
-GET    /api/v1/session                whether this server has accounts, and who is signed in
-POST   /api/v1/session                a username and a password; answers with a session cookie
-DELETE /api/v1/session                end this session
-POST   /api/v1/setup                  the first account, with the one-time token; once, and once only
-GET    /api/v1/accounts               every account on this server (the operator's route)
-POST   /api/v1/accounts               add one (the operator's route)
-DELETE /api/v1/accounts/{name}        remove one, and the keys it had stored (the operator's route)
-PUT    /api/v1/accounts/{name}/password  a new password: your own with the current one, anybody's if you are the operator
-GET    /api/v1/settings/keys          which providers have a key, its last four characters, and the well-known address the page offers for Anthropic, OpenAI and Google
-PUT    /api/v1/settings/keys/{name}   `{"key": "..."}`; answers 204 and returns nothing
-DELETE /api/v1/settings/keys/{name}   forget a provider's key, here and in this server's environment
-PUT    /api/v1/settings/endpoints/{name}    `{"base_url": "..."}`; stores it, clears that provider's key, and answers with what the endpoint listed
-DELETE /api/v1/settings/endpoints/{name}    forget a provider's endpoint, its key and its model listing
-PUT    /api/v1/settings/commands/{name}     switch on a command route this server found on its PATH or in the well-known per-user install directories; the id is looked up in a closed table (the operator's route)
-DELETE /api/v1/settings/commands/{name}     switch one back off; a route you wrote by hand is never touched (the operator's route)
+```sh
+# sign in: the answer contains "token"
+curl -s -H 'Content-Type: application/json' \
+  -d '{"username": "me", "password": "my password", "token": true}' \
+  http://127.0.0.1:8765/api/v1/session
+
+# submit a run: the answer contains the run's "id"
+curl -s -H 'Content-Type: application/json' -H "X-LLossless-Token: $TOKEN" \
+  -d '{"documents": [{"name": "a.md", "text": "..."}, {"name": "b.md", "text": "..."}], "model": "qwen3:8b", "merge_model": "qwen3:8b"}' \
+  http://127.0.0.1:8765/api/v1/runs
+
+# ask for its state, and for the report once it is done
+curl -s -H "X-LLossless-Token: $TOKEN" http://127.0.0.1:8765/api/v1/runs/$ID
 ```
 
-The cancel and retry routes for a run are `POST /api/v1/runs/{id}/cancel` and `POST /api/v1/runs/{id}/retry`, described under [Runs](#runs).
+The fields of a run are `documents` (a list of `name` and `text`, in order), `base`, `model` (the checks), `merge_model`, `fidelity`, `verify_depth`, `title_policy`, `loss_budget`, `window`, `endpoint`, `command_route` and `effort`. `GET /api/v1/config` lists the values this server accepts.
 
-Every response carrying a report is redacted first: `report.json` is keyed by the full path of each prompt file, and a server that served it unchanged would disclose the host's directory layout and the operator's username to whoever posted the documents. The merged document is not redacted: it is the operator's own text, and a merge tool that silently edits its own output would be a worse failure than a disclosed directory name.
+Every `POST`, `PUT` and `DELETE` must carry `Content-Type: application/json`, also when it has no body, for example `curl -X DELETE -H 'Content-Type: application/json' -H "X-LLossless-Token: $TOKEN" http://127.0.0.1:8765/api/v1/runs/$ID`.
+
+The paths in the tables below are relative to `/api/v1`.
+
+### Session and accounts
+
+| method and path | what it does | answers |
+|---|---|---|
+| `GET /session` | Whether the server has accounts, whether it needs setup, and who is signed in. Needs no sign-in. | 200 |
+| `POST /session` | Sign in with `username` and `password`. Needs no sign-in. | 200 and a cookie; 401 `bad_login` |
+| `DELETE /session` | Sign out. | 204 |
+| `POST /setup` | Create the first account with `token` (the code from the one-time address), `username` and `password`. Works once. | 200; 403 `bad_setup_token`; 409 `already_set_up` |
+| `GET /accounts` | List the accounts. Operator only. | 200 |
+| `POST /accounts` | Add an account with `username` and `password`, and `"operator": true` for an operator. Operator only. | 201 |
+| `DELETE /accounts/{name}` | Remove an account and the keys it stored, and cancel its queued and running runs. Operator only. | 204 |
+| `PUT /accounts/{name}/password` | Set a new `password`. Your own needs `current` as well. An operator can set anybody's. | 204; 403 `bad_current_password` |
+
+### Server and settings
+
+| method and path | what it does | answers |
+|---|---|---|
+| `GET /health` | The version, which keys are set, and who is asking. | 200 |
+| `GET /config` | Everything the page's controls are built from: levels, depths, title policies, the model list, endpoints, subscription routes by id, languages, size limits and the retention period. | 200 |
+| `GET /locales`, `GET /locales/{tag}` | The page's texts, in the browser's language or in a named one. Needs no sign-in. | 200; 404 `no_locale` |
+| `GET /defaults` | Your saved settings, and the ones this server no longer offers. | 200 |
+| `PUT /defaults` | Save settings. Each one is checked against what this server offers. | 200; 400 `bad_defaults` |
+| `DELETE /defaults` | Remove your saved settings. | 204 |
+| `GET /settings/keys` | Per provider: whether a key is set, the endpoint (scheme, host and port only when a member looks at an operator's endpoint), and the last four characters of a key that belongs to the account asking. | 200 |
+| `PUT /settings/keys/{name}` | Store a key: `{"key": "..."}`. | 204; 403 `no_endpoint_of_your_own` |
+| `DELETE /settings/keys/{name}` | Remove a provider's key. | 204 |
+| `PUT /settings/endpoints/{name}` | Store an endpoint: `{"base_url": "..."}`. Clears that provider's key and answers with the models the endpoint listed. | 200; 400 `bad_endpoint` |
+| `DELETE /settings/endpoints/{name}` | Remove a provider's endpoint, its key and its model list. | 204 |
+| `PUT /settings/commands/{name}` | Switch on a subscription tool the server found. Operator only. | 200; 400 `bad_command_tool` |
+| `DELETE /settings/commands/{name}` | Switch it off. A route written by hand is never touched. Operator only. | 200 |
+
+`{name}` is a provider (`anthropic`, `google`, `openai`, `self-hosted`) on the keys and endpoints routes, and a tool id such as `claude-opus` on the commands routes.
+
+### Runs
+
+| method and path | what it does | answers |
+|---|---|---|
+| `POST /runs` | Submit documents and settings. The run is queued. | 202, the run's `id` and a `Location` header; 400 with the reason |
+| `GET /runs` | Your runs. | 200 |
+| `GET /runs/{id}` | State, times, exit code, place in the queue, seconds until deletion, and the report once there is one. | 200 |
+| `DELETE /runs/{id}` | Delete a run and everything it produced. | 204 |
+| `POST /runs/{id}/cancel` | Cancel a queued or running run. Its submitter or an operator. | 202; 409 `not_running` |
+| `POST /runs/{id}/retry` | Start a new run from a failed or interrupted one. Its submitter only. | 202 and a `Location` header; 409 `not_retryable`; 410 `forgotten` |
+| `GET /runs/{id}/events` | Progress as Server-Sent Events. Honours `Last-Event-ID`. | 200 |
+| `GET /runs/{id}/merged` | The merged document, as markdown. | 200 |
+| `GET /runs/{id}/report.html` | The HTML report as a file to keep. | 200 |
+| `GET /runs/{id}/report` | The same report as a page to read, with a button that saves it. | 200 |
+| `GET /runs/{id}/bundle.zip` | The documents, the merged document, `report.json` and `report.html` in one zip. | 200 |
+
+The last four routes answer 409 `not_finished` while the run is going, 404 `no_artefact` when the run produced no such file, and 410 `forgotten` after the run was deleted.
+
+### Answers that apply everywhere
+
+- An error is `{"error": {"code": "...", "message": "..."}}`.
+- 401 `no_session`: not signed in. 401 `setup_required`: the server has no account yet.
+- 403 `not_operator`: the route is the operator's.
+- 404 `no_run`: no such run, or it is somebody else's. 400 `bad_id`: a run id is 32 hexadecimal characters.
+- 400 `unknown_field`: the body has a field the API does not define.
+- 403 `cross_origin`: the request's `Origin` header does not name this server.
+- 405 `wrong_method`, 411 `length_required` (a body needs a `Content-Length`), 413 `body_too_large` (over about 4 MB, and over 64 KB on `session` and `setup`), 415 `not_json` (every `POST`, `PUT` and `DELETE` declares `application/json`, with or without a body).
+
+A report served by the API has the server's own directory paths removed, and so have a run's error message and its progress stream. The merged document and your documents are served exactly as they are.
+
+## Security details
+
+For a reviewer: the mechanisms behind what the sections above describe.
+
+**Signing in**
+
+- A session id is 256 random bits from `secrets.token_urlsafe`. It is kept in the server's memory only and compared with `hmac.compare_digest`.
+- The browser holds it in the cookie `llossless_session`, set `HttpOnly`, `SameSite=Strict` and `Path=/`, and `Secure` when the request arrived with `X-Forwarded-Proto: https`. A script presents the same id in `X-LLossless-Token`.
+- A session ends after 12 hours without use, after 7 days, on sign-out, on a password change, when the account is removed, and when the server stops.
+- Passwords are hashed with `hashlib.scrypt` (N = 2^14, r = 8, p = 1), or with PBKDF2-HMAC-SHA256 at 600,000 rounds where scrypt is not available, with a 16-byte salt per account. The cost is stored with each record, so it can be raised later.
+- An unknown username and a wrong password get the same answer and take about the same time: the hash is computed either way. After 10 failed sign-ins for one name within 5 minutes, further attempts for that name get that same answer, until 5 minutes pass without a failure. A wrong `current` password on a password change counts as a failed sign-in for that name.
+
+**Requests**
+
+- Only three routes answer without a sign-in: `session`, `setup` and `locales`. The list is exact, not a prefix. The page's own files are public and hold no data.
+- Cross-site request forgery: the cookie is `SameSite=Strict`. Every `POST`, `PUT` and `DELETE` must declare `application/json`, and an `Origin` header on one of them must name this server's own scheme, host and port: the `Host` header, under `https` when a proxy sent `X-Forwarded-Proto: https`. `Origin: null` is refused. A request with no `Origin` header, which is how a script sends one, is accepted.
+- A connection that sends nothing for 60 seconds is closed, and a request from somebody who is not signed in is answered before its body is read.
+- DNS rebinding: a server bound to this machine's own address refuses any request whose `Host` header is not `127.0.0.1`, `localhost` or `::1`. A server bound to a network address does not make this check.
+- Every response carries `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer` and a content security policy that allows scripts from the server itself only. The HTML report is served in a sandbox, so it cannot read anything else the server holds.
+- The page puts text from documents and models on screen as text, never as HTML.
+
+**Tokens, keys and files**
+
+- The setup code is 256 random bits. It travels in the URL fragment, which browsers do not send to a server, so it reaches no log. It is never written to disk.
+- `LLOSSLESS_WEB_TOKEN` is checked before the port is opened: without a valid token or an account, a network address is never bound. A token with a character outside ASCII is refused at start, because a browser and a script would send it as different bytes.
+- A run's address and its key are taken from one reading of the settings when the run starts, and a stored key is handed out only for the address it is stored with. Changing an endpoint while a run is under way can therefore never send a key to an address it was not saved for. That includes this server's own endpoint. The one exception is a key given as an environment variable, which has no stored address.
+- An endpoint's error text is shown with anything shaped like a key removed, including the start and the end of the key that was sent.
+- While a server has a token and no account, every API request without the token is refused with 401 `no_token`, the three routes that need no sign-in included. The page holds the token the reader typed in a script variable only: it is never written to browser storage or to the address. The page sends it in `X-LLossless-Token` and drops it when the server reports an account, because from then on that header carries a session id.
+- No route returns a key, and no key is written to a log, a report or a JSON answer. The last four characters of a key are sent only to the account that owns it, so a member's answer about a shared key says that it is set and nothing else. A member's keys never enter the server's environment: they are read from that member's file when the run starts and are sent only to the address that member stored them with.
+- The accounts file, the credentials files, the commands file and the work directory are created for their owner only (mode `0600` for files, `0700` for directories). A credentials or commands file that others can read is refused, not repaired: its keys may already have been read and should be replaced. A `users` folder that an earlier version created with wider permissions is set to `0700` at start.
+
+**What is not protected**
+
+- There is no limit on what an account spends or on how many runs it submits, and the server does not encrypt its connections.
+- A subscription route runs a program with the server's own login. Everything that program can do, a run through it can cause.
+
+## For contributors
+
+- **Code.** The web interface is `src/llossless/web/`. `api.py` holds the JSON contract as plain functions with no sockets, `server.py` is the HTTP layer, and `jobs.py` is the queue and retention. The page is `static/index.html` and `static/app.js`, with no build step.
+- **Tests.** The web tests are `tests/test_web_server.py` and the files named like it. They call no model: a test that needs a server or a model endpoint starts one on a free local port. `tests/test_web_jobs.py` runs one merge through the web job layer and one through the command line against the same endpoint, and requires the two reports to agree.
+- **Model figures.** The picker, the scorecard and the merge-effort card read `src/llossless/web/catalogue.json`. The runs behind the merge-effort figures are in `arms/2026-09-25/subscription-comparison/` and `arms/2026-09-26/opus-max/`, and `tests/effort_figures.py --check` and `tests/opus55_effort_figures.py --check` compare the two.
+- **Adding a language.** Copy `src/llossless/web/locales/en.json`, translate the values, and run `python3 tests/test_web_i18n.py`. It names every key that is missing and every placeholder that was renamed. A language file with a missing key is refused whole.
+- **A run folder** holds `sources.json` (the documents as submitted), `events.jsonl` (the progress log), `merged.md`, `report.json` and `report.html`, and `failures/` and `discards/` when a model's answer could not be read.

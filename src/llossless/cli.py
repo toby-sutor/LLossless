@@ -55,8 +55,8 @@ from .decompose import decompose_text
 from .html_report import render as render_html
 from .provenance import Provenance
 from .report import (
-    ERRORED, EXIT_CODES, OK, PLANNED, RECORD_ONLY, SKIPPED, Run, Step, as_dict,
-    exit_code, inconclusive_for_retrieval_alone, render, retrieval_calls_word,
+    ERRORED, EXIT_CODES, OK, PLANNED, RECORD_ONLY, SKIPPED, InventoryDisagrees, Run, Step,
+    as_dict, exit_code, inconclusive_for_retrieval_alone, render, retrieval_calls_word,
     retrieval_lead, retrieval_outcome, retrieval_turns, what_was_found,
 )
 from .structured import ThinkingIgnored, ThinkingNotHonoured, TierUnsupported
@@ -165,15 +165,15 @@ where the output goes
   warnings go to stderr, so `> report.md` still leaves you something to watch.
   `-v` names each step, `-vv` adds each model call and each cache hit.
 
-  exit 0   nothing was dropped or contradicted, and -- at `--verify-depth
-           full` -- nothing was invented. At `coverage` nothing reads the
-           merged document back, so 0 says nothing about invention and every
-           report the run writes says so in its verdict
+  exit 0   nothing was dropped or contradicted and, at `--verify-depth full`,
+           nothing was invented. At `coverage` nothing reads the merged
+           document back, so 0 says nothing about invention; reports say so
   exit 1   at least one finding, or more of the source segments declared
            dropped than --loss-budget allows ({config.DEFAULT_DECLARED_LOSS_BUDGET:.0%} by default)
-  exit 2   an operational error: bad configuration, an unreachable endpoint,
-           or a unit of work the model could not be made to answer usably.
-           2 supersedes 1 -- an inconclusive run is not a clean one.
+  exit 2   inconclusive: bad configuration, an unreachable endpoint, a unit
+           the model could not answer, a source with no claims on verify,
+           no evidence quote found, a sourced merge that looked nothing up,
+           an unwritable -o, disagreeing counts. 2 supersedes 1.
   exit 3   the merged document is sound as far as this tool looked and the
            merge's account of itself is not. 1 and 2 both supersede it.
 
@@ -315,10 +315,10 @@ token in {SERVE_TOKEN_ENV}. With neither the command refuses to start rather
 than binding: this server spends whatever credential its own environment holds
 on every document submitted to it, so reaching it from another machine and
 authenticating the submitter are one decision and not two. With no accounts,
-every API request must carry the token in an X-LLossless-Token header. Once
-an account exists, logging in is the authentication and the token is not
-consulted. The page itself is public: it is a shell, and everything on it
-arrives through the API.
+every API request must carry the token in an X-LLossless-Token header; the
+page asks for it, then offers the first-account form. Once an account exists,
+logging in is the authentication and the token is not consulted. The page
+itself is public: it is a shell, and everything on it arrives through the API.
 
 Documents, the merged document, the report and the progress log are deleted
 {int(SERVE_RETENTION // 3600)} hours ({int(SERVE_RETENTION)}s) after a run
@@ -514,8 +514,8 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"listen on this address (default {SERVE_HOST}). Anything that is "
              f"not loopback needs an account, or, while the server has none, a "
              f"token of at least 16 characters in {SERVE_TOKEN_ENV}, presented "
-             f"by every API request in an X-LLossless-Token header; with "
-             f"neither the command refuses to start",
+             f"by every API request in an X-LLossless-Token header (the page "
+             f"asks for it); with neither the command refuses to start",
     )
     serve_parser.add_argument(
         "--work-dir", type=Path, metavar="DIR",
@@ -1478,12 +1478,12 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
             gloss = (f"{clean} among the claims extracted -- but {named} produced "
                      f"no claims, so coverage for it rests on the structural "
                      f"check alone.")
-        # A 2 whose only reason is a `sourced` merge that retrieved nothing:
-        # the run finished, so "part of this run did not finish" would be false.
         if code == 2 and inconclusive_for_retrieval_alone(run):
             gloss = ("The merge was asked to look its facts up and retrieved "
                      "nothing, so this is not a sourced merge; read it as a merge "
                      "at open, or re-run it.")
+        elif code == 2:
+            headline, gloss = finished_inconclusive(run) or (headline, gloss)
     tint = TINT[code]
     line("")
     line(f"{headline} {gloss}", tint)
@@ -1513,7 +1513,7 @@ def summarise(run: Run, code: int, *, output: Path | None, coloured: bool,
     if run.declared_additions:
         line(f"  {len(run.declared_additions)} statement(s) in the merge came "
              f"from the model's own knowledge and could not be checked against "
-             f"your documents; see `## Additions`")
+             f"your documents; see `## Added from outside the documents`")
     # What `sourced` achieved, not only what it permitted. The banner
     # at the top of the run said which tool was granted; this is the other
     # half, and the terminal is where an operator who never opens the report
@@ -1778,8 +1778,8 @@ def main(argv: list[str] | None = None) -> int:
         # one. That is not always true, and a banner naming the
         # default host over a run whose merge goes to a vendor is a line that
         # reads as a complete account and is not one. So when the roles differ,
-        # say so -- and say it at every verbosity, not only at `-vv`: which
-        # machine is about to be sent the operator's documents is not a detail.
+        # each role's model and endpoint is listed under the banner at `-vv`.
+        # `console.detail` is silent below that: a quieter run sees the banner.
         if settings.split_endpoints:
             for role in sorted(config.ROLES):
                 console.detail(
@@ -1899,7 +1899,16 @@ def main(argv: list[str] | None = None) -> int:
             run.merged_written_to = str(args.output)
             console.done(f"merged document written to {args.output}")
 
-    print(paint(render(run), enabled=report_colour,
+    # `render` holds the Inventory against the Coverage table and raises
+    # sooner than print two counts for one quantity. Nothing caught that, so
+    # the one time it fired the operator would have been shown a traceback.
+    # It is a run with no verdict to act on, which is what 2 means, and it is
+    # said in a sentence: `report_refused`, at the foot of this module.
+    try:
+        rendered = render(run)
+    except InventoryDisagrees as exc:
+        return report_refused(exc, run, coloured=coloured)
+    print(paint(rendered, enabled=report_colour,
                 verdict=None if run.planned else code), end="")
 
     if write_error is not None:
@@ -1920,6 +1929,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.html_path is not None:
         try:
             args.html_path.write_text(render_html(run), encoding="utf-8")
+        except InventoryDisagrees as exc:
+            return report_refused(exc, run, coloured=coloured, html=args.html_path)
         except OSError as exc:
             return fail(f"cannot write {args.html_path}: {exc.strerror or exc}",
                         coloured=coloured)
@@ -1930,6 +1941,72 @@ def main(argv: list[str] | None = None) -> int:
     summarise(run, code, output=args.output, coloured=console.enabled,
               piped=not is_tty(sys.stdout))
     return code
+
+
+def finished_inconclusive(run: Run) -> tuple[str, str] | None:
+    """The closing sentence for a 2 on a run that finished, or None.
+
+    A source that produced no claims on `verify`, and claims graded with no
+    quote found in the file it names, exit 2 with every call answered, so
+    "part of this run did not finish" is false for them. The reason is the
+    report verdict's own (`report.unanswered_by_no_fault`), said once more on
+    the terminal in its plain voice. None for a run with an errored or
+    unusable unit, which really did not finish, and for the other 2s, which
+    have their own sentence above this call.
+    """
+    from .report import GROUNDED, NOT_GRADED, unanswered_by_no_fault
+    graded = [v for v in run.verdicts if v.grounding != NOT_GRADED]
+    named = run.unexamined_sources() if run.command == "verify" else []
+    nothing_grounded = bool(graded) and not any(v.grounding == GROUNDED for v in graded)
+    if run.unusable or run.errored or not (named or nothing_grounded):
+        return None
+    said = unanswered_by_no_fault(run).replace("**", "", 2)
+    gloss = said.split(" ", 1)[1]
+    if named:
+        gloss += f" No claims came from: {', '.join(named)}."
+    return said.split(" ", 1)[0], gloss
+
+
+def report_refused(exc: InventoryDisagrees, run: Run, *, coloured: bool,
+                   html: Path | None = None) -> int:
+    """The report counted one quantity two ways and refused to print both.
+
+    `report.InventoryDisagrees` is the report holding the rows of its
+    Inventory against its Coverage table. Both are read off the same verdicts,
+    so no path through `pipeline` raises it, and when it fires the fault is in
+    this tool and never in the documents. The run still has no verdict a
+    reader can act on, so it is inconclusive, 2, and the last line says what
+    happened and whose defect it is.
+
+    **The merged document is not lost with the report.** When no `-o` wrote
+    it, the report was going to carry it, under `## Merged document`. The
+    merge call is paid for by the time anything here runs, so the text goes to
+    stdout where the report would have put it, and the line says so. Where
+    `-o` did write it, the line names the file: nothing else says so at the
+    default verbosity. `html` is the page that was refused when the Markdown
+    report had already been printed, with the merged document in it or
+    beside it.
+
+    At the foot of the module so that no line another file cites in this one
+    moves.
+    """
+    if html is not None:
+        what = f"the HTML report was not written to {html}"
+    elif run.merged is not None and run.merged_written_to is None:
+        print(run.merged, end="" if run.merged.endswith("\n") else "\n")
+        what = ("the report was not printed, and the merged document was "
+                "printed in its place")
+    elif run.merged_written_to is not None:
+        what = (f"the report was not printed; the merged document is in "
+                f"{run.merged_written_to}")
+    else:
+        what = "the report was not printed"
+    return fail(
+        f"{what}. Its Inventory and its Coverage table counted the same "
+        f"claims differently, and LLossless refuses to print two different "
+        f"counts for one quantity, so this run is inconclusive. That is a "
+        f"defect in LLossless and not in your documents: please report it, "
+        f"with this detail. {exc}", coloured=coloured)
 
 
 if __name__ == "__main__":

@@ -121,7 +121,8 @@ from .. import window as window_module
 from ..client import Client
 from ..html_report import render as render_html
 from ..provenance import Provenance
-from ..report import Run, as_dict, exit_code
+from ..report import InventoryDisagrees, Run, as_dict, exit_code
+from . import accounts as user_accounts
 from . import catalogue, cli_render, commands, credentials, diagnose, discover
 from .events import EventLog, WebConsole
 
@@ -630,14 +631,16 @@ class Workspace:
     # why this field is shaped oddly. `Workspace` is a frozen dataclass with a
     # generated `repr`, and a dict of API keys as a field is a dict of API keys
     # in a traceback, a debugger and every log line that formats a workspace.
-    # A function's `repr` is its name. The values are read when the run asks
-    # for them and live as a local for the length of it.
+    # A function's `repr` is its name. The values are read once, together with
+    # the addresses in `environ`, and it hands back that one reading.
     #
     # `None` and `{}` are different answers and the difference is load-bearing:
     # `None` leaves `os.environ` in place, which is every CLI run and every
     # recorded cassette, and `{}` says this account has no credentials, which
     # is what stops a user with nothing configured from spending the
-    # operator's key.
+    # operator's key. A run `JobStore` starts with no mapping of its own gets
+    # a `StandingKeys` in place of `None`: the same environment, read the
+    # same way, for as long as the run's addresses stand.
     keys: object = None
 
     # The operator's command routes, or `None` for a server that has none.
@@ -654,6 +657,122 @@ class Workspace:
     # unswapped: a request that names no route resolves over HTTP exactly as
     # every run before this one did.
     routes: object = None
+
+    # The addresses this run's submitter may be shown in full: the ones they
+    # stored themselves. `None` is no restriction, which is the operator and
+    # a server with no accounts. Every other address a member's run uses is
+    # the operator's, and the command-line panel and the report give it as
+    # scheme, host and port (`accounts.reduced`).
+    own_addresses: object = None
+
+
+class StandingKeys:
+    """This process's own keys, each handed to a run only while its address stands.
+
+    The key source of a run that has no mapping of its own: the operator's,
+    and every run on a server with no accounts. Their credentials are the
+    process environment, read at send time, which is what lets a key the
+    operator replaces reach a merge that is already running.
+
+    Read like that with nothing else, it also let a key reach an address it
+    was never saved with. A run resolves its addresses once, when it starts.
+    If the operator then moved that provider's endpoint and saved a key for
+    the new address, the run went on calling the old address and was handed
+    the new key on its next call.
+
+    So a provider's key is handed out only while the provider's address in
+    the server's environment is still the one this run started with. The same
+    address with a new key is a replaced key, and it is used. A different
+    address means the key now in the environment belongs somewhere else, and
+    the run gets none.
+
+    Holds no key. It reads `os.environ` when asked, as an unswapped run does.
+    `read` replaces that reading for a member's run, whose view of the
+    operator's keys is `accounts.Directory.shared_keys` and not the process's
+    whole environment.
+
+    `credentials.NO_KEY_ENV` is never read: it is the name a role is pointed
+    at when it must send no key, whatever a process happens to have exported.
+    """
+
+    def __init__(self, live: dict[str, str], started: dict[str, str],
+                 read=None) -> None:
+        self._live = live
+        self._read = read
+        self._started = {
+            variable: (credentials.url_env(name),
+                       started.get(credentials.url_env(name)))
+            for name, variable in credentials.PROVIDERS.items()}
+
+    def __repr__(self) -> str:
+        """Neither a key nor an address."""
+        return "StandingKeys()"
+
+    def get(self, name: str, default=None):
+        # The key first and the address second. `Credentials.apply` moves an
+        # address before it writes the key stored with it, so a key read
+        # here that belongs to a new address is always followed by a check
+        # that sees the new address.
+        if name == credentials.NO_KEY_ENV:
+            return default
+        value = os.environ.get(name) if self._read is None else self._read(name)
+        stood = self._started.get(name)
+        if stood is not None and self._live.get(stood[0]) != stood[1]:
+            return default
+        return default if not value else value
+
+
+class MemberKeys:
+    """A member's key source for one run: their own keys, and the operator's while they stand.
+
+    A member's run was handed a plain mapping, read once when the run
+    started. That is right for the member's own keys and wrong for the
+    operator's: a shared key the operator deleted while the run was under
+    way went on being sent on every later call, where the operator's own run
+    stopped. So the variables that are the operator's (`shared`) are read
+    through a `StandingKeys`: the key the operator's file and environment
+    hold now, and only while that provider's address is the one this run
+    started with.
+
+    `addresses` is not a key. It is the set of addresses the member stored
+    themselves, kept beside the keys because both come out of the one read
+    of the member's file that `JobStore.resolved_for` makes.
+
+    Any other name answers nothing: a member's run reads no variable of the
+    server's environment but the operator's provider keys.
+    """
+
+    def __init__(self, own: dict[str, str], shared, standing: StandingKeys,
+                 addresses=frozenset()) -> None:
+        self._shared = frozenset(shared)
+        self._own = {name: value for name, value in own.items()
+                     if name not in self._shared}
+        self._standing = standing
+        self.addresses = frozenset(addresses)
+
+    def __repr__(self) -> str:
+        """Neither a key nor an address."""
+        return "MemberKeys()"
+
+    def get(self, name: str, default=None):
+        if name in self._shared:
+            return self._standing.get(name, default)
+        value = self._own.get(name)
+        return default if not value else value
+
+
+# The exit code of a run with no verdict a reader can act on: `report.exit_code`'s
+# own 2, which is what the command line returns for the same refusal.
+INCONCLUSIVE = 2
+
+
+class Inconclusive(Exception):
+    """The run ended with no verdict, for a reason that is a sentence.
+
+    Raised by `publish` when the report refuses to be written. The worker
+    lands the job in `failed` with exit code 2 and this message as it is,
+    with no exception name in front of it.
+    """
 
 
 class Job:
@@ -1381,12 +1500,45 @@ def publish(job: Job, run: Run, client: Client, settings: config.Settings,
     # the request's best guess before it ran. Carried in the report too, so it
     # survives a restart (`_restore` reads `report.json` back) and travels
     # through `redact.report` like the rest of the run's account of itself.
-    job.cli_equivalent = cli_render.render(settings, job.request, run)
+    job.cli_equivalent = cli_render.render(settings, job.request, run,
+                                           shown=workspace.own_addresses)
     job.report["cli_equivalent"] = job.cli_equivalent
 
+    # The page first, and nothing written until it exists. Rendering holds
+    # the report's Inventory against its Coverage table and raises sooner
+    # than print two counts for one quantity (`report.InventoryDisagrees`).
+    # Written in the other order, `report.json` was already on disk with the
+    # run's own exit code when the page refused, and the job then failed
+    # under the exception's class name. The command line calls this an
+    # inconclusive run and says why in a sentence (`cli.report_refused`), so
+    # this does: exit code 2, no report in either form, and the merged
+    # document kept where it was written.
+    try:
+        page = render_html(run)
+    except InventoryDisagrees as exc:
+        job.report = None
+        job.exit_code = INCONCLUSIVE
+        raise Inconclusive(report_refused(run, exc)) from None
     write_private(workspace.directory / REPORT_JSON,
                   json.dumps(job.report, indent=2) + "\n")
-    write_private(workspace.directory / REPORT_HTML, render_html(run))
+    write_private(workspace.directory / REPORT_HTML, page)
+
+
+def report_refused(run: Run, exc: BaseException) -> str:
+    """Why a run has no report, in the command line's own sentence.
+
+    `cli.report_refused` words this for a terminal and prints as it goes, so
+    the sentence is restated here; `tests/test_web_jobs.py` holds the two
+    against each other.
+    """
+    what = ("the report was not written; the merged document was, and can "
+            "still be downloaded" if run.merged is not None
+            else "the report was not written")
+    return (f"{what}. Its Inventory and its Coverage table counted the same "
+            f"claims differently, and LLossless refuses to print two different "
+            f"counts for one quantity, so this run is inconclusive. That is a "
+            f"defect in LLossless and not in your documents: please report it, "
+            f"with this detail. {exc}")
 
 
 def run_merge(job: Job, workspace: Workspace) -> None:
@@ -1447,7 +1599,8 @@ def _run_merge(job: Job, workspace: Workspace, console, request) -> None:
     # first request still leaves the operator an exact command to try by hand.
     # Recomputed in `publish` once `run` exists, which sharpens the one field
     # that needs it (the base document); everything else is already exact here.
-    job.cli_equivalent = cli_render.render(settings, request)
+    job.cli_equivalent = cli_render.render(settings, request,
+                                           shown=workspace.own_addresses)
     # Beside the settings it describes and before any call, so a run that
     # fails on its first request still records how it would have been billed.
     # The environment is the one `web_settings` resolved from; the
@@ -1514,6 +1667,12 @@ def _run_merge(job: Job, workspace: Workspace, console, request) -> None:
     client = Client(settings, notify=console.warn, console=console)
     # `job.stop` is the cancel: the client makes no call once it is set.
     client.cancel = job.stop
+    # A reply the client cannot parse is kept on disk, whole, and a reply is
+    # the documents' content rearranged. With the cache off, which it is
+    # here, the client keeps those under the system temporary directory
+    # (`Client._dump_root`), where deleting the run, retention and shutdown
+    # all left them. In this run's own folder they go when the run goes.
+    client._scratch = workspace.directory
     started = time.monotonic()
     fault: BaseException | None = None
     try:
@@ -2074,6 +2233,51 @@ class JobStore:
             return None
         return self.directory.keys_for(owner, self.environ)
 
+    def resolved_for(self, owner: str) -> tuple[dict[str, str], object]:
+        """One run's environment and its key source, taken from one state.
+
+        The address a run sends to and the key it sends are one decision, so
+        they are read once and together: one copy of this server's
+        environment, and one read of the account's own file laid over it
+        (`accounts.Directory.for_run`). `environ_for` and `keys_for` each
+        answer half of this from a read of their own, which is right for a
+        page that shows one half and wrong for a run: an endpoint deleted
+        between the two reads left a run addressed to a member's endpoint and
+        holding the operator's shared key.
+
+        A copy for every run, including one with no owner, so that no
+        address a settings request changes afterwards reaches a run that has
+        started resolving.
+
+        A run with no mapping of its own, the operator's or any run on a
+        server with no accounts, reads this process's keys at send time, as
+        it always has. `StandingKeys` is what ties those to the addresses
+        taken here.
+        """
+        environ = dict(self.environ)
+        keys = None
+        addresses: dict[str, str] = {}
+        if self.directory is not None:
+            # With no owner as well: the directory also says which roles may
+            # not read the key their variable names (`credentials.key_scope`),
+            # and that holds for a run nobody owns.
+            addresses, keys = self.directory.for_run(owner, environ)
+            environ.update(addresses)
+        if keys is None:
+            keys = StandingKeys(self.environ, environ)
+        else:
+            # A member. Their own keys as read; the operator's through the
+            # same rule the operator's own run reads them by, asked of the
+            # directory against this server's environment as it then is.
+            keys = MemberKeys(
+                keys, getattr(keys, "shared", ()),
+                StandingKeys(self.environ, environ,
+                             read=lambda name: self.directory.shared_keys(
+                                 self.environ).get(name)),
+                addresses=(value for name, value in addresses.items()
+                           if name.startswith(credentials.PROVIDER_URL_PREFIX)))
+        return environ, keys
+
     def submit(self, request: MergeRequest, *, owner: str = "",
                retry_of: str | None = None) -> Job:
         """Queue a merge and hand back the job. Refuses a request it cannot run.
@@ -2106,7 +2310,10 @@ class JobStore:
         # model" is a 400 about the request rather than a job that is accepted,
         # queued, started and then fails. The operator finds out before they
         # wait, which is the whole complaint this work started from.
-        resolved_environ(request, self.environ_for(owner), routes=self.routes)
+        # From `resolved_for`, which is what the worker reads: it carries which
+        # roles may not read a key, and a refusal about a key in cleartext
+        # has to be about the key the run would send.
+        resolved_environ(request, self.resolved_for(owner)[0], routes=self.routes)
 
         job = Job(request, now=self.clock(), owner=owner, retry_of=retry_of)
         # On disk before the id is handed back: the documents, so a
@@ -2206,6 +2413,21 @@ class JobStore:
         job.events.close()
         self._save_quietly()
         return True
+
+    def cancel_owned(self, owner: str) -> int:
+        """Cancel every queued or running job of one account. How many.
+
+        For an account that is being removed. Its runs would otherwise go on:
+        the queued ones start later, as a member with nothing of their own,
+        which is a run on the operator's endpoints with the operator's key,
+        and nobody left who can see or stop it.
+        """
+        if not owner:
+            return 0
+        with self._lock:
+            mine = [job.id for job in self._jobs.values()
+                    if job.owner == owner and not job.terminal]
+        return sum(1 for job_id in mine if self.cancel(job_id))
 
     def delete(self, job_id: str) -> bool:
         """Forget the job and drop it from the index entirely. True if it was there.
@@ -2355,24 +2577,51 @@ class JobStore:
         # Before the first call, so a crash from here on is found `running`
         # by the next start and reported `interrupted` -- never re-run.
         self._save_quietly()
+        # The addresses and the keys, from one read. Taken now and not at
+        # submit: the file is the operator's or the user's and may have been
+        # edited since, and the run that spends a credential should spend the
+        # one configured now, at the address configured now.
+        #
+        # A read that fails ends this job and nothing else. It used to be
+        # made outside any handler, so a member's credentials file this
+        # server could not use ended the worker thread: the job stayed
+        # `running`, and with one worker every later run stayed queued.
+        try:
+            environ, keys = self.resolved_for(job.owner)
+        except (credentials.CredentialsError, user_accounts.AccountError) as exc:
+            # Said in full where the operator is. The submitter is told what
+            # happened and not where on this server it happened: both
+            # messages name a file by its path.
+            print(f"llossless serve: run {job.id} was not started: {exc}",
+                  file=sys.stderr, flush=True)
+            self._finish(job, FAILED, error=(
+                str(exc) if isinstance(exc, user_accounts.UnknownAccount) else
+                "the endpoints and keys stored for your account could not be "
+                "read on this server, so the run was not started. No model "
+                "was called. The reason is on the server's own error stream; "
+                "ask whoever runs it."))
+            return
         workspace = Workspace(
             directory=job.directory, cache_dir=self.cache_dir,
-            environ=self.environ_for(job.owner),
-            # A callable, read on the worker thread rather than here: the file
-            # is the operator's or the user's and may have been edited between
-            # submit and start, and the run that spends a credential should
-            # spend the one configured now. It is also what keeps the mapping
-            # off this frozen dataclass -- see `Workspace.keys`.
-            keys=lambda owner=job.owner: self.keys_for(owner),
-            # The store, not a resolved route. Read on the worker thread for
-            # the reason `keys` is: the file is the operator's and may have
-            # been edited between submit and start, and a run that executes a
+            environ=environ,
+            # A callable, which is what keeps the mapping off this frozen
+            # dataclass (see `Workspace.keys`). It returns what was read
+            # above and reads nothing again: a second read is a second state.
+            keys=lambda: keys,
+            # The store, not a resolved route. Read when the run resolves
+            # its settings: the file is the operator's and may have been
+            # edited between submit and start, and a run that executes a
             # program should execute the one configured now.
-            routes=self.routes)
+            routes=self.routes,
+            own_addresses=getattr(keys, "addresses", None))
         try:
             job.directory.mkdir(parents=True, exist_ok=True)
             os.chmod(job.directory, DIR_MODE)
             self.runner(job, workspace)
+        except Inconclusive as exc:
+            # No verdict, and a sentence that says why. `publish` has set the
+            # exit code; the message goes out as written.
+            self._finish(job, FAILED, error=str(exc))
         except BaseException as exc:  # noqa: BLE001 - see below
             if job.stop.is_set() and not isinstance(exc, (KeyboardInterrupt, SystemExit)):
                 # Cancelled, whatever the unit it was in raised on the

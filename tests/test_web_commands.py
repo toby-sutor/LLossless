@@ -354,6 +354,11 @@ def request(url: str, *, method: str = "GET", payload=None, headers=None,
     if payload is not None:
         body = json.dumps(payload).encode("utf-8")
         sent.setdefault("Content-Type", "application/json")
+    if body is None and method in ("POST", "PUT", "DELETE"):
+        # A request that changes something declares the JSON type with or
+        # without a body, which is what the page sends and what the server
+        # asks for. A caller that means otherwise passes the header itself.
+        sent.setdefault("Content-Type", "application/json")
     call = urllib.request.Request(url, data=body, method=method, headers=sent)
     try:
         with urllib.request.urlopen(call, timeout=timeout) as answer:

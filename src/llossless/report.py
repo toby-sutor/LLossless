@@ -1837,7 +1837,7 @@ def verdict_line(run: Run) -> str:
             f"**Inconclusive.** {'; '.join(parts)}. The model could not be made "
             f"to answer usably, so this run does not establish that the claims "
             f"it did check are the only ones there were."
-        )
+        ) if parts else unanswered_by_no_fault(run)
         # What the gradeable part did say, if it said anything. Suppressing it
         # would make a salvaged run indistinguishable from one that produced
         # no report at all, which is the entire difference Pass C makes; but it
@@ -3531,3 +3531,39 @@ def as_dict(run: Run) -> dict:
         "merged_written_to": run.merged_written_to,
         "provenance": run.provenance.as_dict() if run.provenance else None,
     }
+
+
+def unanswered_by_no_fault(run: Run) -> str:
+    """The `Inconclusive.` sentence for an exit 2 that no unit of work caused.
+
+    Two rules in `exit_code` reach 2 with every call answered: a source that
+    yielded no claims on `verify`, and claims graded with not one quote
+    grounded. The sentence for an errored unit says the model could not be
+    made to answer usably, and here it answered, so each of these says what it
+    is. The bold opening is the errored-unit sentence's own, on purpose: one
+    word for an inconclusive run, and the reason after it.
+
+    At the foot of the module, and called from `verdict_line` by name, so that
+    no line another file cites in this one moves.
+    """
+    reasons = []
+    unexamined = run.unexamined_sources() if run.command == "verify" else []
+    if unexamined:
+        # The sources are named in bold at the end of the verdict, where
+        # `verdict_line` has always put them; this is the count and the
+        # consequence, in the words the errored-unit sentence ends on.
+        reasons.append(
+            f"{len(unexamined)} source(s) produced no claims, so this run does "
+            f"not establish that the claims it did check are the only ones "
+            f"there were.")
+    graded = [v for v in run.verdicts if v.grounding != NOT_GRADED]
+    if graded and not any(v.grounding == GROUNDED for v in graded):
+        reasons.append(
+            f"{len(graded)} verdict(s) quote evidence and none of the quotes "
+            f"was found in the file it names, so no verdict here rests on "
+            f"anything shown to be in the documents.")
+    # Unreachable while `exit_code` has the rules it has. Kept so a rule added
+    # there later prints a sentence and never a bare word with nothing after it.
+    reasons = reasons or ["Part of the check produced nothing usable; Coverage "
+                          "below shows which part."]
+    return "**Inconclusive.** " + " ".join(reasons)

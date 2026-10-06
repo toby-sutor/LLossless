@@ -72,8 +72,9 @@ from llossless.web import api, i18n  # noqa: E402
 # probes below fire, and a probe that re-implements the predicate it is probing
 # proves only that the copy fires.
 from test_web_static import (  # noqa: E402
-    APP_JS, INDEX, PATIENCE, a_compiler, block, catalogue_parity, catalogues,
-    live, origin, request, sink_hits, source, strip_comments)
+    APP_JS, EFFORT_DOM, INDEX, PATIENCE, a_compiler, block, catalogue_parity,
+    catalogues, live, node_command, origin, request, sink_hits, source,
+    strip_comments)
 
 from fake_endpoint import FakeEndpoint  # noqa: E402
 from test_cli import CLEAN, SOURCE_A, SOURCE_B, Script  # noqa: E402
@@ -925,6 +926,102 @@ def test_the_type_check_fires_on_a_seeded_error() -> None:
 # --------------------------------------------------------------------------
 # runner
 # --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# the access form's own table, inside the page
+# --------------------------------------------------------------------------
+
+# The form that asks for the server's access token is drawn before any
+# catalogue can be fetched, so its words live in `ACCESS_STRINGS` in the
+# script. The first six entries repeat catalogue keys; the others are for the
+# form alone.
+ACCESS_CATALOGUE_KEYS = {
+    "heading": "auth.access.heading", "hint": "auth.access.hint",
+    "label": "auth.access", "kept": "auth.access.kept",
+    "submit": "auth.access.submit", "refused": "auth.access.refused",
+}
+
+
+def access_table(js: str) -> dict | None:
+    """`ACCESS_STRINGS` as the shipped script builds it, run under node."""
+    node = node_command()
+    if node is None:
+        return None
+    program = (EFFORT_DOM + "\n" + js
+               + "\nprocess.stdout.write(JSON.stringify(ACCESS_STRINGS));")
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                     encoding="utf-8") as handle:
+        handle.write(program)
+        path = handle.name
+    try:
+        run = subprocess.run(node + [path], capture_output=True, text=True,
+                             timeout=120, cwd=ROOT)
+    finally:
+        Path(path).unlink()
+    return json.loads(run.stdout) if run.returncode == 0 else {"error": run.stderr[-300:]}
+
+
+def access_table_problems(table: dict, tables: dict) -> list[str]:
+    """Same keys in both languages, none empty, same placeholders, and the
+    repeated entries equal to the catalogue's own strings."""
+    if "error" in table:
+        return [f"ACCESS_STRINGS did not load: {table['error']}"]
+    holes = re.compile(r"\{[a-z_]+\}")
+    found = []
+    if sorted(table) != sorted(tables):
+        found.append(f"languages {sorted(table)} are not the catalogues' {sorted(tables)}")
+        return found
+    reference = table["en"]
+    for tag, entries in sorted(table.items()):
+        if sorted(entries) != sorted(reference):
+            found.append(f"{tag}: keys differ from en by "
+                         f"{sorted(set(entries) ^ set(reference))}")
+            continue
+        for key, text in entries.items():
+            if not text.strip():
+                found.append(f"{tag}.{key} is empty")
+            if sorted(holes.findall(text)) != sorted(holes.findall(reference[key])):
+                found.append(f"{tag}.{key}: placeholders differ from en")
+            if "<" in text or ">" in text:
+                found.append(f"{tag}.{key} contains markup")
+        for key, catalogue_key in ACCESS_CATALOGUE_KEYS.items():
+            if entries.get(key) != tables[tag].get(catalogue_key):
+                found.append(f"{tag}.{key} no longer says what {catalogue_key} says")
+    return found
+
+
+def test_the_access_form_has_the_same_words_in_both_languages() -> None:
+    """The built-in table for the token form cannot drift from the catalogues or itself.
+
+    MUST FIRE: a key missing in German, an empty string, a placeholder that
+    differs, a copy that no longer matches the catalogue, and a language the
+    catalogues lack.
+    """
+    js = source(APP_JS)
+    tables = catalogues()
+    table = access_table(js)
+    if table is None:
+        decline("UNMEASURED: no node here, so the access form's table was not read")
+        return
+    check(not access_table_problems(table, tables),
+          f"access table: {access_table_problems(table, tables)}")
+    import copy
+    mutations = {
+        "a missing German key": lambda t: t["de"].pop("empty"),
+        "an empty string": lambda t: t["de"].update(unsendable=" "),
+        "a placeholder only in German": lambda t: t["de"].update(empty="Geben Sie {n} ein."),
+        "a copy that drifted": lambda t: t["en"].update(refused="Refused."),
+        "a language the catalogues lack": lambda t: t.update(fr=copy.deepcopy(t["en"])),
+    }
+    for name, mutate in mutations.items():
+        broken = copy.deepcopy(table)
+        mutate(broken)
+        check(bool(access_table_problems(broken, tables)),
+              f"the access table check did not fire on {name}")
+    check(table["en"]["empty"] != table["de"]["empty"],
+          "the two languages of the access form say the same thing")
+
 
 def main() -> int:
     for name, function in sorted(globals().items()):

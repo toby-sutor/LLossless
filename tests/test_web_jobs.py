@@ -60,7 +60,7 @@ import socket_guard  # noqa: E402
 # module states it in exactly this shape.
 socket_guard.install()
 
-from llossless import cli, config, merge  # noqa: E402
+from llossless import cli, config, merge, transport  # noqa: E402
 from llossless.console import Console  # noqa: E402
 from llossless.web import catalogue, credentials, diagnose, events, jobs  # noqa: E402
 from llossless.web.events import EventLog, WebConsole  # noqa: E402
@@ -2503,7 +2503,7 @@ def test_a_restart_past_the_window_deletes_and_leaves_only_a_tombstone() -> None
 
 
 class TwoAccounts:
-    """The two methods `JobStore` asks a `Directory`, for two accounts with keys."""
+    """The methods `JobStore` asks a `Directory`, for two accounts with keys."""
 
     def __init__(self, keys: dict[str, dict[str, str]]) -> None:
         self.keys = keys
@@ -2513,6 +2513,9 @@ class TwoAccounts:
 
     def keys_for(self, owner: str, environ) -> dict[str, str]:
         return dict(self.keys.get(owner, {}))
+
+    def for_run(self, owner: str, environ):
+        return self.environ_for(owner), self.keys_for(owner, environ)
 
 
 def isolation_verdict() -> list[str]:
@@ -2750,6 +2753,422 @@ def test_the_index_is_owner_only_and_holds_no_key() -> None:
     loose = index_secrecy(Seeded(jobs, "FILE_MODE", 0o644))
     check(any("the index is mode 644" in problem for problem in loose),
           f"must fire: an index written 0644 passed: {loose}")
+
+
+# The key a run holds while its endpoint refuses it. The last four characters
+# are ones no job id, timestamp or fixture carries, so finding them anywhere
+# means they came out of the endpoint's answer.
+RELAYED_KEY = "probe-relayed-key-0123456789-XqZw"
+RELAYED_TAIL = RELAYED_KEY[-4:]
+
+
+def echoing_endpoint(body: dict, call: int):
+    """A vendor's 401 that says which key it refused, masked the usual two ways."""
+    return 401, json.dumps({"error": {
+        "message": f"Incorrect API key provided: {RELAYED_KEY[:8]}"
+                   f"{'*' * 20}{RELAYED_TAIL}. Your key ending in "
+                   f"{RELAYED_TAIL} was refused.",
+        "type": "invalid_request_error", "code": "invalid_api_key"}})
+
+
+def relayed_body_problems() -> list[str]:
+    """Run a job whose endpoint answers 401 and echoes the key. What is relayed?
+
+    The key reaches the run the way a member's shared key does, through the
+    directory, and the endpoint's answer is the only place its last
+    characters are written down. They are then looked for in everything the
+    person who ran the job can read: the run's error, its status, its event
+    log and every file in the work directory.
+    """
+    problems: list[str] = []
+    owner = "e" * 32
+    endpoint = FakeEndpoint(echoing_endpoint)
+    with endpoint as base_url, tempfile.TemporaryDirectory() as raw:
+        work = Path(raw) / "work"
+        environ = {"LLOSSLESS_BASE_URL": base_url, "LLOSSLESS_STRUCTURED": "prompt"}
+        directory = TwoAccounts({owner: {config.DEFAULT_KEY_ENV: RELAYED_KEY}})
+        with jobs.JobStore(work, environ=environ, directory=directory) as store:
+            job = store.submit(a_request(), owner=owner)
+            if not wait_for(lambda: job.terminal):
+                return ["the run never finished"]
+            sent = [value for headers in endpoint.headers
+                    for name, value in headers.items()
+                    if name.lower() == "authorization"]
+            if not any(RELAYED_KEY in value for value in sent):
+                return ["the endpoint was never sent the key, so its answer "
+                        "echoed nothing this run held"]
+            error = job.error or ""
+            if job.state != jobs.FAILED or "HTTP 401" not in error:
+                return [f"the run is {job.state} with {error[:200]!r}, not a "
+                        f"failure on the endpoint's 401"]
+            if "Incorrect API key provided" not in error \
+                    or "invalid_api_key" not in error:
+                problems.append(f"the endpoint's own reason was lost with the "
+                                f"key: {error[:300]!r}")
+            seen = {"the run's error": error,
+                    "the run's status": json.dumps(job.status()),
+                    "the run's events": json.dumps(
+                        [event.as_dict() for event in job.events.since(0)])}
+            for path in sorted(work.rglob("*")):
+                if path.is_file():
+                    seen[str(path.relative_to(work))] = path.read_text(
+                        encoding="utf-8", errors="replace")
+            for where, text in seen.items():
+                if RELAYED_TAIL in text:
+                    problems.append(f"{where} carries the last characters of "
+                                    f"the key the endpoint echoed")
+    return problems
+
+
+def test_an_endpoint_s_error_body_is_relayed_without_the_key_it_echoes() -> None:
+    """A vendor's 401 that names the key it refused. The reason is kept, the key is not.
+
+    The error body of a failed call is relayed to whoever ran the job. On a
+    shared server that is a member, and the key is the operator's: a 401
+    that says "your key ending in ..." handed a member its last characters.
+
+    Must fire: `transport.scrub` returning its text untouched, which is the
+    transport this was before.
+    """
+    problems = relayed_body_problems()
+    check(not problems, "relayed error body: " + "; ".join(problems))
+    with Seeded(transport, "scrub", lambda text, secret=None: text):
+        seeded = relayed_body_problems()
+    check(any("the run's error carries" in problem for problem in seeded)
+          and any("the run's events carries" in problem for problem in seeded),
+          f"must fire: a transport that relays the body as it came passed: "
+          f"{seeded}")
+
+
+def scrub_problems() -> list[str]:
+    """`transport.scrub` and the exception built on it, case by case."""
+    problems: list[str] = []
+    key, tail = RELAYED_KEY, RELAYED_TAIL
+    # The key this process holds: itself, and its end, whatever surrounds it.
+    for body in (f"invalid key {key}",
+                 f"invalid key x{key[-12:]}y",
+                 f"no such key: ...{tail}",
+                 f"refused {'x' * 12}{tail}",
+                 f"key ending in {tail}",
+                 f"{key[:6]}{'*' * 30}{tail}"):
+        error = transport.HTTPStatusError(401, body, "h", "m", secret=key)
+        for where, text in (("message", str(error)), ("body", error.body),
+                            ("repr", repr(error)),
+                            ("attributes", repr(vars(error)))):
+            if tail in text:
+                problems.append(f"the {where} for {body!r} carries the end "
+                                f"of the key that was sent")
+        if not str(error).startswith("HTTP 401 from h for model m\n"):
+            problems.append(f"the status line changed: {str(error)[:80]!r}")
+    # A key this process never held is known only by its shape. The shapes
+    # are the release scan's own, so its detectors are asked about the result.
+    import test_client
+    patterns = test_client.secret_patterns()
+    for label in ("an API key", "a literal Authorization token"):
+        for canary in test_client.SECRET_CANARIES[label][0]:
+            if patterns[label].search(canary) is None:
+                problems.append(f"a canary for {label} no longer fires, so "
+                                f"this check is over nothing")
+            left = patterns[label].search(transport.scrub(canary))
+            if left is not None:
+                problems.append(f"{label} survives the scrub: "
+                                f"{len(left.group(0))} characters")
+    for masked in ("sk-ab***********wxyz", "token \u2022\u2022\u2022\u2022wxyz",
+                   "key sk-...wxyz was revoked",
+                   "Your API key ending in 'wxyz' is disabled"):
+        if "wxyz" in transport.scrub(masked):
+            problems.append(f"a masked key is relayed: {masked!r}")
+    # And what is not a key is left exactly as the endpoint wrote it.
+    for plain in ("no model named qwen3:8b loaded (loaded: none)",
+                  '{"error":{"message":"Unrecognized argument: response_format",'
+                  '"type":"invalid_request_error"}}',
+                  "the stream ends with an error... retry in 20s",
+                  "**Bad Gateway** *** upstream timed out"):
+        error = transport.HTTPStatusError(404, plain, "h", "m", secret=key)
+        if str(error) != f"HTTP 404 from h for model m\n{plain}" \
+                or error.body != plain:
+            problems.append(f"an ordinary body was changed: {plain!r} became "
+                            f"{str(error)!r}")
+    return problems
+
+
+def test_scrub_takes_out_the_key_that_was_sent_and_anything_shaped_like_one() -> None:
+    """The two halves of `transport.scrub`, each with a seed that removes it.
+
+    Must fire, twice: with no shapes, the release scan's canaries survive;
+    and with the exact half switched off, the end of the key that was sent
+    survives wherever no shape happens to cover it.
+    """
+    problems = scrub_problems()
+    check(not problems, "scrub: " + "; ".join(problems))
+    with Seeded(transport, "_KEY_SHAPES", ()):
+        seeded = scrub_problems()
+    check(any("survives the scrub" in problem for problem in seeded)
+          and any("a masked key is relayed" in problem for problem in seeded)
+          and not any("the key that was sent" in problem for problem in seeded),
+          f"must fire: a scrub with no shapes passed, or the exact half "
+          f"depends on them: {seeded}")
+    with Seeded(transport, "MIN_KEY_TAIL", 10 ** 6):
+        seeded = scrub_problems()
+    check(any("the key that was sent" in problem for problem in seeded),
+          f"must fire: a scrub that does not know the key it sent passed: "
+          f"{seeded}")
+
+
+# --------------------------------------------------------------------------
+# the second review: what a run keeps, and what it says when it has no report
+# --------------------------------------------------------------------------
+
+# A line a model's unparseable reply quotes out of a document.
+DUMPED_LINE = "PROBE-DOCUMENT-LINE-7731-must-go-with-the-run"
+
+
+def dump_problems(seed=None) -> list[str]:
+    """Where a reply the client could not parse is kept, and whether it goes."""
+    problems: list[str] = []
+    replies = dict(CLEAN)
+    replies["merge"] = "not json, and it quotes the document: " + DUMPED_LINE
+
+    def holding(root: Path) -> list[Path]:
+        found = []
+        for path in root.rglob("*"):
+            if path.is_file() and DUMPED_LINE in path.read_text(
+                    encoding="utf-8", errors="replace"):
+                found.append(path)
+        return found
+
+    with contextlib.ExitStack() as stack:
+        scratch = Path(stack.enter_context(tempfile.TemporaryDirectory()))
+        # The client's own choice of directory is the system's temporary one;
+        # pointed here for the length of the check, so it can be looked at.
+        stack.enter_context(Seeded(tempfile, "tempdir", str(scratch)))
+        stack.enter_context(contextlib.redirect_stderr(io.StringIO()))
+        if seed is not None:
+            stack.enter_context(seed)
+        with live_store(Script(**replies)) as (store, _):
+            job = store.submit(a_request())
+            if not wait_for(lambda: job.terminal):
+                return ["the job never finished"]
+            work = store.work_dir
+            inside = [path for path in holding(work / job.id)
+                      if path.name not in (jobs.REPORT_JSON, jobs.REPORT_HTML,
+                                           jobs.EVENTS_JSONL, jobs.MERGED_MD)]
+            outside = [path for path in holding(scratch)
+                       if work not in path.parents]
+            if not inside and not outside:
+                problems.append("no reply was kept anywhere, so nothing was "
+                                "probed")
+            if outside:
+                problems.append(f"{len(outside)} reply file(s) are kept "
+                                f"outside the run's folder")
+            store.delete(job.id)
+            left = [path for path in holding(scratch)]
+            if left:
+                problems.append(f"{len(left)} file(s) holding the reply "
+                                f"outlive the run's deletion")
+            # And the same for retention, which is the other way a run goes.
+            again = store.submit(a_request())
+            wait_for(lambda: again.terminal)
+            store.retention_seconds = 0.0
+            store.sweep()
+            left = [path for path in holding(scratch)
+                    if path not in outside]
+            if left:
+                problems.append(f"{len(left)} file(s) holding the reply "
+                                f"outlive retention")
+    return problems
+
+
+def test_a_reply_the_client_keeps_is_kept_in_the_run_s_own_folder() -> None:
+    """Deleting a run deletes the raw replies it kept, and so does retention.
+
+    A reply that fails to parse is written to disk whole, and a reply is the
+    documents' content rearranged. With the cache off, which the web path
+    forces, the client put those under the system temporary directory, where
+    deletion, retention and shutdown all left them.
+
+    Must fire: a client that keeps its own choice of directory.
+    """
+    problems = dump_problems()
+    check(not problems, "kept replies: " + "; ".join(problems))
+
+    class OwnChoice(jobs.Client):
+        def __setattr__(self, name, value):
+            if name == "_scratch" and value is not None \
+                    and "llossless-run-" not in str(value):
+                return
+            super().__setattr__(name, value)
+
+    seeded = dump_problems(Seeded(jobs, "Client", OwnChoice))
+    check(any("outside the run's folder" in problem for problem in seeded)
+          and any("outlive the run's deletion" in problem for problem in seeded)
+          and any("outlive retention" in problem for problem in seeded),
+          f"must fire: a client that keeps replies where it chose passed: "
+          f"{seeded}")
+
+
+def refused_report_problems(seed=None) -> list[str]:
+    """A run whose report refuses to be written. What does the job say?"""
+    from llossless import report as report_module
+
+    problems: list[str] = []
+
+    def refusing(run):
+        raise report_module.InventoryDisagrees(
+            "source_a.md: the inventory rows count 3 and the coverage table "
+            "counts 4. One report, two answers.")
+
+    with contextlib.ExitStack() as stack:
+        stack.enter_context(Seeded(jobs, "render_html", refusing))
+        if seed is not None:
+            stack.enter_context(seed)
+        with live_store() as (store, _):
+            job = store.submit(a_request())
+            if not wait_for(lambda: job.terminal):
+                return ["the job never finished"]
+            error = job.error or ""
+            if job.state != jobs.FAILED:
+                problems.append(f"the job is {job.state!r}")
+            if job.exit_code != 2:
+                problems.append(f"the job's exit code is {job.exit_code!r}")
+            if "InventoryDisagrees" in error:
+                problems.append("the job's error is the exception's own name")
+            for wanted in ("the report was not written", "inconclusive",
+                           "a defect in LLossless and not in your documents",
+                           "One report, two answers."):
+                if wanted not in error:
+                    problems.append(f"the job's error does not say "
+                                    f"{wanted!r}: {error[:160]!r}")
+            folder = store.work_dir / job.id
+            for name in (jobs.REPORT_JSON, jobs.REPORT_HTML):
+                if (folder / name).exists():
+                    said = ""
+                    if name == jobs.REPORT_JSON:
+                        said = f" claiming exit code " \
+                               f"{json.loads((folder / name).read_text())['exit_code']}"
+                    problems.append(f"{name} was written{said}")
+            if job.report is not None:
+                problems.append("the job still serves a report")
+            if not (folder / jobs.MERGED_MD).is_file():
+                problems.append("the merged document was not kept")
+            last = job.events.since(0)[-1]
+            if last.fields.get("exit_code") != 2 or last.message != error:
+                problems.append("the closing event does not carry the "
+                                "sentence and the exit code")
+    return problems
+
+
+def test_a_report_that_counts_one_quantity_two_ways_is_an_inconclusive_run() -> None:
+    """Exit code 2 and a sentence, and no report that claims another code.
+
+    `report.InventoryDisagrees` reached the worker's catch-all: the job
+    failed under the exception's class name, after `report.json` had been
+    written with the run's own exit code. The command line calls the same
+    refusal an inconclusive run and says why (`cli.report_refused`).
+
+    Must fire: the sentence not written, so the exception goes out as it is.
+    The order, the page rendered before either file is written, is held
+    against `publish`'s own source, and the sentence against the command
+    line's.
+    """
+    import inspect
+    import re
+
+    problems = refused_report_problems()
+    check(not problems, "refused report: " + "; ".join(problems))
+
+    def as_it_is(run, exc):
+        raise exc
+
+    seeded = refused_report_problems(Seeded(jobs, "report_refused", as_it_is))
+    check(any("the exception's own name" in problem for problem in seeded),
+          f"must fire: a job that fails under the exception's name passed: "
+          f"{seeded}")
+
+    source = inspect.getsource(jobs.publish)
+    check(0 < source.index("render_html(run)") < source.index("REPORT_JSON"),
+          "publish writes report.json before the page has been rendered, so "
+          "a page that refuses leaves a report behind")
+
+    def said(module) -> str:
+        """The module's string literals, joined the way Python joins them."""
+        return re.sub(r'"\s*\n\s*f?"', "", inspect.getsource(module))
+
+    sentence = ("Its Inventory and its Coverage table counted the same claims "
+                "differently, and LLossless refuses to print two different "
+                "counts for one quantity, so this run is inconclusive. That is "
+                "a defect in LLossless and not in your documents: please "
+                "report it, with this detail.")
+    check(sentence in said(jobs) and sentence in said(cli),
+          "the web job and the command line no longer give the same sentence "
+          "for a report that refuses")
+
+
+def head_problems() -> list[str]:
+    """The start of the key that was sent, echoed with no mask beside it."""
+    problems: list[str] = []
+    key, tail = RELAYED_KEY, RELAYED_TAIL
+    half = len(key) // 2
+    for body in (f"Invalid API key '{key[:12]}...' supplied.",
+                 f"No such key: {key[:16]}",
+                 f"bad key {key[:8]}########{tail}",
+                 f"bad key {key[:8]}..{tail}",
+                 f"bad key {key[:half]} {key[half:]}",
+                 f"bad key {key[:-3]}"):
+        error = transport.HTTPStatusError(401, body, "h", "m", secret=key)
+        for where, text in (("message", str(error)), ("body", error.body)):
+            if key[:8] in text:
+                problems.append(f"the {where} for {body!r} carries the start "
+                                f"of the key that was sent")
+    # A streamed event that does not parse is quoted in the error.
+    line = f"data: {{not json, no such key: {key[:16]}\n".encode("utf-8")
+    try:
+        transport._events([line], key)
+        problems.append("an event that is not JSON was accepted")
+    except transport.StreamTruncated as refusal:
+        if key[:8] in str(refusal):
+            problems.append("a streamed event's error carries the start of "
+                            "the key that was sent")
+        if "no such key" not in str(refusal):
+            problems.append("a streamed event's error lost what the endpoint "
+                            "said")
+    # What is not a piece of the key stays as written, a vendor's public
+    # prefix included.
+    for plain in ("API keys start with sk- and are 51 characters long",
+                  f"no key begins {key[:5]}"):
+        if transport.scrub(plain, key) != plain:
+            problems.append(f"an ordinary body was changed: {plain!r}")
+    return problems
+
+
+def test_scrub_takes_out_the_start_of_the_key_that_was_sent() -> None:
+    """A head of the key with no mask beside it, in a body and in a stream.
+
+    The first 12 to 16 characters of the sent key passed: no shape matches a
+    piece of a key with nothing masked next to it, and only the key's end was
+    known to the exact half. The streamed-event error was scrubbed without
+    the key at all.
+
+    Must fire: a scrub that knows no head. And the stream parser is handed
+    the key by the one caller that has it, held against that caller's source.
+    """
+    import inspect
+
+    problems = head_problems()
+    check(not problems, "key heads: " + "; ".join(problems))
+    check(5 < transport.MIN_KEY_HEAD <= 8,
+          f"the shortest head of a key that is taken out is "
+          f"{transport.MIN_KEY_HEAD} characters, and the bodies above echo 8")
+    with Seeded(transport, "MIN_KEY_HEAD", 10 ** 6):
+        seeded = head_problems()
+    check(any("the message for" in problem and "the start of the key" in problem
+              for problem in seeded)
+          and any("a streamed event's error carries" in problem
+                  for problem in seeded),
+          f"must fire: a scrub that knows no head of the key passed: {seeded}")
+    check("_events(chain([head], response), api_key)"
+          in inspect.getsource(transport.post_json),
+          "post_json no longer hands the stream parser the key it sent")
 
 
 def corrupt_verdict(damage, seed: bool = False) -> list[str]:

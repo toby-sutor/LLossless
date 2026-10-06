@@ -132,6 +132,17 @@ SECURITY_HEADERS = (
 # work than hanging up. See `Handler._oversize`.
 DRAIN_CHUNK = 64 * 1024
 DRAIN_LIMIT = 64 * 1024 * 1024
+# How long a read of a refused body waits for a sender this server does not
+# know. Short: the answer has been written by then, and the reading is a
+# courtesy to a client that is still sending.
+DRAIN_SECONDS = 5.0
+
+# How long one read or write on a connection may wait. There was no limit, so
+# a connection that declared a body and never sent it, or opened and said
+# nothing, held a thread until its own end closed it. It is a wait on the
+# socket and not a limit on a request: a merge runs on a worker, and a stream
+# writes a frame every `KEEPALIVE_SECONDS`.
+SOCKET_TIMEOUT = 60.0
 
 # How long a quiet stream waits before sending a comment frame. Short enough
 # that an intermediary with a thirty-second idle timeout never fires, long
@@ -152,6 +163,8 @@ class Handler(BaseHTTPRequestHandler):
     # about the tool, and a version number is the first thing anybody matches
     # an advisory against.
     sys_version = ""
+    # `StreamRequestHandler` sets this on the connection. See `SOCKET_TIMEOUT`.
+    timeout = SOCKET_TIMEOUT
 
     # -- methods ---------------------------------------------------------
 
@@ -202,9 +215,36 @@ class Handler(BaseHTTPRequestHandler):
         if self._is_event_stream(path):
             self.send_error(405, "a stream is not fetchable with HEAD")
             return
-        response = (self.server.api.handle("GET", path, headers=self.headers)
-                    if path.startswith(api.API_PREFIX) else self._static_response(path))
+        if path.startswith(api.API_PREFIX):
+            response = self.server.api.handle("GET", path, headers=self.headers)
+        else:
+            # Behind the same guard `_static` puts in front of a GET. Without
+            # it a HEAD for the page was answered under any `Host`.
+            try:
+                self.server.api.check_transport(self.headers)
+                response = self._static_response(path)
+            except api.ApiError as refusal:
+                response = refusal.response(extra=self.server.api.extra_roots)
         self._respond(response, body=False)
+
+    def send_error(self, code, message=None, explain=None) -> None:
+        """The base class's own error page, with this server's headers on it.
+
+        What answers a method this class has no `do_` for, and a request line
+        that does not parse. It is written by the base class and so carried
+        none of `SECURITY_HEADERS`; `end_headers` adds them while this runs.
+        """
+        self._bare_error = True
+        try:
+            super().send_error(code, message, explain)
+        finally:
+            self._bare_error = False
+
+    def end_headers(self) -> None:
+        if getattr(self, "_bare_error", False):
+            for name, value in SECURITY_HEADERS:
+                self.send_header(name, value)
+        super().end_headers()
 
     # -- reading ---------------------------------------------------------
 
@@ -233,38 +273,56 @@ class Handler(BaseHTTPRequestHandler):
             self._refuse(400, "bad_length", "Content-Length may not be negative.")
             return None
         try:
-            api.check_body_size(length)
+            # Who is asking, and then how much they may send, both before a
+            # byte of the body is read: see `Api.admit`.
+            self.server.api.admit(urlsplit(self.path).path, self.headers, length)
         except api.ApiError as refusal:
             self._oversize(length, refusal)
             return None
         return self.rfile.read(length)
 
     def _oversize(self, length: int, refusal: api.ApiError) -> None:
-        """Answer 413 without ever holding the body, and without a reset.
+        """Refuse a body without ever holding it, and without a reset.
 
-        The refusal happens on the declared length, so nothing oversized is
-        read into memory -- that is the whole point of checking `Content-Length`
-        first. But a server that answers and then hangs up while the client is
-        still writing gives that client a connection reset, and a reset is
+        The refusal is made on the headers, so nothing refused is read into
+        memory: that is the whole point of deciding first. But a server
+        that answers and then hangs up while the client is still writing
+        gives that client a connection reset, and a reset is
         indistinguishable from a crash: the operator sees "the server died on
         my upload" rather than "the server told you it was too big". So the
-        body is *drained* in fixed-size chunks and discarded -- bounded memory,
-        which is what was being protected, rather than bounded bytes, which was
-        never the risk on a loopback socket.
+        body is *drained* in fixed-size chunks and discarded. That bounds
+        memory, which is what was being protected, rather than bytes, which
+        were never the risk on a loopback socket.
 
-        Past `DRAIN_LIMIT` even draining is refused, and the client does get a
-        reset. Reading a gigabyte in order to be polite about refusing it is
-        the denial of service arriving by a different door.
+        **The answer is written first, and the body drained after it.** In
+        the other order the answer waited for the whole of a body that had
+        just been refused, which for a sender nobody knows is the server
+        doing the waiting the refusal was meant to save.
+
+        How much is drained depends on who sent it. From somebody this
+        server knows, up to `DRAIN_LIMIT`; past that even draining is
+        refused, and the client does get a reset. Reading a gigabyte in order
+        to be polite about refusing it is the denial of service arriving by a
+        different door. From anybody else, no more than a body may be, and
+        with a short wait: `DRAIN_SECONDS`.
         """
-        if length <= DRAIN_LIMIT:
+        known = self.server.api.knows(self.headers)
+        self.close_connection = True
+        self._respond(refusal.response(extra=self.server.api.extra_roots))
+        if length > (DRAIN_LIMIT if known else api.MAX_BODY_BYTES):
+            return
+        try:
+            if not known:
+                self.connection.settimeout(DRAIN_SECONDS)
             remaining = length
             while remaining > 0:
                 chunk = self.rfile.read(min(DRAIN_CHUNK, remaining))
                 if not chunk:
                     break
                 remaining -= len(chunk)
-        self.close_connection = True
-        self._respond(refusal.response(extra=self.server.api.extra_roots))
+        except OSError:
+            # The sender stopped, or went away. Either way it has its answer.
+            return
 
     # -- writing ---------------------------------------------------------
 
@@ -350,7 +408,9 @@ class Handler(BaseHTTPRequestHandler):
             for chunk in stream.chunks:
                 self.wfile.write(chunk.encode("utf-8"))
                 self.wfile.flush()
-        except (ConnectionError, BrokenPipeError):
+        except (ConnectionError, BrokenPipeError, TimeoutError):
+            # `TimeoutError`: a reader that stopped reading for
+            # `SOCKET_TIMEOUT`. The same end as one that went away.
             return
 
     # -- static ----------------------------------------------------------
@@ -424,6 +484,18 @@ class Handler(BaseHTTPRequestHandler):
         return api.Response(200, payload, content_type=content_type)
 
     # -- noise -----------------------------------------------------------
+
+    def log_error(self, fmt: str, *args) -> None:
+        """The base class's own complaints, less the one that is not one.
+
+        A browser keeps a connection open after its last request, and
+        `SOCKET_TIMEOUT` later the base class reports that as a request that
+        timed out. It is an idle connection being closed, once per connection
+        per page, and a line for each would bury the ones worth reading.
+        """
+        if fmt.startswith("Request timed out"):
+            return
+        super().log_error(fmt, *args)
 
     def log_message(self, fmt: str, *args) -> None:
         """One line per request on the server's own stream, or none.
@@ -797,6 +869,20 @@ def serve(*, host: str = HOST, port: int = DEFAULT_PORT, work_dir=None,
         print(f"", file=out)
         print(f"    {setup.url(server.url)}", file=out)
         print(f"", file=out)
+        if not is_loopback(host):
+            # A bind to every interface prints an address that another
+            # machine cannot open as it stands. True of a named address too.
+            print(f"  From another machine, open it with this machine's name "
+                  f"or", file=out)
+            print(f"  address as the host.", file=out)
+        if server.api.token:
+            # The page cannot read the environment, so it asks: said here so
+            # the operator has the value to hand when the form appears.
+            print(f"  The page asks for the access token first: the value of",
+                  file=out)
+            print(f"  {TOKEN_ENV}. It sends it in {TOKEN_HEADER} until "
+                  f"the", file=out)
+            print(f"  account is made.", file=out)
         print(f"  The address is new on every start and stops working the "
               f"moment", file=out)
         print(f"  an account exists. Whatever is in {keys.path}", file=out)

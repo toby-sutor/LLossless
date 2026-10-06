@@ -100,18 +100,20 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import math
 import os
 import re
 import sys
 import traceback
 import zipfile
 from dataclasses import dataclass, field
+from pathlib import Path
 from urllib.parse import urlsplit
 
 from .. import __version__, config, html_report, merge, prompts
 from . import accounts as user_accounts
 from . import catalogue, commands, credentials, defaults, discover, i18n, redact
-from .events import frames, parse_last_event_id
+from .events import Event, frames, parse_last_event_id
 from .jobs import (MERGED_MD, REPORT_HTML, REPORT_JSON, REQUEST_SETTABLE,
                    STATED_WINDOW_MAX, STATED_WINDOW_MIN, stated_window_refusal,
                    window_unreportable,
@@ -141,6 +143,12 @@ JOB_ID = re.compile(r"\A[0-9a-f]{32}\Z")
 # than "unlimited, the OS will cope": the OS coping means swapping, and the
 # worker that is mid-merge is the process that gets slow.
 MAX_BODY_BYTES = 4 * 1024 * 1024
+
+# The most a body may hold on a route that answers before anybody has signed
+# in. A sign-in and the first account are a name, a password and a code; four
+# megabytes of either is nobody's password, and those two routes are the ones
+# anybody who can reach the port can post to.
+MAX_OPEN_BODY_BYTES = 64 * 1024
 
 # What a document label may be. Long enough for a real filename, short enough
 # that a megabyte of text submitted as a *name* is refused as one, and no
@@ -408,9 +416,9 @@ def check_host(headers) -> None:
         raise ApiError(
             403, "host_not_loopback",
             f"this server answers only for a loopback Host; the request named "
-            f"{host!r}. It binds 127.0.0.1 and has no setting that binds "
-            f"anything else, so a request arriving under another name reached "
-            f"it through something that should not be in front of it.")
+            f"{host!r}. It is bound to a loopback address, so a request under "
+            f"another name reached it through something in front of it. To be "
+            f"reached under another name it has to be started with --host.")
 
 
 def presented_token(headers) -> str:
@@ -445,8 +453,59 @@ def check_token(headers, expected: str) -> None:
             f"{credentials.TOKEN_ENV} was set to when the server started.")
 
 
+DEFAULT_PORTS = {"http": 80, "https": 443}
+
+
+def forwarded_https(headers) -> bool:
+    """Did this request reach the front of the deployment over TLS?
+
+    The one thing this server takes a proxy's word for: see `FORWARDED_PROTO`.
+    The first value, because a chain of proxies appends and the first is the
+    one the browser spoke to.
+    """
+    return header(headers, FORWARDED_PROTO).lower().split(",")[0].strip() == "https"
+
+
+def _origin(scheme: str, authority: str):
+    """(scheme, host, port) of an origin, the port defaulted from the scheme.
+
+    `None` for anything that is not one: no host, a port that is not a
+    number, a scheme this server is never reached by.
+    """
+    scheme = scheme.lower()
+    if scheme not in DEFAULT_PORTS:
+        return None
+    try:
+        parts = urlsplit(f"//{authority}")
+        port = parts.port
+    except ValueError:
+        return None
+    if not parts.hostname or parts.username is not None:
+        return None
+    return scheme, parts.hostname.lower(), port or DEFAULT_PORTS[scheme]
+
+
 def check_origin(headers) -> None:
-    """On a mutating request, `Origin` must agree with `Host`. Raises if not.
+    """On a mutating request, `Origin` must be this server's own. Raises if not.
+
+    **Scheme, host and port, all three.** This compared the host alone, so a
+    page served from another port of the same machine passed, and so did one
+    from the same name over the other scheme. Those are other origins: a
+    second service on the machine, or anything a member can start on it. And
+    `SameSite=Strict` does not stand in for the comparison there, because a
+    site is a name without its port, so the session cookie travels with a
+    form posted from one port to another.
+
+    This server's own origin is the `Host` the request named, under the
+    scheme it arrived by. That scheme is `http` unless a proxy in front says
+    it terminated TLS (`X-Forwarded-Proto: https`), which is the same word
+    the `Secure` flag on the session cookie is decided by. A proxy that
+    terminates TLS and does not say so is refused here on every request
+    that changes something; the message says what to send.
+
+    `Origin: null` is refused. A browser sends it for a sandboxed frame, a
+    `data:` page and a redirect across origins, none of which is this
+    server's page.
 
     A missing `Origin` is allowed, and that is a considered position rather than
     an oversight. Browsers send it on every cross-origin request and on every
@@ -461,16 +520,21 @@ def check_origin(headers) -> None:
     here with an `Origin` that this check then refuses.
     """
     origin = header(headers, "Origin")
-    if not origin or origin.lower() == "null":
+    if not origin:
         return
-    wanted = hostname(header(headers, "Host"))
-    got = hostname(urlsplit(origin).netloc)
-    if got != wanted:
+    host = header(headers, "Host")
+    scheme = "https" if forwarded_https(headers) else "http"
+    wanted = _origin(scheme, host)
+    parts = urlsplit(origin)
+    got = _origin(parts.scheme, parts.netloc)
+    if got is None or wanted is None or got != wanted:
         raise ApiError(
             403, "cross_origin",
             f"a request that changes something must come from this server's own "
-            f"origin; it named {origin!r} against a Host of "
-            f"{header(headers, 'Host')!r}.")
+            f"origin, which is {scheme}://{host}; it named {origin!r}. The "
+            f"scheme, the host and the port all have to agree. Behind a proxy "
+            f"that terminates TLS, the proxy has to pass the Host header "
+            f"through and send {FORWARDED_PROTO}: https.")
 
 
 def check_content_type(headers) -> None:
@@ -485,13 +549,14 @@ def check_content_type(headers) -> None:
     if declared != "application/json":
         raise ApiError(
             415, "not_json",
-            f"a run is submitted as application/json; this request declared "
+            f"a request that changes something declares Content-Type: "
+            f"application/json, with or without a body; this request declared "
             f"{declared or 'nothing'}. The type is part of the defence rather "
             f"than a formality: a cross-origin form cannot send JSON without a "
             f"preflight, and the preflight is refused.")
 
 
-def check_body_size(length: int) -> None:
+def check_body_size(length: int, limit: int = MAX_BODY_BYTES) -> None:
     """Refuse an oversized body by its declared length, before it is read.
 
     Called by the server with `Content-Length` in hand, which is the only point
@@ -499,12 +564,13 @@ def check_body_size(length: int) -> None:
     in `parse_submit`, because a chunked request carries no length to check and
     a client is free to send fewer bytes than it declared or more.
     """
-    if length > MAX_BODY_BYTES:
+    if length > limit:
         raise ApiError(
             413, "body_too_large",
             f"the request body is {length} bytes and the limit is "
-            f"{MAX_BODY_BYTES}. A merge holds its documents in memory on a "
-            f"server whose default worker count is one.")
+            f"{limit}." + (" A merge holds its documents in memory on a "
+                           "server whose default worker count is one."
+                           if limit == MAX_BODY_BYTES else ""))
 
 
 def check_job_id(job_id: str) -> str:
@@ -578,6 +644,16 @@ def _redacted_report_json(raw: str, *, extra=()) -> str:
     return json.dumps(redact.report(payload, extra=extra), indent=2) + "\n"
 
 
+def _not_a_number(name: str):
+    """`NaN`, `Infinity` and `-Infinity` are not JSON, and are refused as not JSON.
+
+    Python's parser reads all three unless told otherwise. A `loss_budget` of
+    `NaN` was accepted and queued: every comparison against it is false, so it
+    is a budget nothing is ever over.
+    """
+    raise ValueError(f"{name} is not a JSON number")
+
+
 def _json_object(raw: bytes) -> dict:
     """A request body as a JSON object, or a 400 a person can act on.
 
@@ -595,7 +671,7 @@ def _json_object(raw: bytes) -> dict:
     if len(raw) > MAX_BODY_BYTES:
         check_body_size(len(raw))
     try:
-        payload = json.loads(raw.decode("utf-8"))
+        payload = json.loads(raw.decode("utf-8"), parse_constant=_not_a_number)
     except (UnicodeDecodeError, ValueError) as exc:
         raise ApiError(400, "bad_json", f"the request body is not JSON: {exc}") from None
     if not isinstance(payload, dict):
@@ -743,6 +819,16 @@ def _overrides(payload: dict) -> dict[str, str]:
                 raise ApiError(400, "bad_loss_budget",
                                f"loss_budget is a fraction of the source "
                                f"segments; got a {type(value).__name__}.")
+            # A number too large for a float parses as infinity, and an
+            # integer too large for one does not convert at all.
+            try:
+                finite = math.isfinite(float(value))
+            except OverflowError:
+                finite = False
+            if not finite:
+                raise ApiError(400, "bad_loss_budget",
+                               "loss_budget is a fraction of the source "
+                               "segments, so a finite number.")
             overrides[variable] = repr(float(value))
             continue
         if name == "window":
@@ -972,7 +1058,7 @@ class Api:
 
     `environ` defaults to the store's own copy rather than to `os.environ`, so
     that `/health` answers for what a submitted job would see. The store copies
-    the environment once at construction (`web/jobs.py:859`) precisely so an
+    the environment once at construction (`web/jobs.py:1876`) precisely so an
     unrelated part of the process cannot change what a queued job resolves to;
     a health endpoint reading the live environment would report a configuration
     no run on this server will ever use.
@@ -1060,27 +1146,45 @@ class Api:
         turned into a 500 with no detail -- the detail goes to the operator's
         stderr, where the operator is, and not to whoever posted the request.
         """
+        who = None
         try:
             who = self.check_access(headers, self._segments(path))
             if method in ("POST", "DELETE", "PUT", "PATCH"):
                 check_origin(headers)
+                # On every one of them, not only the ones that read a body.
+                # Retry and cancel take none, so they asked for no type, and
+                # a form on another page can post without one: a form sent
+                # with the session cookie started a new run. The page sends
+                # the type on everything it sends (`sendJson` in `app.js`).
+                check_content_type(headers)
             return self._route(method, path, body=body, headers=headers, who=who)
         except user_accounts.AccountError as refusal:
             # The same shape as the credentials case below and for the same
             # reason: the message names a rule, a file or a shape and never a
             # password, and the person who can act on it is the one asking.
             return ApiError(400, "bad_account",
-                            str(refusal)).response(extra=self.extra_roots)
+                            str(refusal)).response(extra=self.roots_for(who))
         except credentials.CredentialsError as refusal:
             # The credentials file is unusable and the operator is the only
             # person who can act on it, so the reason travels -- these messages
             # are built under the rule that they name a path, a mode or a shape
             # and never a value. 409 rather than 500: nothing here is broken,
             # the state on disk is wrong, and a client retrying would loop.
+            #
+            # To the operator. A member cannot act on a file's mode and is
+            # not shown where this server keeps its files, so a member gets
+            # the fact and the operator's stream gets the reason.
+            if self._member(who):
+                print(f"llossless serve: {refusal}", file=sys.stderr, flush=True)
+                return ApiError(
+                    409, "bad_credentials",
+                    "the endpoints and keys stored on this server could not "
+                    "be read, so this was not done. The reason is on the "
+                    "server's own error stream; ask whoever runs it.").response()
             return ApiError(409, "bad_credentials",
                             str(refusal)).response(extra=self.extra_roots)
         except ApiError as refusal:
-            return refusal.response(extra=self.extra_roots)
+            return refusal.response(extra=self.roots_for(who))
         except Exception:  # noqa: BLE001 - see the docstring
             # The traceback goes to the operator's stream, where the operator
             # is. It does not go into the response: a traceback names modules,
@@ -1092,6 +1196,70 @@ class Api:
                 "the server failed while answering this request. What went "
                 "wrong is on the server's own error stream; nothing about it "
                 "is reported here on purpose.").response()
+
+    def admit(self, path: str, headers, length: int) -> None:
+        """May this request's body be read at all? Raises `ApiError` if not.
+
+        Asked by the server with the declared length in hand and before it
+        reads a byte. A body was read in full, up to the four megabytes a
+        submit may carry, and only then was its sender asked who they were:
+        anybody who could reach the port could have the server hold that
+        much per connection. So the identity comes first, and the routes
+        that answer without one take a body no larger than a sign-in is.
+
+        `handle` asks who is there again when it is handed the request. That
+        is one more lookup, and it keeps this from being the only gate.
+        """
+        parts = self._segments(path)
+        self.check_access(headers, parts)
+        check_body_size(length, MAX_OPEN_BODY_BYTES
+                        if self.tenanted and self._is_open(parts)
+                        else MAX_BODY_BYTES)
+
+    def knows(self, headers) -> bool:
+        """Is this request from somebody this server would answer? Never raises.
+
+        A signed-in account, or anybody at all on a server that has no
+        accounts and asks for no token. For the server's decision about how
+        much of a refused body it will read out of politeness.
+        """
+        try:
+            return self.check_access(headers, None) is not None or not self.tenanted
+        except ApiError:
+            return False
+
+    @staticmethod
+    def _member(who) -> bool:
+        """Is this an account that is not an operator's?"""
+        return who is not None and not getattr(who, "operator", False)
+
+    def roots_for(self, who) -> tuple:
+        """The directories to take out of what this caller is sent.
+
+        `extra_roots` for the operator and for a server with no accounts:
+        where the work is kept. A member is also not told where this server
+        keeps its configuration: the directories of the credentials file,
+        the accounts file and the commands file. Those messages are written
+        for the operator and name the file by its path, and `redact` on its
+        own knows the home directory and not what is below it.
+
+        For what this server says in its own words: a refusal, a run's
+        `error`, the progress stream, a route's reason. A report is served
+        under `extra_roots` to everybody, as it always was: it quotes the
+        documents, and its bytes do not depend on who reads it.
+        """
+        if not self._member(who):
+            return self.extra_roots
+        # Not the null device, which is the path of a store with no file
+        # (`commands.NoCommands`): its directory is no secret, and taking it
+        # out would take four characters out of ordinary text.
+        places = [getattr(self.keys, "path", None),
+                  getattr(self.accounts, "path", None),
+                  getattr(self.routes, "path", None)]
+        folders = [str(Path(place).parent) for place in places
+                   if place and str(place) != os.devnull]
+        root = getattr(self.directory, "root", None)
+        return (*self.extra_roots, *folders, *([str(root)] if root else []))
 
     # -- who is asking ---------------------------------------------------
 
@@ -1278,7 +1446,7 @@ class Api:
         The only thing here that takes a proxy header's word for anything, and
         it is safe in exactly one direction: see `FORWARDED_PROTO`.
         """
-        return header(headers, FORWARDED_PROTO).lower().split(",")[0].strip() == "https"
+        return forwarded_https(headers)
 
     def _operator(self, who):
         """`who`, if they may change what everybody shares. 403 if not.
@@ -1499,6 +1667,13 @@ class Api:
                 "address that creates the first one.")
         name = payload.get("username")
         name = name.strip().lower() if isinstance(name, str) else ""
+        if len(name) > user_accounts.USERNAME_MAX:
+            # No account's name, so it is not kept: the throttle is keyed on
+            # the submitted name and would hold a megabyte of one for five
+            # minutes for anybody who posted it. Counted and answered as the
+            # one name that is nobody's, the empty one, which takes the same
+            # time and gets the same refusal as any wrong sign-in.
+            name = ""
         record = None
         if not self.throttle.locked(name):
             record = self.accounts.verify(name, payload.get("password"))
@@ -1582,8 +1757,15 @@ class Api:
             raise ApiError(403, "bad_setup_token",
                            "that is not the setup address this server printed "
                            "when it started. It is a new one on every start.")
-        record = self.accounts.create(payload.get("username"),
-                                      payload.get("password"), operator=True)
+        try:
+            # `first`: only into an empty store, decided under the store's
+            # own lock. The count above is the quick refusal; two requests
+            # that both passed it used to make two operators.
+            record = self.accounts.create(
+                payload.get("username"), payload.get("password"),
+                operator=True, first=True)
+        except user_accounts.AlreadySetUp as refusal:
+            raise ApiError(409, "already_set_up", str(refusal)) from None
         session_id = self.sessions.new(record.id)
         shared = getattr(self.keys, "path", None)
         return Response(200, dump({
@@ -1686,6 +1868,13 @@ class Api:
         record = self.accounts.remove(name)
         if record is not None:
             self.sessions.revoke_account(record.id)
+            # And their runs, queued and running. Left alone they all ran
+            # to the end after the removal, as a member with nothing of
+            # their own, which is on the operator's key, where the operator
+            # could neither see nor cancel them. After the sessions, so no
+            # new run arrives behind this; one that does is refused when it
+            # starts (`accounts.Directory.for_run`).
+            self.store.cancel_owned(record.id)
             self.directory.forget(record)
         return Response(204, b"", content_type=JSON_TYPE)
 
@@ -1716,10 +1905,19 @@ class Api:
         mine = who is not None and who.username == wanted
         if not mine:
             self._operator(who)
-        elif self.accounts.verify(wanted, payload.get("current")) is None:
-            raise ApiError(403, "bad_current_password",
-                           "the current password does not match. A password "
-                           "is changed by somebody who can already give it.")
+        else:
+            # Under the sign-in throttle, by the same name. A session is not
+            # the password: somebody at an unattended browser could otherwise
+            # try the current one as fast as the hash allows. A throttled
+            # name is refused in the words a wrong password is.
+            known = (None if self.throttle.locked(wanted)
+                     else self.accounts.verify(wanted, payload.get("current")))
+            if known is None:
+                self.throttle.failed(wanted)
+                raise ApiError(403, "bad_current_password",
+                               "the current password does not match. A password "
+                               "is changed by somebody who can already give it.")
+            self.throttle.succeeded(wanted)
         if self.accounts.get(wanted) is None:
             raise ApiError(404, "no_account",
                            f"there is no account called {wanted}.")
@@ -1936,7 +2134,8 @@ class Api:
                 # the same scrub, so the two cannot drift.
                 "problems": [
                     {**bad.described(),
-                     "reason": redact.text(bad.reason, extra=self.extra_roots)}
+                     "reason": redact.text(bad.reason,
+                                           extra=self.roots_for(who))}
                     for bad in self._route_problems()],
                 # Which rows `Commands.migrate` retired at startup. A route the
                 # operator had switched on is gone from the picker, and a
@@ -2175,7 +2374,9 @@ class Api:
         auditor will check first, so it is worth saying what it does return
         instead. `configured` is a boolean. `suffix` is the last four
         characters and is absent entirely when nothing is configured, so a
-        client has nothing to render when there is nothing to say.
+        client has nothing to render when there is nothing to say. It is
+        also absent from a shared row when a member asks: the four characters
+        go to the account that owns the key (`accounts.Directory.rows_for`).
 
         The *variable* is reported, and that is not an oversight for the same
         reason it is not one on `/health`: `config.py`'s own docstring says a
@@ -2266,14 +2467,19 @@ class Api:
         provider = self._provider(name)
         store = self._store_for(who)
         try:
-            # Under this account's own key source, not the process's.
-            # `clean_base_url` runs `config.check_cleartext_key`, whose whole
-            # question is whether *the key that would actually be sent* goes on
-            # the wire unencrypted -- and a user's key is in their file and
-            # never in `os.environ`, so a check that read the environment would
-            # answer about the operator's credential or about nothing at all.
-            with self._as(who):
+            # Under the keys that could be sent to this address, not the
+            # process's. `clean_base_url` runs `config.check_cleartext_key`,
+            # whose whole question is whether *the key that would actually be
+            # sent* goes on the wire unencrypted. For a member that is a key
+            # of their own and never the operator's: the operator's key is
+            # not sent to an address a member stored, so it must not decide
+            # whether the member may store one.
+            with self._as_owner(who):
                 stored = store.set_endpoint(provider, payload["base_url"])
+        except credentials.CleartextKey as refusal:
+            raise ApiError(400, "bad_endpoint",
+                           self._cleartext_refusal(who, provider, refusal)
+                           ) from None
         except credentials.CredentialsError as refusal:
             raise ApiError(400, "bad_endpoint", str(refusal)) from None
         found, note = discover.models(
@@ -2439,6 +2645,36 @@ class Api:
             return contextlib.nullcontext()
         return config.keys_for_this_run(source)
 
+    def _as_owner(self, who):
+        """Run a block with only the keys this account stored itself.
+
+        The key source for a question about an address the account is
+        storing. For the operator and for a server with no accounts that is
+        the process environment, as in `_as`. For a member it is the member's
+        own keys and nothing of the operator's, which is where it differs
+        from `_as`: a run on a shared endpoint spends the operator's key, and
+        an address a member typed never receives it.
+        """
+        if who is None or who.operator or self.directory is None:
+            return contextlib.nullcontext()
+        return config.keys_for_this_run(self.directory.own_keys(who.id))
+
+    @staticmethod
+    def _cleartext_refusal(who, provider: str, refusal) -> str:
+        """The cleartext refusal, in words its reader can act on.
+
+        `config` words it for an operator: it names the variable and says to
+        unset it. A member has no variable to unset. Theirs is the key they
+        saved on the credentials sheet, so that is what the message names.
+        """
+        if who is None or who.operator:
+            return str(refusal)
+        return (f"refusing to store that address: it is http:// to a machine "
+                f"other than this one, and you have a {provider} key saved, "
+                f"which would be sent in cleartext on every call. Use the "
+                f"endpoint's https:// address, or delete your {provider} key "
+                f"on the credentials sheet and save the address again.")
+
     def _reload_keys(self, who=None) -> None:
         """Put the file back into the environment, both copies of it.
 
@@ -2475,7 +2711,7 @@ class Api:
         status poll: it carries a state, three timestamps, an integer and a
         count, and nothing quoted out of anybody's document.
         """
-        return {"runs": [self._with_expiry(job) for job in self.store.jobs()
+        return {"runs": [self._with_expiry(job, who) for job in self.store.jobs()
                          if self._owns(job, who)]}
 
     @staticmethod
@@ -2528,7 +2764,7 @@ class Api:
         for the one field that can change between the two.
         """
         job = self.job(job_id, who)
-        payload = self._with_expiry(job)
+        payload = self._with_expiry(job, who)
         cli_equivalent = job.cli_equivalent
         if job.report is not None:
             redacted = redact.report(job.report, extra=self.extra_roots)
@@ -2539,7 +2775,7 @@ class Api:
             payload["cli_equivalent"] = cli_equivalent
         return payload
 
-    def _with_expiry(self, job) -> dict:
+    def _with_expiry(self, job, who=None) -> dict:
         """`job.status()`, plus how many seconds are left before it is forgotten.
 
         **Seconds remaining and not an expiry timestamp**, and the difference
@@ -2557,6 +2793,12 @@ class Api:
         of the last two.
         """
         payload = job.status()
+        if payload.get("error"):
+            # A failed write names the file it could not write, and that is
+            # a path in this server's work directory. Taken out as it is
+            # taken out of a report, for whoever is asking.
+            payload["error"] = redact.text(payload["error"],
+                                           extra=self.roots_for(who))
         payload["expires_in"] = self.store.forgets_in(job)
         # Where a queued run stands: "position 2 of 3". The queue is
         # every account's, since the workers are, so this is a count of other
@@ -2652,7 +2894,7 @@ class Api:
                            f"run {job_id} has already finished ({job.state}), "
                            f"so there is nothing to cancel.")
         self.store.cancel(job.id)
-        return Response(202, dump(self._with_expiry(job)))
+        return Response(202, dump(self._with_expiry(job, who)))
 
     def retry(self, job_id: str, who=None) -> Response:
         """Start a new run from a failed or interrupted one's documents.
@@ -2689,7 +2931,7 @@ class Api:
         except JobRefused as exc:
             raise ApiError(400, "refused", str(exc)) from None
         return Response(
-            202, dump(self._with_expiry(new)),
+            202, dump(self._with_expiry(new, who)),
             headers=(("Location", f"{API_PREFIX}/runs/{new.id}"),),
         )
 
@@ -2855,9 +3097,9 @@ class Api:
         by the time they read it: they clicked a link and their report was
         gone. What they need next is whether it can be stopped from happening
         again, and on a self-hosted tool the person reading this is frequently
-        the person who could have set the window. It is not a disclosure -- the
-        flag is in `--help` and in the README -- and the window itself is on
-        the page before anything is uploaded.
+        the person who could have set the window. It is not a disclosure: the
+        flag is in `--help` and in the README, and the page states the window
+        under a finished run's download buttons.
         """
         if job.forgotten:
             raise ApiError(410, "forgotten",
@@ -2902,6 +3144,16 @@ class Api:
         job = self.job(job_id, who)
         after = (parse_last_event_id(last_event_id)
                  if not isinstance(last_event_id, int) else max(0, last_event_id))
+        # What a step said when it failed can quote a path under this
+        # server's directories, as a report can. The log keeps what was said;
+        # what is sent has the directories taken out, event by event, before
+        # it is serialised.
+        known = redact.roots(self.roots_for(who))
+
+        def sent(event):
+            return Event(event.id, event.kind, redact.scrub(event.message, known),
+                         at=event.at, seconds=event.seconds, level=event.level,
+                         fields=redact.walk(event.fields, known))
 
         def produce():
             cursor = after
@@ -2909,7 +3161,8 @@ class Api:
             while True:
                 events = job.events.since(cursor)
                 if events:
-                    yield frames(events, retry_ms=retry_ms if first else None)
+                    yield frames([sent(event) for event in events],
+                                 retry_ms=retry_ms if first else None)
                     cursor = events[-1].id
                     first = False
                     continue
