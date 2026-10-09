@@ -8,7 +8,7 @@ vLLM endpoint. The run is published at `arms/2026-09-16/phase4/`, and this
 program is those rows' `derived_by`. Before it the
 rows said they were derived by hand. Nothing here calls a model.
 
-The pairs are the operator's hand-written documents, tracked under
+The pairs are documents from `tests/handwritten/`, tracked under
 the names they have now: `toby-test-2` is `tests/handwritten/chickens/`,
 `-4` is `christianity/`, `-5` is `curry/` (`tests/rank_arms.py`'s `PAIRS`;
 each `meta.json` names the original files, which are byte-identical).

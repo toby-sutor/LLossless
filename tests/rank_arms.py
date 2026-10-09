@@ -53,14 +53,14 @@ def sets(docs, text):
     return ab, kp, len(r.duplicates), r.order.runs
 
 def band(name):
-    """(sources, reference-absent ids, reference-kept ids) for one hand-written pair."""
+    """(sources, reference-absent ids, reference-kept ids) for one `handwritten/` pair."""
     docs = sources_of(name, CORPUS)
     habs, hkept = sets(docs, (CORPUS/name/"reference.md").read_text())[:2]
     return docs, habs, hkept
 
 
 def cell_figures(name, merged, rep):
-    """One merge of hand-written pair `name` against its `reference.md`.
+    """One merge of `tests/handwritten` pair `name` against its `reference.md`.
 
     The whole of this ranking's scoring, as a function so that another run's
     figures are formed by the same code (`tests/phase4_figures.py`). Unlike

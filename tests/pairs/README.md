@@ -7,7 +7,7 @@ Each pair directory holds four files:
 | File | What it is |
 |---|---|
 | `source_a.md`, `source_b.md` | The two inputs. |
-| `ideal.md` | A correct merge, written by hand. It carries source A's title. The benchmark counts how far a model's merge deviates from it. |
+| `ideal.md` | The reference merge: a correct merge, written for the pair. It carries source A's title. The benchmark counts how far a model's merge deviates from it. |
 | `ideal.json` | The declarations of that merge: one record for each source segment it did not keep word for word, saying what happened to the segment (`superseded`, `duplicate` or `dropped`) and why. |
 
 A *segment* is the unit the tool splits a document into: a title, a heading, a sentence, a list item, a table row or a fenced code block.
@@ -19,7 +19,7 @@ To merge a pair yourself, with the model you have configured (the README's ["Try
 
 Write the outputs outside this directory: `tests/test_segment.py` fails on any other `.md` file under `tests/pairs/` that it has no pin for.
 
-Nothing here is taken from a real document. The names, numbers and wording were all invented for these fixtures. The pairs are under CC BY 4.0; see `LICENSE` in this directory.
+Nothing here is taken from a real document. The names, numbers and wording were all invented for these fixtures. AI coding agents wrote the nine pairs, with each `ideal.md` and `ideal.json`, under the direction of the project's author, who reviewed them. The pairs are under CC BY 4.0; see `LICENSE` in this directory.
 
 ## What each pair is
 

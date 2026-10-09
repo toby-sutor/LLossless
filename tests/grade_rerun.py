@@ -15,7 +15,7 @@ was allowed to reach 13/13 did.
   tests/grade_rerun.py              print the grading
   tests/grade_rerun.py --self-test  prove the checks can fail
 
-`paper` is NOT-PUBLISHED wholesale, so a published clone has no records to
+A copy made without `paper/records/` has no records to
 grade. There the program says so and passes rather than reporting a result it
 did not compute, the same way `test_fixtures.check_preregistered_block` does.
 """

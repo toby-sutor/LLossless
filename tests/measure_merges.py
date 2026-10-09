@@ -93,7 +93,7 @@ def measure(path: Path, fixtures_root: Path = FIXTURES) -> dict:
     documents = analyse_merges.sources_of(fixture, fixtures_root)
     result = reconcile.reconcile(documents, merged)
     ratio = analyse_merges.concatenation_ratio(fixture, merged, fixtures_root)
-    # `reference_is_concatenation` reads a hand-written `merged.md` under
+    # `reference_is_concatenation` reads a fixture's own `merged.md` under
     # `fixtures_root/fixture/`. The two-source corpus carries one for every fixture;
     # a corpus promoted with no answer key (`tests/handwritten/`, by design:
     # its `reference.md` is a reference and not an oracle)
@@ -112,7 +112,7 @@ def measure(path: Path, fixtures_root: Path = FIXTURES) -> dict:
         "result": result,
         # The old predicate, kept beside the new one so the two can disagree in
         # public. `reference_is_concatenation` is why disjoint_sources is not a
-        # defect when stapled: its own hand-written merge is a staple too.
+        # defect when stapled: its own `merged.md` is a staple too.
         "ratio": ratio,
         "ratio_says_concatenated": ratio >= analyse_merges.CONCATENATION,
         "has_reference": has_reference,

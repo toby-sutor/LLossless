@@ -1,6 +1,6 @@
 """Submitted work, run in the background, observed separately. The job layer.
 
-A merge takes between 23 and 4,559 seconds, measured over the graded run records (withheld with the paper).
+A merge takes between 23 and 4,559 seconds, measured over the graded run records in `paper/records/`.
 No HTTP request holds one of those open, so the web UI cannot be a form that
 posts two documents and waits for a report. It submits, gets an id back, and
 watches the run through `events.py`. This module is what sits between those two

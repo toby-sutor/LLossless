@@ -7,7 +7,7 @@ these checks exist because the instrument was wrong first and the corpus said
 so — each names the merge that caught it, since a regression will show up as
 that fixture changing verdict and the reader should be able to go and look:
 
-    disjoint_sources-off-0    a hand-built staple, reported non-monotone
+    disjoint_sources-off-0    a deliberate staple, reported non-monotone
                               because the heading `Times` is contained in
                               `He also lost his orientation several times.`
     attribution_swapped-off-0 a correct merge, reported stapled on an evidence
@@ -713,7 +713,7 @@ def test_document_letters_follow_the_order_the_merge_was_given() -> None:
 # The mechanical reconciliation
 # --------------------------------------------------------------------------
 #
-# A hand-built pair rather than a fixture, because every one of these checks is
+# A pair built inline, not a fixture, because every one of these checks is
 # about a *disposition record*, and no fixture has one: the corpus on disk was
 # recorded under an earlier prompt, which had no such field. The pair is six
 # segments -- two titles, a line both documents share, and a distinct fact each
@@ -1579,7 +1579,7 @@ def test_the_duplication_finding_fires_on_nothing_the_corpus_calls_correct() -> 
     re-measured here rather than carried forward.
 
     Two of the twenty-five are members the corpus does *not* call correct --
-    `concatenated`, a hand-written concatenation of two overlapping sources, and
+    `concatenated`, a deliberate concatenation of two overlapping sources, and
     `restated`, a real `--fidelity low` merge that keeps both sources' wording of
     every fact. Both belong in this floor and their presence is the sharper form
     of the same claim: check 9's exact pass does not fire even on the two
@@ -2012,7 +2012,7 @@ def test_the_restatement_check_fires_on_the_merge_the_tool_passed() -> None:
     report is where `recorded-claims.json` comes from. So this is the defect
     that stayed unclaimed until now, measured on the instrument that now claims it.
 
-    The hand-written `concatenated` fixture cannot do this job and the corpus
+    The purpose-built `concatenated` fixture cannot do this job and the corpus
     says so: three live samples of its `merged.md` returned ten byte-identical
     claims and zero cross-line repeats, because its two wordings of a fact are
     too far apart for a decomposer to resolve to one sentence. A detector whose

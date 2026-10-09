@@ -129,7 +129,7 @@ MERGE_LETTER = "m"
 # contained in `He also lost his orientation several times.`, `Work` in `she
 # worked in the rosegarden`, and `Winter` in half the sentences of a document
 # about seasons. Each spurious match drags an unrelated ordinal into the order
-# check, and `disjoint_sources` — a hand-built staple — came back non-monotone
+# check, and `disjoint_sources` - a deliberate staple - came back non-monotone
 # on matches like those rather than on anything the merge had actually done.
 LENGTH_FLOOR = NEAR_MATCH / (2 - NEAR_MATCH)
 
@@ -1053,7 +1053,7 @@ NAMES_A_REPLACEMENT = ("reworded", "superseded", "subsumed", "duplicate")
 DECLARED_LOSS_OVER_BUDGET = "declared_loss_over_budget"
 # How many segments one replacement may absorb before the supersession stops
 # being a replacement and becomes a deletion. Measured over `tests/pairs`: the
-# highest legitimate fan-in in nine operator-authored ideal merges is 3, across
+# highest legitimate fan-in in the nine pairs' own ideal merges is 3, across
 # 96 supersessions, and the 50-supersession pair never exceeds 2. Check 6a.
 SUPERSESSION_FAN_IN = 3
 TITLE_NOT_FROM_SOURCE = "title_not_from_source"
@@ -1149,7 +1149,7 @@ assert DOCUMENT_FINDINGS | RECORD_FINDINGS == set(FINDING_KINDS), (
 # merge against its *sources*, and a prompt leak is the merge held against the
 # *prompt*, so counting it here would put a third referent under a denominator
 # whose whole job is to say how many times two texts were compared. The second
-# is the one that decides it. The graded run records (withheld with the paper) show `checks: 9` and
+# is the one that decides it. The graded run records (`paper/records/`) show `checks: 9` and
 # the paper's own prose says "nine" too; those records describe a
 # tool that made nine checks and that is a true fact about the day they were
 # written. Moving this constant would silently restate every one of them as a
@@ -1963,7 +1963,7 @@ def findings(
     # surviving sentence and every record is internally valid.
     #
     # The ceiling is measured, not guessed. Over the nine pairs in
-    # `tests/pairs` -- 96 supersessions, operator-authored, not written for
+    # `tests/pairs` -- 96 supersessions in their ideal merges, not written for
     # this check -- one replacement never absorbs more than **3** segments,
     # and the largest pair (`rate_limits`, 50 supersessions) never exceeds 2.
     # Legitimate supersession is close to one-for-one because each dropped

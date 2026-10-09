@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Score a merge of a hand-written pair against its planted errors. Offline; no call.
+"""Score a merge of a `tests/handwritten` pair against its planted errors. Offline; no call.
 
 **The answer key is computed, never typed.** The operator took a text, kept it
 as `reference.md`, planted factual errors in a copy and split the copy into the

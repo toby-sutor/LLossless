@@ -10,14 +10,16 @@ A fixture is one small test case: two source documents, a merge of them, and an 
 |---|---|
 | `source_a.md` | one of the two input documents |
 | `source_b.md` | the other input document |
-| `merged.md` | a merge of the two, written by hand, with a defect planted in it or with none |
+| `merged.md` | a merge of the two, written for the fixture, with a defect planted in it or with none |
 | `expected.json` | the answer key: the statements to check, the verdict each must get, and the exit code that follows |
 
 `tests/fixtures/GLOBAL.json` is not a fixture. It holds assertions that apply to every document of every fixture and is described under [`GLOBAL.json`](#globaljson).
 
-**The fixtures are ground truth.** The documents are written by hand, the answer key is written from the documents alone, and neither is ever edited to make a result look better. If the tool and a fixture disagree, either the tool is wrong or the fixture was wrong about its own documents from the start. A fixture that is merely inconvenient is neither.
+**The fixtures are ground truth.** The documents are written for the fixture, the answer key is written from the documents alone, before any model under test sees them, and neither is ever edited to make a result look better. If the tool and a fixture disagree, either the tool is wrong or the fixture was wrong about its own documents from the start. A fixture that is merely inconvenient is neither.
 
-**One fixture is not hand-written.** The `merged.md` of `restated` is a merge a model really produced, and the directory carries a fifth file, `recorded-claims.json`. That is deliberate and happens once: see [`restated`](#restated-is-real-model-output-and-the-corpuss-only-one). Every other fixture is four hand-written files, and a new one should be too.
+**Who wrote them.** With the one exception below, AI coding agents wrote the fixtures, sources, merges and answer keys alike, under the direction of the project's author, who reviewed them.
+
+**One fixture's merge comes from a run of the tool.** The `merged.md` of `restated` is a merge a model really produced when the tool ran, and the directory carries a fifth file, `recorded-claims.json`. Its two sources are the documents of `tests/handwritten/christianity/`. That is deliberate and happens once: see [`restated`](#restated-is-real-model-output-and-the-corpuss-only-one). Every other fixture is four files written for it, and a new one should be too.
 
 **What the documents are about.** Twelve fixtures describe Vandrell Relay, an invented HTTP relay, and draw on one pool of facts: listen port, connect timeout, read timeout, maximum concurrent connections, retry limit, minimum TLS version, access log format and health check path. They read as variants of one document, so a difference in results comes from the planted defect and not from the subject. Write a new fixture from the same pool unless the thing it tests is the kind of text. The four fixtures outside the pool are under [Special fixtures](#special-fixtures).
 
@@ -52,8 +54,8 @@ The published detection figures count thirteen of the sixteen. `list_structure`,
 
 1. **Decide the one thing the fixture tests.** Hold everything else constant. A fixture that varies two things cannot say which of them moved a result.
 2. **Create `tests/fixtures/<name>/`** and write `source_a.md` and `source_b.md` from the fact pool. Write each value the same way in every document unless the difference is the defect (see [Notation is not information](#notation-is-not-information)).
-3. **Write `merged.md` by hand.** For a defect fixture, plant exactly one kind of defect. For a guard, write a correct merge.
-4. **Write `expected.json` from the three documents, before any model has seen them.** Use the [field reference](#expectedjson-field-reference). Give each planted defect at least one probe, and add control probes for facts that survive. Give a guard probes in both directions, so that a reverse check that reports correctly merged content as invented fails it.
+3. **Write `merged.md` yourself; do not take it from a run of the tool.** For a defect fixture, plant exactly one kind of defect. For a guard, write a correct merge.
+4. **Write `expected.json` from the three documents, before any model under test has seen them.** Use the [field reference](#expectedjson-field-reference). Give each planted defect at least one probe, and add control probes for facts that survive. Give a guard probes in both directions, so that a reverse check that reports correctly merged content as invented fails it.
 5. **Derive, do not choose, three fields.** `expected_finding` follows from the verdict and the direction, `expected_exit_code` follows from the probes, and `kind` must agree with both. The rules are under [Deriving `expected_finding`](#deriving-expected_finding) and [Deriving the exit code](#deriving-the-exit-code).
 6. **Pin how the new documents are segmented:** `python3 tests/test_segment.py --pin`. It adds a digest for each new document to `tests/segment_pins.json` and never rewrites an existing one.
 7. **Record model answers for the new documents.** Run with `--offline`, the harnesses replay recorded answers, and a recording is keyed by the document text, so a new document has none. `tests/responses/README.md` has the commands.
@@ -411,11 +413,11 @@ A fixture carries assertions for different tests. Each test reads only its own f
 
 **The decompose and verify harnesses run every call three times by default and report the answer most runs gave.** `must_not_extract` is the exception: an assertion counts as violated if any run violated it, and the report says how many did. A claim the document never made is a defect the first time it appears.
 
-**The verify harness does not use the decompose step.** It sends the hand-written probe texts as claims, so that a claim the decompose step failed to extract is not scored as a verify failure.
+**The verify harness does not use the decompose step.** It sends the answer key's probe texts as claims, so that a claim the decompose step failed to extract is not scored as a verify failure.
 
 **The detection harness finds a probe's finding by its anchor.** A probe whose `expected_finding` is not `none` counts as detected when some finding in the report contains every `anchor.all_of` substring in its claim, its quoted span, its evidence or its rationale. A finding that no such probe accounts for counts as invented. Choose anchor substrings that the defect's own sentence contains and its neighbours do not.
 
-**The merge harness never opens a fixture's `merged.md`.** It has the model merge the two sources and grades that merge. `expected_verdict`, `also_acceptable` and `expected_evidence_contains` describe the hand-written merge, so it ignores all three and holds every forward probe to one rule: the verdict must be `SUPPORTED`. That is why `dropped_claim` fails under the verify harness and passes under the merge harness on the same probe. The first scores a merge with a planted omission, and the second scores a merge that has to carry the fact.
+**The merge harness never opens a fixture's `merged.md`.** It has the model merge the two sources and grades that merge. `expected_verdict`, `also_acceptable` and `expected_evidence_contains` describe the fixture's own `merged.md`, so it ignores all three and holds every forward probe to one rule: the verdict must be `SUPPORTED`. That is why `dropped_claim` fails under the verify harness and passes under the merge harness on the same probe. The first scores a merge with a planted omission, and the second scores a merge that has to carry the fact.
 
 ### Deriving the exit code
 
@@ -441,11 +443,11 @@ A fixture carries assertions for different tests. Each test reads only its own f
 
 ### Which `merged.md` assertions transfer to a generated merge
 
-A `must_not_extract` entry on `merged.md` describes the hand-written merge. The merge harness grades a generated merge instead, so it applies an entry only when the entry is true of any correct merge. The rule is computed by `transferable` in `tests/run_merge.py`, not kept as a list:
+A `must_not_extract` entry on `merged.md` describes the fixture's own merge. The merge harness grades a generated merge instead, so it applies an entry only when the entry is true of any correct merge. The rule is computed by `transferable` in `tests/run_merge.py`, not kept as a list:
 
 > A `merged.md` entry with `basis: "absent"` transfers if and only if its pattern matches neither source.
 
-- **If the pattern matches a source,** a correct merge must carry that text, and the entry would punish it. `dropped_claim/no-restored-log-format` forbids a JSON Lines claim because the hand-written merge omits the log format. A generated merge is required to keep it, so the entry does not transfer.
+- **If the pattern matches a source,** a correct merge must carry that text, and the entry would punish it. `dropped_claim/no-restored-log-format` forbids a JSON Lines claim because the fixture's own merge omits the log format. A generated merge is required to keep it, so the entry does not transfer.
 - **If the pattern matches neither source,** the text is absent from everything the model was shown, and a claim of it is invented in any merge.
 - **`basis: "not_a_claim"` never transfers.** It is a statement about text in one particular document. All three such entries are in `structure_added`.
 
@@ -461,7 +463,7 @@ A merge may change how a fact is worded. It may not change what the fact says. E
 
 **Exact values are not wording: the mechanical checks compare them character by character.** This applies to a merge the tool made with `llossless merge`. Where a source sentence is kept, these parts of it must arrive unchanged, at every fidelity level and even if the merge declared the sentence reworded: numbers written in digits, including times and percentages, URLs, paths, version strings, inline code, link targets and fenced code blocks. A number rewritten in another notation is therefore a finding. "512" written as "0x200" is a `verbatim_violation`, and so is "30 seconds" written as "30s", or "02:00 till 15:30" written as "2 am till 3:30 pm". The check compares strings and does not ask whether two notations mean the same number, because a model that may change a format will sooner or later change a value, and the output does not show which it did.
 
-**In a fixture, write every value the same way in all three documents.** `llossless verify`, which grades the hand-written fixtures, has no merge records and does not run the mechanical comparison, so an answer key speaks about claims only. A value written in another notation would be judged there by meaning alone, and no fixture tests how a model judges it, while the same change is a finding in a merge the tool made. So a change of notation must not stand in for a harmless paraphrase. `paraphrase` keeps every value identical for this reason.
+**In a fixture, write every value the same way in all three documents.** `llossless verify`, which grades the fixtures' own merges, has no merge records and does not run the mechanical comparison, so an answer key speaks about claims only. A value written in another notation would be judged there by meaning alone, and no fixture tests how a model judges it, while the same change is a finding in a merge the tool made. So a change of notation must not stand in for a harmless paraphrase. `paraphrase` keeps every value identical for this reason.
 
 ## Special fixtures
 
@@ -489,7 +491,7 @@ Two accounts of one village bell tower, a parish record and a recollection, stat
 
 - **`kind` is `guard` because the probes imply exit 0,** not because the merge is correct. The validator rejects `defect` here.
 - **Do not plant a claim-level defect to make it a `defect`.** The fixture would then vary two things, and the redundancy could no longer be measured on its own.
-- **Do not move the two wordings closer together.** If a later check catches this document as it stands, that is a result to report, and the format then needs a field to expect it in. Editing the text until today's checks fire removes the only hand-written document with this shape.
+- **Do not move the two wordings closer together.** If a later check catches this document as it stands, that is a result to report, and the format then needs a field to expect it in. Editing the text until today's checks fire removes the only document with this shape that was written for the purpose.
 
 It is outside the fact pool because a pool document cannot hold two wordings of one fact: restating "The read timeout is 30 seconds." gives the same sentence back.
 
@@ -500,7 +502,7 @@ A general-knowledge pair about Christianity, the same two documents as `tests/ha
 The fixture exists because a check for repeated claims needs claims a model really produced, and `concatenated` does not supply them: its two wordings of a fact do not come back as the same claim. `tests/test_reconcile.py` reads `recorded-claims.json` and requires the repeat check to find 23 repeated claim texts in the merge and none in either source. That check runs on `merge` only, so `verify`, which grades this fixture, still finds nothing, and the fixture is a `guard` for the same reason as `concatenated`.
 
 - **Never edit `merged.md` or `recorded-claims.json`.** They record one run. An edited copy no longer shows that the check fires on real output.
-- **Do not add other model-written merges to `tests/fixtures/`.** An answer key is independent of the tool only while a person wrote the documents. This one exception exists because its evidence could not be written by hand.
+- **Do not add other merges from a run of the tool to `tests/fixtures/`.** An answer key is independent of the tool only while the tool did not produce the documents it grades. This one exception exists because its evidence had to come from a real run and could not be written for the purpose.
 
 ### `conflict_surfaced`
 

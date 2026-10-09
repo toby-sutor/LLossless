@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Shape checks for `tests/handwritten/`, and the boundaries it must not cross.
 
-The corpus is nineteen document pairs a person wrote by hand, fifteen with a
-`reference.md` the same person wrote. What makes it worth having is exactly
+The corpus is nineteen document sets on ordinary subjects, fifteen with a
+`reference.md` the project's author wrote. What makes it worth having is exactly
 what makes it dangerous to wire in carelessly: these merges break rules the
 other two corpora keep. `sepia/reference.md` is a byte concatenation and
 `treecreeper/reference.md` is a three-way one -- the defect `reconcile`'s
@@ -175,13 +175,13 @@ def test_admitting_the_corpus_moved_no_registered_count() -> None:
     check(len(controls) == CONTROLS_COUNT,
           f"the check-9 and staple control set holds {len(controls)}, "
           f"registered at {CONTROLS_COUNT} in tests/test_reconcile.py:1595")
-    # Globbing `pairs/` and `fixtures/` and then looking for a hand-written
+    # Globbing `pairs/` and `fixtures/` and then looking for a `handwritten/`
     # file among the results would be a tautology -- it cannot be there. The
     # way this actually goes wrong is somebody widening the glob in
     # `test_reconcile.py` itself, so the assertion is over that file's source.
     owner = (ROOT / "tests" / "test_reconcile.py").read_text(encoding="utf-8")
     check("handwritten" not in owner,
-          "tests/test_reconcile.py now mentions the hand-written corpus. Its "
+          "tests/test_reconcile.py now mentions the handwritten corpus. Its "
           "control set is registered as firing the staple predicate on exactly "
           "two members (:1829); sepia/reference.md and treecreeper/reference.md "
           "are both staples and would make it four, which voids the "
@@ -192,7 +192,7 @@ def test_sepia_is_the_staple_the_registration_would_have_caught() -> None:
     """The must-fire half: the hazard is real, not hypothetical.
 
     `test_admitting_the_corpus_moved_no_registered_count` asserts that no
-    hand-written document is in the control set. On its own that is
+    document of this corpus is in the control set. On its own that is
     indistinguishable from the predicate having been broken, so this end
     proves the exclusion is load-bearing: run the same predicate on
     `sepia/reference.md` directly and it fires.

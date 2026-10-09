@@ -4,11 +4,11 @@ Every LLossless run produces a report that says, with evidence, what a model dro
 
 ## The release benchmark of 2026-09-27
 
-**When it ran, and how big it was.** The cross-vendor release benchmark ran on 2026-09-27: 295 runs over five models, GPT-6 Sol, GPT-6 Luna, Opus 5.5, Sonnet 5 and Haiku 4.5. The two GPT models ran through the vendor's API, and the three Claude models through both the API and a Claude subscription, which makes eight result rows. Fable 5.1 ran on three documents only and is outside the main table. There were two model failures, both Haiku 4.5 (one per route).
+**When it ran, and how big it was.** The cross-vendor release benchmark ran on 2026-09-27, in one session that ended shortly after midnight UTC: 295 runs over five models, GPT-6 Sol, GPT-6 Luna, Opus 5.5, Sonnet 5 and Haiku 4.5. The two GPT models ran through the vendor's API, and the three Claude models through both the API and a Claude subscription, which makes eight result rows. Fable 5.1 ran on three documents only and is outside the main table. There were two model failures, both Haiku 4.5 (one per route).
 
 **Where the results are.** The README has the table and the per-model notes. Everything behind them is in `arms/2026-09-27/lineup/`: [`REGISTRATION.md`](../arms/2026-09-27/lineup/REGISTRATION.md) is the registration written before the first call, [`figures.md`](../arms/2026-09-27/lineup/figures.md) holds the derived tables, and `cells/` holds the merged document and the report of every run. [`arms/README.md`](../arms/README.md) describes the layout.
 
-**What was registered but not measured.** Gemini 3.8 Flash: during the run its free tier answered every call with "high demand".
+**What was registered but not measured.** Gemini 3.8 Flash: during the run its free tier refused every call.
 
 **Where earlier runs are.** [`arms/BENCHMARK-MATRIX.md`](../arms/BENCHMARK-MATRIX.md) lists every measurement made before this one, each with its settings and the reasons it is not directly comparable with its neighbours. Read that file as a record of what was measured, not as a leaderboard.
 
@@ -18,11 +18,13 @@ Three test sets, all in this repository:
 
 | set | what runs | what it measures |
 |---|---|---|
-| **Merge quality** | the nine document pairs in `tests/pairs/`, merged at `--fidelity high` with full verification | *silent loss*: source sentences missing from the merge that the merge did not declare; *deviations*: sentences lost, wrongly kept or repeated when the merge is held against a hand-written merge of the same pair (`ideal.md`) |
-| **Detection** | the 13 pre-registered fixtures in `tests/fixtures/`, each a hand-written merge with a known defect or none, checked by `llossless verify` | planted defects found; findings that no answer key accounts for; exit codes matched |
+| **Merge quality** | the nine document pairs in `tests/pairs/`, merged at `--fidelity high` with full verification | *silent loss*: source sentences missing from the merge that the merge did not declare; *deviations*: sentences lost, wrongly kept or repeated when the merge is held against the reference merge written for the pair (`ideal.md`) |
+| **Detection** | the 13 pre-registered fixtures in `tests/fixtures/`, each a merge written for the test with a known defect or none, checked by `llossless verify` | planted defects found; findings that no answer key accounts for; exit codes matched |
 | **Planted errors** | three document sets in `tests/handwritten/`, merged at `--fidelity open`: `voyager` and `bip39` have factual errors planted in them (44 and 14), and `mahjongg` has none and is the control | errors the merge corrects from what the model knows (`voyager`, `bip39`), and true facts it "corrects" wrongly (`mahjongg`) |
 
 `tests/fixtures/` holds sixteen fixtures. All sixteen were run, and the detection figures count the thirteen that were registered in advance.
+
+**Who wrote the test material.** AI coding agents wrote the nine pairs, their reference merges, the fixtures and their answer keys, under the author's direction, and the author reviewed them. The `voyager` sources are adapted from NASA's page on the Voyager 2 mission, and the `bip39` sources were written by the author together with an AI assistant. The author planted the errors in both and wrote both reference merges alone. `mahjongg` is adapted from a Wikipedia article. [`tests/pairs/README.md`](../tests/pairs/README.md), [`tests/fixtures/SCHEMA.md`](../tests/fixtures/SCHEMA.md) and [`tests/handwritten/README.md`](../tests/handwritten/README.md) say more.
 
 Silent loss and deviations are computed mechanically from the merged text and the merge's own records. No model judges them. A deviation count has two sides on purpose: a one-sided figure would rank a copy-everything merge first, because it cannot lose what the reference kept.
 
@@ -33,7 +35,7 @@ A row is one model on one route: the vendor's API, or a Claude subscription thro
 | column | what it counts | better is |
 |---|---|---|
 | Silent loss | source sentences missing from the merge and not declared, summed over the nine pairs | lower, and only 0 keeps a model in the ranking |
-| Deviations per pair | sentences lost, wrongly kept or repeated against the hand-written merge, averaged over the pairs | lower; the mechanical union, a script with no model, scores 7.78 |
+| Deviations per pair | sentences lost, wrongly kept or repeated against the pair's reference merge, averaged over the pairs | lower; the mechanical union, a script with no model, scores 7.78 |
 | Planted errors fixed | how many of the 44 errors in `voyager` and the 14 in `bip39` the merge corrected, as the median of three runs | higher |
 | $ per merge | the price of one merge with all its checks | lower |
 
@@ -56,7 +58,7 @@ The headline cost is the vendor's list price per merge, the checks included, rea
 
 ## What it cannot tell you
 
-This is a small benchmark: nine pairs, thirteen fixtures, two planted-error documents and one control, mostly English, most of them run once. A difference smaller than the spread between runs is reported as no difference. The result is a dated snapshot of what each model did on this task, and a model released after the lineup is frozen goes into the next snapshot.
+This is a small benchmark: nine pairs, thirteen fixtures, two planted-error documents and one control, mostly English, most of them run once. A difference smaller than the spread between runs is reported as no difference. The reference merges and the answer keys were written inside this project, by Claude coding agents under the author's direction, and nobody outside it has reviewed them. Claude models are among the models ranked against those reference merges. The result is a dated snapshot of what each model did on this task, and a model released after the lineup is frozen goes into the next snapshot.
 
 ## The earlier specification
 

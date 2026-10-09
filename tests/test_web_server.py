@@ -464,7 +464,7 @@ def test_a_submitted_run_is_accepted_with_202_a_location_and_an_id() -> None:
     """202 rather than 201, and the id is the contract's whole surface.
 
     201 would tell a client the result exists at `Location`, and it does not --
-    a merge takes between 23 and 4,559 seconds, measured over the graded run records (withheld with the paper), and
+    a merge takes between 23 and 4,559 seconds, measured over the graded run records in `paper/records/`, and
     the only thing that exists at submit time is a record that the work was
     accepted.
     """

@@ -10,9 +10,9 @@ committed records and fails if this file differs, and `tests/run_all.py`
 runs that check. Every figure here is derived from a committed file; a run
 whose figures live only in a note or outside the repository says
 "not derivable here: no committed record" and is listed under [Evidence gaps](#evidence-gaps).
-Rows whose evidence is under `paper/records/` cite graded records that are
-withheld with the paper in this release; in a copy without them the check
-says UNMEASURED instead of rebuilding this file.
+Rows whose evidence is under `paper/records/` cite the graded records that
+are published with the paper; in a copy made without that directory the
+check says UNMEASURED instead of rebuilding this file.
 
 **65 run groups.** Rows are not a leaderboard: read the
 comparability column before setting two rows side by side.
@@ -53,15 +53,15 @@ A date in a setting, as in "before 2026-09-25", is the day that setting changed.
 
 **Test sets.**
 
-- tests/pairs (9): the nine pairs in `tests/pairs/`, merged and scored against each pair's hand-written `ideal.md`.
-- hand-written reference: the author's hand-written pairs (named `toby-test-*` when run, now in `tests/handwritten/`), scored against the author's own `reference.md`.
+- tests/pairs (9): the nine pairs in `tests/pairs/`, merged and scored against each pair's reference merge, `ideal.md`.
+- hand-written reference: pairs from `tests/handwritten/` (named `toby-test-*` when run), scored against the `reference.md` the author wrote.
 - planted errors: `tests/handwritten/` `voyager` (44 planted errors) and `bip39` (14), plus `mahjongg` as the false-correction control.
-- tests/fixtures (13): the 13-fixture detection block in `tests/fixtures/`: seeded defects and clean guards, `verify` run on each fixture's hand-written `merged.md`.
+- tests/fixtures (13): the 13-fixture detection block in `tests/fixtures/`: seeded defects and clean guards, `verify` run on each fixture's own `merged.md`.
 - tests/pairs/index_429: the one public pair `tests/pairs/index_429`, merged and checked (the August local-model study).
 - tests/pairs (2, recorded): `index_429` and `trace_names` from `tests/pairs/`, replayed from `tests/responses/pairs/`.
 - tests/fixtures (recorded): the fixtures replayed from recorded responses in `tests/responses/`.
 - early fixtures: the fixtures as they stood in the first week of August (8 for the cross-model sweep, 12 for the `qwen3:4b` comparison); most were later revised.
-- probe: one hand-written prompt, not a test set.
+- probe: one ad-hoc prompt, not a test set.
 
 ## Run groups
 
@@ -368,8 +368,8 @@ of 2026-09-03 (D14). It has not run since 2026-09-03.
   reading was put under review. On 2026-09-02 the endpoint's own envelope
   settled it: `content` empty, no reasoning field of either
   spelling, 996 completion tokens billed. The model generated and stopped; the
-  tokens are discarded above the tool, so it is not a harness defect. A
-  hand-written probe (X9) found `gpt-oss:20b` did not reproduce it, and a run
+  tokens are discarded above the tool, so it is not a harness defect. An
+  ad-hoc probe (X9) found `gpt-oss:20b` did not reproduce it, and a run
   through the tool's own decompose path reversed that, where the 20B emptied
   its body too (on an off-configuration window). The same mechanism was later
   seen on the 27B at the merge role, so it is not specific to this model.

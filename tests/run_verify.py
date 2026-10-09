@@ -2,7 +2,7 @@
 """Run the verify pass over every fixture probe and grade it against expected.json.
 
 This is the entailment measurement. It is the verify pass *alone*: the claims fed to the
-model are the fixtures' hand-written probe texts, not decompose output. That is
+model are the fixtures' own probe texts, not decompose output. That is
 deliberate. Chaining the two passes would fold extraction quality into the
 accuracy number, and a claim decompose never extracted would be scored here as a
 verify failure. `run_decompose.py` measures extraction; this measures entailment,
@@ -532,7 +532,7 @@ def aggregate(sweeps: list[list[FixtureResult]]) -> list[FixtureSamples]:
 
 
 def probe_claims(probes: list[dict]) -> list[Claim]:
-    """Turn hand-written probes into claims, with the probe id as the join key.
+    """Turn a fixture's probes into claims, with the probe id as the join key.
 
     span and anchored carry no meaning here -- they are decompose's way of
     earning belief in a line number, and these lines came from a human. Setting

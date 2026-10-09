@@ -326,12 +326,12 @@ NAMED: list[tuple[str, list[str], bool]] = [
     # The full scan, not just its self-test. It ran with `--self-test` alone
     # from the day it was added, so the check it exists for -- no published file
     # reads a withheld one -- had never gated anything, and was green over
-    # `annotate_merges.py` reading a withheld `paper/records/` file for as long
+    # `annotate_merges.py` reading a then-withheld `paper/records/` file for as long
     # as it existed. No-args runs the self-test *and* the scan.
     ("internal/tests/scan_dependencies.py", [], False),
-    # The pre-commit gate on `paper/records/`. `paper` is withheld wholesale, so
-    # the release scan never sees those files and this is their only
-    # detector; a detector that is never run is the failure it exists to prevent.
+    # The pre-commit gate on `paper/records/`. The records are published, so
+    # the release scan reads them too, but only after the commit; this is the
+    # detector that runs before it, and git history is permanent.
     ("internal/tests/gate_records.py", [], False),
     # `gate_records.py` decides whether a record may be committed;
     # this decides whether the inputs behind it were. An earlier check tested that a
@@ -368,7 +368,7 @@ NAMED: list[tuple[str, list[str], bool]] = [
     # derived a second way. Same `{work}` for both, so they cannot drift apart.
     ("internal/tests/rehearse_publication.py", [".", "{work}"], True),
     ("internal/tests/scan_release.py", [".", "{work}/fresh"], True),
-    # The paper gates. Also withheld, also outside every habit.
+    # The paper gates, outside every habit. The first is withheld; the second is not.
     ("internal/paper/check_numbers.py", [], False),
     ("paper/check_refs.py", [], False),
 ]

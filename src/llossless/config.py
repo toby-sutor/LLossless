@@ -674,7 +674,7 @@ def merge_model_calls(depth: str, sources: int) -> int:
 # opposite of what it does is a defect in its own right.
 #
 # Why the wire name did not move with it. `off` is in 151 recorded merge
-# cassettes, in every graded run record (withheld with the paper), in the fidelity prompt fragments
+# cassettes, in every graded run record under `paper/records/`, in the fidelity prompt fragments
 # whose text is hashed into the cassette key, in five benchmark registrations
 # and in the operator's own scripts. Renaming the value would orphan all of it
 # for a cosmetic gain. So `FIDELITY_LEVELS` is untouched and the rename lives

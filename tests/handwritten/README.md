@@ -1,16 +1,18 @@
-# The hand-written corpus
+# The `tests/handwritten/` corpus
 
-Nineteen sets of documents on ordinary subjects, put together by hand by the project's author: a recipe, two party invitations, an email and a memo about one topic. Seventeen sets are a pair of documents and two have three. Fifteen sets carry a `reference.md`, a merge the author wrote. The other four are sets the author judged should not be merged at all, and their `meta.json` says why in the author's words.
+Nineteen sets of documents on ordinary subjects: a recipe, two party invitations, an email and a memo about one topic. Seventeen sets are a pair of documents and two have three. Fifteen sets carry a `reference.md`, a merge the project's author wrote. The other four are sets the author judged should not be merged at all, and their `meta.json` says why in the author's words.
+
+**Who wrote what.** The sources of fourteen sets were written by the author together with an AI assistant (Claude). The two sources of `voyager` are adapted from NASA's page on the Voyager 2 mission, and the author planted factual errors in them. They give no address for that page on purpose, so that a model has to search for it. Four sets (`gold_de_en`, `mahjongg`, `sepia` and `treecreeper`) are adapted from Wikipedia articles. The author wrote every `reference.md` alone. The directory keeps the name `handwritten` because published results cite its paths.
 
 The benchmark's planted-error test uses three of the sets: `voyager` and `bip39` have factual errors planted in their sources (44 and 14), and `mahjongg` has none and is the control. See [The benchmark](../../docs/benchmark.md). You can also measure a merge of your own against any set; the commands are below.
 
-**Two licences apply.** Fifteen sets are published under CC BY 4.0: see `LICENSE` in this directory. Four sets (`gold_de_en`, `mahjongg`, `sepia` and `treecreeper`) are adapted from Wikipedia articles and are published under CC BY-SA 4.0, the licence of Wikipedia's text: see `LICENSE-CC-BY-SA` in this directory and the `LICENSE` in each of the four set directories. If you reuse one of those four, credit the Wikipedia contributors and publish what you build from it under CC BY-SA 4.0 as well. The repository's root `LICENSE` (Elastic License 2.0) covers the code and does not cover this directory.
+**Two licences apply.** Fifteen sets are published under CC BY 4.0: see `LICENSE` in this directory, which also credits NASA as the source of `voyager`. Four sets (`gold_de_en`, `mahjongg`, `sepia` and `treecreeper`) are adapted from Wikipedia articles and are published under CC BY-SA 4.0, the licence of Wikipedia's text: see `LICENSE-CC-BY-SA` in this directory and the `LICENSE` in each of the four set directories. If you reuse one of those four, credit the Wikipedia contributors and publish what you build from it under CC BY-SA 4.0 as well. The repository's root `LICENSE` (Elastic License 2.0) covers the code and does not cover this directory.
 
 ## What this corpus is for
 
 The other two test corpora, `tests/pairs/` and `tests/fixtures/`, were written for the tool. Every reference merge in `tests/pairs/` is required to pass the tool's own mechanical checks, the checks that compare text and use no model.
 
-The merges here were written by a person with no such rule in front of them. They reword freely, they drop material, and two of them (`sepia` and `treecreeper`) simply paste the sources one after the other. That is what makes the corpus useful: it shows what a person does when asked to merge, which is not what the tool's rules describe.
+The reference merges here were written by a person, the project's author, with no such rule in front of them. They reword freely, they drop material, and two of them (`sepia` and `treecreeper`) simply paste the sources one after the other. That is what makes the corpus useful: it shows what a person does when asked to merge, which is not what the tool's rules describe.
 
 ## A `reference.md` is a reference, not an answer key
 
@@ -40,7 +42,7 @@ The scripts that compare a merge with a `reference.md` therefore report the diff
 | `treecreeper` | merge | 1,488 | 2,825 | 1,686 | 6,003 | The Eurasian treecreeper, as three sections. The reference is the three sources pasted together. |
 | `universe` | merge | 1,425 | 1,427 | - | 1,428 | Deep time and scale, as two essays with the same title. |
 | `unrelated` | refusal | 3,668 | 1,734 | - | - | A Japan travelogue and an essay on Chaplin. |
-| `voyager` | merge | 881 | 1,337 | - | 2,186 | Voyager 2's flyby of Uranus in 1986, as two accounts. 44 planted errors. |
+| `voyager` | merge | 881 | 1,337 | - | 2,186 | Voyager 2's flyby of Uranus in 1986, as two accounts adapted from NASA's page on the mission. 44 planted errors. |
 
 Sizes are in bytes. A, B and C are `source_a.md`, `source_b.md` and `source_c.md`; only `mahjongg` and `treecreeper` have a third source.
 
@@ -65,7 +67,7 @@ LLossless does not decline them. It merges whatever it is given and reports what
 
 ### The planted-error sets
 
-The sources of `voyager` and `bip39` contain factual errors, put there on purpose to test whether a merge corrects them or repeats them. Their `reference.md` has the correct facts. `mahjongg` has no planted errors and measures the opposite mistake: a merge that "corrects" a fact that was right. Its sources are in German, are given out of order, and carry Chinese and Japanese characters.
+The sources of `voyager` and `bip39` contain factual errors, put there on purpose by the author to test whether a merge corrects them or repeats them. Their `reference.md` has the correct facts. `mahjongg` has no planted errors and measures the opposite mistake: a merge that "corrects" a fact that was right. Its sources are in German, are given out of order, and carry Chinese and Japanese characters.
 
 **The errors are not listed in any published file, and should not be.** The answer key is computed: `tests/score_planted.py` compares `reference.md` with the sources word by word, and every place that differs is a planted error. A typed list would be a second key that could disagree with the files. The one exception is in `bip39/meta.json`, which names the licence error because it was planted as a deliberate trap.
 

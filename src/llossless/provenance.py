@@ -311,7 +311,7 @@ def _git_dirs(root: Path) -> tuple[Path, Path]:
     recorded its provenance as `unknown` -- the commit silently missing from
     exactly the checkouts a second line of work is done in. Found by running
     the paper's own build step from one, which wrote `unknown` over a real commit
-    in its generated output (withheld with the paper).
+    in its generated output, `paper/generated/numbers.json`.
 
     Shelling out to `git rev-parse` would be shorter and is refused for
     `git_commit`'s own reason: git may not be installed in the container, and
@@ -1118,7 +1118,7 @@ class Provenance:
               if data["endpoint"].get("billed") else ()),
             # The published name, not the recorded one. `as_dict` keeps the
             # wire spelling because a report is read by machines too and 151
-            # cassettes and every graded run record (withheld with the paper) say `off`; this row is
+            # cassettes and every graded run record (`paper/records/`) say `off`; this row is
             # the half a person reads, so it says `verbatim`.
             ("Fidelity", fidelity_name(data["merge_policy"]["fidelity"])),
             # Unconditional, unlike `field_order` and `profile` below, which

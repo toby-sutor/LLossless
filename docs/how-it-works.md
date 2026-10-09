@@ -42,7 +42,7 @@ Two verdicts are not findings. `SUPPORTED` means the other side states the claim
 - **Evidence must be grounded,** as described above: a quote that is not in the named file is reported, never silently accepted.
 - **The merge's records are confirmed, not believed.** Each kind of record predicts what the forward check should find, and a record the evidence contradicts is reported as rejected. A segment the merge declared dropped counts as intentional only when the forward check independently finds its claims gone. The merge's own reason is printed next to the evidence and never counted in the grade, and past `3%` of the source segments the volume of declared drops is itself a finding (`--loss-budget` changes the share).
 - **Documents are data, never instructions.** The merge prompt and every verify prompt say so before the model is shown a document. The code also substitutes every field of a prompt in a single pass, so a document containing `{claims}` cannot have the claim list rendered into it. The first defence is a request to a model and worth what such requests are worth; the second is enforced by code.
-- **No score comes from a model grading itself.** In the [benchmark](benchmark.md), every headline figure is computed by code: from the merged text and the merge's own records, the hand-written answer keys and the exit codes.
+- **No score comes from a model grading itself.** In the [benchmark](benchmark.md), every headline figure is computed by code: from the merged text and the merge's own records, the published answer keys and the exit codes.
 
 ## Structured output
 
@@ -70,7 +70,7 @@ Every model answer is JSON that must match a schema. Endpoints differ in how the
 
 ## What is in this repository
 
-The tool, its prompts, the tests with the recorded model answers they replay, this documentation, and the benchmark evidence the figures come from.
+The tool, its prompts, the tests with the recorded model answers they replay, this documentation, the benchmark evidence the figures come from, and the paper about the tool.
 
 | path | what is in it |
 |---|---|
@@ -78,9 +78,9 @@ The tool, its prompts, the tests with the recorded model answers they replay, th
 | `src/llossless/web/` | the web interface and its JSON API, started with `llossless serve` |
 | `src/llossless/web/locales/` | every word the web interface says, one JSON file per language; `en.json` is the reference the others are checked against |
 | `prompts/` | every prompt, as a file |
-| `tests/fixtures/` | sixteen small test cases with hand-written answer keys; `tests/fixtures/SCHEMA.md` is the format |
-| `tests/pairs/` | the nine document pairs the benchmark merges, each with a hand-written reference merge |
-| `tests/handwritten/` | nineteen more hand-written document sets, among them the benchmark's planted-error documents |
+| `tests/fixtures/` | sixteen small test cases with answer keys, written for this project; `tests/fixtures/SCHEMA.md` is the format |
+| `tests/pairs/` | the nine document pairs the benchmark merges, each with a reference merge written for it |
+| `tests/handwritten/` | nineteen more document sets, fifteen with a reference merge the author wrote, among them the benchmark's planted-error documents |
 | `tests/responses/` | recorded model answers, so the whole suite runs offline |
 | `tests/run_merge.py`, `tests/run_verify.py`, `tests/run_decompose.py`, `tests/run_detect.py` | the harnesses that replay the recordings and print the figures on [Measured results](results.md) |
 | `tests/run_lineup.py`, `tests/lineup_figures.py` | the release benchmark's runner, and the script that re-derives its figures from `arms/` |
@@ -89,6 +89,7 @@ The tool, its prompts, the tests with the recorded model answers they replay, th
 | `annotated/` | the merges of an earlier model study as readable pages, derived from `arms/` and `tests/pairs/` |
 | `scripts/` | the script that builds `arms/` from a run directory, and the redactor it uses to keep endpoint addresses, credentials and home paths out of it |
 | `docs/` | this page, the other pages the README links to, and `docs/bench-spec.md`, an earlier benchmark specification that `tests/run_bench.py` reads |
+| `paper/` | the paper about the tool: its LaTeX sources, the numbers generated for it (`paper/generated/`) and the graded run records of the open-weight model study (`paper/records/`); `paper/README.md` says how to build the PDF |
 
 ## How it is tested
 
@@ -102,4 +103,4 @@ Run everything with **`python3 tests/run_all.py`**: one command over every test 
 
 ## Licence
 
-The code is under the Elastic License 2.0. Its text is in `LICENSE`, and the SPDX identifier is `pyproject.toml`'s `license` field. The copyright holder is named in `NOTICE`, because the Elastic License 2.0 has no copyright line of its own. Four data directories (`tests/pairs/`, `tests/handwritten/`, `arms/` and `annotated/`) are under Creative Commons Attribution 4.0 International instead, and each carries its own `LICENSE`. Inside them, four document sets in `tests/handwritten/` (`gold_de_en`, `mahjongg`, `sepia` and `treecreeper`) are adapted from Wikipedia articles. Those sets, and the benchmark runs under `arms/` that merged `mahjongg`, are under Creative Commons Attribution-ShareAlike 4.0 International: anything built from them must credit the Wikipedia contributors and carry the same licence. `NOTICE` lists them, and `tests/handwritten/LICENSE-CC-BY-SA` names each article.
+The code is under the Elastic License 2.0. Its text is in `LICENSE`, and the SPDX identifier is `pyproject.toml`'s `license` field. The copyright holder is named in `NOTICE`, because the Elastic License 2.0 has no copyright line of its own. Five data directories (`tests/pairs/`, `tests/handwritten/`, `arms/`, `paper/records/` and `annotated/`) are under Creative Commons Attribution 4.0 International instead, and each carries its own `LICENSE`. The text of the paper in `paper/` is under Creative Commons Attribution 4.0 too: see `paper/LICENSE`. Inside them, four document sets in `tests/handwritten/` (`gold_de_en`, `mahjongg`, `sepia` and `treecreeper`) are adapted from Wikipedia articles. Those sets, and the benchmark runs under `arms/` that merged `mahjongg`, are under Creative Commons Attribution-ShareAlike 4.0 International: anything built from them must credit the Wikipedia contributors and carry the same licence. `NOTICE` lists them, and `tests/handwritten/LICENSE-CC-BY-SA` names each article.

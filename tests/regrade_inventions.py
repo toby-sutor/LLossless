@@ -36,7 +36,7 @@ merged document says the value is unresolved, and it is -- the sources disagree.
 
 This program re-grades from stored evidence. No model is called; nothing here
 asks anything of an endpoint. It needs the per-fixture reports the run wrote,
-which the graded run records (withheld with the paper) do not carry, so it says so and passes rather than
+which `paper/records/` does not carry, so it says so and passes rather than
 reporting a result it did not compute -- the same refusal `grade_rerun.py` and
 `test_fixtures.check_preregistered_block` make. What it writes instead is
 self-contained: every finding it re-classified is in the output with the claim
@@ -209,7 +209,7 @@ def main() -> int:
     self_test()
 
     if not all(record_path(a).is_file() for a in ARMS):
-        print("  paper/records/ is NOT-PUBLISHED wholesale; no records to "
+        print("  paper/records/ is not in this copy; no records to "
               "re-grade here")
         return 0
     missing = [a for a in ARMS if not reports_for(args.reports_dir, a).is_dir()]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Re-grade the 2026-09-03 re-run's guard fixtures against their own probes.
 
-A record from the 2026-09-03 re-run (withheld with the paper) shows
+`paper/records/detect-2026-09-03-B-70b.json` shows
 `conflict_surfaced` with `probes: []` and `plants: 0`. Both are correct readings
 of `tests/run_detect.py` as it stood: `planted()` only ever kept a probe whose
 `expected_finding` is not `"none"`, and every probe on a guard fixture declares

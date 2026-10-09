@@ -21,7 +21,7 @@ Teams often keep the same knowledge in more than one place: two runbooks for one
 
 Two runbooks cover the same fault. The field crew's says: send a jammed dock to the workshop after **2** failed attempts. The support desk's says after **3**. They disagree, and someone should decide which is right.
 
-Claude Opus 5.5 was asked to merge them. The result reads perfectly and says 2. The 3 is gone, and nothing in the merged document shows the two teams ever disagreed. The next person to read it follows a rule nobody actually agreed on.
+Claude Opus 5.5 was asked to merge them. The result reads perfectly and says 2. The 3 is gone, and nothing in the merged document shows the two teams ever disagreed. The model did what the default setting asks: where two documents disagree, it picks one value and records the choice, in a record no reader of the runbook sees. The next person to read it follows a rule nobody actually agreed on.
 
 LLossless caught it:
 
@@ -118,7 +118,7 @@ LLossless answers each one with evidence.
 
 **It finds what it is built to find.** On the 13 pre-registered test documents, each a merge with a known defect or none, the full check found 7 of 7 planted defects and wrongly flagged 0 of 116 correct statements it graded (one model, one run). The cheaper `coverage` depth found 6 of the 6 defects it can reach and ran 2.04x faster.
 
-**Models do lose things.** On the nine public document pairs in the 2026-09-27 release run, every model deviated from a careful hand-written merge, and 5 of the 8 rows lost content without declaring it. Those are the losses a reader of the merged document cannot see.
+**Models do lose things.** On the nine public document pairs in the 2026-09-27 release run, every model deviated from the reference merge written for each pair, and 5 of the 8 rows lost content without declaring it. Those are the losses a reader of the merged document cannot see.
 
 **Cost and time.** On those pairs, each source under 6 KB, one merge with all its checks cost $0.012 to $0.485 through a vendor API and took 69 to 332 seconds; through a subscription CLI it took 164 to 677 seconds, at an API-equivalent $0.309 to $0.614 per merge, the price of the same calls, not money spent. A local model costs nothing per call and runs at the speed of your hardware. Longer documents cost more, because every document gets its own calls and verification is paid per batch of claims.
 
@@ -130,7 +130,7 @@ LLossless answers each one with evidence.
 - **It does not decide what belongs together.** It merges unrelated documents if asked. In the one measured case, the declared-loss budget made that run fail loudly.
 - **Two sources are what has been measured.** Up to twelve are accepted and checked, but almost every published figure comes from a pair: the one exception is the three-source `mahjongg` control document in the benchmark.
 - **The checker is a model too.** Its verdicts must quote real evidence, which catches a fabricated quote but not every wrong judgement. Temperature 0 and a fixed seed do not make the model deterministic, and claim extraction varies a little between runs.
-- **The evidence base is small**: short hand-written test documents, mostly English, and mostly one run per cell.
+- **The evidence base is small**: short test documents written or adapted for this project, mostly English, and mostly one run per cell.
 
 [Measured results](docs/results.md) has the figures behind all of this, including where the project's own headline metric misleads.
 
@@ -158,7 +158,7 @@ Nine merge pairs at `high`, two documents with planted factual errors and one cl
 **How to read the columns:**
 
 - **Silent loss** (lower is better, and only 0 is good enough): sentences from the sources that are missing from the merge, and that the merge never said it left out. These are the losses a reader cannot see. Any silent loss puts a model out of the ranking. Each one is a failure of the model, and LLossless reported it.
-- **Deviations per pair** (lower is better): how far the merge is from a careful hand-written merge of the same two documents. It counts sentences the merge should have kept but did not, sentences it should have left out but kept, and sentences it repeated. The last row shows what a simple program scores by pasting the documents together without duplicates: a model at or above 7.78 did no better than that.
+- **Deviations per pair** (lower is better): how far the merge is from the reference merge written for the same two documents. It counts sentences the merge should have kept but did not, sentences it should have left out but kept, and sentences it repeated. The last row shows what a simple program scores by pasting the documents together without duplicates: a model at or above 7.78 did no better than that.
 - **Planted errors fixed** (higher is better): each of these documents has known factual errors planted in it, 44 in voyager and 14 in bip39, and the merge was allowed to correct facts. The number is how many it corrected. Only the fidelity levels `open` and `sourced` allow the model to correct facts, so these runs used `open`. At the lower levels the merge carries such errors over unchanged.
 - **$ per merge** (lower is better): the price of one merge including all its checks.
 
@@ -175,7 +175,7 @@ Planted errors are the median of three runs. Subscription dollars are the API pr
 - **Skip: Haiku 4.5.** The most silent losses, the fewest fixes and two outright failures, and on the subscription it takes over eleven minutes a merge.
 - **Local models: not measured in this release.** An earlier trial with an 8B and a 27B model was stopped: the 8B was not useful, and the 27B cost more to run than a hosted frontier model for a result expected to be worse, on top of serving problems with Ollama and vLLM. Even the weakest hosted model here is not fit for production work, so a local model would have to match the stronger ones above, and this benchmark cannot tell you which one does.
 
-Most pairs ran once, and a single run can move a model by several facts. Gemini 3.8 Flash was registered but not measured: its free tier answered "high demand" throughout. [`arms/BENCHMARK-MATRIX.md`](arms/BENCHMARK-MATRIX.md) lists every earlier measurement with its settings and caveats.
+Most pairs ran once, and a single run can move a model by several facts. Gemini 3.8 Flash was registered but not measured: its free tier refused every call. [`arms/BENCHMARK-MATRIX.md`](arms/BENCHMARK-MATRIX.md) lists every earlier measurement with its settings and caveats.
 
 ## Try it in two minutes
 
@@ -314,7 +314,7 @@ flowchart LR
 LLossless started in March 2026 as a question: when a large language model (LLM) merges two knowledge-base articles, what does it leave out? It was built in milestones, each ending in a written review. A few of the things it taught:
 
 - **Reading finds the loud errors, and a diff finds the quiet ones.** The answer key for a document with planted factual errors was first typed by reading two versions side by side; a word diff found about twice as many, the swapped words and decimal commas a model carries through unnoticed.
-- **A script can beat a model.** A mechanical union, one document plus every paragraph of the other that it does not already contain, deviated from the hand-written reference merges less than one frontier model's run did. So the benchmark scores it beside every model.
+- **A script can beat a model.** A mechanical union, one document plus every paragraph of the other that it does not already contain, deviated from the reference merges less than one frontier model's run did. So the benchmark scores it beside every model.
 - **A gap between models can be a gap in the prompt.** Two models deleted internal markup tags that two others kept, which looked like a ranking. Three sentences saying that tags are code closed the gap completely.
 - **Show the model the shape.** Merged code came back with its indentation destroyed, and the model looked guilty, but the pipeline had stripped the indentation before the model ever saw it. Restoring it fixed the indentation and, unexpectedly, stopped the model from collapsing two programs into one.
 - **The models moved faster than the project.** During development two model families released a new generation, and one model began refusing the merge prompt through its API. So the lineup is frozen per release, every figure is dated, and re-measuring is cheap.
@@ -336,7 +336,7 @@ Elastic-2.0, the Elastic License 2.0, with the text in `LICENSE`. It is source-a
 
 If you are interested in a commercial licence that allows hosted or managed services, please contact the author directly.
 
-Four directories are excluded from this licence. The fixture corpora in `tests/pairs/`, the hand-written document pairs in `tests/handwritten/`, the raw model-study outputs in `arms/` and the annotated pages in `annotated/` are under Creative Commons Attribution 4.0 International, which permits commercial use. Each carries its own `LICENSE`, and that file governs its directory rather than this one. One exception inside them: four document sets in `tests/handwritten/` are adapted from Wikipedia articles, and they and the benchmark runs that merged one of them are under Creative Commons Attribution-ShareAlike 4.0 International, which also permits commercial use and requires anything built from them to carry the same licence. `NOTICE` lists them. [How it works](docs/how-it-works.md#licence) says where the licence text and the copyright notice live.
+Five directories are excluded from this licence. The fixture corpora in `tests/pairs/`, the document sets in `tests/handwritten/`, the raw model-study outputs in `arms/`, the graded run records in `paper/records/` and the annotated pages in `annotated/` are under Creative Commons Attribution 4.0 International, which permits commercial use. Each carries its own `LICENSE`, and that file governs its directory rather than this one. The text of the paper in `paper/` is under the same Creative Commons licence, as `paper/LICENSE` says. One exception inside them: four document sets in `tests/handwritten/` are adapted from Wikipedia articles, and they and the benchmark runs that merged one of them are under Creative Commons Attribution-ShareAlike 4.0 International, which also permits commercial use and requires anything built from them to carry the same licence. `NOTICE` lists them. [How it works](docs/how-it-works.md#licence) says where the licence text and the copyright notice live.
 
 ## Documentation
 

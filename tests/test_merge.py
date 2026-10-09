@@ -459,7 +459,7 @@ def test_verbatim_is_the_published_name_for_off_and_off_still_works() -> None:
     `--fidelity off` reads as "turn fidelity checking off" when it means
     "rewriting off", and it is the strictest setting -- so the level is
     published as `verbatim`. The wire spelling did not move with it, because
-    151 recorded cassettes, every graded run record (withheld with the paper) and the operator's own
+    151 recorded cassettes, every graded run record in `paper/records/` and the operator's own
     scripts are written in `off`, and the alias is not on a deprecation clock.
     """
     check(config.FIDELITY_LEVELS == ("off", "low", "mid", "high", "open", "sourced"),
@@ -1713,7 +1713,7 @@ def test_the_reason_scan_fires_on_the_captured_leak_and_not_on_real_reasons() ->
 
     Must-fire is the reason `qwen3:8b` actually emitted on 2026-09-14, which
     is the example's own sentence with "because " removed. Must-not-fire is
-    every reason in the nine answer keys, which are human-authored.
+    every reason in the nine answer keys, which were written for the pairs.
     """
     leaked = [{"segment": "b1",
                "reason": "The base title was kept and this one was not."}]
@@ -1734,7 +1734,7 @@ def test_the_reason_scan_fires_on_the_captured_leak_and_not_on_real_reasons() ->
         ).get("dispositions", ())
         hits = merge.example_reason_leaks(records)
         check(not hits,
-              f"{name}'s answer key reasons are human-authored and must not "
+              f"{name}'s answer key reasons are written for the fixture and must not "
               f"read as the example: {hits}")
 
 
@@ -1863,7 +1863,7 @@ def test_the_uniform_forward_rule() -> None:
 
     `contradiction/a-connect-timeout` is the worked case. It declares
     `expected_verdict: CONTRADICTED` and `expected_evidence_contains: ["60"]`,
-    both true of the hand-written merge and both wrong for a generated one that
+    both true of the fixture's own merge and both wrong for a generated one that
     surfaces A's 30 seconds and B's 60 alongside each other.
     """
     probe = next(
@@ -1914,7 +1914,7 @@ def test_the_merge_step_is_shown_two_sources_and_nothing_else() -> None:
 
     Worth its own test because the two are different claims. Downstream the
     concern is grounding -- `verify.locate` searches only the mapping it is
-    handed. Here the concern is contamination: a merge shown the hand-written
+    handed. Here the concern is contamination: a merge shown the fixture's own
     merge would reproduce it, and every measurement after that would be of a
     document the model was given rather than one it wrote.
 
@@ -1928,7 +1928,7 @@ def test_the_merge_step_is_shown_two_sources_and_nothing_else() -> None:
 
     hand_written = (run_merge.FIXTURES_DIR / "disjoint_sources" / "merged.md").read_text()
     check(all(hand_written not in text for text in sources.values()),
-          "no source may carry the hand-written merge, or the guard proves nothing")
+          "no source may carry the fixture's own merge, or the guard proves nothing")
 
     seen: list[dict] = []
 
@@ -1942,7 +1942,7 @@ def test_the_merge_step_is_shown_two_sources_and_nothing_else() -> None:
     check(len(seen) == 1, f"one merge call per unit, saw {len(seen)}")
     rendered = seen[0]["messages"][-1]["content"]
     check(hand_written.strip() not in rendered,
-          "the hand-written merge must never reach the merge prompt")
+          "the fixture's own merge must never reach the merge prompt")
 
     try:
         merge.check_sources({**sources, "merged.md": hand_written})

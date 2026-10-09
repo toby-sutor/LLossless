@@ -48,8 +48,9 @@ sentence pass:
   (c) Recorded evidence, data rather than prose, skipped by directory, whole,
       for rules 1 and 2: `arms/` (every recorded run: raw reports,
       registrations, pins, commit ids captured verbatim, and old absolute
-      paths from checkouts named "claimcheck") and `tests/responses/` (recorded
-      model-response cassettes). Rule 3 skips the same
+      paths from checkouts named "claimcheck"), `tests/responses/` (recorded
+      model-response cassettes) and `paper/records/` (the graded run records
+      the paper cites, recorded byte for byte). Rule 3 skips the same
       directories but reads the prose pages that live in them
       (`EVIDENCE_PROSE`): a README inside an evidence directory is written
       for a reader, not recorded.
@@ -155,6 +156,7 @@ UPPER_TOKEN = "CLAIMCHECK"
 EXEMPT_DIRECTORIES = (
     "arms/",
     "tests/responses/",
+    "paper/records/",
 )
 
 # (d) file-scoped name exceptions -------------------------------------------
@@ -215,6 +217,13 @@ COMMIT_ID_FILE_EXCEPTIONS: dict[str, str] = {
     "tests/fixtures/restated/recorded-claims.json":
         "the recorded run's own `claimcheck_commit` value, the same kind of "
         "evidence as the field itself",
+    "paper/generated/numbers.json":
+        "generated, never typed: each figure's value beside the record it was "
+        "read from. Its commit ids are the paper's own build stamp and values "
+        "read from recorded data (a `claimcheck_commit`, a registration's pin), "
+        "which are exempt in the files they are read from",
+    "paper/generated/numbers.tex":
+        "the same generated figures as numbers.json, as LaTeX macros",
     "tests/benchmark_matrix.py":
         "two hardcoded provenance commits, for the two rows (D3/D4, X8) "
         "with no committed record to read one from structurally; they feed "
@@ -278,6 +287,9 @@ RECORD_POINTER_EXCEPTIONS: dict[str, str] = {
     "publication-manifest.txt":
         "the manifest records each publication ruling beside the decision that "
         "made it; it is the one published file whose job is to cite that record",
+    "paper/generated/numbers.json":
+        "the three `blindspot.*` keys name the unpublished decision log as their "
+        "record, which the paper states in its text; no decision number appears",
     "tests/repo_paths.py":
         "defines the path of the decision log, `DECISIONS.md`, for the withheld "
         "maintainers' tooling that imports this module; a path, not a citation",
@@ -307,6 +319,9 @@ INTERNAL_POINTER_EXCEPTIONS: dict[str, str] = {
     "tests/run_all.py":
         "names the withheld tools by path so that a published copy, where they "
         "are absent, reports them as withheld instead of failing",
+    "paper/Makefile":
+        "runs the withheld number generator and number check where they are "
+        "present, and says so and builds from the committed figures where not",
     "scripts/build_arm_bundle.py":
         "imports the withheld provider-name detector by path where it is present "
         "and runs the other four detectors, saying so, where it is not",

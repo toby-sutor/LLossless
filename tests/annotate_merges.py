@@ -401,7 +401,7 @@ def detect_page(entry: dict) -> str:
             f'<dt>plants detected</dt><dd>{entry["plants_detected"]} of '
             f'{entry["plants_total"]}</dd>',
             f'<dt>fixtures</dt><dd>{len(entry["fixtures"])}</dd>',
-            f'<dt>graded from</dt><dd><code>regrade-inventions.json</code>, a record withheld with the paper</dd>',
+            f'<dt>graded from</dt><dd><code>paper/records/regrade-inventions.json</code></dd>',
             '</dl>']
     if entry["disqualified"]:
         for reason in entry["disqualified"]:
@@ -459,7 +459,7 @@ def index_page(merge_pages: dict[str, str], detect_pages: dict[str, str]) -> str
             + section("Detection, by arm", detect_pages,
                       "Which planted defects each arm caught, which it missed, "
                       "and which findings no probe accounts for, graded from "
-                      "regrade-inventions.json, a record withheld with the paper.")
+                      "paper/records/regrade-inventions.json.")
             + "</body></html>\n")
 
 
@@ -494,9 +494,9 @@ def check() -> int:
     if not ARMS.is_dir():
         print("  arms/2026-08-30/ is absent; nothing to annotate")
         return 0
-    # The detection pages are graded from `paper/records/regrade-inventions.json`
-    # and a published copy withholds `paper` wholesale. The merge pages are
-    # still fully checkable there, so the copy checks those and says plainly
+    # The detection pages are graded from `paper/records/regrade-inventions.json`,
+    # published with the paper. A copy made without that record can still check
+    # the merge pages in full, so it checks those and says plainly
     # that it could not check the rest: a run that prints only "ok" would
     # imply it had verified pages it never looked at.
     graded = INVENTIONS.is_file()
@@ -532,10 +532,10 @@ def check() -> int:
               + ", ".join(f"{n} ({fresh[n] // 1024} KiB)" for n in checked))
         if skipped:
             pages = len([n for n in skipped if n.startswith("detect-")])
-            print(f"  UNMEASURED: paper/records/ is withheld from the published "
-                  f"copy, so the {pages} detection page(s) and the index cannot "
-                  f"be regraded here. Not a failure: the grading record ships "
-                  f"with the paper, not with the tool.")
+            print(f"  UNMEASURED: paper/records/regrade-inventions.json is not "
+                  f"in this copy, so the {pages} detection page(s) and the index "
+                  f"cannot be regraded here. Not a failure of the pages: the "
+                  f"grading record is published with the paper.")
         return 0
     finally:
         shutil.rmtree(scratch, ignore_errors=True)

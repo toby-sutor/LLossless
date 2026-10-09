@@ -2080,7 +2080,7 @@ def test_a_linked_worktree_still_knows_which_commit_it_is() -> None:
     """`git worktree add` leaves a `.git` file, and the commit went `unknown`.
 
     Found by running the paper build from a worktree: it wrote `unknown`
-    over a real commit in the paper's generated output (withheld with the paper), because `git_commit`
+    over a real commit in the paper's generated output (`paper/generated/numbers.json`), because `git_commit`
     read `root/.git/HEAD` as a path and `root/.git` is a *file* there, holding
     `gitdir: <path>`. Every run made from a second checkout had been recording
     its provenance as "git could not be asked" -- and a second checkout is
@@ -2210,7 +2210,7 @@ def test_a_sweep_rewriting_cassettes_does_not_dirty_its_own_provenance() -> None
 def test_the_paper_stamp_excludes_its_own_output_and_nothing_else() -> None:
     """The same exclusion one directory over, and it has to stay that narrow.
 
-    The paper's generated `numbers.tex` (withheld with the paper) is tracked and carries the commit the PDF was
+    The paper's generated `numbers.tex` (`paper/generated/`) is tracked and carries the commit the PDF was
     built from, so the build writes it. Left in scope, the first `make paper`
     after a commit stamps a clean revision and the second stamps `-dirty` for
     nothing but the stamp the first one wrote -- the cassette failure above,
@@ -3979,7 +3979,7 @@ PUBLIC_REFERENCES = ("www.apache.org", "creativecommons.org",
                      "api.openai.com", "platform.openai.com",
                      "api.anthropic.com", "docs.claude.com",
                      "generativelanguage.googleapis.com", "ai.google.dev",
-                     # The paper's bibliography-check script (withheld with the paper)
+                     # The paper's bibliography-check script (`paper/check_refs.py --online`)
                      # re-fetches every bibliography entry from the arXiv API, and reads the
                      # Atom namespace URI to parse the reply. Same ground as
                      # the pricing pages: a fixed published address the
@@ -3987,8 +3987,8 @@ PUBLIC_REFERENCES = ("www.apache.org", "creativecommons.org",
                      # not even an endpoint -- it is an XML namespace, and
                      # nothing dereferences it.
                      "export.arxiv.org", "arxiv.org", "www.w3.org",
-    # The hand-written corpus cites its own sources. `tests/handwritten/`
-    # holds documents a person wrote on ordinary subjects, and four of them
+    # The `tests/handwritten/` corpus cites its own sources. It
+    # holds documents on ordinary subjects, and four of them
     # carry the Wikipedia article they were drawn from, in the body text
     # where a reader can check it. Same ground as the deeds and the pricing
     # pages above: a fixed, published address, incapable of naming anybody's
@@ -4596,7 +4596,7 @@ SECRET_CANARIES = {
          "https://ai.google.dev/pricing",
          "https://export.arxiv.org/api/query?id_list=2305.14251&max_results=1",
          "http://www.w3.org/2005/Atom",
-         # The hand-written corpus cites the Wikipedia articles its
+         # The `tests/handwritten/` corpus cites the Wikipedia articles its
          # documents were drawn from, in the body text.
          "https://en.wikipedia.org/wiki/Sepiidae",
          "https://de.wikipedia.org/wiki/Gold",

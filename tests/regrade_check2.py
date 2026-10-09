@@ -31,8 +31,8 @@ disposition records need the response cassette, and this file deliberately does
 not go there: it would be re-running the grader from a different input than the
 one it is checking.
 
-The output is a record kept beside the graded run records (withheld with the paper), named `regrade-<label>.json` so that
-the paper's own figure builder (withheld with it) gives it its own `regrade.<label>.*` key
+The output is a record in `paper/records/`, named `regrade-<label>.json` so that
+the paper's own figure builder (not part of a published copy) gives it its own `regrade.<label>.*` key
 prefix. It is not written back into the sweep record and does not share its
 prefix. A sweep record is what a run produced on the day, and a number this
 file derived afterwards has different provenance and has to say so in its own

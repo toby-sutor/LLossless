@@ -83,7 +83,7 @@ socket_guard.install()
 from llossless import reconcile  # noqa: E402
 
 # The recorded arms are published under `arms/`, and their
-# sources are the hand-written pairs in `tests/handwritten/`, found by the
+# sources are the pairs in `tests/handwritten/`, found by the
 # original filename each pair's `meta.json` records. `LLOSSLESS_ARTEFACTS_ROOT`
 # (the scratch mirror the runs were first written to), `--run-dir` and
 # `--sources-root` override; a source not under `--sources-root` is looked up
@@ -99,7 +99,7 @@ COMMITTED = ROOT / "tests" / "league_table.json"
 
 
 def handwritten_by_origin() -> dict[str, Path]:
-    """Original filename -> tracked copy, from each hand-written pair's meta.json."""
+    """Original filename -> tracked copy, from each `tests/handwritten` meta.json."""
     out = {}
     for meta in sorted((ROOT / "tests" / "handwritten").glob("*/meta.json")):
         origin = json.loads(meta.read_text(encoding="utf-8")).get("origin") or {}

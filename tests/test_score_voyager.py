@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The planted-error scorers' keys are derived, and every control holds. Offline; no call.
 
-`tests/score_planted.py` scores merges of the two hand-written
+`tests/score_planted.py` scores merges of the two `tests/handwritten`
 pairs with planted errors, `voyager` and `bip39`, against a key computed by
 diffing each pair's `reference.md` with its sources, and scores `mahjongg`,
 which has none, for false corrections. `score_voyager.py` is kept as that

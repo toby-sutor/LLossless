@@ -7,7 +7,7 @@ from the report. Every other harness in this directory is a library caller and
 grades its own return values; none of them can tell you what `echo $?` prints,
 and that is the thing an operator acts on.
 
-The document under test is the fixture's own hand-written `merged.md`, not a
+The document under test is the fixture's own `merged.md`, not a
 generated one. That is what makes detection measurable at all: `expected.json`
 describes the planted defect in *that* file, so there is an answer key. A merge
 this tool generated has no key, and its measurable properties live in
@@ -100,7 +100,7 @@ def fixture_names() -> list[str]:
 #
 # A hand-written list is a second place for the set to be wrong, so it is not
 # trusted: `test_fixtures.check_preregistered_block` requires it to equal the
-# fixture set of every graded half-run record (withheld with the paper), which is the block as it
+# fixture set of every `paper/records/half1-*.json`, which is the block as it
 # was actually run, and to name only fixtures that exist.
 PREREGISTERED_BLOCK = (
     "attribution_invented", "attribution_swapped", "conflict_surfaced",

@@ -1,6 +1,6 @@
 """Progress as structured events, for a browser watching a run it cannot hold open.
 
-A merge takes between 23 and 4,559 seconds, measured over the graded run records (withheld with the paper).
+A merge takes between 23 and 4,559 seconds, measured over the graded run records in `paper/records/`.
 Nothing about that is compatible with a request/response cycle, so the web UI
 submits work and then watches it, and this module is the watching half: a
 `Console` subclass that records what the engine says instead of printing it, an

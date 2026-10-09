@@ -92,16 +92,16 @@ AS_OF = "2026-09-26"
 
 TEST_SETS = {
     "pairs9": ("tests/pairs (9)", "the nine pairs in `tests/pairs/`, merged and "
-               "scored against each pair's hand-written `ideal.md`"),
-    "handref": ("hand-written reference", "the author's hand-written pairs "
-                "(named `toby-test-*` when run, now in `tests/handwritten/`), "
-                "scored against the author's own `reference.md`"),
+               "scored against each pair's reference merge, `ideal.md`"),
+    "handref": ("hand-written reference", "pairs from `tests/handwritten/` "
+                "(named `toby-test-*` when run), "
+                "scored against the `reference.md` the author wrote"),
     "planted": ("planted errors", "`tests/handwritten/` `voyager` (44 planted "
                 "errors) and `bip39` (14), plus `mahjongg` as the "
                 "false-correction control"),
     "fixtures": ("tests/fixtures (13)", "the 13-fixture detection block in "
                  "`tests/fixtures/`: seeded defects and clean guards, "
-                 "`verify` run on each fixture's hand-written `merged.md`"),
+                 "`verify` run on each fixture's own `merged.md`"),
     "index429": ("tests/pairs/index_429", "the one public pair "
                  "`tests/pairs/index_429`, merged and checked (the August "
                  "local-model study)"),
@@ -112,7 +112,7 @@ TEST_SETS = {
     "early": ("early fixtures", "the fixtures as they stood in the first "
               "week of August (8 for the cross-model sweep, 12 for the "
               "`qwen3:4b` comparison); most were later revised"),
-    "probe": ("probe", "one hand-written prompt, not a test set"),
+    "probe": ("probe", "one ad-hoc prompt, not a test set"),
 }
 
 # The coverage grid's columns: the test sets a model can be compared on. The
@@ -597,7 +597,7 @@ def span(values: list) -> str:
 
 def pairs_headline(m: dict) -> str:
     """One pairs row's headline. A row `figure_rules` formed also names the
-    columns that never enter it; a hand-written-pair row (`rank_arms`)
+    columns that never enter it; a `tests/handwritten` row (`rank_arms`)
     carries none of them."""
     usd = m.get("usd_per_merge")
     cost = f"${usd:.3f}/merge" if usd is not None else "no $ figure"
@@ -1126,8 +1126,8 @@ of 2026-09-03 (D14). It has not run since 2026-09-03.
   reading was put under review. On 2026-09-02 the endpoint's own envelope
   settled it: `content` empty, no reasoning field of either
   spelling, 996 completion tokens billed. The model generated and stopped; the
-  tokens are discarded above the tool, so it is not a harness defect. A
-  hand-written probe (X9) found `gpt-oss:20b` did not reproduce it, and a run
+  tokens are discarded above the tool, so it is not a harness defect. An
+  ad-hoc probe (X9) found `gpt-oss:20b` did not reproduce it, and a run
   through the tool's own decompose path reversed that, where the 20B emptied
   its body too (on an off-configuration window). The same mechanism was later
   seen on the 27B at the merge role, so it is not specific to this model.
@@ -1188,9 +1188,9 @@ def render(all_rows: list[Row]) -> str:
         "runs that check. Every figure here is derived from a committed file; a run",
         "whose figures live only in a note or outside the repository says",
         f"\"{NOT_DERIVABLE}\" and is listed under [Evidence gaps](#evidence-gaps).",
-        "Rows whose evidence is under `paper/records/` cite graded records that are",
-        "withheld with the paper in this release; in a copy without them the check",
-        "says UNMEASURED instead of rebuilding this file.",
+        "Rows whose evidence is under `paper/records/` cite the graded records that",
+        "are published with the paper; in a copy made without that directory the",
+        "check says UNMEASURED instead of rebuilding this file.",
         "",
         f"**{len(all_rows)} run groups.** Rows are not a leaderboard: read the",
         "comparability column before setting two rows side by side.",
@@ -1419,10 +1419,10 @@ def main(argv: list[str] | None = None) -> int:
                     help="run the must-fire probes, then fail if the committed file differs")
     args = ap.parse_args(argv)
 
-    # A published copy withholds `paper/` whole, and a third of the rows are
-    # read from its graded records, so the matrix can be neither regenerated
-    # nor compared there. Said, and declined, rather than crashing on the
-    # first missing record or passing over rows it never rebuilt.
+    # A third of the rows are read from the graded records under `paper/`,
+    # which is published with the rest. In a copy made without that directory
+    # the matrix can be neither regenerated nor compared. Said, and declined,
+    # rather than crashing on a missing record or passing over unbuilt rows.
     if not RECORDS.is_dir():
         print(f"UNMEASURED: {RECORDS.relative_to(ROOT)}/ is not in this copy, so "
               f"{OUT.relative_to(ROOT)} cannot be regenerated or checked here")

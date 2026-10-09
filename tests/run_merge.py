@@ -11,7 +11,7 @@ convenient.
 
 **Every declared expectation on a forward probe is ignored.**
 `expected_verdict`, `also_acceptable` and `expected_evidence_contains` all
-describe the hand-written merge, and this harness is not looking at it. Each
+describe the fixture's own merge, and this harness is not looking at it. Each
 `source_to_merged` probe is graded against one rule -- the verdict must be
 SUPPORTED -- plus the *computed* grounding check verify already performs against
 the document the model produced. So `dropped_claim` passes here and fails under
@@ -20,9 +20,9 @@ and this asks whether the merge model committed it.
 
 Enforcing `expected_evidence_contains` would be worse than useless: 58 of the 121
 forward probes declare one, and every declared span is a span of the
-hand-written merge. A generated merge is free to write `30s` for `30 seconds`,
+fixture's own merge. A generated merge is free to write `30s` for `30 seconds`,
 which is a notation change and silent by design (README.md, "Non-goals"), and
-`contradiction/a-connect-timeout` declares `60` because the hand-written merge
+`contradiction/a-connect-timeout` declares `60` because the fixture's merge
 silently took B's value -- so a merge that correctly surfaces both is SUPPORTED
 quoting `30 seconds`, and would fail the assertion for being right.
 `expected_evidence_source` needs no exclusion: no forward probe carries one.
@@ -155,7 +155,7 @@ DEFAULT_SAMPLES = 3
 #
 # Forward runs before decompose deliberately. The forward measurement is the
 # headline and it makes no decompose call -- its claims are the fixtures'
-# hand-written probe texts -- so putting it second means a decompose failure
+# own probe texts -- so putting it second means a decompose failure
 # leaves the headline measured rather than erasing it.
 STEPS = ("merge", "verify_forward", "decompose", "verify_reverse")
 
@@ -283,7 +283,7 @@ def unit_documents(fixture: str, merged: str) -> dict[str, str]:
     merged.md is never validated against" is a property of one function rather
     than a habit spread over the runner. `verify.locate` searches only the
     mapping it is handed, and this mapping's `merged.md` is the generated text,
-    so a span quoted from the hand-written merge and absent from this one comes
+    so a span quoted from the fixture's merge and absent from this one comes
     back a transcription error -- which is the correct reading of it.
     """
     return {**load_sources(fixture), MERGED: merged}
@@ -294,7 +294,7 @@ def forward_probes(expected: dict) -> list[dict]:
 
 
 def probe_claims(probes: list[dict]) -> list[Claim]:
-    """Hand-written probes as claims, with the probe id as the join key.
+    """A fixture's probes as claims, with the probe id as the join key.
 
     The same construction as `run_verify.probe_claims`, and repeated rather than
     imported for the reason the two runners repeat their report code:
@@ -321,7 +321,7 @@ def global_assertions() -> list[dict]:
 def transferable(expected: dict, sources: dict[str, str]) -> list[dict]:
     """The fixture's `merged.md` assertions that describe *any* correct merge.
 
-    A `must_not_extract` entry scoped to `merged.md` describes the hand-written
+    A `must_not_extract` entry scoped to `merged.md` describes the fixture's own
     merge, and most do not survive the move. `dropped_claim` forbids a JSON Lines
     claim because its merge omits the log format -- but a correct generated merge
     is *required* to carry that fact, so applying the assertion would punish the

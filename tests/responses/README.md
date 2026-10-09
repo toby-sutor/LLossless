@@ -96,7 +96,7 @@ A prompt digest is the first twelve hex characters of the SHA-256 of the prompt 
 
 **The current set is the first two rows, 407 recordings from one session.** They share one endpoint id and one revision stamp, and the stamp carries no `-dirty` mark. Every one was made at temperature 0 and seed 0, with the structured-output tier `json_schema`, with thinking off for every role, and with answers read under field order `any`. None of the 407 answers contains a reasoning block. [Measured results](../../docs/results.md#reference-configuration) describes the endpoint.
 
-**This directory holds the decompose and verify measurements.** Each fixture's three documents were decomposed, and each fixture's hand-written merged document was verified against its sources. `tests/run_decompose.py` and `tests/run_verify.py` replay it.
+**This directory holds the decompose and verify measurements.** Each fixture's three documents were decomposed, and each fixture's own merged document was verified against its sources. `tests/run_decompose.py` and `tests/run_verify.py` replay it.
 
 **`m7/` holds the merge measurement.** The model merged each fixture's two sources, and that merge was decomposed and verified. `tests/run_merge.py` replays it. Beside the recordings it has:
 
@@ -148,7 +148,7 @@ Verify, as recorded, gave the expected verdict on every measured probe of every 
 Temperature 0 and a fixed seed do not make a model repeat itself, so each call was made three times and the samples are compared. In the current set:
 
 - **Decompose:** 42 of the 43 distinct fixture documents got the same answer, byte for byte, in all three samples.
-- **The one that differed is `restated/merged.md`,** the only fixture document a model wrote. Its claim count came back at 43, 50 and 43. In sample 2 the first answer held the same 43 claims as the other two samples, but one claim lacked its line number, so validation rejected it. The retry returned 50 claims. The count that moved is the answer to a retry, not a different answer to the same request.
+- **The one that differed is `restated/merged.md`,** the only fixture document that is the output of a run of the tool. Its claim count came back at 43, 50 and 43. In sample 2 the first answer held the same 43 claims as the other two samples, but one claim lacked its line number, so validation rejected it. The retry returned 50 claims. The count that moved is the answer to a retry, not a different answer to the same request.
 - **Verify:** every request got the same answer in all three samples.
 - **Merge:** the model wrote the same merged document in all three samples for 15 of the 16 fixtures. For `concatenated` it wrote two different ones.
 
@@ -161,7 +161,7 @@ In `attribution_invented`, the reverse check covers two probes, `m-tls-attribute
 ### What a reviewer should know before counting files
 
 - **Byte-identical documents are decomposed once per sample.** The sixteen fixtures have 48 documents but 43 distinct ones, because fixtures share sources: `conflict_surfaced/source_a.md`, `contradiction/source_a.md` and `dropped_claim/source_a.md` are one text, as are `conflict_surfaced/source_b.md` and `contradiction/source_b.md`, `attribution_invented/source_a.md` and `attribution_swapped/source_a.md`, and `dedup/source_b.md` and `structure_added/source_b.md`. So 43 x 3 = 129 decompose calls, plus one retry, make the 130 files.
-- **Two fixtures share their merge requests.** `conflict_surfaced` and `contradiction` have the same two sources and differ only in their hand-written merged document. In `m7/`, 45 merge recordings therefore answer 48 merges.
+- **Two fixtures share their merge requests.** `conflict_surfaced` and `contradiction` have the same two sources and differ only in the merged document written for each. In `m7/`, 45 merge recordings therefore answer 48 merges.
 - **A retry is a recording of its own.** When validation rejects an answer, the next attempt is a new request with the rejection appended, and it gets its own key and file with `meta.attempt` 2. The current set holds eleven: one decompose and three verify in this directory, seven verify in `m7/`.
 - **The three samples of one request have identical `request` blocks.** The sample number is in the key and not in the file. `m7/journal.jsonl` maps each key to its fixture and sample.
 

@@ -1024,7 +1024,7 @@ def check_preregistered_block() -> Report:
     The scored detection block is a list and not a rule, because what excludes
     `list_structure` is its history rather than any field it carries. A list is
     a second place for the set to be wrong, so it is checked against the block
-    as it was actually run: every graded run record (withheld with the paper) records the
+    as it was actually run: every `paper/records/half1-*.json` records the
     fixtures its arm graded, and the constant must equal that set exactly. If a
     fixture is ever added to or dropped from the block, three records disagree
     with it and this fails until the change is deliberate.
@@ -1041,7 +1041,7 @@ def check_preregistered_block() -> Report:
         f"PREREGISTERED_BLOCK names fixtures that do not exist: "
         f"{sorted(block - on_disk)}",
     )
-    # `paper` is NOT-PUBLISHED wholesale, so a published clone has no records to
+    # A copy made without `paper/records/` has no records to
     # check against and this half of the check genuinely cannot run there. It
     # says so on its own output rather than reporting a pass it did not earn,
     # the same way `scripts/build_arm_bundle.py` reports a withheld detector.

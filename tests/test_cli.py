@@ -4174,7 +4174,7 @@ def test_a_merge_that_returns_the_prompts_example_is_a_finding() -> None:
     The third assertion is the one that is not about detection. A leak is a
     finding but it is not one of the nine, so `structural` must not carry it and
     must still publish `checks: 9`: that block's denominator is what
-    the graded run records (withheld with the paper) fixed, and a tenth thing inside it would restate
+    the graded run records in `paper/records/` fixed, and a tenth thing inside it would restate
     every one of those records as a reading taken on a different instrument.
     """
     leaked = LONG_MERGED + "The Marlbrook funicular closes at dusk.\n"
@@ -4253,7 +4253,7 @@ def test_a_merge_that_states_one_fact_twice_is_a_finding() -> None:
     """Check 9's claim-level half, wired into the command.
 
     The defect this is about passed the whole pipeline clean on three real
-    operator runs: two sources stating the same facts in two people's wordings,
+    operator runs: two sources stating the same facts in two different wordings,
     a merge that keeps both, and exit 0 with nothing reported. Nothing in the
     reconciler can see it -- the two copies are two strings, so the exact
     duplication pass is silent, and the control maximum for near-repeat

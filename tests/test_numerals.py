@@ -355,7 +355,7 @@ def test_every_corpus_file() -> None:
     """Every document in the three corpora; the planted pair fires, nothing else.
 
     Measured 2026-09-25 over 130 documents: 16 fixtures, 9 pairs and 19
-    hand-written pairs, sources and merges both:
+    `tests/handwritten` sets, sources and merges both:
     six findings, all in `voyager` -- the four planted format errors in the
     sources, and the two its reference resolves. Pinned by name, so a new
     firing is read rather than absorbed.

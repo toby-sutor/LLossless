@@ -219,7 +219,7 @@ def sources_of(fixture: str, fixtures_root: Path = FIXTURES) -> dict[str, str]:
 
 
 def reference_is_concatenation(fixture: str, fixtures_root: Path = FIXTURES) -> bool:
-    """Is the fixture's own hand-written merge a concatenation of its sources?
+    """Is the fixture's own `merged.md` a concatenation of its sources?
 
     True for exactly one fixture in the suite. Checked byte-for-byte against the
     three plausible joins rather than by similarity, because this decides whether
@@ -227,7 +227,7 @@ def reference_is_concatenation(fixture: str, fixtures_root: Path = FIXTURES) -> 
     is not a judgement to make on a ratio.
 
     `fixtures_root` is a parameter rather than always `FIXTURES` so a second
-    corpus can be measured with the same function; a corpus with no hand-written
+    corpus can be measured with the same function; a corpus with no fixture
     `merged.md` (`tests/handwritten/` deliberately carries none) has
     nothing for this predicate to read, and the caller is expected to check
     that file exists before calling this rather than have this function guess

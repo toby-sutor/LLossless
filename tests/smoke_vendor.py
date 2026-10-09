@@ -17,7 +17,7 @@ is the failure this exists to catch: `decompose` and `verify` both refuse
 outright without a measured window, and a run that skipped them silently
 would otherwise look like a pass with a smaller report.
 
-**The documents are synthetic and stay that way.** The paper's introduction (its paragraph "Where the documents come from", withheld with it)
+**The documents are synthetic and stay that way.** The paper's introduction (`paper/sections/10-introduction.tex`, its paragraph "Where the documents come from")
 and the benchmark rules forbid sending text derived from private documents to a
 hosted endpoint, and the operator's `toby-test-*` corpus is theirs. The pair
 here is `tests/fixtures/dedup`, which is 270 bytes of invented relay

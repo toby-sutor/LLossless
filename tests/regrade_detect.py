@@ -40,7 +40,7 @@ measure it, which is what `unmeasured` says; but the record must not imply the
 stronger reading, so every fixture re-scored without probe evidence is listed
 under `unverifiable_conditions`.
 
-The output is a record kept beside the graded run records (withheld with the paper), giving it the
+The output is `paper/records/regrade-detect.json`, giving it the
 `regrade.detect.<arm>.*` key prefix. A reader who sees
 `regrade.detect.B-70b.matched` therefore knows it was not measured by the run
 that produced `detect.B-70b.exit_code_matched`.
