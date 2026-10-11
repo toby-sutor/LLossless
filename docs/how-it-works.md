@@ -80,7 +80,7 @@ The tool, its prompts, the tests with the recorded model answers they replay, th
 | `prompts/` | every prompt, as a file |
 | `tests/fixtures/` | sixteen small test cases with answer keys, written for this project; `tests/fixtures/SCHEMA.md` is the format |
 | `tests/pairs/` | the nine document pairs the benchmark merges, each with a reference merge written for it |
-| `tests/handwritten/` | nineteen more document sets, fifteen with a reference merge the author wrote, among them the benchmark's planted-error documents |
+| `tests/handwritten/` | nineteen more document sets, fifteen with a reference merge, among them the benchmark's planted-error documents |
 | `tests/responses/` | recorded model answers, so the whole suite runs offline |
 | `tests/run_merge.py`, `tests/run_verify.py`, `tests/run_decompose.py`, `tests/run_detect.py` | the harnesses that replay the recordings and print the figures on [Measured results](results.md) |
 | `tests/run_lineup.py`, `tests/lineup_figures.py` | the release benchmark's runner, and the script that re-derives its figures from `arms/` |
