@@ -43,6 +43,20 @@ judge:
   itself rejected. Silent loss keeps its definition (a declared segment is
   not silent); this is its own column.
 
+**The rule is an argument and has no default.** Whether a segment that is not
+in the merge word for word is reworded or absent is decided by
+`reconcile.locate`, the tool's own function, under one of `reconcile.RULES`:
+the registered rule, under which every figure published up to 2026-10-12 was
+scored, or the amended rule of that date. `sets`, `located_of`, `ideal_sets`,
+`cell_sets`, `cell_figures` and `cells_of` all take `rule` by keyword and none
+of them defaults it, so a program that re-derives a published figure has to say which
+scoring it is re-deriving, and one that does not fails instead of moving the
+figure. Under the amended rule "kept" still means one thing: the merge and
+`ideal.md` are both read with it, so `lost` and `bloat` are formed from the
+amended verdicts on both sides, silent loss is `reconcile.is_silent_loss`,
+and an untaken heading that is not lost content is counted in a column of its
+own, `headings_untaken`, which is not part of silent loss.
+
 `main` ranks a matrix run by `figure_rules`: one figure per (model, pair),
 headline rates over the pairs every counted model completed, exit 2 and other
 exclusions as their own column, exact cost and one seconds source.
@@ -170,31 +184,33 @@ def sources_of(docs: dict) -> list:
             for index, (name, text) in enumerate(docs.items())]
 
 
-def sets(docs, text):
-    """(absent ids, kept ids, exact repeats, near repeats) of one merge against its sources.
+def located_of(docs, text, *, rule):
+    """(every source segment located in one merge, the merge's segments).
 
-    `reconcile.locate`'s rule, over `inline_plain` text on both sides and the
-    `merge_side` of the merge: a label is looked for among the merge's labels,
-    anything else in the whole flattened merge, and what is not found is
-    `absent` unless some merge segment is within `NEAR_MATCH` of it.
+    `reconcile.locate` itself, under `rule`, over `inline_plain` text on both
+    sides and the `merge_side` of the merge. This is the scorer's only reading
+    of "carried, reworded or absent"; there is no second copy of the rule
+    here to keep in step with the tool's.
     """
     merged_text = merge_side(text)
     merged = segment.segment_document(merged_text, reconcile.MERGE_LETTER).segments
-    flattened = [(_flat(item), item.kind) for item in merged]
-    labels = [flat for flat, kind in flattened if kind in reconcile.LABEL_KINDS]
     haystack = inline_plain(reconcile.flatten(merged_text))
-    absent, kept = set(), set()
-    for document in sources_of(docs):
-        for source in document.segments:
-            needle = _flat(source)
-            found = (any(reconcile.occurs(needle, label) for label in labels)
-                     if source.kind in reconcile.LABEL_KINDS
-                     else reconcile.occurs(needle, haystack))
-            if not found:
-                best = max((reconcile.similarity(needle, flat) for flat, _ in flattened),
-                           default=0.0)
-                found = best >= reconcile.NEAR_MATCH
-            (kept if found else absent).add(source.id)
+    located = [item for document in sources_of(docs)
+               for item in reconcile.locate(document, haystack, merged, rule=rule,
+                                            plain=inline_plain).located]
+    return located, merged
+
+
+def sets(docs, text, *, rule):
+    """(absent ids, kept ids, exact repeats, near repeats) of one merge against its sources.
+
+    The verdicts are `located_of`'s: a label is looked for among the merge's
+    labels, anything else in the whole flattened merge, and what is not found
+    is `absent` unless `rule` calls it reworded.
+    """
+    located, merged = located_of(docs, text, rule=rule)
+    absent = {item.segment.id for item in located if item.verdict == reconcile.ABSENT}
+    kept = {item.segment.id for item in located if item.verdict != reconcile.ABSENT}
     repeats = reconcile.duplication(tuple(dataclasses.replace(item, text=_flat(item))
                                           for item in merged))
     return (absent, kept, sum(1 for d in repeats if d.exact),
@@ -207,10 +223,16 @@ def pair_docs(pair):
 
 
 @functools.lru_cache(maxsize=None)
-def ideal_sets(pair):
-    """(ideal-absent ids, ideal-kept ids, source title ids) for one pair."""
+def ideal_sets(pair, *, rule):
+    """(ideal-absent ids, ideal-kept ids, source title ids) for one pair, under `rule`.
+
+    Cached per (pair, rule): the reference merge is read with the same rule as
+    the merge it is compared with, so "kept by the reference" and "kept by the
+    model" are one meaning of kept.
+    """
     docs = pair_docs(pair)
-    habs, hkept, _, _ = sets(docs, (P / pair / "ideal.md").read_text(encoding="utf-8"))
+    habs, hkept, _, _ = sets(docs, (P / pair / "ideal.md").read_text(encoding="utf-8"),
+                             rule=rule)
     titles = {item.id for document in sources_of(docs) for item in document.segments
               if item.kind == segment.TITLE}
     return frozenset(habs), frozenset(hkept), frozenset(titles)
@@ -226,19 +248,41 @@ def declarations(rep) -> dict:
     return out
 
 
-def cell_figures(pair, merged, rep):
-    """One merge of one pair against its `ideal.md`.
+def cell_sets(pair, merged, rep, *, rule):
+    """The segment ids behind every count `cell_figures` gives, under one of `reconcile.RULES`.
 
-    `silent`, `decl`, `lost`, `bloat`, `dup` as the module docstring defines
-    them, plus three columns that never enter a headline: `near_dup`,
-    `model_confirmed` (lost segments the tested model's own verifier confirmed
-    as declared) and `absent_rejected` (absent segments behind a declaration
-    the tool rejected). The whole of the pairs scoring, as a function so that
-    another run's figures are formed by the same code.
+    The one place the pairs scoring is formed. `cell_figures` is the length of
+    each set here and nothing else, so a program that has to say which
+    segments a count is made of (the list of what differs between the two
+    scorings, the audit's validation) reads the same sets the published count
+    was taken from, and cannot drift from it.
+
+    `silent`, `decl`, `lost`, `bloat`, `model_confirmed` and `absent_rejected`
+    are sets of source segment ids, `headings_untaken` too (empty under the
+    registered rule, which has no such column), `dup` and `near_dup` are
+    counts of repeats in the merge, and `located` maps every source segment id
+    to its `reconcile.Located` in this merge.
+
+    The result is kept per (pair, merge text, records, rule), because a
+    program that publishes two scorings of one run asks for the same merge
+    more than once. It is read and never changed by its callers.
     """
+    return _cell_sets(pair, merged, json.dumps(rep.get("declarations") or [],
+                                               sort_keys=True), rule)
+
+
+@functools.lru_cache(maxsize=512)
+def _cell_sets(pair, merged, declared, rule):
+    rep = {"declarations": json.loads(declared)}
     docs = pair_docs(pair)
-    habs, hkept, titles = ideal_sets(pair)
-    mabs, mkept, dup, near = sets(docs, merged)
+    habs, hkept, titles = ideal_sets(pair, rule=rule)
+    located, merged_segments = located_of(docs, merged, rule=rule)
+    mabs = {item.segment.id for item in located if item.verdict == reconcile.ABSENT}
+    mkept = {item.segment.id for item in located if item.verdict != reconcile.ABSENT}
+    repeats = reconcile.duplication(tuple(dataclasses.replace(item, text=_flat(item))
+                                          for item in merged_segments))
+    dup = sum(1 for d in repeats if d.exact)
+    near = sum(1 for d in repeats if not d.exact)
     decls = declarations(rep)
     forgiven, judged = set(), set()
     for segment_id, record in decls.items():
@@ -252,14 +296,61 @@ def cell_figures(pair, merged, rep):
     rejected = {s for s, record in decls.items() if record.get("grade") == "rejected"}
     absent = mabs - titles
     lost = (absent & hkept) - forgiven
-    return dict(silent=len(absent - set(decls)), decl=len(absent & set(decls)),
-                lost=len(lost), bloat=len((mkept & habs) - titles), dup=dup,
-                near_dup=near, model_confirmed=len(lost & judged),
-                absent_rejected=len(absent & rejected))
+    by_id = {item.segment.id: item for item in located}
+    sets_ = dict(silent=absent - set(decls), decl=absent & set(decls),
+                 lost=lost, bloat=(mkept & habs) - titles, dup=dup,
+                 near_dup=near, model_confirmed=lost & judged,
+                 absent_rejected=absent & rejected, headings_untaken=set(),
+                 located=by_id)
+    if rule == reconcile.REGISTERED:
+        return sets_
+    silent = {item.segment.id for item in located
+              if reconcile.is_silent_loss(item, by_id, decls)}
+    untaken = {item.segment.id for item in located
+               if reconcile.is_untaken_heading(item, by_id, decls)}
+    if silent | untaken != absent - set(decls) or silent & untaken:
+        raise SystemExit(f"rank_matrix: {pair}: lost content and untaken headings do not "
+                         f"split the absent, undeclared segments: "
+                         f"{sorted((silent | untaken) ^ (absent - set(decls)))}")
+    sets_["silent"] = silent
+    sets_["headings_untaken"] = untaken
+    return sets_
 
 
-def cells_of(run: Path) -> list[dict]:
-    """One record per runner row of a matrix-shaped run, excluded or scored.
+# The columns of a scored record, in the order a stored record carries them.
+_COUNTED = ("silent", "decl", "lost", "bloat", "dup", "near_dup", "model_confirmed",
+            "absent_rejected")
+
+
+def cell_figures(pair, merged, rep, *, rule):
+    """One merge of one pair against its `ideal.md`, under one of `reconcile.RULES`.
+
+    `silent`, `decl`, `lost`, `bloat`, `dup` as the module docstring defines
+    them, plus three columns that never enter a headline: `near_dup`,
+    `model_confirmed` (lost segments the tested model's own verifier confirmed
+    as declared) and `absent_rejected` (absent segments behind a declaration
+    the tool rejected). The whole of the pairs scoring, as a function so that
+    another run's figures are formed by the same code. Each figure is the size
+    of the set `cell_sets` forms.
+
+    Under the registered rule the record has exactly the fields it always
+    had, so a stored record of a published run is given back field for field.
+    Under the amended rule the absent, undeclared segments that are not titles
+    are split in two: `silent` is lost content (`reconcile.is_silent_loss`),
+    and `headings_untaken` is the headings the merge did not take and did not
+    declare while their sections survived. The two sum to what `silent` would
+    have been from the same verdicts.
+    """
+    formed = cell_sets(pair, merged, rep, rule=rule)
+    figures = {key: formed[key] if isinstance(formed[key], int) else len(formed[key])
+               for key in _COUNTED}
+    if rule != reconcile.REGISTERED:
+        figures["headings_untaken"] = len(formed["headings_untaken"])
+    return figures
+
+
+def cells_of(run: Path, *, rule) -> list[dict]:
+    """One record per runner row of a matrix-shaped run, excluded or scored under `rule`.
 
     The last runner row for an (arm, pair) is the cell and the earlier ones are
     `superseded`; a cell with exit 2 or no report is excluded and named.
@@ -290,7 +381,7 @@ def cells_of(run: Path) -> list[dict]:
         if not cell["excluded"]:
             rep = json.loads((where / "report.json").read_text(encoding="utf-8"))
             cell.update(cell_figures(row["pair"], (where / "merged.md").read_text(encoding="utf-8"),
-                                     rep))
+                                     rep, rule=rule))
             cell["usd"] = figure_rules.exact_usd(rep, recorded=row.get("cost_usd"))
             cell["billed"] = max(row.get("cost_usd") or 0, row.get("cost_usd_billed") or 0)
             cell["seconds"] = figure_rules.answer_seconds(rep)
@@ -302,8 +393,13 @@ def cells_of(run: Path) -> list[dict]:
     return out
 
 
+# The rule `main` ranks under. The matrix it ranks by default is a published
+# run, and every figure published for it was scored under the registered rule.
+RULE = reconcile.REGISTERED
+
+
 def main():
-    cells = cells_of(R)
+    cells = cells_of(R, rule=RULE)
     arms = tuple(sorted({c["arm"] for c in cells}))
     pairs_run = sorted({c["pair"] for c in cells})
     groups = figure_rules.groups(cells, arms, "arm", pairs_run, registered_k1=True)
@@ -324,7 +420,7 @@ def main():
     print("\nBAND DEVIATION per pair (lost + bloat + exact repeats; lower is closer to ideal.md)\n")
     print(f"{'pair':<16}{'segs':>5}{'ref drop':>9}  " + "".join(f"{a:>18}" for a in groups))
     for p in pairs_run:
-        habs, hkept, _ = ideal_sets(p)
+        habs, hkept, _ = ideal_sets(p, rule=RULE)
         devs = {a: figure_rules.deviations(by[(a, p)]) for a in groups if (a, p) in by}
         best = min(devs.values()) if devs else None
         line = f"{p:<16}{len(habs)+len(hkept):>5}{len(habs):>9}  "

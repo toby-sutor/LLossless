@@ -82,16 +82,20 @@ HEADINGS = {
 # report, so the two are checked against each other here rather than trusted.
 assert set(HEADINGS) == set(FINDING_ORDER) == set(FINDINGS.values()) - {"none"}
 
-# The reconciler's ten kinds, reported in `reconcile.FINDING_KINDS` order, which
+# The reconciler's kinds of finding, reported in `reconcile.FINDING_KINDS` order, which
 # matches the prompt's own section order, so the section and the rules it enforces
 # can be read side by side. These are failures of *structure* rather than of
 # claims: no model produced any of them and none of them came out of a verdict.
-# Twelve kinds from nine checks -- `reconcile.CHECKS` is the number the prose
+# Thirteen kinds from nine checks: `reconcile.CHECKS` is the number the prose
 # below quotes, and the two are not interchangeable.
 STRUCTURAL_HEADINGS = {
     "undeclared_absence": (
         "Absent and undeclared — in a source, not in the merge, and no record explains it"
     ),
+    # "In altered wording" covers both ways the reconciler can find a segment
+    # that is not there word for word: a merge segment close to it, and the
+    # segment's own words standing in the merge as one run, joined to a
+    # neighbour or split in two. The finding's own sentence says which.
     "undeclared_rewording": (
         "Reworded and undeclared — in the merge in altered wording, and no record explains it. "
         "At verbatim this also covers layout: a segment whose "
@@ -119,6 +123,15 @@ STRUCTURAL_HEADINGS = {
     "title_not_from_source": "Title not from a source — the merged title was written, not kept",
     "title_not_superseded": (
         "Title dropped in silence — a source title is gone and no record names what replaced it"
+    ),
+    # The title's neighbour, and worded like it on purpose: the merge chose
+    # one of two labels and did not say so. The second half is what tells a
+    # reader this is not lost content: a heading whose whole section went with
+    # it is listed under "Absent and undeclared" instead.
+    "heading_not_declared": (
+        "Heading dropped in silence — a source heading is not a heading of the merge and "
+        "no record says what became of it, while the section under it is in the merge or "
+        "accounted for"
     ),
     # One heading, two halves: a whole segment repeated character for character,
     # and one claim extracted from two different lines. The second is what a

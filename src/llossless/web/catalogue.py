@@ -103,6 +103,11 @@ from ..config import EFFORT_LEVELS
 # allows, since a figure for an id no route can carry is a figure for nothing.
 from .commands import ROUTE_ID
 
+# And the rules a merge can be scored under (`reconcile.RULES`): a measured
+# block says which one its figures were scored with, and a name this build
+# does not know is a block written against another tool.
+from ..reconcile import AMENDED, RULES
+
 # The catalogue ships beside this module as package data, not in the
 # operator's working directory: it is data about the
 # tool, distributed with it, the same way `tests/pairs/*/ideal.json` travels
@@ -143,6 +148,24 @@ RATE_FIELDS = (("deviations_per_pair", "deviations"),
 # wrong test and would fail on 35/3. Half of the last retained place, with room
 # for binary float representation.
 RATE_TOLERANCE = 0.006
+
+# **A measured block says which scoring its figures are.** Since 2026-10-12
+# there are two: the rule every run up to that date was scored under
+# (`registered`), and the amended rule, under which the release benchmark was
+# scored a second time from its stored outputs. Rows of both kinds stand in
+# one table, so the field is required on every block that carries a count of
+# silent loss or deviations, and it is never defaulted: a block that does not
+# say is a block whose figures cannot be set beside another's.
+#
+# A block of the amended scoring carries three more, and all three are
+# required with it. `headings_untaken` is the column the amended rule counts
+# apart from silent loss. `audited_loss` is whether an audit by reading found
+# content gone on a first run, which is what disqualifies a row under that
+# scoring; the count of silent loss does not. `registered` holds the four
+# quality figures of the same run as it was first scored, published beside the
+# amended ones and never in their place.
+SCORING_FIELD = "scoring"
+AMENDED_FIELDS = ("headings_untaken", "audited_loss", "registered")
 
 # --- the `verify_depth` block ------------------------------------------------
 #
@@ -409,6 +432,53 @@ def validate_measured(where: str, measured) -> None:
                                    f"nobody was billed for carries no dollar figure")
 
     pairs = measured.get("pairs")
+    _validate_rates(where, measured, pairs)
+    _validate_scoring(where, measured, pairs)
+
+
+def _validate_scoring(where: str, measured: dict, pairs) -> None:
+    """Which scoring a block's figures are, and what the amended one must carry."""
+    counted = any(measured.get(count) is not None for _, count in RATE_FIELDS)
+    scoring = measured.get(SCORING_FIELD)
+    if not counted and scoring is None:
+        return
+    if scoring not in RULES:
+        raise InvalidCatalogue(
+            f"{where}: measured.{SCORING_FIELD} is {scoring!r}; a block with a count of "
+            f"silent loss or deviations says which rule it was scored under, one of "
+            f"{', '.join(RULES)}")
+    present = [field for field in AMENDED_FIELDS if field in measured]
+    if scoring != AMENDED:
+        if present:
+            raise InvalidCatalogue(
+                f"{where}: {', '.join(present)} belong to the amended scoring, and this "
+                f"block says it is the {scoring} one")
+        return
+    missing = [field for field in AMENDED_FIELDS if field not in measured]
+    if missing:
+        raise InvalidCatalogue(
+            f"{where}: a block of the amended scoring carries {', '.join(AMENDED_FIELDS)}; "
+            f"missing {', '.join(missing)}")
+    if not isinstance(measured["audited_loss"], bool):
+        raise InvalidCatalogue(
+            f"{where}: measured.audited_loss is {measured['audited_loss']!r}; it is true "
+            f"or false, whether the audit by reading found content gone on a first run")
+    if not _count(measured["headings_untaken"]):
+        raise InvalidCatalogue(
+            f"{where}: measured.headings_untaken is {measured['headings_untaken']!r}, "
+            f"not a count")
+    registered = measured["registered"]
+    if not isinstance(registered, dict) or sorted(registered) != sorted(
+            field for pair in RATE_FIELDS for field in pair):
+        raise InvalidCatalogue(
+            f"{where}: measured.registered holds the registered scoring's "
+            f"{', '.join(field for pair in RATE_FIELDS for field in pair)} and nothing "
+            f"else")
+    _validate_rates(f"{where}: registered", registered, pairs)
+
+
+def _validate_rates(where: str, measured: dict, pairs) -> None:
+    """Every rate of one block against its own count over `pairs`."""
     for rate_field, count_field in RATE_FIELDS:
         rate, count = measured.get(rate_field), measured.get(count_field)
         if rate is None and count is None:

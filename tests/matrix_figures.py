@@ -68,6 +68,12 @@ import figure_rules  # noqa: E402
 import rank_matrix  # noqa: E402
 from llossless.web import catalogue  # noqa: E402
 
+# The rule every figure published from this run was scored with, one of
+# `reconcile.RULES`. Named here and passed to every scorer call, because the
+# scorer has no default: a script that followed whatever the scorer does
+# today would move a published figure without a line of its own changing.
+RULE = "registered"
+
 EVIDENCE = ROOT / "arms" / "2026-09-18" / "matrix"
 SCORED = EVIDENCE / "scored.json"
 RESULTS = ("results_anthropic.json", "results_openai.json")
@@ -151,7 +157,8 @@ def score() -> list[dict]:
             record["claimcheck_commit"] = str(provenance.get("claimcheck_commit"))
             record["generated_on"] = str(provenance.get("generated_at"))[:10]
             record.update(rank_matrix.cell_figures(
-                row["pair"], (where / "merged.md").read_text(encoding="utf-8"), report))
+                row["pair"], (where / "merged.md").read_text(encoding="utf-8"), report,
+                rule=RULE))
             record["usd_priced"] = figure_rules.exact_usd(report, recorded=row.get("cost_usd"))
             record["seconds"] = figure_rules.answer_seconds(report)
         out.append(record)

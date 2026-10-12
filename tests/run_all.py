@@ -150,6 +150,12 @@ NAMED: list[tuple[str, list[str], bool]] = [
     # itself so a stale entry is caught rather than just unused.
     ("tests/test_published_names.py", [], False),
     ("tests/test_reconcile.py", [], False),
+    # The amended rule for "reworded or gone", in the tool's view and the
+    # scorer's: every case that must be cleared beside its siblings that must
+    # stay a loss, the heading filing, the controls on the nine pairs under
+    # both rules, and seeded cuts of every real sentence, with the three
+    # seeded losses the rule is known to clear pinned by name.
+    ("tests/test_amended_rule.py", [], False),
     # The number format: each document's decimal convention, decided from
     # its own numerals and then its language, and a merged value that changed.
     ("tests/test_numerals.py", [], False),
@@ -164,6 +170,8 @@ NAMED: list[tuple[str, list[str], bool]] = [
     # The pairs scorer (no model a judge, formatting moves nothing) and
     # the headline rules every figure script forms rows by: common pairs,
     # draws apart, exact money, one seconds source. Each seeded both ways.
+    # Also that the scorer has no default rule and that every program which
+    # scores a published figure names the rule it was scored under.
     ("tests/test_figure_rules.py", [], False),
     # The fair-lineup runner and its figures, end to end against a fake
     # model and a fake `claude`, from a throwaway pinned clone: the pin and the

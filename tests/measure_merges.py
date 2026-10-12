@@ -87,11 +87,16 @@ BANNER = (
 
 
 def measure(path: Path, fixtures_root: Path = FIXTURES) -> dict:
-    """Every Phase 1 figure for one recorded merge, plus the old predicate."""
+    """Every Phase 1 figure for one recorded merge, plus the old predicate.
+
+    Under the registered rule, by name: these are the figures the recorded
+    corpus was measured and published with, and `league_table.py` is the same
+    instrument over another corpus.
+    """
     fixture, condition, sample = path.stem.rsplit("-", 2)
     merged = path.read_text(encoding="utf-8")
     documents = analyse_merges.sources_of(fixture, fixtures_root)
-    result = reconcile.reconcile(documents, merged)
+    result = reconcile.reconcile(documents, merged, rule=reconcile.REGISTERED)
     ratio = analyse_merges.concatenation_ratio(fixture, merged, fixtures_root)
     # `reference_is_concatenation` reads a fixture's own `merged.md` under
     # `fixtures_root/fixture/`. The two-source corpus carries one for every fixture;

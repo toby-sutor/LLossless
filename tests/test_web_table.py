@@ -533,6 +533,8 @@ MARKED: tuple[tuple[str, str], ...] = (
     ("models.route.mark.incomparable", "models.route.caveat.incomparable"),
     ("models.route.mark.shared", "models.route.caveat.shared"),
     ("models.cost.plan.cell", "models.route.caveat.cost"),
+    # A row the release benchmark's audit by reading disqualified.
+    ("models.audit.mark", "models.audit.caveat"),
 )
 
 # Shortest a caveat may be. A sentence that has been trimmed to the length of

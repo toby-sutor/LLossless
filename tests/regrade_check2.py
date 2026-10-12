@@ -88,8 +88,11 @@ def check_two(pair: dict[str, str], merged: str, declared: set[str]) -> tuple[li
     to compress what its two sources say twice; it is not entitled to empty one
     of them, and only a per-source count can tell those apart. Both totals are
     recorded so neither has to be arrived at by subtraction.
+
+    Under the registered rule, by name: the re-score has to reproduce what
+    each run recorded, and every run this file reads was graded with it.
     """
-    result = reconcile.reconcile(pair, merged)
+    result = reconcile.reconcile(pair, merged, rule=reconcile.REGISTERED)
     rows = []
     totals = {}
     for coverage in result.coverages:

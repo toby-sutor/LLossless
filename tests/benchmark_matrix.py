@@ -717,7 +717,7 @@ def headline_handwritten(rs: dict[str, Row]) -> None:
     rs["H5"].date = "2026-09-17"
     rs["H5"].commit = commits(frontier, "")
 
-    cells, agg = rank_arms.collect()
+    cells, agg = rank_arms.collect(rule=rank_arms.RULE)
     for rid, arm in (("H6", "claude-opus-5"), ("H7", "claude-sonnet-5"),
                      ("H8", "claude-haiku-4-5"), ("H9", "gpt-5.6-terra")):
         tot, n = agg[arm], agg[arm]["n"]

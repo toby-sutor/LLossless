@@ -102,6 +102,7 @@ def minimal_entry(**overrides) -> dict:
             "deviations_per_pair": 0.0,
             "pairs": 1,
             "fidelity": "high",
+            "scoring": "registered",
             "run": "test-run",
             "artefacts": ["results.json"],
             "derived_by": "test fixture",
@@ -296,6 +297,80 @@ def test_a_rate_that_disagrees_with_its_own_count_is_rejected() -> None:
         entry["measured"][count_field] = 35
         entry["measured"][rate_field] = 11.67
         catalogue.validate(minimal_catalogue(entry))
+
+
+def amended_entry() -> dict:
+    """`minimal_entry` as a block of the amended scoring, with what that scoring carries."""
+    entry = minimal_entry()
+    entry["measured"].update(scoring="amended", headings_untaken=0, audited_loss=False,
+                             registered={"silent_loss": 1, "silent_loss_per_pair": 1.0,
+                                         "deviations": 2, "deviations_per_pair": 2.0})
+    return entry
+
+
+def test_a_measured_block_says_which_scoring_its_figures_are() -> None:
+    """Two scorings stand in one table since 2026-10-12, so a block that counts
+    silent loss or deviations names its rule, and nothing defaults it.
+
+    Must fire: no `scoring`, an unknown one, a field of the amended scoring on
+    a registered block, an amended block missing one of its three, an
+    `audited_loss` that is not true or false, a `registered` block with a rate
+    that disagrees with its count or with a field too many. Must not fire: a
+    registered block, an amended block, and a block with no count at all.
+    """
+    catalogue.validate(minimal_catalogue(minimal_entry()))
+    catalogue.validate(minimal_catalogue(amended_entry()))
+    check(set(catalogue.RULES) == {"registered", "amended"},
+          f"the scorings the catalogue knows are reconcile's: {catalogue.RULES}")
+
+    entry = minimal_entry()
+    del entry["measured"]["scoring"]
+    must_raise(minimal_catalogue(entry), "a counted block with no scoring must raise")
+    entry = minimal_entry()
+    entry["measured"]["scoring"] = "strict"
+    must_raise(minimal_catalogue(entry), "an unknown scoring must raise")
+    entry = minimal_entry()
+    entry["measured"]["audited_loss"] = False
+    must_raise(minimal_catalogue(entry),
+               "audited_loss on a block of the registered scoring must raise")
+    for field in catalogue.AMENDED_FIELDS:
+        entry = amended_entry()
+        del entry["measured"][field]
+        must_raise(minimal_catalogue(entry), f"an amended block with no {field} must raise")
+    entry = amended_entry()
+    entry["measured"]["audited_loss"] = "no"
+    must_raise(minimal_catalogue(entry), "an audited_loss that is a word must raise")
+    entry = amended_entry()
+    entry["measured"]["headings_untaken"] = -1
+    must_raise(minimal_catalogue(entry), "a negative headings_untaken must raise")
+    entry = amended_entry()
+    entry["measured"]["registered"]["deviations_per_pair"] = 0.5
+    must_raise(minimal_catalogue(entry),
+               "a registered rate that disagrees with its count must raise")
+    entry = amended_entry()
+    entry["measured"]["registered"]["pairs"] = 1
+    must_raise(minimal_catalogue(entry), "a registered block with a field too many must raise")
+
+    # A block with no count carries no scoring: there is nothing it was scored on.
+    entry = minimal_entry()
+    for rate_field, count_field in catalogue.RATE_FIELDS:
+        del entry["measured"][rate_field]
+        del entry["measured"][count_field]
+    del entry["measured"]["scoring"]
+    catalogue.validate(minimal_catalogue(entry))
+
+    # The shipped file: the release benchmark's rows are the amended scoring,
+    # every other counted row the registered one, and none is left unsaid.
+    said = {}
+    data = catalogue.load()
+    for row in list(data["models"]) + list(data["command_routes"]):
+        measured = row.get("measured") or {}
+        if measured.get("silent_loss") is not None:
+            said[row.get("id") or row.get("route")] = (measured.get("run"),
+                                                       measured.get("scoring"))
+    check(said and all((scoring == "amended") == (run == "2026-09-27-lineup")
+                       and scoring in catalogue.RULES for run, scoring in said.values()),
+          f"the shipped rows' scorings: {said}")
 
 
 def test_a_count_with_no_rate_is_rejected() -> None:
@@ -1335,6 +1410,68 @@ def test_the_lineup_check_fires_on_a_changed_figure() -> None:
     data["models"] = [e for e in data["models"] if e["id"] != "gpt-6-luna"]
     check(bool(lineup_figures.catalogue_problems(data, figures)),
           "a missing gpt-6-luna row was not reported")
+    # The two scorings (the benchmark's Amendment 3): the row is the amended
+    # one, and what it says about the audit, about the untaken headings, about
+    # the registered figures beside it and in its notes is held to the run.
+    # The audit is the one its Amendment 4 extended: gpt-6-luna is disqualified
+    # by it, on one case that both readings call borderline, and its note has
+    # to say so; claude-sonnet counts as many silent losses and is not.
+    luna = lambda d: next(e for e in d["models"] if e["id"] == "gpt-6-luna")  # noqa: E731
+    haiku = lambda d: next(e for e in d["command_routes"]  # noqa: E731
+                           if e["route"] == "claude-haiku")
+    sonnet = lambda d: next(e for e in d["command_routes"]  # noqa: E731
+                            if e["route"] == "claude-sonnet")
+    check(luna(catalogue.load())["measured"]["audited_loss"] is True
+          and haiku(catalogue.load())["measured"]["audited_loss"] is True
+          and sonnet(catalogue.load())["measured"]["audited_loss"] is False
+          and luna(catalogue.load())["measured"]["silent_loss"] == 2
+          and sonnet(catalogue.load())["measured"]["silent_loss"] == 2,
+          "the shipped rows: gpt-6-luna and claude-sonnet both count 2; the audit "
+          "disqualifies gpt-6-luna and claude-haiku and not claude-sonnet")
+    borderline = "; its one case is borderline"
+    marked = [str(e.get("id") or e.get("route"))
+              for e in catalogue.load()["models"] + catalogue.load()["command_routes"]
+              if borderline in str(e.get("notes"))]
+    check(marked == ["gpt-6-luna"],
+          f"the rows whose notes say the verdict rests on one borderline case: {marked}; "
+          f"it is gpt-6-luna and no other")
+    for name, change in (
+            ("a row's audited_loss", lambda d: luna(d)["measured"].update(audited_loss=False)),
+            ("a route's audited_loss",
+             lambda d: haiku(d)["measured"].update(audited_loss=False)),
+            ("a counted route's audited_loss",
+             lambda d: sonnet(d)["measured"].update(audited_loss=True)),
+            ("the borderline case dropped from a row's notes",
+             lambda d: luna(d).update(notes=luna(d)["notes"].replace(borderline, ""))),
+            ("a borderline case put into another row's notes",
+             lambda d: haiku(d).update(notes=haiku(d)["notes"].replace(
+                 "gone or partly gone.", "gone or partly gone" + borderline + "."))),
+            ("the scoring", lambda d: luna(d)["measured"].update(scoring="registered")),
+            ("the untaken headings",
+             lambda d: luna(d)["measured"].update(headings_untaken=1)),
+            ("a registered figure beside the amended one",
+             lambda d: luna(d)["measured"]["registered"].update(deviations=52)),
+            ("the amended figure put back to the registered one",
+             lambda d: luna(d)["measured"].update(deviations=51, deviations_per_pair=5.67)),
+            ("a figure in the notes",
+             lambda d: luna(d).update(notes=luna(d)["notes"].replace(
+                 "deviations 52 against", "deviations 51 against"))),
+            ("the audit's verdict in a route's notes",
+             lambda d: haiku(d).update(notes=haiku(d)["notes"].replace(
+                 "found 3 of the 8 segments it read", "found 2 of the 8 segments it read"))),
+            ("the amendment that extended the audit in a row's notes",
+             lambda d: luna(d).update(notes=luna(d)["notes"].replace(
+                 "extended by Amendment 4, 2026-10-12", "extended by Amendment 3, 2026-10-12")))):
+        data = copy.deepcopy(catalogue.load())
+        before = json.dumps(data, sort_keys=True)
+        change(data)
+        check(json.dumps(data, sort_keys=True) != before,
+              f"the probe for {name} no longer changes the catalogue")
+        check(bool(lineup_figures.catalogue_problems(data, figures)),
+              f"{name} the release benchmark does not give was not reported")
+    one = {key: value for key, value in figures.items() if key != "S1_registered"}
+    check(bool(lineup_figures.catalogue_problems(catalogue.load(), one)),
+          "figures with one scoring only must not pass for both")
 
 
 def main() -> int:

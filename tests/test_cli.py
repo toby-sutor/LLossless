@@ -7353,6 +7353,91 @@ def test_every_heading_a_terminal_message_names_is_one_the_report_prints() -> No
           f"seeded check: the old wrong name must be found and refused: {seeded}")
 
 
+# --------------------------------------------------------------------------
+# the amended rule of 2026-10-12, through the command
+# --------------------------------------------------------------------------
+#
+# At the end of the file on purpose: `cli.py` cites a test above by line, and
+# a test inserted in the middle would move it.
+
+# `LONG_B` with a heading over everything but its first two lines. Those stay
+# above it so that the line the two sources share and the line the scripted
+# claim is drawn from are outside the section; `b3` is the heading and `b4`
+# to `b13` are its section. None of those ten lines resembles a line of
+# `LONG_A` closely enough for the similarity ratio to read it as reworded,
+# which the sibling below depends on and asserts.
+_B_LINES = LONG_B.splitlines()
+HEADED_B = "\n".join(_B_LINES[:2] + ["", "## Limits", ""] + _B_LINES[2:]) + "\n"
+
+
+def headed_merge(merged: str) -> tuple[int, str, dict]:
+    """A real `merge` of `LONG_A` and `HEADED_B` that answers with `merged` and no record."""
+    script = Script(
+        merge=json.dumps({"merged_document": merged, "decisions": [], "dispositions": []}),
+        decompose=lambda n: (claims(*LONG_A_CLAIMS),
+                             claims(*LONG_B_CLAIMS),
+                             claims(*LONG_M_CLAIMS))[min(n, 3) - 1],
+        forward=verdicts(
+            ("A-001", "SUPPORTED", "The connect timeout is 30 seconds.", "merged.md"),
+            ("A-002", "SUPPORTED", "The archive rotates every 7 days", "merged.md"),
+            ("A-003", "SUPPORTED", "every archive is signed", "merged.md"),
+            ("B-001", "SUPPORTED", "The read timeout is 45 seconds.", "merged.md"),
+        ),
+        reverse=verdicts(
+            ("M-001", "SUPPORTED", "The relay listens on port 8443.", "source_a.md")),
+    )
+    with workspace(script) as (home, base_url):
+        (home / "headed-b.md").write_text(HEADED_B, encoding="utf-8")
+        code, out, _ = invoke(home, base_url, "merge",
+                              str(home / "long-a.md"), str(home / "headed-b.md"),
+                              "--json", str(home / "report.json"))
+        return code, out, json.loads((home / "report.json").read_text(encoding="utf-8"))
+
+
+def test_an_untaken_heading_ends_the_command_at_3_and_a_lost_section_at_1() -> None:
+    """"Heading dropped in silence", driven through `main`, with its sibling.
+
+    The merge carries every line of both sources and not source B's one
+    heading, and declares nothing. Until the amended rule of 2026-10-12 the
+    command reported the heading under "Absent and undeclared" and exited 1,
+    although the whole section under it is in the merged document. It now
+    reports "Heading dropped in silence", a record finding, and exits 3.
+
+    MUST FIRE, the sibling: the same answer without the section either. The
+    heading went with its content, both are "Absent and undeclared", and the
+    command exits 1. The new kind must not be reachable by losing more.
+    """
+    check(HEADED_B.count("## Limits") == 1 and HEADED_B.splitlines()[3] == "## Limits"
+          and HEADED_B.replace("\n## Limits\n\n", "") == LONG_B,
+          "the fixture's heading is not where the test says it is")
+    code, out, record = headed_merge(faithful_merge())
+    kinds = [(f["kind"], f["segment"]) for f in record["structural"]["findings"]]
+    check(kinds == [(reconcile.HEADING_NOT_DECLARED, "b3")],
+          f"an untaken, undeclared heading over a kept section: {kinds}")
+    check(code == report.RECORD_ONLY == record["exit_code"],
+          f"it is a record finding and the command exits {report.RECORD_ONLY}: "
+          f"{code}, {record['exit_code']}")
+    heading = report.STRUCTURAL_HEADINGS[reconcile.HEADING_NOT_DECLARED]
+    check(f"### {heading}" in out and "Absent and undeclared" not in out,
+          f"the report files it under its own heading and not as lost content: "
+          f"{[line for line in out.splitlines() if line.startswith('### ')]}")
+    check("heading 'Limits' is not a heading of the merge" in out,
+          "the entry names the heading")
+
+    # The whole section gone with the heading: `LONG_A` and B's two lines
+    # from above the heading, and nothing from under it.
+    code, out, record = headed_merge(LONG_A + _B_LINES[1] + "\n")
+    kinds = [(f["kind"], f["segment"]) for f in record["structural"]["findings"]]
+    absent = [segment for kind, segment in kinds if kind == reconcile.UNDECLARED_ABSENCE]
+    check(absent == [f"b{n}" for n in range(3, 14)],
+          f"MUST FIRE: the heading and all ten lines of its section are lost content, "
+          f"each on its own: {kinds}")
+    check(not any(kind == reconcile.HEADING_NOT_DECLARED for kind, _ in kinds),
+          f"and the heading is not filed as a matter of records: {kinds}")
+    check(code == 1 == record["exit_code"],
+          f"and the command exits 1: {code}, {record['exit_code']}")
+
+
 def main() -> int:
     for name, function in sorted(globals().items()):
         if name.startswith("test_") and callable(function):

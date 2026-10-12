@@ -118,7 +118,7 @@ LLossless answers each one with evidence.
 
 **It finds what it is built to find.** On the 13 pre-registered test documents, each a merge with a known defect or none, the full check found 7 of 7 planted defects and wrongly flagged 0 of 116 correct statements it graded (one model, one run). The cheaper `coverage` depth found 6 of the 6 defects it can reach and ran 2.04x faster.
 
-**Models do lose things.** On the nine public document pairs in the 2026-09-27 release run, every model deviated from the reference merge written for each pair, and 5 of the 8 rows lost content without declaring it. Those are the losses a reader of the merged document cannot see.
+**Models do lose things.** On the nine public document pairs in the 2026-09-27 release run, every model deviated from the reference merge written for each pair, and 3 of the 8 rows lost content without declaring it: both Haiku 4.5 rows and GPT-6 Luna. Haiku 4.5 lost parts of sentences on both routes and, on the subscription, one line wholly. GPT-6 Luna has one case, a sentence left without its opening condition, and both readings call it borderline. Those are the losses a reader of the merged document cannot see. They were found by reading every source sentence on a pair's first run that the merge neither kept word for word nor recorded, because the program flags sentences that are still there and passes some that lost a part. An AI model read each one twice; no person did.
 
 **Cost and time.** On those pairs, each source under 6 KB, one merge with all its checks cost $0.012 to $0.485 through a vendor API and took 69 to 332 seconds; through a subscription CLI it took 164 to 677 seconds, at an API-equivalent $0.309 to $0.614 per merge, the price of the same calls, not money spent. A local model costs nothing per call and runs at the speed of your hardware. Longer documents cost more, because every document gets its own calls and verification is paid per batch of claims.
 
@@ -132,33 +132,42 @@ LLossless answers each one with evidence.
 - **The checker is a model too.** Its verdicts must quote real evidence, which catches a fabricated quote but not every wrong judgement. Temperature 0 and a fixed seed do not make the model deterministic, and claim extraction varies a little between runs.
 - **The evidence base is small**: short test documents written or adapted for this project, mostly English, and mostly one run per cell.
 
+**Known issues:**
+
+- **A sentence cut short can pass as reworded.** When a merge drops the end of a sentence and a little more than half of it is left, the check that compares text calls the sentence reworded, not missing. The report still lists it under "Reworded and undeclared" with the difference printed, and the run still fails, but it is not counted as silent loss. With the last two words cut from each, 173 of 181 longer sentences in the benchmark's source documents passed this way.
+- **A dropped title and a dropped heading end with different exit codes.** A source heading that the merge did not take and did not record, while its section is still there, ends the run with exit code 3. A source title in the same situation ends it with exit code 1. The two should be treated alike.
+
 [Measured results](docs/results.md) has the figures behind all of this, including where the project's own headline metric misleads.
 
 ## Which model to use
 
-Which model should you trust with a merge? Price and reputation do not answer that; measuring does. Because most of its checks are computed by code, LLossless doubles as a benchmark: the same documents through every model, scored the same way. A model that silently loses content is disqualified before anything is ranked, and a merge made by a script with no model in it is scored beside every model, so you can see whether a model beat a script. [The benchmark](docs/benchmark.md) has the full rules.
+Which model should you trust with a merge? Price and reputation do not answer that; measuring does. Because most of its checks are computed by code, LLossless doubles as a benchmark: the same documents through every model, scored the same way. A model is disqualified before anything is ranked when a reading of its merges found content silently lost, and a merge made by a script with no model in it is scored beside every model, so you can see whether a model beat a script. [The benchmark](docs/benchmark.md) has the full rules.
 
 ### Results, 2026-09-27
 
 Nine merge pairs at `high`, two documents with planted factual errors and one clean control document at `open`, 295 runs. The registration, every report and the figures are in [`arms/2026-09-27/lineup/`](arms/2026-09-27/lineup/figures.md).
 
+The scoring of the nine pairs was amended on 2026-10-12, after the results were known. The rule as registered counted sentences as lost that were still in the merge: joined to a neighbour, split in two or said in other words. Amendment 3 of [the registration](arms/2026-09-27/lineup/REGISTRATION.md) has the amended rule, and [the audit](arms/2026-09-27/lineup/audit/README.md) has the reading that showed the miscount. Amendment 4, of the same day and also made after the results, extended that reading to sentences the program had passed as reworded although the merge recorded no change, and that disqualified a third row. The table shows the amended scoring. Under the scoring as registered, five rows were disqualified where three are now, and Sonnet 5 on the API did no better than the mechanical union: [`figures.md`](arms/2026-09-27/lineup/figures.md) has both scorings.
 
-| Model, route | Silent loss, 9 pairs | Deviations per pair | Planted errors fixed, voyager (of 44) | bip39 (of 14) | $ per merge |
-|---|---|---|---|---|---|
-| GPT-6 Sol, API | 0 | 4.11 | 23 | 11 | 0.19 |
-| GPT-6 Luna, API | 2 | 5.67 | 19 | 8 | 0.01 |
-| Opus 5.5, API | 2 | 6.78 | 29 | 13 | 0.49 |
-| Opus 5.5, subscription | 0 | 7.00 | 32 | 13 | 0.61 |
-| Sonnet 5, API | 0 | 8.11 | 21 | 12 | 0.46 |
-| Sonnet 5, subscription | 5 | 7.33 | 20 | 12 | 0.31 |
-| Haiku 4.5, API | 13 | 6.25 | 11 | 8 | 0.07 |
-| Haiku 4.5, subscription | 3 | 7.56 | 6 | 8 | 0.48 |
-| *Mechanical union, no model* | 0 | 7.78 | - | - | - |
+| Model, route | Flagged as silent loss, 9 pairs | Lost content, by reading | Deviations per pair | Planted errors fixed, voyager (of 44) | bip39 (of 14) | $ per merge |
+|---|---|---|---|---|---|---|
+| GPT-6 Sol, API | 0 | - | 4.22 | 23 | 11 | 0.19 |
+| GPT-6 Luna, API | 2 | **in part: disqualified** | 5.78 | 19 | 8 | 0.01 |
+| Opus 5.5, API | 0 | none | 6.11 | 29 | 13 | 0.49 |
+| Opus 5.5, subscription | 0 | - | 6.00 | 32 | 13 | 0.61 |
+| Sonnet 5, API | 0 | - | 6.22 | 21 | 12 | 0.46 |
+| Sonnet 5, subscription | 2 | none | 6.00 | 20 | 12 | 0.31 |
+| Haiku 4.5, API | 3 | **in part: disqualified** | 6.12 | 11 | 8 | 0.07 |
+| Haiku 4.5, subscription | 3 | **gone: disqualified** | 7.22 | 6 | 8 | 0.48 |
+| *Mechanical union, no model* | 0 | - | 7.67 | - | - | - |
+
+GPT-6 Luna is disqualified for one case, and both readings call that case borderline.
 
 **How to read the columns:**
 
-- **Silent loss** (lower is better, and only 0 is good enough): sentences from the sources that are missing from the merge, and that the merge never said it left out. These are the losses a reader cannot see. Any silent loss puts a model out of the ranking. Each one is a failure of the model, and LLossless reported it.
-- **Deviations per pair** (lower is better): how far the merge is from the reference merge written for the same two documents. It counts sentences the merge should have kept but did not, sentences it should have left out but kept, and sentences it repeated. The last row shows what a simple program scores by pasting the documents together without duplicates: a model at or above 7.78 did no better than that.
+- **Flagged as silent loss** (lower is better): sentences from the sources that the program could not find in the merge, and that the merge never said it left out. A flag is a reason to look, not proof of a loss: a sentence said in other words is flagged too. LLossless reported each one. A source heading the merge did not take, while the section under it is still there, is counted apart and is not in this figure.
+- **Lost content, by reading**: what a reading against the whole merge found. It read every source sentence, in the runs the table counts, that the merge did not keep word for word and wrote no record for: the ones flagged under either scoring, and the ones the program passed as reworded. *none* means every one of them was still there. *in part* means a part of at least one was gone, and *gone* means at least one was gone wholly: these are the losses a reader cannot see, and one of them puts a model out of the ranking. A dash means a model had no such sentence, so there was nothing to read; the mechanical union was not read. The reading was made by an AI model (Claude Opus), twice, and by no person; [the audit](arms/2026-09-27/lineup/audit/README.md) lists every case and says how far it can be trusted.
+- **Deviations per pair** (lower is better): how far the merge is from the reference merge written for the same two documents. It counts sentences the merge should have kept but did not, sentences it should have left out but kept, and sentences it repeated. The last row shows what a simple program scores by pasting the documents together without duplicates: a model at or above 7.67 did no better than that.
 - **Planted errors fixed** (higher is better): each of these documents has known factual errors planted in it, 44 in voyager and 14 in bip39, and the merge was allowed to correct facts. The number is how many it corrected. Only the fidelity levels `open` and `sourced` allow the model to correct facts, so these runs used `open`. At the lower levels the merge carries such errors over unchanged.
 - **$ per merge** (lower is better): the price of one merge including all its checks.
 
@@ -166,13 +175,13 @@ Planted errors are the median of three runs. Subscription dollars are the API pr
 
 **Which model for what:**
 
-- **Merging with little loss at a low price: GPT-6 Sol.** No silent loss under the ranking rule, the fewest deviations of any model and well below the mechanical union, at 19 cents a merge. One of its three runs of the largest pair lost one fact silently.
-- **Fixing factual errors in the sources: Opus 5.5.** It fixed the most planted errors on both routes. Its API row lost two facts silently in one of three runs of the largest pair. Fable 5.1, tested on the subscription only and on the three documents Opus found hardest, fixed 38 of 44 on voyager, more than any Opus run, at about 2.3 times Opus's cost.
+- **Merging with little loss at a low price: GPT-6 Sol.** No silent loss under the ranking rule, the fewest deviations of any model and well below the mechanical union, at 19 cents a merge. One of its three runs of the largest pair had one sentence flagged; the reading found it in the merge, shortened.
+- **Fixing factual errors in the sources: Opus 5.5.** It fixed the most planted errors on both routes. In one of three runs of the largest pair its API row did not take two headings from one of the documents; the sections under them are in the merge. Fable 5.1, tested on the subscription only and on the three documents Opus found hardest, fixed 38 of 44 on voyager, more than any Opus run, at about 2.3 times Opus's cost.
 - **The sweet spot: no model leads on all three.** Opus 5.5 on the subscription comes closest: no silent loss in any run, the most errors fixed, and fewer deviations than the mechanical union, at the highest cost per merge. When cost matters more than fixes, GPT-6 Sol is the cheaper corner.
-- **Checking a merge: Sonnet 5.** In the detection tests it was the only model that got all 13 outcomes right, with nothing invented, on both routes. As a merger on the API it did no better than the mechanical union.
+- **Checking a merge: Sonnet 5.** In the detection tests it was the only model that got all 13 outcomes right, with nothing invented, on both routes. As a merger on the API it has the most deviations of the five rows left in the ranking, and still fewer than the mechanical union.
 - **Sonnet 5.5: not measured.** It was released after this benchmark and thinks by default; how it performs in LLossless has not been tested.
-- **On a tight budget: GPT-6 Luna**, at about one cent a merge, with two silent losses on nine pairs.
-- **Skip: Haiku 4.5.** The most silent losses, the fewest fixes and two outright failures, and on the subscription it takes over eleven minutes a merge.
+- **On a tight budget: GPT-6 Sol.** GPT-6 Luna is the cheapest by far, at about one cent a merge, but it is disqualified for one borderline case. The cheapest row that is not disqualified is GPT-6 Sol, at 19 cents a merge.
+- **Skip: Haiku 4.5.** The reading found lost content on both of its routes; it also has the fewest fixes and two outright failures, and on the subscription it takes over eleven minutes a merge.
 - **Local models: not measured in this release.** An earlier trial with an 8B and a 27B model was stopped: the 8B was not useful, and the 27B cost more to run than a hosted frontier model for a result expected to be worse, on top of serving problems with Ollama and vLLM. Even the weakest hosted model here is not fit for production work, so a local model would have to match the stronger ones above, and this benchmark cannot tell you which one does.
 
 Most pairs ran once, and a single run can move a model by several facts. Gemini 3.8 Flash was registered but not measured: its free tier refused every call. [`arms/BENCHMARK-MATRIX.md`](arms/BENCHMARK-MATRIX.md) lists every earlier measurement with its settings and caveats.
@@ -314,7 +323,7 @@ flowchart LR
 LLossless started in March 2026 as a question: when a large language model (LLM) merges two knowledge-base articles, what does it leave out? It was built in milestones, each ending in a written review. A few of the things it taught:
 
 - **Reading finds the loud errors, and a diff finds the quiet ones.** The answer key for a document with planted factual errors was first typed by reading two versions side by side; a word diff found about twice as many, the swapped words and decimal commas a model carries through unnoticed.
-- **A script can beat a model.** A mechanical union, one document plus every paragraph of the other that it does not already contain, deviated from the reference merges less than one frontier model's run did. So the benchmark scores it beside every model.
+- **Read what your metric counts.** The benchmark's first scoring rule counted sentences as lost that were still in the merge. No check found that; reading what the metric had counted did. The rule was amended after the results were known, and both scorings are published.
 - **A gap between models can be a gap in the prompt.** Two models deleted internal markup tags that two others kept, which looked like a ranking. Three sentences saying that tags are code closed the gap completely.
 - **Show the model the shape.** Merged code came back with its indentation destroyed, and the model looked guilty, but the pipeline had stripped the indentation before the model ever saw it. Restoring it fixed the indentation and, unexpectedly, stopped the model from collapsing two programs into one.
 - **The models moved faster than the project.** During development two model families released a new generation, and one model began refusing the merge prompt through its API. So the lineup is frozen per release, every figure is dated, and re-measuring is cheap.

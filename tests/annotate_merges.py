@@ -131,7 +131,9 @@ def annotate(entry: dict) -> dict:
 
     sources = {n: p.read_text(encoding="utf-8") for n, p in entry["documents"].items()}
     merged_text = entry["merged"].read_text(encoding="utf-8")
-    result = reconcile.reconcile(sources, merged_text)
+    # The registered rule, by name: the pages are published beside records
+    # that were graded with it, and `--check` holds the pages to those records.
+    result = reconcile.reconcile(sources, merged_text, rule=reconcile.REGISTERED)
     blob = entry["blob"]
 
     # Source side. The reconciler's own verdict first, then anything the record

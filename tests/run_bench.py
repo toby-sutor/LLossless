@@ -140,8 +140,13 @@ def score_merge(sources: dict[str, str], merged: str, dispositions: tuple[dict, 
     One implementation, called for the candidate's merges and for both
     baselines, because a baseline scored by a second implementation is a
     baseline for a different metric.
+
+    Under the registered rule, by name: the properties this runner evaluates
+    are registered in `docs/bench-spec.md` against figures that were scored
+    with it. Scoring them under the amended rule is a change to that
+    registration, not to this line.
     """
-    result = reconcile.reconcile(sources, merged)
+    result = reconcile.reconcile(sources, merged, rule=reconcile.REGISTERED)
     got = reconcile.findings(result, dispositions, fidelity=fidelity,
                              title_policy="keep-base", base=base,
                              budget=config.DEFAULT_DECLARED_LOSS_BUDGET,

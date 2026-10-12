@@ -56,7 +56,7 @@ import socket_guard  # noqa: E402
 # turns that sentence into something that fails when it stops being true.
 socket_guard.install()
 
-from llossless import config, html_report, parsing, report  # noqa: E402
+from llossless import config, html_report, parsing, reconcile, report  # noqa: E402
 from llossless.client import Client  # noqa: E402
 from llossless.decompose import Claim  # noqa: E402
 from llossless.provenance import Provenance  # noqa: E402
@@ -560,6 +560,73 @@ def test_the_three_outputs_agree_where_a_claim_was_dropped() -> None:
 
 def test_the_three_outputs_agree_on_a_structural_finding() -> None:
     parity(structural_run(), "structural")
+
+
+def heading_run(*kinds: str) -> Run:
+    """A merge that is clean in its claims, with one structural finding per kind named."""
+    run = fixture_run("dedup")
+    run.command = "merge"
+    run.merged_written_to = None
+    run.base = "source_a.md"
+    run.base_chosen = "explicit"
+    run.segments = 12
+    run.reconciled = Reconciled(
+        findings=tuple(
+            Finding(kind=kind,
+                    detail="heading 'Night shift' is not a heading of the merge and no "
+                           "disposition record says what became of it",
+                    segment="b2", document="source_b.md", source_text="Night shift")
+            for kind in kinds),
+        declared_drops=(),
+        segments=12,
+    )
+    run.order = Order(sequence=("a", "a", "b", "b"), runs=2, interleaved=False,
+                      monotone=True, attributed=4, headings_total=4, headings_present=3)
+    run.provenance = provenance_for(run)
+    return run
+
+
+def test_an_untaken_heading_has_its_own_section_and_is_a_record_finding() -> None:
+    """"Heading dropped in silence" on all three outputs, at exit code 3.
+
+    The kind that joined the reconciler's on 2026-10-12. Alone it is a record
+    finding: the page's banner says so and the code is 3. MUST FIRE the other
+    way: beside "Absent and undeclared", a document finding, the same page is
+    a findings page at exit code 1, so the new kind cannot soften a real loss.
+    """
+    kind = reconcile.HEADING_NOT_DECLARED
+    heading = report.STRUCTURAL_HEADINGS[kind]
+    check(heading.startswith("Heading dropped in silence \u2014 "),
+          f"the section is named for what happened: {heading!r}")
+    alone = heading_run(kind)
+    parity(alone, "untaken heading")
+    check(report.exit_code(alone) == report.RECORD_ONLY == 3,
+          f"an untaken heading alone is exit code 3, got {report.exit_code(alone)}")
+    page = html_report.render(alone)
+    shape = parse(page, "untaken heading")
+    record_word, findings_word = html_report.BANNER[3][1], html_report.BANNER[1][1]
+    check(banner_word(page).startswith(record_word) and record_word != findings_word
+          and banner_word(html_report.render(heading_run(
+              reconcile.TITLE_NOT_SUPERSEDED))).startswith(record_word),
+          f"its banner is the record banner, the one an untaken title has: "
+          f"{banner_word(page)[:60]!r}")
+    check("1 heading not declared" in banner_word(page),
+          f"the verdict counts it by its kind: {banner_word(page)[:120]!r}")
+    cards = [a for tag, a in shape.attrs if tag == "article" and a.get("data-kind") == kind]
+    check(len(cards) == 1, f"one card of the new kind, got {len(cards)}")
+    check(f"<h3>{html_report.esc(heading)}</h3>" in page,
+          "the page prints the kind's heading above its card")
+    markdown = report.render(alone)
+    check(f"### {heading}" in markdown and "In the source: Night shift" in markdown,
+          "the Markdown report prints the same heading and the source heading's text")
+
+    both = heading_run(reconcile.UNDECLARED_ABSENCE, kind)
+    check(report.exit_code(both) == 1,
+          f"MUST FIRE: a document finding beside it is exit code 1, got "
+          f"{report.exit_code(both)}")
+    check(banner_word(html_report.render(both)).startswith(findings_word),
+          f"and the banner is the findings banner: "
+          f"{banner_word(html_report.render(both))[:60]!r}")
 
 
 def test_the_hostile_run_is_held_to_the_same_parity() -> None:

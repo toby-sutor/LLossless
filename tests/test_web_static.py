@@ -7701,6 +7701,82 @@ def test_a_free_tier_row_keeps_its_metered_badge_and_says_so_beside_it() -> None
           "dropping the free-tier caveat from renderRouteCaveats is not caught")
 
 
+def test_a_row_the_audit_disqualified_says_so_and_the_count_does_not() -> None:
+    """A row the release benchmark's audit by reading disqualified is marked in words.
+
+    Since that benchmark's amendment of 2026-10-12 the silent-loss column is
+    a program's count and does not disqualify; what does is `audited_loss` in
+    the catalogue, whether a reading of the row's test merges found content
+    gone. So the marker reads that field and nothing else (`auditNote`, on the
+    picker row and the scorecard row), its sentence stands once under the
+    scorecard table (`renderRouteCaveats`), and the column's help no longer
+    says that what it counts is lost.
+    """
+    js = strip_comments(source(APP_JS))
+    note = body_of(js, "function auditNote(")
+    check("measured.audited_loss === true" in note and '"models.audit.mark"' in note,
+          "auditNote no longer reads measured.audited_loss, true and nothing else")
+    check("silent_loss" not in note,
+          "auditNote reads the count of silent loss; the count does not disqualify")
+    for owner in ("function pickerRow(", "function scorecardRow("):
+        check("appendAuditNote(" in body_of(js, owner),
+              f"{owner} no longer shows the audit's marker under the row's name")
+    caveats = body_of(js, "function renderRouteCaveats(")
+    check('"models.audit.caveat"' in caveats and "auditNote" in caveats,
+          "renderRouteCaveats no longer explains the audit's marker")
+
+    for tag, strings in sorted(catalogues().items()):
+        mark = strings.get("models.audit.mark", "")
+        caveat = strings.get("models.audit.caveat", "")
+        check(bool(mark.strip()) and mark in caveat,
+              f"{tag}.json: the audit's sentence does not quote its marker {mark!r}")
+        check(strings.get("models.col.loss", "") in caveat,
+              f"{tag}.json: the audit's sentence does not name the silent-loss column it "
+              f"sets the marker against")
+    # The help of the column says what the figure is, in both languages: a
+    # count by a check, and not proof that anything was lost.
+    help_text = {tag: strings.get("models.help.loss", "")
+                 for tag, strings in catalogues().items()}
+    check("could not find" in help_text["en"] and "not proof of loss" in help_text["en"]
+          and "went missing" not in help_text["en"],
+          f"en.json: the silent-loss help still says the count is lost content: "
+          f"{help_text['en']!r}")
+    check("nicht gefunden" in help_text["de"] and "kein Beweis" in help_text["de"]
+          and "verloren gingen" not in help_text["de"],
+          f"de.json: the silent-loss help still says the count is lost content: "
+          f"{help_text['de']!r}")
+
+    # The rows it is on: exactly the ones the catalogue says the audit
+    # disqualified. In the release benchmark those are the two Haiku rows
+    # and, since the audit was extended to sentences reworded with no record,
+    # GPT-6 Luna.
+    marked = sorted(
+        str(row.get("id") or row.get("route"))
+        for row in list(catalogue.load()["models"]) + list(catalogue.load()["command_routes"])
+        if (row.get("measured") or {}).get("audited_loss") is True)
+    check(marked == ["claude-haiku", "claude-haiku-4-5", "gpt-6-luna"],
+          f"the catalogue's rows with audited loss are {marked}")
+
+    # Seeded both ways: the marker dropped from a row, and the sentence
+    # dropped from under the table.
+    dropped_row = js.replace("  appendAuditNote(name, model);\n  appendFreeTierNote(name, model);",
+                             "  appendFreeTierNote(name, model);")
+    check(dropped_row != js, "the pickerRow audit-marker probe's anchor has moved")
+    check("appendAuditNote(" not in body_of(dropped_row, "function pickerRow("),
+          "dropping the audit's marker from pickerRow is not caught")
+    raw = source(APP_JS)
+    dropped_caveat = strip_comments(raw.replace(
+        '  if (scorecardRows().some(\n'
+        '      (/** @type {any} */ model) => Boolean(auditNote(model)))) {\n'
+        '    said.push(t("models.audit.caveat"));\n  }\n', ''))
+    check(dropped_caveat != js, "the renderRouteCaveats audit probe's anchor has moved")
+    check("models.audit.caveat" not in body_of(dropped_caveat, "function renderRouteCaveats("),
+          "dropping the audit's sentence from renderRouteCaveats is not caught")
+    by_count = note.replace("measured.audited_loss === true", "measured.silent_loss > 0")
+    check("measured.audited_loss === true" not in by_count and "silent_loss" in by_count,
+          "MUST FIRE: a marker driven by the count of silent loss is not what this checks")
+
+
 def test_loading_accounts_does_not_ask_a_server_with_no_account_store() -> None:
     """`loadAccounts` reads `session.tenanted` before it asks `/api/v1/accounts`.
 

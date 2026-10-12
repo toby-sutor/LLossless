@@ -217,24 +217,25 @@ The tool does not take these declarations on trust. The next three sections chec
 
 ### Structure
 
-**What it shows.** The results of nine mechanical checks over the source segments, the merged document and the declarations. No model is involved: every check compares strings or counts, so you can verify any entry by hand. These checks cover what claims cannot: titles and headings, tokens that must survive exactly, and segments from which no claim was extracted.
+**What it shows.** The results of nine mechanical checks over the source segments, the merged document and the declarations. No model is involved in the nine checks: each compares strings or counts, so you can verify any entry by hand. Two kinds of entry can also rest on the model's claims: `Stated twice`, when the same claim was drawn from two lines of the merged document, and `Title not from a source`, when the merge wrote a title of its own and the sources do not support it. These checks cover what claims cannot: titles and headings, tokens that must survive exactly, and segments from which no claim was extracted.
 
 **How to read it.** The section opens with the number of checks and the number of source segments they ran over. A line starting `Ordering:` then describes how the merge arranged the sources. It is a measurement and never a finding, but if it says each source sits in one unbroken block and your documents overlap, the merge may have pasted them one after the other instead of merging them. After that comes either `No structural finding.` or entries under these headings:
 
 | Heading | Meaning | Exit code |
 |---|---|---|
 | Absent and undeclared | A source segment is missing from the merged document and no declaration explains it. | 1 |
-| Reworded and undeclared | A source segment is in the merged document in changed wording and no declaration explains it. At `verbatim`, changed line breaks count too. | 1 |
+| Reworded and undeclared | A source segment is in the merged document in changed wording and no declaration explains it. That includes a sentence whose words all still stand in the merged document, in order and as one run, but joined to a neighbouring sentence or split cleanly into two: the entry then names the merge segments the words were found in. At `verbatim`, changed line breaks count too. | 1 |
 | Declared gone, still here | A declaration says the segment was replaced or absorbed, and the merged document still carries it unchanged. Nothing was lost. | 3 |
 | Invented segment | A declaration names a segment that no source has. | 1 |
 | Unresolved replacement | A declaration points at replacement text that is not in the merged document. | 3 |
 | Not permitted here | The merge declared a kind of change that the fidelity level forbids. | 3 |
 | Verbatim violation | A number, unit, URL, path, version string, piece of inline code or code block did not survive exactly. | 1 |
 | Over budget | The merge declared more than 3% of the source segments dropped, or let one replacement stand in for more than 3 missing segments. | 1 |
-| Title not from a source | The merged document has no title, or a written one where the title policy requires a source's title. | 1 |
+| Title not from a source | The merged document has no title, or a written one where the title policy requires a source's title, or a written one that the sources do not support. | 1 |
 | Title dropped in silence | A source title is gone and no declaration says what replaced it. | 3 |
+| Heading dropped in silence | A source heading is not among the merged document's headings and no declaration says what became of it, while the section under it is still in the merged document or accounted for by declarations. If the whole section is missing with it, or the heading carries a number, link or code value the merged document does not have, the heading is listed under "Absent and undeclared" instead. | 3 |
 | Stated twice | The merged document says the same thing more than once. | 1 |
-| Prompt example returned | The merged document contains a word from the tool's own prompt example and from no source. | 1 |
+| Prompt example returned | The merged document contains a word from the tool's own prompt example and from no source, or a declaration gives the example's reason as its own. | 1 |
 
 In ordinary text, runs of spaces and line breaks are ignored when a token is compared. Inside a fenced code block, spacing is compared exactly, because there indentation is content; only line endings and trailing spaces are ignored.
 

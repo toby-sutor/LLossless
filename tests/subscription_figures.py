@@ -81,6 +81,12 @@ import figure_rules  # noqa: E402
 import rank_matrix  # noqa: E402
 from llossless.web import catalogue  # noqa: E402
 
+# The rule every figure published from this run was scored with, one of
+# `reconcile.RULES`. Named here and passed to every scorer call, because the
+# scorer has no default: a script that followed whatever the scorer does
+# today would move a published figure without a line of its own changing.
+RULE = "registered"
+
 EVIDENCE = ROOT / "arms" / "2026-09-24" / "subscription"
 RESULTS = EVIDENCE / "results.json"
 SCORED = EVIDENCE / "scored.json"
@@ -158,7 +164,8 @@ def score(results: list[dict]) -> list[dict]:
             where = cell_dir(row)
             report = load(where / "report.json")
             record.update(rank_matrix.cell_figures(
-                row["pair"], (where / "merged.md").read_text(encoding="utf-8"), report))
+                row["pair"], (where / "merged.md").read_text(encoding="utf-8"), report,
+                rule=RULE))
             record["seconds"] = figure_rules.answer_seconds(report)
         out.append(record)
     return out

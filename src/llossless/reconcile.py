@@ -46,9 +46,23 @@ and it is the tolerance a reader would grant: a sentence lifted into a list, a
 paragraph rewrapped, or a clause that now opens with a lower-case letter because
 it was folded into an attributing sentence has not lost a fact.
 
-Nothing else is normalised. Case inside the segment, punctuation, digits and
-word order all have to match, because those are the things whose change is the
-defect being looked for.
+Nothing else is normalised for "present". Case inside the segment, punctuation,
+digits and word order all have to match, because those are the things whose
+change is the defect being looked for.
+
+## Reworded or gone
+
+A segment that is not present is either in the merge in other words or not in
+it, and that line has two definitions (`RULES`). Under the registered rule it
+is one similarity ratio against one merge segment (`NEAR_MATCH`). Under the
+amended rule of 2026-10-12, which is the tool's own, a sentence, list item or
+table row the ratio leaves absent is still called reworded when its own words
+stand in the merge as one unbroken run: joined to a neighbour, or split
+cleanly in two. The amended rule only ever clears an absence; it never creates
+one and never calls anything present. An untaken heading keeps its verdict,
+and `is_silent_loss` says whether it is lost content or only an undeclared
+label. The comment at `REGISTERED` has the reasons, and `locate` is the one
+implementation of both.
 """
 
 from __future__ import annotations
@@ -112,6 +126,18 @@ if TYPE_CHECKING:  # pragma: no cover - a type name, never a runtime import
 # those land in `absent` — 21 of the corpus's 87 absent observations, the
 # largest single share, and the same blind spot `tests/analyse_merges.py`
 # records for duplication, in the same corpus, for the same reason.
+#
+# This ratio is the whole of the registered rule and the first step of the
+# amended one, which keeps it unchanged and adds to it (`REGISTERED`, below).
+# Two things about it are known and are not repaired by the amendment, which
+# is additive. It errs towards "gone" for a sentence kept whole inside a
+# longer one: the ratio of a text of length m inside one of length M is at
+# most 2m/(m+M), so a sentence joined to a neighbour twice its length cannot
+# reach 0.68. That is what the amended steps are for. And it errs towards
+# "reworded" for a sentence that was cut short: the same bound reaches 0.68 at
+# m/M = 0.515, so a sentence that lost its second half still reads as
+# reworded whenever a little more than half of it is left. The amended rule
+# leaves that class where it is and marks it (`Located.step` is `ratio`).
 NEAR_MATCH = 0.68
 
 # The merge's own segments are lettered `m`. It is not a source and never gets
@@ -259,6 +285,299 @@ def token_present(token: str, haystack: str) -> bool:
 def similarity(left: str, right: str) -> float:
     """Character-level similarity of two flattened texts, case-insensitively."""
     return SequenceMatcher(None, left.casefold(), right.casefold()).ratio()
+
+
+# --------------------------------------------------------------------------
+# Reworded or gone: the two rules
+# --------------------------------------------------------------------------
+#
+# `locate` decides, for every source segment, whether the merge carries it
+# word for word, carries it in other words, or does not carry it. The first
+# answer has one definition (`occurs`). The line between the second and the
+# third has two, and which one is in force is an argument, never a module
+# constant, so that a caller cannot score under a rule it did not name.
+#
+# REGISTERED is the rule every benchmark figure published up to 2026-10-12 was
+# scored with: a segment that is not found word for word is reworded when some
+# single merge segment is at least `NEAR_MATCH` like it, and absent otherwise.
+# It stays callable, unchanged, so that those figures can be re-derived.
+#
+# AMENDED is the rule of 2026-10-12 and the tool's own. It was written because
+# the registered rule calls content gone that is plainly in the merge, in
+# three ways: a sentence kept whole and joined to its neighbour (the search
+# includes the sentence's full stop and misses, and the ratio of a text of
+# length m inside one of length M is at most 2m/(m+M), which cannot reach
+# `NEAR_MATCH` against a long joined sentence); a sentence spread over two
+# merge sentences or two run into one (the ratio is taken against one merge
+# segment at a time); and a heading the merge did not take because it took the
+# other source's heading for the same section.
+#
+# It is additive. Whatever the registered rule calls present or reworded stays
+# exactly that; the amended rule looks only at what the registered rule calls
+# absent and can only move a sentence, list item or table row from absent to
+# reworded. So it cannot create an absence anywhere, and every change it makes
+# is a clearing a person can read: the merge text the words were found in is
+# carried on the `Located`.
+#
+# Two steps do the clearing, both asking the same one-sided question: do the
+# segment's own words still stand in the merge as one unbroken run, in order?
+#
+#   phrase       every word of the segment, punctuation and capitals ignored.
+#   containment  every content word of the segment, inside two neighbouring
+#                merge segments, where the words in `FREE_WORDS` may be
+#                missing or added, and every number, link, path, version and
+#                code value the segment carries is in those two segments too.
+#
+# There is no share below 100% and no gap inside the run, and that is the
+# design rather than a setting. Any lower share names a part of the sentence
+# that may be lost without the rule noticing: at 80% a twenty-word sentence
+# may lose a four-word clause. A gap is where a statement nobody made gets
+# assembled from the right words of two sentences, and where a name cut from a
+# sentence is picked up again from the sentence after it.
+#
+# A heading keeps its registered verdict. What the amended rule adds for a
+# heading is what `is_silent_loss` needs to tell a lost section from an
+# untaken label: the section under it, and the protected values it carries
+# that the merge does not have.
+#
+# The rule does not read for meaning, and its limits are pinned case by case
+# in `tests/test_amended_rule.py`. It still clears a sentence whose every word
+# survives behind words that turn it round (`It is not the case that ...`),
+# as the exact search always did; one that differs only in a word of
+# `FREE_WORDS`; and one whose opening words happen to end the merge sentence
+# before it. It still keeps as absent a sentence split with a word written at
+# the seam, one with a clause inserted, one reworded with a different content
+# word or an inflection, and one whose clauses changed order.
+REGISTERED = "registered"
+AMENDED = "amended"
+RULES = (REGISTERED, AMENDED)
+
+# Which step gave a segment its verdict. `exact` is `occurs`, `ratio` is
+# `NEAR_MATCH`, and `none` is an absent segment: nothing found it.
+STEP_EXACT = "exact"
+STEP_RATIO = "ratio"
+STEP_PHRASE = "phrase"
+STEP_CONTAINMENT = "containment"
+STEP_NONE = "none"
+STEPS = (STEP_EXACT, STEP_RATIO, STEP_PHRASE, STEP_CONTAINMENT, STEP_NONE)
+# The two steps of the amended rule. A segment one of them cleared is reworded
+# by observation, its words are there as a run, and its ratio is below
+# `NEAR_MATCH` by construction: a sentence that prints the ratio as the reason
+# would contradict the verdict it explains.
+RUN_STEPS = (STEP_PHRASE, STEP_CONTAINMENT)
+
+# Words that may be missing from the merge, or added to it, without a segment
+# counting as changed by the containment step. Four closed classes: articles;
+# "and"; forms of "to be"; pronouns that only point back at something already
+# named. Splitting a sentence, or running two together, changes exactly these
+# ("X, and Y" to "X. Y"; "X, which Y" to "X. It Y"), and none of them can carry
+# a negation, a condition, an obligation, a place or a quantity.
+#
+# Not in the list, on purpose: not, no, never, only, if, unless, or, but, so,
+# then, also, before, after, must, may, can, every preposition and every
+# number word. `before 12:00` against `after 12:00`, or `must` against `may`,
+# would clear with them in it.
+#
+# Two limits, both known. Tense is the one thing here that can carry a fact:
+# `The cutoff was 15:00` is cleared against `the cutoff is 15:00`. And the
+# list is English, so a German sentence split at "und" or "welche" stays
+# absent. That errs to the safe side, and a German list cannot simply be added
+# to the same set: "die" and "war" are content words in English.
+FREE_WORDS = frozenset({
+    "a", "an", "the",
+    "and",
+    "am", "is", "are", "was", "were", "be", "been", "being",
+    "it", "they", "them", "this", "that", "these", "those", "which", "who",
+})
+
+# The phrase step needs a phrase, and one word is not one: `None.` is "found"
+# in any document that says "none of that". It is the argument `LABEL_KINDS`
+# makes for headings (`Times`, `Work`, `Winter`). At 3, a two-word item that
+# only lost its full stop (`Not applicable.`) would stay a false alarm.
+PHRASE_MIN_WORDS = 2
+
+# The containment step forgives connecting words and reads across a sentence
+# boundary. That is for a sentence that was split or joined, and a sentence
+# that can be split in two has two clauses of at least two content words each.
+# Below four a segment is cleared only as a whole phrase, with every word: at
+# 3, `Platform: Nimbrel Cloud` would clear as soon as its three words stood
+# together in a window, connecting words aside.
+CONTAINMENT_MIN_CONTENT_WORDS = 4
+
+# How many neighbouring merge segments the containment step reads as one. A
+# sentence cut once lands in two.
+WINDOW = 2
+
+# What the phrase and containment steps apply to, and what a window is made
+# of. A title is the title checks', a heading names a place rather than
+# stating something, and a fenced block is protected whole: words found in
+# order are not a block.
+BODY_KINDS = (segment_module.SENTENCE, segment_module.LIST_ITEM,
+              segment_module.TABLE_ROW)
+
+# The spans the containment step has to find as well as the words: check 5's
+# classes, less the link span, whose text is words and whose address is a url
+# span of its own. Check 5 walks the same spans for the tool. The benchmark's
+# scorer does not count check 5, which is why the step asks for itself.
+PROTECTED_KINDS = (segment_module.CODE, segment_module.URL, segment_module.PATH,
+                   segment_module.VERSION, segment_module.NUMERIC)
+
+# Punctuation taken off both ends of a whitespace-separated piece: sentence
+# punctuation, quotation marks, brackets, Markdown marks, the en and em dash.
+# Deliberately not here: the hyphen-minus and the plus (a sign), `#`, `%`,
+# `$`, `/`, `@`, `=`, `&`, which belong to the value they are attached to.
+_EDGE = (".,;:!?\u2026"
+         "\"'\u201c\u201d\u2018\u2019\u201e\u201a\u00ab\u00bb\u2039\u203a"
+         "()[]{}<>"
+         "*_~|`"
+         "\u2013\u2014")
+
+
+def words(text: str) -> list[str]:
+    """A flattened text cut into words. The amended rule's only tokeniser.
+
+    A space is put between `]` and `(` where they touch, so a Markdown link
+    counts as its text followed by its address. Then: split at whitespace,
+    take edge punctuation off both ends of each piece, case-fold, and drop a
+    piece with no letter and no digit left in it.
+
+    Nothing inside a piece is touched. `5.5`, `30-33`, `-70`, `2,000,000`,
+    `wide_text`, `channel.id`, `visitor's` and a whole URL are one word each.
+    That is the direction the cutter is allowed to err in: it can make a word
+    more specific than a reader would, never less, so `5` is never found
+    inside `5.5` and `30` never inside `300`.
+    """
+    out: list[str] = []
+    for piece in text.replace("](", "] (").split():
+        piece = piece.strip(_EDGE).casefold()
+        if any(character.isalnum() for character in piece):
+            out.append(piece)
+    return out
+
+
+def content_words(sequence: list[str]) -> list[str]:
+    """A word sequence without the words in `FREE_WORDS`."""
+    return [word for word in sequence if word not in FREE_WORDS]
+
+
+def _run_at(needle: list[str], haystack: list[str]) -> int:
+    """Where `needle` occurs in `haystack` as one uninterrupted run, or -1."""
+    if not needle or len(needle) > len(haystack):
+        return -1
+    first, length = needle[0], len(needle)
+    for start in range(len(haystack) - length + 1):
+        if haystack[start] == first and haystack[start:start + length] == needle:
+            return start
+    return -1
+
+
+class _Body:
+    """The merge's sentences, list items and table rows, as the two steps read them.
+
+    Built once per `locate` call and only if some segment needs it. `norm` is
+    the caller's reading of a text (`flatten`, and the scorer's normaliser on
+    top when one was given), so both sides of every comparison here have been
+    through the same function.
+
+    `stretches` is for the phrase step: the words of each stretch of
+    consecutive body segments, with the merge segment each word came from. A
+    stretch ends at a title, a heading or a code block, so a run never reads a
+    heading's last words as the start of the sentence under it. That was
+    measured before it was a rule: read over the whole flattened merge, the
+    step cleared real sentences that had lost their first words, because the
+    heading above happened to end with them.
+
+    `windows` is for the containment step: every run of 1 to `WINDOW`
+    consecutive body segments, as (ids, content words, text). A window does
+    not reach across a title, a heading or a code block either. The windows
+    of one segment come first. Which window is asked first cannot change a
+    verdict, since any one that holds the run decides; it changes which
+    window is named to the reader, and a run that fits in one merge segment
+    is then reported against that segment and not against it and the
+    unrelated sentence before it.
+    """
+
+    def __init__(self, merged: tuple[Segment, ...], norm) -> None:
+        texts = [norm(item.text) if item.kind in BODY_KINDS else None for item in merged]
+        self.text_of = {item.id: text for item, text in zip(merged, texts)
+                        if text is not None}
+
+        self.stretches: list[tuple[list[str], list[str]]] = []
+        current: tuple[list[str], list[str]] | None = None
+        for item, text in zip(merged, texts):
+            if text is None:
+                current = None
+                continue
+            if current is None:
+                current = ([], [])
+                self.stretches.append(current)
+            cut = words(text)
+            current[0].extend(cut)
+            current[1].extend([item.id] * len(cut))
+
+        content = [content_words(words(text)) if text is not None else None
+                   for text in texts]
+        self.windows: list[tuple[tuple[str, ...], list[str], str]] = []
+        for start in range(len(merged)):
+            for size in range(1, WINDOW + 1):
+                stop = start + size
+                if stop > len(merged) or any(texts[i] is None for i in range(start, stop)):
+                    break
+                self.windows.append((
+                    tuple(merged[i].id for i in range(start, stop)),
+                    [word for i in range(start, stop) for word in content[i]],
+                    " ".join(texts[i] for i in range(start, stop)),
+                ))
+        # Stable, so within one size the windows stay in document order.
+        self.windows.sort(key=lambda window: len(window[0]))
+
+    def find(self, source: Segment, norm) -> tuple[str, tuple[str, ...]]:
+        """(step, merge segment ids) for one body segment the ratio left absent.
+
+        The phrase step first, then containment; the first stretch or window
+        that satisfies a step decides, the smallest window being asked
+        first, and `STEP_NONE` with no ids means neither did.
+        """
+        sequence = words(norm(source.text))
+        if len(sequence) >= PHRASE_MIN_WORDS:
+            for stretch, owners in self.stretches:
+                at = _run_at(sequence, stretch)
+                if at >= 0:
+                    return STEP_PHRASE, tuple(dict.fromkeys(owners[at:at + len(sequence)]))
+        content = content_words(sequence)
+        if len(content) >= CONTAINMENT_MIN_CONTENT_WORDS:
+            values = [value for value in _protected(source, norm) if value]
+            for ids, window, text in self.windows:
+                if (_run_at(content, window) >= 0
+                        and all(token_present(value, text) for value in values)):
+                    return STEP_CONTAINMENT, ids
+        return STEP_NONE, ()
+
+    def text(self, ids: tuple[str, ...]) -> str:
+        return " ".join(self.text_of[identifier] for identifier in ids)
+
+
+def _protected(item: Segment, norm) -> list[str]:
+    """The protected values one segment carries, as the comparison reads them."""
+    return [norm(span.text) for span in item.spans if span.kind in PROTECTED_KINDS]
+
+
+def _section_of(heading: Segment, document: Document) -> tuple[str, ...]:
+    """The ids of the segments under one heading.
+
+    Every sentence, list item, table row and code block after it, up to the
+    next heading of its own level or above. What stands under a sub-heading
+    belongs to the section; the sub-heading itself does not, because a label
+    is not content the section could have kept.
+    """
+    members: list[str] = []
+    for item in document.segments[heading.ordinal:]:
+        if item.kind in LABEL_KINDS:
+            if item.level <= heading.level:
+                break
+            continue
+        members.append(item.id)
+    return tuple(members)
 
 
 # How a word-level difference is marked, and the one rule the notation has to
@@ -441,9 +760,14 @@ class Located:
     """One source segment, and what became of it as far as text can tell."""
 
     segment: Segment
-    # present | reworded | absent. `reworded` is a reading of a similarity
-    # score and not an observation, which is why it is not called `changed`.
+    # present | reworded | absent. Where `step` is `ratio`, `reworded` is a
+    # reading of a similarity score and not an observation, which is why the
+    # verdict is not called `changed`. Where `step` is `phrase` or
+    # `containment` it is an observation, and `window` says of what.
     verdict: str
+    # The best similarity against any one merge segment. Under the amended
+    # rule it is still the similarity's reading and nothing else: a segment a
+    # run step cleared keeps a ratio below `NEAR_MATCH`.
     ratio: float = 0.0
     # The merge segment it most resembles, for a reader who has to judge the
     # call themselves. Empty when it was found outright.
@@ -452,10 +776,42 @@ class Located:
     # finding has to show the reader what the merge says instead, and a second
     # lookup by id is a second chance to name a different segment.
     nearest_text: str = ""
+    # Which step gave the verdict, one of `STEPS`. Empty only on a `Located`
+    # built by hand; `locate` always says.
+    step: str = ""
+    # For a segment a run step cleared: the merge segments its words were
+    # found in, and their text as it was compared. One or two segments for the
+    # containment step, which reads a window; as many consecutive ones as the
+    # run covers for the phrase step, which is how a sentence turned into a
+    # line and a list is shown whole. Kept
+    # apart from `nearest` on purpose. The two answer different questions,
+    # which merge segment looks most like this one and where this one's words
+    # stand, and for a joined sentence they can name different segments.
+    window: tuple[str, ...] = ()
+    window_text: str = ""
+    # For a heading under the amended rule: the ids of the segments of its
+    # section (`_section_of`), and the protected values it carries that are
+    # nowhere in the merge. `is_silent_loss` reads both. Empty for every other
+    # kind, and under the registered rule, which knows neither.
+    section: tuple[str, ...] = ()
+    protected_missing: tuple[str, ...] = ()
 
     @property
     def found(self) -> bool:
         return self.verdict == PRESENT
+
+    @property
+    def counterpart(self) -> str:
+        """The merge text to show a reader beside this segment, or `` for none.
+
+        Where the words were found for a segment a run step cleared, the
+        nearest segment for one the ratio called reworded, and nothing for an
+        absent one: the nearest match at 0.3 is a coincidence and not a
+        version of it.
+        """
+        if self.step in RUN_STEPS:
+            return self.window_text
+        return self.nearest_text if self.verdict == REWORDED else ""
 
 
 PRESENT = "present"
@@ -649,6 +1005,10 @@ class Reconciliation:
     # `merged`, because a replacement pointer is checked against what the model
     # wrote and not against what the segmenter made of it.
     merged_text: str = ""
+    # Which of `RULES` located the segments. `findings` reads it: only under
+    # the amended rule is an untaken heading told from lost content, because
+    # only that rule records what the decision needs.
+    rule: str = AMENDED
 
     @property
     def added_breaks(self) -> tuple[tuple[str, str], ...]:
@@ -695,35 +1055,165 @@ class Reconciliation:
         return sum(item.present for item in self.coverages)
 
 
-def locate(document: Document, merged_flat: str, merged: tuple[Segment, ...]) -> Coverage:
-    """Find each of one source's segments in the merge.
+def locate(document: Document, merged_flat: str, merged: tuple[Segment, ...], *,
+           rule: str, plain=None) -> Coverage:
+    """Find each of one source's segments in the merge, under one of `RULES`.
 
-    A label -- a title or a heading -- is searched for among the merge's own
-    labels rather than in the whole flattened merge. Everything else is
-    searched for as before. See `LABEL_KINDS` for why the two are not the same
-    question.
+    The one implementation of both rules, for the tool and for the benchmark's
+    scorer alike. `rule` has no default, here of all places: a caller that
+    scores a published figure and does not say which rule it was scored with
+    would follow whatever this function's default became, and the figure
+    would move without a line of its own script changing.
+
+    `plain`, when given, is a text normaliser applied on top of `flatten` to
+    both sides of every comparison, and `merged_flat` must already have been
+    through it. The tool passes none. The benchmark's scorer passes its own,
+    which takes inline emphasis and code marks off, so that a merge with
+    every number in bold is the same merge.
+
+    The steps, in order, for each source segment:
+
+    1. Present. A label, which is a title or a heading, is searched for among
+       the merge's own labels and not in the whole flattened merge; everything
+       else is searched for in the whole of it. See `LABEL_KINDS` for why the
+       two are not the same question. Both rules.
+    2. Reworded by ratio: some one merge segment is at least `NEAR_MATCH` like
+       it. Both rules, and the whole of the registered one.
+    3. Under the amended rule only, and only for a sentence, a list item or a
+       table row that steps 1 and 2 left absent: reworded if its words stand
+       in the merge's body as one unbroken run (`_Body.find`).
+    4. Otherwise absent.
+
+    A title and a fenced block stop after step 2 under both rules. So does a
+    heading: its words turning up in a sentence are vocabulary and not the
+    heading, which is the ruling at `LABEL_KINDS`. What the amended rule adds
+    for a heading is its section and the protected values the merge lacks,
+    whatever its verdict, for `is_silent_loss` to read.
     """
-    flattened = [(item.id, flatten(item.text), item.kind) for item in merged]
+    if rule not in RULES:
+        raise ValueError(f"unknown rule {rule!r}; expected one of {RULES}")
+    amended = rule == AMENDED
+
+    def norm(text: str) -> str:
+        flat = flatten(text)
+        return plain(flat) if plain is not None else flat
+
+    flattened = [(item.id, norm(item.text), item.kind) for item in merged]
     labels = [text for _, text, kind in flattened if kind in LABEL_KINDS]
+    # Built on the first segment that needs it. Most merges of most sources
+    # leave nothing for the run steps to look at.
+    body: _Body | None = None
     located: list[Located] = []
     for source in document.segments:
-        needle = flatten(source.text)
+        needle = norm(source.text)
+        heading: dict = {}
+        if amended and source.kind == HEADING:
+            heading = {
+                "section": _section_of(source, document),
+                "protected_missing": tuple(
+                    value for value in _protected(source, norm)
+                    if value and not token_present(value, merged_flat)),
+            }
         found = (
             any(occurs(needle, label) for label in labels)
             if source.kind in LABEL_KINDS
             else occurs(needle, merged_flat)
         )
         if found:
-            located.append(Located(source, PRESENT))
+            located.append(Located(source, PRESENT, step=STEP_EXACT, **heading))
             continue
         best_id, best, best_text = "", 0.0, ""
         for identifier, candidate, _ in flattened:
             ratio = similarity(needle, candidate)
             if ratio > best:
                 best_id, best, best_text = identifier, ratio, candidate
-        verdict = REWORDED if best >= NEAR_MATCH else ABSENT
-        located.append(Located(source, verdict, best, best_id, best_text))
+        if best >= NEAR_MATCH:
+            located.append(Located(source, REWORDED, best, best_id, best_text,
+                                   step=STEP_RATIO, **heading))
+            continue
+        if amended and source.kind in BODY_KINDS:
+            if body is None:
+                body = _Body(merged, norm)
+            step, window = body.find(source, norm)
+            if step != STEP_NONE:
+                located.append(Located(source, REWORDED, best, best_id, best_text,
+                                       step=step, window=window,
+                                       window_text=body.text(window)))
+                continue
+        located.append(Located(source, ABSENT, best, best_id, best_text,
+                               step=STEP_NONE, **heading))
     return Coverage(document, tuple(located))
+
+
+def how_found(item: Located) -> str:
+    """In one clause, what the search for a segment that is not present came to.
+
+    For a reader of a finding, and written once because two reports print it.
+    A segment the ratio decided, reworded or absent, is explained by the
+    nearest merge segment and its score. A segment a run step cleared is not:
+    its score is below `NEAR_MATCH` by construction, and printing it as the
+    reason for "reworded" would read as a contradiction. It is explained by
+    what was observed, its words standing in the merge as one run, and where.
+    """
+    where = ", ".join(item.window)
+    if item.step == STEP_PHRASE:
+        return (f"its words stand in the merge as one unbroken run, in other "
+                f"punctuation or capitals, in merge segment(s) {where}")
+    if item.step == STEP_CONTAINMENT:
+        return (f"its words stand in merge segment(s) {where} as one unbroken run, "
+                f"connecting words aside, with every number, link and code value "
+                f"it carries")
+    return f"nearest merge segment {item.nearest or 'none'} at {item.ratio:.2f}"
+
+
+def is_silent_loss(item: Located, by_id, declared) -> bool:
+    """Is this segment lost content that no record explains, under the amended rule?
+
+    The one place that needs the records as well as the texts, which is why it
+    is not part of `locate`: `locate` sees no record, `findings` and the
+    benchmark's scorer do. `by_id` maps every source segment id of the merge
+    to its `Located`, and `declared` holds the ids that carry a record of any
+    kind.
+
+    A sentence, a list item, a table row or a code block: absent and no
+    record. A title: never, because the title checks own it. A heading:
+    absent, no record, and either it carries a protected value the merge does
+    not have (`## From release 4.6 onward`, and the merge never says 4.6), or
+    its whole section is lost with it, which means every segment under it is
+    itself absent with no record. A heading with nothing under it has nothing
+    that survived, and stays a loss.
+
+    That second clause is what keeps a real loss a loss. A merge that takes
+    only one source leaves the other's headings untaken, and most of those
+    stand over sections of which nothing is left. Filing them as a matter of
+    records would take real losses out of the count.
+
+    Given segments the registered rule located, every absent heading with no
+    record is a silent loss, which is that rule: it records no section.
+    """
+    if item.verdict != ABSENT or item.segment.id in declared:
+        return False
+    if item.segment.kind == TITLE:
+        return False
+    if item.segment.kind != HEADING:
+        return True
+    if item.protected_missing:
+        return True
+    return all(by_id[member].verdict == ABSENT and member not in declared
+               for member in item.section)
+
+
+def is_untaken_heading(item: Located, by_id, declared) -> bool:
+    """Is this a heading the merge did not take and did not declare, and no more than that?
+
+    Absent, no record, and not lost content by `is_silent_loss`: the section
+    under it is in the merge, or what is not is accounted for by records, and
+    only the label was dropped without a word. Together with `is_silent_loss`
+    this splits the absent, undeclared segments that are not titles in two.
+    """
+    return (item.verdict == ABSENT and item.segment.kind == HEADING
+            and item.segment.id not in declared
+            and not is_silent_loss(item, by_id, declared))
 
 
 def verbatim(documents: list[Document], merged_flat: str,
@@ -996,7 +1486,8 @@ def order(coverages: tuple[Coverage, ...], merged: tuple[Segment, ...]) -> Order
     )
 
 
-def reconcile(documents: dict[str, str], merged: str) -> Reconciliation:
+def reconcile(documents: dict[str, str], merged: str, *,
+              rule: str = AMENDED) -> Reconciliation:
     """Every measurement in this module, over one merge and its sources.
 
     `documents` maps filename to text, in the order the merge was given them,
@@ -1004,14 +1495,22 @@ def reconcile(documents: dict[str, str], merged: str) -> Reconciliation:
     same function as the sources: two segmentations would put the numerator and
     the denominator on different footings, which is the kind of defect this
     module exists to expose.
+
+    `rule` is which of `RULES` tells reworded from absent. The default is the
+    tool's own, the amended rule. A program that re-derives a figure published
+    under the registered rule passes `REGISTERED` by name;
+    `tests/test_figure_rules.py` refuses one that does not.
     """
+    if rule not in RULES:
+        raise ValueError(f"unknown rule {rule!r}; expected one of {RULES}")
     sources = [
         segment_document(text, document_id(index), filename)
         for index, (filename, text) in enumerate(documents.items())
     ]
     merged_segments = segment_document(merged, MERGE_LETTER).segments
     merged_flat = flatten(merged)
-    coverages = tuple(locate(source, merged_flat, merged_segments) for source in sources)
+    coverages = tuple(locate(source, merged_flat, merged_segments, rule=rule)
+                      for source in sources)
     absent, tokens = verbatim(sources, merged_flat, merged)
     return Reconciliation(
         coverages=coverages,
@@ -1021,6 +1520,7 @@ def reconcile(documents: dict[str, str], merged: str) -> Reconciliation:
         order=order(coverages, merged_segments),
         merged=merged_segments,
         merged_text=merged,
+        rule=rule,
     )
 
 
@@ -1055,9 +1555,25 @@ DECLARED_LOSS_OVER_BUDGET = "declared_loss_over_budget"
 # being a replacement and becomes a deletion. Measured over `tests/pairs`: the
 # highest legitimate fan-in in the nine pairs' own ideal merges is 3, across
 # 96 supersessions, and the 50-supersession pair never exceeds 2. Check 6a.
+#
+# That is the measurement under the registered rule, which is the one the
+# ceiling was set by. The check counts absent segments only, and under the
+# amended rule one of the three behind that maximum is not absent: `bike_docks`
+# b10, whose final comma the reference merge writes as a full stop, is found
+# as a run of its own words. So the highest fan-in measured on the same nine
+# merges under the amended rule is 2. The ceiling was not moved with it.
 SUPERSESSION_FAN_IN = 3
 TITLE_NOT_FROM_SOURCE = "title_not_from_source"
 TITLE_NOT_SUPERSEDED = "title_not_superseded"
+# Check 2's fourth kind, since the amended rule of 2026-10-12. A source
+# heading that is not a heading of the merge and has no record, while the
+# section under it is in the merge or accounted for by records: the merge
+# chose one of two headings for a section and did not say so. Not lost content
+# (`is_silent_loss` decides that, and a heading that is lost content stays
+# `UNDECLARED_ABSENCE`), and not the title kind either: a consumer of the
+# report that reads `title_not_superseded` as "a title" must stay right, and
+# the title policy has nothing to say about a heading.
+HEADING_NOT_DECLARED = "heading_not_declared"
 DUPLICATED_CONTENT = "duplicated_content"
 # Named here with the other kinds and produced by none of the checks below.
 # `merge.example_content_leaks` is what finds it, because the words it looks for are
@@ -1079,6 +1595,7 @@ FINDING_KINDS = (
     DECLARED_LOSS_OVER_BUDGET,
     TITLE_NOT_FROM_SOURCE,
     TITLE_NOT_SUPERSEDED,
+    HEADING_NOT_DECLARED,
     DUPLICATED_CONTENT,
     PROMPT_EXAMPLE_LEAK,
 )
@@ -1096,7 +1613,7 @@ FINDING_KINDS = (
 # what it did. Both are faults and both are reported; they differ in what the
 # reader does next, which is why they differ in the exit code.
 #
-# The three judgement calls, argued rather than left to the name:
+# The four judgement calls, argued rather than left to the name:
 #
 # `DECLARED_LOSS_OVER_BUDGET` is DOCUMENT even though it is computed entirely
 # from records. The records are honest and the arithmetic over them is right --
@@ -1114,6 +1631,16 @@ FINDING_KINDS = (
 # invented content by another name. Filed under the worse of its two readings
 # on purpose: a kind that can mean either should move the exit code as if it
 # means the one that hurts.
+#
+# `HEADING_NOT_DECLARED` is RECORD, beside `TITLE_NOT_SUPERSEDED`, and for the
+# title's reason: what the section said is in the document or accounted for,
+# and what is missing is the merge's word on a label it did not take. The
+# case where the reader does have a problem in their hands, a heading whose
+# whole section went with it or that carried a value the merge lost, never
+# reaches this kind. One limit is accepted with it: a heading that stated a
+# fact in plain words (`## Night shift only`) and was dropped without a
+# record while part of its section survived is filed here and not as lost
+# content. It is still reported and still fails the run.
 DOCUMENT_FINDINGS = frozenset({
     UNDECLARED_ABSENCE,
     UNDECLARED_REWORDING,
@@ -1130,6 +1657,7 @@ RECORD_FINDINGS = frozenset({
     UNRESOLVED_REPLACEMENT,
     DISPOSITION_NOT_PERMITTED,
     TITLE_NOT_SUPERSEDED,
+    HEADING_NOT_DECLARED,
 })
 
 # A partition, asserted at import rather than in a test. A kind added to
@@ -1142,8 +1670,10 @@ assert DOCUMENT_FINDINGS | RECORD_FINDINGS == set(FINDING_KINDS), (
     f"{set(FINDING_KINDS) ^ (DOCUMENT_FINDINGS | RECORD_FINDINGS)}")
 
 # The numbered checks in `findings()`, which is not `len(FINDING_KINDS)`, though
-# it once was. Check 2 now produces two kinds, so the two counts came apart:
-# eleven names, nine checks. The eleventh name, `PROMPT_EXAMPLE_LEAK`, widens
+# it once was. Check 2 produces more than one kind (four, since an untaken
+# heading got a kind of its own), so the two counts came apart: more names
+# than checks. `HEADING_NOT_DECLARED` is check 2's result filed differently
+# and not a tenth check. `PROMPT_EXAMPLE_LEAK` widens
 # that gap for a second and different reason and this number does not move for
 # it. Two reasons, and the first is the weaker one: every check below holds the
 # merge against its *sources*, and a prompt leak is the merge held against the
@@ -1417,7 +1947,7 @@ class Reconciled:
     # finding nor a declaration: it is a measurement of the merged document,
     # reported so a reader can see structure the merge added, and carrying no
     # verdict because every level permits adding it. `CHECKS` stays 9 and
-    # `FINDING_KINDS` stays 12 for exactly that reason.
+    # `FINDING_KINDS` gains nothing for exactly that reason.
     added_breaks: tuple[tuple[str, str], ...] = ()
 
     @property
@@ -1663,7 +2193,7 @@ def findings(
     # later than the forward direction: two directions of one
     # sentence are one rule, and this loop already had both operands in hand.
     #
-    # Three kinds, not one, because the three are different accusations.
+    # Four kinds, not one, because the four are different accusations.
     #
     #   undeclared_absence   nothing said, and the merge does not carry it.
     #                        Material the merge lost.
@@ -1674,9 +2204,23 @@ def findings(
     #                        figure gets misread. Named for the
     #                        verdict rather than `undeclared_change`, because
     #                        `Located.verdict`'s own comment declines to call
-    #                        `REWORDED` a change -- it is a reading of a
-    #                        similarity score, and a kind named `change` would
-    #                        assert more than the ratio supports.
+    #                        `REWORDED` a change: where the ratio gave it, it
+    #                        is a reading of a similarity score, and a kind
+    #                        named `change` would assert more than that
+    #                        supports. Under the amended rule it also holds a
+    #                        sentence found as a run of its own words, joined
+    #                        to a neighbour or split cleanly in two, and the
+    #                        detail then says where the words stand and gives
+    #                        no score: the score is below the threshold there.
+    #   heading_not_declared nothing said about a source heading that is not a
+    #                        heading of the merge, while the section under it
+    #                        is in the merge or accounted for by records. The
+    #                        amended rule only; under the registered rule, and
+    #                        whenever `is_silent_loss` says the heading is
+    #                        lost content, it is an undeclared absence. A
+    #                        title never comes here: an untaken title with no
+    #                        record is reported by this check as an undeclared
+    #                        absence and by check 8, as it always was.
     #   false_departure      a record claims the content departed, and the
     #                        merge carries the segment unchanged. Not loss
     #                        either, and not named for absence for the reason
@@ -1698,6 +2242,11 @@ def findings(
             flatten(item.text) for item in coverage.document.segments
         }
 
+    by_id = {
+        located.segment.id: located
+        for coverage in result.coverages
+        for located in coverage.located
+    }
     for coverage in result.coverages:
         for located in coverage.located:
             record = declared.get(located.segment.id)
@@ -1725,20 +2274,41 @@ def findings(
                             document=coverage.document.filename or coverage.document.id,
                         ))
                     continue
+                if (result.rule == AMENDED
+                        and is_untaken_heading(located, by_id, declared)):
+                    members = located.section
+                    accounted = sum(1 for member in members
+                                    if by_id[member].verdict != ABSENT or member in declared)
+                    found.append(Finding(
+                        HEADING_NOT_DECLARED,
+                        f"heading {located.segment.text!r} is not a heading of the "
+                        f"merge and no disposition record says what became of it. "
+                        f"{accounted} of the {len(members)} segment(s) under it are in "
+                        f"the merge or have a record, so the section was not lost as "
+                        f"a whole and what is missing is the record for the heading; "
+                        f"a segment under it that is gone with no record is reported "
+                        f"on its own",
+                        segment=located.segment.id,
+                        document=coverage.document.filename or coverage.document.id,
+                        # The heading, and no merge side: the merge has no
+                        # heading that is this one, which is the finding.
+                        source_text=located.segment.text,
+                    ))
+                    continue
                 found.append(Finding(
                     UNDECLARED_ABSENCE if located.verdict == ABSENT else UNDECLARED_REWORDING,
                     f"{located.segment.text!r} is {'not in' if located.verdict == ABSENT else 'reworded in'} "
-                    f"the merge and no disposition record explains it (nearest merge "
-                    f"segment {located.nearest or 'none'} at {located.ratio:.2f})",
+                    f"the merge and no disposition record explains it ({how_found(located)})",
                     segment=located.segment.id,
                     document=coverage.document.filename or coverage.document.id,
                     # Both sides on the row. The merge side is carried
                     # only where the verdict says there is one: a segment the
                     # merge does not have has no counterpart, and the nearest
                     # match at 0.3 is a coincidence rather than a version of it.
+                    # For a segment a run step cleared it is the text the
+                    # run stands in, not the nearest segment by similarity.
                     source_text=located.segment.text,
-                    merge_text=("" if located.verdict == ABSENT
-                                else located.nearest_text),
+                    merge_text=located.counterpart,
                 ))
                 continue
             disposition = str(record.get("disposition", ""))
@@ -1780,6 +2350,11 @@ def findings(
     # `UNRESOLVED_REPLACEMENT`, a record fault at exit 3 -- a milder penalty than
     # the instruction threatens, on a document that really did lose content.
     # The operator's rule: "if it is genuinely-absent then it is lost."
+    #
+    # "Absent" is `locate`'s verdict under the rule in force. Under the amended
+    # rule a sentence whose words stand in the merge as one run is reworded
+    # and not absent, so a record with no replacement over it is not a drop
+    # and draws nothing here: the content is in the document.
     absent_ids = {
         located.segment.id
         for coverage in result.coverages
@@ -1893,8 +2468,9 @@ def findings(
     # The record is the whole test, and deliberately not "the segment is also
     # `ABSENT`". A drop that the merge actually reworded rather than removed
     # reads as `REWORDED` here whenever the nearest merge segment happens to
-    # score above the threshold -- `Located.verdict` says so itself: reworded is
-    # a reading of a similarity score and not an observation. Gating a finding
+    # score above the threshold, and `Located.verdict` says so itself: reworded
+    # by the ratio is a reading of a similarity score and not an observation.
+    # Gating a finding
     # on it would put a heuristic in the one part of this module that is meant
     # to be checkable by hand. So the hole stays open and is closed elsewhere:
     # a `dropped` record over a segment the merge kept comes back **rejected**
@@ -1966,18 +2542,22 @@ def findings(
     # `tests/pairs` -- 96 supersessions in their ideal merges, not written for
     # this check -- one replacement never absorbs more than **3** segments,
     # and the largest pair (`rate_limits`, 50 supersessions) never exceeds 2.
+    # (Under the amended rule the measured maximum is 2, for the reason given
+    # at `SUPERSESSION_FAN_IN`; the ceiling is unchanged.)
     # Legitimate supersession is close to one-for-one because each dropped
     # segment is replaced by its own better version.
     #
     # Same finding kind as the budget below: this is the declared-loss ceiling
-    # measured a second way, not a tenth check. `FINDING_KINDS` stays 12 and
+    # measured a second way, not a tenth check. No kind is added for it and
     # `CHECKS` stays 9.
     # Keyed on the replacement, not on the disposition word. B5's fixture
     # expresses the same attack as `superseded` at `off`, `reworded` at `low`
     # and `mid`, and `subsumed` at `high`; a check that read the word would
     # close one level and leave three open. And on the *absent* records only:
     # a record whose segment is still in the merge has lost nothing, which is
-    # `FALSE_DEPARTURE`'s subject rather than this one.
+    # `FALSE_DEPARTURE`'s subject rather than this one. A segment the amended
+    # rule found as a run of its own words counts as still in the merge here
+    # too, so it does not count towards the ceiling.
     gone = {
         located.segment.id
         for coverage in result.coverages

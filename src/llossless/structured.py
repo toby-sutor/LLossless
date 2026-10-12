@@ -499,7 +499,7 @@ def _empty_reason(response: dict, message: dict) -> str:
     instruction -- the operator met the first while the response carried both.
 
     Message only. `EmptyResponse` is a `TierUnsupported` and stays on the
-    exit-2 operational path, so `FINDING_KINDS` stays 12 and `CHECKS` stays 9.
+    exit-2 operational path, so no kind is added to `FINDING_KINDS` and `CHECKS` stays 9.
     """
     generic = "response message has empty content"
     try:

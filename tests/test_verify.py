@@ -968,6 +968,67 @@ def test_a_declaration_no_claim_reaches_is_graded_on_the_text_instead() -> None:
               f"{item.grade}: {item.detail!r}")
 
 
+def test_a_record_over_a_sentence_found_as_a_run_is_left_unchecked() -> None:
+    """`dropped` or `duplicate` over a joined sentence: unchecked, where it was graded.
+
+    The location table grades a claimless `dropped` record by `absent` and a
+    `duplicate` record against it. Under the registered rule a sentence the
+    merge kept word for word and joined to its neighbour is `absent`, so a
+    `dropped` record over it came back **confirmed** although every word of it
+    is in the merge, and a `duplicate` record came back **rejected**. Under
+    the amended rule of 2026-10-12 the sentence is `reworded`, found as a run
+    of its own words, and the table leaves `reworded` out: both records are
+    now `unchecked`. That is the conservative reading and it is pinned here as
+    a decision, not as an accident: whether a `dropped` record over such a
+    segment should be rejected outright is an open question.
+
+    MUST FIRE, the sibling: with the sentence deleted the two records are
+    graded as before under both rules, confirmed and rejected.
+    """
+    sources = {
+        "source_a.md": "# Gate Notes\n\nDrivers sign in at the lodge before unloading.\n",
+        "source_b.md": ("# Gate Notes\n\nThe gate opens at six for deliveries.\n"
+                        "The yard closes at dusk on weekdays.\n"),
+    }
+    gone = ("# Gate Notes\n\nDrivers sign in at the lodge before unloading.\n"
+            "The yard closes at dusk on weekdays.\n")
+    joined = gone.replace(
+        "Drivers sign in",
+        "The gate opens at six for deliveries; nothing is accepted before that hour, "
+        "whoever is on the lodge and whatever the carrier says about its own schedule.\n"
+        "Drivers sign in")
+    cases = (
+        # merge,  rule,                 verdict of b2,  dropped,   duplicate
+        (joined, reconcile.REGISTERED, ABSENT, CONFIRMED, REJECTED),
+        (joined, reconcile.AMENDED, reconcile.REWORDED, UNCHECKED, UNCHECKED),
+        (gone, reconcile.REGISTERED, ABSENT, CONFIRMED, REJECTED),
+        (gone, reconcile.AMENDED, ABSENT, CONFIRMED, REJECTED),
+    )
+    for merged, rule, verdict, dropped, duplicate in cases:
+        label = f"{'joined' if merged is joined else 'deleted'}, {rule} rule"
+        result = reconcile.reconcile(sources, merged, rule=rule)
+        where = {item.segment.id: item for coverage in result.coverages
+                 for item in coverage.located}
+        check(where["b2"].segment.text == "The gate opens at six for deliveries."
+              and where["b2"].verdict == verdict,
+              f"{label}: b2 must be {verdict}, got {where['b2'].verdict}")
+        documents = dict(sources, **{"merged.md": merged})
+        for disposition, expected in (("dropped", dropped), ("duplicate", duplicate)):
+            records = (declaration("b2", disposition),)
+            found = reconcile.findings(result, records, fidelity="high",
+                                       title_policy="keep-base", base="source_a.md",
+                                       budget=0.5)
+            item = grade_declarations(records, [], [], documents,
+                                      located=result, findings=found.findings)[0]
+            check(item.grade == expected,
+                  f"{label}: {disposition!r} over b2 must be {expected}, got "
+                  f"{item.grade}: {item.detail!r}")
+            if expected == UNCHECKED:
+                check(" at 0." not in item.detail,
+                      f"{label}: an unchecked record over a segment found as a run must "
+                      f"not be explained by a similarity score: {item.detail!r}")
+
+
 def test_the_new_route_is_measured_over_the_recorded_merges() -> None:
     """The headline fraction, recomputed rather than quoted.
 

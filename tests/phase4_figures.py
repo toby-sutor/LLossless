@@ -51,6 +51,12 @@ socket_guard.install()
 import rank_arms  # noqa: E402
 from llossless.web import catalogue  # noqa: E402
 
+# The rule every figure published from this run was scored with, one of
+# `reconcile.RULES`. Named here and passed to every scorer call, because the
+# scorer has no default: a script that followed whatever the scorer does
+# today would move a published figure without a line of its own changing.
+RULE = "registered"
+
 EVIDENCE = ROOT / "arms" / "2026-09-16" / "phase4"
 SCORED = EVIDENCE / "scored.json"
 RESULTS = EVIDENCE / "results.json"
@@ -86,7 +92,7 @@ def score() -> list[dict]:
             record["handwritten"] = rank_arms.PAIRS[row["pair"]]
             record.update(rank_arms.cell_figures(
                 rank_arms.PAIRS[row["pair"]],
-                (where / "merged.md").read_text(encoding="utf-8"), report))
+                (where / "merged.md").read_text(encoding="utf-8"), report, rule=RULE))
         out.append(record)
     return out
 

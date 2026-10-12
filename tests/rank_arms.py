@@ -16,6 +16,13 @@ directions and neither 0% nor 100% coverage is the target.
 A one-sided figure would rank the literal merge first: it cannot drop what the
 editor kept because it drops nothing. Both are scored, and a silent-loss of 0 is
 read beside the declared count so a no-op merge cannot game the primary axis.
+
+The scoring goes through `reconcile.reconcile`, whose default rule for telling
+reworded from absent is the tool's own and can change with the tool. A
+published figure must not change with it, so `sets`, `band`, `cell_figures`
+and `collect` take the rule by keyword and none of them defaults it. Every
+figure published from this ranking was scored under the registered rule, and
+`main` and `tests/phase4_figures.py` say so by name (`RULE`).
 """
 import json, sys, collections, os
 from pathlib import Path
@@ -46,21 +53,26 @@ RUNS = ([Path(_B)/"2026-09-17-frontier-thinking", Path(_B)/"2026-09-17-ladder-hi
         [REPO/"arms"/"2026-09-17"/"frontier-thinking", REPO/"arms"/"2026-09-17"/"ladder-high",
          REPO/"arms"/"2026-09-18"/"gaps"])
 
-def sets(docs, text):
-    r = reconcile.reconcile(docs, text)
+# The rule `main` ranks under: the recorded arms are published runs, and every
+# figure published for them was scored under the registered rule.
+RULE = reconcile.REGISTERED
+
+
+def sets(docs, text, *, rule):
+    r = reconcile.reconcile(docs, text, rule=rule)
     ab = {L.segment.id for c in r.coverages for L in c.located if L.verdict == "absent"}
     kp = {L.segment.id for c in r.coverages for L in c.located if L.verdict != "absent"}
     return ab, kp, len(r.duplicates), r.order.runs
 
-def band(name):
+def band(name, *, rule):
     """(sources, reference-absent ids, reference-kept ids) for one `handwritten/` pair."""
     docs = sources_of(name, CORPUS)
-    habs, hkept = sets(docs, (CORPUS/name/"reference.md").read_text())[:2]
+    habs, hkept = sets(docs, (CORPUS/name/"reference.md").read_text(), rule=rule)[:2]
     return docs, habs, hkept
 
 
-def cell_figures(name, merged, rep):
-    """One merge of `tests/handwritten` pair `name` against its `reference.md`.
+def cell_figures(name, merged, rep, *, rule):
+    """One merge of `tests/handwritten` pair `name` against its `reference.md`, under `rule`.
 
     The whole of this ranking's scoring, as a function so that another run's
     figures are formed by the same code (`tests/phase4_figures.py`). Unlike
@@ -68,15 +80,15 @@ def cell_figures(name, merged, rep):
     the title: this is the scoring the catalogue's
     2026-09-16 rows were made with.
     """
-    docs, habs, hkept = band(name)
-    mabs, mkept, dup, _runs = sets(docs, merged)
+    docs, habs, hkept = band(name, rule=rule)
+    mabs, mkept, dup, _runs = sets(docs, merged, rule=rule)
     decl = {x["segment"] for x in (rep.get("declarations") or []) if x.get("segment")}
     return dict(silent=len(mabs-decl), declared=len(mabs&decl), lost=len(mabs&hkept),
                 bloat=len(mkept&habs), dup=dup)
 
 
-def collect(runs=None):
-    """(cells, per-arm totals) over the `high` cells of `runs`."""
+def collect(runs=None, *, rule):
+    """(cells, per-arm totals) over the `high` cells of `runs`, scored under `rule`."""
     bands = {pair for pair, name in PAIRS.items() if (CORPUS/name/"reference.md").exists()}
     agg = collections.defaultdict(lambda: collections.Counter())
     cells = []
@@ -97,7 +109,8 @@ def collect(runs=None):
             row = rows.get((pair, fid, arm), {})
             cost = max(row.get("cost_usd") or 0.0, row.get("cost_usd_billed") or 0.0)
             rec = dict(arm=arm, pair=pair,
-                       **cell_figures(PAIRS[pair], (d/"merged.md").read_text(), rep),
+                       **cell_figures(PAIRS[pair], (d/"merged.md").read_text(), rep,
+                                      rule=rule),
                        cost=cost, secs=row.get("wall_seconds") or 0.0,
                        commit=str((rep.get("provenance") or {}).get("claimcheck_commit"))[:7])
             cells.append(rec)
@@ -108,7 +121,7 @@ def collect(runs=None):
 
 
 def main():
-    cells, agg = collect()
+    cells, agg = collect(rule=RULE)
 
     print("PER CELL (high fidelity only)\n")
     print(f"{'arm':<20}{'pair':<13}{'SILENT':>7}{'decl':>6}{'lost':>6}{'bloat':>7}{'dup':>5}{'$':>8}{'s':>8}")

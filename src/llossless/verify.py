@@ -977,9 +977,22 @@ def attribute(claims: list[Claim], documents: list[segment.Document]) -> dict[st
 # declarations no claim reaches. `reconcile.locate` puts every source segment in
 # one of three states against the merge, and two of them are observations: a
 # segment is `present` because its flattened text was found in the merged text,
-# and `absent` because it was not. `reworded` is neither — it is a similarity
-# score above a threshold, and it decides nothing here, which is why every row
-# below leaves it out.
+# and `absent` because it was not. `reworded` decides nothing here, which is
+# why every row below leaves it out. Where the similarity ratio gave it, it is
+# a score above a threshold and not an observation.
+#
+# Since the amended rule of 2026-10-12, `reworded` can also be an observation:
+# the segment's own words were found in the merge as one unbroken run
+# (`Located.step` is `phrase` or `containment`), and a segment the registered
+# rule called `absent` can now be `reworded` for that reason. This table still
+# leaves it out. The consequence is deliberate and is the conservative one: a
+# `dropped` record over such a segment used to be confirmed by `absent` and a
+# `duplicate` record over it used to be rejected by `absent`, and both are now
+# left `unchecked`. There is a case for going further, since every word of the
+# segment standing in the merge speaks against `dropped`, and it is not taken
+# here: the run steps forgive punctuation and a list of connecting words,
+# which is a different test from `present`, and a rejection is an accusation
+# that should rest on the stricter of the two.
 #
 # Only the rows a location can settle are here. `superseded` and `subsumed` are
 # absent on purpose: both say the content survives inside some other segment's
@@ -1070,10 +1083,18 @@ def _by_text(record_id: str, disposition: str, located: dict) -> Graded | None:
     if item is None or disposition not in LOCATED:
         return None
     confirms, rejects = LOCATED[disposition]
+    # The third clause is unreachable today, because no row of `LOCATED` is
+    # confirmed or rejected by `reworded`. It is kept right all the same: a
+    # segment a run step found has a ratio below the threshold, and a
+    # sentence that printed that ratio as what it "matches at" would say the
+    # opposite of the verdict the day a row starts reading it.
     where = (
         f"its text is in the merge" if item.verdict == reconcile.PRESENT
         else f"its text is not in the merge"
         if item.verdict == reconcile.ABSENT
+        else f"{reconcile.how_found(item)}, which was observed in the merge text: "
+             f"{item.window_text!r}"
+        if item.step in reconcile.RUN_STEPS
         else f"the nearest merge segment matches it at {item.ratio:.2f}, which is a "
              f"reading of a similarity score and not an observation"
     )

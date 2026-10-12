@@ -2,7 +2,59 @@
 
 Rules (688): refusal_counts row (a refusal counts against its row, flagged "refused (prompt or guardrail)"); an unruled cell counts against its row (a model failure on a vendor row; `limit` or `config` on a self-hosted row); a cell still failing after every retry pass is the row's "endpoint failed while reference worked" when the reference route answered; nothing shrinks the common pairs.
 
-## S1: the pairs, lowest counted draw, over the 9 common pairs
+## S1: the pairs under the amended scoring, lowest counted draw, over the 9 common pairs
+
+The scoring shown first. It was made after every call of this run and after its results were known (`REGISTRATION.md`, Amendment 3, 2026-10-12); the scoring as registered and run follows it, unchanged. Disqualify, then rank: a row is disqualified (`DQ`) when the audit by reading found content gone, wholly or in part, on one of its first runs (`audit/README.md`). The audit read every source segment there that the merge does not carry word for word and wrote no record for: the segments the registered scoring counted as silent loss and, since Amendment 4, 2026-10-12, the segments the similarity rule alone calls reworded. The column `audit, first run` gives what it found of how many it read, and says so where a row's disqualification rests on borderline cases only. `silent` is the program's count under the amended rule, source segments it could not find in the merge and that no record explains; it does not disqualify. `untaken` counts source headings the merge did not take and did not record while their sections survived. The other rows are ranked by deviations per pair, equal deviations sharing a rank unless every row in the tie is list-priced (then list dollars, then seconds), as registered. A row that did not complete every pair is listed after every complete row with its figures over the pairs it completed. One draw a cell: an order by the rule, not a ranking claim.
+
+| # | row | pairs | silent | /pair | untaken | audit, first run | dev | /pair | vs union | $ / merge | unit | billed $ | s / merge | tokens / merge | model-conf | incomplete | excluded | unruled calls | reused calls | not completed |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | gpt-6-sol-api | 9 of 9 | 0 | 0.00 | 0 | - | 38 | 4.22 | below (69) | 0.189 | list | 0.189 | 158.4 | 34956 | 19 | - | 0 | 0 | 0 | - |
+| 2= | opus-5.5-sub | 9 of 9 | 0 | 0.00 | 0 | - | 54 | 6.00 | below (69) | 0.614 | api_equivalent | 0.614 | 164.1 | 55453 | 32 | - | 0 | 0 | 0 | - |
+| 2= | sonnet-5-sub | 9 of 9 | 2 | 0.22 | 0 | 0 of 9 gone or partly gone | 54 | 6.00 | below (69) | 0.309 | api_equivalent | 0.309 | 186.5 | 73188 | 30 | - | 0 | 0 | 0 | - |
+| 4 | opus-5.5-api | 9 of 9 | 0 | 0.00 | 2 | 0 of 2 gone or partly gone | 55 | 6.11 | below (69) | 0.485 | list | 0.485 | 142.7 | 47656 | 32 | - | 0 | 0 | 0 | - |
+| 5 | sonnet-5-api | 9 of 9 | 0 | 0.00 | 0 | - | 56 | 6.22 | below (69) | 0.462 | list | 0.462 | 332.4 | 67974 | 29 | - | 0 | 0 | 0 | - |
+| DQ | gpt-6-luna-api | 9 of 9 | 2 | 0.22 | 0 | 1 of 4 gone or partly gone: disqualified; its one case is borderline | 52 | 5.78 | below (69) | 0.012 | list | 0.012 | 141.3 | 39666 | 22 | - | 0 | 0 | 0 | - |
+| DQ | haiku-4.5-sub | 9 of 9 | 3 | 0.33 | 0 | 3 of 8 gone or partly gone | 65 | 7.22 | below (69) | 0.483 | api_equivalent | 0.483 | 676.5 | 122847 | 23 | - | 0 | 0 | 0 | - |
+| DQ | haiku-4.5-api | 8 of 9 | 3 | 0.38 | 9 | 2 of 21 gone or partly gone | 49 | 6.12 | below (63) | 0.069 | list | 0.069 | 69.1 | 30132 | 6 | exit 2 on 1 of 9 | 0 | 0 | 0 | bike_docks (model_failure) |
+| base | concatenation | 9 of 9 | 0 | 0.00 | 0 | - | 78 | 8.67 | - | - | no model | - | - | - | - | - | - | - | - | - |
+| base | union | 9 of 9 | 0 | 0.00 | 0 | - | 69 | 7.67 | - | - | no model | - | - | - | - | - | - | - | - | - |
+| base | base_only | 9 of 9 | 121 | 13.44 | 8 | - | 69 | 7.67 | - | - | no model | - | - | - | - | - | - | - | - | - |
+
+Ties: opus-5.5-sub and sonnet-5-sub have 6.00 deviations per pair and share rank 2. Cost and then speed decide a tie only where every row in it is list-priced, and these are not (opus-5.5-sub: api_equivalent 0.614 dollars, 164.1 seconds a merge; sonnet-5-sub: api_equivalent 0.309 dollars, 186.5 seconds a merge), so the tie is stated and not broken.
+
+Floors, scored by the same scorer under the amended rule from the sources with no model call: byte-concatenation, a mechanical union (the base, then every paragraph of the other not already in it, its title dropped) and base-only. `vs union` holds each row against the union on the same pairs; every counted row is below the union. The route, the effort and the model ids of each row do not depend on the scoring and are in the table under the registered scoring.
+
+Spread pairs under the amended scoring, every counted draw (min / median / max):
+
+| row | pair | draws | silent | deviations |
+|---|---|---|---|---|
+| gpt-6-sol-api | badge_access | 3 | 0 / 0 / 0 | 0 / 0 / 1 |
+| gpt-6-sol-api | trace_names | 3 | 0 / 0 / 0 | 8 / 9 / 10 |
+| gpt-6-sol-api | rate_limits | 3 | 0 / 0 / 1 | 9 / 9 / 9 |
+| opus-5.5-sub | badge_access | 3 | 0 / 0 / 0 | 0 / 0 / 0 |
+| opus-5.5-sub | trace_names | 3 | 0 / 0 / 0 | 7 / 7 / 8 |
+| opus-5.5-sub | rate_limits | 3 | 0 / 0 / 0 | 20 / 20 / 23 |
+| sonnet-5-sub | badge_access | 3 | 0 / 0 / 0 | 0 / 0 / 0 |
+| sonnet-5-sub | trace_names | 3 | 0 / 0 / 0 | 4 / 5 / 7 |
+| sonnet-5-sub | rate_limits | 3 | 0 / 0 / 2 | 16 / 17 / 19 |
+| opus-5.5-api | badge_access | 3 | 0 / 0 / 0 | 0 / 0 / 0 |
+| opus-5.5-api | trace_names | 3 | 0 / 0 / 0 | 7 / 7 / 9 |
+| opus-5.5-api | rate_limits | 3 | 0 / 0 / 0 | 20 / 20 / 23 |
+| gpt-6-luna-api | badge_access | 3 | 0 / 0 / 0 | 0 / 1 / 1 |
+| gpt-6-luna-api | trace_names | 3 | 0 / 0 / 0 | 8 / 8 / 9 |
+| gpt-6-luna-api | rate_limits | 3 | 0 / 0 / 2 | 14 / 18 / 22 |
+| haiku-4.5-sub | badge_access | 3 | 0 / 0 / 0 | 0 / 0 / 0 |
+| haiku-4.5-sub | trace_names | 3 | 0 / 0 / 0 | 9 / 10 / 10 |
+| haiku-4.5-sub | rate_limits | 3 | 2 / 9 / 25 | 8 / 9 / 14 |
+
+Side table under the amended scoring, fable-sub against opus-5.5-sub, over 2 common pair(s):
+
+| row | pairs | silent | untaken | dev | $ / merge | unit | s / merge | incomplete | not completed |
+|---|---|---|---|---|---|---|---|---|---|
+| fable-sub | 2 of 2 | 0 | 0 | 18 | 2.721 | api_equivalent | 359.9 | - | - |
+| opus-5.5-sub | 2 of 2 | 0 | 0 | 27 | 1.177 | api_equivalent | 329.6 | - | - |
+
+## S1 as registered and run: the scoring of the registration, unchanged, over the 9 common pairs
 
 Disqualify, then rank: silent loss disqualifies; the complete rows by deviations per pair, equal deviations sharing a rank unless every row in the tie is list-priced (then list dollars, then seconds). A row's own exit 2, window cell, refusal, unruled cell or failed endpoint, and a pair it was not measured on, never shrink another row's pairs: it is listed after every complete row with its figures over the pairs it completed. One draw a cell: an order by the rule, not a ranking claim (plan 9.3).
 
@@ -64,6 +116,10 @@ Side table, fable-sub against opus-5.5-sub, over 2 common pair(s):
 |---|---|---|---|---|---|---|---|---|
 | fable-sub | 2 of 2 | 0 | 21 | 2.721 | api_equivalent | 359.9 | - | - |
 | opus-5.5-sub | 2 of 2 | 0 | 32 | 1.177 | api_equivalent | 329.6 | - | - |
+
+## What differs between the two scorings of S1, and why
+
+The registered scoring counts a source segment as silent loss when its text is not in the merge word for word, no record names it and no single merge segment is at least 0.68 similar to it, and it disqualifies a row on that count. An audit by reading of every segment counted this way (65 over 18 runs, 25 of them on first runs) found most of them still in the merge: on first runs 3 gone or partly gone, 11 present in other words and 11 not content, which are headings the merge did not take (`audit/README.md`). The amended scoring (`REGISTRATION.md`, Amendment 3, 2026-10-12) also finds a sentence whose words stand in the merge as one unbroken run, counts an untaken heading apart from lost content, reads the reference merge by the same rule, and disqualifies on what the audit found gone and not on the program's count: over the 109 scored cells the counted silent losses go from 65 to 45, with 12 counted as untaken headings, the runs with a counted silent loss from 18 to 10, and the disqualified rows from 5 (gpt-6-luna-api, opus-5.5-api, haiku-4.5-sub, sonnet-5-sub, haiku-4.5-api) to 2 (haiku-4.5-sub, haiku-4.5-api). The audit was then extended (Amendment 4, 2026-10-12) to the segments on first runs that the similarity rule alone calls reworded and that no record names, which neither scoring counts: 19 segments, 3 of them gone or partly gone. That changes no count and no figure of either scoring; the disqualified rows are now 3 (gpt-6-luna-api, haiku-4.5-sub, haiku-4.5-api). Every segment whose count differs is listed with the merge text it was found in, in `differences.json`.
 
 ## S2: detection, over the 13 common fixtures
 

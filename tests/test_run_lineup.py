@@ -1233,8 +1233,16 @@ def test_688_a_refusal_counts_against_the_row_flagged_and_never_shrinks() -> Non
 def test_684_n5_the_floors_are_scored_and_a_row_no_better_than_the_union_is_flagged() -> None:
     """N5. The floors from the sources, no model call: concatenation 79, the union 70,
     base-only 129 silent over the nine pairs. MUST FIRE: a row with the union's own
-    deviations is flagged. MUST NOT FIRE: a row below it is not."""
-    floors = lineup_figures.baselines(list(run_lineup.PAIRS), "source_a.md")
+    deviations is flagged. MUST NOT FIRE: a row below it is not.
+
+    These are the published floors, scored under the rule the lineup was
+    published with (`lineup_figures.RULE`, the registered one), named here
+    because the scorer has no default."""
+    check(lineup_figures.RULE == "registered",
+          f"the lineup's published figures are the registered scoring, got "
+          f"{lineup_figures.RULE!r}")
+    floors = lineup_figures.baselines(list(run_lineup.PAIRS), "source_a.md",
+                                      rule=lineup_figures.RULE)
     over = {name: lineup_figures._floor(per, list(run_lineup.PAIRS))
             for name, per in floors.items()}
     check((over["concatenation"]["silent_loss"], over["concatenation"]["deviations"]) == (0, 79)
@@ -1978,6 +1986,961 @@ def test_688_haiku_gets_no_effort_and_keeps_its_default() -> None:
           "the label the registration and the figures print")
 
 
+# --- 12. the second scoring: Amendment 3, the audit and the order by the ruling -----
+#
+# The release run is published under two scorings. Everything below reads the
+# committed run, derives its amended scoring once (no model, no network) and
+# holds each derived file to it, then seeds a wrong value into each and
+# requires the check to refuse it.
+#
+# The audit holds two kinds of case since the registration's Amendment 4: the
+# segments the registered scoring counted as silent loss, and the segments on
+# first runs that the similarity rule alone calls reworded and no record
+# names. That amendment changes who is disqualified and nothing else, and the
+# tests of it are with the ones of the audit below.
+
+_SECOND: dict = {}
+
+
+def second_scoring() -> dict:
+    """The committed run's second scoring, derived once for every test below."""
+    if not _SECOND:
+        run_dir = lineup_figures.EVIDENCE
+        reg, _ = run_lineup.parse_registration(run_dir / "REGISTRATION.md")
+        scored = lineup_figures.load(run_dir / "scored.json")
+        amended = lineup_figures.derive_amended(run_dir, reg, scored)
+        audit = lineup_figures.load_audit(run_dir)
+        registered = lineup_figures._plain(lineup_figures.rows(reg, scored))
+        formed = lineup_figures._plain(lineup_figures.with_amended(
+            reg, scored, registered, amended, audit))
+        _SECOND.update(run_dir=run_dir, reg=reg, scored=scored, amended=amended,
+                       audit=audit, formed=formed,
+                       first=lineup_figures.first_runs_of(registered))
+    return _SECOND
+
+
+def _second_copy(tmp: Path) -> Path:
+    """The files `amended_problems` reads, copied where a test may spoil them."""
+    run_dir = lineup_figures.EVIDENCE
+    (tmp / lineup_figures.AUDIT_DIR).mkdir(parents=True)
+    for name in (lineup_figures.AMENDED_SCORED, lineup_figures.DIFFERENCES,
+                 lineup_figures.SIMILARITY, "REGISTRATION.md",
+                 f"{lineup_figures.AUDIT_DIR}/cases.md", f"{lineup_figures.AUDIT_DIR}/README.md"):
+        shutil.copy(run_dir / name, tmp / name)
+    return tmp
+
+
+def test_751_the_second_scoring_is_what_the_stored_cells_give() -> None:
+    """MUST NOT FIRE: every file of the amended scoring against the committed run.
+
+    The registered layer is untouched by it: `S1_registered` in figures.json
+    is the block `rows` forms from scored.json, and the page still carries the
+    registered tables line for line."""
+    s = second_scoring()
+    run_dir, formed = s["run_dir"], s["formed"]
+    refused = lineup_figures.audit_problems(s["audit"], s["amended"], s["first"])
+    check(refused == [], f"MUST NOT FIRE: audit.json against the stored runs: {refused[:3]}")
+    check(s["first"] == lineup_figures.first_runs_of(formed),
+          "a first run is the same draw under both scorings")
+    problems = lineup_figures.amended_problems(run_dir, s["reg"], formed, s["amended"],
+                                               s["audit"])
+    check(problems == [], f"MUST NOT FIRE: the second scoring's files: {problems[:4]}")
+    published = lineup_figures.load(run_dir / "figures.json")
+    check(lineup_figures.figures_problems(formed, published) == [],
+          "MUST NOT FIRE: figures.json is what the cells and the audit form")
+    registered = lineup_figures._plain(lineup_figures.rows(s["reg"], s["scored"]))
+    check(published["S1_registered"] == registered["S1"]
+          and published["S2"] == registered["S2"] and published["S3"] == registered["S3"],
+          "the registered blocks of figures.json are not what scored.json forms")
+    page = (run_dir / "figures.md").read_text(encoding="utf-8")
+    as_run = lineup_figures.render(s["reg"], registered).split("\n", 5)[5]
+    body = as_run[:as_run.index("\n## S2")]
+    check(body in page, "figures.md no longer carries the registered tables line for line")
+    check(page.index("under the amended scoring") < page.index("as registered and run")
+          < page.index("What differs between the two scorings"),
+          "figures.md must show the amended scoring first, then the registered one, then "
+          "what differs")
+    check(all(item["holds"] for item in formed["properties"])
+          and [item["property"] for item in formed["properties"]] == list(range(1, 9)),
+          f"the amendment's eight properties: "
+          f"{[(item['property'], item['holds']) for item in formed['properties']]}")
+
+
+def test_751_a_wrong_value_in_any_file_of_the_second_scoring_is_refused() -> None:
+    """MUST FIRE, one seed a file: the amended cells, the list of differences, the
+    similarity list, the cases page, the audit's tables, the amendment's outcome
+    lines, its measured sentence and the rows it names as disqualified, a
+    property that does not hold, and every new figure of figures.json."""
+    s = second_scoring()
+    formed, amended, audit, reg = s["formed"], s["amended"], s["audit"], s["reg"]
+
+    def problems(spoil) -> list[str]:
+        with tempfile.TemporaryDirectory() as tmp:
+            where = _second_copy(Path(tmp) / "run")
+            spoil(where)
+            return lineup_figures.amended_problems(where, reg, formed, amended, audit)
+
+    def edit_json(name: str, change):
+        def spoil(where: Path) -> None:
+            data = json.loads((where / name).read_text(encoding="utf-8"))
+            change(data)
+            (where / name).write_text(json.dumps(data), encoding="utf-8")
+        return spoil
+
+    def edit_text(name: str, old: str, new: str):
+        def spoil(where: Path) -> None:
+            text = (where / name).read_text(encoding="utf-8")
+            if old not in text:
+                raise AssertionError(f"the seed's anchor is not in {name}: {old!r}")
+            (where / name).write_text(text.replace(old, new, 1), encoding="utf-8")
+        return spoil
+
+    def bump_cell(data: dict) -> None:
+        data["cells"][0]["lost"] += 1
+
+    def bump_floor(data: dict) -> None:
+        data["baselines"]["union"]["rate_limits"]["bloat"] += 1
+
+    def drop_difference(data: dict) -> None:
+        data["cells"][0]["segments"].pop()
+
+    def other_run(data: dict) -> None:
+        data["cells"][0]["segments"][0]["found_in"] = {"merge_segments": ["m1"], "text": "x"}
+
+    def flip_alone(data: dict) -> None:
+        entry = data["cells"][0]["segments"][0]
+        entry["similarity_alone"] = not entry["similarity_alone"]
+
+    check(problems(lambda where: None) == [],
+          f"MUST NOT FIRE: an unspoiled copy: {problems(lambda where: None)[:3]}")
+    outcome = lineup_figures.outcome_lines(formed, amended, audit)
+    tables = lineup_figures.audit_tables(formed)
+    extension = lineup_figures.extension_lines(formed)
+    ruling_now = extension["the disqualified rows"]
+    fourth = f"**{lineup_figures.AUDIT_AMENDMENT}"
+
+    def move_up(line: str):
+        """Take a sentence out of Amendment 4 and set it into Amendment 3 instead."""
+        def spoil(where: Path) -> None:
+            page = (where / "REGISTRATION.md").read_text(encoding="utf-8")
+            head, tail = page.split(fourth)
+            if line not in tail:
+                raise AssertionError(f"the seed's sentence is not in Amendment 4: {line!r}")
+            (where / "REGISTRATION.md").write_text(
+                head + line + "\n\n" + fourth + tail.replace(line, "", 1), encoding="utf-8")
+        return spoil
+
+    def move_down(line: str):
+        """Take a sentence out of Amendment 3 and set it into Amendment 4 instead."""
+        def spoil(where: Path) -> None:
+            page = (where / "REGISTRATION.md").read_text(encoding="utf-8")
+            head, tail = page.split(fourth)
+            if line not in head:
+                raise AssertionError(f"the seed's sentence is not in Amendment 3: {line!r}")
+            (where / "REGISTRATION.md").write_text(
+                head.replace(line, "", 1) + fourth + tail + "\n" + line + "\n",
+                encoding="utf-8")
+        return spoil
+
+    seeds = {
+        "scored-amended.json, a cell": (
+            edit_json(lineup_figures.AMENDED_SCORED, bump_cell), lineup_figures.AMENDED_SCORED),
+        "scored-amended.json, a floor": (
+            edit_json(lineup_figures.AMENDED_SCORED, bump_floor), lineup_figures.AMENDED_SCORED),
+        "differences.json, a segment dropped": (
+            edit_json(lineup_figures.DIFFERENCES, drop_difference), lineup_figures.DIFFERENCES),
+        "differences.json, another merge text": (
+            edit_json(lineup_figures.DIFFERENCES, other_run), lineup_figures.DIFFERENCES),
+        "reworded-by-similarity.json": (
+            edit_json(lineup_figures.SIMILARITY, flip_alone), lineup_figures.SIMILARITY),
+        "cases.md, a class": (
+            edit_text("audit/cases.md", "`b9`: present", "`b9`: gone"), "cases.md"),
+        "cases.md, a quotation": (
+            edit_text("audit/cases.md", "The default allowance is 100 requests",
+                      "The default allowance is 200 requests"), "cases.md"),
+        "README.md, a table figure": (
+            edit_text("audit/README.md", tables.splitlines()[7],
+                      tables.splitlines()[7].replace("| 2 |", "| 3 |", 1)), "README.md"),
+        "REGISTRATION.md, the outcome of property 2": (
+            edit_text("REGISTRATION.md", outcome[1], outcome[1].replace("65", "64", 1)),
+            "property 2"),
+        "REGISTRATION.md, the outcome of property 5": (
+            edit_text("REGISTRATION.md", outcome[4], outcome[4].replace("121", "120", 1)),
+            "property 5"),
+        "REGISTRATION.md, the second defect": (
+            edit_text("REGISTRATION.md", lineup_figures.second_defect_line(formed),
+                      lineup_figures.second_defect_line(formed).replace("173", "170")),
+            "second defect"),
+        "REGISTRATION.md, the disqualified rows": (
+            edit_text("REGISTRATION.md", lineup_figures.ruling_line(formed),
+                      lineup_figures.ruling_line(formed).replace("haiku-4.5-sub",
+                                                                 "sonnet-5-sub")),
+            "does not name the disqualified rows"),
+        "REGISTRATION.md, no amendment": (
+            edit_text("REGISTRATION.md", f"**{lineup_figures.AMENDMENT}", "**Amendment 3, "),
+            "has no Amendment 3"),
+        # The extension of the audit: its pages and its amendment.
+        "cases.md, a reading of a segment reworded with no record": (
+            edit_text("audit/cases.md", '"requested item" occurs nowhere',
+                      '"requested item" occurs once'), "cases.md"),
+        "cases.md, the group in a case's title": (
+            edit_text("audit/cases.md", "`a3`, reworded with no record: partly gone",
+                      "`a3`: partly gone"), "cases.md"),
+        "README.md, the borderline case in the table": (
+            edit_text("audit/README.md", "| yes: disqualified; its one case is borderline |",
+                      "| yes |"), "README.md"),
+        "README.md, the agreement on the segments reworded with no record": (
+            edit_text("audit/README.md", "both readings give the same class to 19.",
+                      "both readings give the same class to 18."), "README.md"),
+        "README.md, what was not read": (
+            edit_text("audit/README.md", "- On repeated runs: 30 segments",
+                      "- On repeated runs: 29 segments"), "README.md"),
+        "REGISTRATION.md, no fourth amendment": (
+            edit_text("REGISTRATION.md", fourth, "**Amendment 4, "), "has no Amendment 4"),
+        "REGISTRATION.md, the fourth amendment above the third": (
+            lambda where: (where / "REGISTRATION.md").write_text(
+                fourth + ", moved.**\n\n"
+                + (where / "REGISTRATION.md").read_text(encoding="utf-8").replace(
+                    fourth, "**Amendment 4, "), encoding="utf-8"),
+            "above Amendment 3"),
+        "REGISTRATION.md, the rows disqualified now": (
+            edit_text("REGISTRATION.md", ruling_now,
+                      ruling_now.replace("`gpt-6-luna-api`, ", "")),
+            "does not carry the disqualified rows"),
+        "REGISTRATION.md, the rows disqualified now, said in Amendment 3 only": (
+            move_up(ruling_now), "does not carry the disqualified rows"),
+        "REGISTRATION.md, Amendment 3's own rows, said in Amendment 4 only": (
+            move_down(lineup_figures.ruling_line(formed)), "does not name the disqualified rows"),
+        **{f"REGISTRATION.md, Amendment 4, {name}": (
+            edit_text("REGISTRATION.md", line, line[:-9] + "CHANGED" + line[-2:]),
+            f"does not carry {name}") for name, line in extension.items()},
+    }
+    for name, (spoil, word) in seeds.items():
+        found = problems(spoil)
+        check(any(word in problem for problem in found),
+              f"MUST FIRE: {name}: the check found {found[:3]}")
+    check("| 2 |" in tables.splitlines()[7] and "65" in outcome[1] and "121" in outcome[4]
+          and "173" in lineup_figures.second_defect_line(formed),
+          "a seed above no longer changes the line it is aimed at")
+    check(len(extension) == 10 and ruling_now != lineup_figures.ruling_line(formed)
+          and "are now" in ruling_now and "are now" not in lineup_figures.ruling_line(formed),
+          f"Amendment 4 is held to {len(extension)} sentences, and the one that names the "
+          f"disqualified rows must not be Amendment 3's: {sorted(extension)}")
+
+    failing = copy.deepcopy(formed)
+    failing["properties"][0]["holds"] = False
+    with tempfile.TemporaryDirectory() as tmp:
+        where = _second_copy(Path(tmp) / "run")
+        found = lineup_figures.amended_problems(where, reg, failing, amended, audit)
+    check(any("property 1" in problem and "does not hold" in problem for problem in found),
+          f"MUST FIRE: a property that does not hold is a difference: {found[:3]}")
+
+    # figures.json: every figure the second scoring adds, each spoiled in turn.
+    def seeded(change) -> list[str]:
+        published = copy.deepcopy(formed)
+        change(published)
+        return lineup_figures.figures_problems(formed, published)
+
+    row = "opus-5.5-api"
+    changes = {
+        "an amended silent loss": lambda f: f["S1"]["rows"][row].update(silent_loss=1),
+        "an amended deviation": lambda f: f["S1"]["rows"][row].update(deviations=54),
+        "the untaken headings": lambda f: f["S1"]["rows"][row].update(headings_untaken=0),
+        "a row's audit": lambda f: f["S1"]["rows"][row]["audit"].update(lost=1),
+        "a row's disqualification": lambda f: f["S1"]["rows"][row].update(disqualified=True),
+        "the order": lambda f: f["S1"]["order"]["survivors"].reverse(),
+        "the disqualified rows": lambda f: f["S1"]["order"]["disqualified"].pop(),
+        "a tie": lambda f: f["S1"]["order"]["ties"].clear(),
+        "an amended floor": lambda f: f["S1"]["baselines"]["union"].update(deviations=70),
+        "the side comparison": lambda f: f["S1"]["side"]["fable-sub"]["rows"]["fable-sub"]
+        .update(deviations=21),
+        "a registered figure": lambda f: f["S1_registered"]["rows"][row].update(silent_loss=0),
+        "the audit's tally": lambda f: f["audit"]["first_runs"].update(partly=4),
+        "the second reading's agreement": lambda f: f["audit"]["second_reading"]
+        .update(same_class=25),
+        "the tally of the segments reworded with no record": lambda f: f["audit"][
+            lineup_figures.REWORDED]["first_runs"].update(partly=1, present=16),
+        "the tally of the counted segments over all runs": lambda f: f["audit"]["all_runs"]
+        .update(gone=1, present=43),
+        "the tally of both groups": lambda f: f["audit"][lineup_figures.BOTH]["first_runs"]
+        .update(partly=4, present=27),
+        "the agreement on the segments reworded with no record": lambda f: f["audit"][
+            lineup_figures.REWORDED]["second_reading"].update(same_class=18),
+        "the agreement over both groups": lambda f: f["audit"][lineup_figures.BOTH][
+            "second_reading"].update(same_class=44),
+        "a configuration's tally in the second group": lambda f: f["audit"][
+            lineup_figures.REWORDED]["configurations"]["gpt-6-luna-api"]["first_runs"]
+        .update(partly=0, present=2),
+        "a first-run case of loss among the counted segments": lambda f: f["audit"][
+            "first_runs_lost"].pop(),
+        "a first-run case of loss among the segments reworded with no record": lambda f: f[
+            "audit"][lineup_figures.REWORDED]["first_runs_lost"].pop(),
+        "what the audit block says its keys cover": lambda f: f["audit"].update(covers=""),
+        "that a verdict rests on borderline cases only": lambda f: f["S1"]["rows"][
+            "gpt-6-luna-api"]["audit"].update(rests_only_on_borderline=False),
+        "a verdict's count of borderline losses": lambda f: f["S1"]["rows"][
+            "haiku-4.5-api"]["audit"].update(lost_borderline=0),
+        "the rows whose verdict depends on a borderline case": lambda f: f["audit"][
+            "borderline"]["verdict_depends_on_one"].clear(),
+        "the same, where both groups are counted together": lambda f: f["audit"][
+            lineup_figures.BOTH]["borderline"]["verdict_depends_on_one"].clear(),
+        "what was not read on repeated runs": lambda f: f["audit"]["unread"][
+            "reworded_no_record_on_repeated_runs"].update(cases=29),
+        "what was not read on first runs": lambda f: f["audit"]["unread"][
+            "reworded_as_a_run_no_record_on_first_runs"].update(cases=4),
+        "the titles that were not read": lambda f: f["audit"]["unread"][
+            "titles_absent_no_record_on_first_runs"].update(cases=3),
+        "the amendment that extended the audit": lambda f: f["scoring"]
+        .update(audit_amendment=lineup_figures.AMENDMENT),
+        "the amended filing": lambda f: f["audit"]["amended_filing"]["all_runs"]["present"]
+        .update(reworded=9),
+        "a property's figure": lambda f: f["properties"][5]["figures"].update(cleared=1),
+        "the floors' lost and bloat": lambda f: f["floor_bands"]["union"]["amended"]
+        .update(bloat=65),
+        "the second defect": lambda f: f["second_defect"].update(sentences=180),
+        "which scoring is shown first": lambda f: f["scoring"].update(shown_first="registered"),
+    }
+    for name, change in changes.items():
+        check(seeded(change) != [], f"MUST FIRE: figures.json with {name} changed")
+    check(seeded(lambda f: None) == [], "MUST NOT FIRE: figures.json as formed")
+
+
+def test_751_audit_json_is_held_to_the_registered_count() -> None:
+    """The audit is an input and is validated. MUST NOT FIRE: the committed one, 84
+    cases: the 65 the registered scoring counted over 18 runs, and the 19 on
+    first runs that the similarity rule alone calls reworded and no record
+    names. MUST FIRE: a case removed, a case for a segment that was not
+    counted, a case twice, a text that is not the segment's, an unknown class.
+    The second group is seeded in the test after this one."""
+    s = second_scoring()
+    audit, counted = s["audit"], s["amended"]["silent_registered"]
+    runs = [key for key, ids in counted.items() if ids]
+    of = {group: [case for case in audit["cases"] if case["group"] == group]
+          for group in lineup_figures.GROUPS}
+    check((len(audit["cases"]), len(of[lineup_figures.COUNTED]),
+           sum(len(ids) for ids in counted.values()), len(runs)) == (84, 65, 65, 18),
+          f"the audit holds {len(audit['cases'])} cases, {len(of[lineup_figures.COUNTED])} "
+          f"of them counted; the registered scoring counted "
+          f"{sum(len(ids) for ids in counted.values())} over {len(runs)} runs")
+
+    def problems(change) -> list[str]:
+        spoiled = copy.deepcopy(audit)
+        change(spoiled)
+        return lineup_figures.audit_problems(spoiled, s["amended"], s["first"])
+
+    def stranger(data: dict) -> None:
+        case = copy.deepcopy(data["cases"][0])
+        case.update(configuration="gpt-6-sol-api", pair="badge_access", draw=1, segment="a2")
+        data["cases"].append(case)
+
+    for name, change, word in (
+            ("a case removed", lambda d: d["cases"].pop(3), "has no case for it"),
+            ("a case that was not counted", stranger, "did not count"),
+            ("a case twice", lambda d: d["cases"].append(copy.deepcopy(d["cases"][0])),
+             "twice"),
+            ("another text", lambda d: d["cases"][0].update(text="Another sentence."),
+             "not the segment's own"),
+            ("an unknown class", lambda d: d["cases"][0]["first_reading"].update(
+                **{"class": "lost"}), "no class the audit knows"),
+            ("a second reading with no class", lambda d: d["cases"][0].update(
+                second_reading={"evidence": "x"}), "no class the audit knows")):
+        found = problems(change)
+        check(any(word in problem for problem in found),
+              f"MUST FIRE: audit.json with {name}: {found[:2]}")
+    check(problems(lambda d: None) == [], "MUST NOT FIRE: the committed audit")
+
+
+def test_audit_json_holds_exactly_the_segments_reworded_with_no_record_on_first_runs() -> None:
+    """The audit's second group, held to the stored runs. MUST NOT FIRE: the committed
+    19, which are 8, 5, 4 and 2 for four configurations and none for the others.
+    MUST FIRE: one removed; one that stands on a repeated run; one whose segment
+    a record names; one the similarity rule calls reworded while its words also
+    stand as a run; a counted segment marked as this group and the reverse; a
+    case with no group; one with a single reading."""
+    s = second_scoring()
+    audit, amended, first = s["audit"], s["amended"], s["first"]
+    reworded = lineup_figures.REWORDED
+    mine = [case for case in audit["cases"] if case["group"] == reworded]
+    per: dict[str, int] = {}
+    for case in mine:
+        per[case["configuration"]] = per.get(case["configuration"], 0) + 1
+    check(per == {"haiku-4.5-api": 8, "haiku-4.5-sub": 5, "sonnet-5-sub": 4,
+                  "gpt-6-luna-api": 2},
+          f"the segments reworded with no record on first runs, per configuration: {per}")
+    check(all(first[case["configuration"]][case["pair"]] == case["draw"]
+              and case.get("second_reading") for case in mine),
+          "every case of the second group is on a first run and carries two readings")
+    tally = lineup_figures._tally(mine, "first_reading")
+    check(tally == {"gone": 1, "partly": 2, "present": 15, "not_content": 1}
+          and tally == lineup_figures._tally(mine, "second_reading"),
+          f"the two readings of the 19: {tally} and "
+          f"{lineup_figures._tally(mine, 'second_reading')}")
+
+    # A segment of each kind the group must not hold, taken from the stored
+    # runs themselves: similarity alone and no record on a repeated run;
+    # similarity alone with a record on a first run; and no record on a first
+    # run with its words standing as a run.
+    def is_first(run: tuple) -> bool:
+        return first.get(run[0], {}).get(run[1]) == run[2]
+
+    on_repeat = next((*run, ids[0]) for run, ids in amended["reworded_no_record"].items()
+                     if ids and not is_first(run))
+    as_a_run = next((*run, next(iter(found))) for run, found
+                    in amended["unread"]["as_a_run"].items() if found and is_first(run))
+    similar = lineup_figures.load(s["run_dir"] / lineup_figures.SIMILARITY)
+    unrecorded = {(*run, identifier) for run, ids in amended["reworded_no_record"].items()
+                  for identifier in ids}
+    with_record = next(
+        (cell["row"], cell["pair"], cell["draw"], entry["segment"])
+        for cell in similar["cells"] if is_first((cell["row"], cell["pair"], cell["draw"]))
+        for entry in cell["segments"] if entry["similarity_alone"]
+        and (cell["row"], cell["pair"], cell["draw"], entry["segment"]) not in unrecorded)
+
+    def problems(change) -> list[str]:
+        spoiled = copy.deepcopy(audit)
+        change(spoiled)
+        return lineup_figures.audit_problems(spoiled, amended, first)
+
+    def texts_of(pair: str) -> dict:
+        return {item.id: item for document in lineup_figures.rank_matrix.sources_of(
+            lineup_figures.rank_matrix.pair_docs(pair)) for item in document.segments}
+
+    def stranger(key: tuple):
+        """A well-formed case of the second group for a segment that is not one."""
+        def change(data: dict) -> None:
+            case = copy.deepcopy(next(c for c in data["cases"] if c["group"] == reworded))
+            item = texts_of(key[1])[key[3]]
+            case.update(configuration=key[0], pair=key[1], draw=key[2], segment=key[3],
+                        text=item.text, kind=item.kind)
+            data["cases"].append(case)
+        return change
+
+    def regroup(group: str, to: str):
+        def change(data: dict) -> None:
+            next(c for c in data["cases"] if c["group"] == group)["group"] = to
+        return change
+
+    def last(data: dict) -> dict:
+        return next(c for c in reversed(data["cases"]) if c["group"] == reworded)
+
+    not_given = "the stored runs do not give that"
+    for name, change, words in (
+            ("a case of the second group removed",
+             lambda d: d["cases"].remove(last(d)), ["audit.json has no case for it"]),
+            ("a segment reworded with no record on a repeated run", stranger(on_repeat),
+             [not_given]),
+            ("a segment reworded on a first run that a record names", stranger(with_record),
+             [not_given]),
+            ("a segment whose words also stand in the merge as a run", stranger(as_a_run),
+             [not_given]),
+            ("a counted segment marked as reworded with no record",
+             regroup(lineup_figures.COUNTED, reworded), [not_given, "has no case for it"]),
+            ("a segment reworded with no record marked as counted",
+             regroup(reworded, lineup_figures.COUNTED),
+             ["did not count", "audit.json has no case for it"]),
+            ("a case with no group", lambda d: last(d).pop("group"), ["its group is None"]),
+            ("a case of a group the audit does not have",
+             lambda d: last(d).update(group="other"), ["its group is 'other'"]),
+            ("a case of the second group with one reading",
+             lambda d: last(d).update(second_reading=None), ["has no second reading"]),
+            ("a second reading of the second group with no class",
+             lambda d: last(d).update(second_reading={"evidence": "x"}),
+             ["no class the audit knows"])):
+        found = problems(change)
+        check(all(any(word in problem for problem in found) for word in words),
+              f"MUST FIRE: audit.json with {name}: {found[:3]}")
+    check(problems(lambda d: None) == [], "MUST NOT FIRE: the committed audit")
+    # A counted segment on a repeated run needs one reading; that stays so.
+    once = [case for case in audit["cases"] if case["group"] == lineup_figures.COUNTED
+            and not case.get("second_reading")]
+    check(len(once) == 40 and not any(is_first((c["configuration"], c["pair"], c["draw"]))
+                                      for c in once),
+          f"{len(once)} counted cases carry one reading; all of them are on repeated runs")
+
+
+def _audit_case(first: str, second: str | None = None, alternative: str | None = None,
+                **more) -> dict:
+    case = {"configuration": "row", "pair": "badge_access", "draw": 1, "segment": "a2",
+            "first_reading": {"class": first, "alternative": alternative},
+            "second_reading": None if second is None else {"class": second,
+                                                           "alternative": None}}
+    case.update(more)
+    return case
+
+
+def test_751_the_verdict_is_the_first_readings_and_a_disagreement_is_marked() -> None:
+    """The rule that turns readings into a verdict. MUST FIRE: one first-run case the
+    first reading classed gone, or partly gone, is audited loss. MUST NOT FIRE:
+    present and not content are not. A second reading that comes to the other
+    verdict marks `readings_disagree`, either way round, and does not change the
+    verdict; one that differs on a case and not on the verdict marks nothing.
+    No configuration of the committed run is in that state."""
+    of = lineup_figures.verdict_of
+    for cases, loss, disagree in (
+            ([_audit_case("present"), _audit_case("not_content")], False, False),
+            ([_audit_case("present"), _audit_case("partly")], True, False),
+            ([_audit_case("gone")], True, False),
+            ([], False, False),
+            ([_audit_case("present", "gone")], False, True),
+            ([_audit_case("partly", "present")], True, True),
+            ([_audit_case("partly", "present"), _audit_case("present", "partly")], True, False),
+            ([_audit_case("present", "present"), _audit_case("gone")], True, True),
+            ([_audit_case("not_content", "not_content")], False, False)):
+        got = of(cases)
+        check((got["audited_loss"], got["readings_disagree"]) == (loss, disagree),
+              f"{[(c['first_reading']['class'], (c['second_reading'] or {}).get('class')) for c in cases]}: "
+              f"audited loss {got['audited_loss']}, readings disagree "
+              f"{got['readings_disagree']}; expected {loss} and {disagree}")
+    marked = of([_audit_case("present", "gone")])
+    check("readings disagree" in lineup_figures._audit_text(marked)
+          and "readings disagree" not in lineup_figures._audit_text(of([_audit_case("gone")])),
+          "the table's audit cell must say `readings disagree`, and only then")
+    check("(readings disagree)" in lineup_figures._audit_reason(of([_audit_case("gone",
+                                                                               "present")])),
+          "the reason a row is disqualified must carry the mark")
+    s = second_scoring()
+    rows = s["formed"]["S1"]["rows"]
+    check({rid for rid, row in rows.items() if row["disqualified"]}
+          == {"gpt-6-luna-api", "haiku-4.5-api", "haiku-4.5-sub"}
+          and not any(row["audit"]["readings_disagree"] for row in rows.values()),
+          f"the committed run: audited loss for "
+          f"{sorted(rid for rid, row in rows.items() if row['disqualified'])}")
+    # The table says so: a seeded disagreement reaches both rendered tables.
+    seeded = copy.deepcopy(s["formed"])
+    seeded["S1"]["rows"]["sonnet-5-sub"]["audit"]["readings_disagree"] = True
+    check("0 of 9 gone or partly gone; readings disagree"
+          in lineup_figures.render(s["reg"], seeded)
+          and "| no (readings disagree) |" in lineup_figures.audit_tables(seeded)
+          and "different verdicts for: sonnet-5-sub" in lineup_figures.audit_tables(seeded),
+          "MUST FIRE: a row whose readings disagree is not marked in the tables")
+    check("readings disagree" not in lineup_figures.render(s["reg"], s["formed"]),
+          "MUST NOT FIRE: no row of the committed run is marked")
+    # A first run is the draw the order reads: a repeat's loss does not disqualify.
+    head = {"row": {"headline_draws": {"badge_access": 1}}}
+    audit = {"cases": [_audit_case("present"), _audit_case("gone", draw=2)]}
+    check(not lineup_figures.audit_verdicts(audit, head)["row"]["audited_loss"],
+          "MUST NOT FIRE: content gone on a repeat is not audited loss on a first run")
+    audit = {"cases": [_audit_case("gone"), _audit_case("present", draw=2)]}
+    check(lineup_figures.audit_verdicts(audit, head)["row"]["audited_loss"],
+          "MUST FIRE: content gone on the first run")
+    # The rule runs over the cases of both groups: a loss in either is a loss.
+    for group in lineup_figures.GROUPS:
+        other = next(name for name in lineup_figures.GROUPS if name != group)
+        audit = {"cases": [_audit_case("partly", group=group),
+                           _audit_case("present", group=other, segment="a3")]}
+        got = lineup_figures.audit_verdicts(audit, head)["row"]
+        check(got["audited_loss"] and got["cases"] == 2 and got["lost"] == 1,
+              f"MUST FIRE: a loss among the cases marked {group}: {got}")
+    committed = {rid: (row["audit"]["cases"], row["audit"]["lost"])
+                 for rid, row in rows.items() if row["audit"]["cases"]}
+    check(committed == {"gpt-6-luna-api": (4, 1), "haiku-4.5-api": (21, 2),
+                        "haiku-4.5-sub": (8, 3), "sonnet-5-sub": (9, 0),
+                        "opus-5.5-api": (2, 0)}
+          and sum(cases for cases, _ in committed.values()) == 44,
+          f"the committed run, cases read and lost on first runs: {committed}")
+
+
+def test_a_verdict_that_rests_only_on_borderline_cases_says_so() -> None:
+    """Whether a verdict of loss has a case to stand on that no reading doubted.
+
+    A case of loss is borderline when its first reading names an alternative
+    on the other side of the line, present or not content. MUST FIRE: every
+    case of loss is one. MUST NOT FIRE: a loss with no alternative beside it; a
+    loss whose alternative is the other class of loss; no loss at all, however
+    many cases name a loss as their alternative. The verdict itself is the
+    same either way. On the committed run it is true of gpt-6-luna-api and of
+    no other configuration, and every page that names its verdict says
+    "disqualified; its one case is borderline"."""
+    of = lineup_figures.verdict_of
+    for cases, loss, only, borderline in (
+            ([_audit_case("partly", alternative="present")], True, True, 1),
+            ([_audit_case("gone", alternative="not_content")], True, True, 1),
+            ([_audit_case("partly", alternative="present"),
+              _audit_case("gone", alternative="not_content")], True, True, 2),
+            ([_audit_case("partly", alternative="present"), _audit_case("present")],
+             True, True, 1),
+            ([_audit_case("partly", alternative="present"), _audit_case("partly")],
+             True, False, 1),
+            ([_audit_case("partly")], True, False, 0),
+            ([_audit_case("partly", alternative="gone")], True, False, 0),
+            ([_audit_case("gone", alternative="partly")], True, False, 0),
+            ([_audit_case("present", alternative="partly")], False, False, 0),
+            ([_audit_case("not_content", alternative="gone"), _audit_case("present")],
+             False, False, 0),
+            ([], False, False, 0)):
+        got = of(cases)
+        check((got["audited_loss"], got["rests_only_on_borderline"], got["lost_borderline"])
+              == (loss, only, borderline),
+              f"{[(c['first_reading']['class'], c['first_reading']['alternative']) for c in cases]}: "
+              f"audited loss {got['audited_loss']}, rests only on borderline cases "
+              f"{got['rests_only_on_borderline']}, borderline losses "
+              f"{got['lost_borderline']}; expected {loss}, {only} and {borderline}")
+    one = of([_audit_case("partly", alternative="present")])
+    two = of([_audit_case("partly", alternative="present"),
+              _audit_case("gone", alternative="present")])
+    firm = of([_audit_case("partly")])
+    check(lineup_figures._borderline_words(one) == "its one case is borderline"
+          and lineup_figures._borderline_words(two) == "its 2 cases are all borderline"
+          and lineup_figures._borderline_words(firm) == "",
+          "the words for a verdict that rests on borderline cases only, and none otherwise")
+    check(lineup_figures._audit_text(one)
+          == "1 of 1 gone or partly gone: disqualified; its one case is borderline"
+          and lineup_figures._audit_text(firm) == "1 of 1 gone or partly gone"
+          and lineup_figures._audit_reason(one).endswith("; its one case is borderline")
+          and "borderline" not in lineup_figures._audit_reason(firm),
+          "the table's audit cell and the order's reason carry the words, and only then")
+
+    s = second_scoring()
+    formed, reg = s["formed"], s["reg"]
+    rows = formed["S1"]["rows"]
+    only = sorted(rid for rid, row in rows.items() if row["audit"]["rests_only_on_borderline"])
+    check(only == ["gpt-6-luna-api"] and formed["audit"]["borderline"]["verdict_depends_on_one"]
+          == ["gpt-6-luna-api"],
+          f"the committed run: the verdict rests only on borderline cases for {only}, and "
+          f"depends on one for {formed['audit']['borderline']['verdict_depends_on_one']}")
+    check({rid: row["audit"]["lost_borderline"] for rid, row in rows.items()
+           if row["audit"]["lost"]} == {"gpt-6-luna-api": 1, "haiku-4.5-api": 1,
+                                        "haiku-4.5-sub": 1},
+          "each disqualified row has one borderline case of loss; the two Haiku rows have "
+          "others beside it")
+    words = "disqualified; its one case is borderline"
+    page, tables = lineup_figures.render(reg, formed), lineup_figures.audit_tables(formed)
+    note = lineup_figures.catalogue_note(formed, "gpt-6-luna-api", side=False)
+    amendment = lineup_figures.extension_lines(formed)
+    check(page.count(words) == 1 and "| DQ | gpt-6-luna-api |" in page
+          and words in next(line for line in page.splitlines()
+                            if line.startswith("| DQ | gpt-6-luna-api |")),
+          "figures.md says it in gpt-6-luna-api's row of the amended table and nowhere else")
+    check(f"| yes: {words} |" in tables and tables.count(f"| yes: {words} |") == 1
+          and f"`gpt-6-luna-api` is {words}: `library_holds`, segment `a3`, "
+              f"\"When a requested item arrives," in tables,
+          "the audit's page says it in the table and quotes the case under it")
+    check("; its one case is borderline" in note
+          and not any("borderline" in lineup_figures.catalogue_note(formed, rid, side=False)
+                      for rid in rows if rid != "gpt-6-luna-api"),
+          "the catalogue's note says it for gpt-6-luna-api and for no other row")
+    check(amendment["that the verdict of gpt-6-luna-api rests on borderline cases only"]
+          == f"`gpt-6-luna-api` is {words}"
+          and [name for name in amendment if "rests on borderline" in name]
+          == ["that the verdict of gpt-6-luna-api rests on borderline cases only"],
+          "the amendment's sentence about it, for that row and no other")
+
+    # Seeded, on the committed audit itself: the case read with no alternative
+    # is still a loss and is no longer borderline, and no page says so any more.
+    def reformed(change) -> dict:
+        audit = copy.deepcopy(s["audit"])
+        change(next(case for case in audit["cases"]
+                    if lineup_figures._case_key(case)
+                    == ("gpt-6-luna-api", "library_holds", 1, "a3")))
+        return lineup_figures._plain(lineup_figures.with_amended(
+            reg, s["scored"], lineup_figures._plain(lineup_figures.rows(reg, s["scored"])),
+            s["amended"], audit))
+
+    sure = reformed(lambda case: case["first_reading"].update(alternative=None))
+    check(sure["S1"]["rows"]["gpt-6-luna-api"]["disqualified"]
+          and not sure["S1"]["rows"]["gpt-6-luna-api"]["audit"]["rests_only_on_borderline"]
+          and words not in lineup_figures.render(reg, sure)
+          and words not in lineup_figures.audit_tables(sure)
+          and "borderline" not in lineup_figures.catalogue_note(sure, "gpt-6-luna-api",
+                                                                side=False)
+          and not any("rests on borderline" in name
+                      for name in lineup_figures.extension_lines(sure)),
+          "MUST NOT FIRE: the same case with no alternative named is a loss no page calls "
+          "borderline")
+    cleared = reformed(lambda case: case["first_reading"].update(
+        {"class": "present", "alternative": "partly"}))
+    check(not cleared["S1"]["rows"]["gpt-6-luna-api"]["disqualified"]
+          and [d["row"] for d in cleared["S1"]["order"]["disqualified"]]
+          == ["haiku-4.5-sub", "haiku-4.5-api"]
+          and cleared["S1"]["order"]["survivors"][1] == "gpt-6-luna-api"
+          and cleared["audit"]["borderline"]["verdict_depends_on_one"] == ["gpt-6-luna-api"],
+          "the same case read the other way: no loss, the row is second again, and its "
+          "verdict still depends on that one case")
+    # And figures.json is held to it: the flag put on another row is a difference.
+    published = copy.deepcopy(formed)
+    published["S1"]["rows"]["haiku-4.5-sub"]["audit"]["rests_only_on_borderline"] = True
+    check(lineup_figures.figures_problems(formed, published) != []
+          and "3 of 8 gone or partly gone: disqualified; its 3 cases are all borderline"
+          in lineup_figures.render(reg, published),
+          "MUST FIRE: the flag on a row whose verdict has other cases to stand on")
+
+
+def test_no_figure_of_the_counted_segments_moves_when_the_audit_is_extended() -> None:
+    """The audit block's own keys count the counted segments, extended or not.
+
+    A sentence written against `audit.cases` or `audit.first_runs` when the
+    audit held the counted segments and nothing else must stay as true as it
+    was. So the block is formed twice, from the committed audit and from the
+    same audit without its second group, and every key it had before the
+    extension has to come out the same. MUST FIRE: the one exception,
+    `verdict_depends_on_one`, which states the verdict and follows it. The
+    second group stands under its own name and the two together under
+    `both_groups`, and the committed figures of all three are pinned here."""
+    s = second_scoring()
+    audit = s["audit"]
+    alone = {**audit, "cases": [case for case in audit["cases"]
+                                if case["group"] == lineup_figures.COUNTED]}
+    whole = lineup_figures._plain(lineup_figures.audit_summary(audit, s["first"],
+                                                               s["amended"]))
+    before = lineup_figures._plain(lineup_figures.audit_summary(alone, s["first"],
+                                                                s["amended"]))
+    check(whole == s["formed"]["audit"], "the block in figures.json is this summary")
+    kept = ("date", "cases", "runs", "configurations", "first_runs", "all_runs",
+            "first_runs_lost", "second_reading", "amended_filing", "runs_with_silent_loss")
+    moved = [key for key in kept if whole[key] != before[key]]
+    check(moved == [], f"MUST NOT FIRE: keys of the counted segments that moved: {moved}")
+    apart = {key: value for key, value in whole["borderline"].items()
+             if key != "verdict_depends_on_one"}
+    check(apart == {key: value for key, value in before["borderline"].items()
+                    if key != "verdict_depends_on_one"},
+          "MUST NOT FIRE: the counted segments' borderline counts moved")
+    check(before["borderline"]["verdict_depends_on_one"] == []
+          and whole["borderline"]["verdict_depends_on_one"] == ["gpt-6-luna-api"]
+          and whole[lineup_figures.BOTH]["borderline"]["verdict_depends_on_one"]
+          == ["gpt-6-luna-api"],
+          "MUST FIRE: whose verdict depends on a borderline case follows the verdict, "
+          "which the extension changed for gpt-6-luna-api")
+    check((whole["cases"], whole["runs"], whole["first_runs"], whole["all_runs"])
+          == (65, 18, {"cases": 25, "gone": 0, "partly": 3, "present": 11, "not_content": 11},
+              {"cases": 65, "gone": 2, "partly": 9, "present": 42, "not_content": 12})
+          and (whole["second_reading"]["cases"], whole["second_reading"]["same_class"])
+          == (25, 23)
+          and (whole["borderline"]["cases"], whole["borderline"]["first_runs"],
+               whole["borderline"]["lost_range"]) == (12, 4, {"first_runs": [3, 6],
+                                                              "all_runs": [7, 18]}),
+          f"the counted segments as the audit first published them: {whole['cases']} over "
+          f"{whole['runs']} runs, {whole['first_runs']}")
+    second = whole[lineup_figures.REWORDED]
+    check((second["cases"], second["runs"], second["first_runs"])
+          == (19, 12, {"cases": 19, "gone": 1, "partly": 2, "present": 15, "not_content": 1})
+          and second["all_runs"]["cases"] == 19
+          and (second["second_reading"]["cases"], second["second_reading"]["same_class"],
+               second["second_reading"]["different"]) == (19, 19, [])
+          and [(c["configuration"], c["segment"], c["first"])
+               for c in second["first_runs_lost"]]
+          == [("gpt-6-luna-api", "a3", "partly"), ("haiku-4.5-api", "b2", "partly"),
+              ("haiku-4.5-sub", "b2", "gone")],
+          f"the segments reworded with no record: {second['first_runs']}, "
+          f"{second['second_reading']['same_class']} of {second['second_reading']['cases']} "
+          f"classed alike")
+    both = whole[lineup_figures.BOTH]
+    check((both["cases"], both["runs"], both["first_runs"])
+          == (84, 21, {"cases": 44, "gone": 1, "partly": 5, "present": 26, "not_content": 12})
+          and (both["second_reading"]["cases"], both["second_reading"]["same_class"])
+          == (44, 42) and len(both["first_runs_lost"]) == 6
+          and (both["borderline"]["cases"], both["borderline"]["first_runs"],
+               both["borderline"]["lost_range"]["first_runs"]) == (19, 11, [3, 11]),
+          f"both groups together: {both['cases']} cases, {both['first_runs']}")
+    check(before[lineup_figures.REWORDED]["cases"] == 0
+          and before[lineup_figures.BOTH]["cases"] == 65
+          and all(name in whole["covers"] for name in (
+              lineup_figures.REWORDED, lineup_figures.BOTH, "verdict_depends_on_one")),
+          "without its second group the audit is the counted segments, and the block says "
+          "in words what its keys cover")
+    unread = whole["unread"]
+    check(unread == {"reworded_no_record_on_repeated_runs": {
+                         "cases": 30, "configurations": {"gpt-6-luna-api": 10,
+                                                         "haiku-4.5-sub": 20}},
+                     "reworded_as_a_run_no_record_on_first_runs": {
+                         "cases": 5, "phrase": 3, "containment": 2},
+                     "titles_absent_no_record_on_first_runs": {
+                         "cases": 2, "configurations": {"haiku-4.5-api": 2}}},
+          f"what has no record and was not read: {unread}")
+
+
+def test_each_amendment_names_the_rows_its_own_audit_disqualified() -> None:
+    """Amendment 3 stands as written and Amendment 4 says who is disqualified now.
+
+    Amendment 3's sentence is derived from the counted segments alone, which
+    is all the audit held when it was written: the two Haiku rows. Amendment
+    4's is the order's: those two and gpt-6-luna-api. MUST FIRE: a loss
+    seeded among the counted segments of another row changes the first; a
+    row taken out of the order changes the second and not the first."""
+    s = second_scoring()
+    formed = s["formed"]
+    third = lineup_figures.ruling_line(formed)
+    now = lineup_figures.extension_lines(formed)
+    check(third == "On this lineup the disqualified rows are `haiku-4.5-api` and "
+                   "`haiku-4.5-sub`."
+          and now["the disqualified rows"] == "On this lineup the disqualified rows are now "
+          "`gpt-6-luna-api`, `haiku-4.5-api` and `haiku-4.5-sub`."
+          and now["the order"] == "The other complete rows in order: 1, `gpt-6-sol-api`; 2, "
+          "`opus-5.5-sub` and `sonnet-5-sub`, tied and not broken; 4, `opus-5.5-api`; 5, "
+          "`sonnet-5-api`.",
+          f"the two amendments' sentences: {third!r}; {now['the disqualified rows']!r}; "
+          f"{now['the order']!r}")
+    check(lineup_figures._counted_alone(formed) == ["haiku-4.5-sub", "haiku-4.5-api"]
+          and "to 2 (haiku-4.5-sub, haiku-4.5-api). The audit was then extended (Amendment "
+          "4, 2026-10-12)" in lineup_figures.render(s["reg"], formed)
+          and "the disqualified rows are now 3 (gpt-6-luna-api, haiku-4.5-sub, "
+          "haiku-4.5-api)" in lineup_figures.render(s["reg"], formed),
+          "figures.md gives the rows disqualified by the counted segments alone, then the "
+          "rows disqualified now")
+    seeded = copy.deepcopy(formed)
+    lost = seeded["audit"]["first_runs_lost"]
+    lost.append({**lost[0], "configuration": "sonnet-5-sub"})
+    check("`sonnet-5-sub`" in lineup_figures.ruling_line(seeded)
+          and lineup_figures.extension_lines(seeded)["the disqualified rows"]
+          == now["the disqualified rows"],
+          "MUST FIRE: a loss among another row's counted segments changes Amendment 3's "
+          "sentence, which is not read off the order")
+    seeded = copy.deepcopy(formed)
+    seeded["S1"]["order"]["disqualified"] = [
+        entry for entry in seeded["S1"]["order"]["disqualified"]
+        if entry["row"] != "gpt-6-luna-api"]
+    check("gpt-6-luna-api" not in lineup_figures.extension_lines(seeded)["the disqualified rows"]
+          and lineup_figures.ruling_line(seeded) == third,
+          "MUST FIRE: a row out of the order changes Amendment 4's sentence and leaves "
+          "Amendment 3's")
+
+
+def test_751_the_order_disqualifies_on_audited_loss_and_states_its_ties() -> None:
+    """The ruling's order. MUST FIRE: a row the audit names is disqualified whatever
+    its count. MUST NOT FIRE: a row with counted silent loss and no audited loss is
+    ranked by its deviations. Equal deviations: shared and stated when a row in
+    the tie is not list-priced, decided by list dollars when all are. The
+    registered order is unchanged by the argument."""
+    def row(silent: int, dev: float, unit: str = "list", usd: float = 0.1,
+            seconds: float = 10.0) -> dict:
+        return {"silent_loss": silent, "silent_loss_per_pair": silent / 9,
+                "deviations_per_pair": dev, "cost_unit": unit, "usd_per_merge": usd,
+                "seconds_per_merge": seconds, "incomplete": [], "incomplete_text": "",
+                "pairs": 9}
+    rows = {"counted": row(2, 5.0), "clean": row(0, 6.0), "read-gone": row(0, 4.0),
+            "sub-a": row(0, 7.0, "api_equivalent", 0.6), "sub-b": row(3, 7.0, "api_equivalent",
+                                                                       0.3),
+            "list-a": row(0, 8.0, usd=0.5), "list-b": row(0, 8.0, usd=0.2)}
+    ruled = lineup_figures.order(rows, {"read-gone": "audited loss on a first run: 1 of 1"})
+    check([d["row"] for d in ruled["disqualified"]] == ["read-gone"]
+          and ruled["disqualified"][0]["reason"].startswith("audited loss"),
+          f"MUST FIRE: the audited row is disqualified: {ruled['disqualified']}")
+    check(ruled["survivors"] == ["counted", "clean", "sub-a", "sub-b", "list-b", "list-a"]
+          and ruled["ranks"] == {"counted": 1, "clean": 2, "sub-a": 3, "sub-b": 3,
+                                 "list-b": 5, "list-a": 6},
+          f"MUST NOT FIRE: counted silent loss does not disqualify under the ruling: "
+          f"{ruled['survivors']} {ruled['ranks']}")
+    ties = {tuple(tie["rows"]): tie for tie in ruled["ties"]}
+    check(set(ties) == {("sub-a", "sub-b"), ("list-a", "list-b")}
+          and ties[("sub-a", "sub-b")]["shared"] and not ties[("list-a", "list-b")]["shared"]
+          and ties[("list-a", "list-b")]["decided_by"] == "list dollars, then seconds",
+          f"the ties and how each was decided: {ruled['ties']}")
+    as_run = lineup_figures.order(rows)
+    check([d["row"] for d in as_run["disqualified"]] == ["counted", "sub-b"]
+          and "ties" not in as_run and as_run["survivors"][0] == "read-gone",
+          f"the registered order still disqualifies on the count: {as_run}")
+    s = second_scoring()
+    block = s["formed"]["S1"]
+    check(block["order"]["survivors"] == ["gpt-6-sol-api", "opus-5.5-sub", "sonnet-5-sub",
+                                          "opus-5.5-api", "sonnet-5-api"]
+          and [d["row"] for d in block["order"]["disqualified"]]
+          == ["gpt-6-luna-api", "haiku-4.5-sub", "haiku-4.5-api"]
+          and block["order"]["ranks"] == {"gpt-6-sol-api": 1, "opus-5.5-sub": 2,
+                                          "sonnet-5-sub": 2, "opus-5.5-api": 4,
+                                          "sonnet-5-api": 5}
+          and [tie["rows"] for tie in block["order"]["ties"]]
+          == [["opus-5.5-sub", "sonnet-5-sub"]] and block["order"]["ties"][0]["shared"]
+          and block["order"]["ties"][0]["rank"] == 2,
+          f"the committed run's order under the ruling: {block['order']}")
+    lines = lineup_figures._tie_lines(block)
+    check(len(lines) == 1 and "share rank 2" in lines[0] and "not broken" in lines[0],
+          f"the tie is stated on the page: {lines}")
+    reason = next(d["reason"] for d in block["order"]["disqualified"]
+                  if d["row"] == "gpt-6-luna-api")
+    check(reason == "audited loss on a first run: 1 of 4 segments read gone or partly gone; "
+                    "its one case is borderline",
+          f"why gpt-6-luna-api is disqualified, as the order states it: {reason!r}")
+
+
+def test_750_each_property_fails_on_a_seeded_breach() -> None:
+    """The amendment's properties are computed, not asserted. MUST FIRE, one seed
+    each: an audited loss that is cleared (1), a segment absent under the amended
+    rule only (2), a reference merge with a silent loss (3), a floor with one (4),
+    a base-only heading that is not one of the eight (5), a clearing whose words
+    are not a run (6), a second reference segment that moves (7), a segment the
+    similarity rule calls reworded under one rule only (8)."""
+    s = second_scoring()
+    formed, amended, audit, reg = s["formed"], s["amended"], s["audit"], s["reg"]
+
+    def holds(changed_formed=None, changed_amended=None) -> dict:
+        got = lineup_figures.properties(reg, changed_formed or formed,
+                                        changed_amended or amended, audit)
+        return {item["property"]: item["holds"] for item in got}
+
+    check(all(holds().values()), f"MUST NOT FIRE: the committed run: {holds()}")
+
+    def with_fact(problem: str) -> dict:
+        spoiled = copy.copy(amended)
+        spoiled["facts"] = {**amended["facts"], "problems": [problem]}
+        return spoiled
+
+    one = copy.deepcopy(formed)
+    one["audit"]["amended_filing"]["all_runs"]["partly"].update(silent=8, reworded=1)
+    check(not holds(one)[1], "MUST FIRE: property 1, a partly gone segment found as reworded")
+    check(not holds(None, with_fact("property 2: a cell x is absent under the amended rule "
+                                    "only"))[2], "MUST FIRE: property 2")
+    three = copy.copy(amended)
+    three["scored"] = copy.deepcopy(amended["scored"])
+    three["scored"]["references"]["bike_docks"]["amended"]["silent"] = 1
+    check(not holds(None, three)[3], "MUST FIRE: property 3, a reference merge with a loss")
+    four = copy.deepcopy(formed)
+    four["S1"]["baselines"]["union"]["silent_loss"] = 1
+    check(not holds(four)[4], "MUST FIRE: property 4, the union with a silent loss")
+    five = copy.copy(amended)
+    five["differences"] = copy.deepcopy(amended["differences"])
+    base = next(entry for entry in five["differences"]["baselines"]
+                if entry["baseline"] == "base_only"
+                and any(segment_["decided_by"] == "heading" for segment_ in entry["segments"]))
+    base["segments"].remove(next(segment_ for segment_ in base["segments"]
+                                 if segment_["decided_by"] == "heading"))
+    check(not holds(None, five)[5], "MUST FIRE: property 5, one of the eight headings missing")
+    check(not holds(None, with_fact("property 6: a cell x is cleared and its words are not "
+                                    "shown as one run"))[6], "MUST FIRE: property 6")
+    seven = copy.copy(amended)
+    seven["differences"] = copy.deepcopy(amended["differences"])
+    seven["differences"]["references"].append(
+        {"pair": "rate_limits", "segment": "a2", "decided_by": "phrase"})
+    check(not holds(None, seven)[7], "MUST FIRE: property 7, a second reference segment moves")
+    bands = copy.deepcopy(formed)
+    bands["floor_bands"]["union"]["amended"]["bloat"] = 63
+    check(not holds(bands)[7], "MUST FIRE: property 7, the union's bloat off by one")
+    check(not holds(None, with_fact("property 8: a cell x is reworded by the similarity rule "
+                                    "under one rule only"))[8], "MUST FIRE: property 8")
+
+    # And the reading of a clearing that property 6 rests on, on a made-up case.
+    class Found:
+        def __init__(self, text: str, window: str, step: str) -> None:
+            self.segment = type("S", (), {"text": text})()
+            self.window_text, self.step = window, step
+
+    plain = lineup_figures.rank_matrix.inline_plain
+    run = lineup_figures._words_stand_as_a_run
+    check(run(Found("Call the on-call technician.", "Call the on-call technician if it rises.",
+                    "phrase"), plain), "MUST NOT FIRE: every word, as one run")
+    check(not run(Found("Call the on-call technician.", "Call the technician if it rises.",
+                        "phrase"), plain), "MUST FIRE: a word of the segment is missing")
+    check(not run(Found("Call the on-call technician.", "Call the on-call duty technician.",
+                        "phrase"), plain), "MUST FIRE: a word stands inside the run")
+    check(run(Found("The crew signs the restart log.", "the crew signs a restart log",
+                    "containment"), plain)
+          and not run(Found("The crew signs the restart log.", "the crew signs a restart",
+                            "containment"), plain),
+          "the containment step's run: connecting words aside, every content word")
+
+
+def test_751_two_scorings_of_one_merge_or_none() -> None:
+    """MUST FIRE: a stored record that is not the registered scoring of its own
+    merge stops the second scoring, so the two are never of different merges."""
+    s = second_scoring()
+    record = copy.deepcopy(next(r for r in s["scored"] if r["set"] == "S1"
+                                and r["state"] == "ok"))
+    record["lost"] += 1
+    try:
+        lineup_figures.derive_amended(s["run_dir"], s["reg"], [record])
+        check(False, "MUST FIRE: a record that is not its merge's registered scoring")
+    except SystemExit as refusal:
+        check("is not its record in scored.json" in str(refusal), f"refused with: {refusal}")
+
+
 def test_run_lineup_offline() -> None:
     """pytest entry point."""
     main()
@@ -2008,7 +2971,8 @@ def main() -> int:
     print(f"run_lineup: {checks} checks pass -- the pin, the registration, the environment, "
           f"the label, classification and retry, resume, the caps, pre-warm, the pilot, "
           f"limits, the journal, redaction and the figures, each seeded both ways against "
-          f"fakes")
+          f"fakes; and the committed run's second scoring, its audit of both kinds of case "
+          f"and its order")
     return 0
 
 

@@ -185,6 +185,10 @@ def measure_run(arm: ArmRun, sources_root: Path) -> None:
     not a second instrument. `silent_loss` is the one figure that instrument
     does not compute, because the corpus it was built for had no declarations
     to check `absent` against; this run's report does.
+
+    Under the registered rule, by name: `tests/league_table.json` is a
+    published figure of runs that were scored with it, and `--check` holds
+    this function to that file.
     """
     report_path = arm.run_dir / "report.json"
     merged_path = arm.run_dir / "merged.md"
@@ -207,7 +211,7 @@ def measure_run(arm: ArmRun, sources_root: Path) -> None:
         documents[canonical] = source_path.read_text(encoding="utf-8")
     merged_text = merged_path.read_text(encoding="utf-8")
 
-    result = reconcile.reconcile(documents, merged_text)
+    result = reconcile.reconcile(documents, merged_text, rule=reconcile.REGISTERED)
 
     declared_segments = {item["segment"] for item in report.get("declarations", [])}
     absent_ids = []

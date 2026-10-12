@@ -10,7 +10,9 @@ The floor is `lineup_figures.baselines`/`_floor`'s union row over the nine
 registered pairs (`run_lineup.PAIRS`), base `source_a.md`, scored with
 `rank_matrix.cell_figures` and no report -- the same arithmetic
 `tests/run_lineup.py figures` already runs, with no model call. This program
-only imports and calls those functions; it does not edit them.
+only imports and calls those functions; it does not edit them. It is scored
+under the rule `RULE` names, which is the scoring the picker's benchmark rows
+are shown under.
 
 The band rule (stated once more, beside `RANK_SCALES` in `app.js`): `poor`
 starts AT the floor -- a merge no better than a mechanical union of the two
@@ -47,6 +49,16 @@ import run_lineup  # noqa: E402
 
 APP_JS = ROOT / "src" / "llossless" / "web" / "static" / "app.js"
 BASE = "source_a.md"
+# The rule the floor is scored under, one of `reconcile.RULES`. Since the
+# release benchmark's Amendment 3 (2026-10-12) the model picker shows that
+# benchmark's rows under the amended scoring, so the band they are coloured
+# against is the union floor of the same scoring: 7.67 deviations a pair,
+# where the registered scoring gives 7.78. Named here because the scorer has
+# no default: the band moves when this line is changed and for no other
+# reason. The catalogue's rows from earlier runs were scored under the
+# registered rule and say so (`measured.scoring`); they are coloured against
+# the same band, which is 0.11 stricter than the one they were scored beside.
+RULE = "amended"
 
 # Matches the shipped line whether or not it already carries `poorInclusive`,
 # so `--check`/`--write` work on both shapes alike.
@@ -58,7 +70,7 @@ LINE_RE = re.compile(
 def floor() -> float:
     """The union floor: deviations per pair a mechanical union of each pair's two
     sources leaves silent, over the nine registered pairs. No model call."""
-    floors = lineup_figures.baselines(run_lineup.PAIRS, BASE)
+    floors = lineup_figures.baselines(run_lineup.PAIRS, BASE, rule=RULE)
     value = lineup_figures._floor(floors["union"], run_lineup.PAIRS)["deviations_per_pair"]
     if value is None:
         raise RuntimeError("lineup_figures._floor gave no deviations_per_pair for the union")

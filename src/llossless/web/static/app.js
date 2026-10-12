@@ -138,7 +138,8 @@ const MERGED_DOCUMENT = "merged.md";
 
 const OMITTED_FINDINGS = ["dropped", "partially_dropped"];
 const CONFLICT_FINDINGS = ["contradicted", "hallucinated", "partially_invented"];
-const OMITTED_KINDS = ["undeclared_absence", "false_departure", "title_not_superseded"];
+const OMITTED_KINDS = ["undeclared_absence", "false_departure", "title_not_superseded",
+                       "heading_not_declared"];
 const CONFLICT_KINDS = ["undeclared_rewording", "invented_segment",
                         "unresolved_replacement", "disposition_not_permitted",
                         "verbatim_violation", "declared_loss_over_budget",
@@ -1862,6 +1863,40 @@ function appendFreeTierNote(name, model) {
 }
 
 /**
+ * "disqualified: lost content", for a row an audit by reading disqualified, or "".
+ *
+ * The release benchmark's rows carry `measured.audited_loss`: whether a
+ * reading of the row's test merges, made twice, found content gone on a first
+ * run. That, and not the count in the silent-loss column, is what disqualifies
+ * a row in that benchmark since its amendment of 2026-10-12: the column counts
+ * source sentences a program could not find, and a sentence said in other
+ * words is counted too. A row from another run carries no such field and gets
+ * no marker, which says that nobody read its merges and not that nothing was
+ * lost; `models.audit.caveat` says so under the table.
+ * @param {any} model
+ * @returns {string}
+ */
+function auditNote(model) {
+  return model && model.measured && model.measured.audited_loss === true
+    ? t("models.audit.mark") : "";
+}
+
+/**
+ * Append `auditNote`'s line to a name cell, under the row's other markers,
+ * on the picker row and on the scorecard row alike.
+ * @param {HTMLElement} name
+ * @param {any} model
+ */
+function appendAuditNote(name, model) {
+  const text = auditNote(model);
+  if (!text) return;
+  const note = document.createElement("span");
+  note.className = "model-meta route-note";
+  setText(note, text);
+  name.appendChild(note);
+}
+
+/**
  * One picker row: the radios, the name, one meta line and two figures.
  *
  * The meta line is the route's markers on a command row -- the retrieval
@@ -1902,6 +1937,7 @@ function pickerRow(model) {
     });
   }
   if (meta.firstChild) name.appendChild(meta);
+  appendAuditNote(name, model);
   appendFreeTierNote(name, model);
   row.appendChild(name);
   row.appendChild(costCell(model));
@@ -2372,6 +2408,8 @@ function scorecardRow(model) {
   // since `routeMarks` is a command route's own markers and this is true of
   // an ordinary metered row just as much.
   appendFreeTierNote(name, model);
+  // A row the benchmark's audit disqualified: its own line, as above.
+  appendAuditNote(name, model);
   // **A retired row says so, dated**. Its figures stay, because they
   // were measured; this line says why it can no longer be picked and what
   // to use instead. Words, not a colour, for the reason below.
@@ -2464,7 +2502,8 @@ const RANK_SCALES = {
   silent_loss_per_pair: { good: 0, poor: 1, ideal: 0 },
   // As of 2026-09-28, anchored to the mechanical-union floor N5
   // defines, not to where the catalogue's own rows happen to
-  // sit. `poor` starts AT the floor -- a merge no better than
+  // sit. Since 2026-10-12 the floor is the one of the amended scoring,
+  // which is the scoring the release benchmark's rows are shown under. `poor` starts AT the floor -- a merge no better than
   // gluing the two sources together mechanically is poor, not
   // fair -- and `good` is at or below half the floor; `fair` is
   // the gap between. Halving is the only floor-derived split
@@ -2476,7 +2515,7 @@ const RANK_SCALES = {
   // `--check` fails if this drifts from the recomputed floor. Do not edit the
   // numbers by hand. A merge that matched the reference exactly would still
   // sit at 0, the ideal.
-  deviations_per_pair: { good: 3.89, poor: 7.78, poorInclusive: true, ideal: 0 },
+  deviations_per_pair: { good: 3.83, poor: 7.67, poorInclusive: true, ideal: 0 },
 };
 
 /**
@@ -3458,6 +3497,13 @@ function renderRouteCaveats() {
   if (scorecardRows().some(
       (/** @type {any} */ model) => Boolean(freeTierNote(model)))) {
     said.push(t("models.route.caveat.freetier"));
+  }
+  // A row the release benchmark's audit disqualified. What the marker means,
+  // and that the silent-loss column beside it is a program's count and not
+  // the reason.
+  if (scorecardRows().some(
+      (/** @type {any} */ model) => Boolean(auditNote(model)))) {
+    said.push(t("models.audit.caveat"));
   }
   target.hidden = said.length === 0;
   setText(target, said.join(" "));

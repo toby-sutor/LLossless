@@ -219,8 +219,8 @@ def test_a_dropped_heading_is_not_found_inside_a_sentence() -> None:
 
     found = reconcile.findings(result, (), fidelity="off", title_policy="keep-base",
                                base="source_a.md", budget=0.05)
-    check(any(item.kind == reconcile.UNDECLARED_ABSENCE for item in found.findings),
-          f"the dropped heading must reach the report, got "
+    check([item.kind for item in found.findings] == [reconcile.HEADING_NOT_DECLARED],
+          f"the dropped heading must reach the report, as an undeclared heading, got "
           f"{[item.kind for item in found.findings]}")
 
 
@@ -275,23 +275,23 @@ B5_LEVELS = (("off", "superseded"), ("low", "reworded"),
 
 
 def test_b5_declaring_your_way_past_the_checks_still_works() -> None:
-    """A KNOWN BLIND SPOT, asserted open. This test passing is not good news.
+    """The declared-loss demonstration: once a blind spot, caught since 2026-09-18.
 
-    Seventy per cent of the source text is declared away and the
-    model-independent layer says nothing, at every fidelity level including the
-    default. The mechanism: check 2 stands down on the mere
-    existence of a disposition record and delegates the record's validity to
-    check 3, whose question -- `resolves(replacement, merged_flat)` -- has no
-    parameter for the segment and so returns the same answer for all six.
+    Six of the eight source segments are gone from the merge, and each has a
+    record that names one surviving sentence as its replacement. Before the
+    fan-in rule the model-independent layer accepted every one of those
+    records, at every fidelity level including the default: the check on a
+    record asked only whether the replacement is in the merge, never whether it
+    carries the segment, so it gave the same answer for all six.
 
-    **If this test fails, read the failure before fixing it.** A non-zero
-    finding count here means something closed the blind spot, which is the outcome wanted.
-    The right response is to retire the blind spot from the record of known
-    blind spots, where it is written up with the mechanism above, and not to
-    re-baseline the number so that this test
-    goes quiet again. The count is asserted as exactly zero rather than as an
-    upper bound for that reason: a partial fix that produced one finding at
-    `high` and none at `off` must be loud, not rounded off.
+    **What this asserts today.** The fan-in rule (one replacement may stand in
+    for only a few missing segments) reports exactly one finding at every
+    level, and no declared drop. The test keeps the name it had while it pinned
+    the blind spot open, because published text cites it. A failure here means
+    the blind spot has re-opened, and that is a regression. The count is
+    asserted as exactly one rather than as a lower bound for that reason: a
+    change that reported nothing at one level, or reported twice, must be
+    loud, not rounded off.
     """
     result = reconcile.reconcile({"source_a.md": B5_SOURCE_A,
                                   "source_b.md": B5_SOURCE_B}, B5_MERGED)
@@ -325,10 +325,10 @@ def test_b5_declaring_your_way_past_the_checks_still_works() -> None:
         check(len(found.findings) == 1 and len(found.declared_drops) == 0,
               f"THE SUPERSESSION BLIND SPOT HAS RE-OPENED at fidelity {level!r}: "
               f"{len(found.findings)} finding(s), {len(found.declared_drops)} "
-              f"declared drop(s), where check 6a should now produced 0 "
-              f"and 0. This is the wanted outcome and it is NOT a regression. "
-              f"Retire the blind spot from the record "
-              f"of known blind spots "
+              f"declared drop(s), where check 6a should produce 1 "
+              f"and 0. This is a regression: the fan-in rule has "
+              f"stopped catching the demonstration. "
+              f"Find what changed the rule "
               f"rather than re-baselining "
               f"this assertion.")
 
@@ -1629,14 +1629,14 @@ def test_the_reconciler_asks_nothing_of_a_model() -> None:
     check(reconcile.FINDING_KINDS == tuple(sorted(set(reconcile.FINDING_KINDS),
                                                   key=reconcile.FINDING_KINDS.index)),
           "the finding kinds must be distinct")
-    check(len(reconcile.FINDING_KINDS) == 12,
-          f"twelve kinds: the original nine, the rewording half of check 2 "
-          f"split off from absence, the false-departure half of it added later, "
-          f"and the prompt-example leak, which this module names but "
-          f"does not produce; got {len(reconcile.FINDING_KINDS)}")
+    check(len(reconcile.FINDING_KINDS) == 13,
+          f"thirteen kinds: the original nine, the rewording half of check 2 split off "
+          f"from absence, the false-departure half added later, the prompt-example leak, "
+          f"which this module names but does not produce, and the untaken heading that "
+          f"check 2 files apart since 2026-10-12; got {len(reconcile.FINDING_KINDS)}")
     check(reconcile.CHECKS == 9,
-          f"check 2 gaining a third kind must not move the check count: the two "
-          f"directions of one contract sentence are one check, got "
+          f"check 2 gaining a third kind, and later a fourth, must not move the check "
+          f"count: the two directions of one contract sentence are one check, got "
           f"{reconcile.CHECKS}")
     # The one kind here that `findings()` never emits, pinned in both directions
     # so neither drifts: no numbered check may construct it, and the module must
@@ -2721,6 +2721,82 @@ def test_each_bound_on_a_misattribution_holds() -> None:
           "`that` is required in the second shape")
     check(fires("The minimum TLS version is 1.2.") == 0,
           "an unattributed sentence")
+
+
+# --------------------------------------------------------------------------
+# The amended rule of 2026-10-12, where it moved a pin in this file
+# --------------------------------------------------------------------------
+#
+# Placed at the end of the file on purpose: other files cite tests above by
+# line, and a test inserted beside the pin it belongs to would move them all.
+# The rule's own suite is `tests/test_amended_rule.py`.
+
+HEADING_A = "# Runbook\n\nThe relay listens on port 8443.\n"
+HEADING_B = "# Runbook\n\n## Limits\n\nConcurrency limits apply during peak windows.\n"
+# The merge of `test_a_dropped_heading_is_not_found_inside_a_sentence`: the
+# heading gone, the sentence under it carried.
+HEADING_MERGED = ("# Runbook\n\nThe relay listens on port 8443.\n\n"
+                  "Concurrency limits apply during peak windows.\n")
+
+
+def _heading_findings(merged: str, records: tuple = (), *, rule: str = reconcile.AMENDED,
+                      budget: float = 0.05) -> list[tuple[str, str]]:
+    result = reconcile.reconcile({"source_a.md": HEADING_A, "source_b.md": HEADING_B},
+                                 merged, rule=rule)
+    found = reconcile.findings(result, records, fidelity="off", title_policy="keep-base",
+                               base="source_a.md", budget=budget)
+    return [(item.kind, item.segment) for item in found.findings]
+
+
+def test_a_dropped_heading_is_an_undeclared_heading_and_no_longer_lost_content() -> None:
+    """What `test_a_dropped_heading_is_not_found_inside_a_sentence` asserts now, and why.
+
+    That test pinned the finding as `UNDECLARED_ABSENCE`, "Absent and
+    undeclared", a document finding. Its fixture is the case the amended rule
+    files apart: `## Limits` is gone, the sentence under it is carried, so the
+    section is not lost and what the merge owes is a record for the heading.
+    The finding is `HEADING_NOT_DECLARED`, "Heading dropped in silence", a
+    record finding. The verdict the test also pins did not move: the heading
+    is still `ABSENT`, and its words inside a sentence are still not it.
+
+    The registered rule is asserted beside it, on the same merge: it files
+    the heading as an undeclared absence, as it always did, which is what
+    keeps a figure published under that rule reproducible.
+    """
+    check(_heading_findings(HEADING_MERGED) == [(reconcile.HEADING_NOT_DECLARED, "b2")],
+          f"amended: the dropped heading is an undeclared heading, got "
+          f"{_heading_findings(HEADING_MERGED)}")
+    registered = _heading_findings(HEADING_MERGED, rule=reconcile.REGISTERED)
+    check(registered == [(reconcile.UNDECLARED_ABSENCE, "b2")],
+          f"registered: the dropped heading is an undeclared absence, got {registered}")
+    check(reconcile.HEADING_NOT_DECLARED in reconcile.RECORD_FINDINGS
+          and reconcile.UNDECLARED_ABSENCE in reconcile.DOCUMENT_FINDINGS,
+          "the two kinds are in different families, which is the exit code")
+
+
+def test_a_dropped_heading_whose_section_went_with_it_is_still_lost_content() -> None:
+    """The sibling that must stay a loss: `## Limits` gone, and the sentence under it too.
+
+    The fixture above with one thing varied. There the section survived and
+    only the label was dropped; here nothing of the section is in the merge
+    and nothing has a record, so the heading is lost content with it and both
+    are "Absent and undeclared", under the amended rule as under the
+    registered one. A rule that refiled every untaken heading as a matter of
+    records would take a real loss out of the count, and this is where that
+    would show.
+    """
+    merged = "# Runbook\n\nThe relay listens on port 8443.\n"
+    for rule in reconcile.RULES:
+        got = _heading_findings(merged, rule=rule)
+        check(got == [(reconcile.UNDECLARED_ABSENCE, "b2"), (reconcile.UNDECLARED_ABSENCE, "b3")],
+              f"{rule}: a heading lost with its whole section is lost content, got {got}")
+    # And with a record for the sentence, the section is accounted for and the
+    # heading alone is left without one: the record finding again.
+    declared = ({"segment": "b3", "disposition": "dropped", "replacement": "",
+                 "reason": "peak windows are out of scope"},)
+    got = _heading_findings(merged, declared, budget=0.5)
+    check(got == [(reconcile.HEADING_NOT_DECLARED, "b2")],
+          f"a heading over a declared section is a record matter, got {got}")
 
 
 def main() -> int:

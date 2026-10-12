@@ -1,0 +1,3351 @@
+{
+ "audit": "Every source segment on a first run of the benchmark of 2026-09-27 that the merge does not carry word for word and wrote no record for, and every segment the registered scoring counted as silent loss on a repeated run, each read with the merged document of its run and classed by what became of its content.",
+ "date": "2026-10-12",
+ "classes": {
+  "gone": "The fact or instruction is nowhere in the merged document.",
+  "partly": "Part of it is in the merged document and part is gone.",
+  "present": "The merged document states it: in other words, split, or joined onto another sentence.",
+  "not_content": "A heading whose section is in the merged document under another heading, or the like."
+ },
+ "groups": {
+  "counted_missing": "A segment the registered scoring counted as silent loss: its text is not in the merge word for word, no record of the merge names it, and no single merge segment is at least 0.68 similar to it. Every run that has one, repeats included.",
+  "reworded_no_record": "A segment on a first run that the registered similarity rule alone called reworded and that no record of the merge names: a merge segment is at least 0.68 similar to it, and its words do not stand in the merge as one unbroken run. First runs only."
+ },
+ "readings": {
+  "counted_missing": {
+   "first": "One run of an AI model (Claude Opus), given each counted segment and the merged document of its run. All 65 cases, every run.",
+   "second": "A separate run of the same model, given the 25 first-run cases and the merged documents and nothing else: not the first reading's classes, not the program's scores, not the benchmark's figures."
+  },
+  "reworded_no_record": {
+   "first": "Reading A: a separate run of the same model, given the 19 segments with the source documents and the merged documents of their runs and nothing else. It was told that a program had called each segment reworded and that the merge had written no record for it. It was not given the program's scores, the benchmark's figures or reading B.",
+   "second": "Reading B: another separate run of the same model, given the same and nothing else, and not given reading A."
+  }
+ },
+ "cases": [
+  {
+   "configuration": "gpt-6-luna-api",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "b9",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    7,
+    7
+   ],
+   "text": "The default allowance is 100 requests in a window, which is enough for every interactive use of this API the platform team has seen, and a caller that needs more than that is almost always doing batch work under an interactive credential.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Split. The merge kept source A's sentence about the allowance and set the rest of B's sentence after it as a sentence of its own, with B's words unchanged from 'enough for every interactive use' to the end.",
+    "quotes": [
+     {
+      "line": 7,
+      "text": "The default allowance is 100 requests in a window, and a credential marked for batch work is allowed 1000 in the same window. The default allowance is enough for every interactive use of this API the platform team has seen, and a caller that needs more than that is almost always doing batch work under an interactive credential."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m10",
+      "similarity": 0.49,
+      "bound": 0.69,
+      "segment_chars": 238,
+      "merge_chars": 125
+     },
+     {
+      "merge_segment": "m11",
+      "similarity": 0.19,
+      "bound": 0.92,
+      "segment_chars": 238,
+      "merge_chars": 203
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L7, split over two sentences."
+   }
+  },
+  {
+   "configuration": "gpt-6-luna-api",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "b10",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    7,
+    7
+   ],
+   "text": "The refusal isn’t an outage and it isn’t a bug in the gateway — it is capacity being held for a request somebody else has already been promised.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Split over three sentences. All three statements of the segment are there: not an outage, not a bug in the gateway, capacity promised to somebody else.",
+    "quotes": [
+     {
+      "line": 7,
+      "text": "A refusal is not an outage, whatever the error class in a client library happens to call it. It is the platform declining to spend capacity that has already been promised to somebody else, and waiting is the only correct answer. The refusal isn’t a bug in the gateway either."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m12",
+      "similarity": 0.34,
+      "bound": 0.78,
+      "segment_chars": 144,
+      "merge_chars": 92
+     },
+     {
+      "merge_segment": "m13",
+      "similarity": 0.4,
+      "bound": 0.97,
+      "segment_chars": 144,
+      "merge_chars": 135
+     },
+     {
+      "merge_segment": "m14",
+      "similarity": 0.47,
+      "bound": 0.48,
+      "segment_chars": 144,
+      "merge_chars": 46
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L7, split over three sentences."
+   }
+  },
+  {
+   "configuration": "gpt-6-luna-api",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "a12",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    11,
+    11
+   ],
+   "text": "The refusal carries a Retry-After header.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. Every word of the segment is there; a comma stands where the full stop stood.",
+    "quotes": [
+     {
+      "line": 11,
+      "text": "The refusal carries a Retry-After header, which is present on every refusal the gateway sends."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m17",
+      "similarity": 0.61,
+      "bound": 0.61,
+      "segment_chars": 41,
+      "merge_chars": 94
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "gpt-6-luna-api",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "a35",
+   "kind": "list_item",
+   "document": "source_a.md",
+   "source_lines": [
+    25,
+    25
+   ],
+   "text": "Log every refusal seen.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. Every word of the segment is there; a comma stands where the full stop stood.",
+    "quotes": [
+     {
+      "line": 25,
+      "text": "4. Log every refusal seen, and keep the log for at least a week."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m43",
+      "similarity": 0.55,
+      "bound": 0.55,
+      "segment_chars": 23,
+      "merge_chars": 61
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "gpt-6-luna-api",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "a13",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    11,
+    11
+   ],
+   "text": "Its value is a whole number of seconds to wait.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. Every word of the segment is there; a comma stands where the full stop stood.",
+    "quotes": [
+     {
+      "line": 9,
+      "text": "Its value is a whole number of seconds to wait, and it is present on every refusal the gateway sends."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m18",
+      "similarity": 0.64,
+      "bound": 0.64,
+      "segment_chars": 47,
+      "merge_chars": 101
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "gpt-6-sol-api",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b7",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    5,
+    5
+   ],
+   "text": "The count follows the credential wherever the caller happens to put it, including across hosts.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Shortened. 'wherever the caller happens to put it, including' was cut; that the count follows the credential, and does so across hosts, is stated. The same paragraph also says the count is never against a connection and is the same across eight worker processes.",
+    "quotes": [
+     {
+      "line": 5,
+      "text": "The count follows the credential across hosts."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m8",
+      "similarity": 0.65,
+      "bound": 0.65,
+      "segment_chars": 95,
+      "merge_chars": 46
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "freezer_alarm",
+   "draw": 1,
+   "segment": "a13",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    22,
+    22
+   ],
+   "text": "Call the on-call technician.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. The instruction stands under the same heading as in source A, with source B's condition attached in place of the full stop.",
+    "quotes": [
+     {
+      "line": 15,
+      "text": "## If the temperature keeps rising"
+     },
+     {
+      "line": 17,
+      "text": "Call the on-call technician if the temperature is still rising 20 minutes after you arrive."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m16",
+      "similarity": 0.47,
+      "bound": 0.47,
+      "segment_chars": 28,
+      "merge_chars": 91
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L17: \"Call the on-call technician if the temperature is still rising 20 minutes after you arrive.\""
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "freezer_alarm",
+   "draw": 1,
+   "segment": "b2",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    3,
+    3
+   ],
+   "text": "Reading the alarm",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. The sentence of its section that the merge kept stands under source A's heading 'First response'. The section's other sentence (b3, 'The alarm panel names the unit and shows the temperature that triggered it.') is not in the merge, but the merge wrote a record for b3 (subsumed, rejected by the tool), so b3 is a declared segment and is not among the counted silent losses.",
+    "quotes": [
+     {
+      "line": 7,
+      "text": "## First response"
+     },
+     {
+      "line": 9,
+      "text": "Note the unit name; there are three units on this floor and two of them alarm at the same set point."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m7",
+      "similarity": 0.19,
+      "bound": 0.29,
+      "segment_chars": 17,
+      "merge_chars": 100
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section's surviving sentence stands under \"## First response\" (L7-9)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "freezer_alarm",
+   "draw": 1,
+   "segment": "b8",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    14,
+    14
+   ],
+   "text": "Escalating",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Both sentences of its section are in the merge word for word, under source A's heading for the same step.",
+    "quotes": [
+     {
+      "line": 15,
+      "text": "## If the temperature keeps rising"
+     },
+     {
+      "line": 17,
+      "text": "Call the on-call technician if the temperature is still rising 20 minutes after you arrive. Give the unit name, the reading you took on arrival and the reading now."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m16",
+      "similarity": 0.16,
+      "bound": 0.2,
+      "segment_chars": 10,
+      "merge_chars": 91
+     },
+     {
+      "merge_segment": "m17",
+      "similarity": 0.15,
+      "bound": 0.24,
+      "segment_chars": 10,
+      "merge_chars": 72
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section stands under \"## If the temperature keeps rising\" (L15-17)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "index_429",
+   "draw": 1,
+   "segment": "b5",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    8,
+    8
+   ],
+   "text": "It sets out what the evidence pointed at, which was expensive queries and deep grouping, and what was put forward in response.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": "not_content",
+    "why_alternative": "it is a sentence about the source document's layout, not about the subject",
+    "gone": "",
+    "note": "The segment is source B's own table-of-contents sentence. What it announces is in the merge: expensive queries and deep grouping as what was found (line 32), and what was put forward in response (lines 42 and 58).",
+    "quotes": [
+     {
+      "line": 32,
+      "text": "Contributing factors in a managed deployment include expensive queries that hold worker slots for extended periods, deep grouping operations that consume memory from the same pool the append path draws on, and resource accounting patterns where processor load appears normal while memory sits high."
+     },
+     {
+      "line": 42,
+      "text": "In a managed deployment, lower the slow query threshold to 1 second"
+     },
+     {
+      "line": 58,
+      "text": "capture evidence during a refusal by taking a thread dump and a heap snapshot"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m19",
+      "similarity": 0.05,
+      "bound": 0.59,
+      "segment_chars": 126,
+      "merge_chars": 298
+     },
+     {
+      "merge_segment": "m24",
+      "similarity": 0.15,
+      "bound": 0.69,
+      "segment_chars": 126,
+      "merge_chars": 237
+     },
+     {
+      "merge_segment": "m37",
+      "similarity": 0.33,
+      "bound": 0.84,
+      "segment_chars": 126,
+      "merge_chars": 174
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": "not_content",
+    "evidence": "L32, L42 and L58 carry the content. The sentence itself is a table-of-contents line about the note."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "library_holds",
+   "draw": 1,
+   "segment": "a11",
+   "kind": "heading",
+   "document": "source_a.md",
+   "source_lines": [
+    19,
+    19
+   ],
+   "text": "Borrowers who cannot collect in time",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its whole section is in the merge word for word under a new heading.",
+    "quotes": [
+     {
+      "line": 19,
+      "text": "## Extending a hold"
+     },
+     {
+      "line": 21,
+      "text": "A borrower who asks before the 7 days are up can have the item held for a further 7 days. This is granted once per request."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m16",
+      "similarity": 0.37,
+      "bound": 0.58,
+      "segment_chars": 36,
+      "merge_chars": 89
+     },
+     {
+      "merge_segment": "m17",
+      "similarity": 0.14,
+      "bound": 0.96,
+      "segment_chars": 36,
+      "merge_chars": 33
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section stands unchanged under \"## Extending a hold\" (L19-21)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "loading_dock",
+   "draw": 1,
+   "segment": "b7",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    8,
+    8
+   ],
+   "text": "When to request",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its one sentence is in the merge word for word under source A's heading for the same topic.",
+    "quotes": [
+     {
+      "line": 7,
+      "text": "## Booking window"
+     },
+     {
+      "line": 9,
+      "text": "Slots open 14 days ahead and close 4 hours before the slot starts."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m8",
+      "similarity": 0.25,
+      "bound": 0.37,
+      "segment_chars": 15,
+      "merge_chars": 66
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section stands under \"## Booking window\" (L7-9)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "loading_dock",
+   "draw": 1,
+   "segment": "b9",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    12,
+    12
+   ],
+   "text": "Requesting by phone",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Both sentences of its section are in the merge word for word, moved under 'Booking window'. (That the merge then says under the next heading that the phone line was retired is a contradiction between the sources that the merge left standing; it is not a loss.)",
+    "quotes": [
+     {
+      "line": 7,
+      "text": "## Booking window"
+     },
+     {
+      "line": 9,
+      "text": "If the portal is down, call the dock booking line on extension 2140 and the dock supervisor will enter the slot for you. Phone requests are taken between 08:00 and 16:00 on working days only."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m10",
+      "similarity": 0.14,
+      "bound": 0.27,
+      "segment_chars": 19,
+      "merge_chars": 120
+     },
+     {
+      "merge_segment": "m11",
+      "similarity": 0.34,
+      "bound": 0.43,
+      "segment_chars": 19,
+      "merge_chars": 70
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section stands in full under \"## Booking window\" (L9)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "loading_dock",
+   "draw": 1,
+   "segment": "b12",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    18,
+    18
+   ],
+   "text": "On the day",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its section survives under source A's heading 'Arriving'.",
+    "quotes": [
+     {
+      "line": 15,
+      "text": "## Arriving"
+     },
+     {
+      "line": 17,
+      "text": "Drivers report to the gatehouse with the booking reference."
+     },
+     {
+      "line": 17,
+      "text": "A driver without a reference waits in the holding area until a slot is free."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m17",
+      "similarity": 0.2,
+      "bound": 0.29,
+      "segment_chars": 10,
+      "merge_chars": 59
+     },
+     {
+      "merge_segment": "m19",
+      "similarity": 0.21,
+      "bound": 0.23,
+      "segment_chars": 10,
+      "merge_chars": 76
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section stands under \"## Arriving\" (L15-17)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "loading_dock",
+   "draw": 1,
+   "segment": "b15",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    23,
+    23
+   ],
+   "text": "Late finishes",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its one sentence is in the merge word for word under source A's heading 'Overrunning'.",
+    "quotes": [
+     {
+      "line": 19,
+      "text": "## Overrunning"
+     },
+     {
+      "line": 21,
+      "text": "A vehicle still on the bay 15 minutes after its slot ends is logged as an overrun."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m21",
+      "similarity": 0.25,
+      "bound": 0.27,
+      "segment_chars": 13,
+      "merge_chars": 82
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section stands under \"## Overrunning\" (L19-21)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "payroll_cutoff",
+   "draw": 1,
+   "segment": "b13",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    24,
+    24
+   ],
+   "text": "Paper timesheets",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": "gone",
+    "why_alternative": "the whole section is gone from the merge; if a dropped section's heading is taken as part of that loss, this is a real loss whose record covers the sentence only",
+    "gone": "",
+    "note": "A heading, but not of the kind whose section survives: the section's one sentence (b14, tests/pairs/payroll_cutoff/source_b.md:26-27, 'Teams without terminal access may send paper timesheets to the payroll office by internal post, to arrive no later than the cut-off.') is not in the merge either. The merge wrote a record for b14 ('dropped', reason 'Paper timesheet option not mentioned in 2026 schedule; dropped as obsolete.') and the tool confirmed it, so the loss of the section is a declared loss and what the benchmark counted as silent is the heading alone. The heading states no fact that its sentence does not state.",
+    "quotes": [],
+    "phrases_checked_absent": [
+     "Paper timesheets",
+     "paper timesheets",
+     "internal post"
+    ],
+    "carriers": []
+   },
+   "second_reading": {
+    "class": "gone",
+    "alternative": "not_content",
+    "evidence": "The heading's whole section (teams without terminal access may send paper timesheets by internal post) is absent, so a reader cannot learn the paper route exists. Alternative because the heading alone states no fact; the loss is carried by the section's one sentence."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a47",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    35,
+    35
+   ],
+   "text": "A cap can be raised, and the number of caps raised without a measurement behind them is 0.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "why_alternative": "the figure 0, read as a count of past cases and not as a way of saying 'never', is not in the merge",
+    "gone": "",
+    "note": "Other words. The merge took source B's sentence for the same rule: a cap is raised on a measurement and not on a say-so. The literal figure '0' ('the number of caps raised without a measurement behind them is 0') is not in the merge.",
+    "quotes": [
+     {
+      "line": 35,
+      "text": "A cap can be raised, but not on the strength of an assertion that the current one is too small. Bring a week of refusal counts, the shape of the traffic across the day, and the deadline that traffic is serving."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m47",
+      "similarity": 0.58,
+      "bound": 0.97,
+      "segment_chars": 90,
+      "merge_chars": 95
+     },
+     {
+      "merge_segment": "m48",
+      "similarity": 0.35,
+      "bound": 0.88,
+      "segment_chars": 90,
+      "merge_chars": 114
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "evidence": "L35 states the same rule in source B's wording. Alternative because the literal statement (\"the number ... is 0\") is not there."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "b20",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    15,
+    15
+   ],
+   "text": "What the client does",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its section (the four rules) survives under source A's heading.",
+    "quotes": [
+     {
+      "line": 15,
+      "text": "## How to retry well"
+     },
+     {
+      "line": 17,
+      "text": "Four rules, given in the order they should be applied."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m21",
+      "similarity": 0.24,
+      "bound": 0.54,
+      "segment_chars": 20,
+      "merge_chars": 54
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. The section stands under \"## How to retry well\" (L15-25)."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "trace_names",
+   "draw": 1,
+   "segment": "b6",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    10,
+    10
+   ],
+   "text": "Only letters, digits, spaces and hyphens are accepted (it has to match ^[A-Za-z0-9 -]+$) as documented [here](https://docs.nimbrel.example/probe/agent/browser/current/configuration.html#stream-name)",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "The link. The segment points to the browser agent's configuration page, https://docs.nimbrel.example/probe/agent/browser/current/configuration.html#stream-name. The merge carries the rule and the pattern (line 11) but only the Java agent's link (line 8) and the Node.js agent's link (line 22); the browser agent's page is not named anywhere.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 8,
+      "text": "The stream name cannot contain arbitrary symbols as documented [here](https://docs.nimbrel.example/probe/agent/java/current/config-core.html#config-stream-name)"
+     },
+     {
+      "line": 11,
+      "text": "Stream names are validated against ^[A-Za-z0-9 -]+$ before the agent registers. Put plainly: letters, digits, spaces and hyphens only, and nothing else, or the agent refuses to start."
+     }
+    ],
+    "phrases_checked_absent": [
+     "probe/agent/browser",
+     "configuration.html#stream-name"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m5",
+      "similarity": 0.61,
+      "bound": 0.89,
+      "segment_chars": 198,
+      "merge_chars": 160
+     },
+     {
+      "merge_segment": "m6",
+      "similarity": 0.3,
+      "bound": 0.96,
+      "segment_chars": 198,
+      "merge_chars": 183
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "partly",
+    "alternative": null,
+    "evidence": "L11 carries rule and pattern. Gone: the link to the browser agent's configuration page."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "bike_docks",
+   "draw": 1,
+   "segment": "b18",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    30,
+    31
+   ],
+   "text": "The support desk takes a station out of service in the app when more than half its docks are faulted.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "Who does it. Source B says the support desk takes the station out of service. The merge states the threshold and the action in the passive and then tells the reader to notify the support desk, so a reader can no longer learn that source B gives this job to the support desk. The two sources disagree on this point (source A has the field crew do it after telling the desk) and the merge wrote no record for the side it did not take.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 21,
+      "text": "A station with more than half its docks faulted is taken out of service in the app. Notify the support desk before this happens, not after."
+     }
+    ],
+    "phrases_checked_absent": [
+     "The support desk takes",
+     "support desk takes"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m17",
+      "similarity": 0.39,
+      "bound": 0.9,
+      "segment_chars": 101,
+      "merge_chars": 83
+     },
+     {
+      "merge_segment": "m18",
+      "similarity": 0.46,
+      "bound": 0.71,
+      "segment_chars": 101,
+      "merge_chars": 55
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "partly",
+    "alternative": null,
+    "evidence": "L21: \"A station with more than half its docks faulted is taken out of service in the app. Notify the support desk before this happens, not after.\" Threshold and action are there. Gone: that the support desk is the one who does it."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a6",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    5,
+    5
+   ],
+   "text": "A client spread across eight worker processes is throttled at exactly the point one process would have been — and pays for the extra file descriptors as well.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "The second half: 'and pays for the extra file descriptors as well'. The merge says nothing about file descriptors or any cost of spreading over processes. The figure 'eight' is gone too.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 3,
+      "text": "Opening additional sockets provides no benefit, and a client spread across worker processes is throttled at exactly the point a single process would be."
+     }
+    ],
+    "phrases_checked_absent": [
+     "descriptor",
+     "eight"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m5",
+      "similarity": 0.61,
+      "bound": 0.98,
+      "segment_chars": 158,
+      "merge_chars": 152
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "partly",
+    "alternative": null,
+    "evidence": "L3 carries the main statement. Gone: \"and pays for the extra file descriptors as well\", and the figure \"eight\"."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a8",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    7,
+    7
+   ],
+   "text": "A refusal is not an outage, whatever the error class in a client library happens to call it.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "why_alternative": "the remark that a client library's error class may call a refusal something else is not stated in so many words",
+    "gone": "",
+    "note": "Joined and shortened. That a refusal is not an outage is stated. The concession 'whatever the error class in a client library happens to call it' is not repeated at that place; that the error class is not to be trusted is said at line 25.",
+    "quotes": [
+     {
+      "line": 3,
+      "text": "A 429 refusal is not an outage but the platform declining to spend capacity already promised to someone else; waiting is the correct answer."
+     },
+     {
+      "line": 25,
+      "text": "Reading the status code rather than the error class is what separates these cases, and it costs one comparison."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m7",
+      "similarity": 0.47,
+      "bound": 0.79,
+      "segment_chars": 92,
+      "merge_chars": 140
+     },
+     {
+      "merge_segment": "m42",
+      "similarity": 0.42,
+      "bound": 0.91,
+      "segment_chars": 92,
+      "merge_chars": 111
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "partly",
+    "alternative": "present",
+    "evidence": "L3 carries the main statement. Gone: \"whatever the error class in a client library happens to call it\"."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "a17",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    13,
+    13
+   ],
+   "text": "It names the cap and the tier as well.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined onto the sentence before it.",
+    "quotes": [
+     {
+      "line": 11,
+      "text": "The body of the refusal is JSON, and it names what the gateway calls the \"window\" it counted in, the cap, and the tier as well."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m15",
+      "similarity": 0.46,
+      "bound": 0.46,
+      "segment_chars": 38,
+      "merge_chars": 127
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "a39",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    29,
+    29
+   ],
+   "text": "Not all are caps.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Expanded from four words to eight; the same statement.",
+    "quotes": [
+     {
+      "line": 27,
+      "text": "Not all 429 responses are due to caps."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m36",
+      "similarity": 0.62,
+      "bound": 0.62,
+      "segment_chars": 17,
+      "merge_chars": 38
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "a40",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    29,
+    29
+   ],
+   "text": "The gateway refuses a request for three reasons and only one of them is the one above.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "why_alternative": "'only one of them is the one above' is not stated as a count; the merge's three reasons are three besides the cap",
+    "gone": "",
+    "note": "Joined onto the list that follows it. That there are three reasons is stated; that the cap is only one reason among them is carried by the sentence before. The merge reads the three as the three it lists, which is also how source A's own next sentences read ('None of those three').",
+    "quotes": [
+     {
+      "line": 27,
+      "text": "Not all 429 responses are due to caps. The gateway refuses a request for three reasons: a credential may be suspended, a route may be closed for maintenance, or a body may exceed the 5 megabyte limit."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m36",
+      "similarity": 0.34,
+      "bound": 0.61,
+      "segment_chars": 86,
+      "merge_chars": 38
+     },
+     {
+      "merge_segment": "m37",
+      "similarity": 0.53,
+      "bound": 0.7,
+      "segment_chars": 86,
+      "merge_chars": 161
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b3",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    3,
+    3
+   ],
+   "text": "When the cap is spent the gateway answers 429 at the edge, without troubling the service behind it.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's wording of the same sentence ('waking' for 'troubling').",
+    "quotes": [
+     {
+      "line": 3,
+      "text": "When that cap is spent the gateway answers 429 at the edge without waking the service behind it"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m3",
+      "similarity": 0.39,
+      "bound": 0.63,
+      "segment_chars": 99,
+      "merge_chars": 214
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b16",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    11,
+    11
+   ],
+   "text": "Waiting longer than the header asks earns nothing, because nobody at this end is keeping score.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's sentence says the same two things in the opposite order.",
+    "quotes": [
+     {
+      "line": 9,
+      "text": "The gateway keeps no memory of who backed off politely, so waiting longer than the header asks earns a caller no credit at all."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m14",
+      "similarity": 0.5,
+      "bound": 0.86,
+      "segment_chars": 95,
+      "merge_chars": 127
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b17",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    13,
+    13
+   ],
+   "text": "The response body is JSON and it repeats the cap, the window and the tier as plain fields.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: JSON body, with the cap, the window and the tier as fields.",
+    "quotes": [
+     {
+      "line": 11,
+      "text": "The body of the refusal is JSON, and it names what the gateway calls the \"window\" it counted in, the cap, and the tier as well. None of those fields is a substitute for the header"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m15",
+      "similarity": 0.52,
+      "bound": 0.83,
+      "segment_chars": 90,
+      "merge_chars": 127
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b19",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    13,
+    13
+   ],
+   "text": "The body is for the human reading the log afterwards.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's longer sentence for the same statement.",
+    "quotes": [
+     {
+      "line": 11,
+      "text": "The body is there so that a human reading a log afterwards can see why the request was refused"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m17",
+      "similarity": 0.49,
+      "bound": 0.56,
+      "segment_chars": 53,
+      "merge_chars": 137
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b20",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    15,
+    15
+   ],
+   "text": "What the client does",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its section (the four rules) survives under source A's heading.",
+    "quotes": [
+     {
+      "line": 13,
+      "text": "## How to retry well"
+     },
+     {
+      "line": 15,
+      "text": "Four rules, given in the order they should be applied."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m19",
+      "similarity": 0.24,
+      "bound": 0.54,
+      "segment_chars": 20,
+      "merge_chars": 54
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b21",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    17,
+    17
+   ],
+   "text": "There are four rules, and the order they are given in is the order to apply them.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's sentence for the same statement.",
+    "quotes": [
+     {
+      "line": 15,
+      "text": "Four rules, given in the order they should be applied."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m19",
+      "similarity": 0.55,
+      "bound": 0.8,
+      "segment_chars": 81,
+      "merge_chars": 54
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b24",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    19,
+    19
+   ],
+   "text": "On the 503 path the same rule holds, even though the cause of the refusal is an entirely different one.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words, in two places: that the header is to be honoured on the 503 path as well (rule 1), and that a 503 has another cause, overload (rule 2).",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "The gateway has already done that arithmetic, with information the caller does not have, and it does the same on the 503 path."
+     },
+     {
+      "line": 19,
+      "text": "a 503 is the overload path"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m21",
+      "similarity": 0.14,
+      "bound": 0.9,
+      "segment_chars": 103,
+      "merge_chars": 126
+     },
+     {
+      "merge_segment": "m25",
+      "similarity": 0.31,
+      "bound": 0.89,
+      "segment_chars": 103,
+      "merge_chars": 129
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b25",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    19,
+    19
+   ],
+   "text": "Anything computed on the client side is a guess.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's sentence for the same statement.",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "A wait derived on the client side is a guess about a counter it cannot see."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m22",
+      "similarity": 0.59,
+      "bound": 0.78,
+      "segment_chars": 48,
+      "merge_chars": 75
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b26",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    19,
+    19
+   ],
+   "text": "That guess is not worth having.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's sentence for the same statement.",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "There is no case at all where a guess is the better of the two."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m23",
+      "similarity": 0.43,
+      "bound": 0.66,
+      "segment_chars": 31,
+      "merge_chars": 63
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b30",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    21,
+    21
+   ],
+   "text": "That is the behaviour this rule exists to prevent.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: 'Avoid writing that loop.' is source A's counterpart of 'That is the behaviour this rule exists to prevent.'",
+    "quotes": [
+     {
+      "line": 19,
+      "text": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive. Avoid writing that loop."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m27",
+      "similarity": 0.3,
+      "bound": 0.54,
+      "segment_chars": 50,
+      "merge_chars": 134
+     },
+     {
+      "merge_segment": "m28",
+      "similarity": 0.24,
+      "bound": 0.65,
+      "segment_chars": 50,
+      "merge_chars": 24
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b32",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    23,
+    23
+   ],
+   "text": "The window, the header and the body are identical to the interactive case, so a client written for one tier needs no change at all to run against the other.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": "present",
+    "why_alternative": "'Nothing else about the two tiers differs in any way' implies it",
+    "gone": "That the header and the body are the same for both tiers, and the conclusion drawn from it: 'a client written for one tier needs no change at all to run against the other'. The merge says the window is the same and that nothing else differs, and leaves the reader to draw the conclusion.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 21,
+      "text": "3. A batch credential is allowed 1000 requests in a window, measured over exactly the same window."
+     },
+     {
+      "line": 21,
+      "text": "Nothing else about the two tiers differs in any way."
+     }
+    ],
+    "phrases_checked_absent": [
+     "needs no change",
+     "identical to the interactive"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m29",
+      "similarity": 0.25,
+      "bound": 0.76,
+      "segment_chars": 156,
+      "merge_chars": 95
+     },
+     {
+      "merge_segment": "m31",
+      "similarity": 0.23,
+      "bound": 0.5,
+      "segment_chars": 156,
+      "merge_chars": 52
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b36",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    25,
+    25
+   ],
+   "text": "The counts are the whole of the argument, and without them a request is only a preference.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: without the counts there is no case for a larger cap.",
+    "quotes": [
+     {
+      "line": 23,
+      "text": "A caller that cannot say how often it was refused last week cannot argue for a larger cap, and nobody at the far end will assemble that argument on its behalf."
+     },
+     {
+      "line": 33,
+      "text": "A cap can be raised, but the number of caps raised without a measurement behind them is zero."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m33",
+      "similarity": 0.31,
+      "bound": 0.72,
+      "segment_chars": 90,
+      "merge_chars": 159
+     },
+     {
+      "merge_segment": "m43",
+      "similarity": 0.39,
+      "bound": 0.98,
+      "segment_chars": 90,
+      "merge_chars": 93
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b38",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    29,
+    29
+   ],
+   "text": "The gateway refuses a request for three separate reasons, and only one of them is a cap.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "why_alternative": "'only one of them is a cap' is not stated as a count",
+    "gone": "",
+    "note": "As a40: three reasons stated, and that the cap is not the only one stated by the sentence before.",
+    "quotes": [
+     {
+      "line": 27,
+      "text": "Not all 429 responses are due to caps. The gateway refuses a request for three reasons: a credential may be suspended, a route may be closed for maintenance, or a body may exceed the 5 megabyte limit."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m36",
+      "similarity": 0.37,
+      "bound": 0.6,
+      "segment_chars": 88,
+      "merge_chars": 38
+     },
+     {
+      "merge_segment": "m37",
+      "similarity": 0.52,
+      "bound": 0.71,
+      "segment_chars": 88,
+      "merge_chars": 161
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b39",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    29,
+    29
+   ],
+   "text": "Two of the three have nothing to do with how much traffic a caller has sent in the window it is currently in.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": "gone",
+    "why_alternative": "the merge never says in a sentence of its own that these refusals are unrelated to traffic volume",
+    "gone": "",
+    "note": "Other words. The segment restates the sentence before it in its source (b38): a refusal that is not a cap has nothing to do with the traffic sent in the window. The merge says that not all refusals are due to caps and names the three other causes, none of which is a matter of traffic.",
+    "quotes": [
+     {
+      "line": 27,
+      "text": "Not all 429 responses are due to caps. The gateway refuses a request for three reasons: a credential may be suspended, a route may be closed for maintenance, or a body may exceed the 5 megabyte limit."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m36",
+      "similarity": 0.16,
+      "bound": 0.52,
+      "segment_chars": 109,
+      "merge_chars": 38
+     },
+     {
+      "merge_segment": "m37",
+      "similarity": 0.24,
+      "bound": 0.81,
+      "segment_chars": 109,
+      "merge_chars": 161
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b41",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    31,
+    31
+   ],
+   "text": "The difference matters more to a retry loop than it does to a reader.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Shortened: 'more ... than it does to a reader' is a turn of phrase, not a statement about the gateway.",
+    "quotes": [
+     {
+      "line": 29,
+      "text": "The distinction matters to a retry loop."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m39",
+      "similarity": 0.61,
+      "bound": 0.73,
+      "segment_chars": 69,
+      "merge_chars": 40
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b42",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    31,
+    31
+   ],
+   "text": "A loop retrying against a suspended credential burns its whole budget and reaches nothing.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's sentence for the same statement.",
+    "quotes": [
+     {
+      "line": 29,
+      "text": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m40",
+      "similarity": 0.57,
+      "bound": 0.64,
+      "segment_chars": 90,
+      "merge_chars": 193
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b43",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    31,
+    31
+   ],
+   "text": "The log afterwards shows a long run of refusals and no successes at all, which reads like an outage and isn’t one — and the wasted budget is the caller’s own.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "'which reads like an outage and isn’t one': the warning that such a log looks like an outage. That the log shows only refusals is there, and that the budget is the loop's own is implied by 'spends its whole budget'.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 29,
+      "text": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service—and the log afterwards shows nothing at all except a long run of refusals."
+     }
+    ],
+    "phrases_checked_absent": [
+     "reads like an outage",
+     "caller’s own",
+     "caller's own"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m40",
+      "similarity": 0.27,
+      "bound": 0.9,
+      "segment_chars": 158,
+      "merge_chars": 193
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b45",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    33,
+    33
+   ],
+   "text": "That is the cheapest fix available to anybody, and it is available to almost everybody.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "gone",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "Both statements of the segment: that moving work to a quieter hour is the cheapest fix there is, and that almost everybody can do it. The merge keeps the thing the segment talks about (the quoted line) and says of it only that it is the outcome everyone prefers.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 33,
+      "text": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all, which is the outcome everyone prefers."
+     }
+    ],
+    "phrases_checked_absent": [
+     "cheapest",
+     "almost everybody",
+     "almost everyone"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m46",
+      "similarity": 0.18,
+      "bound": 0.71,
+      "segment_chars": 87,
+      "merge_chars": 158
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b46",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    33,
+    33
+   ],
+   "text": "A cap can be raised, but not on the strength of an assertion that the current one is too small.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "why_alternative": "'an assertion that the current one is too small' is not named as the thing that does not suffice",
+    "gone": "",
+    "note": "Other words. The merge took source A's sentence for the same rule: a cap is raised on a measurement, not on a say-so. The mirror image of haiku-4.5-api rate_limits d1 a47.",
+    "quotes": [
+     {
+      "line": 33,
+      "text": "A cap can be raised, but the number of caps raised without a measurement behind them is zero."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m43",
+      "similarity": 0.43,
+      "bound": 0.99,
+      "segment_chars": 95,
+      "merge_chars": 93
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b48",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    35,
+    35
+   ],
+   "text": "The team wants to know whether the load is smooth or bursty before it looks at the number at all.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": "present",
+    "why_alternative": "what the team looks at is stated; only the order is missing",
+    "gone": "The order: 'before it looks at the number at all'. The merge says what the team looks at, not that it looks at it first.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 33,
+      "text": "The platform team looks at whether the load is smooth or bursty"
+     }
+    ],
+    "phrases_checked_absent": [
+     "before it looks",
+     "before it considers"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m45",
+      "similarity": 0.6,
+      "bound": 0.87,
+      "segment_chars": 97,
+      "merge_chars": 125
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b49",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    35,
+    35
+   ],
+   "text": "A burst is cheaper to smooth out than it is to serve at its peak.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined after a dash, and 'smooth out' became 'smooth'.",
+    "quotes": [
+     {
+      "line": 33,
+      "text": "a burst is cheaper to smooth than it is to serve at its peak"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m45",
+      "similarity": 0.64,
+      "bound": 0.68,
+      "segment_chars": 65,
+      "merge_chars": 125
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b50",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    35,
+    35
+   ],
+   "text": "Requests go to the platform team through the usual channel.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words ('reach' for 'go to'), and joined.",
+    "quotes": [
+     {
+      "line": 35,
+      "text": "Requests reach the platform team through the usual channel, and they are answered within two working days."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m47",
+      "similarity": 0.65,
+      "bound": 0.72,
+      "segment_chars": 59,
+      "merge_chars": 106
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 2,
+   "segment": "b52",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    37,
+    37
+   ],
+   "text": "An answer takes two working days, and chasing it doesn’t make it take fewer.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": "present",
+    "why_alternative": "'There is no expedited path' can be read as covering it",
+    "gone": "'chasing it doesn’t make it take fewer'. The two working days are there. That asking again does not speed the answer up is not said; the nearest statement is that there is no expedited path.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 35,
+      "text": "Requests reach the platform team through the usual channel, and they are answered within two working days."
+     },
+     {
+      "line": 35,
+      "text": "There is no expedited path and no exception list."
+     }
+    ],
+    "phrases_checked_absent": [
+     "chasing",
+     "Chasing"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m47",
+      "similarity": 0.32,
+      "bound": 0.84,
+      "segment_chars": 76,
+      "merge_chars": 106
+     },
+     {
+      "merge_segment": "m48",
+      "similarity": 0.3,
+      "bound": 0.78,
+      "segment_chars": 76,
+      "merge_chars": 49
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "a5",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    5,
+    5
+   ],
+   "text": "Opening a second socket therefore buys a caller nothing.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. Every word of the segment is there; a comma stands where the full stop stood.",
+    "quotes": [
+     {
+      "line": 3,
+      "text": "Opening a second socket therefore buys a caller nothing, and a client spread across multiple worker processes is throttled at exactly the point a single process would have been."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m5",
+      "similarity": 0.48,
+      "bound": 0.48,
+      "segment_chars": 56,
+      "merge_chars": 177
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b24",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    19,
+    19
+   ],
+   "text": "On the 503 path the same rule holds, even though the cause of the refusal is an entirely different one.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "As in d2: the header is honoured on the 503 path as well (rule 1), and a 503 has another cause, overload (rule 2).",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "The gateway has already done that arithmetic, with information the caller does not have, and it does the same on the 503 path."
+     },
+     {
+      "line": 19,
+      "text": "a 503 is the overload path"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m23",
+      "similarity": 0.14,
+      "bound": 0.9,
+      "segment_chars": 103,
+      "merge_chars": 126
+     },
+     {
+      "merge_segment": "m27",
+      "similarity": 0.31,
+      "bound": 0.89,
+      "segment_chars": 103,
+      "merge_chars": 129
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b25",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    19,
+    19
+   ],
+   "text": "Anything computed on the client side is a guess.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's sentence for the same statement.",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "A wait derived on the client side is a guess about a counter it cannot see."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m24",
+      "similarity": 0.59,
+      "bound": 0.78,
+      "segment_chars": 48,
+      "merge_chars": 75
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b26",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    19,
+    19
+   ],
+   "text": "That guess is not worth having.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: source A's sentence for the same statement.",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "There is no case at all where a guess is the better of the two."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m25",
+      "similarity": 0.43,
+      "bound": 0.66,
+      "segment_chars": 31,
+      "merge_chars": 63
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b30",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    21,
+    21
+   ],
+   "text": "That is the behaviour this rule exists to prevent.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: 'Avoid writing that loop.' is source A's counterpart.",
+    "quotes": [
+     {
+      "line": 19,
+      "text": "A client that folds every non-success into one branch will retry hardest during exactly the incident the cap was installed to survive. Avoid writing that loop."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m29",
+      "similarity": 0.3,
+      "bound": 0.54,
+      "segment_chars": 50,
+      "merge_chars": 134
+     },
+     {
+      "merge_segment": "m30",
+      "similarity": 0.24,
+      "bound": 0.65,
+      "segment_chars": 50,
+      "merge_chars": 24
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b32",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    23,
+    23
+   ],
+   "text": "The window, the header and the body are identical to the interactive case, so a client written for one tier needs no change at all to run against the other.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": "present",
+    "why_alternative": "'Nothing else about the two tiers differs in any way' implies it",
+    "gone": "As in d2: that header and body are the same for both tiers and that 'a client written for one tier needs no change at all to run against the other'.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 21,
+      "text": "A batch credential is allowed fifty times the default allowance, and it is measured over exactly the same window."
+     },
+     {
+      "line": 21,
+      "text": "Nothing else about the two tiers differs in any way."
+     }
+    ],
+    "phrases_checked_absent": [
+     "needs no change",
+     "identical to the interactive"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m32",
+      "similarity": 0.08,
+      "bound": 0.84,
+      "segment_chars": 156,
+      "merge_chars": 113
+     },
+     {
+      "merge_segment": "m34",
+      "similarity": 0.23,
+      "bound": 0.5,
+      "segment_chars": 156,
+      "merge_chars": 52
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b36",
+   "kind": "list_item",
+   "document": "source_b.md",
+   "source_lines": [
+    25,
+    25
+   ],
+   "text": "The counts are the whole of the argument, and without them a request is only a preference.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Other words: without the counts there is no case for a larger cap.",
+    "quotes": [
+     {
+      "line": 23,
+      "text": "A caller that cannot say how often it was refused last week cannot argue for a larger cap, and nobody at the far end will assemble that argument on its behalf."
+     },
+     {
+      "line": 33,
+      "text": "A cap can be raised, but only with measurement."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m36",
+      "similarity": 0.31,
+      "bound": 0.72,
+      "segment_chars": 90,
+      "merge_chars": 159
+     },
+     {
+      "merge_segment": "m46",
+      "similarity": 0.29,
+      "bound": 0.69,
+      "segment_chars": 90,
+      "merge_chars": 47
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b43",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    31,
+    31
+   ],
+   "text": "The log afterwards shows a long run of refusals and no successes at all, which reads like an outage and isn’t one — and the wasted budget is the caller’s own.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "partly",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "As in d2: 'which reads like an outage and isn’t one'.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 29,
+      "text": "A loop that waits and retries against a suspended credential spends its whole budget without ever reaching the service — and the log afterwards shows nothing at all except a long run of refusals."
+     }
+    ],
+    "phrases_checked_absent": [
+     "reads like an outage",
+     "caller’s own",
+     "caller's own"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m43",
+      "similarity": 0.27,
+      "bound": 0.9,
+      "segment_chars": 158,
+      "merge_chars": 195
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b45",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    33,
+    33
+   ],
+   "text": "That is the cheapest fix available to anybody, and it is available to almost everybody.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "gone",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "As in d2: that this is the cheapest fix and that almost everybody can use it. Neither is in the merge.",
+    "note": "",
+    "quotes": [
+     {
+      "line": 33,
+      "text": "A caller that can move half its work to a quieter hour usually gets what it needs without any change to the cap at all, which is the outcome everyone prefers."
+     }
+    ],
+    "phrases_checked_absent": [
+     "cheapest",
+     "almost everybody",
+     "almost everyone"
+    ],
+    "carriers": [
+     {
+      "merge_segment": "m49",
+      "similarity": 0.18,
+      "bound": 0.71,
+      "segment_chars": 87,
+      "merge_chars": 158
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 3,
+   "segment": "b49",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    35,
+    35
+   ],
+   "text": "A burst is cheaper to smooth out than it is to serve at its peak.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined after a dash, and 'smooth out' became 'smooth'.",
+    "quotes": [
+     {
+      "line": 33,
+      "text": "a burst is cheaper to smooth than it is to serve at its peak"
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m48",
+      "similarity": 0.64,
+      "bound": 0.68,
+      "segment_chars": 65,
+      "merge_chars": 127
+     }
+    ]
+   },
+   "second_reading": null
+  },
+  {
+   "configuration": "opus-5.5-api",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "b20",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    15,
+    15
+   ],
+   "text": "What the client does",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its section (the four rules, lines 19 to 27) survives under source A's heading for the same section.",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "## How to retry well"
+     },
+     {
+      "line": 19,
+      "text": "Four rules, given in the order they should be applied."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m21",
+      "similarity": 0.24,
+      "bound": 0.54,
+      "segment_chars": 20,
+      "merge_chars": 54
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. The section stands under \"## How to retry well\" (L17-27)."
+   }
+  },
+  {
+   "configuration": "opus-5.5-api",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "b37",
+   "kind": "heading",
+   "document": "source_b.md",
+   "source_lines": [
+    27,
+    27
+   ],
+   "text": "Other kinds of refusal",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "A heading. Its section (lines 31 to 33) survives under source A's heading for the same section, which says nearly the same thing.",
+    "quotes": [
+     {
+      "line": 29,
+      "text": "## Other refusals and their codes"
+     },
+     {
+      "line": 31,
+      "text": "The gateway refuses a request for three reasons and only one of them is the one above."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m41",
+      "similarity": 0.22,
+      "bound": 0.41,
+      "segment_chars": 22,
+      "merge_chars": 86
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading. Its section stands under \"## Other refusals and their codes\" (L29-33)."
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "bike_docks",
+   "draw": 1,
+   "segment": "a10",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    16,
+    16
+   ],
+   "text": "Escalate E2 to the workshop after 2 failed attempts.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. Every word of the segment is in the merge, in order, under the same heading ('When to escalate E2', line 15); a semicolon stands where the full stop stood. The case named in the brief.",
+    "quotes": [
+     {
+      "line": 17,
+      "text": "Escalate E2 to the workshop after 2 failed attempts; do not keep cycling a dock that has failed twice, since repeated forcing bends the pin and turns a 20 minute workshop job into a replacement."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m14",
+      "similarity": 0.42,
+      "bound": 0.42,
+      "segment_chars": 52,
+      "merge_chars": 194
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L17: \"Escalate E2 to the workshop after 2 failed attempts; do not keep cycling a dock that has failed twice, ...\" (joined onto the next sentence)"
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a8",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    7,
+    7
+   ],
+   "text": "A refusal is not an outage, whatever the error class in a client library happens to call it.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. Every word of the segment is there; a colon stands where the full stop stood.",
+    "quotes": [
+     {
+      "line": 7,
+      "text": "A refusal is not an outage, whatever the error class in a client library happens to call it: it is the platform declining to spend capacity that has already been promised to somebody else, and waiting is the only correct answer."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m9",
+      "similarity": 0.57,
+      "bound": 0.57,
+      "segment_chars": 92,
+      "merge_chars": 228
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L7, verbatim, joined by a colon."
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a16",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    13,
+    13
+   ],
+   "text": "The body of the refusal is JSON, and it names what the gateway calls the “window” it counted in.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined with the next sentence (a17) and lightly reworded. Scored 0.679, one hundredth under the threshold.",
+    "quotes": [
+     {
+      "line": 13,
+      "text": "The body of the refusal is JSON, and it names the window the gateway counted in, along with the cap and the tier."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m16",
+      "similarity": 0.68,
+      "bound": 0.92,
+      "segment_chars": 96,
+      "merge_chars": 113
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L13: \"The body of the refusal is JSON, and it names the window the gateway counted in, along with the cap and the tier.\""
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a17",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    13,
+    13
+   ],
+   "text": "It names the cap and the tier as well.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined onto the sentence before it (a16): 'It names the cap and the tier as well' became 'along with the cap and the tier'.",
+    "quotes": [
+     {
+      "line": 13,
+      "text": "The body of the refusal is JSON, and it names the window the gateway counted in, along with the cap and the tier."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m16",
+      "similarity": 0.4,
+      "bound": 0.5,
+      "segment_chars": 38,
+      "merge_chars": 113
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L13, joined onto the previous sentence."
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a40",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    29,
+    29
+   ],
+   "text": "The gateway refuses a request for three reasons and only one of them is the one above.",
+   "group": "counted_missing",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "why_alternative": "",
+    "gone": "",
+    "note": "Joined. Every word of the segment is there; a semicolon stands where the full stop stood.",
+    "quotes": [
+     {
+      "line": 43,
+      "text": "The gateway refuses a request for three reasons and only one of them is the one above; two of the three have nothing to do with how much traffic a caller has sent in the window it is currently in."
+     }
+    ],
+    "phrases_checked_absent": [],
+    "carriers": [
+     {
+      "merge_segment": "m41",
+      "similarity": 0.61,
+      "bound": 0.61,
+      "segment_chars": 86,
+      "merge_chars": 196
+     }
+    ]
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "L43, verbatim, joined by a semicolon."
+   }
+  },
+  {
+   "configuration": "gpt-6-luna-api",
+   "pair": "library_holds",
+   "draw": 1,
+   "segment": "a3",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    5,
+    6
+   ],
+   "text": "When a requested item arrives, print a hold slip and fold it into the item so the name is visible from the spine.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "partly",
+    "alternative": "present",
+    "evidence": "merged.md line 5: \"Print a hold slip and fold it into the item so the name is visible from the spine.\" Gone: the trigger \"When a requested item arrives\". \"requested\" occurs nowhere in the merged text. Alternative because the heading \"Placing an item on the shelf\" lets a reader guess the timing."
+   },
+   "second_reading": {
+    "class": "partly",
+    "alternative": "present",
+    "evidence": "merged.md line 5: \"Bring your library card. Print a hold slip and fold it into the item so the name is visible from the spine.\" Gone: the condition \"When a requested item arrives\" (\"requested item\" occurs nowhere in the merged document). The instruction now follows a sentence addressed to the borrower, so its trigger and addressee are no longer stated. Alternative because the heading \"Placing an item on the shelf\" implies the occasion."
+   }
+  },
+  {
+   "configuration": "gpt-6-luna-api",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "b5",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    5,
+    5
+   ],
+   "text": "Requests are counted against the credential rather than the connection, over a fixed window of 60 seconds whose start the gateway doesn’t disclose.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 5, split over two sentences: \"Requests are counted against the credential that presented them, over a fixed window of 60 seconds, and never against a connection. The window's start is not disclosed by the gateway.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 5: \"Requests are counted against the credential that presented them, over a fixed window of 60 seconds, and never against a connection. The window's start is not disclosed by the gateway.\" Split over two sentences; credential, 60 seconds and undisclosed start all kept."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "library_holds",
+   "draw": 1,
+   "segment": "a14",
+   "kind": "heading",
+   "document": "source_a.md",
+   "source_lines": [
+    24,
+    24
+   ],
+   "text": "Items nobody collects twice",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "not_content",
+    "alternative": "present",
+    "evidence": "Heading. Its section stands under \"## Items not collected\" (line 23); \"twice\" is carried by the body, line 25: \"If this happens twice with the same request, the request is cancelled.\""
+   },
+   "second_reading": {
+    "class": "not_content",
+    "alternative": null,
+    "evidence": "Heading only. Its section stands under merged.md line 23, \"## Items not collected\"; the \"twice\" rule is in the body at line 25: \"If this happens twice with the same request, the request is cancelled.\""
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "loading_dock",
+   "draw": 1,
+   "segment": "a10",
+   "kind": "heading",
+   "document": "source_a.md",
+   "source_lines": [
+    14,
+    14
+   ],
+   "text": "The dock phone line is closed",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": "not_content",
+    "evidence": "Heading shortened to \"## The dock phone line\" (line 11); the closure it asserts is at line 13: \"The dock booking phone line was retired and the number no longer connects.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": "not_content",
+    "evidence": "Heading shortened to merged.md line 11, \"## The dock phone line\"; the statement it made is in the body at line 13: \"The dock booking phone line was retired and the number no longer connects.\" Alternative because it is a heading whose section survives. Line 9 of the merged document contradicts it (\"If the portal is down, call the dock booking line on extension 2140\")."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "loading_dock",
+   "draw": 1,
+   "segment": "b3",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    5,
+    5
+   ],
+   "text": "Every delivery needs a dock slot.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 5: \"All deliveries need a dock slot.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 5: \"All deliveries need a dock slot.\""
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "payroll_cutoff",
+   "draw": 1,
+   "segment": "b6",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    9,
+    10
+   ],
+   "text": "Submissions that arrive after the cut-off are held for the following month's run.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 9: \"Submissions that arrive after it are held for the following month's run.\" (\"it\" is the cut-off of the sentence before)"
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 9: \"Submissions that arrive after it are held for the following month's run.\" (\"it\" is the cut-off named in the sentence before.)"
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "payroll_cutoff",
+   "draw": 1,
+   "segment": "b9",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    16,
+    17
+   ],
+   "text": "Submit one file per team listing every hourly worker with hours and the cost centre the hours are charged to.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 15: \"Submit one file per team. The file must list every hourly worker with hours and the cost centre the hours are charged to.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 15: \"Submit one file per team. The file must list every hourly worker with hours and the cost centre the hours are charged to.\" Split over two sentences."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "trace_names",
+   "draw": 1,
+   "segment": "a14",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    30,
+    32
+   ],
+   "text": "{internal-notes} https://tickets.nimbrel.example/700Bb00000QrmTD {/internal-notes}",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md lines 24 to 27: one {internal-notes} block; this address verbatim at line 25, joined with the other source's link."
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md lines 24 to 27, one {internal-notes} block holding both links; this link at line 25."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "trace_names",
+   "draw": 1,
+   "segment": "b2",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    3,
+    4
+   ],
+   "text": "Author: Marlowe Ferrante Updated: 2026-02-03",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "partly",
+    "alternative": "not_content",
+    "evidence": "merged.md lines 3 and 4: \"Author: Rune Delacroix\" / \"Updated: 2026-02-03\". Gone: the author's name; \"Marlowe\" and \"Ferrante\" occur nowhere. The date survives, now attached to source A's author, a pairing neither source has. Alternative only if a second source's byline is treated as metadata."
+   },
+   "second_reading": {
+    "class": "partly",
+    "alternative": null,
+    "evidence": "merged.md lines 3 and 4: \"Author: Rune Delacroix\" / \"Updated: 2026-02-03\". Gone: the name Marlowe Ferrante (\"Marlowe\" and \"Ferrante\" occur nowhere). The date 2026-02-03 survives, now attached to the other author."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-api",
+   "pair": "trace_names",
+   "draw": 1,
+   "segment": "b13",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    25,
+    27
+   ],
+   "text": "{internal-notes} https://tickets.nimbrel.example/700Bb00000LnqWs {/internal-notes}",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md lines 24 to 27: the same block; this address verbatim at line 26."
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "The same block; this link at merged.md line 26."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "bike_docks",
+   "draw": 1,
+   "segment": "b13",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    20,
+    20
+   ],
+   "text": "Raise an E4 to the electrical contractor the same day.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "evidence": "merged.md line 17: \"Report E4 to the electrical contractor the same day.\" Alternative because source B is the support desk's page and the merged page is titled for the field crew, so the implied addressee changes; the segment itself names no actor."
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 17: \"Report E4 to the electrical contractor the same day.\" Same instruction, same recipient, same deadline. The segment names no actor; that source B addressed the support desk comes only from its title."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "index_429",
+   "draw": 1,
+   "segment": "a5",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    8,
+    8
+   ],
+   "text": "Callers see a write that will not land: Nimbrel Relay stalls, batch loaders resend the same envelope, and reads against the same shard begin to time out.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 8: \"Callers experience writes that will not land: Nimbrel Relay stalls, batch loaders resend the same envelope, and reads against the same shard begin to time out.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 8: \"Callers experience writes that will not land: Nimbrel Relay stalls, batch loaders resend the same envelope, and reads against the same shard begin to time out.\" All three symptoms kept."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a9",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    7,
+    7
+   ],
+   "text": "It is the platform declining to spend capacity that has already been promised to somebody else, and waiting is the only correct answer.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "evidence": "merged.md line 3: \"A 429 refusal is not an outage but the platform declining to spend capacity already promised to someone else; waiting is the correct answer.\" Alternative because \"the only correct answer\" became \"the correct answer\"."
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": "partly",
+    "evidence": "merged.md line 3: \"A 429 refusal is not an outage but the platform declining to spend capacity already promised to someone else; waiting is the correct answer.\" Alternative only because \"the only correct answer\" became \"the correct answer\"; the definite article still says there is one."
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a10",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    7,
+    7
+   ],
+   "text": "Callers that retry at once are the largest single reason the cap is there at all.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 3: \"Callers that retry immediately are the primary reason the cap exists.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 3: \"Callers that retry immediately are the primary reason the cap exists.\""
+   }
+  },
+  {
+   "configuration": "haiku-4.5-sub",
+   "pair": "trace_names",
+   "draw": 1,
+   "segment": "b2",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    3,
+    4
+   ],
+   "text": "Author: Marlowe Ferrante Updated: 2026-02-03",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "gone",
+    "alternative": "not_content",
+    "evidence": "Searched \"Marlowe\", \"Ferrante\", \"2026-02-03\": no occurrence. merged.md lines 3 and 4 carry only source A's byline, \"Author: Rune Delacroix\" / \"Updated: 2026-01-29\". Alternative as in the case before."
+   },
+   "second_reading": {
+    "class": "gone",
+    "alternative": null,
+    "evidence": "Searched for \"Marlowe\", \"Ferrante\", \"2026-02-03\", \"02-03\", \"February\": none occur. merged.md lines 3 and 4 read \"Author: Rune Delacroix\" / \"Updated: 2026-01-29\", which is source A's own line; neither the name nor the date of the segment is anywhere."
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "bike_docks",
+   "draw": 1,
+   "segment": "a11",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    16,
+    18
+   ],
+   "text": "Do not keep cycling a dock that has failed twice; repeated forcing bends the pin and turns a 20 minute workshop job into a replacement.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 17: \"...; do not keep cycling a dock that has failed twice, since repeated forcing bends the pin and turns a 20 minute workshop job into a replacement.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 17: \"do not keep cycling a dock that has failed twice, since repeated forcing bends the pin and turns a 20 minute workshop job into a replacement.\" Joined onto the previous sentence; nothing lost."
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a12",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    11,
+    11
+   ],
+   "text": "The refusal carries a Retry-After header.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 11: \"The refusal carries a header called Retry-After.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 11: \"The refusal carries a header called Retry-After.\""
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "a39",
+   "kind": "sentence",
+   "document": "source_a.md",
+   "source_lines": [
+    29,
+    29
+   ],
+   "text": "Not all are caps.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 43: \"Not all refusals are caps.\""
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 43: \"Not all refusals are caps.\""
+   }
+  },
+  {
+   "configuration": "sonnet-5-sub",
+   "pair": "rate_limits",
+   "draw": 1,
+   "segment": "b4",
+   "kind": "sentence",
+   "document": "source_b.md",
+   "source_lines": [
+    3,
+    3
+   ],
+   "text": "An earlier draft of this note argued for a client-side token bucket that mirrored the gateway’s own counters, and that section has been left out on purpose — two counters that disagree are worse than one counter that refuses, which is the whole reason the header exists.",
+   "group": "reworded_no_record",
+   "first_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 3: \"An earlier draft of this note argued for a client-side token bucket that mirrored the gateway's own counters; that section has been left out on purpose, ...\" Punctuation changed only."
+   },
+   "second_reading": {
+    "class": "present",
+    "alternative": null,
+    "evidence": "merged.md line 3: \"An earlier draft of this note argued for a client-side token bucket that mirrored the gateway's own counters; that section has been left out on purpose, because two counters that disagree are worse than one counter that refuses, which is the whole reason the header exists.\" Punctuation changed only."
+   }
+  }
+ ]
+}

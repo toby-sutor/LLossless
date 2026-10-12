@@ -45,6 +45,7 @@ import depth_figures  # noqa: E402
 import figure_rules  # noqa: E402
 import fixture_semantics  # noqa: E402
 import rank_matrix  # noqa: E402
+from llossless import reconcile  # noqa: E402
 import vendor_figures  # noqa: E402
 
 failures: list[str] = []
@@ -58,27 +59,45 @@ def check(ok: bool, message: str) -> None:
 PAIR = "payroll_cutoff"
 
 
+def under_both_rules(case):
+    """Run one case of the pairs scorer under the registered rule and under the amended one.
+
+    The scorer has no default rule, so a case has to name one, and every rule
+    this section holds the scorer to is a property of the scoring and not of
+    how "reworded" is told from "absent": it must hold under both. A failure
+    says which rule it failed under.
+    """
+    def run() -> None:
+        for rule in reconcile.RULES:
+            before = len(failures)
+            case(rule)
+            failures[before:] = [f"[{rule} rule] {message}" for message in failures[before:]]
+    run.__name__, run.__doc__ = case.__name__, case.__doc__
+    return run
+
+
 def ideal(pair: str = PAIR) -> str:
     return (rank_matrix.P / pair / "ideal.md").read_text(encoding="utf-8")
 
 
-def kept_sentence(pair: str = PAIR):
+def kept_sentence(pair: str = PAIR, *, rule: str, accept=lambda item: True):
     """A sentence segment `ideal.md` keeps verbatim, and `ideal.md` without it.
 
     Chosen so that removing it makes that one segment absent and nothing else:
-    the seeds below vary one thing (fixtures-must-vary-one-thing).
+    the seeds below vary one thing (fixtures-must-vary-one-thing). `accept`
+    narrows the choice for a seed that needs more of the sentence than that.
     """
     docs = rank_matrix.pair_docs(pair)
-    habs, hkept, titles = rank_matrix.ideal_sets(pair)
+    habs, hkept, titles = rank_matrix.ideal_sets(pair, rule=rule)
     text = ideal(pair)
     flat = " ".join(text.split())
     for document in rank_matrix.sources_of(docs):
         for item in document.segments:
             if (item.kind == "sentence" and item.id in hkept and len(item.text) > 40
-                    and flat.count(item.text) == 1):
+                    and flat.count(item.text) == 1 and accept(item)):
                 pattern = r"\s+".join(re.escape(w) for w in item.text.split())
                 removed, n = re.subn(pattern, "", text, count=1)
-                if n == 1 and rank_matrix.sets(docs, removed)[0] - habs == {item.id}:
+                if n == 1 and rank_matrix.sets(docs, removed, rule=rule)[0] - habs == {item.id}:
                     return item, removed
     raise AssertionError(f"{pair}: no verbatim kept sentence to remove on its own")
 
@@ -90,15 +109,16 @@ def declared(segment_id: str, disposition: str, grade: str, claims: list[str]) -
 
 # --- the pairs scorer ----------------------------------------------------------
 
-def test_a_model_judged_confirmation_forgives_nothing() -> None:
+@under_both_rules
+def test_a_model_judged_confirmation_forgives_nothing(rule: str) -> None:
     """Must fire: confirmed by a model verdict, the loss stays lost and is
     counted apart. Must not fire: confirmed mechanically, it is forgiven."""
-    target, merged = kept_sentence()
-    base = rank_matrix.cell_figures(PAIR, ideal(), {})
+    target, merged = kept_sentence(rule=rule)
+    base = rank_matrix.cell_figures(PAIR, ideal(), {}, rule=rule)
     by_model = rank_matrix.cell_figures(PAIR, merged, declared(target.id, "reworded",
-                                                               "confirmed", ["S-004"]))
+                                                               "confirmed", ["S-004"]), rule=rule)
     by_text = rank_matrix.cell_figures(PAIR, merged, declared(target.id, "reworded",
-                                                              "confirmed", []))
+                                                              "confirmed", []), rule=rule)
     check(by_model["lost"] == base["lost"] + 1 and by_model["model_confirmed"] == 1,
           f"a model-confirmed declaration forgave the loss: {by_model} against {base}")
     check(by_text["lost"] == base["lost"] and by_text["model_confirmed"] == 0,
@@ -107,42 +127,45 @@ def test_a_model_judged_confirmation_forgives_nothing() -> None:
           "a declared segment is not silent, whoever confirmed it")
 
 
-def test_a_declared_drop_is_never_forgiven() -> None:
+@under_both_rules
+def test_a_declared_drop_is_never_forgiven(rule: str) -> None:
     """Must fire: `dropped`, even confirmed mechanically, is lost."""
-    target, merged = kept_sentence()
-    base = rank_matrix.cell_figures(PAIR, ideal(), {})
+    target, merged = kept_sentence(rule=rule)
+    base = rank_matrix.cell_figures(PAIR, ideal(), {}, rule=rule)
     got = rank_matrix.cell_figures(PAIR, merged, declared(target.id, "dropped",
-                                                          "confirmed", []))
+                                                          "confirmed", []), rule=rule)
     check(got["lost"] == base["lost"] + 1 and got["model_confirmed"] == 0,
           f"a confirmed `dropped` was forgiven: {got}")
 
 
-def test_a_title_is_out_of_every_axis() -> None:
+@under_both_rules
+def test_a_title_is_out_of_every_axis(rule: str) -> None:
     """Must not fire: a synthesised title, undeclared, charges no axis.
     Must fire: a real sentence removed beside it is still silent and lost."""
     text = ideal()
     first = text.splitlines()[0]
     check(first.startswith("# "), "the title probe's anchor has moved")
     synthesised = "\n".join(["# A different, synthesised title"] + text.splitlines()[1:])
-    base = rank_matrix.cell_figures(PAIR, text, {})
-    got = rank_matrix.cell_figures(PAIR, synthesised, {})
+    base = rank_matrix.cell_figures(PAIR, text, {}, rule=rule)
+    got = rank_matrix.cell_figures(PAIR, synthesised, {}, rule=rule)
     check(got == base, f"a replaced title moved a figure: {got} against {base}")
-    _, merged = kept_sentence()
+    _, merged = kept_sentence(rule=rule)
     both = rank_matrix.cell_figures(
-        PAIR, "\n".join(["# A different, synthesised title"] + merged.splitlines()[1:]), {})
+        PAIR, "\n".join(["# A different, synthesised title"] + merged.splitlines()[1:]), {}, rule=rule)
     check(both["silent"] == base["silent"] + 1 and both["lost"] == base["lost"] + 1,
           f"a removed sentence beside a replaced title was not charged: {both}")
 
 
-def test_dup_counts_exact_repeats_only() -> None:
+@under_both_rules
+def test_dup_counts_exact_repeats_only(rule: str) -> None:
     """Must not fire: `ideal.md` has no exact repeat on any pair. Must
     fire: a sentence stated twice word for word is one."""
     for pair in sorted(p.name for p in rank_matrix.P.iterdir() if (p / "ideal.md").is_file()):
-        got = rank_matrix.cell_figures(pair, ideal(pair), {})
+        got = rank_matrix.cell_figures(pair, ideal(pair), {}, rule=rule)
         check(got["dup"] == 0, f"{pair}: ideal.md scored dup {got['dup']}")
-    target, _ = kept_sentence()
+    target, _ = kept_sentence(rule=rule)
     twice = ideal() + "\n\n" + target.text + "\n"
-    check(rank_matrix.cell_figures(PAIR, twice, {})["dup"] == 1,
+    check(rank_matrix.cell_figures(PAIR, twice, {}, rule=rule)["dup"] == 1,
           "a sentence stated twice word for word was not a repeat")
 
 
@@ -165,35 +188,326 @@ def bold_numbers(text: str) -> str:
     return re.sub(r"(?<![\w*])(\d[\d.,:]*)(?![\w*])", r"**\1**", text)
 
 
-def test_formatting_moves_nothing() -> None:
+@under_both_rules
+def test_formatting_moves_nothing(rule: str) -> None:
     """Must not fire: every pair's ideal.md wrapped at 72 columns, or with
     its numbers in bold, scores as ideal.md. Must fire: a sentence deleted
     from the wrapped, bolded ideal is still silent and lost."""
     for pair in sorted(p.name for p in rank_matrix.P.iterdir() if (p / "ideal.md").is_file()):
-        base = rank_matrix.cell_figures(pair, ideal(pair), {})
+        base = rank_matrix.cell_figures(pair, ideal(pair), {}, rule=rule)
         for name, style in (("wrapped at 72", lambda t: hard_wrap(t, 72)),
                             ("numbers in bold", bold_numbers)):
-            got = rank_matrix.cell_figures(pair, style(ideal(pair)), {})
+            got = rank_matrix.cell_figures(pair, style(ideal(pair)), {}, rule=rule)
             check(got == base, f"{pair}: ideal.md {name} scored {got}, not {base}")
-    _, merged = kept_sentence()
-    base = rank_matrix.cell_figures(PAIR, ideal(), {})
-    got = rank_matrix.cell_figures(PAIR, bold_numbers(hard_wrap(merged, 72)), {})
+    _, merged = kept_sentence(rule=rule)
+    base = rank_matrix.cell_figures(PAIR, ideal(), {}, rule=rule)
+    got = rank_matrix.cell_figures(PAIR, bold_numbers(hard_wrap(merged, 72)), {}, rule=rule)
     check(got["silent"] == base["silent"] + 1 and got["lost"] == base["lost"] + 1,
           f"a deleted sentence was hidden by formatting: {got}")
 
 
-def test_an_absence_behind_a_rejected_declaration_is_its_own_column() -> None:
+@under_both_rules
+def test_an_absence_behind_a_rejected_declaration_is_its_own_column(rule: str) -> None:
     """Must fire: absent and rejected is counted, and not as
     silent. Must not fire: absent and confirmed is not counted."""
-    target, merged = kept_sentence()
-    base = rank_matrix.cell_figures(PAIR, ideal(), {})
+    target, merged = kept_sentence(rule=rule)
+    base = rank_matrix.cell_figures(PAIR, ideal(), {}, rule=rule)
     rejected = rank_matrix.cell_figures(PAIR, merged, declared(target.id, "reworded",
-                                                               "rejected", ["S-001"]))
+                                                               "rejected", ["S-001"]), rule=rule)
     confirmed = rank_matrix.cell_figures(PAIR, merged, declared(target.id, "reworded",
-                                                                "confirmed", []))
+                                                                "confirmed", []), rule=rule)
     check(rejected["absent_rejected"] == 1 and rejected["silent"] == base["silent"],
           f"an absence behind a rejected declaration: {rejected}")
     check(confirmed["absent_rejected"] == 0, f"a confirmed one was counted: {confirmed}")
+
+
+# --- the rule is an argument, and it is named ----------------------------------
+
+def joined(sentence: str) -> str:
+    """The sentence kept word for word and joined to a clause three times its length.
+
+    Long enough that no similarity ratio can reach the sentence inside it
+    (2m/(m+M) is 0.5 at M = 3m), so that what clears it can only be the
+    amended rule's run of words.
+    """
+    clause = ("the control added this clause, which says nothing that either document "
+              "says, so that no line of the merge is close to the sentence in length")
+    tail = clause
+    while len(tail) < 3 * len(sentence):
+        tail += ", and " + clause
+    return sentence.rstrip(".!?:;,") + "; " + tail + "."
+
+
+def test_a_joined_sentence_is_a_silent_loss_under_the_registered_rule_only() -> None:
+    """The two scorings differ exactly where they are meant to.
+
+    Must not fire under the amended rule: a sentence `ideal.md` keeps, kept
+    word for word and joined to a long clause, is not silent and not lost.
+    Under the registered rule the same merge is one silent loss and one lost
+    segment, which is the published scoring and has to stay reproducible.
+    Must fire under both: the same join with the sentence's last two words
+    cut is silent and lost whichever rule scores it.
+    """
+    def cuttable(item) -> bool:
+        """At least eight words, and the last two are both content words."""
+        pieces = item.text.rstrip(".!?:;,").split()
+        return len(pieces) >= 8 and len(
+            reconcile.content_words(reconcile.words(" ".join(pieces[-2:])))) == 2
+
+    target, _ = kept_sentence(rule=reconcile.REGISTERED, accept=cuttable)
+    words = target.text.rstrip(".!?:;,").split()
+    pattern = r"\s+".join(re.escape(word) for word in target.text.split())
+    whole, n = re.subn(pattern, lambda _: joined(target.text), ideal(), count=1)
+    cut, m = re.subn(pattern, lambda _: joined(" ".join(words[:-2])), ideal(), count=1)
+    check(n == 1 and m == 1, "the probe's sentence is no longer in ideal.md once")
+    for rule, silent_whole in ((reconcile.REGISTERED, 1), (reconcile.AMENDED, 0)):
+        base = rank_matrix.cell_figures(PAIR, ideal(), {}, rule=rule)
+        got = rank_matrix.cell_figures(PAIR, whole, {}, rule=rule)
+        check((got["silent"] - base["silent"], got["lost"] - base["lost"])
+              == (silent_whole, silent_whole),
+              f"[{rule} rule] a sentence kept and joined: silent and lost moved by "
+              f"{got['silent'] - base['silent']} and {got['lost'] - base['lost']}, "
+              f"expected {silent_whole} and {silent_whole}")
+        shortened = rank_matrix.cell_figures(PAIR, cut, {}, rule=rule)
+        check((shortened["silent"] - base["silent"], shortened["lost"] - base["lost"]) == (1, 1),
+              f"[{rule} rule] MUST FIRE: the joined sentence with its last two words cut is "
+              f"silent and lost, got {shortened} against {base}")
+
+
+def test_an_untaken_heading_is_a_column_of_its_own_under_the_amended_rule() -> None:
+    """Base only, source A alone, over the nine pairs: 129 registered, 121 and 8 amended.
+
+    Must fire: the 121 are real losses and stay silent losses under the
+    amended rule. Must not fire as a loss: the 8 headings of source B whose
+    sections have something left in source A are counted apart, in
+    `headings_untaken`, and the registered record has no such field at all, so
+    a stored record of a published run is still given back field for field.
+    """
+    totals = {rule: {"silent": 0, "headings_untaken": 0} for rule in reconcile.RULES}
+    for pair in PAIRS9:
+        base_only = rank_matrix.pair_docs(pair)["source_a.md"]
+        for rule in reconcile.RULES:
+            got = rank_matrix.cell_figures(pair, base_only, {}, rule=rule)
+            check(("headings_untaken" in got) == (rule == reconcile.AMENDED),
+                  f"[{rule} rule] {pair}: the record's fields are {sorted(got)}")
+            for key in totals[rule]:
+                totals[rule][key] += got.get(key, 0)
+    check(totals == {reconcile.REGISTERED: {"silent": 129, "headings_untaken": 0},
+                     reconcile.AMENDED: {"silent": 121, "headings_untaken": 8}},
+          f"base only over the nine pairs: {totals}")
+    registered = rank_matrix.cell_figures(PAIR, ideal(), {}, rule=reconcile.REGISTERED)
+    check(sorted(registered) == ["absent_rejected", "bloat", "decl", "dup", "lost",
+                                 "model_confirmed", "near_dup", "silent"],
+          f"the registered record's fields moved: {sorted(registered)}")
+
+
+def test_the_counts_are_the_sizes_of_the_sets_they_are_published_from() -> None:
+    """`cell_figures` is `cell_sets`, counted, under both rules.
+
+    The list of segments that differ between the two scorings, and the
+    audit's validation, read the sets; the published figures are the counts.
+    Must fire: a count that is not the size of its set would let the list
+    and the figure disagree in silence, so both are formed here from one
+    merge and compared, and the two scorings must differ on the control that
+    is built to make them differ.
+    """
+    def cuttable(item) -> bool:
+        return len(item.text.rstrip(".!?:;,").split()) >= 8
+
+    target, _ = kept_sentence(rule=reconcile.REGISTERED, accept=cuttable)
+    pattern = r"\s+".join(re.escape(word) for word in target.text.split())
+    merged, n = re.subn(pattern, lambda _: joined(target.text), ideal(), count=1)
+    check(n == 1, "the probe's sentence is no longer in ideal.md once")
+    seen = {}
+    for rule in reconcile.RULES:
+        formed = rank_matrix.cell_sets(PAIR, merged, {}, rule=rule)
+        figures = rank_matrix.cell_figures(PAIR, merged, {}, rule=rule)
+        for key, value in figures.items():
+            size = formed[key] if isinstance(formed[key], int) else len(formed[key])
+            check(size == value, f"[{rule} rule] {key}: the set has {size}, the figure "
+                                 f"says {value}")
+        check(set(formed["located"]) >= formed["silent"] | formed["lost"] | formed["bloat"],
+              f"[{rule} rule] a counted segment is not among the located ones")
+        seen[rule] = formed
+    check(target.id in seen[reconcile.REGISTERED]["silent"]
+          and target.id not in seen[reconcile.AMENDED]["silent"]
+          and seen[reconcile.AMENDED]["located"][target.id].step in reconcile.RUN_STEPS
+          and seen[reconcile.AMENDED]["located"][target.id].window_text,
+          "MUST FIRE: the joined sentence is in the registered set of silent losses and "
+          "not in the amended one, where it is found as a run with the text it stands in")
+
+
+# Every function that scores, by the module that defines it. Each takes `rule`
+# by keyword and none may default it.
+SCORERS = {
+    "rank_matrix": ("located_of", "sets", "ideal_sets", "cell_sets", "cell_figures",
+                    "cells_of"),
+    "rank_arms": ("sets", "band", "cell_figures", "collect"),
+    "lineup_figures": ("baselines",),
+}
+# The tools that re-derive a figure published so far, and the rule each names.
+# Everything published up to 2026-10-12 was scored under the registered rule.
+# Two things changed on that date, both by the release benchmark's Amendment
+# 3. `lineup_figures.py` still names the registered rule as `RULE`, for
+# `scored.json` and the registered tables, and names the amended one beside it
+# as `AMENDED_RULE`, for the second scoring it publishes. And
+# `rank_scale_floor.py` scores the model picker's band under the amended rule,
+# because the picker shows that benchmark's rows under the amended scoring.
+PUBLISHED_UNDER = {
+    "rank_matrix.py": "registered", "rank_arms.py": "registered",
+    "matrix_figures.py": "registered", "vendor_figures.py": "registered",
+    "subscription_figures.py": "registered", "google_figures.py": "registered",
+    "phase4_figures.py": "registered", "lineup_figures.py": "registered",
+    "rank_scale_floor.py": "amended",
+}
+# And the tools that reach the rule through `reconcile.reconcile` itself,
+# whose default is the tool's own rule and not the published one.
+RECONCILES_RECORDED = ("league_table.py", "measure_merges.py", "annotate_merges.py",
+                       "regrade_check2.py", "run_bench.py", "rank_arms.py")
+
+
+def unnamed_rule_calls(source: str, filename: str) -> list[str]:
+    """Scoring calls in one program that do not pass `rule=`, as `file, line N: name`.
+
+    A scorer function called through its module (`rank_matrix.cell_figures(`),
+    or by its bare name inside the module that defines it; and, in a program
+    that is not a test, `reconcile.reconcile(` and `reconcile.locate(`. A test
+    may call `reconcile.reconcile` with no rule: that is the tool's default
+    and testing it is the point.
+    """
+    import ast
+
+    module = filename.removesuffix(".py")
+    is_tool = not filename.startswith("test_")
+    out = []
+    for node in ast.walk(ast.parse(source)):
+        if not isinstance(node, ast.Call):
+            continue
+        function = node.func
+        if isinstance(function, ast.Attribute) and isinstance(function.value, ast.Name):
+            owner, name = function.value.id, function.attr
+            scores = name in SCORERS.get(owner, ()) or (
+                is_tool and owner == "reconcile" and name in ("reconcile", "locate"))
+        elif isinstance(function, ast.Name):
+            owner, name = module, function.id
+            scores = name in SCORERS.get(module, ())
+        else:
+            continue
+        if scores and not any(keyword.arg == "rule" for keyword in node.keywords):
+            out.append(f"{filename}, line {node.lineno}: {owner}.{name}")
+    return out
+
+
+def test_the_scorer_has_no_default_rule() -> None:
+    """Must fire: a scoring call that names no rule is an error, not a figure.
+
+    A default here is how a published figure moves in silence: the tool's own
+    rule changed on 2026-10-12, and a scorer that followed it would have
+    re-scored every published run without one figure script changing.
+    """
+    import importlib
+    import inspect
+
+    for module_name, names in SCORERS.items():
+        module = importlib.import_module(module_name)
+        for name in names:
+            parameter = inspect.signature(getattr(module, name)).parameters.get("rule")
+            check(parameter is not None and parameter.kind is inspect.Parameter.KEYWORD_ONLY
+                  and parameter.default is inspect.Parameter.empty,
+                  f"{module_name}.{name} must take `rule` by keyword with no default; "
+                  f"it has {parameter!r}")
+    for call in (lambda: rank_matrix.cell_figures(PAIR, ideal(), {}),
+                 lambda: rank_matrix.sets(rank_matrix.pair_docs(PAIR), ideal()),
+                 lambda: rank_matrix.ideal_sets(PAIR)):
+        try:
+            call()
+            check(False, "a scorer call without a rule returned a figure")
+        except TypeError:
+            pass
+    try:
+        rank_matrix.cell_figures(PAIR, ideal(), {}, rule="strict")
+        check(False, "an unknown rule was scored")
+    except ValueError:
+        pass
+    # The tool's own entry point does have a default, the tool's own rule, and
+    # it is not the published one. That difference is why the tools below
+    # must not lean on it.
+    default = inspect.signature(reconcile.reconcile).parameters["rule"].default
+    check(default == reconcile.AMENDED != reconcile.REGISTERED,
+          f"reconcile.reconcile defaults to {default!r}")
+
+
+def test_every_figure_script_names_the_rule_it_scores_with() -> None:
+    """Must not fire: no program under `tests/` scores without `rule=`.
+    Must fire: a seeded call without it is reported, and a seeded script
+    whose `RULE` is not the published one is too."""
+    import importlib
+
+    tests = ROOT / "tests"
+    unnamed = []
+    scoring = set()
+    own = []
+    for path in sorted(tests.glob("*.py")):
+        source = path.read_text(encoding="utf-8")
+        found = unnamed_rule_calls(source, path.name)
+        if path.name == Path(__file__).name:
+            own = found
+        else:
+            unnamed += found
+        if unnamed_rule_calls(source.replace("rule=", "ruled="), path.name):
+            scoring.add(path.name)
+    # This file is the one exemption, and it is pinned: the three calls
+    # without a rule that `test_the_scorer_has_no_default_rule` makes in
+    # order to be refused. A fourth here is a fourth to explain.
+    check([entry.split(": ", 1)[1] for entry in own]
+          == ["rank_matrix.cell_figures", "rank_matrix.sets", "rank_matrix.ideal_sets"],
+          f"this file's own calls without a rule are {own}; exactly the three "
+          f"must-fire probes are exempt")
+    check(not unnamed,
+          f"these calls score without naming their rule, so they follow whatever the "
+          f"scorer or the tool does today: {unnamed}")
+    for name in (*PUBLISHED_UNDER, *RECONCILES_RECORDED):
+        check(name in scoring, f"{name} is listed as scoring and has no scoring call")
+    tools = {name for name in scoring if not name.startswith("test_")}
+    check(tools == set(PUBLISHED_UNDER) | set(RECONCILES_RECORDED) | {"benchmark_matrix.py"},
+          f"the programs that score are {sorted(tools)}; each has to be listed here with "
+          f"the rule its published figures were scored under")
+    for name, rule in PUBLISHED_UNDER.items():
+        module = importlib.import_module(name.removesuffix(".py"))
+        check(getattr(module, "RULE", None) == rule,
+              f"{name} must name its rule as `RULE = {rule!r}`; it has "
+              f"{getattr(module, 'RULE', None)!r}")
+        source = (tests / name).read_text(encoding="utf-8")
+        check("rule=RULE" in source, f"{name} does not pass its `RULE` to the scorer")
+    for name in RECONCILES_RECORDED:
+        source = (tests / name).read_text(encoding="utf-8")
+        check("rule=reconcile.REGISTERED" in source or "rule=rule" in source,
+              f"{name} re-derives recorded figures and must name the registered rule")
+    # The one program that publishes two scorings names both, and scores the
+    # second with the name it gave it and never with a literal.
+    lineup = importlib.import_module("lineup_figures")
+    source = (tests / "lineup_figures.py").read_text(encoding="utf-8")
+    check(getattr(lineup, "AMENDED_RULE", None) == reconcile.AMENDED
+          and "rule=AMENDED_RULE" in source and 'rule="' not in source
+          and "rule=reconcile." not in source,
+          "lineup_figures.py must score its second scoring as `rule=AMENDED_RULE` and "
+          "name no rule in any other way")
+
+    seeded = ("import rank_matrix\n"
+              "figures = rank_matrix.cell_figures(pair, merged, report)\n"
+              "named = rank_matrix.cell_figures(pair, merged, report, rule=RULE)\n"
+              "result = reconcile.reconcile(documents, merged)\n")
+    check(unnamed_rule_calls(seeded, "some_figures.py")
+          == ["some_figures.py, line 2: rank_matrix.cell_figures",
+              "some_figures.py, line 4: reconcile.reconcile"],
+          f"MUST FIRE: {unnamed_rule_calls(seeded, 'some_figures.py')}")
+    check(unnamed_rule_calls(seeded, "test_something.py")
+          == ["test_something.py, line 2: rank_matrix.cell_figures"],
+          "a test may use the tool's default; it may not score without a rule")
+    inside = "def sets(docs, text, *, rule):\n    return 1\n\nx = sets(docs, text)\n"
+    check(unnamed_rule_calls(inside, "rank_matrix.py")
+          == ["rank_matrix.py, line 4: rank_matrix.sets"],
+          "MUST FIRE: a bare call inside the defining module")
 
 
 # --- the headline rules ----------------------------------------------------------
