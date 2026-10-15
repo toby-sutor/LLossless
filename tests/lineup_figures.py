@@ -1899,11 +1899,17 @@ def with_amended(reg: dict, scored: list[dict], formed: dict, amended: dict,
         else:
             out[set_id] = formed[set_id]
     pairs = out["S1"]["common_pairs"]
-    registered_floors = _floor_parts(pairs, reg["settings"]["base"])
+    # What the rule change alone does to the floors (Amendment 3's property 7):
+    # both rules on the references as registered, so that a later correction
+    # to a reference (Amendments 5 and 6) does not pass for an effect of the rule.
+    registered_floors = _floor_parts(pairs, reg["settings"]["base"], RULE)
+    amended_floors = _floor_parts(pairs, reg["settings"]["base"], AMENDED_RULE)
     out["floor_bands"] = {
-        name: {"registered": registered_floors[name],
-               "amended": {"lost": out["S1"]["baselines"][name]["lost"],
-                           "bloat": out["S1"]["baselines"][name]["bloat"]}}
+        name: {"registered": {"lost": registered_floors[name]["lost"],
+                              "bloat": registered_floors[name]["bloat"]},
+               "amended": {"lost": amended_floors[name]["lost"],
+                           "bloat": amended_floors[name]["bloat"]},
+               "amended_deviations_per_pair": amended_floors[name]["deviations_per_pair"]}
         for name in out["S1"]["baselines"]}
     first = first_runs_of(out)
     if first != first_runs_of({"S1": out["S1_registered"]}):
@@ -1915,11 +1921,12 @@ def with_amended(reg: dict, scored: list[dict], formed: dict, amended: dict,
     return out
 
 
-def _floor_parts(pairs: list[str], base: str) -> dict:
-    """Each floor's lost and bloat under the registered rule, summed over `pairs`."""
-    floors = baselines(pairs, base, rule=RULE, reference=REGISTERED_REFERENCE)
+def _floor_parts(pairs: list[str], base: str, rule: str) -> dict:
+    """Each floor's lost and bloat under `rule`, on the references as registered, summed over `pairs`."""
+    floors = baselines(pairs, base, rule=rule, reference=REGISTERED_REFERENCE)
     return {name: {"lost": sum(per[p]["lost"] for p in pairs),
-                   "bloat": sum(per[p]["bloat"] for p in pairs)}
+                   "bloat": sum(per[p]["bloat"] for p in pairs),
+                   "deviations_per_pair": _floor(per, pairs)["deviations_per_pair"]}
             for name, per in floors.items()}
 
 
@@ -2618,7 +2625,7 @@ def outcome_lines(formed: dict, amended: dict, audit: dict) -> list[str]:
         f"{floors['base_only']['registered']} lost to {floors['base_only']['amended']}. "
         f"Deviations per pair of the union: "
         f"{_rate(formed['S1_registered']['baselines']['union']['deviations_per_pair'])} "
-        f"registered, {_rate(formed['S1']['baselines']['union']['deviations_per_pair'])} "
+        f"registered, {_rate(formed['floor_bands']['union']['amended_deviations_per_pair'])} "
         f"amended.")
     eight = by[8]["figures"]
     lines.append(
@@ -2746,8 +2753,8 @@ def catalogue_note(figures: dict, row_id: str, side: bool) -> str:
                 if figure.get("union_deviations") is not None else "")
 
     return (f"The figures are the amended scoring of the release benchmark (its Amendments "
-            f"3, 2026-10-12, and 5, 2026-10-15, made after the results were known: a new "
-            f"rule for finding a segment, and a corrected reference merge for one pair): "
+            f"3, 2026-10-12, and 5 and 6, 2026-10-15, made after the results were known: a "
+            f"new rule for finding a segment, and corrected reference merges for two pairs): "
             f"silent loss "
             f"{row['silent_loss']}, which counts source segments the program could not find "
             f"and no record explains, untaken headings {row['headings_untaken']}, deviations "

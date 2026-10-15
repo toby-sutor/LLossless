@@ -52,8 +52,9 @@ BASE = "source_a.md"
 # The rule the floor is scored under, one of `reconcile.RULES`. Since the
 # release benchmark's Amendment 3 (2026-10-12) the model picker shows that
 # benchmark's rows under the amended scoring, so the band they are coloured
-# against is the union floor of the same scoring: 7.67 deviations a pair,
-# where the registered scoring gives 7.78. Named here because the scorer has
+# against is the union floor of the same scoring: 7.78 deviations a pair
+# since the corrected reference merges of its Amendments 5 and 6 (7.67 before),
+# and 7.78 under the registered scoring as well. Named here because the scorer has
 # no default: the band moves when this line is changed and for no other
 # reason. The catalogue's rows from earlier runs were scored under the
 # registered rule and say so (`measured.scoring`); they are coloured against

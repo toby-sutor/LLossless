@@ -15,8 +15,7 @@ same-hour booking.
 
 The dock booking phone line was retired and the number no longer connects. All
 bookings go through the portal. Drivers who call the old number hear a recorded
-message pointing them at the portal. The line took requests between 08:00 and
-16:00 on working days before it was retired.
+message pointing them at the portal.
 
 ## Arriving
 

@@ -2252,7 +2252,7 @@ def test_751_a_wrong_value_in_any_file_of_the_second_scoring_is_refused() -> Non
         "the order": lambda f: f["S1"]["order"]["survivors"].reverse(),
         "the disqualified rows": lambda f: f["S1"]["order"]["disqualified"].pop(),
         "a tie": lambda f: f["S1"]["order"]["ties"].clear(),
-        "an amended floor": lambda f: f["S1"]["baselines"]["union"].update(deviations=70),
+        "an amended floor": lambda f: f["S1"]["baselines"]["union"].update(deviations=71),
         "the side comparison": lambda f: f["S1"]["side"]["fable-sub"]["rows"]["fable-sub"]
         .update(deviations=21),
         "a registered figure": lambda f: f["S1_registered"]["rows"][row].update(silent_loss=0),

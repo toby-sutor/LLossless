@@ -147,19 +147,19 @@ Which model should you trust with a merge? Price and reputation do not answer th
 
 Nine merge pairs at `high`, two documents with planted factual errors and one clean control document at `open`, 295 runs. The registration, every report and the figures are in [`arms/2026-09-27/lineup/`](arms/2026-09-27/lineup/figures.md).
 
-The scoring of the nine pairs was amended on 2026-10-12, after the results were known. The rule as registered counted sentences as lost that were still in the merge: joined to a neighbour, split in two or said in other words. Amendment 3 of [the registration](arms/2026-09-27/lineup/REGISTRATION.md) has the amended rule, and [the audit](arms/2026-09-27/lineup/audit/README.md) has the reading that showed the miscount. Amendment 4, of the same day and also made after the results, extended that reading to sentences the program had passed as reworded although the merge recorded no change, and that disqualified a third row. Amendment 5, of 2026-10-15, corrected the reference merge of one pair, `bike_docks`: it had kept a count that a merge at `high` is told to choose away, so six rows that rightly dropped it have 0.22 fewer deviations per pair, and nothing else moved. The table shows the amended scoring. Under the scoring as registered, five rows were disqualified where three are now, and Sonnet 5 on the API did no better than the mechanical union: [`figures.md`](arms/2026-09-27/lineup/figures.md) has both scorings.
+The scoring of the nine pairs was amended on 2026-10-12, after the results were known. The rule as registered counted sentences as lost that were still in the merge: joined to a neighbour, split in two or said in other words. Amendment 3 of [the registration](arms/2026-09-27/lineup/REGISTRATION.md) has the amended rule, and [the audit](arms/2026-09-27/lineup/audit/README.md) has the reading that showed the miscount. Amendment 4, of the same day and also made after the results, extended that reading to sentences the program had passed as reworded although the merge recorded no change, and that disqualified a third row. Amendments 5 and 6, of 2026-10-15, corrected the reference merges of two pairs, `bike_docks` and `loading_dock`: each had kept a value that a merge at `high` is told to choose away or remove, and a sentence of its own. The deviations moved by up to a third of one per pair; the order and the disqualifications did not. The table shows the amended scoring. Under the scoring as registered, five rows were disqualified where three are now, and Sonnet 5 on the API did no better than the mechanical union: [`figures.md`](arms/2026-09-27/lineup/figures.md) has both scorings.
 
 | Model, route | Flagged as silent loss, 9 pairs | Lost content, by reading | Deviations per pair | Planted errors fixed, voyager (of 44) | bip39 (of 14) | $ per merge |
 |---|---|---|---|---|---|---|
-| GPT-6 Sol, API | 0 | - | 4.00 | 23 | 11 | 0.19 |
-| GPT-6 Luna, API | 2 | **in part: disqualified** | 5.56 | 19 | 8 | 0.01 |
-| Opus 5.5, API | 0 | none | 5.89 | 29 | 13 | 0.49 |
-| Opus 5.5, subscription | 0 | - | 5.78 | 32 | 13 | 0.61 |
-| Sonnet 5, API | 0 | - | 6.00 | 21 | 12 | 0.46 |
-| Sonnet 5, subscription | 2 | none | 5.78 | 20 | 12 | 0.31 |
-| Haiku 4.5, API | 3 | **in part: disqualified** | 6.12 | 11 | 8 | 0.07 |
-| Haiku 4.5, subscription | 3 | **gone: disqualified** | 7.22 | 6 | 8 | 0.48 |
-| *Mechanical union, no model* | 0 | - | 7.67 | - | - | - |
+| GPT-6 Sol, API | 0 | - | 3.89 | 23 | 11 | 0.19 |
+| GPT-6 Luna, API | 2 | **in part: disqualified** | 5.44 | 19 | 8 | 0.01 |
+| Opus 5.5, API | 0 | none | 5.78 | 29 | 13 | 0.49 |
+| Opus 5.5, subscription | 0 | - | 5.67 | 32 | 13 | 0.61 |
+| Sonnet 5, API | 0 | - | 5.89 | 21 | 12 | 0.46 |
+| Sonnet 5, subscription | 2 | none | 5.67 | 20 | 12 | 0.31 |
+| Haiku 4.5, API | 3 | **in part: disqualified** | 6.25 | 11 | 8 | 0.07 |
+| Haiku 4.5, subscription | 3 | **gone: disqualified** | 7.11 | 6 | 8 | 0.48 |
+| *Mechanical union, no model* | 0 | - | 7.78 | - | - | - |
 
 GPT-6 Luna is disqualified for one case, and both readings call that case borderline.
 
@@ -167,7 +167,7 @@ GPT-6 Luna is disqualified for one case, and both readings call that case border
 
 - **Flagged as silent loss** (lower is better): sentences from the sources that the program could not find in the merge, and that the merge never said it left out. A flag is a reason to look, not proof of a loss: a sentence said in other words is flagged too. LLossless reported each one. A source heading the merge did not take, while the section under it is still there, is counted apart and is not in this figure.
 - **Lost content, by reading**: what a reading against the whole merge found. It read every source sentence, in the runs the table counts, that the merge did not keep word for word and wrote no record for: the ones flagged under either scoring, and the ones the program passed as reworded. *none* means every one of them was still there. *in part* means a part of at least one was gone, and *gone* means at least one was gone wholly: these are the losses a reader cannot see, and one of them puts a model out of the ranking. A dash means a model had no such sentence, so there was nothing to read; the mechanical union was not read. The reading was made by an AI model (Claude Opus), twice, and by no person; [the audit](arms/2026-09-27/lineup/audit/README.md) lists every case and says how far it can be trusted.
-- **Deviations per pair** (lower is better): how far the merge is from the reference merge written for the same two documents. It counts sentences the merge should have kept but did not, sentences it should have left out but kept, and sentences it repeated. The last row shows what a simple program scores by pasting the documents together without duplicates: a model at or above 7.67 did no better than that.
+- **Deviations per pair** (lower is better): how far the merge is from the reference merge written for the same two documents. It counts sentences the merge should have kept but did not, sentences it should have left out but kept, and sentences it repeated. The last row shows what a simple program scores by pasting the documents together without duplicates: a model at or above 7.78 did no better than that.
 - **Planted errors fixed** (higher is better): each of these documents has known factual errors planted in it, 44 in voyager and 14 in bip39, and the merge was allowed to correct facts. The number is how many it corrected. Only the fidelity levels `open` and `sourced` allow the model to correct facts, so these runs used `open`. At the lower levels the merge carries such errors over unchanged.
 - **$ per merge** (lower is better): the price of one merge including all its checks.
 

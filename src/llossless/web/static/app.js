@@ -2515,7 +2515,7 @@ const RANK_SCALES = {
   // `--check` fails if this drifts from the recomputed floor. Do not edit the
   // numbers by hand. A merge that matched the reference exactly would still
   // sit at 0, the ideal.
-  deviations_per_pair: { good: 3.83, poor: 7.67, poorInclusive: true, ideal: 0 },
+  deviations_per_pair: { good: 3.89, poor: 7.78, poorInclusive: true, ideal: 0 },
 };
 
 /**

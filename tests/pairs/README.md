@@ -9,7 +9,7 @@ Each pair directory holds four files:
 | `source_a.md`, `source_b.md` | The two inputs. |
 | `ideal.md` | The reference merge: a correct merge, written for the pair. It carries source A's title. The benchmark counts how far a model's merge deviates from it. |
 | `ideal.json` | The declarations of that merge: one record for each source segment it did not keep word for word, saying what happened to the segment (`superseded`, `duplicate` or `dropped`) and why. |
-| `ideal-as-registered.md`, `ideal-as-registered.json` | `bike_docks` only. Its reference merge as the 2026-09-27 benchmark was registered with, kept because that benchmark's scoring as registered is counted against it. It kept the support desk's count of 3 beside the field crew's 2, which a merge at `high` is told to choose away, and was corrected on 2026-10-15. |
+| `ideal-as-registered.md`, `ideal-as-registered.json` | `bike_docks` and `loading_dock` only. The reference merge as the 2026-09-27 benchmark was registered with, kept because that benchmark's scoring as registered is counted against it. Both were corrected on 2026-10-15: `bike_docks`' kept the support desk's count of 3 beside the field crew's 2, which a merge at `high` is told to choose away, and `loading_dock`'s kept the hours of the retired phone line. |
 
 A *segment* is the unit the tool splits a document into: a title, a heading, a sentence, a list item, a table row or a fenced code block.
 
