@@ -165,7 +165,7 @@ def score(results: list[dict]) -> list[dict]:
             report = load(where / "report.json")
             record.update(rank_matrix.cell_figures(
                 row["pair"], (where / "merged.md").read_text(encoding="utf-8"), report,
-                rule=RULE))
+                rule=RULE, reference=rank_matrix.AS_REGISTERED))
             record["seconds"] = figure_rules.answer_seconds(report)
         out.append(record)
     return out

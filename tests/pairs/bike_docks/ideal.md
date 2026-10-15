@@ -20,10 +20,7 @@ bike and releases it on both cycles, close the fault on your handheld.
 ## When to escalate E2
 
 Escalate E2 to the workshop after 2 failed attempts. The support desk raises an
-E2 to the field crew first, and raises it to the workshop if the field crew have
-already tried 3 times. The two documents disagree on the number of attempts; the
-field crew figure of 2 is the one to work to and the support desk figure of 3 is
-the one to correct.
+E2 to the field crew first.
 
 Do not keep cycling a dock
 that has failed twice; repeated forcing bends the pin and turns a 20 minute

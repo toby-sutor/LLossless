@@ -125,6 +125,12 @@ from llossless.web import catalogue as _catalogue  # noqa: E402
 # amended after its results is scored a second time, beside it and never in
 # its place, under `AMENDED_RULE` below.
 RULE = "registered"
+# The reference merge each scoring reads (`rank_matrix.reference_file`). The
+# registered scoring reads the references the run was registered with. The
+# amended scoring's counts read them as they stand: bike_docks' was corrected
+# on 2026-10-15, after the results (Amendment 5), and only its counts move.
+REGISTERED_REFERENCE = rank_matrix.AS_REGISTERED
+AMENDED_REFERENCE = rank_matrix.CURRENT
 
 # The committed lineup run this script derives the published figures from: the
 # release benchmark of 2026-09-27; `--run-dir` names any other.
@@ -284,7 +290,7 @@ def score(run_dir: Path) -> list[dict]:
                 if spec["kind"] == "merge" else ""
             if spec["score"] == "pairs":
                 record.update(rank_matrix.cell_figures(cell.item, merged, report,
-                                                       rule=RULE))
+                                                       rule=RULE, reference=REGISTERED_REFERENCE))
             elif spec["score"] == "planted":
                 record["planted"] = _planted(cell.item, merged, report, cell_dir)
             record.update(_money(row, report, cell_dir))
@@ -464,17 +470,19 @@ def baseline_texts(pair: str, base: str) -> dict[str, str]:
             "base_only": documents[base]}
 
 
-def baselines(pairs: list[str], base: str, *, rule: str) -> dict:
+def baselines(pairs: list[str], base: str, *, rule: str,
+              reference: str = rank_matrix.CURRENT) -> dict:
     """Each floor scored by `rank_matrix.cell_figures` with no report: per pair, and summed.
 
     `rule` is the scorer's and has no default here either: the floors are
     published figures, and the model picker's colour bands are derived from
-    one of them.
+    one of them. `reference` is which reference merge they are scored against
+    (`rank_matrix.reference_file`).
     """
     out: dict = {}
     for pair in pairs:
         for name, text in baseline_texts(pair, base).items():
-            figures = rank_matrix.cell_figures(pair, text, {}, rule=rule)
+            figures = rank_matrix.cell_figures(pair, text, {}, rule=rule, reference=reference)
             out.setdefault(name, {})[pair] = {"silent": figures["silent"],
                                              "deviations": figure_rules.deviations(figures),
                                              "lost": figures["lost"],
@@ -664,7 +672,8 @@ def rows(reg: dict, scored: list[dict]) -> dict:
                         and r.get("headline", True)]
             mine = [c for c in scored if c["set"] == set_id]
             common, head = _pairs_rows(reg, mine, headline, pairs)
-            floors = baselines(pairs, reg["settings"]["base"], rule=RULE)
+            floors = baselines(pairs, reg["settings"]["base"], rule=RULE,
+                               reference=REGISTERED_REFERENCE)
             for r in head.values():
                 # N5: the union's deviations over the very pairs this row's figure is over.
                 on = sorted(r["headline_draws"])
@@ -918,6 +927,9 @@ AMENDMENT = "Amendment 3, 2026-10-12"
 # The amendment that extends the audit, and with it who is disqualified. It
 # changes no count and neither scoring.
 AUDIT_AMENDMENT = "Amendment 4, 2026-10-12"
+# The amendment that corrects bike_docks' reference merge. It moves the amended
+# scoring's deviations on that pair and nothing else.
+REFERENCE_AMENDMENT = "Amendment 5, 2026-10-15"
 AUDIT_DIR = "audit"
 AMENDED_SCORED = "scored-amended.json"
 DIFFERENCES = "differences.json"
@@ -984,16 +996,38 @@ def _counts(formed: dict) -> dict:
 
 
 def _reference_declarations(pair: str) -> dict:
-    """The reference merge's own records, in the shape the scorer reads a report in."""
-    data = load(rank_matrix.P / pair / "ideal.json")
+    """The reference merge's own records, in the shape the scorer reads a report in.
+
+    The reference as registered: this is the reading of the rule change
+    (Amendment 3), which is made on the reference the run was registered with.
+    """
+    data = load(rank_matrix.reference_file(pair, ".json", REGISTERED_REFERENCE))
     return {"declarations": [{"segment": record["segment"]}
                              for record in data["dispositions"]]}
 
 
 def _both(pair: str, merged: str, report: dict) -> tuple[dict, dict]:
-    """One merge scored under the registered and the amended rule, as sets."""
-    return (rank_matrix.cell_sets(pair, merged, report, rule=RULE),
-            rank_matrix.cell_sets(pair, merged, report, rule=AMENDED_RULE))
+    """One merge scored under the registered and the amended rule, as sets.
+
+    Both against the reference as registered, so that what differs between
+    the two is the rule and nothing else. The amended scoring's published
+    counts are against the corrected reference (`_amended_counts`).
+    """
+    return (rank_matrix.cell_sets(pair, merged, report, rule=RULE,
+                                  reference=REGISTERED_REFERENCE),
+            rank_matrix.cell_sets(pair, merged, report, rule=AMENDED_RULE,
+                                  reference=REGISTERED_REFERENCE))
+
+
+def _amended_counts(pair: str, merged: str, report: dict) -> dict:
+    """One merge's counts as the amended scoring publishes them (Amendment 5).
+
+    The amended rule against the reference merge as it stands. It differs from
+    `_both`'s amended reading only on a pair whose reference was corrected
+    after the run, which is bike_docks' (2026-10-15).
+    """
+    return _counts(rank_matrix.cell_sets(pair, merged, report, rule=AMENDED_RULE,
+                                         reference=AMENDED_REFERENCE))
 
 
 def _words_stand_as_a_run(item, plain) -> bool:
@@ -1170,7 +1204,8 @@ def derive_amended(run_dir: Path, reg: dict, scored: list[dict]) -> dict:
                     cleared[item.step] += 1
 
     for pair in pairs:
-        text = (rank_matrix.P / pair / "ideal.md").read_text(encoding="utf-8")
+        text = rank_matrix.reference_file(pair, ".md", REGISTERED_REFERENCE).read_text(
+            encoding="utf-8")
         registered, amended = _both(pair, text, _reference_declarations(pair))
         references[pair], reference_moves[pair] = _reference_moves(registered, amended)
         audit_one(f"reference merge of {pair}", pair, text, registered, amended)
@@ -1190,7 +1225,7 @@ def derive_amended(run_dir: Path, reg: dict, scored: list[dict]) -> dict:
                              f"scorings would not be of the same merge")
         head = {"cell": record["cell"], "row": record["row"], "set": record["set"],
                 "pair": record["pair"], "draw": record["draw"]}
-        cells.append({**head, **_counts(amended)})
+        cells.append({**head, **_amended_counts(record["pair"], merged, report)})
         silent_registered[(record["row"], record["pair"], record["draw"])] = sorted(
             registered["silent"])
         for identifier in registered["silent"]:
@@ -1230,7 +1265,7 @@ def derive_amended(run_dir: Path, reg: dict, scored: list[dict]) -> dict:
     for pair in pairs:
         for name, text in baseline_texts(pair, base).items():
             registered, amended = _both(pair, text, {})
-            floors.setdefault(name, {})[pair] = _counts(amended)
+            floors.setdefault(name, {})[pair] = _amended_counts(pair, text, {})
             if name == "base_only":
                 headings_still_silent += sum(
                     1 for identifier in amended["silent"]
@@ -1882,7 +1917,7 @@ def with_amended(reg: dict, scored: list[dict], formed: dict, amended: dict,
 
 def _floor_parts(pairs: list[str], base: str) -> dict:
     """Each floor's lost and bloat under the registered rule, summed over `pairs`."""
-    floors = baselines(pairs, base, rule=RULE)
+    floors = baselines(pairs, base, rule=RULE, reference=REGISTERED_REFERENCE)
     return {name: {"lost": sum(per[p]["lost"] for p in pairs),
                    "bloat": sum(per[p]["bloat"] for p in pairs)}
             for name, per in floors.items()}
@@ -2710,8 +2745,10 @@ def catalogue_note(figures: dict, row_id: str, side: bool) -> str:
         return (f" against a mechanical union of {figure['union_deviations']}"
                 if figure.get("union_deviations") is not None else "")
 
-    return (f"The figures are the amended scoring of the release benchmark (its Amendment "
-            f"3, 2026-10-12, made after the results were known): silent loss "
+    return (f"The figures are the amended scoring of the release benchmark (its Amendments "
+            f"3, 2026-10-12, and 5, 2026-10-15, made after the results were known: a new "
+            f"rule for finding a segment, and a corrected reference merge for one pair): "
+            f"silent loss "
             f"{row['silent_loss']}, which counts source segments the program could not find "
             f"and no record explains, untaken headings {row['headings_untaken']}, deviations "
             f"{row['deviations']}{union(row)} over {row['pairs']} pair(s); {verdict}. As "

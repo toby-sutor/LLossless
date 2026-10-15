@@ -27,7 +27,7 @@ This is the run behind the README's results table: nine rows and 295 runs, made 
 
 | Path under `2026-09-27/lineup/` | What it is |
 |---|---|
-| `REGISTRATION.md` | The lineup, the settings, the rules for failures and the spending caps, written before the first call. Four dated amendments follow the original text: two made during the run, and two of 2026-10-12, made after the results were known. The third amends how a finished merge is scored, and the fourth extends the audit that decides who is disqualified. It holds no predictions. |
+| `REGISTRATION.md` | The lineup, the settings, the rules for failures and the spending caps, written before the first call. Five dated amendments follow the original text: two made during the run, and three of 2026-10-12 and 2026-10-15, made after the results were known. The third amends how a finished merge is scored, the fourth extends the audit that decides who is disqualified, and the fifth corrects the reference merge of `bike_docks`. It holds no predictions. |
 | `run.json` | The hashes of the input files and the prompts, written at the first start. |
 | `cells.jsonl` | The runner's log: a `begin` and an `end` line for each run, and the runner's own events. |
 | `scored.json` | One scored record per run, 295 in all, under the scoring as registered and run. |
@@ -72,7 +72,7 @@ Each command below runs offline from the repository root. It re-derives the scor
 
 The scorecard and the merge-effort figures are read from `src/llossless/web/catalogue.json`; the web interface shows them.
 
-**From a figure to its files.** Each record in `scored.json` names its row, set, pair and draw, which together are the path of its run directory under `cells/`. For example, the README gives GPT-6 Sol 4.22 deviations per pair. That is 38 deviations over nine pairs: the sum of `lost`, `bloat` and `dup` over the nine first-draw `S1` records of `gpt-6-sol-api` in `scored-amended.json`, whose records are named the same way. The same sum over `scored.json` is 37, which is the 4.11 of the scoring as registered.
+**From a figure to its files.** Each record in `scored.json` names its row, set, pair and draw, which together are the path of its run directory under `cells/`. For example, the README gives GPT-6 Sol 4.00 deviations per pair. That is 36 deviations over nine pairs: the sum of `lost`, `bloat` and `dup` over the nine first-draw `S1` records of `gpt-6-sol-api` in `scored-amended.json`, whose records are named the same way. The same sum over `scored.json` is 37, which is the 4.11 of the scoring as registered.
 
 **Planted-error counts can be re-scored one draw at a time.** `python3 tests/score_planted.py --pair voyager <run directory>/merged.md` prints how many of the planted errors that merge fixed, kept or left in another state (`--pair bip39` for the other document, `--pair mahjongg --control` for the control). The two merge-effort checks do not do this for `voyager` and `bip39`: they take those outcomes from `scored.json` as given, and print a line starting `UNMEASURED` to say so.
 

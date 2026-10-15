@@ -77,6 +77,28 @@ from llossless import reconcile, segment  # noqa: E402
 import figure_rules  # noqa: E402
 
 P = REPO / "tests" / "pairs"
+
+# Which reference merge a merge is scored against. A pair's `ideal.md` is the
+# reference as it stands. Where a reference was corrected after runs had been
+# scored against it, the one those runs were registered with is kept beside it
+# as `ideal-as-registered.md` (with its `.json`), so that a published scoring
+# can still be given back: bike_docks', corrected on 2026-10-15, kept the
+# support desk's count of 3 that a merge at the default level is told to choose
+# away. `AS_REGISTERED` reads that file where there is one and `ideal.md`
+# elsewhere; `CURRENT` always reads `ideal.md`.
+CURRENT = "current"
+AS_REGISTERED = "as-registered"
+REFERENCES = (CURRENT, AS_REGISTERED)
+
+
+def reference_file(pair, suffix, reference):
+    """The reference merge of `pair` (`suffix` ".md" or ".json") that `reference` names."""
+    if reference not in REFERENCES:
+        raise ValueError(f"reference must be one of {REFERENCES}, not {reference!r}")
+    kept = P / pair / f"ideal-as-registered{suffix}"
+    if reference == AS_REGISTERED and kept.is_file():
+        return kept
+    return P / pair / f"ideal{suffix}"
 # The 2026-09-18 matrix, published. `MATRIX_DIR` points
 # it at another run of the same shape. `tests/matrix_figures.py` forms the
 # catalogue rows from the same cells by the same selection and arithmetic.
@@ -223,7 +245,7 @@ def pair_docs(pair):
 
 
 @functools.lru_cache(maxsize=None)
-def ideal_sets(pair, *, rule):
+def ideal_sets(pair, *, rule, reference=CURRENT):
     """(ideal-absent ids, ideal-kept ids, source title ids) for one pair, under `rule`.
 
     Cached per (pair, rule): the reference merge is read with the same rule as
@@ -231,8 +253,8 @@ def ideal_sets(pair, *, rule):
     model" are one meaning of kept.
     """
     docs = pair_docs(pair)
-    habs, hkept, _, _ = sets(docs, (P / pair / "ideal.md").read_text(encoding="utf-8"),
-                             rule=rule)
+    habs, hkept, _, _ = sets(docs, reference_file(pair, ".md", reference).read_text(
+        encoding="utf-8"), rule=rule)
     titles = {item.id for document in sources_of(docs) for item in document.segments
               if item.kind == segment.TITLE}
     return frozenset(habs), frozenset(hkept), frozenset(titles)
@@ -248,7 +270,7 @@ def declarations(rep) -> dict:
     return out
 
 
-def cell_sets(pair, merged, rep, *, rule):
+def cell_sets(pair, merged, rep, *, rule, reference=CURRENT):
     """The segment ids behind every count `cell_figures` gives, under one of `reconcile.RULES`.
 
     The one place the pairs scoring is formed. `cell_figures` is the length of
@@ -268,14 +290,14 @@ def cell_sets(pair, merged, rep, *, rule):
     more than once. It is read and never changed by its callers.
     """
     return _cell_sets(pair, merged, json.dumps(rep.get("declarations") or [],
-                                               sort_keys=True), rule)
+                                               sort_keys=True), rule, reference)
 
 
 @functools.lru_cache(maxsize=512)
-def _cell_sets(pair, merged, declared, rule):
+def _cell_sets(pair, merged, declared, rule, reference):
     rep = {"declarations": json.loads(declared)}
     docs = pair_docs(pair)
-    habs, hkept, titles = ideal_sets(pair, rule=rule)
+    habs, hkept, titles = ideal_sets(pair, rule=rule, reference=reference)
     located, merged_segments = located_of(docs, merged, rule=rule)
     mabs = {item.segment.id for item in located if item.verdict == reconcile.ABSENT}
     mkept = {item.segment.id for item in located if item.verdict != reconcile.ABSENT}
@@ -322,7 +344,7 @@ _COUNTED = ("silent", "decl", "lost", "bloat", "dup", "near_dup", "model_confirm
             "absent_rejected")
 
 
-def cell_figures(pair, merged, rep, *, rule):
+def cell_figures(pair, merged, rep, *, rule, reference=CURRENT):
     """One merge of one pair against its `ideal.md`, under one of `reconcile.RULES`.
 
     `silent`, `decl`, `lost`, `bloat`, `dup` as the module docstring defines
@@ -341,7 +363,7 @@ def cell_figures(pair, merged, rep, *, rule):
     declare while their sections survived. The two sum to what `silent` would
     have been from the same verdicts.
     """
-    formed = cell_sets(pair, merged, rep, rule=rule)
+    formed = cell_sets(pair, merged, rep, rule=rule, reference=reference)
     figures = {key: formed[key] if isinstance(formed[key], int) else len(formed[key])
                for key in _COUNTED}
     if rule != reconcile.REGISTERED:
@@ -381,7 +403,7 @@ def cells_of(run: Path, *, rule) -> list[dict]:
         if not cell["excluded"]:
             rep = json.loads((where / "report.json").read_text(encoding="utf-8"))
             cell.update(cell_figures(row["pair"], (where / "merged.md").read_text(encoding="utf-8"),
-                                     rep, rule=rule))
+                                     rep, rule=rule, reference=AS_REGISTERED))
             cell["usd"] = figure_rules.exact_usd(rep, recorded=row.get("cost_usd"))
             cell["billed"] = max(row.get("cost_usd") or 0, row.get("cost_usd_billed") or 0)
             cell["seconds"] = figure_rules.answer_seconds(rep)
@@ -420,7 +442,7 @@ def main():
     print("\nBAND DEVIATION per pair (lost + bloat + exact repeats; lower is closer to ideal.md)\n")
     print(f"{'pair':<16}{'segs':>5}{'ref drop':>9}  " + "".join(f"{a:>18}" for a in groups))
     for p in pairs_run:
-        habs, hkept, _ = ideal_sets(p, rule=RULE)
+        habs, hkept, _ = ideal_sets(p, rule=RULE, reference=AS_REGISTERED)
         devs = {a: figure_rules.deviations(by[(a, p)]) for a in groups if (a, p) in by}
         best = min(devs.values()) if devs else None
         line = f"{p:<16}{len(habs)+len(hkept):>5}{len(habs):>9}  "

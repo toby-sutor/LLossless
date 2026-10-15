@@ -1194,15 +1194,20 @@ def test_an_untaken_heading_is_its_own_finding_in_the_record_family() -> None:
 # Controls on the nine pairs
 # --------------------------------------------------------------------------
 
-def pair_merges(pair: str) -> dict[str, str]:
-    """reference, concatenation, union and base_only for one pair."""
-    out = {"reference": (PAIRS_ROOT / pair / "ideal.md").read_text(encoding="utf-8")}
+def pair_merges(pair: str, reference: str = rank_matrix.CURRENT) -> dict[str, str]:
+    """reference, concatenation, union and base_only for one pair.
+
+    `reference` names which reference merge (`rank_matrix.reference_file`).
+    """
+    out = {"reference": rank_matrix.reference_file(pair, ".md", reference).read_text(
+        encoding="utf-8")}
     out.update(lineup_figures.baseline_texts(pair, BASE))
     return out
 
 
-def declared_in_reference(pair: str) -> set[str]:
-    data = json.loads((PAIRS_ROOT / pair / "ideal.json").read_text(encoding="utf-8"))
+def declared_in_reference(pair: str, reference: str = rank_matrix.CURRENT) -> set[str]:
+    data = json.loads(rank_matrix.reference_file(pair, ".json", reference).read_text(
+        encoding="utf-8"))
     return {record["segment"] for record in data["dispositions"]}
 
 
@@ -1221,27 +1226,36 @@ BASE_ONLY_UNTAKEN = {
 
 def test_the_reference_merges_stay_clean_under_both_rules() -> None:
     """MUST NOT FIRE: nine reference merges, no silent loss, no untaken heading, both views."""
-    moved = []
-    for pair in PAIRS:
-        documents = rank_matrix.pair_docs(pair)
-        declared = declared_in_reference(pair)
-        merged = pair_merges(pair)["reference"]
-        for name, (amended, registered) in both_rules(documents, merged).items():
-            check(silent(amended, declared) == [] and untaken(amended, declared) == [],
-                  f"{pair}/reference/{name}: amended silent {silent(amended, declared)}, "
-                  f"untaken {untaken(amended, declared)}")
-            check([i for i in silent_registered(registered, declared)] == [],
-                  f"{pair}/reference/{name}: registered silent "
-                  f"{silent_registered(registered, declared)}")
-            moved += [(pair, name, new.segment.id, new.step)
-                      for new, old in zip(amended, registered) if new.verdict != old.verdict]
-    # One declared segment changes side, and it is the whole of what the rule
-    # does to the references: a final comma that the reference writes as a
-    # full stop. Pinned, because this one segment is why the mechanical
-    # union's deviations differ by one between the two scorings.
-    check(moved == [("bike_docks", "tool", "b10", STEP_PHRASE),
-                    ("bike_docks", "scorer", "b10", STEP_PHRASE)],
-          f"the reference merges move exactly one segment between the rules, got {moved}")
+    moved = {rank_matrix.AS_REGISTERED: [], rank_matrix.CURRENT: []}
+    for reference, found in moved.items():
+        for pair in PAIRS:
+            documents = rank_matrix.pair_docs(pair)
+            declared = declared_in_reference(pair, reference)
+            merged = pair_merges(pair, reference)["reference"]
+            for name, (amended, registered) in both_rules(documents, merged).items():
+                check(silent(amended, declared) == [] and untaken(amended, declared) == [],
+                      f"{pair}/reference ({reference})/{name}: amended silent "
+                      f"{silent(amended, declared)}, untaken {untaken(amended, declared)}")
+                check([i for i in silent_registered(registered, declared)] == [],
+                      f"{pair}/reference ({reference})/{name}: registered silent "
+                      f"{silent_registered(registered, declared)}")
+                found += [(pair, name, new.segment.id, new.step)
+                          for new, old in zip(amended, registered)
+                          if new.verdict != old.verdict]
+    # In the references as registered one declared segment changes side, and it
+    # is the whole of what the rule does to them: a final comma that the
+    # reference writes as a full stop. Pinned, because this one segment is why
+    # the mechanical union's deviations differ by one between the two scorings
+    # of the 2026-09-27 benchmark. It was bike_docks' support desk count of 3,
+    # which the corrected reference (2026-10-15) no longer carries, so there
+    # nothing moves.
+    check(moved[rank_matrix.AS_REGISTERED] == [("bike_docks", "tool", "b10", STEP_PHRASE),
+                                                ("bike_docks", "scorer", "b10", STEP_PHRASE)],
+          f"the references as registered move exactly one segment between the rules, "
+          f"got {moved[rank_matrix.AS_REGISTERED]}")
+    check(moved[rank_matrix.CURRENT] == [],
+          f"the corrected references move no segment between the rules, "
+          f"got {moved[rank_matrix.CURRENT]}")
     counts["must_not_fire"] += 1
 
 

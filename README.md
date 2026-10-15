@@ -147,16 +147,16 @@ Which model should you trust with a merge? Price and reputation do not answer th
 
 Nine merge pairs at `high`, two documents with planted factual errors and one clean control document at `open`, 295 runs. The registration, every report and the figures are in [`arms/2026-09-27/lineup/`](arms/2026-09-27/lineup/figures.md).
 
-The scoring of the nine pairs was amended on 2026-10-12, after the results were known. The rule as registered counted sentences as lost that were still in the merge: joined to a neighbour, split in two or said in other words. Amendment 3 of [the registration](arms/2026-09-27/lineup/REGISTRATION.md) has the amended rule, and [the audit](arms/2026-09-27/lineup/audit/README.md) has the reading that showed the miscount. Amendment 4, of the same day and also made after the results, extended that reading to sentences the program had passed as reworded although the merge recorded no change, and that disqualified a third row. The table shows the amended scoring. Under the scoring as registered, five rows were disqualified where three are now, and Sonnet 5 on the API did no better than the mechanical union: [`figures.md`](arms/2026-09-27/lineup/figures.md) has both scorings.
+The scoring of the nine pairs was amended on 2026-10-12, after the results were known. The rule as registered counted sentences as lost that were still in the merge: joined to a neighbour, split in two or said in other words. Amendment 3 of [the registration](arms/2026-09-27/lineup/REGISTRATION.md) has the amended rule, and [the audit](arms/2026-09-27/lineup/audit/README.md) has the reading that showed the miscount. Amendment 4, of the same day and also made after the results, extended that reading to sentences the program had passed as reworded although the merge recorded no change, and that disqualified a third row. Amendment 5, of 2026-10-15, corrected the reference merge of one pair, `bike_docks`: it had kept a count that a merge at `high` is told to choose away, so six rows that rightly dropped it have 0.22 fewer deviations per pair, and nothing else moved. The table shows the amended scoring. Under the scoring as registered, five rows were disqualified where three are now, and Sonnet 5 on the API did no better than the mechanical union: [`figures.md`](arms/2026-09-27/lineup/figures.md) has both scorings.
 
 | Model, route | Flagged as silent loss, 9 pairs | Lost content, by reading | Deviations per pair | Planted errors fixed, voyager (of 44) | bip39 (of 14) | $ per merge |
 |---|---|---|---|---|---|---|
-| GPT-6 Sol, API | 0 | - | 4.22 | 23 | 11 | 0.19 |
-| GPT-6 Luna, API | 2 | **in part: disqualified** | 5.78 | 19 | 8 | 0.01 |
-| Opus 5.5, API | 0 | none | 6.11 | 29 | 13 | 0.49 |
-| Opus 5.5, subscription | 0 | - | 6.00 | 32 | 13 | 0.61 |
-| Sonnet 5, API | 0 | - | 6.22 | 21 | 12 | 0.46 |
-| Sonnet 5, subscription | 2 | none | 6.00 | 20 | 12 | 0.31 |
+| GPT-6 Sol, API | 0 | - | 4.00 | 23 | 11 | 0.19 |
+| GPT-6 Luna, API | 2 | **in part: disqualified** | 5.56 | 19 | 8 | 0.01 |
+| Opus 5.5, API | 0 | none | 5.89 | 29 | 13 | 0.49 |
+| Opus 5.5, subscription | 0 | - | 5.78 | 32 | 13 | 0.61 |
+| Sonnet 5, API | 0 | - | 6.00 | 21 | 12 | 0.46 |
+| Sonnet 5, subscription | 2 | none | 5.78 | 20 | 12 | 0.31 |
 | Haiku 4.5, API | 3 | **in part: disqualified** | 6.12 | 11 | 8 | 0.07 |
 | Haiku 4.5, subscription | 3 | **gone: disqualified** | 7.22 | 6 | 8 | 0.48 |
 | *Mechanical union, no model* | 0 | - | 7.67 | - | - | - |

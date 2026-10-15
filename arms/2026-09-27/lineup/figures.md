@@ -8,19 +8,19 @@ The scoring shown first. It was made after every call of this run and after its 
 
 | # | row | pairs | silent | /pair | untaken | audit, first run | dev | /pair | vs union | $ / merge | unit | billed $ | s / merge | tokens / merge | model-conf | incomplete | excluded | unruled calls | reused calls | not completed |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | gpt-6-sol-api | 9 of 9 | 0 | 0.00 | 0 | - | 38 | 4.22 | below (69) | 0.189 | list | 0.189 | 158.4 | 34956 | 19 | - | 0 | 0 | 0 | - |
-| 2= | opus-5.5-sub | 9 of 9 | 0 | 0.00 | 0 | - | 54 | 6.00 | below (69) | 0.614 | api_equivalent | 0.614 | 164.1 | 55453 | 32 | - | 0 | 0 | 0 | - |
-| 2= | sonnet-5-sub | 9 of 9 | 2 | 0.22 | 0 | 0 of 9 gone or partly gone | 54 | 6.00 | below (69) | 0.309 | api_equivalent | 0.309 | 186.5 | 73188 | 30 | - | 0 | 0 | 0 | - |
-| 4 | opus-5.5-api | 9 of 9 | 0 | 0.00 | 2 | 0 of 2 gone or partly gone | 55 | 6.11 | below (69) | 0.485 | list | 0.485 | 142.7 | 47656 | 32 | - | 0 | 0 | 0 | - |
-| 5 | sonnet-5-api | 9 of 9 | 0 | 0.00 | 0 | - | 56 | 6.22 | below (69) | 0.462 | list | 0.462 | 332.4 | 67974 | 29 | - | 0 | 0 | 0 | - |
-| DQ | gpt-6-luna-api | 9 of 9 | 2 | 0.22 | 0 | 1 of 4 gone or partly gone: disqualified; its one case is borderline | 52 | 5.78 | below (69) | 0.012 | list | 0.012 | 141.3 | 39666 | 22 | - | 0 | 0 | 0 | - |
+| 1 | gpt-6-sol-api | 9 of 9 | 0 | 0.00 | 0 | - | 36 | 4.00 | below (69) | 0.189 | list | 0.189 | 158.4 | 34956 | 19 | - | 0 | 0 | 0 | - |
+| 2= | opus-5.5-sub | 9 of 9 | 0 | 0.00 | 0 | - | 52 | 5.78 | below (69) | 0.614 | api_equivalent | 0.614 | 164.1 | 55453 | 31 | - | 0 | 0 | 0 | - |
+| 2= | sonnet-5-sub | 9 of 9 | 2 | 0.22 | 0 | 0 of 9 gone or partly gone | 52 | 5.78 | below (69) | 0.309 | api_equivalent | 0.309 | 186.5 | 73188 | 30 | - | 0 | 0 | 0 | - |
+| 4 | opus-5.5-api | 9 of 9 | 0 | 0.00 | 2 | 0 of 2 gone or partly gone | 53 | 5.89 | below (69) | 0.485 | list | 0.485 | 142.7 | 47656 | 32 | - | 0 | 0 | 0 | - |
+| 5 | sonnet-5-api | 9 of 9 | 0 | 0.00 | 0 | - | 54 | 6.00 | below (69) | 0.462 | list | 0.462 | 332.4 | 67974 | 29 | - | 0 | 0 | 0 | - |
+| DQ | gpt-6-luna-api | 9 of 9 | 2 | 0.22 | 0 | 1 of 4 gone or partly gone: disqualified; its one case is borderline | 50 | 5.56 | below (69) | 0.012 | list | 0.012 | 141.3 | 39666 | 22 | - | 0 | 0 | 0 | - |
 | DQ | haiku-4.5-sub | 9 of 9 | 3 | 0.33 | 0 | 3 of 8 gone or partly gone | 65 | 7.22 | below (69) | 0.483 | api_equivalent | 0.483 | 676.5 | 122847 | 23 | - | 0 | 0 | 0 | - |
 | DQ | haiku-4.5-api | 8 of 9 | 3 | 0.38 | 9 | 2 of 21 gone or partly gone | 49 | 6.12 | below (63) | 0.069 | list | 0.069 | 69.1 | 30132 | 6 | exit 2 on 1 of 9 | 0 | 0 | 0 | bike_docks (model_failure) |
 | base | concatenation | 9 of 9 | 0 | 0.00 | 0 | - | 78 | 8.67 | - | - | no model | - | - | - | - | - | - | - | - | - |
 | base | union | 9 of 9 | 0 | 0.00 | 0 | - | 69 | 7.67 | - | - | no model | - | - | - | - | - | - | - | - | - |
 | base | base_only | 9 of 9 | 121 | 13.44 | 8 | - | 69 | 7.67 | - | - | no model | - | - | - | - | - | - | - | - | - |
 
-Ties: opus-5.5-sub and sonnet-5-sub have 6.00 deviations per pair and share rank 2. Cost and then speed decide a tie only where every row in it is list-priced, and these are not (opus-5.5-sub: api_equivalent 0.614 dollars, 164.1 seconds a merge; sonnet-5-sub: api_equivalent 0.309 dollars, 186.5 seconds a merge), so the tie is stated and not broken.
+Ties: opus-5.5-sub and sonnet-5-sub have 5.78 deviations per pair and share rank 2. Cost and then speed decide a tie only where every row in it is list-priced, and these are not (opus-5.5-sub: api_equivalent 0.614 dollars, 164.1 seconds a merge; sonnet-5-sub: api_equivalent 0.309 dollars, 186.5 seconds a merge), so the tie is stated and not broken.
 
 Floors, scored by the same scorer under the amended rule from the sources with no model call: byte-concatenation, a mechanical union (the base, then every paragraph of the other not already in it, its title dropped) and base-only. `vs union` holds each row against the union on the same pairs; every counted row is below the union. The route, the effort and the model ids of each row do not depend on the scoring and are in the table under the registered scoring.
 

@@ -1455,7 +1455,7 @@ def test_the_lineup_check_fires_on_a_changed_figure() -> None:
              lambda d: luna(d)["measured"].update(deviations=51, deviations_per_pair=5.67)),
             ("a figure in the notes",
              lambda d: luna(d).update(notes=luna(d)["notes"].replace(
-                 "deviations 52 against", "deviations 51 against"))),
+                 "deviations 50 against", "deviations 49 against"))),
             ("the audit's verdict in a route's notes",
              lambda d: haiku(d).update(notes=haiku(d)["notes"].replace(
                  "found 3 of the 8 segments it read", "found 2 of the 8 segments it read"))),

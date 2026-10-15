@@ -1242,7 +1242,8 @@ def test_684_n5_the_floors_are_scored_and_a_row_no_better_than_the_union_is_flag
           f"the lineup's published figures are the registered scoring, got "
           f"{lineup_figures.RULE!r}")
     floors = lineup_figures.baselines(list(run_lineup.PAIRS), "source_a.md",
-                                      rule=lineup_figures.RULE)
+                                      rule=lineup_figures.RULE,
+                                      reference=lineup_figures.REGISTERED_REFERENCE)
     over = {name: lineup_figures._floor(per, list(run_lineup.PAIRS))
             for name, per in floors.items()}
     check((over["concatenation"]["silent_loss"], over["concatenation"]["deviations"]) == (0, 79)

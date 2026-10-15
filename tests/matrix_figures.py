@@ -158,7 +158,7 @@ def score() -> list[dict]:
             record["generated_on"] = str(provenance.get("generated_at"))[:10]
             record.update(rank_matrix.cell_figures(
                 row["pair"], (where / "merged.md").read_text(encoding="utf-8"), report,
-                rule=RULE))
+                rule=RULE, reference=rank_matrix.AS_REGISTERED))
             record["usd_priced"] = figure_rules.exact_usd(report, recorded=row.get("cost_usd"))
             record["seconds"] = figure_rules.answer_seconds(report)
         out.append(record)

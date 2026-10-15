@@ -156,7 +156,7 @@ def score() -> list[dict]:
                 report = load(where / "report.json")
                 record.update(rank_matrix.cell_figures(
                     row["pair"], (where / "merged.md").read_text(encoding="utf-8"), report,
-                    rule=RULE))
+                    rule=RULE, reference=rank_matrix.AS_REGISTERED))
                 record["seconds_raw"] = figure_rules.answer_seconds(report)
                 record["seconds"] = figure_rules.answer_seconds(
                     report, harness_waits=row["paced_seconds"] + row["backoff_seconds"])
