@@ -1,0 +1,121 @@
+\section{How the checks work}
+\label{sec:system}
+
+This section explains what happens between the merge and the report. The checks described here are the guardrails of Section~\ref{sec:problem}, taken one at a time.
+
+A merge can go wrong in three ways: it can drop something, change something, or invent something. A checker that is itself a language model can go wrong in the same three ways. So what can be decided by comparing strings is decided that way, and a model is asked only about meaning. That gives two families of checks. The \emph{mechanical checks} are a program. A reader can verify any of their findings with a text editor. The \emph{judged checks} rest on a model, the judge. The tool keeps the two apart in the report, and Section~\ref{sec:trust} leans on that split. Figure~\ref{fig:pipeline} shows the steps of a run in order.
+
+\input{sections/fig-pipeline}
+
+\subsection{What a program can settle}
+
+\paragraph{Segments.} A program first cuts every document into \emph{segments}. A segment is a sentence, or one of the other units a document is built from: a heading, a list item, a table row, a block of code set off by fences. The field crew's sentence ``Escalate E2 to the workshop after 2 failed attempts.'' is one segment. A segment also ends where a line of the file ends on a comma or another punctuation mark. So the support desk's sentence ``If the field crew have already tried 3 times, raise it to the workshop instead.'' is two segments, cut after the comma, where its line ends. Sources and merge are cut the same way, so the program can look for a source segment in the merge without asking a model.
+
+\paragraph{Protected values.} Some parts of a segment must never change: numbers, version strings, inline code, file paths, links and URLs. I call them protected values. A fenced code block is protected byte for byte. A merge may rewrite the sentence around a command that is written as inline code, but not the command. It may not re-indent a fenced YAML block.
+
+\paragraph{Records.} The merge model returns the merged document and one record for every source segment it did not copy word for word. A record names the segment, says what happened to it, and gives a reason. There are six kinds:
+
+\begin{center}\small
+\begin{tabular}{@{}lp{0.74\linewidth}@{}}
+\toprule
+Kind of record & What the merge says happened to the segment \\
+\midrule
+reworded & The same content is in the merge in other words. \\
+superseded & Another source's version of this content was used instead. \\
+subsumed & The content is inside a broader statement of the merge. \\
+duplicate & Another segment already says this. \\
+combined & This segment and another were joined into a statement that neither makes alone. \\
+dropped & The content is not in the merge, and nothing replaces it. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent In the opening story the record for the support desk's sentence is of the kind \emph{\ccnum{lineup.story.disposition}}, with the reason ``\ccnum{lineup.story.reason}'' A record of the kinds reworded, superseded, subsumed or duplicate also names a \emph{replacement}: the text in the merge that is said to carry the content now.
+
+\paragraph{The rule that makes loss checkable.} Whether a merge lost anything is a question no program can answer by itself. A sentence that is missing from the merge may have been reworded, folded into another sentence, or dropped. The records turn this into a question a program can answer. Every source segment must be in the merge word for word, or it must have a record. For a segment that is not there word for word, the program looks further, by similarity and by the run of its words (Appendix~\ref{sec:checks}). If it finds the segment in altered form, the segment counts as reworded, and a reworded segment with no record is a finding. If it does not find it, the segment is missing. A segment that is missing and has no record is a silent loss, and the mechanical checks report it. Figure~\ref{fig:sentence} draws the whole rule.
+
+The program also checks the records against the text, as far as a comparison of text can. The replacement that a record names must be in the merge. And a record must not describe a change that did not happen. A record may say that a segment was subsumed or superseded while the merge still carries that segment unchanged. No content is lost then, but the merge's account of its own work is false. Exit code 3 is for this case (Section~\ref{sec:false-departure}), and for an \emph{untaken heading}: a source heading that the merge did not take and wrote no record for, while its section is in the merge under another heading.
+
+\paragraph{Two limits on records.} A model could use records to excuse any loss, so two rules limit them. The first is the \emph{loss budget}. A merge may declare segments dropped, with records of the kind dropped, but not more than \ccnum{tool.loss_budget_percent}\% of the source segments it was given. That figure is the default, and the user can change it with the option \texttt{-{}-loss-budget}. The second limits a replacement. One replacement may stand in for at most \ccnum{tool.fan_in} missing segments. A single sentence that claims to carry many detailed ones has dropped them. Section~\ref{sec:declared-blindspot} says where the second rule came from and what it still misses.
+
+\input{sections/fig-sentence}
+
+\paragraph{How the mechanical checks decide.} There are \ccnum{tool.checks} mechanical checks, built from four operations. A search looks for one text in another, character for character or word for word. Regular expressions cut documents into segments and find protected values. A similarity score with a fixed cut-off helps to tell reworded from missing. The rest is counting. The code is plain Python with its standard library, \texttt{re} for the patterns and \texttt{difflib} for the score. No model is asked, so the same input gives the same findings. Appendix~\ref{sec:checks} lists the checks one by one, says how a segment is looked for, and gives the patterns for protected values.
+\paragraph{What the program reports on two real merges.} Here are two merges of the runbooks from Section~\ref{sec:problem}, taken from the benchmark. The program caught both, and it judged them differently.
+
+\bigskip\noindent\textbf{Example 1: a near-duplicate dropped.}
+
+\begin{center}\small
+\vspace{2pt}
+\begin{tabular}{@{}lp{0.74\linewidth}@{}}
+\toprule
+Field crew & Report E4 to the electrical contractor the same day. \\
+Support desk & Raise an E4 to the electrical contractor the same day. \\
+Reference merge & Keeps both sentences. \\
+Merge & By \texttt{\ccnum{lineup.haiku-4.5-sub.name}}: keeps the field crew's sentence, drops the support desk's, writes no record. \\
+Program & \texttt{is reworded in the merge and no disposition record explains it} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{4pt}
+
+\noindent The program looked for the support desk's sentence and found the field crew's, which is nearly the same. So it reports the sentence as reworded without a record. That is listed for a person to look at, but it is not a silent loss. Both readings of the audit found the content still in the merge.
+
+\bigskip\noindent\textbf{Example 2: a number dropped.}
+
+\begin{center}\small
+\vspace{2pt}
+\begin{tabular}{@{}lp{0.74\linewidth}@{}}
+\toprule
+Field crew & Escalate E2 to the workshop after \ccnum{lineup.story.a_count} failed attempts. \\
+Support desk & If the field crew have already tried \ccnum{lineup.story.b_count} times, raise it to the workshop instead. \\
+Reference merge & Keeps \ccnum{lineup.story.a_count}. Its record says that the support desk's sentence was superseded by the field crew's. \\
+Merge & By \texttt{\ccnum{lineup.sonnet-5-api.name}}: keeps \ccnum{lineup.story.a_count}, drops \ccnum{lineup.story.b_count}, and writes the record ``Attempt-count disagreement resolved to the base's value of 2.'' \\
+Program & \texttt{numeric \textquotesingle{}3\textquotesingle{} (times) does not survive into the merge unchanged} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{4pt}
+
+\noindent The model made the reference merge's choice and declared it, but a number is a protected value. A record excuses a missing number only when the replacement it names is the wording of a source sentence (Appendix~\ref{sec:checks}). The reference merge's record names the field crew's sentence as written. This record names it joined to the one after it, which no source has in that form. So the program reports the \ccnum{lineup.story.b_count} as missing.
+
+\paragraph{What the mechanical checks cannot see.} When a record names a replacement, the program checks that the replacement is in the merge, not that it says what the missing sentence said. The merge of Section~\ref{sec:problem} is an example. Its record names the field crew's ``Escalate E2 to the workshop after \ccnum{lineup.story.a_count} failed attempts.'' as the replacement for the support desk's sentence with \ccnum{lineup.story.b_count}. Unlike the record in the second example above, it names a sentence that stands in the merge exactly as a source wrote it, so the mechanical checks accept the record. That the two numbers disagree is a question of meaning, and it was the judge that reported it. Such questions go to the judge (Section~\ref{sec:judged}). Section~\ref{sec:declared-blindspot} shows how far a merge could push this.
+
+\subsection{What needs a judge}
+\label{sec:judged}
+
+Whether ``refund at the time of the call'' survived in a sentence that says ``refund immediately'' is a question about meaning. For such questions the tool asks a model, the judge.
+
+\paragraph{Claims.} The judge first splits each document into \emph{claims}, short statements of one fact each, with the line each comes from. In the literature these are called atomic claims. Segments and claims are different things. A segment is a piece of the text as it stands, cut by a program. A claim is a statement of what the text says, written by a model. One segment can hold several claims. The field crew's runbook has the sentence ``E2 is a mechanical fault and E4 is an electrical one, and they are escalated differently.'' From it the judge drew three claims: ``E2 is a mechanical fault.'', ``E4 is an electrical fault.'' and ``E2 and E4 are escalated differently.''
+
+\paragraph{Both directions.} The judge then compares each claim with the other side and gives a verdict. Every source claim is compared with the merge. Every merge claim is compared with the sources. Three verdicts are findings:
+\begin{points}
+\item A source claim that is missing from the merge was \emph{dropped}.
+\item A merge claim that is missing from the sources was \emph{invented}.
+\item A claim that the other side states differently is \emph{contradicted}.
+\end{points}
+
+\noindent Checking both directions is the default. The tool calls it the verification depth \texttt{\ccnum{tool.default_depth}}. A cheaper depth, \texttt{coverage}, compares only the source claims with the merge. It can find what was dropped, but it cannot find what was invented. Section~\ref{sec:depth} measures the difference.
+
+\paragraph{A verdict must quote its evidence.} A judge can be confidently wrong. So a verdict that rests on what the other side says must quote it. The quote must be \emph{grounded}: the tool looks for the quoted text in the file the judge named, and it has to be there. This is one of the two findings about the count in the opening story:
+
+\begin{quote}\small
+\texttt{source\_b.md:15} says: If the field crew have already tried 3 times on an E2 fault, the fault is raised to the workshop instead.\\[3pt]
+\texttt{merged.md} says: \textquotesingle{}Escalate E2 to the workshop after 2 failed attempts.\textquotesingle{} (grounded)\\[3pt]
+judged against: \texttt{merged.md}\\[3pt]
+why this was read as a contradiction: The reference text sets the escalation threshold at 2 failed attempts, not 3.
+\end{quote}
+
+\noindent These are the lines of the report, as it prints them. The first is a claim that the judge drew from the support desk's runbook, in the judge's own words, with its file and line. The second is the quote that the judge gave as evidence. ``Grounded'' means that the tool found that quote, word for word, in the merged document. The judge calls the document it checks against ``the reference text'', and here that is the merged document. A person can check the finding by opening both files at the places named. A quote that is in none of the files is reported as a transcription error.
+
+\paragraph{When the judge did not finish.} Two cases make a run inconclusive, with exit code 2. In the first, claims were graded and not one quote could be grounded, so nothing was measured. In the second, the judge failed to grade a claim even after a fixed number of retries. The claim is then listed as not graded. This happens when the judge's answer for that claim breaks the required format, for example by naming a claim it was not asked about, and the judge is told what is wrong and still gets it wrong on every retry.
+
+\subsection{Running against real endpoints}
+
+Two practical matters decide whether the checks can be relied on from day to day. One is whether a model's answer arrives in a form a program can read. The other is whether the tool's own tests can run without a model.
+
+\paragraph{Answers a program can read.} Every model answer is JSON that must match a schema, which is a formal description of the fields the answer must have. Endpoints differ in how firmly they can be held to a schema. The tool knows three ways and uses the strongest one the endpoint supports. In the strongest, the endpoint enforces the schema itself. In the second, the schema is the parameter list of a function the model must call. In the weakest, the schema is only described in the prompt. The report records which was used.
+
+One lesson came from this. A schema with a single optional field made one vendor's strongest mode refuse the schema. The tool then fell back to the weakest way, and no error appeared anywhere. Since then no schema the tool sends has an optional field, and a test holds the merge schema to that at every fidelity level.
+
+\paragraph{Tests without a model.} The test suite needs no model. The model answers its figures depend on were recorded from real models and are replayed with no network. Each recorded answer is stored under a digest of the request that produced it. So when a prompt changes, the request changes, and the old recordings no longer match. The figures that depended on them are then reported as \emph{unmeasured}, not as passes.

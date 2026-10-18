@@ -1,0 +1,16 @@
+\section{Related work}
+\label{sec:related}
+
+This section places LLossless beside earlier work on checking what a model wrote. In short: I did not find a method that gives a verdict on a merge without resting that verdict on a model.
+
+\paragraph{Atomic claims and faithfulness.} FActScore \citep{min2023factscore} breaks generated text into atomic facts, which are single statements of one fact, and scores each against a knowledge source. RAGAS \citep{es2023ragas} scores how faithful an answer is to the passages it was generated from, with a model as judge. LLossless borrows the splitting into claims and adds the direction those tools do not need. They ask whether what was written is supported. An audit of a merge must also ask whether what was supported got written. A question-answering system is not expected to reproduce its context. A merge is.
+
+\paragraph{Multi-document summarisation.} Multi-News \citep{fabbri2019multinews} and WikiSum \citep{liu2018wikisum} ask for one text that stands in for several, and score it by its overlap with a reference written by a person. Dropping a claim that the reference also dropped costs nothing there. FactCC \citep{kryscinski2019factcc} and QAGS \citep{wang2020qags} detect inconsistency between a summary and its source, and SummEval \citep{fabbri2020summeval} re-evaluates the metrics themselves. A summary is supposed to omit, so a consistency metric does not count omission as a defect. A merge is not supposed to omit. So LLossless scores a merge against its sources, and keeps a reference merge only to measure deviation in its benchmark.
+
+\paragraph{Hallucination and judges.} HaluEval \citep{li2023halueval}, TruthfulQA \citep{lin2021truthfulqa} and SelfCheckGPT \citep{manakul2023selfcheckgpt} measure what a model states that is not true. For a merge, the check of merge claims against the sources covers that. The other half is not covered by any metric that is scored over what is present, because a claim that is absent is invisible to it.
+
+\citet{zheng2023judge} studied how well a model serves as a judge and reported its biases, among them the position of an answer in the list it is shown. \citet{wang2023evaluators} show such a judge changing its ranking when the same candidates are shown in a different order. A metric that changes with the order of its input can inform a disagreement. It cannot settle one. That is my argument for keeping the mechanical checks apart from the judged checks (Sections~\ref{sec:system} and~\ref{sec:trust}).
+
+\citet{atil2024nondeterminism} report that settings meant to make a model repeat itself, temperature zero included, do not guarantee the same output twice. I saw the same on one open-weight model (Section~\ref{sec:study}): a repeated call is a second sample, not a confirmation.
+
+\paragraph{The gap.} Leaving aside overlap with a reference, the metrics above rest on a trained model or a judge model, so a disagreement about a score is an argument about a model. The mechanical checks in LLossless are code. That is a deliberate trade: they measure less, and what they measure they settle.

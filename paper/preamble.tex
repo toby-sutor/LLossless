@@ -1,0 +1,113 @@
+% Packages, and the two macros the number pipeline depends on.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{listings}
+\usepackage[numbers]{natbib}
+\usepackage{xcolor}
+% Links show in the text itself, on screen and on paper: one dark blue for
+% cross-references, citations and web addresses. With `hidelinks` a reference
+% was a link only to a reader who happened to hover over it.
+\definecolor{linkblue}{RGB}{0,51,153}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% The figures' palette and styles, shared by the five diagrams and charts in
+% sections/fig-*.tex. One meaning per colour, the same in every figure: blue is
+% a program, orange a model (in the charts, Anthropic; teal is OpenAI), green a
+% good outcome, red a finding.
+\usetikzlibrary{arrows.meta,positioning,fit,shapes.geometric,calc,shadows}
+\definecolor{progblue}{RGB}{33,102,172}
+\definecolor{progfill}{RGB}{222,235,247}
+\definecolor{modelorange}{RGB}{204,102,0}
+\definecolor{modelfill}{RGB}{254,235,212}
+\definecolor{goodgreen}{RGB}{35,139,69}
+\definecolor{goodfill}{RGB}{229,245,224}
+\definecolor{badred}{RGB}{203,24,29}
+\definecolor{badfill}{RGB}{254,224,210}
+\definecolor{docgrey}{RGB}{90,90,90}
+\definecolor{docfill}{RGB}{245,245,245}
+% Vendors in the charts.
+\definecolor{anthropic}{RGB}{204,102,0}
+\definecolor{openai}{RGB}{16,130,120}
+\tikzset{
+  doc/.style={draw=docgrey, fill=docfill, rounded corners=2pt, align=center,
+              font=\small, inner sep=5pt, drop shadow={opacity=0.15}},
+  prog/.style={draw=progblue, fill=progfill, thick, rounded corners=3pt, align=center,
+               font=\small, inner sep=5pt},
+  model/.style={draw=modelorange, fill=modelfill, thick, rounded corners=3pt, align=center,
+                font=\small, inner sep=5pt},
+  good/.style={draw=goodgreen, fill=goodfill, thick, rounded corners=3pt, align=center,
+               font=\small, inner sep=5pt},
+  bad/.style={draw=badred, fill=badfill, thick, rounded corners=3pt, align=center,
+              font=\small, inner sep=5pt},
+  ask/.style={draw=progblue, fill=progfill, thick, diamond, aspect=2.4, align=center,
+              font=\footnotesize, inner sep=1pt},
+  flow/.style={-{Stealth[length=6pt]}, thick, draw=docgrey},
+  lbl/.style={font=\footnotesize\itshape, text=docgrey},
+}
+
+% Tables and figures.
+%
+% Every table and figure is placed with [H], exactly where its source stands,
+% between two paragraphs. A float that LaTeX moves to the top of a page lands
+% in the middle of whatever sentence was running there, and a caption followed
+% by the second half of a sentence from the page before reads as broken text.
+%
+% A caption is set apart from the body: smaller type, indented on both sides, a
+% bold label, and a thin rule below it (`\floatfoot`, written after each
+% caption) before the text resumes.
+\captionsetup{font=footnotesize,labelfont=bf,margin=0.06\linewidth,skip=8pt}
+\setlength{\intextsep}{16pt plus 4pt minus 4pt}
+\newcommand{\floatfoot}{\par\vspace{7pt}{\centering\rule{0.4\linewidth}{0.3pt}\par}}
+
+% A compact word list for "Words used in this paper". Defined here because a
+% result section may not carry a digit, and a length is written with one.
+\newenvironment{wordlist}{%
+  \begin{description}%
+    \setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}}%
+  {\end{description}}
+% The same for a bullet list.
+\newenvironment{points}{%
+  \begin{itemize}%
+    \setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}\setlength{\parsep}{0pt}}%
+  {\end{itemize}}
+
+% -- the number pipeline ----------------------------------------------------
+%
+% generated/numbers.tex defines one \ccval@<key> per measured figure. \ccnum
+% is the only way a numeral is allowed to enter a result section, and it fails
+% loudly rather than typesetting a question mark: an undefined key is a figure
+% somebody deleted from the records, and a paper that renders anyway is a paper
+% that ships a hole.
+\makeatletter
+\newcommand{\ccnum}[1]{%
+  \@ifundefined{ccval@#1}%
+    {\PackageError{llossless}{No generated value for key '#1'}%
+      {Run `make numbers` -- generated/numbers.tex is stale or the key is misspelt.}}%
+    {\csname ccval@#1\endcsname}%
+}
+% \ccplanned names an arm that has NOT been run. It renders exactly as \ccnum
+% does -- the reader sees a model name either way -- and it exists so that the
+% difference is machine-checkable. `\ccnum` asserts "a record under
+% paper/records/ carries this arm"; `\ccplanned` asserts the opposite, on
+% purpose, so a section can say what has not been measured without the claim
+% reading as a measurement. check_numbers.py refuses each one used for the
+% other's job, so neither marker can rot into a lie as arms are run.
+\newcommand{\ccplanned}[1]{%
+  \@ifundefined{ccval@#1}%
+    {\PackageError{llossless}{No generated value for key '#1'}%
+      {Run `make numbers` -- generated/numbers.tex is stale or the key is misspelt.}}%
+    {\csname ccval@#1\endcsname}%
+}
+\makeatother
+\IfFileExists{generated/numbers.tex}{\input{generated/numbers}}{%
+  \PackageError{llossless}{generated/numbers.tex is missing}%
+    {Run `make numbers` first. Result sections cannot be typeset without it.}}

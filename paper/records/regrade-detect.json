@@ -1,0 +1,143 @@
+{
+  "note": "Two fixtures disagreed with themselves, and the disagreement scored the arms\n(DECISIONS 223). `conflict_surfaced` declared exit 1 with nothing planted and\neleven all-`SUPPORTED` probes, so the only way to reach the expected code was to\ninvent a finding; `numeric_drift` declared exit 1 in both modes while sanctioning\na reading that exits 0, so an arm taking that reading was disqualified for\ncorrect behaviour. Both are repaired. The runs are not affected -- no model\noutput changed, and nothing here asks a model anything -- so the honest\ncorrection is to re-score what was recorded rather than to re-run it, exactly as\n`tests/regrade_check2.py` did for check 2.",
+  "amended": "2026-09-03",
+  "arms": [
+    {
+      "arm": "A-27b",
+      "record": "half1-A-27b.json",
+      "sha256": "abe27cb99ecda216a0915346d28b933d55c8d82358ddb9fb1d5549574b8b8044",
+      "model": "qwen3.8:27b",
+      "fixtures": 13,
+      "fixtures_measured": 12,
+      "matched": 11,
+      "unmeasured": 1,
+      "missed": 1,
+      "matched_fixtures": [
+        "attribution_invented",
+        "attribution_swapped",
+        "contradiction",
+        "dedup",
+        "disjoint_domains",
+        "disjoint_sources",
+        "dropped_claim",
+        "hallucination",
+        "numeric_drift",
+        "ordering_only",
+        "structure_added"
+      ],
+      "unmeasured_fixtures": [
+        {
+          "fixture": "conflict_surfaced",
+          "why": "the fixture declared exit 1 when this arm ran and declares 0 now; the arm was graded against a fixture that no longer exists"
+        }
+      ],
+      "missed_fixtures": [
+        "paraphrase"
+      ],
+      "plants_total": 6,
+      "plants_unmeasured": 0,
+      "plants_detected": 6,
+      "invented_total": 2,
+      "invented_on_unmeasured": 0,
+      "disqualified": [
+        "paraphrase: a clean fixture failed with 1 invented finding(s)"
+      ],
+      "disqualified_as_run": [
+        "paraphrase: a clean fixture failed with 1 invented finding(s)"
+      ],
+      "unverifiable_conditions": [
+        "attribution_swapped: the fixture's planted probes changed from 1 to 2 since this run, so `invented_findings` cannot be re-accounted from the record"
+      ]
+    },
+    {
+      "arm": "B-70b",
+      "record": "half1-B-70b.json",
+      "sha256": "f29f7e8f899dde36760a07d59170c5377ad564f066ee717474ebbb9dccda33d9",
+      "model": "deepseek-r1:70b",
+      "fixtures": 13,
+      "fixtures_measured": 11,
+      "matched": 11,
+      "unmeasured": 2,
+      "missed": 0,
+      "matched_fixtures": [
+        "attribution_invented",
+        "attribution_swapped",
+        "contradiction",
+        "dedup",
+        "disjoint_domains",
+        "disjoint_sources",
+        "dropped_claim",
+        "hallucination",
+        "ordering_only",
+        "paraphrase",
+        "structure_added"
+      ],
+      "unmeasured_fixtures": [
+        {
+          "fixture": "conflict_surfaced",
+          "why": "the fixture declared exit 1 when this arm ran and declares 0 now; the arm was graded against a fixture that no longer exists"
+        },
+        {
+          "fixture": "numeric_drift",
+          "why": "the fixture sanctions a reading that exits 0 as well as the strict 1, and this arm exited 0 having invented nothing"
+        }
+      ],
+      "missed_fixtures": [],
+      "plants_total": 6,
+      "plants_unmeasured": 1,
+      "plants_detected": 5,
+      "invented_total": 1,
+      "invented_on_unmeasured": 0,
+      "disqualified": [],
+      "disqualified_as_run": [
+        "numeric_drift: a seeded defect exited clean"
+      ],
+      "unverifiable_conditions": [
+        "attribution_swapped: the fixture's planted probes changed from 1 to 2 since this run, so `invented_findings` cannot be re-accounted from the record",
+        "numeric_drift"
+      ]
+    },
+    {
+      "arm": "C-120b",
+      "record": "half1-C-120b.json",
+      "sha256": "f37f5da8f11962b84f02094da4af593200cb76dba2dbf79d2ea45178f7f0eeb1",
+      "model": "gpt-oss:120b",
+      "fixtures": 13,
+      "fixtures_measured": 12,
+      "matched": 12,
+      "unmeasured": 1,
+      "missed": 0,
+      "matched_fixtures": [
+        "attribution_invented",
+        "attribution_swapped",
+        "contradiction",
+        "dedup",
+        "disjoint_domains",
+        "disjoint_sources",
+        "dropped_claim",
+        "hallucination",
+        "numeric_drift",
+        "ordering_only",
+        "paraphrase",
+        "structure_added"
+      ],
+      "unmeasured_fixtures": [
+        {
+          "fixture": "conflict_surfaced",
+          "why": "the fixture declared exit 1 when this arm ran and declares 0 now; the arm was graded against a fixture that no longer exists"
+        }
+      ],
+      "missed_fixtures": [],
+      "plants_total": 6,
+      "plants_unmeasured": 0,
+      "plants_detected": 6,
+      "invented_total": 3,
+      "invented_on_unmeasured": 1,
+      "disqualified": [],
+      "disqualified_as_run": [],
+      "unverifiable_conditions": [
+        "attribution_swapped: the fixture's planted probes changed from 1 to 2 since this run, so `invented_findings` cannot be re-accounted from the record"
+      ]
+    }
+  ]
+}

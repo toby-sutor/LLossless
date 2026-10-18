@@ -1,0 +1,56 @@
+% A REGISTERED RESULT SECTION. No numeral outside \ccnum; see check_numbers.py.
+% The refusal sentence below is checked against tests/run_bench.py by
+% check_numbers.stale_refusals. The declared-loss subsection is checked against
+% a fresh run of its demonstration, and of the variant that evades the rule, by
+% check_numbers.prose_b5.
+\section{How the figures are kept honest}
+\label{sec:trust}
+
+LLossless rests on one idea: a model's account of its own work is not evidence, so the check has to come from outside. The same holds for the tool itself, because agents wrote its code, its tests and this paper.
+
+\subsection{Figures and registrations}
+
+No measured figure in a result section of this paper is typed. Each is a name whose value a program generates from a file of results kept in the repository. The published file \texttt{paper/generated/numbers.json} lists every name with its value and its source. The build stops on a typed digit, on a name with no value, and on a sentence that compares figures when the figures no longer bear it out. That proves less than it seems, because a generated value only proves that a string came out of a file, and a figure can still count something other than its name says (Section~\ref{sec:audit}). The benchmark's programs, documents and outputs are published, and anyone with API keys or a subscription can run it again. The result is a new sample, not the same figures.
+
+Every experiment behind this paper was registered before its first model call, except one: the comparison of a small and a larger local model (Section~\ref{sec:study}). The benchmark has \ccnum{lineup.amendments.after_results} amendments made after the results were known, and Section~\ref{sec:audit} is about them. The program that ran and scored the local-model study is strict. It refuses rather than warns, in ten places. It writes no score, for example, when the properties it can evaluate are not exactly the registered ones, or when the model being scored is also its judge.
+
+\subsection{Checks that passed while their claim was false}
+\label{sec:blind-spots}
+
+The most expensive failure in this project was a check that reported success while the thing it claimed did not hold. I count \ccnum{blindspot.total} of them. Most of the tool's mechanical checks were called by nothing except their own tests: on a real pair the report showed a single finding, and when I ran the uncalled checks by hand, they found several more. A detector for words copied from the merge prompt's worked example was never called by the shipped tool. A scanner that lists the files a program depends on could not see a dependency that came in through an import, its own among them.
+
+Everything looked green until I entered data from outside, data the AI did not know, and suddenly a lot of it collapsed. The lesson is not to rely on the tests that the coding agent wrote itself, and to test with data the AI does not know while the app is being built. Since then a check has to be seen to run, a detector has to be seen to fire, and an expected value is derived and not written down. The mechanical checks are a named step of the command, and the report prints ``Not checked'' where that step did not run.
+
+\subsection{A figure that passed every check and miscounted}
+\label{sec:audit}
+
+The same happened to the benchmark's headline figure. I asked how the mechanical checks actually work, so that this paper could explain them. Writing that explanation, the coding agent found that the headline was wrong. It said that \ccnum{lineup.registered.disqualified} of the \ccnum{lineup.rows} configurations had lost content silently. What it counted was segments that a program could not find, and most of them were still in the merge: a sentence that the merge had joined to its neighbour with a semicolon, a heading that the merge did not take because it kept the other source's heading for the same section. The figure had been green from \ccnum{lineup.to}, when the benchmark ended, to \ccnum{lineup.audit.date}. It was generated from the stored runs, and its sentence was held to it on every build. Nobody had read what it counted.
+
+So the rule was repaired and the benchmark was scored again. An AI model then read the segments that a merge had changed or dropped without a record. By that reading \ccnum{lineup.disqualified} of the \ccnum{lineup.rows} configurations lost content, not \ccnum{lineup.registered.disqualified}. The repair and my ruling below are amendments that I made after the results were known, and so are later corrections to the reference merges of the runbook and loading-dock pairs (Section~\ref{sec:findings}). Both scorings are published.
+
+This rests on less than I would like. A model did the reading, a Claude model at that, and no person. And one of the \ccnum{lineup.disqualified} is out on a single borderline sentence, by my ruling. Its source says: ``\ccnum{lineup.audit.example.condition.source}'' In the merge by \texttt{\ccnum{lineup.audit.example.condition.row}} the words ``\ccnum{lineup.audit.example.condition.missing}'' are gone, and the sentence stands under the heading ``\ccnum{lineup.audit.example.condition.heading}'', which implies the occasion. A reader who takes the heading as enough finds no loss, and then \texttt{\ccnum{lineup.audit.borderline.verdict_row}} lost nothing. The audit page in the repository, \texttt{\ccnum{reg.2026-09-27-lineup.path}/audit/}, has every case with its quotations, and a count of what was not read.
+
+\subsection{A merge could declare its way past every check}
+\label{sec:declared-blindspot}
+
+A record switches the loss check off for its segment, and the check on a record asks only whether its replacement is in the merge (Section~\ref{sec:system}). So a merge could declare most of its sources away against one sentence. A test in the published suite shows it with plain Python and no model:
+
+\begin{quote}\small\ttfamily
+tests/test\_reconcile.py\\
+\ccnum{b5.test}
+\end{quote}
+
+\noindent Its sources are release notes with \ccnum{b5.segments} segments and \ccnum{b5.source_chars} characters. The merge has \ccnum{b5.merged_chars} characters: a title and the single sentence ``This release changes scheduling, queues, auditing, replicas, archiving and compaction.'' The \ccnum{b5.absent} segments that are gone each have a record that names this sentence as their replacement. \ccnum{b5.absent_percent}\% of the source segments were gone, and with them \ccnum{b5.absent_chars_percent}\% of the sources' characters. Every record was accepted, and every one of the mechanical checks passed.
+
+The rule that now applies counts and does not read: one replacement may stand in for at most \ccnum{tool.fan_in} missing segments. When I set it, no replacement in the reference merges of the \ccnum{b5.pairs} public pairs stood in for more than \ccnum{b5.pairs_max_fan_in_registered} missing segments, and I put the limit at that maximum, with no margin. With the rule in place the demonstration now fails the run. At every one of the \ccnum{b5.levels} fidelity levels it returns \ccnum{b5.findings} finding, because one replacement is declared to stand in for \ccnum{b5.fan_in} missing segments.
+
+The hole is narrowed, not closed. A merge can point each missing segment at a different part of the same surviving sentence. The variant with \ccnum{b5.split_spans} records that name \ccnum{b5.split_spans} different parts of the one sentence returns \ccnum{b5.split_findings} findings at every level. A record that is coherent and false cannot be told from a true one without reading the documents, and reading is the judge's job. For a user this means that a clean result from the mechanical checks does not rule out a merge that summarised its sources away.
+
+\paragraph{The opposite lie.}
+\label{sec:false-departure}
+A merge can also write a record that says a segment was subsumed or superseded and still carry that segment unchanged. In one recorded merge of a public pair by a small open-weight model, \ccnum{fd.findings} of the merge's \ccnum{fd.records} records were false in exactly that way. No content is lost, but the record sends a reviewer looking for a change that is not there. Whether a segment is still in the merge unchanged is a comparison of text, so the check needs no threshold.
+
+\subsection{An answer key that contradicted itself}
+\label{sec:unmeasurable}
+
+The detection test scores a judge against answer keys (Section~\ref{sec:detection}), so a wrong key scores every model wrongly. That happened in the local-model study. A control test case planted no defect, yet its key said that a correct run should end as a failure, so the models that rightly found nothing were scored as having missed a defect. The expected exit code is now computed from the key's entries, and the scoring gained a third outcome beside pass and fail, \emph{unmeasured}.

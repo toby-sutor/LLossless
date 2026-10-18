@@ -1,0 +1,984 @@
+{
+  "summary": {
+    "label": "A-27b",
+    "passthrough": [
+      "--model",
+      "qwen3.8:27b",
+      "--field-order",
+      "schema",
+      "--structured",
+      "json_schema"
+    ],
+    "fixtures": 13,
+    "exit_code_matched": [
+      "attribution_invented",
+      "attribution_swapped",
+      "conflict_surfaced",
+      "contradiction",
+      "dedup",
+      "disjoint_domains",
+      "disjoint_sources",
+      "dropped_claim",
+      "hallucination",
+      "numeric_drift",
+      "ordering_only",
+      "structure_added"
+    ],
+    "exit_code_unmeasured": [],
+    "exit_code_missed": [
+      "paraphrase"
+    ],
+    "fixtures_measured": 13,
+    "plants_total": 6,
+    "plants_unmeasured": 0,
+    "plants_detected": 6,
+    "invented_total": 2,
+    "invented_on_unmeasured": 0,
+    "disqualified": [
+      "paraphrase: a clean fixture failed with 1 invented finding(s)"
+    ]
+  },
+  "records": [
+    {
+      "fixture": "attribution_invented",
+      "kind": "defect",
+      "wall_seconds": 34.8,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/attribution_invented.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "m-tls-attributed",
+          "expected_finding": "hallucinated",
+          "anchor": {
+            "all_of": [
+              "According to the Operator Guide"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-004",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "# Vandrell Relay - Operator Guide\n\nThe relay listens on port 8443.\nThe read timeout is 30 seconds.\nThe health check path is /healthz.",
+          "rationale": "The claim attributes the minimum TLS version to the Operator Guide (source_a.md), but source_a.md does not contain this information; it is found in source_b.md."
+        }
+      ],
+      "detected": [
+        "m-tls-attributed"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 5,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 11,
+        "anchored": 11,
+        "graded": 11,
+        "grounded": 11,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 5,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1504,
+        "model_loads": 0,
+        "duration_seconds": 34.7,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "attribution_swapped",
+      "kind": "defect",
+      "wall_seconds": 33.2,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/attribution_swapped.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  2 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "m-notes-timeout-attribution",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "According to the Deployment Notes",
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-003",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "The read timeout is 60 seconds.",
+          "rationale": "Source B (Deployment Notes) states the read timeout is 60 seconds, which contradicts the claim that it is 30 seconds."
+        }
+      ],
+      "detected": [
+        "m-notes-timeout-attribution"
+      ],
+      "missed": [],
+      "invented_findings": [
+        {
+          "claim_id": "M-004",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "Source A (Operator Guide) states the read timeout is 30 seconds, which contradicts the claim that it is 60 seconds."
+        }
+      ],
+      "findings_total": 2,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 10,
+        "anchored": 10,
+        "graded": 10,
+        "grounded": 10,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1401,
+        "model_loads": 0,
+        "duration_seconds": 33.0,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "conflict_surfaced",
+      "kind": "guard",
+      "wall_seconds": 55.7,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/conflict_surfaced.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 10,
+          "source_a.md": 7,
+          "source_b.md": 6
+        },
+        "claims_total": 23,
+        "anchored": 23,
+        "graded": 23,
+        "grounded": 23,
+        "forward_verdicts": 13,
+        "reverse_verdicts": 10,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 3120,
+        "model_loads": 0,
+        "duration_seconds": 55.5,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "contradiction",
+      "kind": "defect",
+      "wall_seconds": 53.1,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/contradiction.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "A-003",
+          "finding": "contradicted",
+          "direction": "source_to_merged",
+          "evidence": "The default connect timeout is 60 seconds.",
+          "rationale": "The reference text states the default connect timeout is 60 seconds, which contradicts the claim of 30 seconds."
+        }
+      ],
+      "detected": [
+        "a-connect-timeout"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 9,
+          "source_a.md": 7,
+          "source_b.md": 6
+        },
+        "claims_total": 22,
+        "anchored": 22,
+        "graded": 22,
+        "grounded": 22,
+        "forward_verdicts": 13,
+        "reverse_verdicts": 9,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2936,
+        "model_loads": 0,
+        "duration_seconds": 52.9,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "dedup",
+      "kind": "guard",
+      "wall_seconds": 31.1,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/dedup.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 10,
+        "anchored": 10,
+        "graded": 10,
+        "grounded": 10,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1302,
+        "model_loads": 0,
+        "duration_seconds": 30.9,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "disjoint_domains",
+      "kind": "guard",
+      "wall_seconds": 214.4,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/disjoint_domains.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 47,
+          "source_a.md": 22,
+          "source_b.md": 30
+        },
+        "claims_total": 99,
+        "anchored": 99,
+        "graded": 99,
+        "grounded": 99,
+        "forward_verdicts": 52,
+        "reverse_verdicts": 47,
+        "errored": 0,
+        "calls": 8,
+        "schema_repairs": 0,
+        "completion_tokens": 13743,
+        "model_loads": 0,
+        "duration_seconds": 214.3,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "disjoint_sources",
+      "kind": "guard",
+      "wall_seconds": 185.8,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/disjoint_sources.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 36,
+          "source_a.md": 13,
+          "source_b.md": 25
+        },
+        "claims_total": 74,
+        "anchored": 74,
+        "graded": 74,
+        "grounded": 74,
+        "forward_verdicts": 38,
+        "reverse_verdicts": 36,
+        "errored": 0,
+        "calls": 7,
+        "schema_repairs": 0,
+        "completion_tokens": 11447,
+        "model_loads": 0,
+        "duration_seconds": 185.7,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "dropped_claim",
+      "kind": "defect",
+      "wall_seconds": 81.3,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/dropped_claim.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 dropped: in a source, not in the merge (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "b-log-format",
+          "expected_finding": "dropped",
+          "anchor": {
+            "all_of": [
+              "access logs",
+              "JSON Lines"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "B-005",
+          "finding": "dropped",
+          "direction": "source_to_merged",
+          "evidence": "",
+          "rationale": "The reference text does not mention the format of access logs."
+        }
+      ],
+      "detected": [
+        "b-log-format"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 11,
+          "source_a.md": 7,
+          "source_b.md": 8
+        },
+        "claims_total": 26,
+        "anchored": 26,
+        "graded": 25,
+        "grounded": 25,
+        "forward_verdicts": 15,
+        "reverse_verdicts": 11,
+        "errored": 0,
+        "calls": 6,
+        "schema_repairs": 1,
+        "completion_tokens": 4677,
+        "model_loads": 0,
+        "duration_seconds": 81.2,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "hallucination",
+      "kind": "defect",
+      "wall_seconds": 48.6,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/hallucination.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 invented: in the merge, in neither source (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "merged-socks5",
+          "expected_finding": "hallucinated",
+          "anchor": {
+            "all_of": [
+              "SOCKS5"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-005",
+          "finding": "hallucinated",
+          "direction": "merged_to_sources",
+          "evidence": "",
+          "rationale": "Neither source document mentions SOCKS5 proxies or upstream traffic forwarding."
+        }
+      ],
+      "detected": [
+        "merged-socks5"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 9,
+          "source_a.md": 5,
+          "source_b.md": 5
+        },
+        "claims_total": 19,
+        "anchored": 19,
+        "graded": 18,
+        "grounded": 18,
+        "forward_verdicts": 10,
+        "reverse_verdicts": 9,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2461,
+        "model_loads": 0,
+        "duration_seconds": 48.5,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "numeric_drift",
+      "kind": "defect",
+      "wall_seconds": 39.6,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/numeric_drift.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "a-max-connections",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "approximately 500",
+              "concurrent connections"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "A-002",
+          "finding": "contradicted",
+          "direction": "source_to_merged",
+          "evidence": "The connection limit is 512 concurrent connections.",
+          "rationale": "The reference text specifies a limit of 512 concurrent connections, which contradicts the claim of approximately 500."
+        }
+      ],
+      "detected": [
+        "a-max-connections"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 5,
+          "source_b.md": 4
+        },
+        "claims_total": 13,
+        "anchored": 13,
+        "graded": 13,
+        "grounded": 13,
+        "forward_verdicts": 9,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1774,
+        "model_loads": 0,
+        "duration_seconds": 39.5,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "ordering_only",
+      "kind": "guard",
+      "wall_seconds": 89.2,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/ordering_only.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 13,
+          "source_a.md": 13,
+          "source_b.md": 13
+        },
+        "claims_total": 39,
+        "anchored": 39,
+        "graded": 39,
+        "grounded": 39,
+        "forward_verdicts": 26,
+        "reverse_verdicts": 13,
+        "errored": 0,
+        "calls": 6,
+        "schema_repairs": 0,
+        "completion_tokens": 5075,
+        "model_loads": 0,
+        "duration_seconds": 89.0,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "paraphrase",
+      "kind": "guard",
+      "wall_seconds": 72.7,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/paraphrase.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 partly dropped: the merge carries some of this claim (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 1,
+      "exit_code_matches": false,
+      "outcome": "missed",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [
+        {
+          "claim_id": "A-002",
+          "finding": "partially_dropped",
+          "direction": "source_to_merged",
+          "evidence": "The relay's default listen port is 8443.",
+          "rationale": "The reference text states the default port is 8443, but does not mention the condition 'unless overridden'."
+        }
+      ],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 9,
+          "source_a.md": 9,
+          "source_b.md": 10
+        },
+        "claims_total": 28,
+        "anchored": 28,
+        "graded": 28,
+        "grounded": 28,
+        "forward_verdicts": 19,
+        "reverse_verdicts": 9,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 4031,
+        "model_loads": 0,
+        "duration_seconds": 72.5,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "structure_added",
+      "kind": "guard",
+      "wall_seconds": 31.0,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/A-27b/detect-reports/structure_added.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 2,
+          "source_b.md": 3
+        },
+        "claims_total": 9,
+        "anchored": 9,
+        "graded": 9,
+        "grounded": 9,
+        "forward_verdicts": 5,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1184,
+        "model_loads": 0,
+        "duration_seconds": 30.9,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    }
+  ]
+}

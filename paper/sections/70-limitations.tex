@@ -1,0 +1,42 @@
+\section{Limitations}
+\label{sec:limitations}
+
+This section lists what the tool does not do and what the figures do not show. Each paragraph is one limit.
+
+\paragraph{It checks facts, not form.} A merge that reads badly passes. Rewording within what the fidelity level allows is not reported.
+
+Notation is the exception, and only in part. In a merge the tool made, where a source sentence is kept, the mechanical checks compare its numbers character by character. There, ``512'' rewritten as ``0x200'' is a finding, and so is ``512'' rewritten as ``approximately 500''. The judged checks decide about meaning and have no rule about notation. Under \texttt{llossless verify}, which checks a merge made elsewhere, only the judged checks look at such a change. A judge that reads both notations as the same number reports nothing.
+
+Source code is outside what the tool protects, except inside fenced blocks of a document. In one test I gave the tool the same small program written once in C and once in C++. The programs were plain files, not fenced blocks inside a document. The merge kept the C version, dropped the C++ version and flattened the indentation. The run still ended clean, with every source claim accounted for, because both programs make the same claims about what the program does. What was lost was form, and the tool does not check form.
+
+\paragraph{Loss can be declared away or misfiled.} A merge can still declare most of its sources away against one surviving sentence and pass every mechanical check (Section~\ref{sec:declared-blindspot}). Catching that is left to the judged checks, and I have not measured how often they do.
+
+A second weakness is in how a missing segment is classified. When the merge does not carry a source segment word for word, the program looks for a merge segment that resembles it. If one resembles it closely enough, the source segment is called reworded. Nothing requires that the resembling segment is really its counterpart. So when the sources hold two nearly identical sentences and the merge deletes one, the other is still there to be compared with. The deletion is then reported as a rewording, which flatters the merge. A sentence that was cut short is flattered in the same way: of \ccnum{lineup.audit.reworded.cases} reworded segments with no record on the benchmark's first runs, a reading found a loss in \ccnum{lineup.audit.reworded.lost} (Section~\ref{sec:audit}).
+
+The misfiling also runs the other way: a sentence that the merge states in other words is counted as a silent loss. Of the \ccnum{lineup.audit.first.still_counted} segments that the amended scoring counts on the first runs of the benchmark, the reading found \ccnum{lineup.audit.first.present_still_counted} present in the merge. So the silent-loss column of Table~\ref{tab:lineup} still counts more than was lost.
+
+\paragraph{The disqualification rests on a model's reading.} An AI model decided by reading which configurations lost content, not a person, and one disqualification rests on my ruling on a borderline case. Section~\ref{sec:audit} gives the figures, what was not read, and the other limits.
+
+\paragraph{A declared choice can hide a conflict from the loss score.} A declared segment is not a silent loss, and a declaration can settle a disagreement that the merged text never shows. In the opening story the merge declared the dropped count, so the score recorded \ccnum{lineup.story.silent} silent losses for that run while the report flagged the contradiction and exited \ccnum{lineup.story.exit}. A reader who looks only at the silent-loss column of Table~\ref{tab:lineup} does not see such a case.
+
+\paragraph{The judged half depends on its judge.} The figures of the judged checks come from a model, and a different judge would give different ones. In the benchmark every configuration was judged by its own model. The judged half is not neutral between vendors and should not be read as if it were.
+
+Drawing claims from a document does not always repeat. On the hosted configurations of the benchmark, the number of claims taken from an unchanged source moved between runs. On the local model behind the tool's recorded test answers, every first answer repeated.
+
+Claims also get coarser as documents get longer. A claim that bundles several facts can be scored as covered by a merge that dropped one of them. How often that hides a loss has not been measured.
+
+\paragraph{A small test set, built for properties.} The test material is \ccnum{corpus.pairs} document pairs with reference merges, \ccnum{corpus.fixtures} small test cases with answer keys, of which \ccnum{corpus.detection_block} form the registered detection test, and \ccnum{corpus.handwritten} further document sets. It was built so that each piece carries a specific property, such as a conflict that cannot be resolved by choosing. It was not built to be representative. No claim here is about documents in general.
+
+The coding agents that wrote the tool also wrote the pairs, their reference merges and the answer keys of the test cases. So the yardstick can share a blind spot with the tool. The agents were Claude models, and Claude models are among those ranked against these merges. I reviewed the material, but nobody outside the project has.
+
+The documents are also short. The longest pair of the benchmark, \texttt{\ccnum{corpus.largest_pair.name}}, has \ccnum{corpus.largest_pair.words} words in its sources, which the tool cuts into \ccnum{corpus.largest_pair.segments} segments. The largest document set that was merged is \texttt{\ccnum{corpus.largest_set.name}}, the Mah-Jongg set, with \ccnum{corpus.largest_set.words} words in \ccnum{corpus.largest_set.segments} segments. Nothing longer has been measured. So this paper cannot say what happens with documents of many pages.
+
+Nearly every measurement covers two sources, although up to \ccnum{tool.max_sources} are accepted. The exception is the Mah-Jongg set, which has \ccnum{corpus.mahjongg.sources} sources. No measurement covers more.
+
+\paragraph{One snapshot, hosted models only.} Most pairs ran once, and a second run is a fresh sample: no configuration sent a temperature, and only the OpenAI configurations sent a seed. So the figures support statements of the form ``on these pairs, on this date, the program could not find so many segments in this configuration's merges, a reading found content gone in so many, and a merge cost so much''. They do not support a ranking where ranges overlap or a ranking from a single run, and they do not support any combined score. No local model is in the benchmark. One measured document set is German: the Mah-Jongg set, whose sources also carry Chinese and Japanese characters. Nothing else is measured outside English.
+
+\paragraph{One tool's opinion of a merge.} The mechanical checks define what counts as a defect. They always give the same answer for the same input. That makes them reproducible, but it does not make them right: a segment they count as a silent loss is one a person might call an acceptable shortening.
+
+The tool also merges whatever it is given. It does not decide which documents belong together.
+
+And the web interface is for people who trust each other: a member without a key of their own runs on the operator's key.

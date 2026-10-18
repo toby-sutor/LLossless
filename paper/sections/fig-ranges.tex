@@ -1,0 +1,53 @@
+% Figure: Voyager errors fixed, as ranges, in Table 2's order. Placed in
+% Section 4.3. The row order and the shaded bands follow Table 2's places, and
+% check_numbers.py holds them to the generated places (`_ranges_figure`).
+\newcommand{\rangerow}[3]{% row, y position, vendor colour
+  \draw[line width=3.5pt, color=#3, opacity=0.35, line cap=round]
+    (axis cs:\ccnum{lineup.#1.S3.voyager.min},#2) -- (axis cs:\ccnum{lineup.#1.S3.voyager.max},#2);
+  \addplot[only marks, mark=*, mark size=2.6pt, color=#3]
+    coordinates {(\ccnum{lineup.#1.S3.voyager.median},#2)};
+}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.92\linewidth, height=7.4cm,
+  xmin=0, xmax=\ccnum{planted.voyager.errors}, ymin=-0.6, ymax=8.6, y dir=reverse,
+  ytick={0,...,8},
+  yticklabels={\ccnum{lineup.fable-sub.name},\ccnum{lineup.opus-5.5-sub.name},\ccnum{lineup.opus-5.5-api.name},
+               \ccnum{lineup.gpt-6-sol-api.name},\ccnum{lineup.sonnet-5-api.name},
+               \ccnum{lineup.sonnet-5-sub.name},\ccnum{lineup.gpt-6-luna-api.name},
+               \ccnum{lineup.haiku-4.5-api.name},\ccnum{lineup.haiku-4.5-sub.name}},
+  yticklabel style={font=\scriptsize\ttfamily},
+  xlabel={Voyager errors fixed, of \ccnum{planted.voyager.errors}},
+  xmajorgrids, grid style={draw=black!8},
+  axis line style={draw=docgrey}, tick label style={font=\footnotesize},
+  label style={font=\small}, clip=false,
+]
+  \fill[goodfill]   (axis cs:0,0.5) rectangle (axis cs:\ccnum{planted.voyager.errors},2.5);
+  \fill[progfill]   (axis cs:0,2.5) rectangle (axis cs:\ccnum{planted.voyager.errors},5.5);
+  \fill[modelfill!60] (axis cs:0,5.5) rectangle (axis cs:\ccnum{planted.voyager.errors},8.5);
+  \node[font=\scriptsize\bfseries, color=goodgreen, anchor=east] at (axis cs:\ccnum{planted.voyager.errors},1.5) {\ccnum{lineup.opus-5.5-sub.S3.order}};
+  \node[font=\scriptsize\bfseries, color=progblue, anchor=east] at (axis cs:\ccnum{planted.voyager.errors},4) {\ccnum{lineup.gpt-6-sol-api.S3.order}};
+  \node[font=\scriptsize\bfseries, color=modelorange, anchor=east] at (axis cs:\ccnum{planted.voyager.errors},7) {\ccnum{lineup.gpt-6-luna-api.S3.order}};
+  \rangerow{opus-5.5-sub}{1}{anthropic}
+  \rangerow{opus-5.5-api}{2}{anthropic}
+  \rangerow{gpt-6-sol-api}{3}{openai}
+  \rangerow{sonnet-5-api}{4}{anthropic}
+  \rangerow{sonnet-5-sub}{5}{anthropic}
+  \rangerow{gpt-6-luna-api}{6}{openai}
+  \rangerow{haiku-4.5-api}{7}{anthropic}
+  \rangerow{haiku-4.5-sub}{8}{anthropic}
+  \addplot[only marks, mark=star, mark size=4pt, color=anthropic, line width=1pt]
+    coordinates {(\ccnum{lineup.fable-sub.S3.voyager.max},0)};
+  \node[font=\scriptsize\itshape, color=docgrey, anchor=east, xshift=-6pt]
+    at (axis cs:\ccnum{lineup.fable-sub.S3.voyager.max},0) {one run, no place};
+\end{axis}
+\end{tikzpicture}
+\caption{Voyager errors fixed, from each configuration's lowest run to its highest, with
+the median as a dot. Orange is Anthropic, teal OpenAI. Where the ranges of neighbouring
+rows overlap, a further run could swap them, so they share a place in Table~\ref{tab:planted}:
+the shaded bands. Fable ran once, the star at the top: the best single run, but with no place.}
+\label{fig:ranges}
+\floatfoot
+\end{figure}

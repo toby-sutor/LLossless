@@ -1,0 +1,35 @@
+% Figure: what becomes of one source sentence. Placed in Section 3, after the
+% rule that makes loss checkable. Every question in it is answered by a program.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=6mm and 9mm]
+  \node[doc] (s) {One sentence\\of a source};
+  \node[ask, below=6mm of s] (q1) {In the merge\\word for word?};
+  \node[good, right=12mm of q1] (kept) {\textbf{Kept}};
+  \node[ask, below=8mm of q1] (q2) {Found in\\other words?};
+  \node[ask, right=12mm of q2] (r1) {Has a\\record?};
+  \node[good, right=10mm of r1, yshift=5mm] (rw) {\textbf{Reworded}, declared};
+  \node[bad, right=10mm of r1, yshift=-5mm] (rwu) {\textbf{Reworded, undeclared}\\a finding to look at};
+  \node[ask, below=8mm of q2] (q3) {Has a\\record?};
+  \node[good, right=12mm of q3, text width=40mm] (dec)
+       {\textbf{Declared loss}\\allowed, within the loss budget\\and the replacement limit};
+  \node[bad, below=6mm of q3, text width=40mm] (sil)
+       {\textbf{Silent loss}\\the case this tool exists to find};
+  \draw[flow] (s) -- (q1);
+  \draw[flow] (q1) -- node[lbl, above] {yes} (kept);
+  \draw[flow] (q1) -- node[lbl, left] {no} (q2);
+  \draw[flow] (q2) -- node[lbl, above] {yes} (r1);
+  \draw[flow] (r1.east) -- ++(3mm,0) |- node[lbl, pos=0.75, above] {yes} (rw.west);
+  \draw[flow] (r1.east) -- ++(3mm,0) |- node[lbl, pos=0.75, below] {no} (rwu.west);
+  \draw[flow] (q2) -- node[lbl, left] {no} (q3);
+  \draw[flow] (q3) -- node[lbl, above] {yes} (dec);
+  \draw[flow] (q3) -- node[lbl, left] {no} (sil);
+\end{tikzpicture}
+\caption{What becomes of one sentence of a source. Every question here is answered by a
+program. Green outcomes are allowed. Red ones are reported, and a silent loss is the case
+the tool exists to find. Because the program compares text and not meaning, it can call a
+sentence missing that the merge kept in very different words, so a silent loss is a place
+to look and not proof.}
+\label{fig:sentence}
+\floatfoot
+\end{figure}

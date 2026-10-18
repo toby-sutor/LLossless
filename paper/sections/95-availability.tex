@@ -1,0 +1,23 @@
+\section{How this was produced, and where to find it}
+\label{sec:availability}
+
+\paragraph{How it was built.} The idea is mine, and it comes from a real problem: merging documents that say the same thing with a model, and not being able to tell what the merge left out. I set the scope, wrote the plans and ruled on the design decisions. AI coding agents wrote the implementation, the test suite and the prose of this paper. I read what they reported and the decisions they recorded, not every line they wrote. The errors are mine.
+
+It took about seven months, from a first proof of concept in March 2026. The subscription that ran the agents has usage limits, and at times the work stopped for days until they reset. Testing on local models took many hours for little progress (Section~\ref{sec:study}). And the scope grew. The first plan was the cheaper check alone, which asks only whether the sources survived in the merge (Section~\ref{sec:depth}). That was not enough, so the full check, which also reads the merge back against the sources, was built on top of it, with more checks around it. Writing the test material by hand, the documents with planted errors and the reference merges, took a long time as well.
+
+The disclosure is not a reason The disclosure is not a reason to discount the figures: the mechanical checks and the scoring program are code that anyone can run again. The exception is the disqualification, which rests on a reading by a model, and its cases are published (Section~\ref{sec:audit}).
+
+\paragraph{Where to find it.} The repository is \url{https://github.com/toby-sutor/LLossless}. It holds the tool, the web interface, the programs that ran and scored the benchmark, the prompts, the test documents, the sources of this paper with the files of results behind its figures, and the published part of the test suite with recorded model answers. My working notes are withheld. For any figure, \texttt{paper/generated/numbers.json} names the file it came from and the place in that file (Section~\ref{sec:trust}).
+
+\paragraph{Which version this paper describes.} The published repository starts a fresh history, so the title page names a digest of the published files instead of a commit: a \textsc{sha}-256 over the path and the \textsc{sha}-256 of every file, leaving out \texttt{paper/generated/}. \texttt{paper/README.md} gives the command that prints it in a fresh clone. The title page shows its first twelve characters.
+
+The tool was renamed on 2026-09-26. Every report still carries the field \texttt{claimcheck\_commit}, which keeps the earlier name and names the version of the tool that produced the report.
+
+\paragraph{Reference: licences and credits.} \texttt{NOTICE} in the repository is the authority and lists each exception. In summary:
+\begin{points}
+\item \emph{This paper.} The text is under Creative Commons Attribution 4.0, as \texttt{paper/LICENSE} states: it may be shared and adapted with credit.
+\item \emph{The code.} The code is under the Elastic License 2.0, as the repository's \texttt{LICENSE} file states, with the copyright holder named in \texttt{NOTICE}. It may be used, modified and redistributed, but may not be offered to third parties as a hosted or managed service.
+\item \emph{The data.} The document pairs in \texttt{tests/pairs/}, the document sets in \texttt{tests/handwritten/}, the run outputs in \texttt{arms/}, the annotated pages in \texttt{annotated/} and the graded results in \texttt{paper/records/} are under Creative Commons Attribution 4.0, as a \texttt{LICENSE} file in each of those directories states, with one exception.
+\item \emph{The exception: sets adapted from Wikipedia.} Four sets in \texttt{tests/handwritten/} are adapted from Wikipedia articles: \texttt{gold\_de\_en} from ``Gold'' in the German and the English Wikipedia, \texttt{mahjongg} from ``Mah-Jongg'' in the German Wikipedia, and \texttt{sepia} and \texttt{treecreeper} from ``Cuttlefish'' and ``Eurasian treecreeper'' in the English Wikipedia. Those four sets, and the benchmark run directories under \texttt{arms/} that merged \texttt{mahjongg}, are under Creative Commons Attribution-ShareAlike 4.0. Anything built from them must credit the Wikipedia contributors and carry the same licence.
+\item \emph{The Voyager sources.} The \texttt{voyager} sources are adapted from a NASA page. NASA says its content is generally not subject to copyright in the United States, and it does not endorse this project.
+\end{points}

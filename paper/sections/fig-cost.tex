@@ -1,0 +1,53 @@
+% Figure: price against merge quality. Placed in Section 4.2. Every plotted
+% value is a generated figure. The axis limits and the shaded zone are layout,
+% and check_numbers.py holds the data to them (`_cost_figure`), so a point that
+% leaves them fails the build.
+\newcommand{\costpoint}[4]{% row, vendor colour, mark, where the label goes
+  \addplot[only marks, mark=#3, mark size=3.2pt, color=#2, line width=1pt]
+    coordinates {(\ccnum{lineup.#1.usd},\ccnum{lineup.#1.dev_per_pair})};
+  \node[font=\scriptsize\ttfamily, color=#2, #4]
+    at (axis cs:\ccnum{lineup.#1.usd},\ccnum{lineup.#1.dev_per_pair}) {\ccnum{lineup.#1.name}};
+}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.92\linewidth, height=8cm,
+  xmode=log, log basis x=10,
+  xmin=0.008, xmax=1.4, ymin=3.4, ymax=8.4,
+  xtick={0.01,0.03,0.1,0.3,1}, xticklabels={\$0.01,\$0.03,\$0.10,\$0.30,\$1.00},
+  xlabel={Cost per merge (log scale)}, ylabel={Deviations per pair},
+  grid=major, grid style={draw=black!8},
+  axis line style={draw=docgrey}, tick label style={font=\footnotesize},
+  label style={font=\small},
+  clip=false,
+]
+  % The zone reaches a little beyond the configuration that is cheapest and closest, by the
+  % factor and the margin below; check_numbers.py requires that no other row falls in it.
+  \fill[goodfill, opacity=0.55] (axis cs:0.008,3.4) rectangle
+    (axis cs:{\ccnum{lineup.gpt-6-sol-api.usd}*1.3},{\ccnum{lineup.gpt-6-sol-api.dev_per_pair}+0.7});
+  \node[font=\scriptsize\itshape, color=goodgreen, anchor=south west]
+    at (axis cs:0.0085,3.45) {cheap and close to the reference};
+  \draw[dashed, thick, color=badred] (axis cs:0.008,\ccnum{lineup.floor.union.dev_per_pair})
+    -- (axis cs:1.4,\ccnum{lineup.floor.union.dev_per_pair});
+  \node[font=\scriptsize, color=badred, anchor=south east]
+    at (axis cs:1.35,\ccnum{lineup.floor.union.dev_per_pair})
+    {a script pasting the documents together};
+  \costpoint{gpt-6-sol-api}{openai}{*}{anchor=west, xshift=4pt}
+  \costpoint{gpt-6-luna-api}{openai}{o}{anchor=west, xshift=4pt}
+  \costpoint{opus-5.5-api}{anthropic}{*}{anchor=north, yshift=-6pt}
+  \costpoint{opus-5.5-sub}{anthropic}{square*}{anchor=west, xshift=5pt, yshift=-3pt}
+  \costpoint{sonnet-5-api}{anthropic}{*}{anchor=south east, xshift=-3pt, yshift=6pt}
+  \costpoint{sonnet-5-sub}{anthropic}{square*}{anchor=east, xshift=-5pt}
+  \costpoint{haiku-4.5-api}{anthropic}{o}{anchor=west, xshift=4pt}
+  \costpoint{haiku-4.5-sub}{anthropic}{square}{anchor=west, xshift=4pt}
+\end{axis}
+\end{tikzpicture}
+\caption{Price against merge quality on the \ccnum{lineup.pairs} pairs: lower is closer
+to the reference merges. Orange is Anthropic, teal OpenAI. Circles are the vendor's API,
+squares its command-line program under a subscription, whose cost is the API-equivalent
+and not a bill. Hollow markers are disqualified for lost content. The dashed line is a
+script with no model; every configuration is below it.}
+\label{fig:cost}
+\floatfoot
+\end{figure}

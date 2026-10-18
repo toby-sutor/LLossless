@@ -1,0 +1,490 @@
+{
+  "provenance": {
+    "generated_at": "2026-08-29T08:12:56+00:00",
+    "claimcheck_commit": "d51870d62ac1",
+    "run_mode": "live",
+    "endpoint": {
+      "id": "5cefcb5c2a07",
+      "location": "hosted",
+      "content_left_this_machine": true
+    },
+    "merge_policy": {
+      "fidelity": "off",
+      "title_policy": "keep-base",
+      "base": null,
+      "base_chosen": null
+    },
+    "models": {
+      "merge": "qwen3.8:27b",
+      "decompose": "qwen3.8:27b",
+      "verify": "qwen3.8:27b"
+    },
+    "structured_output": {
+      "mode": "json_schema",
+      "how": "probed",
+      "field_order": "schema"
+    },
+    "prompts": {
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/decompose.md": "b4ec1e0c7eade283c407c8f1b66c48c71fb38cde670eb6067c159b0161481984",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/merge.md": "21ce9934e2ce29822dd0e1effe682779492d28dd08d741c39d5924678d522d03",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify.md": "54c88ce35a87e3317da8ec605c677c0c4355e756db62f8b5dd2a6286d556106c",
+      "<home>/Documents/Dev/vibe-coding/claimcheck/prompts/verify_reverse.md": "7f655f15e201b6e2b872c7979bb4bdaf3709aae10c46b2d87fca9b071889c522"
+    },
+    "decoding": {
+      "temperature": 0.0,
+      "seed": 0,
+      "thinking": [
+        "merge"
+      ]
+    },
+    "counts": {
+      "calls": 54,
+      "cache_hits": 0,
+      "replayed": 0,
+      "schema_repairs": 0,
+      "model_loads": 0,
+      "errors": 0,
+      "prompt_tokens": 120959,
+      "completion_tokens": 40719
+    },
+    "duration_seconds": 1088.2
+  },
+  "inconclusive": false,
+  "abandoned_units": 0,
+  "harness_fault": [],
+  "budget_tripped": [],
+  "samples": 1,
+  "grading": "every source_to_merged probe is graded against SUPPORTED alone; expected_verdict, also_acceptable and expected_evidence_contains describe the hand-written merge and are not consulted. No forward probe declares an expected_evidence_source.",
+  "forward": {
+    "probes_declared": 93,
+    "probes_measured": 93,
+    "supported": 93,
+    "paired_denominator": 0,
+    "paired_supported": {
+      "off": 0,
+      "on": 0
+    }
+  },
+  "headline": {
+    "example_leaks": [],
+    "must_not_extract": []
+  },
+  "fixtures": [
+    {
+      "fixture": "attribution_invented",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 5,
+          "forward_measured": 5,
+          "forward_supported": 5,
+          "not_supported": [],
+          "claims": 5,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 5,
+          "merge_completion_tokens": 297,
+          "merged_sha256": "8bffb165c0633123",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 68.24
+        }
+      ]
+    },
+    {
+      "fixture": "attribution_swapped",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 2,
+          "forward_measured": 2,
+          "forward_supported": 2,
+          "not_supported": [],
+          "claims": 4,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 4,
+          "merge_completion_tokens": 377,
+          "merged_sha256": "33b6dca4d30e0a45",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 58.37
+        }
+      ]
+    },
+    {
+      "fixture": "conflict_surfaced",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 8,
+          "forward_measured": 8,
+          "forward_supported": 8,
+          "not_supported": [],
+          "claims": 10,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 10,
+          "merge_completion_tokens": 633,
+          "merged_sha256": "359ca1070e42f919",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 78.56
+        }
+      ]
+    },
+    {
+      "fixture": "contradiction",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 8,
+          "forward_measured": 8,
+          "forward_supported": 8,
+          "not_supported": [],
+          "claims": 10,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 10,
+          "merge_completion_tokens": 633,
+          "merged_sha256": "359ca1070e42f919",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 74.33
+        }
+      ]
+    },
+    {
+      "fixture": "dedup",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 6,
+          "forward_measured": 6,
+          "forward_supported": 6,
+          "not_supported": [],
+          "claims": 4,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 4,
+          "merge_completion_tokens": 346,
+          "merged_sha256": "cfd1a509c93dc516",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 36.66
+        }
+      ]
+    },
+    {
+      "fixture": "disjoint_domains",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 12,
+          "forward_measured": 12,
+          "forward_supported": 12,
+          "not_supported": [],
+          "claims": 48,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 48,
+          "merge_completion_tokens": 923,
+          "merged_sha256": "2c9d903088703d3c",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 163.95
+        }
+      ]
+    },
+    {
+      "fixture": "disjoint_sources",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 12,
+          "forward_measured": 12,
+          "forward_supported": 12,
+          "not_supported": [],
+          "claims": 36,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 36,
+          "merge_completion_tokens": 887,
+          "merged_sha256": "e7b29c2767d1cb5d",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 156.57
+        }
+      ]
+    },
+    {
+      "fixture": "dropped_claim",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 10,
+          "forward_measured": 10,
+          "forward_supported": 10,
+          "not_supported": [],
+          "claims": 12,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 12,
+          "merge_completion_tokens": 592,
+          "merged_sha256": "48f9cfb845989f01",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 77.62
+        }
+      ]
+    },
+    {
+      "fixture": "hallucination",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 5,
+          "forward_measured": 5,
+          "forward_supported": 5,
+          "not_supported": [],
+          "claims": 8,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 8,
+          "merge_completion_tokens": 512,
+          "merged_sha256": "707f93fadf6548d5",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 54.47
+        }
+      ]
+    },
+    {
+      "fixture": "numeric_drift",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 5,
+          "forward_measured": 5,
+          "forward_supported": 5,
+          "not_supported": [],
+          "claims": 6,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 6,
+          "merge_completion_tokens": 652,
+          "merged_sha256": "216f7298c41f561c",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 79.36
+        }
+      ]
+    },
+    {
+      "fixture": "ordering_only",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 8,
+          "forward_measured": 8,
+          "forward_supported": 8,
+          "not_supported": [],
+          "claims": 13,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 13,
+          "merge_completion_tokens": 1091,
+          "merged_sha256": "80d4fe106ba7c3e8",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 91.75
+        }
+      ]
+    },
+    {
+      "fixture": "paraphrase",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 8,
+          "forward_measured": 8,
+          "forward_supported": 8,
+          "not_supported": [],
+          "claims": 9,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 9,
+          "merge_completion_tokens": 1807,
+          "merged_sha256": "599a608bded29610",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 112.34
+        }
+      ]
+    },
+    {
+      "fixture": "structure_added",
+      "status": "ok",
+      "identical_samples": [],
+      "units": [
+        {
+          "condition": "on",
+          "sample": 0,
+          "status": "measured",
+          "failed_step": null,
+          "error": null,
+          "forward_declared": 4,
+          "forward_measured": 4,
+          "forward_supported": 4,
+          "not_supported": [],
+          "claims": 4,
+          "example_leaks": [],
+          "must_not_extract": [],
+          "invented_claims": [],
+          "reverse_claims": 4,
+          "merge_completion_tokens": 293,
+          "merged_sha256": "1b2f0d7d9939cbe2",
+          "thinking": {
+            "merge": true,
+            "verify": false,
+            "decompose": false
+          },
+          "schema_repairs": 0,
+          "seconds": 35.95
+        }
+      ]
+    }
+  ]
+}

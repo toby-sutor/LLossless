@@ -1,0 +1,54 @@
+% Figure: the pipeline at a glance, merge then verify. Placed at the start of
+% Section 3. Blue boxes are a program, orange boxes a model. The exit codes are
+% the tool's design constants, stated in Section 2.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=8mm and 9mm]
+  \node[doc] (a) {Source A};
+  \node[doc, below=3mm of a] (b) {Source B};
+  \coordinate (ab) at ($(a.east)!0.5!(b.east)$);
+  \node[model, right=10mm of ab, minimum height=12mm] (merge)
+       {\textbf{Merge model}\\writes the merge};
+  \node[doc, right=10mm of merge, minimum height=12mm] (out)
+       {\textbf{Merged document}\\and its records:\\what changed, and why};
+  \draw[flow] (a.east) -- (a.east -| merge.west);
+  \draw[flow] (b.east) -- (b.east -| merge.west);
+  \draw[flow] (merge) -- (out);
+
+  \node[prog, below=16mm of merge, text width=62mm] (mech)
+       {\textbf{1. Mechanical checks}\quad\footnotesize a program, no model\\[3pt]
+        every source sentence kept or recorded; numbers, links\\and code unchanged; records within their limits};
+  \node[model, below=7mm of mech, text width=62mm] (judge)
+       {\textbf{2. Judge}\quad\footnotesize a model\\[3pt]
+        splits each document into claims and checks each claim\\
+        against the other side, in both directions, with a quote};
+  \node[prog, below=7mm of judge, text width=62mm] (quote)
+       {\textbf{3. Quote check}\quad\footnotesize a program\\[3pt]
+        is each quote really in the file it names?};
+  \node[good, below=9mm of quote, text width=96mm] (report)
+       {\textbf{Report and exit code}\\[2pt]\footnotesize
+        every finding with its file, line and quote. Exit code 0: nothing found;
+        1: a finding in the merged document; 2: the check did not finish;
+        3: only the records are wrong. A pipeline stops on 1 or 2.};
+  \draw[flow] (out.south) |- ($(mech.north)+(0,5mm)$) -- (mech.north);
+  \node[draw=modelorange, dashed, thick, rounded corners=4pt, inner sep=3mm,
+        fit=(merge) (out)] (mergebox) {};
+  \node[font=\small\bfseries, text=modelorange, anchor=south west, inner sep=1pt]
+    at (mergebox.north west) {Merge};
+  \node[draw=progblue, dashed, thick, rounded corners=4pt, inner sep=3mm,
+        fit=(mech) (judge) (quote)] (verifybox) {};
+  \node[font=\small\bfseries, text=progblue, anchor=south west, inner sep=1pt]
+    at (verifybox.north west) {Verify};
+  \draw[flow] (mech) -- node[lbl, right] {runs either way} (judge);
+  \draw[flow] (judge) -- (quote);
+  \draw[flow] (quote) -- (report);
+\end{tikzpicture}
+\caption{What happens in one run, in order: the merge, then its verification.
+\texttt{llossless merge} does both; \texttt{llossless verify} does only the second, on a
+merge made elsewhere. Blue boxes are a program, which compares text and cannot invent
+anything. Orange boxes are a model. A model writes the merge, and a model
+judges what only meaning can settle, but every quote it gives as evidence is checked by
+a program.}
+\label{fig:pipeline}
+\floatfoot
+\end{figure}

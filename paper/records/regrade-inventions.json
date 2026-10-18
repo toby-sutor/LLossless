@@ -1,0 +1,180 @@
+{
+  "brief": "BC item 1",
+  "amended": "2026-09-03",
+  "arm_count": 3,
+  "defect_fixtures": 6,
+  "clean_fixtures": 7,
+  "swapped_unaccounted_as_run": 4,
+  "swapped_reclassified": 3,
+  "rule": "an invented finding disqualifies on every measured fixture, whatever exit code the fixture expects",
+  "fixture_repaired": "attribution_swapped: the second half of the declared swap was unprobed",
+  "arms": [
+    {
+      "arm": "A-27b",
+      "label": "A-27b",
+      "passthrough": [
+        "--model",
+        "qwen3.8:27b",
+        "--field-order",
+        "schema",
+        "--structured",
+        "json_schema"
+      ],
+      "fixtures": 13,
+      "exit_code_matched": [
+        "attribution_invented",
+        "attribution_swapped",
+        "conflict_surfaced",
+        "contradiction",
+        "dedup",
+        "disjoint_domains",
+        "disjoint_sources",
+        "dropped_claim",
+        "hallucination",
+        "numeric_drift",
+        "ordering_only",
+        "structure_added"
+      ],
+      "exit_code_unmeasured": [],
+      "exit_code_missed": [
+        "paraphrase"
+      ],
+      "fixtures_measured": 13,
+      "plants_total": 7,
+      "plants_unmeasured": 0,
+      "plants_detected": 7,
+      "invented_total": 1,
+      "disqualified": [
+        "paraphrase: a clean fixture failed with 1 invented finding(s)",
+        "paraphrase: 1 guard probe(s) graded wrong against their own answer key -- a-listen-port"
+      ],
+      "disqualified_as_run": [
+        "paraphrase: a clean fixture failed with 1 invented finding(s)"
+      ],
+      "unaccounted_findings": [
+        {
+          "fixture": "paraphrase",
+          "claim_id": "A-002",
+          "claim_text": "The relay binds to port 8443 unless overridden.",
+          "finding": "partially_dropped",
+          "evidence": "The relay's default listen port is 8443.",
+          "rationale": "The reference text states the default port is 8443, but does not mention the condition 'unless overridden'."
+        }
+      ]
+    },
+    {
+      "arm": "B-70b",
+      "label": "B-70b",
+      "passthrough": [
+        "--model",
+        "deepseek-r1:70b",
+        "--field-order",
+        "any",
+        "--structured",
+        "json_schema",
+        "--thinking",
+        "merge",
+        "--thinking",
+        "verify",
+        "--thinking",
+        "decompose"
+      ],
+      "fixtures": 13,
+      "exit_code_matched": [
+        "attribution_invented",
+        "attribution_swapped",
+        "conflict_surfaced",
+        "contradiction",
+        "dedup",
+        "disjoint_domains",
+        "disjoint_sources",
+        "dropped_claim",
+        "hallucination",
+        "ordering_only",
+        "paraphrase",
+        "structure_added"
+      ],
+      "exit_code_unmeasured": [
+        "numeric_drift"
+      ],
+      "exit_code_missed": [],
+      "fixtures_measured": 12,
+      "plants_total": 7,
+      "plants_unmeasured": 1,
+      "plants_detected": 6,
+      "invented_total": 0,
+      "disqualified": [],
+      "disqualified_as_run": [],
+      "unaccounted_findings": []
+    },
+    {
+      "arm": "C-120b",
+      "label": "C-120b",
+      "passthrough": [
+        "--model",
+        "gpt-oss:120b",
+        "--field-order",
+        "schema",
+        "--structured",
+        "json_schema",
+        "--thinking",
+        "merge",
+        "--thinking",
+        "verify",
+        "--thinking",
+        "decompose"
+      ],
+      "fixtures": 13,
+      "exit_code_matched": [
+        "attribution_swapped",
+        "conflict_surfaced",
+        "contradiction",
+        "dedup",
+        "disjoint_domains",
+        "dropped_claim",
+        "hallucination",
+        "numeric_drift",
+        "ordering_only",
+        "paraphrase",
+        "structure_added"
+      ],
+      "exit_code_unmeasured": [],
+      "exit_code_missed": [
+        "attribution_invented",
+        "disjoint_sources"
+      ],
+      "fixtures_measured": 13,
+      "plants_total": 7,
+      "plants_unmeasured": 0,
+      "plants_detected": 6,
+      "invented_total": 2,
+      "disqualified": [
+        "attribution_invented: a seeded defect exited clean",
+        "attribution_swapped: 1 invented finding(s) beside the seeded defect",
+        "disjoint_sources: a clean fixture failed with 1 invented finding(s)"
+      ],
+      "disqualified_as_run": [
+        "attribution_invented: a seeded defect exited clean",
+        "disjoint_sources: a clean fixture failed with 1 invented finding(s)"
+      ],
+      "unaccounted_findings": [
+        {
+          "fixture": "attribution_swapped",
+          "claim_id": "M-003",
+          "claim_text": "The read timeout is unresolved.",
+          "finding": "contradicted",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The claim says the timeout is unresolved, but source_a specifies it as 30 seconds, contradicting the claim."
+        },
+        {
+          "fixture": "disjoint_sources",
+          "claim_id": "M-022",
+          "claim_text": "Wandering travelers transported and sold the herbs into the cities.",
+          "finding": "partially_invented",
+          "evidence": "transported and sold the herbs into the cities",
+          "rationale": "The source provides the verb phrase but omits the explicit subject \"Wandering travelers\"."
+        }
+      ]
+    }
+  ]
+}

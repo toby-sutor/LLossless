@@ -1,0 +1,37 @@
+% A REGISTERED RESULT SECTION. No numeral outside \ccnum; see check_numbers.py.
+% The word list, moved here from Section 1 on 2026-10-14.
+\section{Words used in this paper}
+\label{sec:words}
+
+These are the paper's own terms, with the meaning each has here. Most are explained again where they are first needed.
+\begin{wordlist}
+\item[source] One of the documents to be merged.
+\item[merge] The one document made from the sources, and the act of making it.
+\item[pair] Two sources on the same subject that are to be merged. The benchmark's pairs each come with a reference merge.
+\item[segment] One piece of a document: a sentence, a heading, a list item, a table row or a block of code. A program cuts every document into segments.
+\item[record] The merge model's note about one source segment that it did not copy word for word. It says what became of the segment, and why.
+\item[declare] To state a change in a record. A \emph{declared loss} is content that the merge left out and wrote a record for.
+\item[silent loss] A source segment that the program could not find in the merge and that no record explains. It is a flag for a person to look at, and not proof that content is gone.
+\item[untaken heading] A source heading that the merge did not take and wrote no record for, while the section under it is in the merge. It is counted apart from silent loss.
+\item[reworded] Said by the program of a source segment that is not in the merge word for word but closely resembles a segment of it. It is not counted as a silent loss.
+\item[audit] The reading, against its merge, of every source segment on the first run of a pair that the merge does not carry word for word and has no record for. An AI model read each segment twice, in separate readings. The readings gave the same verdict on \ccnum{lineup.audit.both.second.same_class} of \ccnum{lineup.audit.both.second.cases} segments, and where they differed, the first reading counts. \emph{Audited loss} is content that this reading found gone, wholly or in part.
+\item[claim] One statement of one fact, drawn from a document by a model, with the line it comes from.
+\item[judge] The model that draws the claims from the documents and decides, claim by claim, whether the other side supports it.
+\item[mechanical check] A check done by a program that compares text and asks no model.
+\item[judged check] A check that rests on the judge's decision.
+\item[guardrails] The checks around the model, taken together: the mechanical checks, the judged checks with their quoted evidence, and the exit code that stops a pipeline.
+\item[grounded] Said of a quote that the judge gives as evidence: the tool looked for the quoted text in the file the judge named, and found it there.
+\item[verification depth] The setting that says how much the judge checks. \texttt{full} compares the sources with the merge and the merge with the sources. \texttt{coverage} is cheaper and does only the first.
+\item[finding] An entry in the report that names a problem, with the file and the line.
+\item[fidelity level] The setting that says how much a merge may edit its sources (Section~\ref{sec:usage}).
+\item[reference merge] A correct merge of a pair or a document set, written in advance, to compare a model's merge with.
+\item[deviation] One source segment that a merge treats differently from the reference merge: lost, kept where the reference left it out, or repeated.
+\item[configuration] One model reached by one route.
+\item[route] The way a model is reached. On the \emph{API route} the tool calls the vendor's API, and every call is billed by the token. On the \emph{subscription route} it runs the vendor's command-line program under a subscription: a fixed fee that buys a budget of usage, with no price per call.
+\item[frontier model] One of a vendor's large, most capable models, as opposed to its smaller and cheaper ones.
+\item[run] One execution of the tool on one set of documents.
+\item[test case] A small merge written for testing, with a planted defect or none, and an answer key.
+\item[planted] Put there on purpose. A \emph{planted error} is a false fact that I put into a source. A \emph{planted defect} is a flaw built into the merge of a test case.
+\item[registration] A file that states the question and the settings of an experiment, written before its first run. A later correction to it is an \emph{amendment}.
+\item[registered scoring, amended scoring] The benchmark's results under the scoring rule as it was registered, and under the rule as I amended it after the results (Section~\ref{sec:findings}).
+\end{wordlist}

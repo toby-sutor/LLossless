@@ -1,0 +1,59 @@
+% The whitepaper. Built by `make` in this directory; see README.md.
+%
+% NO NUMBER IS TYPED INTO A RESULT SECTION BY HAND. Every numeral in the
+% sections the number check registers as a result section
+% must arrive through \ccnum{key}, and every key must resolve in
+% generated/numbers.tex, which the number generator
+% writes from committed records. The Makefile runs the check before latexmk,
+% so a hand-typed figure fails the build rather than reaching a reader.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{LLossless: catching what a language model silently drops,\\
+       changes or invents when it merges documents}
+\author{Toby Sutor}
+% The paper names the bytes that produced it, not the commit that produced it.
+% A git commit identifies nothing to somebody holding only the published copy,
+% and the published copy is the only thing a reader will ever hold: there is no
+% history in it to check out. `build.digest` is a sha256 over every published
+% file's path and contents, which a reader can recompute with `sha256sum` --
+% the recipe is in sections/95-availability. The commit is still recorded, in
+% generated/numbers.json, beside this digest and labelled.
+\date{\today\\[2pt]%
+  \normalsize Published set \texttt{\ccnum{build.digest}}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\input{sections/00-abstract}
+\end{abstract}
+
+\input{sections/10-introduction}
+\input{sections/15-usage}
+\input{sections/20-system}
+% The measurements come before the section on how the figures are kept honest:
+% a reader has to have seen a figure before being told why it can be checked.
+% The files keep their names, because the number check names sections by file.
+\input{sections/50-findings}
+\input{sections/40-trust}
+\input{sections/60-lessons}
+\input{sections/70-limitations}
+\input{sections/80-related-work}
+\input{sections/95-availability}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+\input{sections/A0-checks}
+\input{sections/A1-words}
+
+% A closing mark, so the paper does not stop on the last entry of the word list.
+\par\nopagebreak\vspace{1.2em}
+\begin{center}
+  \rule{0.3\linewidth}{0.4pt}\\[6pt]
+  {\small\textsc{End of document}}
+\end{center}
+
+\end{document}

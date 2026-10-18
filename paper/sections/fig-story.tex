@@ -1,0 +1,40 @@
+% Figure: the opening case. Placed in Section 1. Every value comes from the
+% generated figures; check_numbers.py scans this file as a result figure.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=6mm and 8mm]
+  \node[doc, text width=60mm, align=left] (a)
+       {\textbf{Field crew's runbook}\\[2pt]Escalate \ccnum{lineup.story.code} to the workshop after
+        \colorbox{goodfill}{\strut\textbf{\ccnum{lineup.story.a_count}}} failed attempts.};
+  \node[doc, text width=60mm, align=left, right=8mm of a] (b)
+       {\textbf{Support desk's runbook}\\[2pt]If the field crew have already tried
+        \colorbox{badfill}{\strut\textbf{\ccnum{lineup.story.b_count}}} times, raise it to the
+        workshop instead.};
+  \node[model, below=9mm of $(a.south)!0.5!(b.south)$] (m)
+       {\textbf{\ccnum{lineup.story.row_label}} merges them};
+  \draw[flow] (a.south) -- (m.north west);
+  \draw[flow] (b.south) -- (m.north east);
+  \node[doc, text width=60mm, align=left, below=9mm of m, xshift=-34mm] (out)
+       {\textbf{The merged runbook}\\[2pt]Escalate \ccnum{lineup.story.code} to the workshop after
+        \colorbox{goodfill}{\strut\textbf{\ccnum{lineup.story.a_count}}} failed attempts.\\[2pt]
+        \footnotesize\itshape No word of the other count.};
+  \node[draw=docgrey, dashed, fill=white, rounded corners=2pt, text width=56mm,
+        align=left, font=\footnotesize, inner sep=5pt, below=9mm of m, xshift=34mm] (rec)
+       {\textbf{The record}, which no reader of the runbook sees\\[2pt]
+        superseded: ``\ccnum{lineup.story.reason}''};
+  \draw[flow] (m.south) -- (out.north);
+  \draw[flow, dashed] (m.south) -- (rec.north);
+  \node[prog, below=8mm of $(out.south)!0.5!(rec.south)$, text width=110mm] (rep)
+       {\textbf{LLossless reports:} the support desk's sentence, line \ccnum{lineup.story.b_line},
+        is contradicted by the merge. Exit code \ccnum{lineup.story.exit}: a person decides
+        which count is right.};
+  \draw[flow] (out.south) -- (rep.north -| out.south);
+  \draw[flow] (rec.south) -- (rep.north -| rec.south);
+\end{tikzpicture}
+\caption{The opening case. The merge chose the field crew's count, which is the right
+one, and noted the choice in a record that the merged runbook does not show. Had it
+chosen the other count, the page would have read just as well. The report is what makes
+the choice visible.}
+\label{fig:story}
+\floatfoot
+\end{figure}

@@ -1,0 +1,1024 @@
+{
+  "summary": {
+    "label": "C-120b",
+    "passthrough": [
+      "--model",
+      "gpt-oss:120b",
+      "--field-order",
+      "schema",
+      "--structured",
+      "json_schema",
+      "--thinking",
+      "merge",
+      "--thinking",
+      "verify",
+      "--thinking",
+      "decompose"
+    ],
+    "fixtures": 13,
+    "exit_code_matched": [
+      "attribution_swapped",
+      "conflict_surfaced",
+      "contradiction",
+      "dedup",
+      "disjoint_domains",
+      "dropped_claim",
+      "hallucination",
+      "numeric_drift",
+      "ordering_only",
+      "paraphrase",
+      "structure_added"
+    ],
+    "exit_code_unmeasured": [],
+    "exit_code_missed": [
+      "attribution_invented",
+      "disjoint_sources"
+    ],
+    "fixtures_measured": 13,
+    "plants_total": 6,
+    "plants_unmeasured": 0,
+    "plants_detected": 5,
+    "invented_total": 3,
+    "invented_on_unmeasured": 0,
+    "disqualified": [
+      "attribution_invented: a seeded defect exited clean",
+      "disjoint_sources: a clean fixture failed with 1 invented finding(s)"
+    ]
+  },
+  "records": [
+    {
+      "fixture": "attribution_invented",
+      "kind": "defect",
+      "wall_seconds": 79.4,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/attribution_invented.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 0,
+      "exit_code_matches": false,
+      "outcome": "missed",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "m-tls-attributed",
+          "expected_finding": "hallucinated",
+          "anchor": {
+            "all_of": [
+              "According to the Operator Guide"
+            ]
+          },
+          "verdict": "missed",
+          "claim_id": "B-002",
+          "finding": "none",
+          "direction": "source_to_merged",
+          "evidence": "According to the Operator Guide, the minimum TLS version is 1.2.",
+          "rationale": "The reference text attributes the minimum TLS version as 1.2.",
+          "model_verdict": "SUPPORTED"
+        }
+      ],
+      "detected": [],
+      "missed": [
+        "m-tls-attributed"
+      ],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 5,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 11,
+        "anchored": 11,
+        "graded": 11,
+        "grounded": 11,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 5,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1193,
+        "model_loads": 0,
+        "duration_seconds": 79.2,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "attribution_swapped",
+      "kind": "defect",
+      "wall_seconds": 83.0,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/attribution_swapped.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  3 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "m-notes-timeout-attribution",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "According to the Deployment Notes",
+              "read timeout is 30 seconds"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-004",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "The read timeout is 60 seconds.",
+          "rationale": "The claim attributes 30 seconds to Deployment Notes, but source_b lists 60 seconds, contradicting it."
+        }
+      ],
+      "detected": [
+        "m-notes-timeout-attribution"
+      ],
+      "missed": [],
+      "invented_findings": [
+        {
+          "claim_id": "M-003",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The claim says the timeout is unresolved, but source_a specifies it as 30 seconds, contradicting the claim."
+        },
+        {
+          "claim_id": "M-005",
+          "finding": "contradicted",
+          "direction": "merged_to_sources",
+          "evidence": "The read timeout is 30 seconds.",
+          "rationale": "The claim says Operator Guide sets 60 seconds, but source_a states 30 seconds, contradicting the claim."
+        }
+      ],
+      "findings_total": 3,
+      "harvest": {
+        "extracted": {
+          "merged.md": 5,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 11,
+        "anchored": 11,
+        "graded": 11,
+        "grounded": 11,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 5,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1295,
+        "model_loads": 0,
+        "duration_seconds": 82.8,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "conflict_surfaced",
+      "kind": "guard",
+      "wall_seconds": 160.5,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/conflict_surfaced.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 11,
+          "source_a.md": 8,
+          "source_b.md": 7
+        },
+        "claims_total": 26,
+        "anchored": 26,
+        "graded": 26,
+        "grounded": 26,
+        "forward_verdicts": 15,
+        "reverse_verdicts": 11,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2756,
+        "model_loads": 0,
+        "duration_seconds": 160.3,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "contradiction",
+      "kind": "defect",
+      "wall_seconds": 137.2,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/contradiction.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "a-connect-timeout",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "connect timeout",
+              "30 seconds"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "A-004",
+          "finding": "contradicted",
+          "direction": "source_to_merged",
+          "evidence": "The default connect timeout is 60 seconds.",
+          "rationale": "The reference text says the default connect timeout is 60 seconds, not 30 seconds."
+        }
+      ],
+      "detected": [
+        "a-connect-timeout"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 10,
+          "source_a.md": 8,
+          "source_b.md": 7
+        },
+        "claims_total": 25,
+        "anchored": 25,
+        "graded": 25,
+        "grounded": 25,
+        "forward_verdicts": 15,
+        "reverse_verdicts": 10,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2756,
+        "model_loads": 0,
+        "duration_seconds": 137.1,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "dedup",
+      "kind": "guard",
+      "wall_seconds": 64.0,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/dedup.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 10,
+        "anchored": 10,
+        "graded": 10,
+        "grounded": 10,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1105,
+        "model_loads": 0,
+        "duration_seconds": 63.8,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "disjoint_domains",
+      "kind": "guard",
+      "wall_seconds": 686.9,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/disjoint_domains.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 51,
+          "source_a.md": 20,
+          "source_b.md": 33
+        },
+        "claims_total": 104,
+        "anchored": 102,
+        "graded": 104,
+        "grounded": 103,
+        "forward_verdicts": 53,
+        "reverse_verdicts": 51,
+        "errored": 0,
+        "calls": 9,
+        "schema_repairs": 0,
+        "completion_tokens": 11538,
+        "model_loads": 0,
+        "duration_seconds": 686.7,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "disjoint_sources",
+      "kind": "guard",
+      "wall_seconds": 638.0,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/disjoint_sources.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 partly invented: the sources carry some of this claim (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 1,
+      "exit_code_matches": false,
+      "outcome": "missed",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [
+        {
+          "claim_id": "M-022",
+          "finding": "partially_invented",
+          "direction": "merged_to_sources",
+          "evidence": "transported and sold the herbs into the cities",
+          "rationale": "The source provides the verb phrase but omits the explicit subject \"Wandering travelers\"."
+        }
+      ],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 35,
+          "source_a.md": 11,
+          "source_b.md": 31
+        },
+        "claims_total": 77,
+        "anchored": 75,
+        "graded": 77,
+        "grounded": 77,
+        "forward_verdicts": 42,
+        "reverse_verdicts": 35,
+        "errored": 0,
+        "calls": 7,
+        "schema_repairs": 0,
+        "completion_tokens": 9506,
+        "model_loads": 0,
+        "duration_seconds": 637.8,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "dropped_claim",
+      "kind": "defect",
+      "wall_seconds": 179.8,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/dropped_claim.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 dropped: in a source, not in the merge (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "b-log-format",
+          "expected_finding": "dropped",
+          "anchor": {
+            "all_of": [
+              "access logs",
+              "JSON Lines"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "B-006",
+          "finding": "dropped",
+          "direction": "source_to_merged",
+          "evidence": "",
+          "rationale": "The reference text does not contain any statement about the claim."
+        }
+      ],
+      "detected": [
+        "b-log-format"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 12,
+          "source_a.md": 8,
+          "source_b.md": 9
+        },
+        "claims_total": 29,
+        "anchored": 29,
+        "graded": 28,
+        "grounded": 28,
+        "forward_verdicts": 17,
+        "reverse_verdicts": 12,
+        "errored": 0,
+        "calls": 6,
+        "schema_repairs": 1,
+        "completion_tokens": 4231,
+        "model_loads": 0,
+        "duration_seconds": 179.7,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "hallucination",
+      "kind": "defect",
+      "wall_seconds": 132.8,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/hallucination.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 invented: in the merge, in neither source (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "merged-socks5",
+          "expected_finding": "hallucinated",
+          "anchor": {
+            "all_of": [
+              "SOCKS5"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "M-006",
+          "finding": "hallucinated",
+          "direction": "merged_to_sources",
+          "evidence": "",
+          "rationale": "No source document mentions a SOCKS5 proxy."
+        }
+      ],
+      "detected": [
+        "merged-socks5"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 10,
+          "source_a.md": 6,
+          "source_b.md": 5
+        },
+        "claims_total": 21,
+        "anchored": 21,
+        "graded": 20,
+        "grounded": 20,
+        "forward_verdicts": 11,
+        "reverse_verdicts": 10,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2239,
+        "model_loads": 0,
+        "duration_seconds": 132.6,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "numeric_drift",
+      "kind": "defect",
+      "wall_seconds": 107.5,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/numeric_drift.json",
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 1,
+      "probes": [
+        {
+          "probe_id": "a-max-connections",
+          "expected_finding": "contradicted",
+          "anchor": {
+            "all_of": [
+              "approximately 500",
+              "concurrent connections"
+            ]
+          },
+          "verdict": "detected",
+          "claim_id": "A-003",
+          "finding": "contradicted",
+          "direction": "source_to_merged",
+          "evidence": "The connection limit is 512 concurrent connections.",
+          "rationale": "The reference gives a specific limit of 512, which conflicts with the claim of approximately 500."
+        }
+      ],
+      "detected": [
+        "a-max-connections"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 6,
+          "source_a.md": 6,
+          "source_b.md": 6
+        },
+        "claims_total": 18,
+        "anchored": 18,
+        "graded": 18,
+        "grounded": 18,
+        "forward_verdicts": 12,
+        "reverse_verdicts": 6,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1942,
+        "model_loads": 0,
+        "duration_seconds": 107.4,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "ordering_only",
+      "kind": "guard",
+      "wall_seconds": 200.0,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/ordering_only.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 12,
+          "source_a.md": 14,
+          "source_b.md": 13
+        },
+        "claims_total": 39,
+        "anchored": 38,
+        "graded": 39,
+        "grounded": 39,
+        "forward_verdicts": 27,
+        "reverse_verdicts": 12,
+        "errored": 0,
+        "calls": 6,
+        "schema_repairs": 0,
+        "completion_tokens": 4140,
+        "model_loads": 0,
+        "duration_seconds": 199.8,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "paraphrase",
+      "kind": "guard",
+      "wall_seconds": 177.0,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/paraphrase.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 10,
+          "source_a.md": 9,
+          "source_b.md": 9
+        },
+        "claims_total": 28,
+        "anchored": 28,
+        "graded": 28,
+        "grounded": 28,
+        "forward_verdicts": 18,
+        "reverse_verdicts": 10,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 3254,
+        "model_loads": 0,
+        "duration_seconds": 176.9,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "structure_added",
+      "kind": "guard",
+      "wall_seconds": 69.3,
+      "report_written": true,
+      "report_ref": "arms/2026-09-03/C-120b/detect-reports/structure_added.json",
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "expected_exit_code_lenient": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "outcome": "matched",
+      "plants": 0,
+      "probes": [],
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 2,
+          "source_b.md": 3
+        },
+        "claims_total": 9,
+        "anchored": 9,
+        "graded": 9,
+        "grounded": 9,
+        "forward_verdicts": 5,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1020,
+        "model_loads": 0,
+        "duration_seconds": 69.2,
+        "models": {
+          "decompose": "gpt-oss:120b",
+          "verify": "gpt-oss:120b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "pinned",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "decompose",
+            "merge",
+            "verify"
+          ]
+        },
+        "endpoint": {
+          "id": "0d84ed4d2d30",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    }
+  ]
+}

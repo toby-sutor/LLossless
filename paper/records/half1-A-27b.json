@@ -1,0 +1,822 @@
+{
+  "summary": {
+    "label": "A-27b",
+    "passthrough": [
+      "--model",
+      "qwen3.8:27b",
+      "--field-order",
+      "schema"
+    ],
+    "fixtures": 13,
+    "exit_code_matched": [
+      "attribution_invented",
+      "attribution_swapped",
+      "contradiction",
+      "dedup",
+      "disjoint_domains",
+      "disjoint_sources",
+      "dropped_claim",
+      "hallucination",
+      "numeric_drift",
+      "ordering_only",
+      "structure_added"
+    ],
+    "exit_code_missed": [
+      "conflict_surfaced",
+      "paraphrase"
+    ],
+    "plants_total": 6,
+    "plants_detected": 6,
+    "invented_total": 2,
+    "disqualified": [
+      "paraphrase: a clean fixture failed with 1 invented finding(s)"
+    ]
+  },
+  "records": [
+    {
+      "fixture": "attribution_invented",
+      "kind": "defect",
+      "wall_seconds": 35.3,
+      "report_written": true,
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "plants": 1,
+      "detected": [
+        "m-tls-attributed"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 5,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 11,
+        "anchored": 11,
+        "graded": 11,
+        "grounded": 11,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 5,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1504,
+        "model_loads": 0,
+        "duration_seconds": 35.2,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "attribution_swapped",
+      "kind": "defect",
+      "wall_seconds": 25.4,
+      "report_written": true,
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  2 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "plants": 1,
+      "detected": [
+        "m-notes-timeout-attribution"
+      ],
+      "missed": [],
+      "invented_findings": [
+        {
+          "claim_id": "M-004",
+          "finding": "contradicted",
+          "direction": "merged_to_sources"
+        }
+      ],
+      "findings_total": 2,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 10,
+        "anchored": 10,
+        "graded": 10,
+        "grounded": 10,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1401,
+        "model_loads": 0,
+        "duration_seconds": 25.3,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "conflict_surfaced",
+      "kind": "guard",
+      "wall_seconds": 43.4,
+      "report_written": true,
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 0,
+      "exit_code_matches": false,
+      "plants": 0,
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 10,
+          "source_a.md": 7,
+          "source_b.md": 6
+        },
+        "claims_total": 23,
+        "anchored": 23,
+        "graded": 23,
+        "grounded": 23,
+        "forward_verdicts": 13,
+        "reverse_verdicts": 10,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 3120,
+        "model_loads": 0,
+        "duration_seconds": 43.3,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "contradiction",
+      "kind": "defect",
+      "wall_seconds": 44.3,
+      "report_written": true,
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "plants": 1,
+      "detected": [
+        "a-connect-timeout"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 9,
+          "source_a.md": 7,
+          "source_b.md": 6
+        },
+        "claims_total": 22,
+        "anchored": 22,
+        "graded": 22,
+        "grounded": 22,
+        "forward_verdicts": 13,
+        "reverse_verdicts": 9,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2936,
+        "model_loads": 0,
+        "duration_seconds": 44.2,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "dedup",
+      "kind": "guard",
+      "wall_seconds": 26.0,
+      "report_written": true,
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "plants": 0,
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 3,
+          "source_b.md": 3
+        },
+        "claims_total": 10,
+        "anchored": 10,
+        "graded": 10,
+        "grounded": 10,
+        "forward_verdicts": 6,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1302,
+        "model_loads": 0,
+        "duration_seconds": 25.9,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "disjoint_domains",
+      "kind": "guard",
+      "wall_seconds": 172.2,
+      "report_written": true,
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "plants": 0,
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 47,
+          "source_a.md": 22,
+          "source_b.md": 30
+        },
+        "claims_total": 99,
+        "anchored": 99,
+        "graded": 99,
+        "grounded": 99,
+        "forward_verdicts": 52,
+        "reverse_verdicts": 47,
+        "errored": 0,
+        "calls": 8,
+        "schema_repairs": 0,
+        "completion_tokens": 13743,
+        "model_loads": 0,
+        "duration_seconds": 172.1,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "disjoint_sources",
+      "kind": "guard",
+      "wall_seconds": 149.4,
+      "report_written": true,
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "plants": 0,
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 36,
+          "source_a.md": 13,
+          "source_b.md": 25
+        },
+        "claims_total": 74,
+        "anchored": 74,
+        "graded": 74,
+        "grounded": 74,
+        "forward_verdicts": 38,
+        "reverse_verdicts": 36,
+        "errored": 0,
+        "calls": 7,
+        "schema_repairs": 0,
+        "completion_tokens": 11447,
+        "model_loads": 0,
+        "duration_seconds": 149.3,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "dropped_claim",
+      "kind": "defect",
+      "wall_seconds": 69.0,
+      "report_written": true,
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 dropped: in a source, not in the merge (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "plants": 1,
+      "detected": [
+        "b-log-format"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 11,
+          "source_a.md": 7,
+          "source_b.md": 8
+        },
+        "claims_total": 26,
+        "anchored": 26,
+        "graded": 25,
+        "grounded": 25,
+        "forward_verdicts": 15,
+        "reverse_verdicts": 11,
+        "errored": 0,
+        "calls": 6,
+        "schema_repairs": 1,
+        "completion_tokens": 4677,
+        "model_loads": 0,
+        "duration_seconds": 68.9,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "hallucination",
+      "kind": "defect",
+      "wall_seconds": 40.2,
+      "report_written": true,
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 invented: in the merge, in neither source (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "plants": 1,
+      "detected": [
+        "merged-socks5"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 9,
+          "source_a.md": 5,
+          "source_b.md": 5
+        },
+        "claims_total": 19,
+        "anchored": 19,
+        "graded": 18,
+        "grounded": 18,
+        "forward_verdicts": 10,
+        "reverse_verdicts": 9,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 2461,
+        "model_loads": 0,
+        "duration_seconds": 40.0,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "numeric_drift",
+      "kind": "defect",
+      "wall_seconds": 30.2,
+      "report_written": true,
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 contradicted: the merge states something different (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "exit_code_matches": true,
+      "plants": 1,
+      "detected": [
+        "a-max-connections"
+      ],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 5,
+          "source_b.md": 4
+        },
+        "claims_total": 13,
+        "anchored": 13,
+        "graded": 13,
+        "grounded": 13,
+        "forward_verdicts": 9,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1774,
+        "model_loads": 0,
+        "duration_seconds": 30.0,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "ordering_only",
+      "kind": "guard",
+      "wall_seconds": 66.5,
+      "report_written": true,
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "plants": 0,
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 13,
+          "source_a.md": 13,
+          "source_b.md": 13
+        },
+        "claims_total": 39,
+        "anchored": 39,
+        "graded": 39,
+        "grounded": 39,
+        "forward_verdicts": 26,
+        "reverse_verdicts": 13,
+        "errored": 0,
+        "calls": 6,
+        "schema_repairs": 0,
+        "completion_tokens": 5075,
+        "model_loads": 0,
+        "duration_seconds": 66.3,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "paraphrase",
+      "kind": "guard",
+      "wall_seconds": 58.9,
+      "report_written": true,
+      "stderr_tail": [
+        "Finished, with problems. The report lists what was found.",
+        "  1 partly dropped: the merge carries some of this claim (see `## Findings`)",
+        "  the full report went to stdout; exit code 1"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 1,
+      "exit_code_matches": false,
+      "plants": 0,
+      "detected": [],
+      "missed": [],
+      "invented_findings": [
+        {
+          "claim_id": "A-002",
+          "finding": "partially_dropped",
+          "direction": "source_to_merged"
+        }
+      ],
+      "findings_total": 1,
+      "harvest": {
+        "extracted": {
+          "merged.md": 9,
+          "source_a.md": 9,
+          "source_b.md": 10
+        },
+        "claims_total": 28,
+        "anchored": 28,
+        "graded": 28,
+        "grounded": 28,
+        "forward_verdicts": 19,
+        "reverse_verdicts": 9,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 4031,
+        "model_loads": 0,
+        "duration_seconds": 58.8,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    },
+    {
+      "fixture": "structure_added",
+      "kind": "guard",
+      "wall_seconds": 23.5,
+      "report_written": true,
+      "stderr_tail": [
+        "Done. Nothing was dropped, contradicted or invented.",
+        "  the full report went to stdout; exit code 0"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "exit_code_matches": true,
+      "plants": 0,
+      "detected": [],
+      "missed": [],
+      "invented_findings": [],
+      "findings_total": 0,
+      "harvest": {
+        "extracted": {
+          "merged.md": 4,
+          "source_a.md": 2,
+          "source_b.md": 3
+        },
+        "claims_total": 9,
+        "anchored": 9,
+        "graded": 9,
+        "grounded": 9,
+        "forward_verdicts": 5,
+        "reverse_verdicts": 4,
+        "errored": 0,
+        "calls": 5,
+        "schema_repairs": 0,
+        "completion_tokens": 1184,
+        "model_loads": 0,
+        "duration_seconds": 23.3,
+        "models": {
+          "decompose": "qwen3.8:27b",
+          "verify": "qwen3.8:27b"
+        },
+        "structured_output": {
+          "mode": "json_schema",
+          "how": "probed",
+          "field_order": "schema"
+        },
+        "decoding": {
+          "temperature": 0.0,
+          "seed": 0,
+          "thinking": [
+            "merge"
+          ]
+        },
+        "endpoint": {
+          "id": "5cefcb5c2a07",
+          "location": "hosted",
+          "content_left_this_machine": true
+        }
+      }
+    }
+  ]
+}
